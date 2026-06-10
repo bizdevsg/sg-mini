@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SGB Website
 
-## Getting Started
+Website marketing dan resource portal untuk `PT Solid Gold Berjangka`, dibangun dengan `Next.js 16`, `React 19`, `TypeScript`, dan `Tailwind CSS v4`.
 
-First, run the development server:
+Project ini sudah mendukung:
+
+- landing page bilingual: Indonesia (`id`) dan English (`en`)
+- live quote dengan websocket feed
+- halaman berita dan detail berita
+- economic calendar
+- historical data
+- halaman about
+- halaman ebook
+
+## Tech Stack
+
+- `next@16.2.7`
+- `react@19.2.4`
+- `typescript`
+- `tailwindcss@4`
+- `@fortawesome/react-fontawesome`
+
+## Locale
+
+Locale aktif:
+
+- `id`
+- `en`
+
+Default locale:
+
+- `id`
+
+Konfigurasi locale ada di [src/locales/config.ts](src/locales/config.ts).
+
+Struktur message locale:
+
+- [src/locales/id/messages.ts](src/locales/id/messages.ts)
+- [src/locales/en/messages.ts](src/locales/en/messages.ts)
+- [src/locales/shared/messages.ts](src/locales/shared/messages.ts)
+
+## Routes
+
+Route utama yang tersedia:
+
+- `/{locale}`: homepage
+- `/{locale}/about`
+- `/{locale}/ebook`
+- `/{locale}/live-quote`
+- `/{locale}/economic-calendar`
+- `/{locale}/historical-data`
+- `/{locale}/news`
+- `/{locale}/news/[slug]`
+
+Contoh:
+
+- `/id`
+- `/en/about`
+- `/id/news/rupiah-open-mixed`
+
+## Struktur Folder
+
+Folder inti project:
+
+- `src/app`
+  berisi app router dan semua route
+- `src/components`
+  berisi atoms, molecules, organisms, layouts, providers, dan content
+- `src/lib`
+  berisi helper env, fetcher API, formatter data, dan integrasi websocket
+- `src/locales`
+  berisi config locale, formatter locale, dan message per bahasa
+
+## Integrasi Data
+
+Project ini memakai beberapa sumber data:
+
+- Live quote websocket
+- Portal news API
+- Historical data API
+- Economic calendar API
+
+Helper env dan URL default ada di [src/lib/env.ts](src/lib/env.ts).
+
+## Environment Variables
+
+Variabel yang dipakai project ini:
+
+```env
+LIVE_QUOTE_SOCKET_URL=
+NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL=
+
+NEXT_PUBLIC_CDN_ASSET_BASE_URL=
+NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL=
+
+NEWS_API_URL=
+NEWS_API_TOKEN=
+NEWS_PORTAL_BASE_URL=
+
+HISTORICAL_DATA_API_URL=
+HISTORICAL_DATA_API_TOKEN=
+
+ECONOMIC_CALENDAR_API_BASE_URL=
+
+NEXT_PUBLIC_PLACEHODER_BASE_URL=
+NEXT_PUBLIC_LOGIN_URL=
+NEXT_PUBLIC_REGISTER_URL=
+NEXT_PUBLIC_HERO_CTA_URL=
+NEXT_PUBLIC_SPREAD_CTA_URL=
+```
+
+Kalau tidak diisi, project akan memakai default value yang sudah didefinisikan di [src/lib/env.ts](src/lib/env.ts).
+
+## Development
+
+Install dependency:
+
+```bash
+npm install
+```
+
+Jalankan development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Jalankan production server:
 
-## Learn More
+```bash
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Lint:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Catatan Implementasi
 
-## Deploy on Vercel
+- remote image domain dikonfigurasi di [next.config.ts](next.config.ts)
+- route loading overlay ada di [src/components/molecules/RouteLoadingBar.tsx](src/components/molecules/RouteLoadingBar.tsx)
+- halaman news detail memakai fallback konten statis lokal untuk slug yang diprerender
+- data news API besar ditangani di level helper agar tidak membebani data cache Next.js
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Catatan Repo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Di repo ini ada aturan internal bahwa command seperti `npm`, `next`, `pnpm`, `yarn`, dan command serupa sebaiknya dijalankan setelah ada konfirmasi user saat bekerja lewat agent.
