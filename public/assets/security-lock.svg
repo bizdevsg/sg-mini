@@ -1,0 +1,35 @@
+<svg width="700" height="700" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lockBody" x1="170" y1="240" x2="520" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B08A39"/>
+      <stop offset="0.18" stop-color="#6F5520"/>
+      <stop offset="0.56" stop-color="#1A140C"/>
+      <stop offset="1" stop-color="#070605"/>
+    </linearGradient>
+    <linearGradient id="lockShackle" x1="216" y1="112" x2="500" y2="354" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7DF"/>
+      <stop offset="0.24" stop-color="#CFA94A"/>
+      <stop offset="0.58" stop-color="#4A3916"/>
+      <stop offset="1" stop-color="#090806"/>
+    </linearGradient>
+    <filter id="lockShadow" x="80" y="70" width="540" height="570" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="40" stdDeviation="24" flood-color="#000000" flood-opacity="0.44"/>
+    </filter>
+    <filter id="checkGlow" x="210" y="310" width="220" height="180" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#lockShadow)" transform="rotate(10 350 350)">
+    <path d="M224 280V212C224 132 278 78 354 78C431 78 486 134 486 212V280" stroke="url(#lockShackle)" stroke-width="34" stroke-linecap="round"/>
+    <path d="M204 260C204 236 223 216 247 216H463C487 216 506 236 506 260V484C506 536 464 578 412 578H298C246 578 204 536 204 484V260Z" fill="url(#lockBody)" stroke="#F2D98A" stroke-opacity="0.22" stroke-width="8"/>
+    <path d="M264 280H444" stroke="#FFF4D0" stroke-opacity="0.08" stroke-width="8" stroke-linecap="round"/>
+    <path d="M274 408L326 460L436 352" stroke="#F2D98A" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+    <g filter="url(#checkGlow)">
+      <path d="M274 408L326 460L436 352" stroke="#F2D98A" stroke-opacity="0.42" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>
