@@ -14,7 +14,7 @@ export default function VisiMisiSection({ locale }: VisiMisiSectionProps) {
   return (
     <SectionContainer className="py-16 md:py-20">
       <div className="max-w-3xl">
-        <SectionEyebrow className="uppercase tracking-[0.24em] text-yellow-500">
+        <SectionEyebrow textClassName="tracking-[0.24em]">
           {visiMisi.eyebrow}
         </SectionEyebrow>
       </div>

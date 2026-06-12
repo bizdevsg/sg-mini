@@ -30,7 +30,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
               href={PUBLIC_HERO_CTA_URL}
               target="_blank"
               rel="noreferrer"
-              className="mt-8 min-w-[220px] px-8 py-3"
+              size="lg"
+              className="mt-8 min-w-[220px]"
             >
               {messages.hero.cta}
             </ButtonLink>

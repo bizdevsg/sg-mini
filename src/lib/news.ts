@@ -40,7 +40,7 @@ export type NewsFeedArticle = {
 };
 
 export type NewsArticleDetail = NewsFeedArticle & {
-  body: string[];
+  bodyHtml: string;
   readTime: string;
   tags: string[];
 };
@@ -117,6 +117,15 @@ function normalizeWhitespace(value: string) {
   return value.replace(/\s+/g, " ").trim();
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function truncateText(value: string, maxLength: number) {
   if (value.length <= maxLength) {
     return value;
@@ -137,16 +146,32 @@ function getArticleSummary(article: PortalNewsApiArticle) {
   return truncateText(normalizedContent, SUMMARY_MAX_LENGTH);
 }
 
-function getArticleParagraphs(content: string) {
-  return decodeHtmlEntities(content)
-    .replace(
-      /<(?:\/p|\/div|\/h[1-6]|br\s*\/?|\/li|\/ul|\/ol|\/blockquote|\/section)>/gi,
-      "\n",
-    )
-    .replace(/<li[^>]*>/gi, "• ")
-    .split(/\n+/)
-    .map((paragraph) => normalizeWhitespace(stripHtml(paragraph)))
-    .filter((paragraph) => paragraph.length > 0);
+function sanitizeArticleHtml(content: string) {
+  return content
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+    .replace(/<(iframe|object|embed|form|input|button|textarea|select)[^>]*>[\s\S]*?<\/\1>/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*(['"]).*?\1/gi, "")
+    .replace(/\s+(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, "");
+}
+
+function getArticleBodyHtml(content: string) {
+  const sanitizedContent = sanitizeArticleHtml(content).trim();
+
+  if (sanitizedContent) {
+    return sanitizedContent;
+  }
+
+  const fallbackText = normalizeWhitespace(decodeHtmlEntities(stripHtml(content)));
+  return fallbackText ? `<p>${escapeHtml(fallbackText)}</p>` : "";
+}
+
+function getFallbackBodyHtml(paragraphs: string[]) {
+  return paragraphs
+    .map((paragraph) => normalizeWhitespace(paragraph))
+    .filter((paragraph) => paragraph.length > 0)
+    .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+    .join("");
 }
 
 function getArticleTitle(article: PortalNewsApiArticle) {
@@ -238,11 +263,11 @@ function toDetailArticle(
   locale: AppLocale,
 ): NewsArticleDetail {
   const feedArticle = toFeedArticle(article);
-  const body = getArticleParagraphs(article.content);
+  const bodyHtml = getArticleBodyHtml(article.content);
 
   return {
     ...feedArticle,
-    body: body.length ? body : [feedArticle.summary],
+    bodyHtml: bodyHtml || `<p>${escapeHtml(feedArticle.summary)}</p>`,
     readTime: getEstimatedReadTime(article.content, locale),
     tags: [],
   };
@@ -262,7 +287,7 @@ function toFallbackDetailArticle(
     displayCategory: getDisplayNewsCategory(article.category, normalizedCategory),
     publishedAt: article.publishedAt,
     imageSrc: NEWS_PLACEHOLDER_IMAGE,
-    body: article.body,
+    bodyHtml: getFallbackBodyHtml(article.body),
     readTime: article.readTime,
     tags: article.tags,
   };

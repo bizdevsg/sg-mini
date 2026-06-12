@@ -1,11 +1,22 @@
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { getCdnAssetUrl } from "@/lib/env";
 import { formatLocaleYear, getMessages, type AppLocale } from "@/locales";
 import Image from "next/image";
+import Link from "next/link";
 
 type FooterSectionProps = {
   locale: AppLocale;
 };
+
+function resolveFooterHref(locale: AppLocale, href: string) {
+  if (/^(https?:|mailto:|tel:)/.test(href)) {
+    return href;
+  }
+
+  return `/${locale}${href}`;
+}
 
 export function FooterSection({ locale }: FooterSectionProps) {
   const messages = getMessages(locale);
@@ -21,16 +32,20 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   {messages.footer.brandTitle}
                 </h6>
                 <ul className="mt-5 space-y-3">
-                  {messages.footer.brandItems.map((item) => (
-                    <li
-                      key={item}
-                      className="text-sm leading-7 text-yellow-500/72"
-                    >
-                      <a href="" className="hover:underline">
-                        {item}
-                      </a>
-                    </li>
-                  ))}
+                  {messages.footer.brandItems.map((item) => {
+                    const href = resolveFooterHref(locale, item.href);
+
+                    return (
+                      <li
+                        key={item.label}
+                        className="text-sm leading-7 text-yellow-500/72"
+                      >
+                        <Link href={href} className="hover:underline">
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
@@ -39,16 +54,20 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   {messages.footer.helpTitle}
                 </h6>
                 <ul className="mt-5 space-y-3">
-                  {messages.footer.helpItems.map((item) => (
-                    <li
-                      key={item}
-                      className="text-sm leading-7 text-yellow-500/72"
-                    >
-                      <a href="" className="hover:underline">
-                        {item}
-                      </a>
-                    </li>
-                  ))}
+                  {messages.footer.helpItems.map((item) => {
+                    const href = resolveFooterHref(locale, item.href);
+
+                    return (
+                      <li
+                        key={item.label}
+                        className="text-sm leading-7 text-yellow-500/72"
+                      >
+                        <Link href={href} className="hover:underline">
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
@@ -76,7 +95,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   <div className="p-2 bg-white rounded-lg">
                     <Image
                       src={getCdnAssetUrl("logo%20TSI.avif")}
-                      alt="TSI Logo"
+                      alt={messages.footer.tsiAlt}
                       width={160}
                       height={48}
                       className="max-h-10 min-h-10 w-auto object-contain"
@@ -89,9 +108,19 @@ export function FooterSection({ locale }: FooterSectionProps) {
             <hr className="border border-yellow-500/20 rounded-full" />
 
             <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
-              <div className="flex flex-wrap justify-center gap-4 text-yellow-500/62 md:justify-start">
+              <div className="flex flex-wrap justify-center gap-4 md:justify-start">
                 {messages.footer.socials.map((item) => (
-                  <span key={item}>{item}</span>
+                  <a
+                    key={item.name}
+                    href={item.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={item.name}
+                    className="inline-flex items-center justify-center gap-2 h-8 w-8 bg-yellow-500 text-yellow-700 hover:text-yellow-800 rounded-full text-center hover:underline"
+                    aria-label={item.name}
+                  >
+                    <FontAwesomeIcon icon={["fab", item.icon] as IconProp} />
+                  </a>
                 ))}
               </div>
 

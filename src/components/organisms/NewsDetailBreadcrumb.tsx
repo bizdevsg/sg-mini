@@ -1,7 +1,5 @@
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import type { AppLocale } from "@/locales";
+import { BreadcrumbTrail } from "@/components/molecules/BreadcrumbTrail";
+import { getMessages, type AppLocale } from "@/locales";
 
 type NewsDetailBreadcrumbProps = {
   locale: AppLocale;
@@ -14,26 +12,25 @@ export function NewsDetailBreadcrumb({
   newsLabel,
   title,
 }: NewsDetailBreadcrumbProps) {
+  const homeLabel = getMessages(locale).app.homeLabel;
+
   return (
-    <nav
-      aria-label="Breadcrumb"
-      className="flex flex-nowrap items-center gap-2 text-xs text-gray-500 sm:text-sm"
-    >
-      <Link
-        href={`/${locale}`}
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-500 transition hover:bg-yellow-500/30"
-      >
-        <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
-      </Link>
-      <span>{">"}</span>
-      <Link
-        href={`/${locale}/news`}
-        className="text-yellow-400 transition hover:text-yellow-500"
-      >
-        {newsLabel}
-      </Link>
-      <span>{">"}</span>
-      <span className="line-clamp-1 font-medium text-white">{title}</span>
-    </nav>
+    <BreadcrumbTrail
+      locale={locale}
+      homeLabel={homeLabel}
+      wrap={false}
+      items={[
+        {
+          label: newsLabel,
+          href: `/${locale}/news`,
+          tone: "accent",
+        },
+        {
+          label: title,
+          tone: "current",
+          className: "line-clamp-1",
+        },
+      ]}
+    />
   );
 }

@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 
+import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { HistoricalDataMetricCard } from "@/components/molecules/HistoricalDataMetricCard";
+import { HistoricalDataRecordCard } from "@/components/molecules/HistoricalDataRecordCard";
+import { PaginationControls } from "@/components/molecules/PaginationControls";
 import { type HistoricalDataRecord } from "@/lib/historical-data";
 import {
   formatLocaleNumber,
@@ -146,30 +150,19 @@ export function HistoricalDataBrowser({
   return (
     <div className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-line bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">
-            {labels.records}
-          </p>
-          <p className="mt-2 text-2xl font-bold text-yellow-500">
-            {filteredRecords.length}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-line bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">
-            {labels.categories}
-          </p>
-          <p className="mt-2 text-2xl font-bold text-yellow-500">
-            {categories.length}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-line bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">
-            {labels.latestDate}
-          </p>
-          <p className="mt-2 text-lg font-bold text-yellow-500">
-            {latestDate ? formatHistoricalDate(latestDate, locale) : "-"}
-          </p>
-        </div>
+        <HistoricalDataMetricCard
+          label={labels.records}
+          value={String(filteredRecords.length)}
+        />
+        <HistoricalDataMetricCard
+          label={labels.categories}
+          value={String(categories.length)}
+        />
+        <HistoricalDataMetricCard
+          label={labels.latestDate}
+          value={latestDate ? formatHistoricalDate(latestDate, locale) : "-"}
+          valueClassName="text-lg font-bold text-yellow-500"
+        />
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -190,83 +183,18 @@ export function HistoricalDataBrowser({
       </div>
 
       {visibleRecords.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-white/5 px-5 py-8 text-sm text-foreground/58">
-          {labels.empty}
-        </div>
+        <EmptyStatePanel body={labels.empty} />
       ) : (
         <>
           <div className="grid gap-4 md:hidden">
             {visibleRecords.map((record) => (
-              <article
+              <HistoricalDataRecordCard
                 key={record.id}
-                className="rounded-2xl border border-line bg-white/5 p-4"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">
-                      {labels.category}
-                    </p>
-                    <p className="mt-1 text-base font-bold text-yellow-500">
-                      {record.category}
-                    </p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">
-                      {labels.date}
-                    </p>
-                    <p className="mt-1 text-sm text-foreground/78">
-                      {formatHistoricalDate(record.tanggal, locale)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-xl border border-line bg-black/20 px-3 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-                      {labels.open}
-                    </p>
-                    <p className="mt-1 font-mono text-foreground/78">
-                      {formatLocaleNumber(record.open, locale)}
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-line bg-black/20 px-3 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-                      {labels.high}
-                    </p>
-                    <p className="mt-1 font-mono text-foreground/78">
-                      {formatLocaleNumber(record.high, locale)}
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-line bg-black/20 px-3 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-                      {labels.low}
-                    </p>
-                    <p className="mt-1 font-mono text-foreground/78">
-                      {formatLocaleNumber(record.low, locale)}
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-line bg-black/20 px-3 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-                      {labels.close}
-                    </p>
-                    <p className="mt-1 font-mono text-foreground/78">
-                      {formatLocaleNumber(record.close, locale)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-3 rounded-xl border border-line bg-black/20 px-3 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-                    {labels.note}
-                  </p>
-                  <p className="mt-1 text-sm text-foreground/72">
-                    {record.isBankHoliday
-                      ? labels.bankHoliday
-                      : record.description || labels.noNote}
-                  </p>
-                </div>
-              </article>
+                locale={locale}
+                record={record}
+                labels={labels}
+                formatDate={formatHistoricalDate}
+              />
             ))}
           </div>
 
@@ -344,45 +272,34 @@ export function HistoricalDataBrowser({
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-foreground/58">
-              {labels.showing} {startIndex + 1} {labels.to}{" "}
-              {startIndex + visibleRecords.length} {labels.ofRecords}{" "}
-              {filteredRecords.length}
-            </p>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrentPage((currentPageValue) =>
-                    Math.max(1, currentPageValue - 1),
-                  )
-                }
-                disabled={safeCurrentPage === 1}
-                className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {labels.previous}
-              </button>
-
+          <PaginationControls
+            previousLabel={labels.previous}
+            nextLabel={labels.next}
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            onPrevious={() =>
+              setCurrentPage((currentPageValue) =>
+                Math.max(1, currentPageValue - 1),
+              )
+            }
+            onNext={() =>
+              setCurrentPage((currentPageValue) =>
+                Math.min(totalPages, currentPageValue + 1),
+              )
+            }
+            summary={
+              <>
+                {labels.showing} {startIndex + 1} {labels.to}{" "}
+                {startIndex + visibleRecords.length} {labels.ofRecords}{" "}
+                {filteredRecords.length}
+              </>
+            }
+            centerContent={
               <div className="rounded-full border border-line px-4 py-2 text-sm text-foreground/72">
                 {labels.page} {safeCurrentPage} {labels.of} {totalPages}
               </div>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrentPage((currentPageValue) =>
-                    Math.min(totalPages, currentPageValue + 1),
-                  )
-                }
-                disabled={safeCurrentPage === totalPages}
-                className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {labels.next}
-              </button>
-            </div>
-          </div>
+            }
+          />
         </>
       )}
     </div>

@@ -22,16 +22,21 @@ export const enMessages: AppMessages = {
       {
         label: "Products",
         items: [
-          { label: "Live Account Types" },
-          { label: "Commissions and Spreads" },
+          {
+            label: "Multilateral Products",
+            href: "/produk/multilateral",
+          },
+          { label: "Bilateral Products", href: "/produk/bilateral" },
           { label: "Solid Gold App" },
           { label: "Live Quote", href: "/live-quote" },
-          { label: "Trading Signals" },
         ],
       },
       {
         label: "Education",
-        items: [{ label: "Getting Started" }, { label: "Ebook", href: "/ebook" }],
+        items: [
+          { label: "Getting Started" },
+          { label: "Ebook", href: "/ebook" },
+        ],
       },
       {
         label: "News",
@@ -113,11 +118,36 @@ export const enMessages: AppMessages = {
       "Maximize your profit potential with low spreads and commission costs.",
     cta: "Start Trading Now",
     items: [
-      { product: "EURUSD", spread: "Starting from 0.3", size: "Starting from 0.01", swap: "Available" },
-      { product: "GBPUSD", spread: "Starting from 0.9", size: "Starting from 0.01", swap: "Available" },
-      { product: "USDJPY", spread: "Starting from 0.9", size: "Starting from 0.01", swap: "Available" },
-      { product: "Gold", spread: "Starting from $0.29", size: "Starting from 0.01", swap: "Available" },
-      { product: "Nasdaq", spread: "Starting from 1.1", size: "Starting from 0.01", swap: "Available" },
+      {
+        product: "EURUSD",
+        spread: "Starting from 0.3",
+        size: "Starting from 0.01",
+        swap: "Available",
+      },
+      {
+        product: "GBPUSD",
+        spread: "Starting from 0.9",
+        size: "Starting from 0.01",
+        swap: "Available",
+      },
+      {
+        product: "USDJPY",
+        spread: "Starting from 0.9",
+        size: "Starting from 0.01",
+        swap: "Available",
+      },
+      {
+        product: "Gold",
+        spread: "Starting from $0.29",
+        size: "Starting from 0.01",
+        swap: "Available",
+      },
+      {
+        product: "Nasdaq",
+        spread: "Starting from 1.1",
+        size: "Starting from 0.01",
+        swap: "Available",
+      },
     ],
     labels: {
       product: "Product",
@@ -292,7 +322,8 @@ export const enMessages: AppMessages = {
           subtitle: "Highest Bilateral Transaction Volume",
           imageSrc:
             "https://cdn.pandalingua.my.id/sgb/assets/bbe0962d-abab-4ba7-90fc-2ee7434d1fdf.avif",
-          imageAlt: "Award for the 2nd Highest Bilateral Transaction Volume in 2011",
+          imageAlt:
+            "Award for the 2nd Highest Bilateral Transaction Volume in 2011",
         },
       ],
     },
@@ -302,6 +333,37 @@ export const enMessages: AppMessages = {
       highlightedTitle: "official Indonesian institutions",
       description:
         "PT. Solid Gold Berjangka operates on the basis of official licenses and memberships with relevant regulators, exchanges, and clearing institutions.",
+    },
+  },
+  productPage: {
+    breadcrumb: "Products",
+    productsLabel: "Product Catalog",
+    categoryLabel: "Exchange Category",
+    countLabel: "Products",
+    sourceLabel: "Source",
+    viewDetailCta: "View Details",
+    backToCatalogCta: "Back to Catalog",
+    descriptionTitle: "Product Description",
+    specificationTitle: "Product Specifications",
+    emptyTitle: "No products are available yet.",
+    emptyBody: "Please check back again shortly.",
+    categories: {
+      multilateral: {
+        title: "Multilateral",
+        description:
+          "Official multilateral products listed from the Solid Gold product catalog.",
+        eyebrow: "JFX Category",
+        summary:
+          "These multilateral products contain official contract specifications together with trading and delivery details for exchange-traded instruments.",
+      },
+      bilateral: {
+        title: "Bilateral",
+        description:
+          "Official bilateral products listed from the Solid Gold product catalog.",
+        eyebrow: "SPA Category",
+        summary:
+          "These bilateral products summarize trading specifications, margins, commissions, and transaction parameters for active bilateral instruments.",
+      },
     },
   },
   economicCalendarPage: {
@@ -428,23 +490,169 @@ export const enMessages: AppMessages = {
     latestNews: "Latest News",
     readTimeUnit: "min read",
   },
+  fraudAlertPage: {
+    title: "Fraud Alert",
+    description:
+      "A short guide to recognize fraud attempts using the Solid Gold Berjangka name and the safest verification steps to take.",
+    breadcrumb: "Fraud Alert",
+    hero: {
+      eyebrow: "Client Safety",
+      title: "Recognize fraud patterns before you respond.",
+      description:
+        "Use this page as a practical reminder to verify who is contacting you, which links are being shared, and whether any transaction instruction is actually legitimate.",
+    },
+    alertBoxTitle:
+      "Do not immediately trust accounts, phone numbers, or links that have not been verified.",
+    alertBoxBody:
+      "Fraudsters often imitate company names, staff identities, and official-looking messages to push rushed decisions. Take time to inspect the details first.",
+    redFlagsTitle: "Warning signs to watch for",
+    redFlags: [
+      "Requests to transfer funds to a personal bank account or to an account outside the official company name.",
+      "Promises of guaranteed profit, instant bonuses, or risk-free trading results.",
+      "Pressure to deposit immediately, share personal data, or click a link right away.",
+      "Files, apps, or login links sent from unofficial domains or suspicious social media accounts.",
+      "Staff identities that are inconsistent, hard to verify, or keep changing during the conversation.",
+    ],
+    verificationTitle: "Safe verification steps",
+    verificationSteps: [
+      "Recheck the website address, email domain, and social media account before following any instruction.",
+      "Confirm phone numbers, account details, or promotional claims through official company channels you already know.",
+      "Never share passwords, PINs, OTPs, verification codes, or device access with anyone else.",
+      "Make sure payment instructions point only to official company accounts and never to personal accounts.",
+      "If anything feels slightly unclear, stop the process and verify again first.",
+    ],
+    responseTitle: "If you have already been contacted or redirected",
+    responseSteps: [
+      "Stop the conversation and do not continue with transfers, logins, or additional document sharing.",
+      "Save evidence such as chat screenshots, sender numbers, email addresses, links, and transfer receipts if any.",
+      "Change relevant passwords immediately if you already shared login details or opened a suspicious link.",
+      "Contact your bank or payment provider right away if any transaction has already happened.",
+      "Report the incident through official support channels so it can be reviewed further.",
+    ],
+    reminderTitle: "Remember",
+    reminderBody:
+      "Official representatives should never ask for your password, PIN, OTP, or a transfer to a personal account.",
+    primaryCta: "Back to Home",
+    secondaryCta: "Learn About the Company",
+  },
+  contactPage: {
+    title: "Contact Us",
+    description:
+      "PT. Solid Gold Berjangka contact page with a message form, head office map, and official customer support information.",
+    breadcrumb: "Contact Us",
+    breadcrumbs: {
+      supportCenter: "Support Center",
+    },
+    hero: {
+      eyebrow: "Official Contact",
+      title: "CONTACT US",
+      description:
+        "PT. Solid Gold Berjangka offices are present in Jakarta and selected operating cities across Indonesia.",
+    },
+    form: {
+      title: "Send Us a Message",
+      description:
+        "Fill in your details briefly. The submit button will open an email draft addressed to PT. Solid Gold Berjangka.",
+      nameLabel: "Name",
+      namePlaceholder: "Your full name",
+      emailLabel: "Email",
+      emailPlaceholder: "name@email.com",
+      phoneLabel: "Phone Number",
+      phonePlaceholder: "08xxxxxxxxxx",
+      subjectLabel: "Subject",
+      subjectPlaceholder: "Example: Account opening inquiry",
+      messageLabel: "Message",
+      messagePlaceholder:
+        "Write your question, request, or issue in a concise way.",
+      captchaLabel: "CAPTCHA",
+      captchaAction: "Refresh",
+      submit: "Send Message",
+      helper:
+        "For faster follow-up, you can also use the official customer support channels shown beside the form.",
+      success:
+        "Your email app is being opened with the prepared message details.",
+    },
+    headOffice: {
+      title: "SGB Head Office",
+      address:
+        "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220",
+      email: "berjangka@solidgold.co.id",
+      phone: "021-29675088",
+      phoneHref: "tel:02129675088",
+      fax: "021-29675089",
+      complaintPhone: "021-29675088 ext. 116",
+      complaintPhoneHref: "tel:02129675088",
+    },
+    map: {
+      title: "Head Office Map",
+      description:
+        "You can open the PT. Solid Gold Berjangka head office location directly through the map below.",
+      iframeTitle: "PT. Solid Gold Berjangka head office map",
+      directionsCta: "Open Directions",
+      directionsUrl:
+        "https://www.google.com/maps/search/?api=1&query=TCC%20Batavia%20Tower%20One%20Lt.%2010%20Jl.%20K.H.%20Mas%20Mansyur%20Kav.%20126%20Jakarta%20Pusat%2010220",
+    },
+    support: {
+      title: "Customer Support",
+      description:
+        "Choose the right official contact channel for general questions, direct communication, or complaint handling.",
+      hoursLabel: "Operating Hours",
+      hoursValue: "Monday - Friday",
+      callTitle: "Phone",
+      callDescription: "Main phone line for the head office.",
+      emailTitle: "Email",
+      emailDescription: "Official email address for general inquiries.",
+      complaintTitle: "Complaint Unit",
+      complaintDescription: "Use extension 116 for complaint handling.",
+      faxTitle: "Fax",
+      faxDescription: "Official company fax line.",
+    },
+    offices: {
+      title: "SGB Branch Offices",
+      description:
+        "PT. Solid Gold Berjangka operating locations shown using the company's official public contact information.",
+      phoneLabel: "Phone",
+      emailLabel: "Email",
+      faxLabel: "Fax",
+      items: [
+        {
+          name: "Jakarta Head Office",
+          address:
+            "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220",
+          phone: "021-29675088",
+          phoneHref: "tel:02129675088",
+          email: "berjangka@solidgold.co.id",
+          fax: "021-29675089",
+        },
+        {
+          name: "Semarang Office",
+          address:
+            "Gedung Menara SUARA MERDEKA Lt. 3, Jl. Pandanaran No. 30 Semarang 50134",
+          phone: "024-3583979, 024-3583980",
+          phoneHref: "tel:0243583979",
+        },
+        {
+          name: "Makassar Office",
+          address:
+            "Pettarani Business Center, Jl. AP. Pettarani Kav. E9, Kel. Tidung, Kec. Rappocini, Kota Makassar, Sulawesi Selatan 90222",
+        },
+      ],
+    },
+  },
   footer: {
     brandTitle: "SG Mini",
     brandItems: [
-      "About Us",
-      "Our Products",
-      "Live Quote",
-      "Download Platform",
-      "Referral Program",
-      "Blog",
+      { label: "About Us", href: "/about" },
+      { label: "Ebook", href: "/ebook" },
+      { label: "Live Quote", href: "/live-quote" },
+      { label: "News", href: "/news" },
     ],
     helpTitle: "Help",
     helpItems: [
-      "Support Center",
-      "Contact Us",
-      "Complaints",
-      "Fraud Alert",
-      "Bug Bounty",
+      { label: "Contact Us", href: "/contact-us" },
+      { label: "Fraud Alert", href: "/fraud-alert" },
+      { label: "Economic Calendar", href: "/economic-calendar" },
+      { label: "Historical Data", href: "/historical-data" },
     ],
     legalItems: [
       "Commodity Futures Trading Regulatory Agency: Number 1156/BAPPEBTI/SI/3/2007",
@@ -454,7 +662,28 @@ export const enMessages: AppMessages = {
       "Jakarta Futures Exchange: Number SPAB-047/BBJ/07/02",
       "Indonesian Clearing House: Number 15/AK-KBI/V/2003",
     ],
-    socials: ["LinkedIn", "YouTube", "TikTok", "Instagram"],
+    socials: [
+      {
+        name: "Instagram",
+        url: "https://instagram.com/example",
+        icon: "instagram",
+      },
+      {
+        name: "Facebook",
+        url: "https://facebook.com/example",
+        icon: "facebook-f",
+      },
+      {
+        name: "YouTube",
+        url: "https://youtube.com/example",
+        icon: "youtube",
+      },
+      {
+        name: "TikTok",
+        url: "https://tiktok.com/@example",
+        icon: "tiktok",
+      },
+    ],
     copyrightProtected: "All rights reserved.",
     komdigiAlt: "Komdigi logo",
     tsiAlt: "TSI logo",

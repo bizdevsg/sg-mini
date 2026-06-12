@@ -22,11 +22,13 @@ export const idMessages: AppMessages = {
       {
         label: "Produk",
         items: [
-          { label: "Jenis Akun Live" },
-          { label: "Komisi dan Spread" },
+          {
+            label: "Produk Multilateral",
+            href: "/produk/multilateral",
+          },
+          { label: "Produk Bilateral", href: "/produk/bilateral" },
           { label: "Aplikasi Solid Gold" },
           { label: "Live Quote", href: "/live-quote" },
-          { label: "Trading Signal" },
         ],
       },
       {
@@ -113,11 +115,36 @@ export const idMessages: AppMessages = {
       "Maksimalkan potensi profit dengan spread dan biaya komisi yang rendah.",
     cta: "Mulai Trading Sekarang",
     items: [
-      { product: "EURUSD", spread: "Mulai dari 0.3", size: "Mulai dari 0.01", swap: "Tersedia" },
-      { product: "GBPUSD", spread: "Mulai dari 0.9", size: "Mulai dari 0.01", swap: "Tersedia" },
-      { product: "USDJPY", spread: "Mulai dari 0.9", size: "Mulai dari 0.01", swap: "Tersedia" },
-      { product: "Gold", spread: "Mulai dari $0.29", size: "Mulai dari 0.01", swap: "Tersedia" },
-      { product: "Nasdaq", spread: "Mulai dari 1.1", size: "Mulai dari 0.01", swap: "Tersedia" },
+      {
+        product: "EURUSD",
+        spread: "Mulai dari 0.3",
+        size: "Mulai dari 0.01",
+        swap: "Tersedia",
+      },
+      {
+        product: "GBPUSD",
+        spread: "Mulai dari 0.9",
+        size: "Mulai dari 0.01",
+        swap: "Tersedia",
+      },
+      {
+        product: "USDJPY",
+        spread: "Mulai dari 0.9",
+        size: "Mulai dari 0.01",
+        swap: "Tersedia",
+      },
+      {
+        product: "Gold",
+        spread: "Mulai dari $0.29",
+        size: "Mulai dari 0.01",
+        swap: "Tersedia",
+      },
+      {
+        product: "Nasdaq",
+        spread: "Mulai dari 1.1",
+        size: "Mulai dari 0.01",
+        swap: "Tersedia",
+      },
     ],
     labels: {
       product: "Produk",
@@ -164,7 +191,8 @@ export const idMessages: AppMessages = {
     breadcrumb: "Ebook",
     hero: {
       eyebrow: "Pusat Materi",
-      title: "Ebook trading yang ringkas, relevan, dan siap dipelajari kapan saja.",
+      title:
+        "Ebook trading yang ringkas, relevan, dan siap dipelajari kapan saja.",
       description:
         "Halaman ini merangkum materi baca yang cocok untuk pemula maupun trader aktif yang ingin memperkuat pemahaman market secara lebih terstruktur.",
       primaryCta: "Buka Akun",
@@ -292,7 +320,8 @@ export const idMessages: AppMessages = {
           subtitle: "Transaksi Bilateral Terbanyak",
           imageSrc:
             "https://cdn.pandalingua.my.id/sgb/assets/bbe0962d-abab-4ba7-90fc-2ee7434d1fdf.avif",
-          imageAlt: "Penghargaan Dengan Volume Transaksi Bilateral Terbanyak ke-2 Tahun 2011",
+          imageAlt:
+            "Penghargaan Dengan Volume Transaksi Bilateral Terbanyak ke-2 Tahun 2011",
         },
       ],
     },
@@ -302,6 +331,37 @@ export const idMessages: AppMessages = {
       highlightedTitle: "lembaga resmi Indonesia",
       description:
         "PT. Solid Gold Berjangka menjalankan kegiatan usaha dengan landasan perizinan dan keanggotaan resmi pada regulator, bursa, serta lembaga kliring yang relevan.",
+    },
+  },
+  productPage: {
+    breadcrumb: "Produk",
+    productsLabel: "Katalog Produk",
+    categoryLabel: "Kategori Bursa",
+    countLabel: "Produk",
+    sourceLabel: "Sumber",
+    viewDetailCta: "Lihat Detail",
+    backToCatalogCta: "Kembali ke Katalog",
+    descriptionTitle: "Deskripsi Produk",
+    specificationTitle: "Spesifikasi Produk",
+    emptyTitle: "Produk belum tersedia.",
+    emptyBody: "Silakan coba lagi beberapa saat lagi.",
+    categories: {
+      multilateral: {
+        title: "Multilateral",
+        description:
+          "Daftar produk multilateral resmi yang ditampilkan dari katalog produk Solid Gold.",
+        eyebrow: "Kategori JFX",
+        summary:
+          "Produk multilateral ini memuat spesifikasi kontrak resmi beserta detail penyerahan dan perdagangan untuk instrumen yang diperdagangkan di bursa.",
+      },
+      bilateral: {
+        title: "Bilateral",
+        description:
+          "Daftar produk bilateral resmi yang ditampilkan dari katalog produk Solid Gold.",
+        eyebrow: "Kategori SPA",
+        summary:
+          "Produk bilateral ini merangkum spesifikasi perdagangan, margin, komisi, dan parameter transaksi untuk instrumen bilateral yang aktif.",
+      },
     },
   },
   economicCalendarPage: {
@@ -335,7 +395,8 @@ export const idMessages: AppMessages = {
     date: "Tanggal",
     noHistory: "Belum ada riwayat event untuk entri ini.",
     empty: "Belum ada event pada rentang kalender ini.",
-    unavailable: "Data untuk rentang kalender ini sedang tidak tersedia dari API.",
+    unavailable:
+      "Data untuk rentang kalender ini sedang tidak tersedia dari API.",
     collapse: "Tutup",
     expand: "Lihat detail",
     today: "Hari ini",
@@ -428,23 +489,169 @@ export const idMessages: AppMessages = {
     latestNews: "Latest News",
     readTimeUnit: "menit baca",
   },
+  fraudAlertPage: {
+    title: "Waspada Penipuan",
+    description:
+      "Panduan singkat untuk mengenali modus penipuan yang mengatasnamakan Solid Gold Berjangka dan langkah verifikasi yang aman.",
+    breadcrumb: "Waspada Penipuan",
+    hero: {
+      eyebrow: "Keamanan Nasabah",
+      title: "Kenali modus penipuan sebelum Anda merespons.",
+      description:
+        "Gunakan halaman ini sebagai pengingat singkat untuk memeriksa identitas pihak yang menghubungi Anda, tautan yang dibagikan, dan instruksi transaksi yang diberikan.",
+    },
+    alertBoxTitle:
+      "Jangan langsung percaya pada akun, nomor, atau tautan yang belum terverifikasi.",
+    alertBoxBody:
+      "Pelaku penipuan biasanya meniru nama perusahaan, staf, atau tampilan komunikasi resmi untuk mendorong keputusan yang terburu-buru. Luangkan waktu untuk memeriksa detailnya terlebih dahulu.",
+    redFlagsTitle: "Tanda-tanda yang perlu dicurigai",
+    redFlags: [
+      "Meminta transfer dana ke rekening pribadi atau rekening di luar nama perusahaan resmi.",
+      "Menjanjikan profit pasti, bonus instan, atau hasil trading tanpa risiko.",
+      "Menekan Anda untuk segera deposit, membagikan data pribadi, atau mengklik tautan tertentu saat itu juga.",
+      "Mengirim file, aplikasi, atau link login dari domain dan akun media sosial yang tidak resmi.",
+      "Menggunakan identitas staf yang tidak konsisten, sulit diverifikasi, atau berubah-ubah selama percakapan.",
+    ],
+    verificationTitle: "Langkah verifikasi yang aman",
+    verificationSteps: [
+      "Periksa kembali alamat website, domain email, dan akun media sosial sebelum mengikuti instruksi apa pun.",
+      "Konfirmasi nomor telepon, akun, atau informasi promo melalui kanal resmi perusahaan yang sudah Anda kenal.",
+      "Jangan pernah membagikan password, PIN, OTP, kode verifikasi, atau akses perangkat kepada pihak lain.",
+      "Pastikan instruksi pembayaran hanya mengarah ke rekening resmi perusahaan dan bukan rekening pribadi.",
+      "Jika ada keraguan kecil sekalipun, hentikan proses dan verifikasi ulang terlebih dahulu.",
+    ],
+    responseTitle: "Jika Anda terlanjur dihubungi atau diarahkan",
+    responseSteps: [
+      "Hentikan komunikasi dan jangan lanjutkan transfer, login, atau pengiriman dokumen tambahan.",
+      "Simpan bukti seperti screenshot chat, nomor pengirim, email, tautan, dan bukti transfer bila ada.",
+      "Segera ubah password akun terkait jika Anda sempat membagikan data login atau mengakses tautan mencurigakan.",
+      "Hubungi bank atau penyedia pembayaran Anda bila sudah terjadi transaksi untuk meminta langkah penanganan secepatnya.",
+      "Laporkan kejadian tersebut ke kanal dukungan resmi agar bisa ditinjau lebih lanjut.",
+    ],
+    reminderTitle: "Ingat",
+    reminderBody:
+      "Pihak resmi tidak akan meminta password, PIN, OTP, atau transfer dana ke rekening pribadi atas nama staf mana pun.",
+    primaryCta: "Kembali ke Beranda",
+    secondaryCta: "Pelajari Perusahaan",
+  },
+  contactPage: {
+    title: "Hubungi Kami",
+    description:
+      "Halaman kontak PT. Solid Gold Berjangka dengan form pesan, peta kantor pusat, dan informasi customer support resmi.",
+    breadcrumb: "Hubungi Kami",
+    breadcrumbs: {
+      supportCenter: "Pusat Dukungan",
+    },
+    hero: {
+      eyebrow: "Kontak Resmi",
+      title: "HUBUNGI KAMI",
+      description:
+        "PT. Solid Gold Berjangka hadir di Jakarta dan beberapa kota operasional lain di Indonesia.",
+    },
+    form: {
+      title: "Kirimkan Pesan Anda",
+      description:
+        "Isi data singkat Anda. Tombol kirim akan membuka email ke alamat resmi PT. Solid Gold Berjangka.",
+      nameLabel: "Nama",
+      namePlaceholder: "Nama lengkap Anda",
+      emailLabel: "Email",
+      emailPlaceholder: "nama@email.com",
+      phoneLabel: "No. Handphone",
+      phonePlaceholder: "08xxxxxxxxxx",
+      subjectLabel: "Subjek",
+      subjectPlaceholder: "Contoh: Pertanyaan pembukaan akun",
+      messageLabel: "Pesan",
+      messagePlaceholder:
+        "Tuliskan kebutuhan, pertanyaan, atau kendala Anda secara singkat.",
+      captchaLabel: "CAPTCHA",
+      captchaAction: "Refresh",
+      submit: "Kirim Pesan",
+      helper:
+        "Untuk respons lebih cepat, Anda juga bisa langsung menghubungi customer support di samping.",
+      success:
+        "Aplikasi email Anda sedang dibuka dengan detail pesan yang sudah disiapkan.",
+    },
+    headOffice: {
+      title: "Kantor Pusat SGB",
+      address:
+        "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220",
+      email: "berjangka@solidgold.co.id",
+      phone: "021-29675088",
+      phoneHref: "tel:02129675088",
+      fax: "021-29675089",
+      complaintPhone: "021-29675088 ext. 116",
+      complaintPhoneHref: "tel:02129675088",
+    },
+    map: {
+      title: "Peta Kantor Pusat",
+      description:
+        "Lokasi kantor pusat PT. Solid Gold Berjangka di Jakarta dapat langsung dibuka melalui peta berikut.",
+      iframeTitle: "Peta kantor pusat PT. Solid Gold Berjangka",
+      directionsCta: "Buka Petunjuk Arah",
+      directionsUrl:
+        "https://www.google.com/maps/search/?api=1&query=TCC%20Batavia%20Tower%20One%20Lt.%2010%20Jl.%20K.H.%20Mas%20Mansyur%20Kav.%20126%20Jakarta%20Pusat%2010220",
+    },
+    support: {
+      title: "Customer Support",
+      description:
+        "Pilih kanal kontak resmi sesuai kebutuhan Anda, mulai dari pertanyaan umum sampai unit pengaduan.",
+      hoursLabel: "Waktu Operasional",
+      hoursValue: "Senin - Jumat",
+      callTitle: "Telepon",
+      callDescription: "Jalur telepon utama kantor pusat.",
+      emailTitle: "Email",
+      emailDescription: "Alamat email resmi untuk pertanyaan umum.",
+      complaintTitle: "Unit Pengaduan",
+      complaintDescription: "Gunakan ext. 116 untuk kebutuhan pengaduan.",
+      faxTitle: "Fax",
+      faxDescription: "Kanal fax resmi perusahaan.",
+    },
+    offices: {
+      title: "Kantor Cabang SGB",
+      description:
+        "Lokasi operasional PT. Solid Gold Berjangka yang ditampilkan mengikuti informasi kontak publik resmi perusahaan.",
+      phoneLabel: "Telepon",
+      emailLabel: "Email",
+      faxLabel: "Fax",
+      items: [
+        {
+          name: "Kantor Pusat Jakarta",
+          address:
+            "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220",
+          phone: "021-29675088",
+          phoneHref: "tel:02129675088",
+          email: "berjangka@solidgold.co.id",
+          fax: "021-29675089",
+        },
+        {
+          name: "Kantor Semarang",
+          address:
+            "Gedung Menara SUARA MERDEKA Lt. 3, Jl. Pandanaran No. 30 Semarang 50134",
+          phone: "024-3583979, 024-3583980",
+          phoneHref: "tel:0243583979",
+        },
+        {
+          name: "Kantor Makassar",
+          address:
+            "Pettarani Business Center, Jl. AP. Pettarani Kav. E9, Kel. Tidung, Kec. Rappocini, Kota Makassar, Sulawesi Selatan 90222",
+        },
+      ],
+    },
+  },
   footer: {
     brandTitle: "SG Mini",
     brandItems: [
-      "Tentang Kami",
-      "Produk Kami",
-      "Live Quote",
-      "Download Platform",
-      "Program Referral",
-      "Blog",
+      { label: "Tentang Kami", href: "/about" },
+      { label: "Ebook", href: "/ebook" },
+      { label: "Live Quote", href: "/live-quote" },
+      { label: "Berita", href: "/news" },
     ],
     helpTitle: "Bantuan",
     helpItems: [
-      "Support Center",
-      "Hubungi Kami",
-      "Pengaduan",
-      "Waspada Penipuan",
-      "Bug Bounty",
+      { label: "Hubungi Kami", href: "/contact-us" },
+      { label: "Waspada Penipuan", href: "/fraud-alert" },
+      { label: "Kalender Ekonomi", href: "/economic-calendar" },
+      { label: "Historical Data", href: "/historical-data" },
     ],
     legalItems: [
       "Badan Pengawas Perdagangan Berjangka Komoditi: Nomor 1156/BAPPEBTI/SI/3/2007",
@@ -454,7 +661,28 @@ export const idMessages: AppMessages = {
       "Bursa Berjangka Jakarta: Nomor SPAB-047/BBJ/07/02",
       "Kliring Berjangka Indonesia: Nomor 15/AK-KBI/V/2003",
     ],
-    socials: ["LinkedIn", "YouTube", "TikTok", "Instagram"],
+    socials: [
+      {
+        name: "Instagram",
+        url: "https://instagram.com/example",
+        icon: "instagram",
+      },
+      {
+        name: "Facebook",
+        url: "https://facebook.com/example",
+        icon: "facebook-f",
+      },
+      {
+        name: "YouTube",
+        url: "https://youtube.com/example",
+        icon: "youtube",
+      },
+      {
+        name: "TikTok",
+        url: "https://tiktok.com/@example",
+        icon: "tiktok",
+      },
+    ],
     copyrightProtected: "Hak cipta dilindungi.",
     komdigiAlt: "Logo Komdigi",
     tsiAlt: "Logo TSI",

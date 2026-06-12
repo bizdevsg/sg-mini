@@ -14,14 +14,21 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
   return (
     <section className="border-y border-line bg-zinc-900">
       <SectionContainer className="py-20">
-        <SectionTitle title={messages.liveQuoteSection.title} />
+        <SectionTitle
+          title={messages.liveQuoteSection.title}
+          subtitle={messages.liveQuoteSection.subtitle}
+          align="center"
+          className="mx-auto"
+          subtitleClassName="mx-auto max-w-2xl"
+        />
         <LiveQuoteTable locale={locale} />
 
         <div className="flex justify-center">
           <ButtonLink
             href={`/${locale}/live-quote`}
             variant="dark"
-            className="mt-5 px-8 py-3"
+            size="lg"
+            className="mt-5"
           >
             {messages.liveQuoteSection.cta}
           </ButtonLink>

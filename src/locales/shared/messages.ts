@@ -173,6 +173,33 @@ export type AppMessages = {
       description: string;
     };
   };
+  productPage: {
+    breadcrumb: string;
+    productsLabel: string;
+    categoryLabel: string;
+    countLabel: string;
+    sourceLabel: string;
+    viewDetailCta: string;
+    backToCatalogCta: string;
+    descriptionTitle: string;
+    specificationTitle: string;
+    emptyTitle: string;
+    emptyBody: string;
+    categories: {
+      multilateral: {
+        title: string;
+        description: string;
+        eyebrow: string;
+        summary: string;
+      };
+      bilateral: {
+        title: string;
+        description: string;
+        eyebrow: string;
+        summary: string;
+      };
+    };
+  };
   economicCalendarPage: {
     title: string;
     description: string;
@@ -288,13 +315,123 @@ export type AppMessages = {
     latestNews: string;
     readTimeUnit: string;
   };
+  fraudAlertPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    alertBoxTitle: string;
+    alertBoxBody: string;
+    redFlagsTitle: string;
+    redFlags: string[];
+    verificationTitle: string;
+    verificationSteps: string[];
+    responseTitle: string;
+    responseSteps: string[];
+    reminderTitle: string;
+    reminderBody: string;
+    primaryCta: string;
+    secondaryCta: string;
+  };
+  contactPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    breadcrumbs: {
+      supportCenter: string;
+    };
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    form: {
+      title: string;
+      description: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      phoneLabel: string;
+      phonePlaceholder: string;
+      subjectLabel: string;
+      subjectPlaceholder: string;
+      messageLabel: string;
+      messagePlaceholder: string;
+      captchaLabel: string;
+      captchaAction: string;
+      submit: string;
+      helper: string;
+      success: string;
+    };
+    headOffice: {
+      title: string;
+      address: string;
+      email: string;
+      phone: string;
+      phoneHref: string;
+      fax: string;
+      complaintPhone: string;
+      complaintPhoneHref: string;
+    };
+    map: {
+      title: string;
+      description: string;
+      iframeTitle: string;
+      directionsCta: string;
+      directionsUrl: string;
+    };
+    support: {
+      title: string;
+      description: string;
+      hoursLabel: string;
+      hoursValue: string;
+      callTitle: string;
+      callDescription: string;
+      emailTitle: string;
+      emailDescription: string;
+      complaintTitle: string;
+      complaintDescription: string;
+      faxTitle: string;
+      faxDescription: string;
+    };
+    offices: {
+      title: string;
+      description: string;
+      phoneLabel: string;
+      emailLabel: string;
+      faxLabel: string;
+      items: Array<{
+        name: string;
+        address: string;
+        phone?: string;
+        phoneHref?: string;
+        email?: string;
+        fax?: string;
+      }>;
+    };
+  };
   footer: {
     brandTitle: string;
-    brandItems: string[];
+    brandItems: Array<{
+      label: string;
+      href: string;
+    }>;
     helpTitle: string;
-    helpItems: string[];
+    helpItems: Array<{
+      label: string;
+      href: string;
+    }>;
     legalItems: string[];
-    socials: string[];
+    socials: Array<{
+      name: string;
+      url: string;
+      icon: string;
+    }>;
     copyrightProtected: string;
     komdigiAlt: string;
     tsiAlt: string;

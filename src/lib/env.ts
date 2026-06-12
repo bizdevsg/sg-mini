@@ -3,6 +3,8 @@ const DEFAULT_CDN_ASSET_BASE_URL = "https://cdn.pandalingua.my.id/sgb/assets";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
 const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "https://portalnews.newsmaker.id";
+const DEFAULT_PRODUCT_API_URL = "https://sg-admin.newsmaker.id/api/v1/produk";
+const DEFAULT_PRODUCT_PORTAL_BASE_URL = "https://sg-admin.newsmaker.id";
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
@@ -34,6 +36,12 @@ export const NEWS_API_TOKEN = process.env.NEWS_API_TOKEN ?? "";
 
 export const NEWS_PORTAL_BASE_URL =
   process.env.NEWS_PORTAL_BASE_URL ?? DEFAULT_NEWS_PORTAL_BASE_URL;
+
+export const PRODUCT_API_URL =
+  process.env.PRODUCT_API_URL ?? DEFAULT_PRODUCT_API_URL;
+
+export const PRODUCT_PORTAL_BASE_URL =
+  process.env.PRODUCT_PORTAL_BASE_URL ?? DEFAULT_PRODUCT_PORTAL_BASE_URL;
 
 export const HISTORICAL_DATA_API_URL =
   process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;
@@ -81,4 +89,12 @@ export function getNewsAssetUrl(assetPath: string) {
   }
 
   return buildAssetUrl(NEWS_PORTAL_BASE_URL, assetPath);
+}
+
+export function getProductAssetUrl(assetPath: string) {
+  if (/^https?:\/\//i.test(assetPath)) {
+    return assetPath;
+  }
+
+  return buildAssetUrl(PRODUCT_PORTAL_BASE_URL, assetPath);
 }

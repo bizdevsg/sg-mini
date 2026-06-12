@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { PaginationControls } from "@/components/molecules/PaginationControls";
 import {
   ECONOMIC_CALENDAR_RANGE_KEYS,
   type EconomicCalendarEvent,
@@ -288,13 +290,9 @@ export function EconomicCalendarBrowser({
       </div>
 
       {activeData.status !== "success" ? (
-        <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-8 text-sm text-rose-200">
-          {labels.unavailable}
-        </div>
+        <EmptyStatePanel body={labels.unavailable} variant="warning" />
       ) : activeEvents.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-white/5 px-5 py-8 text-sm text-foreground/58">
-          {labels.empty}
-        </div>
+        <EmptyStatePanel body={labels.empty} />
       ) : (
         <>
           <div className="grid gap-4 md:hidden">
@@ -496,39 +494,27 @@ export function EconomicCalendarBrowser({
           </div>
 
           {activeEvents.length > PAGE_SIZE ? (
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-foreground/58">
-                {labels.page} {safeCurrentPage} {labels.of} {totalPages}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentPage((pageValue) => Math.max(1, pageValue - 1));
-                    setSelectedEventId(null);
-                  }}
-                  disabled={safeCurrentPage === 1}
-                  className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  {labels.previousPage}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentPage((pageValue) =>
-                      Math.min(totalPages, pageValue + 1),
-                    );
-                    setSelectedEventId(null);
-                  }}
-                  disabled={safeCurrentPage === totalPages}
-                  className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  {labels.nextPage}
-                </button>
-              </div>
-            </div>
+            <PaginationControls
+              previousLabel={labels.previousPage}
+              nextLabel={labels.nextPage}
+              currentPage={safeCurrentPage}
+              totalPages={totalPages}
+              onPrevious={() => {
+                setCurrentPage((pageValue) => Math.max(1, pageValue - 1));
+                setSelectedEventId(null);
+              }}
+              onNext={() => {
+                setCurrentPage((pageValue) =>
+                  Math.min(totalPages, pageValue + 1),
+                );
+                setSelectedEventId(null);
+              }}
+              summary={
+                <>
+                  {labels.page} {safeCurrentPage} {labels.of} {totalPages}
+                </>
+              }
+            />
           ) : null}
 
           <div className="rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-sm text-foreground/62">

@@ -1,6 +1,6 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
 import { regulatorLogos } from "@/components/content/landing-content";
+import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { RegulatorLogoItem } from "@/components/molecules/RegulatorLogoItem";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -14,23 +14,22 @@ export default function RegulasiSection({ locale }: RegulasiSectionProps) {
   return (
     <section className="bg-zinc-900/40">
       <SectionContainer className="py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <SectionEyebrow className="justify-center text-yellow-500">
-            {regulation.eyebrow}
-          </SectionEyebrow>
-
-          <h2 className="mt-5 text-3xl font-bold text-white md:text-4xl">
-            {regulation.title}
-            <span className="text-yellow-500">
-              {" "}
-              {regulation.highlightedTitle}
-            </span>
-          </h2>
-
-          <p className="mt-4 text-sm leading-7 text-zinc-300 sm:text-base">
-            {regulation.description}
-          </p>
-        </div>
+        <SectionIntro
+          align="center"
+          className="mx-auto max-w-3xl"
+          eyebrow={regulation.eyebrow}
+          title={
+            <>
+              {regulation.title}
+              <span className="text-yellow-500">
+                {" "}
+                {regulation.highlightedTitle}
+              </span>
+            </>
+          }
+          description={regulation.description}
+          eyebrowClassName="text-yellow-500"
+        />
 
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
           {regulatorLogos.map((logo) => (

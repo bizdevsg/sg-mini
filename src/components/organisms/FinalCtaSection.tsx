@@ -1,4 +1,5 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { getFramerImageUrl, PUBLIC_REGISTER_URL } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
 import Image from "next/image";
@@ -13,24 +14,36 @@ export function FinalCtaSection({ locale }: FinalCtaSectionProps) {
   const registerHref = PUBLIC_REGISTER_URL;
 
   return (
-    <section className="bg-transparent">
+    <section className="bg-[#010B15]">
       <SectionContainer className="py-20">
-        <div className="text-center font-bold text-3xl md:text-4xl lg:text-5xl">
-          <h1 className="mx-auto max-w-4xl text-yellow-500">
-            {messages.finalCta.title}
-          </h1>
-          <h1 className="mx-auto max-w-4xl">{messages.finalCta.subTitle}</h1>
+        <div className="text-center">
+          <SectionIntro
+            align="center"
+            title={
+              <>
+                <span className="text-yellow-500">
+                  {messages.finalCta.title}
+                </span>
+                <span className="block text-white">
+                  {messages.finalCta.subTitle}
+                </span>
+              </>
+            }
+            className="mx-auto max-w-4xl"
+            titleClassName="text-[2.4rem] md:text-5xl lg:text-[3.6rem]"
+          />
           <ButtonLink
             href={registerHref}
             target="_blank"
             rel="noreferrer"
-            className="mt-10 px-8 py-2"
+            size="lg"
+            className="mt-10"
           >
             {messages.finalCta.cta}
           </ButtonLink>
         </div>
 
-        <div className="relative mt-10 aspect-[3310/1163] w-full overflow-hidden rounded-[2rem]">
+        <div className="relative mt-10 aspect-[3310/1163] w-full overflow-hidden">
           <Image
             src={getFramerImageUrl(
               "ydoWDvRN7X60OhPjxdEIX6YnRAE.webp?scale-down-to=2048&width=3310&height=1163",

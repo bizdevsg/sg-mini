@@ -1,36 +1,57 @@
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { SectionTitle } from "@/components/atoms/SectionTitle";
-import { PUBLIC_SPREAD_CTA_URL } from "@/lib/env";
+import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
+import { SectionIntro } from "@/components/molecules/SectionIntro";
+import { getNewsPageContent } from "@/components/content/news-content";
+import { getNewsFeed } from "@/lib/news";
 import { getMessages, type AppLocale } from "@/locales";
-import { SpreadTable } from "@/components/molecules/SpreadTable";
 
 type SpreadSectionProps = {
   locale: AppLocale;
 };
 
-export function SpreadSection({ locale }: SpreadSectionProps) {
+const LATEST_NEWS_LIMIT = 4;
+
+export async function SpreadSection({ locale }: SpreadSectionProps) {
   const messages = getMessages(locale);
+  const newsPageContent = getNewsPageContent(locale);
+  const latestSection = newsPageContent.latest;
+  const { articles } = await getNewsFeed(locale, LATEST_NEWS_LIMIT);
 
   return (
     <section className="border-b border-line bg-transparent py-20 text-white">
       <SectionContainer>
-        <SectionTitle
-          title={messages.spread.title}
-          subtitle={messages.spread.subtitle}
-          theme="dark"
+        <SectionIntro
+          eyebrow={latestSection.eyebrow}
+          title={latestSection.title}
+          description={latestSection.subtitle}
+          align="center"
+          className="mx-auto max-w-3xl"
+          eyebrowClassName="text-yellow-500"
         />
 
-        <SpreadTable locale={locale} items={messages.spread.items} />
+        {articles.length ? (
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
+            {articles.map((article, index) => (
+              <NewsFeedArticleCard
+                key={article.id}
+                article={article}
+                locale={locale}
+                readMoreLabel={messages.newsBrowser.readArticle}
+                prioritizeImage={index < 2}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-10">
+            <EmptyStatePanel body={messages.newsPage.emptyBody} />
+          </div>
+        )}
 
-        <div className="w-full mt-8">
-          <ButtonLink
-            href={PUBLIC_SPREAD_CTA_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="px-5 py-2 mx-auto"
-          >
-            {messages.spread.cta}
+        <div className="mt-8 w-full">
+          <ButtonLink href={`/${locale}/news`} size="lg" className="mx-auto">
+            {newsPageContent.newsPage.hero.primaryCta}
           </ButtonLink>
         </div>
       </SectionContainer>

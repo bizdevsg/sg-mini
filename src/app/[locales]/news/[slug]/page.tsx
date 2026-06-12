@@ -95,12 +95,11 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     (candidate) => candidate.slug !== article.slug,
   );
 
-  const relatedCandidates = nonCurrentArticles
-    .filter(
-      (candidate) =>
-        (candidate.displayCategory === article.displayCategory ||
-          candidate.category === article.category),
-    );
+  const relatedCandidates = nonCurrentArticles.filter(
+    (candidate) =>
+      candidate.displayCategory === article.displayCategory ||
+      candidate.category === article.category,
+  );
 
   const relatedArticles = (
     relatedCandidates.length ? relatedCandidates : nonCurrentArticles
@@ -137,7 +136,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </div>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <NewsDetailArticleBody paragraphs={article.body} slug={article.slug} />
+        <NewsDetailArticleBody bodyHtml={article.bodyHtml} />
 
         <NewsDetailSidebar
           relatedArticles={relatedArticles}

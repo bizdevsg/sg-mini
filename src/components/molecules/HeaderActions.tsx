@@ -71,7 +71,7 @@ export function HeaderActions({
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
   const mobileActionButtonClass =
-    "h-10 min-w-[74px] rounded-[14px] px-4 py-2 text-xs font-semibold shadow-none";
+    "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
   const localeButtonClass = mobilePanel
     ? "h-10 w-10 justify-center rounded-full border border-white/12 bg-[rgba(22,22,22,0.96)] p-0 text-yellow-500 shadow-[0_12px_28px_rgba(0,0,0,0.35)]"
     : "rounded-full border border-white/10 bg-[rgba(20,20,20,0.94)] p-2 text-yellow-500 shadow-[0_10px_26px_rgba(0,0,0,0.35)]";
@@ -179,6 +179,7 @@ export function HeaderActions({
         <div className="flex items-center gap-2.5">
           <ButtonLink
             variant="ghost"
+            size="sm"
             className={mobileActionButtonClass}
             href={PUBLIC_LOGIN_URL}
             target="_blank"
@@ -189,6 +190,7 @@ export function HeaderActions({
 
           <ButtonLink
             variant="dark"
+            size="sm"
             className={mobileActionButtonClass}
             href={PUBLIC_REGISTER_URL}
             target="_blank"
@@ -207,7 +209,8 @@ export function HeaderActions({
     >
       <ButtonLink
         variant="ghost"
-        className="rounded-full px-3 py-2 text-xs font-medium sm:px-3.5 sm:py-2 sm:text-sm"
+        size="sm"
+        className="rounded-full text-xs font-medium sm:text-sm"
         href={PUBLIC_LOGIN_URL}
         target="_blank"
         rel="noreferrer"
@@ -217,7 +220,8 @@ export function HeaderActions({
 
       <ButtonLink
         variant="dark"
-        className="rounded-full px-3 py-2 text-xs font-medium sm:px-3.5 sm:py-2 sm:text-sm"
+        size="sm"
+        className="rounded-full text-xs font-medium sm:text-sm"
         href={PUBLIC_REGISTER_URL}
         target="_blank"
         rel="noreferrer"
