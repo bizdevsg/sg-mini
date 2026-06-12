@@ -1,4 +1,4 @@
-import type { SpreadItem } from "@/components/content/landing-content";
+import type { SpreadItem } from "@/types/landing";
 import { getMessages, type AppLocale } from "@/locales";
 
 type SpreadTableProps = {

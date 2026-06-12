@@ -3,8 +3,8 @@ import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
-import { getNewsPageContent } from "@/components/content/news-content";
 import { getNewsFeed } from "@/lib/news";
+import { getNewsPageContent } from "@/locales/news-page-content";
 import { getMessages, type AppLocale } from "@/locales";
 
 type SpreadSectionProps = {

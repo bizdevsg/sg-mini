@@ -13,6 +13,22 @@ export {
   formatLocaleYear,
 } from "./formatters";
 export { messages, type AppMessages } from "./messages";
+export {
+  getSolidGoldAppPageContent,
+  type SolidGoldAppPageContent,
+} from "./solid-gold-app-page";
+export {
+  getIndexSymbolsPageContent,
+  type IndexSymbolsPageContent,
+} from "./index-symbols-page";
+export {
+  getLocoLondonGoldPageContent,
+  type LocoLondonGoldPageContent,
+} from "./loco-london-gold-page";
+export {
+  getOnlineTradingTermsPageContent,
+  type OnlineTradingTermsPageContent,
+} from "./online-trading-terms-page";
 
 import { DEFAULT_LOCALE, type AppLocale } from "./config";
 import { messages } from "./messages";

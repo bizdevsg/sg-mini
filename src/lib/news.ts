@@ -3,7 +3,7 @@ import { request } from "node:https";
 import {
   getNewsPageContent,
   type NewsArticle,
-} from "@/components/content/news-content";
+} from "@/locales/news-page-content";
 import { getMessages, type AppLocale } from "@/locales";
 
 import { getNewsAssetUrl, NEWS_API_TOKEN, NEWS_API_URL } from "@/lib/env";

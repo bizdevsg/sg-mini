@@ -1,16 +1,16 @@
 import { AboutCompanyProfileSection } from "@/components/organisms/AboutCompanyProfileSection";
 import { AboutShowcaseSection } from "@/components/organisms/AboutShowcaseSection";
 import RegulasiSection from "@/components/organisms/RegulasiSection";
-import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
 import VisiMisiSection from "@/components/organisms/VisiMisiSection";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import {
+  getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
-import { notFound } from "next/navigation";
 
 type AboutPageProps = {
   params: Promise<{ locales: string }>;
@@ -28,11 +28,37 @@ export function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({
+  params,
+}: AboutPageProps): Promise<Metadata> {
+  const { locales } = await params;
+  assertValidLocale(locales);
+
+  const page = getMessages(locales).aboutPage;
+
+  return {
+    title:
+      locales === "id"
+        ? `Tentang ${page.companyProfile.title}`
+        : `About ${page.companyProfile.title}`,
+    description: page.hero.description,
+    alternates: {
+      canonical: `/${locales}/about`,
+      languages: Object.fromEntries(
+        SUPPORTED_LOCALES.map((locale) => [
+          getLocaleConfig(locale).lang,
+          `/${locale}/about`,
+        ]),
+      ),
+    },
+  };
+}
+
 export default async function AboutPage({ params }: AboutPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
   const messages = getMessages(locales);
-  const { hero, awards } = messages.aboutPage;
+  const { awards } = messages.aboutPage;
 
   return (
     <main>

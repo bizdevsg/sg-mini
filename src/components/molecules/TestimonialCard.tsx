@@ -1,4 +1,4 @@
-import type { Testimonial } from "@/components/content/landing-content";
+import type { Testimonial } from "@/types/landing";
 
 type TestimonialCardProps = {
   testimonial: Testimonial;

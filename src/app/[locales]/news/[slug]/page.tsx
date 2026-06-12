@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { getNewsPageContent } from "@/components/content/news-content";
+import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
 import { NewsDetailArticleBody } from "@/components/organisms/NewsDetailArticleBody";
 import { NewsDetailBreadcrumb } from "@/components/organisms/NewsDetailBreadcrumb";
 import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
@@ -13,6 +13,7 @@ import {
   getStaticNewsArticleBySlug,
   getStaticNewsFeed,
 } from "@/lib/news";
+import { getNewsPageContent } from "@/locales/news-page-content";
 import {
   getLocaleConfig,
   getMessages,
@@ -107,7 +108,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   const latestArticles = nonCurrentArticles.slice(0, 4);
 
-  const labels = getMessages(locales).newsDetailPage;
+  const messages = getMessages(locales);
+  const labels = messages.newsDetailPage;
 
   return (
     <SectionContainer className="py-16 sm:py-20">
@@ -140,11 +142,30 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
         <NewsDetailSidebar
           relatedArticles={relatedArticles}
-          latestArticles={latestArticles}
           locale={locales}
           labels={labels}
         />
       </div>
+
+      {latestArticles.length ? (
+        <section className="mt-16 border-t border-white/10 pt-16 sm:mt-20 sm:pt-20">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+            {labels.latestNews}
+          </h2>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
+            {latestArticles.map((latestArticle, index) => (
+              <NewsFeedArticleCard
+                key={latestArticle.slug}
+                article={latestArticle}
+                locale={locales}
+                readMoreLabel={messages.newsBrowser.readArticle}
+                prioritizeImage={index < 2}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
     </SectionContainer>
   );
 }

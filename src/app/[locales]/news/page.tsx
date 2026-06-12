@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { getNewsPageContent } from "@/components/content/news-content";
 import { NewsBrowser } from "@/components/organisms/NewsBrowser";
 import { getNewsFeed } from "@/lib/news";
+import { getNewsPageContent } from "@/locales/news-page-content";
 import {
   getLocaleConfig,
   getMessages,

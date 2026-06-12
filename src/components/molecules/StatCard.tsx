@@ -1,4 +1,4 @@
-import type { Stat } from "@/components/content/landing-content";
+import type { Stat } from "@/types/landing";
 
 type StatCardProps = {
   stat: Stat;

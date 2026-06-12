@@ -3,12 +3,10 @@ import type { AppLocale } from "@/locales";
 import { NewsSidebarArticleCard } from "@/components/molecules/NewsSidebarArticleCard";
 
 type NewsDetailSidebarProps = {
-  latestArticles: NewsFeedArticle[];
   locale: AppLocale;
   relatedArticles: NewsFeedArticle[];
   labels: {
     relatedNews: string;
-    latestNews: string;
   };
 };
 
@@ -42,7 +40,6 @@ function SidebarSection({ title, articles, locale }: SidebarSectionProps) {
 }
 
 export function NewsDetailSidebar({
-  latestArticles,
   locale,
   relatedArticles,
   labels,
@@ -52,14 +49,6 @@ export function NewsDetailSidebar({
       <SidebarSection
         title={labels.relatedNews}
         articles={relatedArticles}
-        locale={locale}
-      />
-
-      <div className="mx-auto my-10 h-0.5 w-full rounded-full bg-yellow-500/50" />
-
-      <SidebarSection
-        title={labels.latestNews}
-        articles={latestArticles}
         locale={locale}
       />
     </aside>

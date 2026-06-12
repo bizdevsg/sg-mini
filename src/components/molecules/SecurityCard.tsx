@@ -1,6 +1,6 @@
 import { SecurityCardCopy } from "@/components/atoms/SecurityCardCopy";
 import { SecurityCardMedia } from "@/components/atoms/SecurityCardMedia";
-import type { SecurityItem } from "@/components/content/landing-content";
+import type { SecurityItem } from "@/types/landing";
 
 type SecurityCardProps = {
   item: SecurityItem;

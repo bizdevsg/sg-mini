@@ -42,11 +42,11 @@ export async function generateMetadata({
     title: messages.title,
     description: messages.description,
     alternates: {
-      canonical: `/${locales}/ebook`,
+      canonical: `/${locales}/education/ebook`,
       languages: Object.fromEntries(
         SUPPORTED_LOCALES.map((locale) => [
           getLocaleConfig(locale).lang,
-          `/${locale}/ebook`,
+          `/${locale}/education/ebook`,
         ]),
       ),
     },
@@ -61,7 +61,6 @@ export default async function EbookPage({ params }: EbookPageProps) {
 
   return (
     <main>
-      {/* Hero Section */}
       <EbookHeroSection
         eyebrow={messages.hero.eyebrow}
         title={messages.hero.title}
@@ -72,7 +71,6 @@ export default async function EbookPage({ params }: EbookPageProps) {
         secondaryCtaHref={EBOOK_LOGIN_URL}
       />
 
-      {/* Library Section */}
       <EbookLibrarySection
         title={messages.libraryTitle}
         subtitle={messages.librarySubtitle}

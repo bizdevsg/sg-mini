@@ -1,5 +1,5 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { regulatorLogos } from "@/components/content/landing-content";
+import { regulatorLogos } from "@/types/landing";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { RegulatorLogoItem } from "@/components/molecules/RegulatorLogoItem";
 import { getMessages, type AppLocale } from "@/locales";

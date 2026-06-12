@@ -1,0 +1,37 @@
+import type { AppMessages } from "../../shared/messages";
+
+export const idEconomicCalendarBrowser: AppMessages["economicCalendarBrowser"] = {
+    tabs: {
+      today: "Today",
+      thisWeek: "This Week",
+      nextWeek: "Next Week",
+      previousWeek: "Previous Week",
+    },
+    statusUnavailable: "Tidak tersedia",
+    time: "Waktu",
+    country: "Negara",
+    impact: "Dampak",
+    event: "Peristiwa",
+    previous: "Sebelumnya",
+    forecast: "Perkiraan",
+    actual: "Aktual",
+    source: "Sumber",
+    measures: "Indikator",
+    effect: "Dampak Umum",
+    frequency: "Frekuensi",
+    nextRelease: "Rilis Berikutnya",
+    notes: "Catatan",
+    whyCare: "Alasan Penting",
+    date: "Tanggal",
+    noHistory: "Belum ada riwayat event untuk entri ini.",
+    empty: "Belum ada event pada rentang kalender ini.",
+    unavailable:
+      "Data untuk rentang kalender ini sedang tidak tersedia dari API.",
+    collapse: "Tutup",
+    expand: "Lihat detail",
+    today: "Hari ini",
+    previousPage: "Sebelumnya",
+    nextPage: "Berikutnya",
+    page: "Halaman",
+    of: "dari",
+  };

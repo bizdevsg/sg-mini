@@ -2,7 +2,7 @@ import type {
   SecurityItem,
   SpreadItem,
   Stat,
-} from "@/components/content/landing-content";
+} from "@/types/landing";
 
 export type AppMessages = {
   app: {

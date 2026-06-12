@@ -20,8 +20,8 @@
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-line: var(--line);
-  --font-sans: var(--font-manrope);
-  --font-mono: var(--font-space-grotesk);
+  --font-sans: var(--font-noto-sans);
+  --font-mono: var(--font-open-sans);
   --angle: 45deg;
   --gradient: #15eca8, #15c5ec, #1559ec, #ec1559, #eca815;
 }
@@ -39,7 +39,7 @@ body {
   overflow-x: hidden;
   background-color: #050505;
   color: var(--foreground);
-  font-family: var(--font-manrope), sans-serif;
+  font-family: var(--font-noto-sans), sans-serif;
   background-attachment: fixed;
   background-image:
     radial-gradient(circle at 15% 20%, rgba(240, 203, 115, 0.15) 0%, transparent 35%),

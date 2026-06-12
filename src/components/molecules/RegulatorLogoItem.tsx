@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import type { RegulatorLogo } from "@/components/content/landing-content";
+import type { RegulatorLogo } from "@/types/landing";
 
 type RegulatorLogoItemProps = {
   logo: RegulatorLogo;

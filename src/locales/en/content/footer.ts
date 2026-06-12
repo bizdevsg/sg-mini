@@ -1,0 +1,51 @@
+import type { AppMessages } from "../../shared/messages";
+
+export const enFooter: AppMessages["footer"] = {
+    brandTitle: "SG Mini",
+    brandItems: [
+      { label: "About Us", href: "/about" },
+      { label: "Ebook", href: "/education/ebook" },
+      { label: "Live Quote", href: "/live-quote" },
+      { label: "News", href: "/news" },
+    ],
+    helpTitle: "Help",
+    helpItems: [
+      { label: "Contact Us", href: "/contact-us" },
+      { label: "Fraud Alert", href: "/fraud-alert" },
+      { label: "Economic Calendar", href: "/economic-calendar" },
+      { label: "Historical Data", href: "/historical-data" },
+    ],
+    legalItems: [
+      "Commodity Futures Trading Regulatory Agency: Number 1156/BAPPEBTI/SI/3/2007",
+      "Financial Services Authority: Number S-126/PM.02/2025",
+      "Bank Indonesia: Number 27/663/DPPK/Srt/B",
+      "Indonesian Commodity and Derivatives Exchange: Number S-373/PM.02/2025",
+      "Jakarta Futures Exchange: Number SPAB-047/BBJ/07/02",
+      "Indonesian Clearing House: Number 15/AK-KBI/V/2003",
+    ],
+    socials: [
+      {
+        name: "Instagram",
+        url: "https://instagram.com/example",
+        icon: "instagram",
+      },
+      {
+        name: "Facebook",
+        url: "https://facebook.com/example",
+        icon: "facebook-f",
+      },
+      {
+        name: "YouTube",
+        url: "https://youtube.com/example",
+        icon: "youtube",
+      },
+      {
+        name: "TikTok",
+        url: "https://tiktok.com/@example",
+        icon: "tiktok",
+      },
+    ],
+    copyrightProtected: "All rights reserved.",
+    komdigiAlt: "Komdigi logo",
+    tsiAlt: "TSI logo",
+  };

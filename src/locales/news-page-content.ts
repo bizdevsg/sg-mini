@@ -1,4 +1,4 @@
-import type { AppLocale } from "@/locales";
+import type { AppLocale } from "./config";
 
 export type NewsArticle = {
   slug: string;
@@ -95,7 +95,7 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
   id: {
     newsPage: {
       meta: {
-        title: "Berita Market",
+        title: "Berita Market Hari Ini",
         description:
           "Ringkasan berita pasar dan insight trading untuk trader SG Mini.",
       },
@@ -331,7 +331,7 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
   en: {
     newsPage: {
       meta: {
-        title: "Market News",
+        title: "Market News Today",
         description:
           "A compact market news page with concise insights for SG Mini traders.",
       },
@@ -346,7 +346,7 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     calendarPage: {
       meta: {
-        title: "Economic Calendar for Traders",
+        title: "Today's Economic Calendar",
         description:
           "Track high-impact economic events and macro releases for SG Mini traders.",
       },
@@ -362,7 +362,7 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     ratesPage: {
       meta: {
-        title: "Historical Market Data",
+        title: "Market Historical Data",
         description:
           "Track historical market data across major instruments for SG Mini traders.",
       },

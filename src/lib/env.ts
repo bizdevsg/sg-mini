@@ -10,10 +10,12 @@ const DEFAULT_HISTORICAL_DATA_API_URL =
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
 const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
   "https://endpoapi-production-3202.up.railway.app/api/calendar";
-const DEFAULT_LOGIN_URL = "https://client.mifx.com/login";
-const DEFAULT_REGISTER_URL = "https://mifx.com/register";
+const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
+const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
 const DEFAULT_HERO_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SPREAD_CTA_URL = "https://mifx.com/";
+const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
+const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
 
 export const LIVE_QUOTE_SOCKET_URL =
@@ -67,6 +69,14 @@ export const PUBLIC_HERO_CTA_URL =
 
 export const PUBLIC_SPREAD_CTA_URL =
   process.env.NEXT_PUBLIC_SPREAD_CTA_URL ?? DEFAULT_SPREAD_CTA_URL;
+
+export const PUBLIC_SOLID_GOLD_PLAY_STORE_URL =
+  process.env.NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL ??
+  DEFAULT_SOLID_GOLD_PLAY_STORE_URL;
+
+export const PUBLIC_SOLID_GOLD_APP_STORE_URL =
+  process.env.NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL ??
+  DEFAULT_SOLID_GOLD_APP_STORE_URL;
 
 function buildAssetUrl(baseUrl: string, assetPath: string) {
   const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Noto_Sans, Open_Sans } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { RouteLoadingBar } from "@/components/molecules/RouteLoadingBar";
@@ -9,20 +9,22 @@ import "@/lib/fontawesome";
 import { DEFAULT_LOCALE, getLocaleConfig } from "@/locales";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const notoSans = Noto_Sans({
+  variable: "--font-noto-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Solid",
-    template: "%s - Solid",
+    default: "Solid Gold Berjangka",
+    template: "%s | Solid Gold Berjangka",
   },
   description:
     "PT Solid Gold Berjangka provides trusted futures trading services, market insights, and investment education to help traders make informed decisions.",
@@ -42,7 +44,7 @@ export default function RootLayout({
     <html
       lang={getLocaleConfig(DEFAULT_LOCALE).lang}
       suppressHydrationWarning
-      className={`${manrope.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${notoSans.variable} ${openSans.variable} h-full antialiased`}
     >
       <head>
         <link rel="dns-prefetch" href="//portalnews.newsmaker.id" />
