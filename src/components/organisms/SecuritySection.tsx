@@ -18,7 +18,7 @@ export function SecuritySection({ locale }: SecuritySectionProps) {
 
   return (
     <section className="bg-transparent">
-      <SectionContainer className="py-16 sm:py-20 lg:py-[72px]">
+      <SectionContainer className="py-16 sm:py-20 lg:py-18">
         <SectionTitle
           title={messages.security.title}
           subtitle={messages.security.subtitle}
