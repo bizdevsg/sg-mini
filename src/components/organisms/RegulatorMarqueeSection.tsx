@@ -28,7 +28,7 @@ export function RegulatorMarqueeSection({
           </SectionEyebrow>
 
           <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            <div className="border border-yellow-500/16 bg-white/[0.02] py-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
+            <div className="border border-yellow-500/16 bg-white/2 py-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
               <div
                 className="flex w-max min-w-max items-center whitespace-nowrap"
                 style={{
