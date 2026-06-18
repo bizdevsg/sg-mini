@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { getLocaleConfig, type AppLocale } from "@/locales";
+import { LocaleDocumentSync } from "@/components/providers/LocaleDocumentSync";
 import { FooterSection } from "@/components/organisms/FooterSection";
 import { Navbar } from "@/components/organisms/Navbar";
 import { Blur } from "../molecules/Blur";
@@ -22,6 +23,7 @@ export function PageTemplate({
       data-locale={locale}
       className="min-h-screen bg-transparent"
     >
+      <LocaleDocumentSync locale={locale} />
       <Navbar locale={locale} />
       <main className={bodyClassName}>{children}</main>
       <Blur />

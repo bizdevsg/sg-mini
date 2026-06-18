@@ -149,7 +149,7 @@ export function Navbar({ locale }: NavbarProps) {
                       <Link
                         key={`${group.label}-${index}`}
                         href={resolveLocalizedHref(locale, group.href)}
-                        className="rounded-full px-4 py-2 text-sm font-medium text-yellow-500/88 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-400"
+                        className="rounded-full px-4 py-2 text-sm font-medium text-yellow-300 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-200"
                       >
                         {group.label}
                       </Link>
@@ -171,7 +171,7 @@ export function Navbar({ locale }: NavbarProps) {
                             current === index ? null : index,
                           )
                         }
-                        className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-yellow-500/88 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-400 cursor-pointer"
+                        className="inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-yellow-300 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-200"
                       >
                         <span>{group.label}</span>
                         <svg
@@ -205,7 +205,7 @@ export function Navbar({ locale }: NavbarProps) {
                                 key={item.label}
                                 href={resolveLocalizedHref(locale, item.href)}
                                 onClick={() => setOpenDesktopGroup(null)}
-                                className="flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm text-yellow-500/80 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-400"
+                                className="flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-100"
                               >
                                 {item.label}
                               </Link>
@@ -214,7 +214,7 @@ export function Navbar({ locale }: NavbarProps) {
                                 key={item.label}
                                 type="button"
                                 onClick={() => setOpenDesktopGroup(null)}
-                                className="flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm text-yellow-500/80 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-400"
+                                className="flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-100"
                               >
                                 {item.label}
                               </button>
@@ -254,7 +254,7 @@ export function Navbar({ locale }: NavbarProps) {
                       key={`${group.label}-${index}`}
                       href={resolveLocalizedHref(locale, group.href)}
                       onClick={closeMobileMenu}
-                      className="rounded-[22px] border border-[rgba(255,255,255,0.08)] bg-[rgba(18,18,18,0.92)] px-4 py-4 text-sm font-medium text-yellow-500/88 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:text-yellow-400"
+                      className="rounded-[22px] border border-[rgba(255,255,255,0.08)] bg-[rgba(18,18,18,0.92)] px-4 py-4 text-sm font-medium text-yellow-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:text-yellow-200"
                     >
                       {group.label}
                     </Link>
@@ -275,7 +275,7 @@ export function Navbar({ locale }: NavbarProps) {
                           current === index ? null : index,
                         )
                       }
-                      className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left text-sm font-medium text-yellow-500/88 transition-colors duration-300 hover:text-yellow-400"
+                      className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left text-sm font-medium text-yellow-300 transition-colors duration-300 hover:text-yellow-200"
                     >
                       <span>{group.label}</span>
                       <svg
@@ -310,7 +310,7 @@ export function Navbar({ locale }: NavbarProps) {
                                 key={item.label}
                                 href={resolveLocalizedHref(locale, item.href)}
                                 onClick={closeMobileMenu}
-                                className="rounded-2xl px-3 py-3 text-left text-sm text-yellow-500/75 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-400"
+                                className="rounded-2xl px-3 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-100"
                               >
                                 {item.label}
                               </Link>
@@ -318,7 +318,7 @@ export function Navbar({ locale }: NavbarProps) {
                               <button
                                 key={item.label}
                                 type="button"
-                                className="rounded-2xl px-3 py-3 text-left text-sm text-yellow-500/75 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-400"
+                                className="rounded-2xl px-3 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-100"
                               >
                                 {item.label}
                               </button>

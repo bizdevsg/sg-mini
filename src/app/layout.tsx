@@ -6,7 +6,12 @@ import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider"
 import { RouteLoadingBar } from "@/components/molecules/RouteLoadingBar";
 import { getCdnAssetUrl, NEWS_PORTAL_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
-import { DEFAULT_LOCALE, getLocaleConfig } from "@/locales";
+import {
+  DEFAULT_LOCALE,
+  getLocaleConfig,
+  isSupportedLocale,
+  type AppLocale,
+} from "@/locales";
 import "./globals.css";
 
 const notoSans = Noto_Sans({
@@ -35,14 +40,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params?: Promise<{ locales?: string }>;
 }>) {
+  const { locales } = params ? await params : {};
+  const locale: AppLocale =
+    locales && isSupportedLocale(locales) ? locales : DEFAULT_LOCALE;
+
   return (
     <html
-      lang={getLocaleConfig(DEFAULT_LOCALE).lang}
+      lang={getLocaleConfig(locale).lang}
       suppressHydrationWarning
       className={`${notoSans.variable} ${openSans.variable} h-full antialiased`}
     >

@@ -4,10 +4,6 @@ const framerImageBaseUrl = new URL(
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
     "https://framerusercontent.com/images",
 );
-const cdnAssetBaseUrl = new URL(
-  process.env.NEXT_PUBLIC_CDN_ASSET_BASE_URL ??
-    "https://cdn.pandalingua.my.id/sgb/assets",
-);
 const newsPortalBaseUrl = new URL(
   process.env.NEWS_PORTAL_BASE_URL ?? "https://portalnews.newsmaker.id",
 );
@@ -38,11 +34,6 @@ const nextConfig: NextConfig = {
         protocol: framerImageBaseUrl.protocol.replace(":", "") as "https",
         hostname: framerImageBaseUrl.hostname,
         pathname: `${framerImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
-      },
-      {
-        protocol: cdnAssetBaseUrl.protocol.replace(":", "") as "https",
-        hostname: cdnAssetBaseUrl.hostname,
-        pathname: `${cdnAssetBaseUrl.pathname.replace(/\/$/, "")}/**`,
       },
       {
         protocol: newsPortalBaseUrl.protocol.replace(":", "") as "https",

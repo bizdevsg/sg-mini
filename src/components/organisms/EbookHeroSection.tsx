@@ -41,7 +41,7 @@ export function EbookHeroSection({
           <SectionEyebrow align="center">{eyebrow}</SectionEyebrow>
 
           {/* Main Title */}
-          <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-3xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
             <span className="bg-linear-to-r from-yellow-400 via-yellow-500 to-amber-500 bg-clip-text text-transparent">
               {title.split(" ").slice(0, 2).join(" ")}
             </span>
@@ -52,7 +52,7 @@ export function EbookHeroSection({
           </h1>
 
           {/* Description */}
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-lg">
             {description}
           </p>
 
@@ -61,7 +61,7 @@ export function EbookHeroSection({
             <ButtonLink
               href={primaryCtaHref}
               size="lg"
-              className="group sm:min-w-[220px]"
+              className="group w-full sm:min-w-[220px] sm:w-auto"
             >
               <FontAwesomeIcon icon={["fas", "book"]} />
               {primaryCtaLabel}
@@ -75,7 +75,7 @@ export function EbookHeroSection({
               href={secondaryCtaHref}
               variant="ghost"
               size="lg"
-              className="group border-white/15 text-white backdrop-blur-md sm:min-w-[220px]"
+              className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-[220px] sm:w-auto"
             >
               {secondaryCtaLabel}
               <FontAwesomeIcon
@@ -94,7 +94,7 @@ export function EbookHeroSection({
             ].map((badge, index) => (
               <div
                 key={index}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 backdrop-blur-md"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
                 <span>{badge}</span>

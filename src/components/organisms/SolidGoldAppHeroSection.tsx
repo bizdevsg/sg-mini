@@ -35,13 +35,13 @@ export function SolidGoldAppHeroSection({
         <div className="mx-auto max-w-3xl text-center">
           <SectionEyebrow align="center">{eyebrow}</SectionEyebrow>
 
-          <h1 className="mt-6 text-4xl font-bold leading-tight text-white sm:text-5xl">
+          <h1 className="mt-6 text-3xl font-bold leading-tight text-white sm:text-5xl">
             <span className="bg-linear-to-r from-yellow-400 via-yellow-500 to-amber-500 bg-clip-text text-transparent">
               {title}
             </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-lg">
             {description}
           </p>
 
@@ -49,7 +49,7 @@ export function SolidGoldAppHeroSection({
             {badges.map((badge) => (
               <div
                 key={badge}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 backdrop-blur-md"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
                 <span>{badge}</span>

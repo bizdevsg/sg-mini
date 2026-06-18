@@ -1,5 +1,5 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
-const DEFAULT_CDN_ASSET_BASE_URL = "https://cdn.pandalingua.my.id/sgb/assets";
+const DEFAULT_CDN_ASSET_BASE_URL = "/assets";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
 const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "https://portalnews.newsmaker.id";
@@ -27,8 +27,7 @@ export const PUBLIC_LIVE_QUOTE_SOCKET_URL =
   process.env.NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL ??
   DEFAULT_LIVE_QUOTE_SOCKET_URL;
 
-export const PUBLIC_CDN_ASSET_BASE_URL =
-  process.env.NEXT_PUBLIC_CDN_ASSET_BASE_URL ?? DEFAULT_CDN_ASSET_BASE_URL;
+export const PUBLIC_CDN_ASSET_BASE_URL = DEFAULT_CDN_ASSET_BASE_URL;
 
 export const PUBLIC_FRAMER_IMAGE_BASE_URL =
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
@@ -93,8 +92,47 @@ function buildAssetUrl(baseUrl: string, assetPath: string) {
   return `${normalizedBaseUrl}/${normalizedAssetPath}`;
 }
 
+const LOCAL_CDN_ASSET_MAP: Record<string, string> = {
+  "bg-hero1.avif": "bg-hero1.png",
+  "logo-komdigi.avif": "logo-komdigi.png",
+  "logo%20TSI.avif": "logo TSI.png",
+  "Logo-BI.avif": "Logo-BI.png",
+  "f6de89c6-20f7-43e5-87b2-170199c45ec7.avif":
+    "f6de89c6-20f7-43e5-87b2-170199c45ec7.png",
+  "69cf4915-3cbc-48db-b8ea-2cc80c25e463.avif":
+    "69cf4915-3cbc-48db-b8ea-2cc80c25e463.png",
+  "17a99617-1747-42ed-a450-2d0acb17aaa0.avif":
+    "17a99617-1747-42ed-a450-2d0acb17aaa0.png",
+  "e9701fbd-3376-430c-9da2-496f090aecce.avif":
+    "e9701fbd-3376-430c-9da2-496f090aecce.png",
+  "aed38b4d-ca53-447c-8250-59a03a7ea4eb.avif":
+    "aed38b4d-ca53-447c-8250-59a03a7ea4eb.png",
+  "6b4283d4-5ae9-43be-94dc-25c845136019.avif":
+    "6b4283d4-5ae9-43be-94dc-25c845136019.png",
+  "0be6b5d6-eeda-4236-92c9-a1e119e30523.avif":
+    "0be6b5d6-eeda-4236-92c9-a1e119e30523.png",
+};
+
+function resolveLocalCdnAssetPath(assetPath: string) {
+  const normalizedAssetPath = assetPath.replace(/^\/+/, "");
+  const decodedAssetPath = decodeURIComponent(normalizedAssetPath);
+
+  if (LOCAL_CDN_ASSET_MAP[normalizedAssetPath]) {
+    return LOCAL_CDN_ASSET_MAP[normalizedAssetPath];
+  }
+
+  if (LOCAL_CDN_ASSET_MAP[decodedAssetPath]) {
+    return LOCAL_CDN_ASSET_MAP[decodedAssetPath];
+  }
+
+  return decodedAssetPath;
+}
+
 export function getCdnAssetUrl(assetPath: string) {
-  return buildAssetUrl(PUBLIC_CDN_ASSET_BASE_URL, assetPath);
+  return buildAssetUrl(
+    PUBLIC_CDN_ASSET_BASE_URL,
+    resolveLocalCdnAssetPath(assetPath),
+  );
 }
 
 export function getFramerImageUrl(assetPath: string) {

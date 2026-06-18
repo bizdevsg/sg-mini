@@ -14,10 +14,6 @@ type ProductCatalogBrowserProps = {
   copy: AppMessages["productPage"];
 };
 
-function formatItemCount(count: number, label: string) {
-  return `${count} ${label}`;
-}
-
 export function ProductCatalogBrowser({
   items,
   locale,
@@ -67,52 +63,57 @@ export function ProductCatalogBrowser({
 
       <SectionContainer className="py-16 sm:py-20">
         {items.length ? (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {items.map((item) => (
               <Link
                 key={item.id}
                 href={`/${locale}/produk/${category}/${item.slug}`}
                 className="group block"
               >
-                <article className="overflow-hidden rounded-3xl border border-white/10 bg-[#090909] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/40">
-                  {/* Image */}
-                  <div className="relative overflow-hidden bg-white/[0.02]">
+                <article className="flex h-full flex-col overflow-hidden rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(18,18,18,0.96)_0%,rgba(10,10,10,0.98)_100%)] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+                  <div className="relative aspect-[5/4] overflow-hidden border-b border-white/8 bg-white/[0.03]">
                     {item.imageSrc ? (
                       <img
                         src={item.imageSrc}
                         alt={item.name}
-                        className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+                        className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.04]"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-zinc-500">
+                      <div className="flex h-full items-center justify-center px-5 text-center text-sm text-zinc-500">
                         {item.name}
                       </div>
                     )}
+                  </div>
 
-                    <div className="absolute left-5 top-5">
-                      <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-yellow-400">
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/50">
+                        {copy.sourceLabel}
+                      </p>
+                      <span className="rounded-full bg-white/6 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/65">
                         {item.sourceCategory}
                       </span>
                     </div>
-                  </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <h2 className="line-clamp-2 text-xl font-semibold leading-tight text-white">
+                    <h3 className="mt-3 line-clamp-2 min-h-[2.75rem] text-base font-semibold leading-snug text-white transition-colors group-hover:text-yellow-400">
                       {item.name}
-                    </h2>
+                    </h3>
 
-                    <p className="mt-3 line-clamp-2 text-sm leading-7 text-zinc-400">
+                    <p className="mt-2 line-clamp-2 min-h-[3rem] text-sm leading-6 text-foreground/68">
                       {item.description}
                     </p>
 
-                    <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4">
-                      <span className="text-sm font-medium text-zinc-300">
-                        {copy.viewDetailCta}
-                      </span>
-
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-400 transition-all duration-300 group-hover:bg-yellow-500 group-hover:text-black">
-                        →
+                    <div className="mt-auto pt-4">
+                      <div className="flex items-center justify-between border-t border-white/8 pt-3">
+                        <span className="text-sm font-medium text-zinc-200 transition-colors group-hover:text-yellow-400">
+                          {copy.viewDetailCta}
+                        </span>
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-500/25 bg-yellow-500/8 text-yellow-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:bg-yellow-500 group-hover:text-black">
+                          <FontAwesomeIcon
+                            icon={["fas", "arrow-right"]}
+                            className="text-xs"
+                          />
+                        </span>
                       </div>
                     </div>
                   </div>

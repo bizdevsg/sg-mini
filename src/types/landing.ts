@@ -157,7 +157,7 @@ export const spreads: SpreadItem[] = [
 
 export const regulatorLogos: RegulatorLogo[] = [
   {
-    src: "https://cdn.pandalingua.my.id/sgb/assets/bappebti-kemendag.png",
+    src: getCdnAssetUrl("logo-Bappebti.png"),
     alt: "Logo Bappebti",
     width: 1367,
     height: 327,

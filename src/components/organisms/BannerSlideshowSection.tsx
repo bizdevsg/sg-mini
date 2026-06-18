@@ -1,7 +1,14 @@
 import { getBannerRecords } from "@/app/api/_data/banner";
 import { BannerSlideshow } from "@/components/molecules/BannerSlideshow";
+import type { AppLocale } from "@/locales";
 
-export async function BannerSlideshowSection() {
+type BannerSlideshowSectionProps = {
+  locale: AppLocale;
+};
+
+export async function BannerSlideshowSection({
+  locale,
+}: BannerSlideshowSectionProps) {
   const banners = await getBannerRecords();
 
   if (!banners.length) {
@@ -10,7 +17,7 @@ export async function BannerSlideshowSection() {
 
   return (
     <section className="bg-transparent">
-      <BannerSlideshow banners={banners} />
+      <BannerSlideshow banners={banners} locale={locale} />
     </section>
   );
 }

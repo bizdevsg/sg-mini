@@ -47,6 +47,14 @@ export type AppMessages = {
     subtitle: string;
     cards: SecurityItem[];
   };
+  appPromoSection: {
+    title: string;
+    description: string;
+    benefits: string[];
+    imageAlt: string;
+    googlePlayAlt: string;
+    appStoreAlt: string;
+  };
   homeEbookPromo: {
     eyebrow: string;
     title: string;
@@ -321,6 +329,13 @@ export type AppMessages = {
     relatedNews: string;
     latestNews: string;
     readTimeUnit: string;
+  };
+  bannerSlideshow: {
+    regionLabel: string;
+    slideButtonLabel: string;
+    slideImageAlt: string;
+    previousLabel: string;
+    nextLabel: string;
   };
   fraudAlertPage: {
     title: string;

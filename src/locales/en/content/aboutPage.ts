@@ -1,3 +1,4 @@
+import { getCdnAssetUrl } from "@/lib/env";
 import type { AppMessages } from "../../shared/messages";
 
 export const enAboutPage: AppMessages["aboutPage"] = {
@@ -49,15 +50,13 @@ export const enAboutPage: AppMessages["aboutPage"] = {
         {
           title: "KBI Award 2014",
           subtitle: "2nd Best Clearing Member",
-          imageSrc:
-            "https://cdn.pandalingua.my.id/sgb/assets/a4690a59-8cb5-40d0-a2bf-8ce723f1f926.avif",
+          imageSrc: getCdnAssetUrl("security-awards.svg"),
           imageAlt: "2nd Best Clearing Member Award 2014",
         },
         {
           title: "JFX Award 2011",
           subtitle: "Highest Bilateral Transaction Volume",
-          imageSrc:
-            "https://cdn.pandalingua.my.id/sgb/assets/bbe0962d-abab-4ba7-90fc-2ee7434d1fdf.avif",
+          imageSrc: getCdnAssetUrl("security-awards.svg"),
           imageAlt:
             "Award for the 2nd Highest Bilateral Transaction Volume in 2011",
         },

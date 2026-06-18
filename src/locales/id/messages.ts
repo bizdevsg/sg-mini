@@ -5,6 +5,7 @@ import { idHero } from "./content/hero";
 import { idRegulator } from "./content/regulator";
 import { idTrustStats } from "./content/trustStats";
 import { idSecurity } from "./content/security";
+import { idAppPromoSection } from "./content/appPromoSection";
 import { idHomeEbookPromo } from "./content/homeEbookPromo";
 import { idSpread } from "./content/spread";
 import { idFinalCta } from "./content/finalCta";
@@ -21,6 +22,7 @@ import { idHistoricalDataBrowser } from "./content/historicalDataBrowser";
 import { idNewsPage } from "./content/newsPage";
 import { idNewsBrowser } from "./content/newsBrowser";
 import { idNewsDetailPage } from "./content/newsDetailPage";
+import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idFraudAlertPage } from "./content/fraudAlertPage";
 import { idContactPage } from "./content/contactPage";
 import { idFooter } from "./content/footer";
@@ -33,6 +35,7 @@ export const idMessages: AppMessages = {
   regulator: idRegulator,
   trustStats: idTrustStats,
   security: idSecurity,
+  appPromoSection: idAppPromoSection,
   homeEbookPromo: idHomeEbookPromo,
   spread: idSpread,
   finalCta: idFinalCta,
@@ -49,6 +52,7 @@ export const idMessages: AppMessages = {
   newsPage: idNewsPage,
   newsBrowser: idNewsBrowser,
   newsDetailPage: idNewsDetailPage,
+  bannerSlideshow: idBannerSlideshow,
   fraudAlertPage: idFraudAlertPage,
   contactPage: idContactPage,
   footer: idFooter,

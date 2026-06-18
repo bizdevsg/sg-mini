@@ -15,7 +15,7 @@ export function FinalCtaSection({ locale }: FinalCtaSectionProps) {
 
   return (
     <section className="bg-[#010B15]">
-      <SectionContainer className="py-20">
+      <SectionContainer className="py-16 sm:py-20">
         <div className="text-center">
           <SectionIntro
             align="center"
@@ -30,14 +30,14 @@ export function FinalCtaSection({ locale }: FinalCtaSectionProps) {
               </>
             }
             className="mx-auto max-w-4xl"
-            titleClassName="text-[2.4rem] md:text-5xl lg:text-[3.6rem]"
+            titleClassName="text-[2rem] sm:text-[2.4rem] md:text-5xl lg:text-[3.6rem]"
           />
           <ButtonLink
             href={registerHref}
             target="_blank"
             rel="noreferrer"
             size="lg"
-            className="mt-10"
+            className="mt-8 w-full sm:mt-10 sm:w-auto"
           >
             {messages.finalCta.cta}
           </ButtonLink>
@@ -53,7 +53,7 @@ export function FinalCtaSection({ locale }: FinalCtaSectionProps) {
             height={1163}
             sizes="(max-width: 1280px) 100vw, 1280px"
             quality={90}
-            className="absolute left-[48%] top-0 h-auto w-[110%] max-w-none -translate-x-1/2"
+            className="absolute left-1/2 top-0 h-auto w-[145%] max-w-none -translate-x-1/2 sm:w-[124%] lg:left-[48%] lg:w-[110%]"
           />
         </div>
       </SectionContainer>

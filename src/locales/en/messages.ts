@@ -5,6 +5,7 @@ import { enHero } from "./content/hero";
 import { enRegulator } from "./content/regulator";
 import { enTrustStats } from "./content/trustStats";
 import { enSecurity } from "./content/security";
+import { enAppPromoSection } from "./content/appPromoSection";
 import { enHomeEbookPromo } from "./content/homeEbookPromo";
 import { enSpread } from "./content/spread";
 import { enFinalCta } from "./content/finalCta";
@@ -21,6 +22,7 @@ import { enHistoricalDataBrowser } from "./content/historicalDataBrowser";
 import { enNewsPage } from "./content/newsPage";
 import { enNewsBrowser } from "./content/newsBrowser";
 import { enNewsDetailPage } from "./content/newsDetailPage";
+import { enBannerSlideshow } from "./content/bannerSlideshow";
 import { enFraudAlertPage } from "./content/fraudAlertPage";
 import { enContactPage } from "./content/contactPage";
 import { enFooter } from "./content/footer";
@@ -33,6 +35,7 @@ export const enMessages: AppMessages = {
   regulator: enRegulator,
   trustStats: enTrustStats,
   security: enSecurity,
+  appPromoSection: enAppPromoSection,
   homeEbookPromo: enHomeEbookPromo,
   spread: enSpread,
   finalCta: enFinalCta,
@@ -49,6 +52,7 @@ export const enMessages: AppMessages = {
   newsPage: enNewsPage,
   newsBrowser: enNewsBrowser,
   newsDetailPage: enNewsDetailPage,
+  bannerSlideshow: enBannerSlideshow,
   fraudAlertPage: enFraudAlertPage,
   contactPage: enContactPage,
   footer: enFooter,

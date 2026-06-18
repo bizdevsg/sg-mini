@@ -28,7 +28,7 @@ export function ContactPageHero({ locale, copy }: ContactPageHeroProps) {
           items={[
             {
               label: copy.breadcrumbs.supportCenter,
-              href: `/${locale}/support-center`,
+              tone: "default",
             },
             {
               label: copy.breadcrumb,
