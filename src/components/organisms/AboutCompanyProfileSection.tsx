@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { getCdnAssetUrl } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
 
 type AboutCompanyProfileSectionProps = {
@@ -19,7 +18,7 @@ export function AboutCompanyProfileSection({
         <div className="rounded-[28px] border border-white/8 bg-black/20 p-8">
           <div className="relative flex h-full items-center justify-center">
             <Image
-              src={getCdnAssetUrl("Logo%20SG-WEB111.png")}
+              src="/assets/Logo SG-WEB111.png"
               alt={companyProfile.logoAlt}
               width={180}
               height={180}

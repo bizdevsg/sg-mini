@@ -1,7 +1,6 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { getCdnAssetUrl } from "@/lib/env";
 import { formatLocaleYear, getMessages, type AppLocale } from "@/locales";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,7 +83,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
                 <div className="mt-5 flex w-full items-center gap-3">
                   <div className="p-2 bg-white rounded-lg">
                     <Image
-                      src={getCdnAssetUrl("logo-komdigi.avif")}
+                      src="/assets/logo-komdigi.png"
                       alt={messages.footer.komdigiAlt}
                       width={50}
                       height={50}
@@ -94,7 +93,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
 
                   <div className="p-2 bg-white rounded-lg">
                     <Image
-                      src={getCdnAssetUrl("logo%20TSI.avif")}
+                      src="/assets/logo TSI.png"
                       alt={messages.footer.tsiAlt}
                       width={160}
                       height={48}

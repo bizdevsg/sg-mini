@@ -5,7 +5,6 @@ import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
 import type { AppLocale } from "@/locales";
 import type { IndexSymbolsPageContent } from "@/locales/index-symbols-page";
-import { getCdnAssetUrl } from "@/lib/env";
 
 type IndexSymbolsPageHeroProps = {
   locale: AppLocale;
@@ -24,7 +23,7 @@ export function IndexSymbolsPageHero({
     <section
       className="relative overflow-hidden bg-cover bg-bottom bg-no-repeat pt-10"
       style={{
-        backgroundImage: `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+        backgroundImage: "url('/assets/bg-hero1.png')",
       }}
     >
       <SectionContainer className="relative py-16 md:py-20">

@@ -1,5 +1,3 @@
-import { getCdnAssetUrl } from "@/lib/env";
-
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { BreadcrumbTrail } from "@/components/molecules/BreadcrumbTrail";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
@@ -17,7 +15,7 @@ export function ContactPageHero({ locale, copy }: ContactPageHeroProps) {
     <div
       className="bg-cover bg-bottom bg-no-repeat py-20 md:py-24"
       style={{
-        backgroundImage: `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+        backgroundImage: "url('/assets/bg-hero1.png')",
       }}
     >
       <SectionContainer className="relative z-10">

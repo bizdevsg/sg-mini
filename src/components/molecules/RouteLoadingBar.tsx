@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { getCdnAssetUrl } from "@/lib/env";
 import { getMessages } from "@/locales";
 
 const INITIAL_PROGRESS = 10;
@@ -279,7 +278,7 @@ export function RouteLoadingBar() {
           {/* Logo Container */}
           <div className="relative flex h-32 w-32 items-center justify-center">
             <Image
-              src={getCdnAssetUrl("Logo%20SG-WEB111.png")}
+              src="/assets/Logo SG-WEB111.png"
               alt="Logo SGB"
               width={120}
               height={120}

@@ -1,5 +1,3 @@
-import { getCdnAssetUrl } from "@/lib/env";
-
 export type Testimonial = {
   name: string;
   role: string;
@@ -157,37 +155,37 @@ export const spreads: SpreadItem[] = [
 
 export const regulatorLogos: RegulatorLogo[] = [
   {
-    src: getCdnAssetUrl("logo-Bappebti.png"),
+    src: "/assets/be300118-4787-437a-be8a-645cc763b02e.png",
     alt: "Logo Bappebti",
     width: 1367,
     height: 327,
   },
   {
-    src: getCdnAssetUrl("f6de89c6-20f7-43e5-87b2-170199c45ec7.avif"),
+    src: "/assets/f6de89c6-20f7-43e5-87b2-170199c45ec7.png",
     alt: "Logo OJK",
     width: 1200,
     height: 522,
   },
   {
-    src: getCdnAssetUrl("69cf4915-3cbc-48db-b8ea-2cc80c25e463.avif"),
+    src: "/assets/69cf4915-3cbc-48db-b8ea-2cc80c25e463.png",
     alt: "Logo Aspebtindo",
     width: 1574,
     height: 1694,
   },
   {
-    src: getCdnAssetUrl("17a99617-1747-42ed-a450-2d0acb17aaa0.avif"),
+    src: "/assets/17a99617-1747-42ed-a450-2d0acb17aaa0.png",
     alt: "Logo KBI",
     width: 429,
     height: 189,
   },
   {
-    src: getCdnAssetUrl("e9701fbd-3376-430c-9da2-496f090aecce.avif"),
+    src: "/assets/e9701fbd-3376-430c-9da2-496f090aecce.png",
     alt: "Logo JFX",
     width: 4393,
     height: 1390,
   },
   {
-    src: getCdnAssetUrl("Logo-BI.avif"),
+    src: "/assets/Logo-BI.png",
     alt: "Logo BI",
     width: 4393,
     height: 1390,

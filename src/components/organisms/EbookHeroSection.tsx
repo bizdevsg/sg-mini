@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
-import { getCdnAssetUrl } from "@/lib/env";
 
 type EbookHeroSectionProps = {
   eyebrow: string;
@@ -27,7 +26,7 @@ export function EbookHeroSection({
     <section
       className="relative overflow-hidden bg-cover bg-bottom bg-no-repeat pt-10"
       style={{
-        backgroundImage: `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+        backgroundImage: "url('/assets/bg-hero1.png')",
       }}
     >
       {/* Gradient Overlay */}

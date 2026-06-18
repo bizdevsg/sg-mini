@@ -1,6 +1,5 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
-import { getCdnAssetUrl } from "@/lib/env";
 
 type SolidGoldAppHeroSectionProps = {
   eyebrow: string;
@@ -25,7 +24,7 @@ export function SolidGoldAppHeroSection({
     <section
       className="relative overflow-hidden bg-cover bg-bottom bg-no-repeat pt-10"
       style={{
-        backgroundImage: `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+        backgroundImage: "url('/assets/bg-hero1.png')",
       }}
     >
       <div className="absolute inset-0 bg-linear-to-br from-yellow-500/10 via-transparent to-blue-500/10" />

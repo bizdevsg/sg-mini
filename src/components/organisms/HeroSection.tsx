@@ -1,5 +1,5 @@
 import { ButtonLink } from "@/components/atoms/ButtonLink";
-import { getCdnAssetUrl, getFramerImageUrl, PUBLIC_HERO_CTA_URL } from "@/lib/env";
+import { getFramerImageUrl, PUBLIC_HERO_CTA_URL } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
 
 type HeroSectionProps = {
@@ -13,8 +13,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
     <section
       className="bg-cover bg-bottom bg-no-repeat"
       style={{
-        backgroundImage:
-          `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+        backgroundImage: "url('/assets/bg-hero1.png')",
       }}
     >
       <div className="mx-auto max-w-7xl px-4 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-32 lg:px-10 lg:pb-0 lg:pt-28">

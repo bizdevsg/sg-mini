@@ -1,4 +1,3 @@
-import { getCdnAssetUrl } from "@/lib/env";
 import type { AppMessages } from "../../shared/messages";
 
 export const enAboutPage: AppMessages["aboutPage"] = {
@@ -50,13 +49,13 @@ export const enAboutPage: AppMessages["aboutPage"] = {
         {
           title: "KBI Award 2014",
           subtitle: "2nd Best Clearing Member",
-          imageSrc: getCdnAssetUrl("security-awards.svg"),
+          imageSrc: "/assets/security-awards.svg",
           imageAlt: "2nd Best Clearing Member Award 2014",
         },
         {
           title: "JFX Award 2011",
           subtitle: "Highest Bilateral Transaction Volume",
-          imageSrc: getCdnAssetUrl("security-awards.svg"),
+          imageSrc: "/assets/security-awards.svg",
           imageAlt:
             "Award for the 2nd Highest Bilateral Transaction Volume in 2011",
         },

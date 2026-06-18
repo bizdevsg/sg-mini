@@ -4,7 +4,7 @@ import { Noto_Sans, Open_Sans } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { RouteLoadingBar } from "@/components/molecules/RouteLoadingBar";
-import { getCdnAssetUrl, NEWS_PORTAL_BASE_URL } from "@/lib/env";
+import { NEWS_PORTAL_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
 import {
   DEFAULT_LOCALE,
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   description:
     "PT Solid Gold Berjangka provides trusted futures trading services, market insights, and investment education to help traders make informed decisions.",
   icons: {
-    icon: getCdnAssetUrl("Logo%20SG-WEB111.png"),
-    shortcut: getCdnAssetUrl("Logo%20SG-WEB111.png"),
-    apple: getCdnAssetUrl("Logo%20SG-WEB111.png"),
+    icon: "/assets/Logo SG-WEB111.png",
+    shortcut: "/assets/Logo SG-WEB111.png",
+    apple: "/assets/Logo SG-WEB111.png",
   },
 };
 

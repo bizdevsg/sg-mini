@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getCdnAssetUrl } from "@/lib/env";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
@@ -27,7 +26,7 @@ export function ProductCatalogBrowser({
       <div
         className="bg-cover bg-bottom bg-no-repeat py-20 md:py-24"
         style={{
-          backgroundImage: `url('${getCdnAssetUrl("bg-hero1.avif")}')`,
+          backgroundImage: "url('/assets/bg-hero1.png')",
         }}
       >
         <SectionContainer className="relative z-10">
