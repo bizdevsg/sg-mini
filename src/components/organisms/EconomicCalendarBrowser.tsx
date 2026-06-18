@@ -9,7 +9,7 @@ import {
   type EconomicCalendarEvent,
   type EconomicCalendarOverview,
   type EconomicCalendarRangeKey,
-} from "@/lib/economic-calendar";
+} from "@/lib/economic-calendar.shared";
 import {
   formatLocaleDateTime,
   getMessages,

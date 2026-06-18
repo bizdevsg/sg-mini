@@ -5,6 +5,7 @@ import { enHero } from "./content/hero";
 import { enRegulator } from "./content/regulator";
 import { enTrustStats } from "./content/trustStats";
 import { enSecurity } from "./content/security";
+import { enHomeEbookPromo } from "./content/homeEbookPromo";
 import { enSpread } from "./content/spread";
 import { enFinalCta } from "./content/finalCta";
 import { enLiveQuoteSection } from "./content/liveQuoteSection";
@@ -32,6 +33,7 @@ export const enMessages: AppMessages = {
   regulator: enRegulator,
   trustStats: enTrustStats,
   security: enSecurity,
+  homeEbookPromo: enHomeEbookPromo,
   spread: enSpread,
   finalCta: enFinalCta,
   liveQuoteSection: enLiveQuoteSection,

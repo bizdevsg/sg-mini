@@ -31,16 +31,13 @@ export function SectionIntro({
   return (
     <div className={`${alignmentClassName} ${className}`}>
       {eyebrow ? (
-        <SectionEyebrow
-          align={align}
-          textClassName={eyebrowClassName}
-        >
+        <SectionEyebrow align={align} textClassName={eyebrowClassName}>
           {eyebrow}
         </SectionEyebrow>
       ) : null}
 
       <TitleTag
-        className={`mt-5 font-mono text-3xl font-bold leading-[1.02] tracking-[-0.04em] text-white md:text-4xl lg:text-[2.8rem] ${titleClassName}`}
+        className={`mt-5 font-mono text-3xl font-bold capitalize leading-[1.02] tracking-[-0.04em] text-white md:text-4xl lg:text-[2.8rem] ${titleClassName}`}
       >
         {title}
       </TitleTag>

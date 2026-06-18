@@ -171,7 +171,7 @@ export function Navbar({ locale }: NavbarProps) {
                             current === index ? null : index,
                           )
                         }
-                        className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-yellow-500/88 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-400"
+                        className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-yellow-500/88 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-400 cursor-pointer"
                       >
                         <span>{group.label}</span>
                         <svg

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { NewsFeedArticle } from "@/lib/news";
+import type { NewsFeedArticle } from "@/lib/news.shared";
 import {
   formatLocaleArticleDateTime,
   type AppLocale,

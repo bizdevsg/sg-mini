@@ -7,7 +7,10 @@ import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { NewsCategoryFilter } from "@/components/molecules/NewsCategoryFilter";
 import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
 import { NewsFilterModal } from "@/components/molecules/NewsFilterModal";
-import { NEWS_FILTER_CATEGORIES, type NewsFeedArticle } from "@/lib/news";
+import {
+  NEWS_FILTER_CATEGORIES,
+  type NewsFeedArticle,
+} from "@/lib/news.shared";
 import { getMessages, type AppLocale } from "@/locales";
 
 type NewsBrowserProps = {

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { getCdnAssetUrl } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
+import logoMark from "../../../public/assets/Logo SG-WEB111.png";
 
 type LogoMarkProps = {
   locale: AppLocale;
@@ -19,15 +19,14 @@ export function LogoMark({ locale }: LogoMarkProps) {
         className="flex items-center gap-4"
       >
         <Image
-          src={getCdnAssetUrl("Logo%20SG-WEB111.png")}
+          src={logoMark}
           alt={messages.app.brandName}
-          width={50}
-          height={50}
+          preload
           sizes="(max-width: 300px) 30px, 36px"
-          className="h-auto w-5 object-contain sm:w-6"
+          className="h-auto w-6 object-contain sm:w-7"
         />
 
-        <span className="hidden font-mono font-bold tracking-[0.12em] text-foreground sm:inline-block">
+        <span className="hidden font-serif text-xl font-bold tracking-[0.12em] text-yellow-500 sm:inline-block">
           {messages.app.brandWordmark}
         </span>
       </Link>

@@ -49,7 +49,10 @@ export const idNavbar: AppMessages["navbar"] = {
       },
       {
         label: "Tentang",
-        href: "/about",
+        items: [
+          { label: "Tentang Kami", href: "/about" },
+          { label: "Hubungi Kami", href: "/contact-us" },
+        ],
       },
     ],
   };

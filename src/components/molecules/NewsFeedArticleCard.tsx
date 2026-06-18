@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { NewsFeedArticle } from "@/lib/news";
+import type { NewsFeedArticle } from "@/lib/news.shared";
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
 
 type NewsFeedArticleCardProps = {

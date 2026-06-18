@@ -5,6 +5,8 @@ const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_PRODUCT_API_URL = "https://sg-admin.newsmaker.id/api/v1/produk";
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "https://sg-admin.newsmaker.id";
+const DEFAULT_BANNER_API_URL = "http://sg-admin.test/api/banner";
+const DEFAULT_BANNER_IMAGE_BASE_URL = "http://sg-admin.test/storage/banner-images";
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
@@ -44,6 +46,12 @@ export const PRODUCT_API_URL =
 
 export const PRODUCT_PORTAL_BASE_URL =
   process.env.PRODUCT_PORTAL_BASE_URL ?? DEFAULT_PRODUCT_PORTAL_BASE_URL;
+
+export const BANNER_API_URL =
+  process.env.BANNER_API_URL ?? DEFAULT_BANNER_API_URL;
+
+export const BANNER_IMAGE_BASE_URL =
+  process.env.BANNER_IMAGE_BASE_URL ?? DEFAULT_BANNER_IMAGE_BASE_URL;
 
 export const HISTORICAL_DATA_API_URL =
   process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;

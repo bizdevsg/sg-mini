@@ -1,4 +1,4 @@
-import { NEWS_FILTER_CATEGORIES } from "@/lib/news";
+import { NEWS_FILTER_CATEGORIES } from "@/lib/news.shared";
 
 type NewsCategoryFilterProps = {
   title: string;

@@ -5,6 +5,7 @@ import { idHero } from "./content/hero";
 import { idRegulator } from "./content/regulator";
 import { idTrustStats } from "./content/trustStats";
 import { idSecurity } from "./content/security";
+import { idHomeEbookPromo } from "./content/homeEbookPromo";
 import { idSpread } from "./content/spread";
 import { idFinalCta } from "./content/finalCta";
 import { idLiveQuoteSection } from "./content/liveQuoteSection";
@@ -32,6 +33,7 @@ export const idMessages: AppMessages = {
   regulator: idRegulator,
   trustStats: idTrustStats,
   security: idSecurity,
+  homeEbookPromo: idHomeEbookPromo,
   spread: idSpread,
   finalCta: idFinalCta,
   liveQuoteSection: idLiveQuoteSection,

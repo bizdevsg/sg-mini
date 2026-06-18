@@ -1,4 +1,4 @@
-import type { NewsFeedArticle } from "@/lib/news";
+import type { NewsFeedArticle } from "@/lib/news.shared";
 import type { AppLocale } from "@/locales";
 import { NewsSidebarArticleCard } from "@/components/molecules/NewsSidebarArticleCard";
 

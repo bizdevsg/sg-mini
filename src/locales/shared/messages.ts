@@ -47,6 +47,13 @@ export type AppMessages = {
     subtitle: string;
     cards: SecurityItem[];
   };
+  homeEbookPromo: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    primaryCta: string;
+    highlights: string[];
+  };
   spread: {
     title: string;
     subtitle: string;

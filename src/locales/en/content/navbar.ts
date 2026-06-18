@@ -49,7 +49,10 @@ export const enNavbar: AppMessages["navbar"] = {
       },
       {
         label: "About",
-        href: "/about",
+        items: [
+          { label: "About Us", href: "/about" },
+          { label: "Contact Us", href: "/contact-us" },
+        ],
       },
     ],
   };

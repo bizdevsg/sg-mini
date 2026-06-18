@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { AppPromoSection } from "@/components/organisms/AppPromoSection";
+import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSection";
+import { EbookPromoSection } from "@/components/organisms/EbookPromoSection";
 import { FinalCtaSection } from "@/components/organisms/FinalCtaSection";
 import { HeroSection } from "@/components/organisms/HeroSection";
 import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
@@ -65,9 +68,11 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
     <>
       <HeroSection locale={locales} />
       <RegulatorMarqueeSection locale={locales} />
-      <TrustStatsSection locale={locales} />
+      <BannerSlideshowSection />
+      <AppPromoSection locale={locales} />
       <LiveQuoteSection locale={locales} />
       <SecuritySection locale={locales} />
+      <EbookPromoSection locale={locales} />
       <SpreadSection locale={locales} />
       <FinalCtaSection locale={locales} />
     </>
