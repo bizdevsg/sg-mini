@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getBannerRecords } from "@/app/api/_data/banner";
+import { getBannerRecords } from "@/lib/banner";
 
 export const runtime = "nodejs";
 

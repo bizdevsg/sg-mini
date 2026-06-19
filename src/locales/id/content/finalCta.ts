@@ -4,7 +4,7 @@ export const idFinalCta: AppMessages["finalCta"] = {
   title: "Sekarang Saatnya Trading",
   subTitle: "Komoditas dengan Solid Gold",
   cta: "Mulai Trading",
-  companyTitle: "MIFX",
+  companyTitle: "Solid Gold Berjangka",
   companyItems: [
     "Tentang",
     "Produk Kami",

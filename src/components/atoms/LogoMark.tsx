@@ -26,7 +26,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           className="h-auto w-6 object-contain sm:w-7"
         />
 
-        <span className="hidden font-serif text-xl font-bold tracking-[0.12em] text-yellow-500 sm:inline-block">
+        <span className="hidden font-serif text-lg font-bold tracking-[0.12em] text-yellow-500 sm:inline-block">
           {messages.app.brandWordmark}
         </span>
       </Link>

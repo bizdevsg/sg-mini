@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import {
+  faFacebookF,
+  faWhatsapp,
+  faXTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import { faCheck, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -22,14 +27,10 @@ export function NewsDetailHeader({
   slug,
   title,
 }: NewsDetailHeaderProps) {
-  const [shareUrl, setShareUrl] = useState("");
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
     setShareUrl(
       new URL(`/${locale}/news/${slug}`, window.location.origin).toString(),
     );
@@ -67,6 +68,10 @@ export function NewsDetailHeader({
         };
 
   const shareLinks = useMemo(() => {
+    if (!shareUrl) {
+      return [];
+    }
+
     const encodedUrl = encodeURIComponent(shareUrl);
     const encodedTitle = encodeURIComponent(title);
 
@@ -74,17 +79,17 @@ export function NewsDetailHeader({
       {
         href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
         label: shareLabels.facebook,
-        icon: ["fab", "facebook-f"] as IconProp,
+        icon: faFacebookF,
       },
       {
         href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
         label: shareLabels.x,
-        icon: ["fab", "x-twitter"] as IconProp,
+        icon: faXTwitter,
       },
       {
         href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
         label: shareLabels.whatsapp,
-        icon: ["fab", "whatsapp"] as IconProp,
+        icon: faWhatsapp,
       },
     ];
   }, [shareLabels.facebook, shareLabels.whatsapp, shareLabels.x, shareUrl, title]);
@@ -113,17 +118,17 @@ export function NewsDetailHeader({
 
   return (
     <header className="mt-8 space-y-4">
-      <h1 className="mx-auto max-w-3xl text-center text-3xl font-bold leading-tight text-yellow-500 sm:text-4xl">
+      <h1 className="mx-auto max-w-3xl text-center text-3xl font-bold leading-tight text-zinc-50 sm:text-4xl">
         {title}
       </h1>
 
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <span className="text-center text-sm text-gray-400">
+        <span className="text-center text-sm font-medium text-zinc-300">
           {formatLocaleArticleDateTime(publishedAt, locale)}
         </span>
       </div>
 
-      <div className="mx-auto h-1 w-30 rounded-full bg-yellow-500/50" />
+      <div className="mx-auto h-1 w-30 rounded-full bg-yellow-400/70" />
 
       <div className="mx-auto flex w-fit items-center gap-3">
         {shareLinks.map((item) => (
@@ -133,7 +138,7 @@ export function NewsDetailHeader({
             aria-label={item.label}
             target="_blank"
             rel="noreferrer"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400 transition-all duration-300 hover:bg-yellow-500 hover:text-black"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950"
           >
             <FontAwesomeIcon icon={item.icon} />
           </a>
@@ -141,17 +146,14 @@ export function NewsDetailHeader({
 
         <button
           type="button"
+          disabled={!shareUrl}
           aria-label={isCopied ? shareLabels.copied : shareLabels.copy}
           title={isCopied ? shareLabels.copied : shareLabels.copy}
           onClick={handleCopyLink}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500/20 text-yellow-400 transition-all duration-300 hover:bg-yellow-500 hover:text-black"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <FontAwesomeIcon
-            icon={
-              isCopied
-                ? (["fas", "check"] as IconProp)
-                : (["fas", "copy"] as IconProp)
-            }
+            icon={isCopied ? faCheck : faCopy}
           />
         </button>
       </div>

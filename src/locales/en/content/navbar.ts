@@ -23,7 +23,7 @@ export const enNavbar: AppMessages["navbar"] = {
       {
         label: "Education",
         items: [
-          { label: "Getting Started" },
+          { label: "Getting Started", href: "/education/cara-memulai" },
           { label: "Ebook", href: "/education/ebook" },
           {
             label: "Online Trading Terms",

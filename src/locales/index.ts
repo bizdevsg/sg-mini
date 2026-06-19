@@ -29,6 +29,10 @@ export {
   getOnlineTradingTermsPageContent,
   type OnlineTradingTermsPageContent,
 } from "./online-trading-terms-page";
+export {
+  getGettingStartedPageContent,
+  type GettingStartedPageContent,
+} from "./getting-started-page";
 
 import { DEFAULT_LOCALE, type AppLocale } from "./config";
 import { messages } from "./messages";

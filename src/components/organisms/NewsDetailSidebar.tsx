@@ -19,7 +19,7 @@ type SidebarSectionProps = {
 function SidebarSection({ title, articles, locale }: SidebarSectionProps) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-100">
         {title}
       </p>
       <div className="mt-4 space-y-4">
@@ -32,7 +32,7 @@ function SidebarSection({ title, articles, locale }: SidebarSectionProps) {
             />
           ))
         ) : (
-          <p className="text-sm text-gray-400">-</p>
+          <p className="text-sm text-zinc-300">-</p>
         )}
       </div>
     </div>

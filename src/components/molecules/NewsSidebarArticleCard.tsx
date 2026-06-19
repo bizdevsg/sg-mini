@@ -19,6 +19,7 @@ export function NewsSidebarArticleCard({
   return (
     <Link
       href={`/${locale}/news/${article.slug}`}
+      prefetch={false}
       className="group block rounded-2xl border border-white/10 bg-zinc-900/40 p-3 transition-all duration-300 hover:border-yellow-400/40 hover:bg-zinc-900/70"
     >
       <div className="flex gap-4">
@@ -37,7 +38,7 @@ export function NewsSidebarArticleCard({
             {article.title}
           </h3>
 
-          <span className="mt-3 text-xs text-zinc-500">
+          <span className="mt-3 text-xs text-zinc-300">
             {formatLocaleArticleDateTime(article.publishedAt, locale)}
           </span>
         </div>

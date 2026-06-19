@@ -19,55 +19,51 @@ function resolveFooterHref(locale: AppLocale, href: string) {
 
 export function FooterSection({ locale }: FooterSectionProps) {
   const messages = getMessages(locale);
+  const footerMenuGroups = messages.navbar.menuGroups.filter(
+    (group) => group.items && group.items.length > 0,
+  );
 
   return (
     <footer className="border-t border-line bg-black">
       <SectionContainer className="py-10 sm:py-12">
         <div>
           <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-              <div>
-                <h6 className="font-bold text-yellow-500">
-                  {messages.footer.brandTitle}
-                </h6>
-                <ul className="mt-5 space-y-3">
-                  {messages.footer.brandItems.map((item) => {
-                    const href = resolveFooterHref(locale, item.href);
+            <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
+                {footerMenuGroups.map((group) => (
+                  <div key={group.label}>
+                    <h6 className="font-bold text-yellow-500">
+                      {group.label}
+                    </h6>
+                    <ul className="mt-5 space-y-3">
+                      {group.items?.map((item) => {
+                        if (!item.href) {
+                          return (
+                            <li
+                              key={item.label}
+                              className="text-sm leading-7 text-yellow-500/48"
+                            >
+                              <span>{item.label}</span>
+                            </li>
+                          );
+                        }
 
-                    return (
-                      <li
-                        key={item.label}
-                        className="text-sm leading-7 text-yellow-500/72"
-                      >
-                        <Link href={href} className="hover:underline">
-                          {item.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+                        const href = resolveFooterHref(locale, item.href);
 
-              <div>
-                <h6 className="font-bold text-yellow-500">
-                  {messages.footer.helpTitle}
-                </h6>
-                <ul className="mt-5 space-y-3">
-                  {messages.footer.helpItems.map((item) => {
-                    const href = resolveFooterHref(locale, item.href);
-
-                    return (
-                      <li
-                        key={item.label}
-                        className="text-sm leading-7 text-yellow-500/72"
-                      >
-                        <Link href={href} className="hover:underline">
-                          {item.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+                        return (
+                          <li
+                            key={item.label}
+                            className="text-sm leading-7 text-yellow-500/72"
+                          >
+                            <Link href={href} className="hover:underline">
+                              {item.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
               </div>
 
               <div className="grid gap-1">

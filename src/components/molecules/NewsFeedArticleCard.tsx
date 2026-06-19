@@ -20,12 +20,13 @@ export function NewsFeedArticleCard({
     <article className="h-full">
       <Link
         href={`/${locale}/news/${article.slug}`}
-        className="group grid h-full min-h-[202px] grid-cols-1 items-stretch gap-4 rounded-2xl border border-white/10 bg-zinc-950/40 p-4 transition-all duration-300 hover:border-yellow-500/40 hover:bg-zinc-900/40 sm:grid-cols-[9rem_minmax(0,1fr)] lg:grid-cols-[10rem_minmax(0,1fr)]"
+        prefetch={false}
+        className="group grid h-full min-h-[202px] grid-cols-1 items-start gap-4 rounded-2xl border border-white/10 bg-zinc-950/40 p-4 transition-all duration-300 hover:border-yellow-500/40 hover:bg-zinc-900/40 sm:grid-cols-[10rem_minmax(0,1fr)] lg:grid-cols-[11rem_minmax(0,1fr)]"
       >
         <div
           role="img"
           aria-label={article.title}
-          className="min-h-[190px] overflow-hidden rounded-xl bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105 sm:min-h-[170px]"
+          className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105 sm:h-full sm:min-h-[180px] sm:aspect-auto"
           style={{
             backgroundImage: `url('${article.imageSrc}')`,
           }}
@@ -42,11 +43,11 @@ export function NewsFeedArticleCard({
             </span>
           </div>
 
-          <h2 className="mt-3 line-clamp-2 min-h-[3.25rem] text-base font-bold leading-snug text-white transition-colors group-hover:text-yellow-400 sm:min-h-[3.5rem] sm:text-lg">
+          <h2 className="mt-3 line-clamp-2 pr-2 pb-0.5 text-base font-bold leading-[1.4] text-white transition-colors group-hover:text-yellow-400 sm:text-lg sm:leading-[1.45]">
             {article.title}
           </h2>
 
-          <p className="mt-2 line-clamp-2 min-h-[3.25rem] text-sm leading-6 text-zinc-400 sm:min-h-[3.5rem] sm:leading-7">
+          <p className="mt-2 line-clamp-2 pr-2 text-sm leading-6 text-zinc-400 sm:leading-7">
             {article.summary}
           </p>
 

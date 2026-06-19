@@ -1,5 +1,6 @@
-import { getProductApiRecords } from "@/app/api/_data/products";
-import { getProductAssetUrl } from "@/lib/env";
+import "server-only";
+
+import { PRODUCT_API_URL, getProductAssetUrl } from "@/lib/env";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
 
@@ -19,6 +20,57 @@ const PRODUCT_SOURCE_CATEGORY_MAP: Record<ProductPageCategory, string> = {
   multilateral: "JFX",
   bilateral: "SPA",
 };
+
+type ProductApiRecord = {
+  id: number;
+  nama_produk: string;
+  slug: string;
+  deskripsi_produk: string | null;
+  specs: string | null;
+  image: string | null;
+  kategori: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type ProductApiResponse = {
+  status?: string;
+  http?: number;
+  data?: ProductApiRecord[];
+};
+
+function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
+  const categoryDiff = left.kategori.localeCompare(right.kategori);
+
+  if (categoryDiff !== 0) {
+    return categoryDiff;
+  }
+
+  return left.id - right.id;
+}
+
+async function getProductApiRecords() {
+  const response = await fetch(PRODUCT_API_URL, {
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch products: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const payload = (await response.json()) as ProductApiResponse;
+
+  if (!payload?.data || !Array.isArray(payload.data)) {
+    return [];
+  }
+
+  return payload.data.slice().sort(compareProducts);
+}
 
 export function isProductPageCategory(
   value: string,

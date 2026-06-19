@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Noto_Sans, Open_Sans } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
-import { RouteLoadingBar } from "@/components/molecules/RouteLoadingBar";
+import { LoadingProvider } from "@/components/providers/LoadingProvider";
 import { NEWS_PORTAL_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
 import {
@@ -54,6 +53,7 @@ export default async function RootLayout({
   return (
     <html
       lang={getLocaleConfig(locale).lang}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${notoSans.variable} ${openSans.variable} h-full antialiased`}
     >
@@ -67,10 +67,7 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         <FontAwesomeProvider>
-          <Suspense fallback={null}>
-            <RouteLoadingBar />
-          </Suspense>
-          {children}
+          <LoadingProvider locale={locale}>{children}</LoadingProvider>
         </FontAwesomeProvider>
       </body>
     </html>

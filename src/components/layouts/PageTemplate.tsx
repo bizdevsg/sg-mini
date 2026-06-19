@@ -26,7 +26,7 @@ export function PageTemplate({
       <LocaleDocumentSync locale={locale} />
       <Navbar locale={locale} />
       <main className={bodyClassName}>{children}</main>
-      <Blur />
+      {/* <Blur /> */}
       <FooterSection locale={locale} />
     </div>
   );

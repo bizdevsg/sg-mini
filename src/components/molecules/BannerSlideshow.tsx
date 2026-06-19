@@ -3,7 +3,7 @@
 import type { TransitionEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import type { BannerApiRecord } from "@/app/api/_data/banner";
+import type { BannerApiRecord } from "@/lib/banner";
 import { getMessages, type AppLocale } from "@/locales";
 
 type BannerSlideshowProps = {
@@ -167,28 +167,15 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
         effectiveTrackIndex * (slideWidth + slideGap)
       : 0;
 
-  function goToPrevious() {
+  function goToSlide(targetIndex: number) {
     if (banners.length <= 1) {
       return;
     }
 
     clearAutoplayTimer();
     setIsTransitionEnabled(true);
-    setTrackIndex((currentIndex) => currentIndex - 1);
-    setActiveIndex(
-      (currentIndex) => (currentIndex - 1 + banners.length) % banners.length,
-    );
-  }
-
-  function goToNext() {
-    if (banners.length <= 1) {
-      return;
-    }
-
-    clearAutoplayTimer();
-    setIsTransitionEnabled(true);
-    setTrackIndex((currentIndex) => currentIndex + 1);
-    setActiveIndex((currentIndex) => (currentIndex + 1) % banners.length);
+    setTrackIndex(banners.length + targetIndex);
+    setActiveIndex(targetIndex);
   }
 
   function handleTrackTransitionEnd(event: TransitionEvent<HTMLDivElement>) {
@@ -260,10 +247,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                     return;
                   }
 
-                  clearAutoplayTimer();
-                  setIsTransitionEnabled(true);
-                  setTrackIndex(normalizeTrackIndex(index, banners.length));
-                  setActiveIndex(normalizedIndex);
+                  goToSlide(normalizedIndex);
                 }}
               >
                 <article
@@ -289,53 +273,34 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
         </div>
       </div>
 
-      {/* {banners.length > 1 ? (
-        <div className="ab">
-          <button
-            type="button"
-            aria-label={labels.previousLabel}
-            className="absolute left-4 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border-none bg-white text-zinc-900 shadow-lg transition-transform disabled:pointer-events-none disabled:opacity-50 md:h-11 md:w-11"
-            onClick={goToPrevious}
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="none"
-            >
-              <path
-                d="M15 18 9 12l6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+      {banners.length > 1 ? (
+        <div className="mt-5 flex items-center justify-center gap-2">
+          {banners.map((banner, index) => {
+            const isActive = index === activeIndex;
 
-          <button
-            type="button"
-            aria-label={labels.nextLabel}
-            className="absolute right-4 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border-none bg-white text-zinc-900 shadow-lg transition-transform disabled:pointer-events-none disabled:opacity-50 md:h-11 md:w-11"
-            onClick={goToNext}
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="none"
-            >
-              <path
-                d="m9 18 6-6-6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            return (
+              <button
+                key={banner.id}
+                type="button"
+                aria-label={formatBannerLabel(labels.slideButtonLabel, index + 1)}
+                aria-pressed={isActive}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  isActive
+                    ? "w-8 bg-[#D5A246]"
+                    : "w-2.5 bg-white/35 hover:bg-white/60"
+                }`}
+                onClick={() => {
+                  goToSlide(index);
+                }}
+              >
+                <span className="sr-only">
+                  {formatBannerLabel(labels.slideButtonLabel, index + 1)}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      ) : null} */}
+      ) : null}
     </div>
   );
 }

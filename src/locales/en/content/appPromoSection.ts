@@ -3,7 +3,7 @@ import type { AppMessages } from "../../shared/messages";
 export const enAppPromoSection: AppMessages["appPromoSection"] = {
   title: "Commodity Trading Opportunities in One Hand",
   description:
-    "Access the commodity market more easily through a single app. Track price movements, manage your account, and place commodity trades with flexible 24/5 access.",
+    "Accessing the commodities market is now easier than ever through a single integrated app. Monitor price movements in real time, manage your account conveniently, and trade commodities flexibly whenever you need to, with 24/5 market access.",
   benefits: [
     "Trade commodities anytime and from anywhere",
     "Monitor price movements and market information in real time",

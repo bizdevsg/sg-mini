@@ -56,31 +56,31 @@ export const testimonials: Testimonial[] = [
     name: "Yudha Keling",
     role: "Influencer Keuangan",
     quote:
-      "MIFX, M-nya itu memudahkan! Karena di mana lagi bisa trading forex dengan data lengkap, sinyal terkurasi, dan insight untuk bantu arahin strategi trading? Cuma di MIFX!",
+      "Platform ini memudahkan trader dengan data pasar yang lengkap, sinyal terkurasi, dan insight yang membantu menyusun strategi trading dengan lebih percaya diri.",
   },
   {
     name: "Andy Senjaya",
     role: "Influencer Keuangan",
     quote:
-      "Aplikasi MIFX punya semua yang diperlukan oleh para trader khususnya trader Indonesia. Mulai dari video edukasi sampai Trading Signal. Highly recommended!",
+      "Aplikasinya punya fitur yang relevan untuk trader Indonesia, mulai dari materi edukasi sampai trading signal. Sangat layak dipertimbangkan.",
   },
   {
     name: "Theresa Learns",
     role: "Influencer Keuangan",
     quote:
-      "Aku mulai pertama trading di MIFX pake demo akun sambil belajar, sampai sudah familiar baru masuk pakai uang asli. Trading forex di MIFX so far paling oke dan easy to use.",
+      "Saya memulai dari akun demo sambil belajar, lalu beralih ke akun live setelah lebih paham. Alurnya terasa rapi dan tetap nyaman dipakai untuk trading harian.",
   },
   {
     name: "Om Ben Trader",
     role: "Influencer Keuangan",
     quote:
-      "Aplikasi nya mantap, mudah dipahami buat pemula Fitur nya juga lengkap Top banget dah mifx",
+      "Aplikasinya mudah dipahami untuk pemula, fiturnya juga cukup lengkap untuk kebutuhan belajar sekaligus eksekusi trading.",
   },
   {
     name: "Dennis SLL",
     role: "Professional trader",
     quote:
-      "Aplikasi MIFX bener-bener fungsional: deposit & WD gampang, tracking akun simpel, banyak hadiah. Tradingnya juga mulai dari Rp500rb & bisa microlot, pas buat pemula!",
+      "Fungsinya terasa praktis untuk kebutuhan trader aktif: pemantauan akun sederhana, proses transaksi jelas, dan ukuran lot yang ramah untuk pemula.",
   },
 ];
 

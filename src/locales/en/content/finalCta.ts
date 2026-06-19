@@ -4,7 +4,7 @@ export const enFinalCta: AppMessages["finalCta"] = {
   title: "Now Is the Time to Trade",
   subTitle: "Commodity with Solid Gold",
   cta: "Start Trading",
-  companyTitle: "MIFX",
+  companyTitle: "Solid Gold Berjangka",
   companyItems: [
     "About",
     "Our Products",

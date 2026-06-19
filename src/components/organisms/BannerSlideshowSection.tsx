@@ -1,5 +1,5 @@
-import { getBannerRecords } from "@/app/api/_data/banner";
 import { BannerSlideshow } from "@/components/molecules/BannerSlideshow";
+import { getBannerRecords } from "@/lib/banner";
 import type { AppLocale } from "@/locales";
 
 type BannerSlideshowSectionProps = {

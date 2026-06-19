@@ -181,9 +181,8 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     latest: {
       eyebrow: "Berita Terkini",
-      title: "Update yang perlu masuk watchlist trader.",
-      subtitle:
-        "Setiap artikel diringkas untuk membantu screening ide trading tanpa membuka banyak tab.",
+      title: "Update penting untuk trader",
+      subtitle: "Insight singkat untuk peluang trading.",
       articles: [
         {
           slug: "rupiah-open-mixed",
@@ -416,9 +415,8 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     latest: {
       eyebrow: "Latest News",
-      title: "Updates that deserve a spot on a trader's watchlist.",
-      subtitle:
-        "Each story is condensed to help you screen opportunities without opening a dozen tabs.",
+      title: "Important update for traders",
+      subtitle: "Quick insights into trading opportunities.",
       articles: [
         {
           slug: "rupiah-open-mixed",
