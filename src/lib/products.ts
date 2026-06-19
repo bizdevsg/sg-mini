@@ -3,6 +3,7 @@ import "server-only";
 import { PRODUCT_API_URL, getProductAssetUrl } from "@/lib/env";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
+const PRODUCT_CATALOG_REVALIDATE_SECONDS = 300;
 
 export type ProductPageCategory = (typeof PRODUCT_PAGE_CATEGORIES)[number];
 
@@ -51,7 +52,9 @@ function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
 
 async function getProductApiRecords() {
   const response = await fetch(PRODUCT_API_URL, {
-    cache: "no-store",
+    next: {
+      revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
+    },
     headers: {
       Accept: "application/json",
     },

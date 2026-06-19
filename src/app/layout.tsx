@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Noto_Sans, Open_Sans } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
@@ -67,7 +68,9 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         <FontAwesomeProvider>
-          <LoadingProvider locale={locale}>{children}</LoadingProvider>
+          <Suspense fallback={children}>
+            <LoadingProvider locale={locale}>{children}</LoadingProvider>
+          </Suspense>
         </FontAwesomeProvider>
       </body>
     </html>
