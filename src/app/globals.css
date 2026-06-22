@@ -89,3 +89,61 @@ button:hover {
     transform: translate3d(-50%, 0, 0);
   }
 }
+
+/* Pengumuman (Announcement) rich HTML content */
+.pengumuman-content p {
+  margin-bottom: 0.75rem;
+  line-height: 1.75;
+}
+
+.pengumuman-content p:last-child {
+  margin-bottom: 0;
+}
+
+.pengumuman-content strong,
+.pengumuman-content b {
+  color: rgba(242, 217, 138, 0.9);
+  font-weight: 600;
+}
+
+.pengumuman-content ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pengumuman-content ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pengumuman-content li {
+  line-height: 1.75;
+}
+
+.pengumuman-content h1,
+.pengumuman-content h2,
+.pengumuman-content h3,
+.pengumuman-content h4 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.pengumuman-content span {
+  color: inherit;
+}
+
+.pengumuman-content a {
+  color: #eab308;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

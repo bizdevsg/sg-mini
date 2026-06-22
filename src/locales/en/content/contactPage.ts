@@ -17,7 +17,7 @@ export const enContactPage: AppMessages["contactPage"] = {
     form: {
       title: "Send Us a Message",
       description:
-        "Fill in your details briefly. The submit button will open an email draft addressed to PT. Solid Gold Berjangka.",
+        "Fill in your details briefly. Your message will be sent directly to PT. Solid Gold Berjangka's official contact system.",
       nameLabel: "Name",
       namePlaceholder: "Your full name",
       emailLabel: "Email",
@@ -32,10 +32,12 @@ export const enContactPage: AppMessages["contactPage"] = {
       captchaLabel: "CAPTCHA",
       captchaAction: "Refresh",
       submit: "Send Message",
+      submitting: "Sending...",
       helper:
         "For faster follow-up, you can also use the official customer support channels shown beside the form.",
-      success:
-        "Your email app is being opened with the prepared message details.",
+      success: "Your message has been sent successfully.",
+      successReportLabel: "Report ID",
+      error: "Failed to send your message. Please try again.",
     },
     headOffice: {
       title: "SGB Head Office",

@@ -1,8 +1,10 @@
 import "server-only";
 
+import { getDummyHistoricalData } from "@/lib/api-dummy-data";
 import {
   HISTORICAL_DATA_API_TOKEN,
   HISTORICAL_DATA_API_URL,
+  USE_DUMMY_API_DATA,
 } from "@/lib/env";
 
 export type HistoricalDataRecord = {
@@ -49,6 +51,10 @@ function compareHistoricalRecords(
 }
 
 export async function getHistoricalData() {
+  if (USE_DUMMY_API_DATA) {
+    return getDummyHistoricalData();
+  }
+
   const response = await fetch(HISTORICAL_DATA_API_URL, {
     cache: "no-store",
     headers: {

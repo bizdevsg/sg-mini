@@ -14,6 +14,8 @@ import { enLiveQuotePage } from "./content/liveQuotePage";
 import { enEbookPage } from "./content/ebookPage";
 import { enLiveQuoteTable } from "./content/liveQuoteTable";
 import { enAboutPage } from "./content/aboutPage";
+import { enAboutInformationPage } from "./content/aboutInformationPage";
+import { enAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
 import { enProductPage } from "./content/productPage";
 import { enEconomicCalendarPage } from "./content/economicCalendarPage";
 import { enEconomicCalendarBrowser } from "./content/economicCalendarBrowser";
@@ -44,6 +46,8 @@ export const enMessages: AppMessages = {
   ebookPage: enEbookPage,
   liveQuoteTable: enLiveQuoteTable,
   aboutPage: enAboutPage,
+  aboutInformationPage: enAboutInformationPage,
+  aboutBusinessLegalityPage: enAboutBusinessLegalityPage,
   productPage: enProductPage,
   economicCalendarPage: enEconomicCalendarPage,
   economicCalendarBrowser: enEconomicCalendarBrowser,

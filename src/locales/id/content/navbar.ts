@@ -51,6 +51,8 @@ export const idNavbar: AppMessages["navbar"] = {
         label: "Tentang",
         items: [
           { label: "Tentang Kami", href: "/about" },
+          { label: "Informasi", href: "/about/informasi" },
+          { label: "Legalitas Bisnis", href: "/about/legalitas-bisnis" },
           { label: "Hubungi Kami", href: "/contact-us" },
         ],
       },

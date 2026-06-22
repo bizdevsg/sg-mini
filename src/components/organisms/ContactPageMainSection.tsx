@@ -52,10 +52,7 @@ export function ContactPageMainSection({ copy }: ContactPageMainSectionProps) {
     <SectionContainer className="py-16 sm:py-20">
       <div className="grid gap-8 lg:grid-cols-2 md:gap-4">
         <div>
-          <ContactFormCard
-            recipientEmail={copy.headOffice.email}
-            copy={copy.form}
-          />
+          <ContactFormCard copy={copy.form} />
         </div>
 
         <div className="space-y-4">

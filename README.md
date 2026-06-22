@@ -87,6 +87,8 @@ Helper env dan URL default ada di [src/lib/env.ts](src/lib/env.ts).
 Variabel yang dipakai project ini:
 
 ```env
+APP_ENV=dev
+
 LIVE_QUOTE_SOCKET_URL=
 NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL=
 
@@ -109,6 +111,12 @@ NEXT_PUBLIC_SPREAD_CTA_URL=
 ```
 
 Kalau tidak diisi, project akan memakai default value yang sudah didefinisikan di [src/lib/env.ts](src/lib/env.ts).
+
+Nilai `APP_ENV` yang dipakai untuk switch data:
+
+- `dev` atau `prod`: pakai API asli
+- `dev-deploy`: pakai dummy data untuk seluruh API server-side
+- websocket `LIVE_QUOTE_SOCKET_URL` tetap tidak diubah oleh switch ini
 
 ## Development
 

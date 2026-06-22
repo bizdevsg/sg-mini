@@ -27,6 +27,7 @@ type LoadingProviderProps = {
 
 const LoadingContext = createContext<LoadingContextValue | null>(null);
 const MAX_LOADING_MS = 10000;
+const OVERLAY_MIN_VISIBLE_MS = 5000;
 const ROUTE_LOADING_MIN_MS = 250;
 const ROUTE_LOADING_MAX_MS = 5000;
 const HIDE_AFTER_IDLE_MS = 200;
@@ -42,6 +43,7 @@ export function LoadingProvider({
   const tokenTimers = useRef(new Map<symbol, number>());
   const routeTokenRef = useRef<symbol | null>(null);
   const routeStartedAtRef = useRef(0);
+  const overlayShownAtRef = useRef(0);
   const sawNonRouteTokenRef = useRef(false);
   const routeMaxTimerRef = useRef<number | null>(null);
   const pathname = usePathname();
@@ -51,9 +53,14 @@ export function LoadingProvider({
 
   const start = useCallback((label?: string) => {
     const token = Symbol(label ?? "loading");
+    const isStartingFreshSession = tokens.current.size === 0;
 
     if (routeTokenRef.current && token !== routeTokenRef.current) {
       sawNonRouteTokenRef.current = true;
+    }
+
+    if (isStartingFreshSession) {
+      overlayShownAtRef.current = Date.now();
     }
 
     tokens.current.add(token);
@@ -190,13 +197,15 @@ export function LoadingProvider({
     }
 
     let hideTimeout: number | undefined;
+    const elapsed = Date.now() - overlayShownAtRef.current;
+    const minVisibleWaitMs = Math.max(0, OVERLAY_MIN_VISIBLE_MS - elapsed);
     const fadeTimeout = window.setTimeout(() => {
       setFadeOut(true);
       hideTimeout = window.setTimeout(() => {
         setShowOverlay(false);
         setFadeOut(false);
       }, 300);
-    }, HIDE_AFTER_IDLE_MS);
+    }, minVisibleWaitMs + HIDE_AFTER_IDLE_MS);
 
     return () => {
       window.clearTimeout(fadeTimeout);

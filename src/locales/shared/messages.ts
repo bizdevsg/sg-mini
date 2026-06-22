@@ -188,6 +188,84 @@ export type AppMessages = {
       description: string;
     };
   };
+  aboutInformationPage: {
+    breadcrumb: string;
+    parentLabel: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      stats: Array<{
+        label: string;
+        value: string;
+      }>;
+    };
+    overview: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      cards: Array<{
+        title: string;
+        body: string;
+      }>;
+    };
+    operations: {
+      title: string;
+      items: string[];
+    };
+    serviceInfo: {
+      title: string;
+      items: Array<{
+        label: string;
+        value: string;
+      }>;
+    };
+    commitments: {
+      title: string;
+      items: string[];
+    };
+  };
+  aboutBusinessLegalityPage: {
+    breadcrumb: string;
+    parentLabel: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    overview: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      cards: Array<{
+        title: string;
+        body: string;
+      }>;
+    };
+    licenses: {
+      title: string;
+      description: string;
+      items: Array<{
+        authority: string;
+        number: string;
+        note: string;
+      }>;
+    };
+    memberships: {
+      title: string;
+      description: string;
+      items: Array<{
+        authority: string;
+        number: string;
+        note: string;
+      }>;
+    };
+    commitments: {
+      title: string;
+      description: string;
+      items: string[];
+    };
+  };
   productPage: {
     breadcrumb: string;
     productsLabel: string;
@@ -387,8 +465,11 @@ export type AppMessages = {
       captchaLabel: string;
       captchaAction: string;
       submit: string;
+      submitting: string;
       helper: string;
       success: string;
+      successReportLabel: string;
+      error: string;
     };
     headOffice: {
       title: string;

@@ -17,7 +17,7 @@ export const idContactPage: AppMessages["contactPage"] = {
     form: {
       title: "Kirimkan Pesan Anda",
       description:
-        "Isi data singkat Anda. Tombol kirim akan membuka email ke alamat resmi PT. Solid Gold Berjangka.",
+        "Isi data singkat Anda. Pesan akan langsung dikirim ke sistem kontak resmi PT. Solid Gold Berjangka.",
       nameLabel: "Nama",
       namePlaceholder: "Nama lengkap Anda",
       emailLabel: "Email",
@@ -32,10 +32,12 @@ export const idContactPage: AppMessages["contactPage"] = {
       captchaLabel: "CAPTCHA",
       captchaAction: "Refresh",
       submit: "Kirim Pesan",
+      submitting: "Mengirim...",
       helper:
         "Untuk respons lebih cepat, Anda juga bisa langsung menghubungi customer support di samping.",
-      success:
-        "Aplikasi email Anda sedang dibuka dengan detail pesan yang sudah disiapkan.",
+      success: "Pesan Anda berhasil dikirim.",
+      successReportLabel: "ID Laporan",
+      error: "Pesan gagal dikirim. Silakan coba lagi.",
     },
     headOffice: {
       title: "Kantor Pusat SGB",

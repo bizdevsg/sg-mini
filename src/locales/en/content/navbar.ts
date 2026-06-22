@@ -51,6 +51,8 @@ export const enNavbar: AppMessages["navbar"] = {
         label: "About",
         items: [
           { label: "About Us", href: "/about" },
+          { label: "Information", href: "/about/informasi" },
+          { label: "Business Legality", href: "/about/legalitas-bisnis" },
           { label: "Contact Us", href: "/contact-us" },
         ],
       },

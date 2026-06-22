@@ -6,6 +6,8 @@ const DEFAULT_PRODUCT_API_URL = "https://sg-admin.newsmaker.id/api/v1/produk";
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "https://sg-admin.newsmaker.id";
 const DEFAULT_BANNER_API_URL = "http://sg-admin.test/api/banner";
 const DEFAULT_BANNER_IMAGE_BASE_URL = "http://sg-admin.test/storage/banner-images";
+const DEFAULT_PENGUMUMAN_API_URL = "http://sg-admin.test/api/pengumuman";
+const DEFAULT_CONTACT_MESSAGE_API_URL = "http://sg-admin.test/api/massages";
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
@@ -18,6 +20,26 @@ const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
 const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
+
+export type AppEnvMode = "dev" | "prod" | "dev-deploy";
+const DEFAULT_APP_ENV: AppEnvMode = "dev";
+
+function normalizeAppEnvMode(value: string | undefined): AppEnvMode {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (
+    normalizedValue === "dev" ||
+    normalizedValue === "prod" ||
+    normalizedValue === "dev-deploy"
+  ) {
+    return normalizedValue;
+  }
+
+  return DEFAULT_APP_ENV;
+}
+
+export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
+export const USE_DUMMY_API_DATA = APP_ENV === "dev-deploy";
 
 export const LIVE_QUOTE_SOCKET_URL =
   process.env.LIVE_QUOTE_SOCKET_URL ?? DEFAULT_LIVE_QUOTE_SOCKET_URL;
@@ -48,6 +70,12 @@ export const BANNER_API_URL =
 
 export const BANNER_IMAGE_BASE_URL =
   process.env.BANNER_IMAGE_BASE_URL ?? DEFAULT_BANNER_IMAGE_BASE_URL;
+
+export const PENGUMUMAN_API_URL =
+  process.env.PENGUMUMAN_API_URL ?? DEFAULT_PENGUMUMAN_API_URL;
+
+export const CONTACT_MESSAGE_API_URL =
+  process.env.CONTACT_MESSAGE_API_URL ?? DEFAULT_CONTACT_MESSAGE_API_URL;
 
 export const HISTORICAL_DATA_API_URL =
   process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;

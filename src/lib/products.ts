@@ -1,6 +1,11 @@
 import "server-only";
 
-import { PRODUCT_API_URL, getProductAssetUrl } from "@/lib/env";
+import { getDummyProductCatalog } from "@/lib/api-dummy-data";
+import {
+  PRODUCT_API_URL,
+  USE_DUMMY_API_DATA,
+  getProductAssetUrl,
+} from "@/lib/env";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
 const PRODUCT_CATALOG_REVALIDATE_SECONDS = 300;
@@ -82,6 +87,10 @@ export function isProductPageCategory(
 }
 
 export async function getProductCatalog(category: ProductPageCategory) {
+  if (USE_DUMMY_API_DATA) {
+    return getDummyProductCatalog(category);
+  }
+
   try {
     const sourceCategory = PRODUCT_SOURCE_CATEGORY_MAP[category];
     const records = await getProductApiRecords();

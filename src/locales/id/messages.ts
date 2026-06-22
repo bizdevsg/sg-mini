@@ -14,6 +14,8 @@ import { idLiveQuotePage } from "./content/liveQuotePage";
 import { idEbookPage } from "./content/ebookPage";
 import { idLiveQuoteTable } from "./content/liveQuoteTable";
 import { idAboutPage } from "./content/aboutPage";
+import { idAboutInformationPage } from "./content/aboutInformationPage";
+import { idAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
 import { idProductPage } from "./content/productPage";
 import { idEconomicCalendarPage } from "./content/economicCalendarPage";
 import { idEconomicCalendarBrowser } from "./content/economicCalendarBrowser";
@@ -44,6 +46,8 @@ export const idMessages: AppMessages = {
   ebookPage: idEbookPage,
   liveQuoteTable: idLiveQuoteTable,
   aboutPage: idAboutPage,
+  aboutInformationPage: idAboutInformationPage,
+  aboutBusinessLegalityPage: idAboutBusinessLegalityPage,
   productPage: idProductPage,
   economicCalendarPage: idEconomicCalendarPage,
   economicCalendarBrowser: idEconomicCalendarBrowser,

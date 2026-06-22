@@ -32,9 +32,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                 {footerMenuGroups.map((group) => (
                   <div key={group.label}>
-                    <h6 className="font-bold text-yellow-500">
-                      {group.label}
-                    </h6>
+                    <h6 className="font-bold text-yellow-500">{group.label}</h6>
                     <ul className="mt-5 space-y-3">
                       {group.items?.map((item) => {
                         if (!item.href) {
@@ -67,14 +65,28 @@ export function FooterSection({ locale }: FooterSectionProps) {
               </div>
 
               <div className="grid gap-1">
-                {messages.footer.legalItems.map((item) => (
+                {/* {messages.footer.legalItems.map((item) => (
                   <p
                     key={item}
                     className="text-sm leading-7 text-yellow-500/72"
                   >
                     {item}
                   </p>
-                ))}
+                ))} */}
+
+                <div className="text-center p-4 border border-yellow-500/20 rounded-xl">
+                  <h6 className="font-bold mb-4 text-red-500">PERHATIAN!</h6>
+                  <p className="text-white/80  text-sm">
+                    Manajemen PT Solid Gold Berjangka menghimbau
+                    seluruh masyarakat untuk selalu waspada terhadap upaya
+                    penipuan berkedok investasi yang mengatasnamakan PT SGB
+                    melalui media elektronik maupun media sosial. Pastikan
+                    setiap proses transfer dana untuk transaksi Perdagangan
+                    Berjangka dilakukan hanya ke rekening Segregated Account
+                    atas nama PT Solid Gold Berjangka, bukan ke rekening pribadi
+                    siapa pun.
+                  </p>
+                </div>
 
                 <div className="mt-5 flex w-full items-center gap-3">
                   <div className="p-2 bg-white rounded-lg">
