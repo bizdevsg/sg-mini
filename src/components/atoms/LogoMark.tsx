@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { getMessages, type AppLocale } from "@/locales";
-import logoMark from "../../../public/assets/Logo SG-WEB111.png";
+import mobileLogoMark from "../../../public/assets/Logo SG-WEB111.png";
+import logoMark from "../../../public/assets/logo-utama.png";
 
 type LogoMarkProps = {
   locale: AppLocale;
@@ -19,16 +20,20 @@ export function LogoMark({ locale }: LogoMarkProps) {
         className="flex items-center gap-4"
       >
         <Image
+          src={mobileLogoMark}
+          alt={messages.app.brandName}
+          preload
+          sizes="44px"
+          className="h-ato w-6 object-contain sm:hidden"
+        />
+
+        <Image
           src={logoMark}
           alt={messages.app.brandName}
           preload
-          sizes="(max-width: 300px) 30px, 36px"
-          className="h-auto w-6 object-contain sm:w-7"
+          sizes="220px"
+          className="hidden h-auto w-60 object-contain sm:block"
         />
-
-        <span className="hidden font-serif text-lg font-bold tracking-[0.12em] text-yellow-500 sm:inline-block">
-          {messages.app.brandWordmark}
-        </span>
       </Link>
     </div>
   );

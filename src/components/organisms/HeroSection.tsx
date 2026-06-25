@@ -30,7 +30,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 {messages.hero.titleBody}
               </span>
             </h1>
-            <p className="mt-3 max-w-2xl text-white/85 text-center xl:text-left">{messages.hero.subTitle}</p>
+            <p className="mt-3 max-w-2xl text-white/85 text-center text-lg xl:text-left">{messages.hero.subTitle}</p>
             <div className="mt-6 flex gap-4 mx-auto xl:mx-0 w-fit">
               <a href={googlePlayLink} target="_blank" rel="noreferrer">
                 <Image

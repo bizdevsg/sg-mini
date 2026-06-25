@@ -50,7 +50,7 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
         )}
 
         <div className="mt-8 flex justify-center">
-          <ButtonLink href={`/${locale}/news`} size="lg" variant="dark" className="mx-auto">
+          <ButtonLink href={`/${locale}/news`} size="sm" variant="dark" className="mx-auto">
             {newsPageContent.newsPage.hero.primaryCta}
           </ButtonLink>
         </div>

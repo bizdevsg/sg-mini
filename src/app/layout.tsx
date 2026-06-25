@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Noto_Sans, Open_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { LoadingProvider } from "@/components/providers/LoadingProvider";
@@ -14,15 +14,10 @@ import {
 } from "@/locales";
 import "./globals.css";
 
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -56,7 +51,7 @@ export default async function RootLayout({
       lang={getLocaleConfig(locale).lang}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${notoSans.variable} ${openSans.variable} h-full antialiased`}
+      className={`${poppins.variable} h-full antialiased`}
     >
       <head>
         <link rel="dns-prefetch" href="//portalnews.newsmaker.id" />

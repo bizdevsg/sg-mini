@@ -12,13 +12,13 @@ export function LiveQuoteSymbol({
   const display = getLiveQuoteDisplay(symbol);
 
   return (
-    <span className={className}>
-      <span className="text-sm font-semibold md:text-base">{display.label}</span>
+    <div className={className}>
+      <h6 className="text-sm font-semibold md:text-base">{display.label}</h6>
       {display.symbol ? (
-        <span className="ml-1 text-xs font-medium">
+        <span className="text-xs font-medium">
           ({display.symbol})
         </span>
       ) : null}
-    </span>
+    </div>
   );
 }

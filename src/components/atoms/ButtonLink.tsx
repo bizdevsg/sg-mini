@@ -31,7 +31,7 @@ export function ButtonLink({
   size = "md",
   ...props
 }: ButtonLinkProps) {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-xl text-center font-semibold tracking-[-0.01em] ${variants[variant]} ${sizes[size]} ${className} transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]`;
+  const classes = `inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold tracking-[-0.01em] ${variants[variant]} ${sizes[size]} ${className} transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]`;
   const href = props.href;
 
   if (isInternalHref(href)) {

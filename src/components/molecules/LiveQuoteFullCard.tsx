@@ -40,12 +40,12 @@ export function LiveQuoteFullCard({
             <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/55">
               {fieldLabels.symbol}
             </p>
-            <p className={`font-mono text-base font-bold ${directionClassName}`}>
+            <div className={`font-mono text-base font-bold ${directionClassName}`}>
               <LiveQuoteSymbol
                 symbol={symbol}
                 className="font-mono text-base font-bold"
               />
-            </p>
+            </div>
           </div>
         </div>
 

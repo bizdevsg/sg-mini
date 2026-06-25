@@ -33,7 +33,7 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
           <ButtonLink
             href={`/${locale}/live-quote`}
             variant="dark"
-            size="lg"
+            size="sm"
             className="mt-5"
           >
             {messages.liveQuoteSection.cta}

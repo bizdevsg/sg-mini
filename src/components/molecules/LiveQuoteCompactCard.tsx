@@ -35,21 +35,16 @@ export function LiveQuoteCompactCard({
             direction={tick.price_change}
             locale={locale}
           />
-          <div>
-            <p
-              className={`font-mono text-lg font-bold sm:text-xl ${directionClassName}`}
-            >
-              <LiveQuoteSymbol
-                symbol={symbol}
-                className="font-mono text-lg font-bold sm:text-xl"
-              />
-            </p>
-          </div>
+
+          <LiveQuoteSymbol
+            symbol={symbol}
+            className={`${directionClassName}`}
+          />
         </div>
 
-        <p className={`text-lg font-bold sm:text-xl ${directionClassName}`}>
+        <div className={`text-lg font-bold sm:text-xl ${directionClassName}`}>
           {formatQuoteNumber(tick.price, locale)}
-        </p>
+        </div>
       </div>
 
       <p className="mt-6 text-xs uppercase tracking-[0.14em] text-white/55">
