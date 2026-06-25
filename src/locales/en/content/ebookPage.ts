@@ -5,6 +5,8 @@ export const enEbookPage: AppMessages["ebookPage"] = {
     description:
       "A curated ebook page to help traders understand market basics, risk management, and structured trading plans.",
     breadcrumb: "Ebook",
+    parentLabel: "Education",
+    detailCta: "View Details",
     hero: {
       eyebrow: "Learning Library",
       title: "Concise trading ebooks that stay practical and easy to revisit.",

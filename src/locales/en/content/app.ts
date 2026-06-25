@@ -7,4 +7,5 @@ export const enApp: AppMessages["app"] = {
   brandName: "Solid Gold Berjangka",
   brandWordmark: "Solid Gold Berjangka",
   homeLabel: "Back to homepage",
+  breadcrumbLabel: "Breadcrumb",
 };

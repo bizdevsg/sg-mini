@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { NewsBrowser } from "@/components/organisms/NewsBrowser";
+import { NewsPageHeroSection } from "@/components/organisms/NewsPageHeroSection";
 import { getNewsFeed } from "@/lib/news";
 import { getNewsPageContent } from "@/locales/news-page-content";
 import {
@@ -62,23 +61,7 @@ export default async function LocalizedNews({ params }: LocalizedPageProps) {
   const labels = getMessages(locales).newsPage;
 
   return (
-    <SectionContainer className="py-16 sm:py-20">
-      <nav
-        aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-500"
-      >
-        <Link
-          href={`/${locales}`}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-500 transition hover:bg-yellow-500/30"
-        >
-          <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
-        </Link>
-
-        <span>{">"}</span>
-
-        <span className="font-medium text-white">{labels.breadcrumb}</span>
-      </nav>
-
+    <SectionContainer className="py-16 md:py-20 mt-10">
       <NewsBrowser
         articles={articles}
         locale={locales}

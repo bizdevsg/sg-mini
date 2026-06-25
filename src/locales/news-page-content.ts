@@ -181,8 +181,9 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     latest: {
       eyebrow: "Berita Terkini",
-      title: "Update penting untuk trader",
-      subtitle: "Insight singkat untuk peluang trading.",
+      title: "Update News Market",
+      subtitle:
+        "Pantau berita dan insight market terbaru untuk membantu keputusan trading lebih terarah.",
       articles: [
         {
           slug: "rupiah-open-mixed",
@@ -415,8 +416,9 @@ const newsPageContent: Record<AppLocale, NewsPageContent> = {
     },
     latest: {
       eyebrow: "Latest News",
-      title: "Important update for traders",
-      subtitle: "Quick insights into trading opportunities.",
+      title: "Update News Market",
+      subtitle:
+        "Stay up to date on the latest news and market insights to help you make more informed trading decisions.",
       articles: [
         {
           slug: "rupiah-open-mixed",

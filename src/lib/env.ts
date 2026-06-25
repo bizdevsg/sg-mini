@@ -2,12 +2,23 @@ const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
 const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
-const DEFAULT_PRODUCT_API_URL = "https://sg-admin.newsmaker.id/api/v1/produk";
-const DEFAULT_PRODUCT_PORTAL_BASE_URL = "https://sg-admin.newsmaker.id";
-const DEFAULT_BANNER_API_URL = "http://sg-admin.test/api/banner";
+const DEFAULT_SG_ADMIN_API_BASE_URL = "http://sg-admin.test/api/v1";
+const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
+const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
+const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
 const DEFAULT_BANNER_IMAGE_BASE_URL = "http://sg-admin.test/storage/banner-images";
-const DEFAULT_PENGUMUMAN_API_URL = "http://sg-admin.test/api/pengumuman";
-const DEFAULT_CONTACT_MESSAGE_API_URL = "http://sg-admin.test/api/massages";
+const DEFAULT_PENGHARGAAN_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/penghargaan`;
+const DEFAULT_PENGHARGAAN_IMAGE_BASE_URL =
+  "http://sg-admin.test/storage/penghargaan-images";
+const DEFAULT_PENGUMUMAN_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/pengumuman`;
+const DEFAULT_CONTACT_MESSAGE_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/massages`;
+const DEFAULT_COMPANY_PROFILE_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/company-profile`;
+const DEFAULT_LEGALITAS_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/legalitas`;
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
@@ -71,11 +82,24 @@ export const BANNER_API_URL =
 export const BANNER_IMAGE_BASE_URL =
   process.env.BANNER_IMAGE_BASE_URL ?? DEFAULT_BANNER_IMAGE_BASE_URL;
 
+export const PENGHARGAAN_API_URL =
+  process.env.PENGHARGAAN_API_URL ?? DEFAULT_PENGHARGAAN_API_URL;
+
+export const PENGHARGAAN_IMAGE_BASE_URL =
+  process.env.PENGHARGAAN_IMAGE_BASE_URL ??
+  DEFAULT_PENGHARGAAN_IMAGE_BASE_URL;
+
 export const PENGUMUMAN_API_URL =
   process.env.PENGUMUMAN_API_URL ?? DEFAULT_PENGUMUMAN_API_URL;
 
 export const CONTACT_MESSAGE_API_URL =
   process.env.CONTACT_MESSAGE_API_URL ?? DEFAULT_CONTACT_MESSAGE_API_URL;
+
+export const COMPANY_PROFILE_API_URL =
+  process.env.COMPANY_PROFILE_API_URL ?? DEFAULT_COMPANY_PROFILE_API_URL;
+
+export const LEGALITAS_API_URL =
+  process.env.LEGALITAS_API_URL ?? DEFAULT_LEGALITAS_API_URL;
 
 export const HISTORICAL_DATA_API_URL =
   process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;
@@ -135,4 +159,12 @@ export function getProductAssetUrl(assetPath: string) {
   }
 
   return buildAssetUrl(PRODUCT_PORTAL_BASE_URL, assetPath);
+}
+
+export function getPenghargaanAssetUrl(assetPath: string) {
+  if (/^https?:\/\//i.test(assetPath)) {
+    return assetPath;
+  }
+
+  return buildAssetUrl(PENGHARGAAN_IMAGE_BASE_URL, assetPath);
 }

@@ -279,7 +279,10 @@ export function NewsBrowser({
   }
 
   return (
-    <div className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_3fr]">
+    <div
+      id="news-browser"
+      className="grid grid-cols-1 gap-6 xl:grid-cols-[300px_minmax(0,1fr)]"
+    >
       <NewsCategoryFilter
         title={labels.listTitle}
         allCategoriesLabel={labels.allCategories}
@@ -291,40 +294,53 @@ export function NewsBrowser({
         onCategoryChange={handleCategoryChange}
       />
 
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={handleOpenFilterModal}
-            className="rounded-lg bg-yellow-500 p-3 text-zinc-800 sm:px-6 sm:py-2"
-          >
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={["fas", "sliders"]} />
-              <span className="hidden sm:block">{labels.filter}</span>
+      <div className="space-y-6">
+        <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-sm sm:p-5">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-400">
+                {labels.listTitle}
+              </p>
+              <p className="mt-2 text-sm leading-7 text-zinc-400 sm:text-[15px]">
+                {summaryText}
+              </p>
             </div>
-          </button>
 
-          <div className="flex h-11 w-full items-center gap-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-4">
-            <FontAwesomeIcon
-              icon={["fas", "magnifying-glass"]}
-              className="text-sm text-yellow-500"
-            />
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={handleOpenFilterModal}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 px-4 text-sm font-medium text-yellow-400 transition hover:border-yellow-500/50 hover:bg-yellow-500/15"
+              >
+                <FontAwesomeIcon icon={["fas", "sliders"]} />
+                <span>{labels.filter}</span>
+              </button>
 
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder={labels.searchPlaceholder}
-              aria-label={labels.searchPlaceholder}
-              className="flex-1 border-none bg-transparent text-sm text-yellow-500 outline-none placeholder:text-gray-400 focus:outline-none focus:ring-0"
-            />
+              <div className="flex h-12 min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 sm:min-w-[320px]">
+                <FontAwesomeIcon
+                  icon={["fas", "magnifying-glass"]}
+                  className="text-sm text-yellow-500"
+                />
+
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  placeholder={labels.searchPlaceholder}
+                  aria-label={labels.searchPlaceholder}
+                  className="flex-1 border-none bg-transparent text-sm text-white outline-none placeholder:text-zinc-500 focus:outline-none focus:ring-0"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
         {visibleArticles.length ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {visibleArticles.map((article, index) => {
               const shouldPrioritizeImage = index < EAGER_IMAGE_COUNT;
+              const isFeaturedArticle =
+                safeCurrentPage === 1 && index === 0 && visibleArticles.length > 1;
 
               return (
                 <NewsFeedArticleCard
@@ -333,6 +349,8 @@ export function NewsBrowser({
                   locale={locale}
                   readMoreLabel={browserLabels.readArticle}
                   prioritizeImage={shouldPrioritizeImage}
+                  appearance="news"
+                  variant={isFeaturedArticle ? "featured" : "default"}
                 />
               );
             })}
@@ -341,13 +359,13 @@ export function NewsBrowser({
           <EmptyStatePanel
             title={labels.emptyTitle}
             body={emptyBodyText}
-            className="border-yellow-500/20 bg-yellow-500/[0.04] text-gray-400"
+            className="rounded-[28px] border-white/10 bg-white/[0.03] text-gray-400"
           />
         )}
 
         {sortedArticles.length > NEWS_PAGE_SIZE ? (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-yellow-500/20 bg-yellow-500/[0.04] px-4 py-3">
-            <p className="text-sm text-gray-300">{paginationSummary}</p>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-white/[0.03] px-4 py-4">
+            <p className="text-sm text-zinc-300">{paginationSummary}</p>
 
             <div className="flex items-center gap-2">
               <button
@@ -356,8 +374,8 @@ export function NewsBrowser({
                 disabled={safeCurrentPage === 1}
                 className={`rounded-lg border px-3 py-2 text-sm transition ${
                   safeCurrentPage === 1
-                    ? "pointer-events-none border-yellow-500/10 text-gray-600"
-                    : "border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10"
+                    ? "pointer-events-none border-white/8 text-zinc-600"
+                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                 }`}
               >
                 {labels.pagination.previous}
@@ -369,8 +387,8 @@ export function NewsBrowser({
                 disabled={safeCurrentPage === totalPages}
                 className={`rounded-lg border px-3 py-2 text-sm transition ${
                   safeCurrentPage === totalPages
-                    ? "pointer-events-none border-yellow-500/10 text-gray-600"
-                    : "border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10"
+                    ? "pointer-events-none border-white/8 text-zinc-600"
+                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                 }`}
               >
                 {labels.pagination.next}

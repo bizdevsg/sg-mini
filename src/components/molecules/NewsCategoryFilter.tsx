@@ -29,19 +29,22 @@ export function NewsCategoryFilter({
   onCategoryChange,
 }: NewsCategoryFilterProps) {
   return (
-    <aside className="space-y-4">
-      <div className="rounded-xl border border-yellow-500/50 p-4">
-        <h4 className="mb-4 font-bold uppercase text-yellow-500">{title}</h4>
+    <aside className="h-fit xl:sticky xl:top-24">
+      <div className="rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-sm sm:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-400">
+          {title}
+        </p>
+        <p className="mt-3 text-sm leading-7 text-zinc-400">{summaryText}</p>
 
         {categories.length ? (
           <>
-            <div className="xl:hidden">
+            <div className="mt-5 xl:hidden">
               <select
                 value={selectedCategory ?? ""}
                 onChange={(event) =>
                   onCategoryChange(event.target.value || null)
                 }
-                className="w-full rounded-lg border border-yellow-500/20 bg-zinc-900 px-3 py-2 text-sm text-white focus:border-yellow-500 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:border-yellow-500 focus:outline-none"
               >
                 <option value="">{allCategoriesLabel}</option>
 
@@ -53,16 +56,15 @@ export function NewsCategoryFilter({
               </select>
             </div>
 
-            <ul className="hidden space-y-3 xl:block">
+            <ul className="mt-6 hidden space-y-2 xl:block">
               <li>
                 <button
                   type="button"
                   onClick={() => onCategoryChange(null)}
-                  className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${
-                    !selectedCategory
-                      ? "bg-yellow-500/15 text-yellow-400"
-                      : "text-white hover:bg-yellow-500/8"
-                  }`}
+                  className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm transition ${!selectedCategory
+                      ? "border-yellow-500/30 bg-yellow-500/12 text-yellow-400"
+                      : "border-white/8 bg-black/20 text-white hover:border-yellow-500/15 hover:bg-yellow-500/8"
+                    }`}
                 >
                   {allCategoriesLabel}
                 </button>
@@ -73,11 +75,10 @@ export function NewsCategoryFilter({
                   <button
                     type="button"
                     onClick={() => onCategoryChange(category)}
-                    className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${
-                      selectedCategory === category
-                        ? "bg-yellow-500/15 text-yellow-400"
-                        : "text-white hover:bg-yellow-500/8"
-                    }`}
+                    className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm transition ${selectedCategory === category
+                        ? "border-yellow-500/30 bg-yellow-500/12 text-yellow-400"
+                        : "border-white/8 bg-black/20 text-white hover:border-yellow-500/15 hover:bg-yellow-500/8"
+                      }`}
                   >
                     {getCategoryLabel(category, categoryLabels)}
                   </button>
@@ -86,10 +87,8 @@ export function NewsCategoryFilter({
             </ul>
           </>
         ) : (
-          <p className="text-sm text-gray-400">{emptyBodyText}</p>
+          <p className="mt-5 text-sm text-gray-400">{emptyBodyText}</p>
         )}
-
-        <p className="mt-4 text-xs text-gray-400">{summaryText}</p>
       </div>
     </aside>
   );

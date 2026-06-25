@@ -8,6 +8,8 @@ import { idSecurity } from "./content/security";
 import { idAppPromoSection } from "./content/appPromoSection";
 import { idHomeEbookPromo } from "./content/homeEbookPromo";
 import { idSpread } from "./content/spread";
+import { idBenefitSection } from "./content/benefitSection";
+import { idHomeWhyChoose } from "./content/homeWhyChoose";
 import { idFinalCta } from "./content/finalCta";
 import { idLiveQuoteSection } from "./content/liveQuoteSection";
 import { idLiveQuotePage } from "./content/liveQuotePage";
@@ -40,6 +42,8 @@ export const idMessages: AppMessages = {
   appPromoSection: idAppPromoSection,
   homeEbookPromo: idHomeEbookPromo,
   spread: idSpread,
+  benefitSection: idBenefitSection,
+  homeWhyChoose: idHomeWhyChoose,
   finalCta: idFinalCta,
   liveQuoteSection: idLiveQuoteSection,
   liveQuotePage: idLiveQuotePage,

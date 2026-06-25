@@ -5,4 +5,11 @@ export const enNewsDetailPage: AppMessages["newsDetailPage"] = {
     relatedNews: "Related News",
     latestNews: "Latest News",
     readTimeUnit: "min read",
+    share: {
+      facebook: "Share to Facebook",
+      x: "Share to X",
+      whatsapp: "Share to WhatsApp",
+      copy: "Copy link",
+      copied: "Link copied",
+    },
   };

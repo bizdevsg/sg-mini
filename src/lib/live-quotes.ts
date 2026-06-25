@@ -16,6 +16,11 @@ export type LiveQuoteTick = {
 
 export type LiveQuotePayload = Record<string, LiveQuoteTick>;
 
+export type LiveQuoteDisplay = {
+  label: string;
+  symbol: string | null;
+};
+
 export const LIVE_QUOTE_SOCKET_URL = PUBLIC_LIVE_QUOTE_SOCKET_URL;
 
 export const QUOTE_ORDER = [
@@ -46,7 +51,7 @@ export const LIVE_QUOTE_LABELS: Record<(typeof QUOTE_ORDER)[number], string> = {
   UI1010_BBJ: "USD/IDR",
 };
 
-export function getLiveQuoteDisplay(symbol: string) {
+export function getLiveQuoteDisplay(symbol: string): LiveQuoteDisplay {
   const label = LIVE_QUOTE_LABELS[symbol as keyof typeof LIVE_QUOTE_LABELS];
 
   if (!label || label === symbol) {

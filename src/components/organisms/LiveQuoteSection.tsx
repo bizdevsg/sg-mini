@@ -3,6 +3,7 @@ import { SectionTitle } from "@/components/atoms/SectionTitle";
 import { LiveQuoteTable } from "@/components/molecules/LiveQuoteTable";
 import { getMessages, type AppLocale } from "@/locales";
 import { ButtonLink } from "../atoms/ButtonLink";
+import { SectionEyebrow } from "../atoms/SectionEyebrow";
 
 type LiveQuoteSectionProps = {
   locale: AppLocale;
@@ -14,12 +15,15 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
   return (
     <section className="border-y border-line bg-zinc-900">
       <SectionContainer className="py-20">
+        <SectionEyebrow align="left" className="mb-3">
+          {messages.liveQuoteSection.eyebrow}
+        </SectionEyebrow>
         <SectionTitle
           title={messages.liveQuoteSection.title}
           subtitle={messages.liveQuoteSection.subtitle}
-          align="center"
+          align="left"
           className="mx-auto"
-          subtitleClassName="mx-auto max-w-2xl"
+          subtitleClassName="max-w-2xl mb-10"
         />
         <LiveQuoteTable locale={locale} />
 

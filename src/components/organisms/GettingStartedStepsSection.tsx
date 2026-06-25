@@ -16,7 +16,9 @@ export function GettingStartedStepsSection({
   steps,
 }: GettingStartedStepsSectionProps) {
   return (
-    <section id="getting-started-steps" className="py-16 sm:py-20 lg:py-24">
+    <section id="getting-started-steps" className="py-16 sm:py-20 lg:py-24 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+
       <SectionContainer>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-12">
           <div className="max-w-lg">

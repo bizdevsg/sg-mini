@@ -4,6 +4,12 @@ import type {
   Stat,
 } from "@/types/landing";
 
+export type HomeWhyChooseItemId =
+  | "legal"
+  | "experience"
+  | "support"
+  | "ebook";
+
 export type AppMessages = {
   app: {
     title: string;
@@ -11,6 +17,7 @@ export type AppMessages = {
     brandName: string;
     brandWordmark: string;
     homeLabel: string;
+    breadcrumbLabel: string;
   };
   navbar: {
     login: string;
@@ -74,6 +81,25 @@ export type AppMessages = {
       freeSwap: string;
     };
   };
+  benefitSection: {
+    items: Array<{
+      eyebrow: string;
+      title: string;
+      description: string;
+      imageAlt: string;
+    }>;
+  };
+  homeWhyChoose: {
+    eyebrow: string;
+    titleLead: string;
+    titleBody: string;
+    description: string;
+    items: Array<{
+      id: HomeWhyChooseItemId;
+      title: string;
+      body: string;
+    }>;
+  };
   finalCta: {
     title: string;
     subTitle: string;
@@ -84,6 +110,7 @@ export type AppMessages = {
     helpItems: string[];
   };
   liveQuoteSection: {
+    eyebrow: string;
     title: string;
     subtitle: string;
     cta: string;
@@ -95,6 +122,8 @@ export type AppMessages = {
     title: string;
     description: string;
     breadcrumb: string;
+    parentLabel: string;
+    detailCta: string;
     hero: {
       eyebrow: string;
       title: string;
@@ -220,6 +249,14 @@ export type AppMessages = {
         value: string;
       }>;
     };
+    announcements: {
+      management: string;
+      latest: string;
+      emptyTitle: string;
+      emptyBody: string;
+      close: string;
+      defaultTitle: string;
+    };
     commitments: {
       title: string;
       items: string[];
@@ -233,6 +270,7 @@ export type AppMessages = {
       title: string;
       description: string;
     };
+    numberLabel: string;
     overview: {
       eyebrow: string;
       title: string;
@@ -407,6 +445,13 @@ export type AppMessages = {
     relatedNews: string;
     latestNews: string;
     readTimeUnit: string;
+    share: {
+      facebook: string;
+      x: string;
+      whatsapp: string;
+      copy: string;
+      copied: string;
+    };
   };
   bannerSlideshow: {
     regionLabel: string;
@@ -443,6 +488,10 @@ export type AppMessages = {
     breadcrumb: string;
     breadcrumbs: {
       supportCenter: string;
+    };
+    complaintLinks: {
+      onlineComplaint: string;
+      emailComplaint: string;
     };
     hero: {
       eyebrow: string;
@@ -519,6 +568,11 @@ export type AppMessages = {
     };
   };
   footer: {
+    companyName: string;
+    logoAlt: string;
+    investmentWarning: string;
+    disclaimerLabel: string;
+    disclaimerBody: string;
     brandTitle: string;
     brandItems: Array<{
       label: string;

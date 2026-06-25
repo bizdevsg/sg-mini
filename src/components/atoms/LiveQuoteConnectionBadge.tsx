@@ -44,7 +44,7 @@ export function LiveQuoteConnectionBadge({
 
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] ring-1 ${styles.text} ${styles.bg} ${styles.ring}`}
+      className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] ring-1 ${styles.text} ${styles.bg} ${styles.ring}`}
     >
       <span className={`h-2 w-2 rounded-full ${styles.dot}`} />
       {styles.label}

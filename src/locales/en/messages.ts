@@ -8,6 +8,8 @@ import { enSecurity } from "./content/security";
 import { enAppPromoSection } from "./content/appPromoSection";
 import { enHomeEbookPromo } from "./content/homeEbookPromo";
 import { enSpread } from "./content/spread";
+import { enBenefitSection } from "./content/benefitSection";
+import { enHomeWhyChoose } from "./content/homeWhyChoose";
 import { enFinalCta } from "./content/finalCta";
 import { enLiveQuoteSection } from "./content/liveQuoteSection";
 import { enLiveQuotePage } from "./content/liveQuotePage";
@@ -40,6 +42,8 @@ export const enMessages: AppMessages = {
   appPromoSection: enAppPromoSection,
   homeEbookPromo: enHomeEbookPromo,
   spread: enSpread,
+  benefitSection: enBenefitSection,
+  homeWhyChoose: enHomeWhyChoose,
   finalCta: enFinalCta,
   liveQuoteSection: enLiveQuoteSection,
   liveQuotePage: enLiveQuotePage,

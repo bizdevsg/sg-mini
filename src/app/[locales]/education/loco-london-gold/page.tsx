@@ -5,6 +5,7 @@ import { LocoLondonGoldPage as LocoLondonGoldPageView } from "@/components/organ
 import {
   getLocaleConfig,
   getLocoLondonGoldPageContent,
+  getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
   type AppLocale,
@@ -56,6 +57,13 @@ export default async function LocoLondonGoldPage({
   assertValidLocale(locales);
 
   const page = getLocoLondonGoldPageContent(locales);
+  const messages = getMessages(locales);
 
-  return <LocoLondonGoldPageView page={page} />;
+  return (
+    <LocoLondonGoldPageView
+      page={page}
+      locale={locales}
+      homeLabel={messages.app.homeLabel}
+    />
+  );
 }

@@ -13,6 +13,7 @@ type EbookLibrarySectionProps = {
   title: string;
   subtitle: string;
   items: EbookItem[];
+  detailCtaLabel: string;
   benefits?: string[];
   benefitsTitle?: string;
 };
@@ -21,6 +22,7 @@ export function EbookLibrarySection({
   title,
   subtitle,
   items,
+  detailCtaLabel,
   benefits,
   benefitsTitle,
 }: EbookLibrarySectionProps) {
@@ -28,7 +30,9 @@ export function EbookLibrarySection({
     <>
       {/* Benefits Section */}
       {benefits && benefits.length > 0 && benefitsTitle && (
-        <SectionContainer className="py-16 md:py-20">
+        <SectionContainer className="py-16 md:py-20 relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+
           <div className="mx-auto">
             <div className="mb-12 text-center">
               <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
@@ -57,6 +61,30 @@ export function EbookLibrarySection({
           </div>
         </SectionContainer>
       )}
+
+      <SectionContainer className="pb-16 md:pb-20">
+        <div className="mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
+              {title}
+            </h2>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-zinc-300">
+              {subtitle}
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {items.map((item, index) => (
+              <EbookCard
+                key={item.title}
+                item={item}
+                index={index + 1}
+                detailCtaLabel={detailCtaLabel}
+              />
+            ))}
+          </div>
+        </div>
+      </SectionContainer>
     </>
   );
 }

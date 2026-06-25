@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { AboutBusinessLegalityMainSection } from "@/components/organisms/AboutBusinessLegalityMainSection";
+import { getLegalitasRecords } from "@/lib/legalitas";
 import {
   getLocaleConfig,
   getMessages,
@@ -57,10 +58,11 @@ export default async function AboutBusinessLegalityPage({
 }: AboutBusinessLegalityPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  const items = await getLegalitasRecords();
 
   return (
     <main>
-      <AboutBusinessLegalityMainSection locale={locales} />
+      <AboutBusinessLegalityMainSection locale={locales} items={items} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { IndexSymbolsContractExampleSection } from "./IndexSymbolsContractExampleSection";
 import { IndexSymbolsContractMonthsSection } from "./IndexSymbolsContractMonthsSection";
 import { IndexSymbolsOverviewSection } from "./IndexSymbolsOverviewSection";
-import { IndexSymbolsPageHero } from "./IndexSymbolsPageHero";
+import { PageHeroBanner } from "./PageHeroBanner";
 import {
   getIndexSymbolsPageContent,
   getMessages,
@@ -21,12 +21,36 @@ export function IndexSymbolsPage({
 }: IndexSymbolsPageProps) {
   return (
     <main>
-      <IndexSymbolsPageHero
+      <PageHeroBanner
         locale={locales}
         homeLabel={messages.app.homeLabel}
-        breadcrumb={page.breadcrumb}
-        hero={page.hero}
-      />
+        eyebrow={page.hero.eyebrow}
+        title={page.hero.title}
+        description={page.hero.description}
+        breadcrumbs={[
+          {
+            label: page.breadcrumb.education,
+            href: `/${locales}/education/cara-memulai`,
+            tone: "accent",
+          },
+          {
+            label: page.breadcrumb.current,
+            tone: "current",
+          },
+        ]}
+      >
+        <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
+          {page.hero.badges.map((badge) => (
+            <div
+              key={badge}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
+              <span>{badge}</span>
+            </div>
+          ))}
+        </div>
+      </PageHeroBanner>
 
       <IndexSymbolsOverviewSection
         title={page.sections.symbolsTitle}

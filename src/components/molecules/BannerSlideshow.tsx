@@ -163,8 +163,8 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   const trackOffset =
     resolvedViewportWidth > 0
       ? resolvedViewportWidth / 2 -
-        slideWidth / 2 -
-        effectiveTrackIndex * (slideWidth + slideGap)
+      slideWidth / 2 -
+      effectiveTrackIndex * (slideWidth + slideGap)
       : 0;
 
   function goToSlide(targetIndex: number) {
@@ -251,11 +251,10 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                 }}
               >
                 <article
-                  className={`overflow-hidden transition-opacity duration-300 ${
-                    normalizedIndex === activeIndex
+                  className={`overflow-hidden transition-opacity duration-300 rounded-xl overflow-hidden ${normalizedIndex === activeIndex
                       ? "border-line opacity-100"
                       : "border-line/80 opacity-80 hover:opacity-100"
-                  }`}
+                    }`}
                 >
                   <img
                     src={banner.image_url}
@@ -284,11 +283,10 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                 type="button"
                 aria-label={formatBannerLabel(labels.slideButtonLabel, index + 1)}
                 aria-pressed={isActive}
-                className={`h-2.5 rounded-full transition-all duration-300 ${
-                  isActive
+                className={`h-2.5 rounded-full transition-all duration-300 ${isActive
                     ? "w-8 bg-[#D5A246]"
                     : "w-2.5 bg-white/35 hover:bg-white/60"
-                }`}
+                  }`}
                 onClick={() => {
                   goToSlide(index);
                 }}

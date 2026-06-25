@@ -6,11 +6,11 @@ import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSe
 import { EbookPromoSection } from "@/components/organisms/EbookPromoSection";
 import { FinalCtaSection } from "@/components/organisms/FinalCtaSection";
 import { HeroSection } from "@/components/organisms/HeroSection";
+import { HomeWhyChooseSection } from "@/components/organisms/HomeWhyChooseSection";
 import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
 import { RegulatorMarqueeSection } from "@/components/organisms/RegulatorMarqueeSection";
 import { SecuritySection } from "@/components/organisms/SecuritySection";
 import { SpreadSection } from "@/components/organisms/SpreadSection";
-import { TrustStatsSection } from "@/components/organisms/TrustStatsSection";
 import {
   getLocaleConfig,
   getMessages,
@@ -18,6 +18,7 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
+import { BenefitSection } from "@/components/organisms/BenefitSection";
 
 type LocalizedPageProps = {
   params: Promise<{ locales: string }>;
@@ -69,12 +70,11 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
       <HeroSection locale={locales} />
       <RegulatorMarqueeSection locale={locales} />
       <BannerSlideshowSection locale={locales} />
-      <AppPromoSection locale={locales} />
       <LiveQuoteSection locale={locales} />
-      <SecuritySection locale={locales} />
-      <EbookPromoSection locale={locales} />
+      <BenefitSection locale={locales} />
       <SpreadSection locale={locales} />
-      <FinalCtaSection locale={locales} />
+      <HomeWhyChooseSection locale={locales} />
+      <AppPromoSection locale={locales} />
     </>
   );
 }

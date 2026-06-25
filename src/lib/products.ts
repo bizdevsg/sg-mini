@@ -1,11 +1,7 @@
 import "server-only";
 
 import { getDummyProductCatalog } from "@/lib/api-dummy-data";
-import {
-  PRODUCT_API_URL,
-  USE_DUMMY_API_DATA,
-  getProductAssetUrl,
-} from "@/lib/env";
+import { PRODUCT_API_URL, USE_DUMMY_API_DATA, getProductAssetUrl } from "@/lib/env";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
 const PRODUCT_CATALOG_REVALIDATE_SECONDS = 300;
@@ -27,6 +23,11 @@ const PRODUCT_SOURCE_CATEGORY_MAP: Record<ProductPageCategory, string> = {
   bilateral: "SPA",
 };
 
+const PRODUCT_API_CATEGORY_PATH_MAP: Record<ProductPageCategory, string> = {
+  multilateral: "jfx",
+  bilateral: "spa",
+};
+
 type ProductApiRecord = {
   id: number;
   nama_produk: string;
@@ -34,6 +35,7 @@ type ProductApiRecord = {
   deskripsi_produk: string | null;
   specs: string | null;
   image: string | null;
+  image_url?: string | null;
   kategori: string;
   created_at: string;
   updated_at: string;
@@ -45,6 +47,10 @@ type ProductApiResponse = {
   data?: ProductApiRecord[];
 };
 
+function getDummyCatalogForCategory(category: ProductPageCategory) {
+  return getDummyProductCatalog(category);
+}
+
 function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
   const categoryDiff = left.kategori.localeCompare(right.kategori);
 
@@ -55,8 +61,15 @@ function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
   return left.id - right.id;
 }
 
-async function getProductApiRecords() {
-  const response = await fetch(PRODUCT_API_URL, {
+function getProductCategoryApiUrl(category: ProductPageCategory) {
+  const baseUrl = PRODUCT_API_URL.replace(/\/+$/, "");
+  const categoryPath = PRODUCT_API_CATEGORY_PATH_MAP[category];
+
+  return `${baseUrl}/${categoryPath}`;
+}
+
+async function getProductApiRecords(category: ProductPageCategory) {
+  const response = await fetch(getProductCategoryApiUrl(category), {
     next: {
       revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
     },
@@ -66,9 +79,11 @@ async function getProductApiRecords() {
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch products: ${response.status} ${response.statusText}`,
+    console.warn(
+      `Product API returned ${response.status} ${response.statusText}. Falling back to dummy product catalog.`,
     );
+
+    return null;
   }
 
   const payload = (await response.json()) as ProductApiResponse;
@@ -88,12 +103,16 @@ export function isProductPageCategory(
 
 export async function getProductCatalog(category: ProductPageCategory) {
   if (USE_DUMMY_API_DATA) {
-    return getDummyProductCatalog(category);
+    return getDummyCatalogForCategory(category);
   }
 
   try {
     const sourceCategory = PRODUCT_SOURCE_CATEGORY_MAP[category];
-    const records = await getProductApiRecords();
+    const records = await getProductApiRecords(category);
+
+    if (!records) {
+      return getDummyCatalogForCategory(category);
+    }
 
     return records
       .filter((item) => item.kategori === sourceCategory)
@@ -103,11 +122,16 @@ export async function getProductCatalog(category: ProductPageCategory) {
         name: item.nama_produk,
         description: item.deskripsi_produk?.trim() || item.nama_produk,
         specsHtml: item.specs?.trim() || "",
-        imageSrc: item.image ? getProductAssetUrl(item.image) : null,
+        imageSrc:
+          item.image_url?.trim() ||
+          (item.image ? getProductAssetUrl(item.image) : null),
         sourceCategory: item.kategori,
       }));
   } catch (error) {
-    console.error("Failed to fetch product catalog", error);
-    return [];
+    console.warn(
+      "Failed to fetch product catalog. Falling back to dummy data.",
+      error,
+    );
+    return getDummyCatalogForCategory(category);
   }
 }

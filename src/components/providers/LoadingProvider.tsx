@@ -12,7 +12,12 @@ import {
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { LoadingOverlay } from "@/components/molecules/LoadingOverlay";
-import { getMessages, type AppLocale } from "@/locales";
+import {
+  DEFAULT_LOCALE,
+  getMessages,
+  isSupportedLocale,
+  type AppLocale,
+} from "@/locales";
 
 type LoadingContextValue = {
   start: (label?: string) => symbol;
@@ -49,7 +54,14 @@ export function LoadingProvider({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchKey = searchParams?.toString() ?? "";
-  const messages = getMessages(locale).loadingOverlay;
+  const activeLocale = useMemo(() => {
+    const firstSegment = pathname.split("/").filter(Boolean)[0];
+
+    return firstSegment && isSupportedLocale(firstSegment)
+      ? firstSegment
+      : locale ?? DEFAULT_LOCALE;
+  }, [locale, pathname]);
+  const messages = getMessages(activeLocale).loadingOverlay;
 
   const start = useCallback((label?: string) => {
     const token = Symbol(label ?? "loading");
@@ -241,6 +253,8 @@ export function LoadingProvider({
       {children}
       {showOverlay ? (
         <LoadingOverlay
+          brandLabel={getMessages(activeLocale).app.brandWordmark}
+          logoAlt={getMessages(activeLocale).footer.logoAlt}
           title={messages.title}
           description={messages.description}
           fadingOut={fadeOut}

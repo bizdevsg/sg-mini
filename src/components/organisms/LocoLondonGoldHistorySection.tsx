@@ -56,7 +56,9 @@ export function LocoLondonGoldHistorySection({
   items,
 }: LocoLondonGoldHistorySectionProps) {
   return (
-    <SectionContainer className="py-16 md:py-20">
+    <SectionContainer className="py-16 md:py-20 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+
       <div className="mx-auto">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">

@@ -33,27 +33,33 @@ export async function getBannerRecords() {
       .sort(compareBanners);
   }
 
-  const response = await fetch(BANNER_API_URL, {
-    cache: "no-store",
-    headers: {
-      Accept: "application/json",
-    },
-  });
+  try {
+    const response = await fetch(BANNER_API_URL, {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch banners: ${response.status} ${response.statusText}`,
-    );
-  }
+    if (!response.ok) {
+      console.error(
+        `Failed to fetch banners: ${response.status} ${response.statusText}`,
+      );
+      return [];
+    }
 
-  const payload = (await response.json()) as BannerApiResponse;
+    const payload = (await response.json()) as BannerApiResponse;
 
-  if (!payload?.data || !Array.isArray(payload.data)) {
+    if (!payload?.data || !Array.isArray(payload.data)) {
+      return [];
+    }
+
+    return payload.data
+      .filter((item) => item.is_active && item.image_url)
+      .slice()
+      .sort(compareBanners);
+  } catch (error) {
+    console.error("Failed to fetch banners", error);
     return [];
   }
-
-  return payload.data
-    .filter((item) => item.is_active && item.image_url)
-    .slice()
-    .sort(compareBanners);
 }

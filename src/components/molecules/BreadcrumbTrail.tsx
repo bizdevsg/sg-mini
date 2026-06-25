@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type BreadcrumbTrailItem = {
   label: string;
@@ -32,9 +32,11 @@ export function BreadcrumbTrail({
   className = "",
   wrap = true,
 }: BreadcrumbTrailProps) {
+  const navigationLabel = getMessages(locale).app.breadcrumbLabel;
+
   return (
     <nav
-      aria-label="Breadcrumb"
+      aria-label={navigationLabel}
       className={`flex items-center gap-2 text-xs text-gray-500 sm:text-sm ${wrap ? "flex-wrap" : "flex-nowrap"} ${className}`}
     >
       <Link

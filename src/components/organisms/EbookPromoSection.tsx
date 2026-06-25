@@ -47,7 +47,12 @@ export function EbookPromoSection({ locale }: EbookPromoSectionProps) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {featuredEbooks.map((item, index) => (
-              <EbookCard key={item.title} item={item} index={index + 1} />
+              <EbookCard
+                key={item.title}
+                item={item}
+                index={index + 1}
+                detailCtaLabel={messages.ebookPage.detailCta}
+              />
             ))}
           </div>
         </div>

@@ -87,10 +87,10 @@ export default async function ProductDetailRoute({
   assertValidLocale(locales);
   assertValidCategory(category);
 
-  const [copy, items] = await Promise.all([
-    getMessages(locales).productPage,
-    getProductCatalog(category),
-  ]);
+  const messages = getMessages(locales);
+  const copy = messages.productPage;
+  const items = await getProductCatalog(category);
+  const homeLabel = messages.app.homeLabel;
   const item = items.find((candidate) => candidate.slug === slug);
 
   if (!item) {
@@ -101,6 +101,7 @@ export default async function ProductDetailRoute({
     <ProductDetailPage
       item={item}
       locale={locales}
+      homeLabel={homeLabel}
       category={category}
       copy={copy}
     />

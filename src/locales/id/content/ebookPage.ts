@@ -5,6 +5,8 @@ export const idEbookPage: AppMessages["ebookPage"] = {
     description:
       "Kumpulan ebook trading untuk membantu trader memahami dasar market, manajemen risiko, dan penyusunan rencana trading.",
     breadcrumb: "Ebook",
+    parentLabel: "Edukasi",
+    detailCta: "Lihat Detail",
     hero: {
       eyebrow: "Pusat Materi",
       title:

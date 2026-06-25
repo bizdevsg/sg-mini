@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -9,6 +10,7 @@ import type { AppLocale, AppMessages } from "@/locales";
 type ProductCatalogBrowserProps = {
   items: ProductCatalogItem[];
   locale: AppLocale;
+  homeLabel: string;
   category: ProductPageCategory;
   copy: AppMessages["productPage"];
 };
@@ -16,6 +18,7 @@ type ProductCatalogBrowserProps = {
 export function ProductCatalogBrowser({
   items,
   locale,
+  homeLabel,
   category,
   copy,
 }: ProductCatalogBrowserProps) {
@@ -23,44 +26,27 @@ export function ProductCatalogBrowser({
 
   return (
     <main>
-      <div
-        className="bg-cover bg-bottom bg-no-repeat py-20 md:py-24"
-        style={{
-          backgroundImage: "url('/assets/bg-hero1.png')",
-        }}
-      >
-        <SectionContainer className="relative z-10">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-6 flex flex-wrap items-center gap-2 text-xs text-gray-400 sm:text-sm"
-          >
-            <Link
-              href={`/${locale}`}
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-500 transition hover:bg-yellow-500/20"
-            >
-              <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
-            </Link>
-            <span className="text-gray-500">{">"}</span>
-            <span className="text-gray-400">{copy.breadcrumb}</span>
-            <span className="text-gray-500">{">"}</span>
-            <span className="font-medium text-white">{categoryCopy.title}</span>
-          </nav>
+      <PageHeroBanner
+        locale={locale}
+        homeLabel={homeLabel}
+        eyebrow={categoryCopy.eyebrow}
+        title={categoryCopy.title}
+        description={categoryCopy.description}
+        breadcrumbs={[
+          {
+            label: copy.breadcrumb,
+            tone: "accent",
+          },
+          {
+            label: categoryCopy.title,
+            tone: "current",
+          },
+        ]}
+      />
 
-          <div className="text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-yellow-500">
-              {copy.productsLabel}
-            </p>
-            <h1 className="text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl md:text-5xl">
-              {categoryCopy.title}
-            </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">
-              {categoryCopy.description}
-            </p>
-          </div>
-        </SectionContainer>
-      </div>
+      <SectionContainer className="relative py-16 sm:py-20">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
 
-      <SectionContainer className="py-16 sm:py-20">
         {items.length ? (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {items.map((item) => (
@@ -69,36 +55,55 @@ export function ProductCatalogBrowser({
                 href={`/${locale}/produk/${category}/${item.slug}`}
                 className="group block"
               >
-                <article className="flex h-full flex-col overflow-hidden rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(18,18,18,0.96)_0%,rgba(10,10,10,0.98)_100%)] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
-                  <div className="relative aspect-[5/4] overflow-hidden border-b border-white/8 bg-white/[0.03]">
+                <article className="flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]">
+                  <div className="relative h-52 w-full overflow-hidden">
                     {item.imageSrc ? (
-                      <img
-                        src={item.imageSrc}
-                        alt={item.name}
-                        className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.04]"
-                      />
+                      <>
+                        <img
+                          src={item.imageSrc}
+                          alt={item.name}
+                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      </>
                     ) : (
-                      <div className="flex h-full items-center justify-center px-5 text-center text-sm text-zinc-500">
-                        {item.name}
+                      <div className="relative flex h-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+                        <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                          <FontAwesomeIcon
+                            icon={["fas", "box-open"]}
+                            className="text-sm"
+                          />
+                        </div>
                       </div>
                     )}
+
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-mono text-lg font-bold leading-snug text-white drop-shadow-lg line-clamp-2 transition-colors group-hover:text-yellow-300">
+                        {item.name}
+                      </h3>
+                    </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/50">
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-center gap-3 text-xs text-yellow-500/60">
+                      <span className="flex items-center gap-1.5">
+                        <FontAwesomeIcon
+                          icon={["fas", "layer-group"]}
+                          className="text-[10px]"
+                        />
                         {copy.sourceLabel}
-                      </p>
-                      <span className="rounded-full bg-white/6 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground/65">
+                      </span>
+                      <span className="h-px flex-1 bg-yellow-500/10" />
+                      <span className="flex items-center gap-1.5">
+                        <FontAwesomeIcon
+                          icon={["fas", "tag"]}
+                          className="text-[10px]"
+                        />
                         {item.sourceCategory}
                       </span>
                     </div>
 
-                    <h3 className="mt-3 line-clamp-2 min-h-[2.75rem] text-base font-semibold leading-snug text-white transition-colors group-hover:text-yellow-400">
-                      {item.name}
-                    </h3>
-
-                    <p className="mt-2 line-clamp-2 min-h-[3rem] text-sm leading-6 text-foreground/68">
+                    <p className="mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-7 text-foreground/72">
                       {item.description}
                     </p>
 

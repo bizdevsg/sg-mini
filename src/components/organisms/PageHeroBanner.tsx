@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { BreadcrumbTrail } from "@/components/molecules/BreadcrumbTrail";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
@@ -18,6 +20,7 @@ type PageHeroBannerProps = {
   breadcrumbClassName?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  children?: ReactNode;
 };
 
 export function PageHeroBanner({
@@ -31,14 +34,17 @@ export function PageHeroBanner({
   breadcrumbClassName = "mb-6",
   titleClassName = "tracking-[-0.02em] sm:text-4xl md:text-5xl",
   descriptionClassName = "mx-auto max-w-2xl leading-relaxed text-gray-300",
+  children,
 }: PageHeroBannerProps) {
   return (
     <div
-      className={`bg-cover bg-bottom bg-no-repeat ${className}`}
+      className={`relative bg-cover bg-top bg-no-repeat ${className}`}
       style={{
-        backgroundImage: "url('/assets/bg-hero1.png')",
+        backgroundImage: "url('/assets/BCG.png')",
       }}
     >
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black to-transparent" />
+
       <SectionContainer className="relative z-10">
         <BreadcrumbTrail
           locale={locale}
@@ -57,6 +63,8 @@ export function PageHeroBanner({
           titleClassName={titleClassName}
           descriptionClassName={descriptionClassName}
         />
+
+        {children ? <div className="mt-10">{children}</div> : null}
       </SectionContainer>
     </div>
   );

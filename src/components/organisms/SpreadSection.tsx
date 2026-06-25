@@ -20,7 +20,7 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
   const { articles } = await getNewsFeed(locale, LATEST_NEWS_LIMIT);
 
   return (
-    <section className="border-b border-line bg-transparent py-20 text-white">
+    <section className="bg-transparent pb-20 text-white">
       <SectionContainer>
         <SectionIntro
           eyebrow={latestSection.eyebrow}
@@ -49,8 +49,8 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
           </div>
         )}
 
-        <div className="mt-8 w-full">
-          <ButtonLink href={`/${locale}/news`} size="lg" className="mx-auto">
+        <div className="mt-8 flex justify-center">
+          <ButtonLink href={`/${locale}/news`} size="lg" variant="dark" className="mx-auto">
             {newsPageContent.newsPage.hero.primaryCta}
           </ButtonLink>
         </div>

@@ -7,4 +7,5 @@ export const idApp: AppMessages["app"] = {
   brandName: "Solid Gold Berjangka",
   brandWordmark: "Solid Gold Berjangka",
   homeLabel: "Kembali ke beranda",
+  breadcrumbLabel: "Jejak navigasi",
 };

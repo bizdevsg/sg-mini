@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { SectionTitle } from "@/components/atoms/SectionTitle";
 import { LiveQuoteTable } from "@/components/molecules/LiveQuoteTable";
 import {
   getLocaleConfig,
@@ -59,35 +57,38 @@ export default async function LiveQuotePage({ params }: LiveQuotePageProps) {
 
   const messages = getMessages(locales);
   const labels = messages.liveQuotePage;
+  const productLabel =
+    messages.navbar.menuGroups.find((group) =>
+      group.items?.some((item) => item.href === "/live-quote"),
+    )?.label ?? messages.productPage.productsLabel;
 
   return (
-    <SectionContainer className="py-16 sm:py-20">
-      <nav
-        aria-label="Breadcrumb"
-        className="flex flex-wrap items-center gap-2 text-sm text-gray-500"
-      >
-        <Link
-          href={`/${locales}`}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-500 transition hover:bg-yellow-500/30"
-        >
-          <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
-        </Link>
-        <span>{">"}</span>
-        <span className="font-medium text-white">{labels.breadcrumb}</span>
-      </nav>
+    <main>
+      <PageHeroBanner
+        locale={locales}
+        homeLabel={messages.app.homeLabel}
+        eyebrow={labels.breadcrumb}
+        title={messages.liveQuoteSection.title}
+        description={messages.liveQuoteSection.subtitle}
+        breadcrumbs={[
+          {
+            label: productLabel,
+            tone: "accent",
+          },
+          {
+            label: labels.breadcrumb,
+            tone: "current",
+          },
+        ]}
+      />
 
-      <div className="mt-8">
-        <div>
-          <SectionTitle
-            title={messages.liveQuoteSection.title}
-            subtitle={messages.liveQuoteSection.subtitle}
-          />
+      <SectionContainer className="relative py-16 sm:py-20">
+        <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
 
-          <div className="mt-6 rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
-            <LiveQuoteTable locale={locales} mode="full" />
-          </div>
+        <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
+          <LiveQuoteTable locale={locales} mode="full" />
         </div>
-      </div>
-    </SectionContainer>
+      </SectionContainer>
+    </main>
   );
 }

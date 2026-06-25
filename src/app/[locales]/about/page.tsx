@@ -2,6 +2,8 @@ import { AboutCompanyProfileSection } from "@/components/organisms/AboutCompanyP
 import { AboutShowcaseSection } from "@/components/organisms/AboutShowcaseSection";
 import RegulasiSection from "@/components/organisms/RegulasiSection";
 import VisiMisiSection from "@/components/organisms/VisiMisiSection";
+import { getCompanyProfile } from "@/lib/company-profile";
+import { getPenghargaanRecords } from "@/lib/penghargaan";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
@@ -59,15 +61,38 @@ export default async function AboutPage({ params }: AboutPageProps) {
   assertValidLocale(locales);
   const messages = getMessages(locales);
   const { awards } = messages.aboutPage;
+  const fallbackAwardImageSrc =
+    awards.items[0]?.imageSrc || "/assets/security-awards.svg";
+  const [companyProfile, penghargaanRecords] = await Promise.all([
+    getCompanyProfile(),
+    getPenghargaanRecords(),
+  ]);
+  const showcaseItems =
+    penghargaanRecords.length > 0
+      ? penghargaanRecords.map((item) => ({
+        title: item.title,
+        subtitle: item.subtitle,
+        imageSrc: item.imageUrl || fallbackAwardImageSrc,
+        imageAlt: item.title,
+      }))
+      : awards.items;
 
   return (
     <main>
-      <div className="mt-10 border-b border-white/6">
-        <AboutCompanyProfileSection locale={locales} />
-      </div>
+      <AboutCompanyProfileSection
+        locale={locales}
+        companyName={companyProfile.companyName}
+        paragraphs={companyProfile.descriptionParagraphs}
+      />
 
-      <div className="bg-black/10">
-        <VisiMisiSection locale={locales} />
+      <div className="bg-black/10 relative">
+        <div className="absolute top-0 left-0 w-full h-25 bg-linear-to-b from-black to-transparent" />
+
+        <VisiMisiSection
+          locale={locales}
+          missionItems={companyProfile.mission}
+          visionItems={companyProfile.vision}
+        />
       </div>
 
       <div className="border-y border-white/6">
@@ -75,7 +100,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           eyebrow={awards.eyebrow}
           title={awards.title}
           description={awards.description}
-          items={awards.items}
+          items={showcaseItems}
         />
       </div>
 

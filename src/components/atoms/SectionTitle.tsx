@@ -20,22 +20,22 @@ export function SectionTitle({
   subtitleClassName = "",
 }: SectionTitleProps) {
   const titleClass =
-    theme === "dark" ? "text-yellow-500" : "text-yellow-500";
+    theme === "dark" ? "text-yellow-500" : "text-white";
   const subtitleClass =
-    theme === "dark" ? "text-foreground/72" : "text-foreground/72";
+    theme === "dark" ? "text-foreground/72" : "text-white/40";
   const alignmentClassName =
     align === "center" ? "mx-auto text-center" : "md:mx-0 md:text-left";
 
   return (
     <div className={`max-w-3xl ${alignmentClassName} ${className}`}>
       <h2
-        className={`font-mono text-3xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-4xl lg:text-[2.8rem] ${titleClass} ${titleClassName}`}
+        className={`font-mono text-3xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-4xl ${titleClass} ${titleClassName}`}
       >
         {title}
       </h2>
       {subtitle ? (
         <p
-          className={`mt-3 text-sm leading-7 sm:text-base ${subtitleClass} ${subtitleClassName}`}
+          className={`mt-3 text-xs leading-7 sm:text-sm ${subtitleClass} ${subtitleClassName}`}
         >
           {subtitle}
         </p>

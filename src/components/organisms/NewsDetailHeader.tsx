@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   formatLocaleArticleDateTime,
+  getMessages,
   type AppLocale,
 } from "@/locales";
 
@@ -27,6 +28,7 @@ export function NewsDetailHeader({
   slug,
   title,
 }: NewsDetailHeaderProps) {
+  const shareLabels = getMessages(locale).newsDetailPage.share;
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -49,23 +51,6 @@ export function NewsDetailHeader({
       window.clearTimeout(timer);
     };
   }, [isCopied]);
-
-  const shareLabels =
-    locale === "id"
-      ? {
-          facebook: "Bagikan ke Facebook",
-          x: "Bagikan ke X",
-          whatsapp: "Bagikan ke WhatsApp",
-          copy: "Salin link",
-          copied: "Link tersalin",
-        }
-      : {
-          facebook: "Share to Facebook",
-          x: "Share to X",
-          whatsapp: "Share to WhatsApp",
-          copy: "Copy link",
-          copied: "Link copied",
-        };
 
   const shareLinks = useMemo(() => {
     if (!shareUrl) {

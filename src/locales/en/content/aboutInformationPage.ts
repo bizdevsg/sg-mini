@@ -68,6 +68,14 @@ export const enAboutInformationPage: AppMessages["aboutInformationPage"] = {
       },
     ],
   },
+  announcements: {
+    management: "Management",
+    latest: "Latest",
+    emptyTitle: "No announcements at this time",
+    emptyBody: "Please check back later.",
+    close: "Close modal",
+    defaultTitle: "PT. Solid Gold Berjangka Announcement",
+  },
   commitments: {
     title: "Commitments the company maintains",
     items: [

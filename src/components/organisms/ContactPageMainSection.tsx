@@ -3,11 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import type { AppMessages } from "@/locales";
+import type { CompanyProfile } from "@/lib/company-profile";
 
 import { ContactFormCard } from "./ContactFormCard";
 
 type ContactPageMainSectionProps = {
   copy: AppMessages["contactPage"];
+  companyProfile: Pick<
+    CompanyProfile,
+    "address" | "mapsEmbedUrl" | "phone" | "email" | "fax"
+  >;
 };
 
 const SUPPORT_ICON_MAP = {
@@ -17,20 +22,34 @@ const SUPPORT_ICON_MAP = {
   fax: ["fas", "fax"] as IconProp,
 };
 
-export function ContactPageMainSection({ copy }: ContactPageMainSectionProps) {
+export function ContactPageMainSection({
+  copy,
+  companyProfile,
+}: ContactPageMainSectionProps) {
+  const address = companyProfile.address || copy.headOffice.address;
+  const phone = companyProfile.phone || copy.headOffice.phone;
+  const normalizedPhone = phone.replace(/[^\d+]/g, "");
+  const phoneHref = normalizedPhone
+    ? `tel:${normalizedPhone}`
+    : copy.headOffice.phoneHref;
+  const email = companyProfile.email || copy.headOffice.email;
+  const fax = companyProfile.fax || copy.headOffice.fax;
+  const mapEmbedUrl =
+    companyProfile.mapsEmbedUrl ||
+    `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
   const supportItems = [
     {
       title: copy.support.callTitle,
       description: copy.support.callDescription,
-      value: copy.headOffice.phone,
-      href: copy.headOffice.phoneHref,
+      value: phone,
+      href: phoneHref,
       icon: SUPPORT_ICON_MAP.phone,
     },
     {
       title: copy.support.emailTitle,
       description: copy.support.emailDescription,
-      value: copy.headOffice.email,
-      href: `mailto:${copy.headOffice.email}`,
+      value: email,
+      href: `mailto:${email}`,
       icon: SUPPORT_ICON_MAP.envelope,
     },
     {
@@ -43,13 +62,15 @@ export function ContactPageMainSection({ copy }: ContactPageMainSectionProps) {
     {
       title: copy.support.faxTitle,
       description: copy.support.faxDescription,
-      value: copy.headOffice.fax,
+      value: fax,
       icon: SUPPORT_ICON_MAP.fax,
     },
   ];
 
   return (
-    <SectionContainer className="py-16 sm:py-20">
+    <SectionContainer className="py-16 sm:py-20 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+
       <div className="grid gap-8 lg:grid-cols-2 md:gap-4">
         <div>
           <ContactFormCard copy={copy.form} />
@@ -59,9 +80,7 @@ export function ContactPageMainSection({ copy }: ContactPageMainSectionProps) {
           <div className="rounded-2xl border border-line bg-[#0f0f0f] shadow-lg overflow-hidden">
             <iframe
               title={copy.map.iframeTitle}
-              src={`https://www.google.com/maps?q=${encodeURIComponent(
-                copy.headOffice.address,
-              )}&z=15&output=embed`}
+              src={mapEmbedUrl}
               className="h-125 w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

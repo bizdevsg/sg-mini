@@ -37,7 +37,7 @@ export function SectionIntro({
       ) : null}
 
       <TitleTag
-        className={`mt-5 font-mono text-3xl font-bold capitalize leading-[1.02] tracking-[-0.04em] text-white md:text-4xl lg:text-[2.8rem] ${titleClassName}`}
+        className={`mt-5 font-mono text-3xl max-w-2xl mx-auto font-bold capitalize leading-[1.02] tracking-[-0.04em] text-white md:text-4xl lg:text-[2.8rem] ${titleClassName}`}
       >
         {title}
       </TitleTag>

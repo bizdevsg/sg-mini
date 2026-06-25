@@ -28,64 +28,32 @@ export function FooterSection({ locale }: FooterSectionProps) {
       <SectionContainer className="py-10 sm:py-12">
         <div>
           <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
-                {footerMenuGroups.map((group) => (
-                  <div key={group.label}>
-                    <h6 className="font-bold text-yellow-500">{group.label}</h6>
-                    <ul className="mt-5 space-y-3">
-                      {group.items?.map((item) => {
-                        if (!item.href) {
-                          return (
-                            <li
-                              key={item.label}
-                              className="text-sm leading-7 text-yellow-500/48"
-                            >
-                              <span>{item.label}</span>
-                            </li>
-                          );
-                        }
+            <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(320px,1fr)_minmax(0,2fr)]">
 
-                        const href = resolveFooterHref(locale, item.href);
+              <div className="space-y-4">
+                <Link href={`/${locale}`} className="flex items-center gap-3">
+                  <Image src={"/assets/Logo SG-WEB111.png"} alt={messages.footer.logoAlt} height={50} width={50} className="w-7 h-auto" />
+                  <h4 className="font-serif text-white font-semibold text-lg">{messages.footer.companyName}</h4>
+                </Link>
 
-                        return (
-                          <li
-                            key={item.label}
-                            className="text-sm leading-7 text-yellow-500/72"
-                          >
-                            <Link href={href} className="hover:underline">
-                              {item.label}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+                <p className="text-white/80 text-sm">
+                  {messages.footer.investmentWarning}
+                </p>
 
-              <div className="grid gap-1">
-                {/* {messages.footer.legalItems.map((item) => (
-                  <p
-                    key={item}
-                    className="text-sm leading-7 text-yellow-500/72"
-                  >
-                    {item}
-                  </p>
-                ))} */}
-
-                <div className="text-center p-4 border border-yellow-500/20 rounded-xl">
-                  <h6 className="font-bold mb-4 text-red-500">PERHATIAN!</h6>
-                  <p className="text-white/80  text-sm">
-                    Manajemen PT Solid Gold Berjangka menghimbau
-                    seluruh masyarakat untuk selalu waspada terhadap upaya
-                    penipuan berkedok investasi yang mengatasnamakan PT SGB
-                    melalui media elektronik maupun media sosial. Pastikan
-                    setiap proses transfer dana untuk transaksi Perdagangan
-                    Berjangka dilakukan hanya ke rekening Segregated Account
-                    atas nama PT Solid Gold Berjangka, bukan ke rekening pribadi
-                    siapa pun.
-                  </p>
+                <div className="flex flex-wrap gap-4 justify-start">
+                  {messages.footer.socials.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={item.name}
+                      className="inline-flex items-center justify-center gap-2 h-8 w-8 bg-white text-black hover:text-yellow-800 rounded-full text-center hover:underline"
+                      aria-label={item.name}
+                    >
+                      <FontAwesomeIcon icon={["fab", item.icon] as IconProp} />
+                    </a>
+                  ))}
                 </div>
 
                 <div className="mt-5 flex w-full items-center gap-3">
@@ -110,28 +78,50 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   </div>
                 </div>
               </div>
-            </div>
 
-            <hr className="border border-yellow-500/20 rounded-full" />
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
+                {footerMenuGroups.map((group) => (
+                  <div key={group.label}>
+                    <h6 className="font-bold text-white">{group.label}</h6>
+                    <ul className="mt-5 space-y-3">
+                      {group.items?.map((item) => {
+                        if (!item.href) {
+                          return (
+                            <li
+                              key={item.label}
+                              className="text-sm leading-7 text-white/50"
+                            >
+                              <span>{item.label}</span>
+                            </li>
+                          );
+                        }
 
-            <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
-              <div className="flex flex-wrap justify-center gap-4 md:justify-start">
-                {messages.footer.socials.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={item.name}
-                    className="inline-flex items-center justify-center gap-2 h-8 w-8 bg-yellow-500 text-yellow-700 hover:text-yellow-800 rounded-full text-center hover:underline"
-                    aria-label={item.name}
-                  >
-                    <FontAwesomeIcon icon={["fab", item.icon] as IconProp} />
-                  </a>
+                        const href = resolveFooterHref(locale, item.href);
+
+                        return (
+                          <li
+                            key={item.label}
+                            className="text-sm leading-7 text-white/70"
+                          >
+                            <Link href={href} className="hover:underline">
+                              {item.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
                 ))}
               </div>
+            </div>
 
-              <div className="text-center text-yellow-500/72 md:text-left">
+            <div className="text-xs text-zinc-400 bg-zinc-800 rounded-lg p-4 space-y-2">
+              <p>{messages.footer.disclaimerLabel}</p>
+              <p>{messages.footer.disclaimerBody}</p>
+            </div>
+
+            <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
+              <div className="text-center text-white md:text-left">
                 <p>
                   &copy; {formatLocaleYear(new Date(), locale)}{" "}
                   {messages.app.brandName}. {messages.footer.copyrightProtected}

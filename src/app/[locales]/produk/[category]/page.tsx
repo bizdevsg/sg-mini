@@ -73,13 +73,16 @@ export default async function ProductCategoryPage({
   assertValidLocale(locales);
   assertValidCategory(category);
 
-  const copy = getMessages(locales).productPage;
+  const messages = getMessages(locales);
+  const copy = messages.productPage;
+  const homeLabel = messages.app.homeLabel;
   const items = await getProductCatalog(category);
 
   return (
     <ProductCatalogBrowser
       items={items}
       locale={locales}
+      homeLabel={homeLabel}
       category={category}
       copy={copy}
     />

@@ -1,12 +1,12 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { BreadcrumbTrail } from "@/components/molecules/BreadcrumbTrail";
-import { SectionIntro } from "@/components/molecules/SectionIntro";
+import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
-import { getMessages, type AppLocale, type AppMessages } from "@/locales";
+import type { AppLocale, AppMessages } from "@/locales";
 
 type ProductDetailPageProps = {
   item: ProductCatalogItem;
   locale: AppLocale;
+  homeLabel: string;
   category: ProductPageCategory;
   copy: AppMessages["productPage"];
 };
@@ -14,56 +14,36 @@ type ProductDetailPageProps = {
 export function ProductDetailPage({
   item,
   locale,
+  homeLabel,
   category,
   copy,
 }: ProductDetailPageProps) {
   const categoryCopy = copy.categories[category];
-  const homeLabel = getMessages(locale).app.homeLabel;
 
   return (
     <main>
-      <div
-        className="bg-cover bg-bottom bg-no-repeat py-20 md:py-24"
-        style={{
-          backgroundImage: "url('/assets/bg-hero1.png')",
-        }}
-      >
-        <SectionContainer className="relative z-10">
-          <BreadcrumbTrail
-            locale={locale}
-            homeLabel={homeLabel}
-            className="mb-6"
-            items={[
-              {
-                label: copy.breadcrumb,
-                tone: "default",
-              },
-              {
-                label: categoryCopy.title,
-                href:
-                  item.sourceCategory === "JFX"
-                    ? `/${locale}/produk/multilateral`
-                    : `/${locale}/produk/bilateral`,
-              },
-              {
-                label: item.name,
-                tone: "current",
-              },
-            ]}
-          />
-
-          <SectionIntro
-            align="center"
-            titleAs="h1"
-            eyebrow={item.sourceCategory === "JFX" ? "Multilateral" : "Bilateral"}
-            title={item.name}
-            description={item.description}
-            eyebrowClassName="uppercase tracking-[0.24em] text-yellow-500"
-            titleClassName="tracking-[-0.02em] sm:text-4xl md:text-5xl"
-            descriptionClassName="mx-auto max-w-2xl leading-relaxed text-gray-300"
-          />
-        </SectionContainer>
-      </div>
+      <PageHeroBanner
+        locale={locale}
+        homeLabel={homeLabel}
+        eyebrow={categoryCopy.eyebrow}
+        title={item.name}
+        description={item.description}
+        breadcrumbs={[
+          {
+            label: copy.breadcrumb,
+            href: `/${locale}/produk/${category}`,
+            tone: "accent",
+          },
+          {
+            label: categoryCopy.title,
+            href: `/${locale}/produk/${category}`,
+          },
+          {
+            label: item.name,
+            tone: "current",
+          },
+        ]}
+      />
 
       <SectionContainer className="py-16 sm:py-20">
         <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-8">

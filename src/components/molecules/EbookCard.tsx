@@ -11,9 +11,10 @@ type EbookItem = {
 type EbookCardProps = {
   item: EbookItem;
   index: number;
+  detailCtaLabel: string;
 };
 
-export function EbookCard({ item, index }: EbookCardProps) {
+export function EbookCard({ item, index, detailCtaLabel }: EbookCardProps) {
   const levelColors: Record<string, string> = {
     Pemula: "bg-blue-500/20 text-blue-300 border-blue-500/30",
     Menengah: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
@@ -77,7 +78,7 @@ export function EbookCard({ item, index }: EbookCardProps) {
 
       {/* CTA Arrow */}
       <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-yellow-400 transition-all duration-300 group-hover:gap-3">
-        <span>Lihat Detail</span>
+        <span>{detailCtaLabel}</span>
         <FontAwesomeIcon
           icon={["fas", "chevron-right"]}
           className="transition-transform"

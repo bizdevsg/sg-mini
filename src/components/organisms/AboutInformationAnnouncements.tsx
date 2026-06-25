@@ -16,10 +16,12 @@ type AboutInformationAnnouncementsProps = {
     latest: string;
     emptyTitle: string;
     emptyBody: string;
-    readDetail: string;
     close: string;
+    defaultTitle: string;
   };
 };
+
+const MODAL_ANIMATION_DURATION_MS = 240;
 
 function formatDate(dateStr: string, locale: AppLocale) {
   try {
@@ -31,26 +33,6 @@ function formatDate(dateStr: string, locale: AppLocale) {
   } catch {
     return dateStr;
   }
-}
-
-function stripHtml(html: string | null) {
-  if (!html) {
-    return "";
-  }
-
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function truncateText(value: string, maxLength: number) {
-  if (value.length <= maxLength) {
-    return value;
-  }
-
-  return `${value.slice(0, maxLength).trimEnd()}...`;
 }
 
 function EmptyPengumuman({
@@ -80,28 +62,61 @@ export function AboutInformationAnnouncements({
   labels,
 }: AboutInformationAnnouncementsProps) {
   const [selectedItem, setSelectedItem] = useState<PengumumanRecord | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  function handleOpenItem(item: PengumumanRecord) {
+    setSelectedItem(item);
+  }
+
+  function handleCloseModal() {
+    if (!selectedItem || !isModalVisible) {
+      return;
+    }
+
+    setIsModalVisible(false);
+  }
 
   useEffect(() => {
     if (!selectedItem) {
       return;
     }
 
+    const animationFrameId = window.requestAnimationFrame(() => {
+      setIsModalVisible(true);
+    });
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setSelectedItem(null);
+        setIsModalVisible(false);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      window.cancelAnimationFrame(animationFrameId);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedItem]);
+
+  useEffect(() => {
+    if (!selectedItem || isModalVisible) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setSelectedItem(null);
+      setIsModalVisible(false);
+    }, MODAL_ANIMATION_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isModalVisible, selectedItem]);
 
   if (!items.length) {
     return <EmptyPengumuman title={labels.emptyTitle} body={labels.emptyBody} />;
@@ -112,23 +127,18 @@ export function AboutInformationAnnouncements({
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {items.map((item, index) => {
           const isNew = index === 0;
-          const title =
-            item.judul?.trim() ||
-            (locale === "id"
-              ? "Pengumuman PT. Solid Gold Berjangka"
-              : "PT. Solid Gold Berjangka Announcement");
+          const title = item.judul?.trim() || labels.defaultTitle;
           const imageAlt = item.judul?.trim() || title;
           const dateLabel = formatDate(
             item.updated_at || item.created_at,
             locale,
           );
-          const preview = truncateText(stripHtml(item.konten), 150);
 
           return (
             <button
               key={item.id}
               type="button"
-              onClick={() => setSelectedItem(item)}
+              onClick={() => handleOpenItem(item)}
               className="group overflow-hidden rounded-xl cursor-pointer border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]"
             >
               {item.image_url ? (
@@ -208,19 +218,25 @@ export function AboutInformationAnnouncements({
 
       {selectedItem ? (
         <div
-          className="fixed inset-0 z-[140] flex items-center justify-center bg-black/72 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedItem(null)}
+          className={`fixed inset-0 z-[140] flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-all duration-[240ms] ease-out ${isModalVisible
+            ? "opacity-100 backdrop-blur-sm"
+            : "opacity-0 backdrop-blur-none"
+            }`}
+          onClick={handleCloseModal}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby={`pengumuman-title-${selectedItem.id}`}
-            className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)]"
+            className={`relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
+              ? "translate-y-0 scale-100 opacity-100"
+              : "translate-y-6 scale-[0.96] opacity-0"
+              }`}
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
-              onClick={() => setSelectedItem(null)}
+              onClick={handleCloseModal}
               aria-label={labels.close}
               className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/70 transition hover:border-yellow-500/30 hover:text-yellow-400"
             >
@@ -232,12 +248,7 @@ export function AboutInformationAnnouncements({
                 <div className="relative h-64 w-full sm:h-80">
                   <Image
                     src={selectedItem.image_url}
-                    alt={
-                      selectedItem.judul?.trim() ||
-                      (locale === "id"
-                        ? "Pengumuman PT. Solid Gold Berjangka"
-                        : "PT. Solid Gold Berjangka Announcement")
-                    }
+                    alt={selectedItem.judul?.trim() || labels.defaultTitle}
                     fill
                     className="object-cover"
                     sizes="100vw"
@@ -273,10 +284,7 @@ export function AboutInformationAnnouncements({
                   id={`pengumuman-title-${selectedItem.id}`}
                   className="mt-4 max-w-3xl font-mono text-2xl font-bold tracking-[-0.03em] text-white sm:text-[2rem]"
                 >
-                  {selectedItem.judul?.trim() ||
-                    (locale === "id"
-                      ? "Pengumuman PT. Solid Gold Berjangka"
-                      : "PT. Solid Gold Berjangka Announcement")}
+                  {selectedItem.judul?.trim() || labels.defaultTitle}
                 </h2>
 
                 <div

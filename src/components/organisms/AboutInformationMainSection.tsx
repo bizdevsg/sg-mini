@@ -13,20 +13,6 @@ export async function AboutInformationMainSection({
 }: AboutInformationMainSectionProps) {
   const messages = getMessages(locale);
   const page = messages.aboutInformationPage;
-  const sectionLabels = {
-    management: locale === "id" ? "Manajemen" : "Management",
-    latest: locale === "id" ? "Terbaru" : "Latest",
-    emptyTitle:
-      locale === "id"
-        ? "Belum ada pengumuman saat ini"
-        : "No announcements at this time",
-    emptyBody:
-      locale === "id"
-        ? "Silakan kunjungi kembali halaman ini nanti."
-        : "Please check back later.",
-    readDetail: locale === "id" ? "Lihat Detail" : "View Details",
-    close: locale === "id" ? "Tutup modal" : "Close modal",
-  };
 
   const { items: pengumuman } = await getPengumuman();
 
@@ -38,7 +24,7 @@ export async function AboutInformationMainSection({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
-        className="pb-32 pt-20 md:pb-36 md:pt-24"
+        className="pb-10 pt-20 md:pb-36 md:pt-24"
         titleClassName="mx-auto max-w-4xl tracking-[-0.02em] sm:text-4xl md:text-5xl"
         descriptionClassName="mx-auto max-w-3xl leading-relaxed text-gray-300"
         breadcrumbs={[
@@ -54,11 +40,13 @@ export async function AboutInformationMainSection({
         ]}
       />
 
-      <SectionContainer className="py-16 sm:py-20">
+      <SectionContainer className="relative py-16 sm:py-20">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+
         <AboutInformationAnnouncements
           items={pengumuman}
           locale={locale}
-          labels={sectionLabels}
+          labels={page.announcements}
         />
       </SectionContainer>
     </>

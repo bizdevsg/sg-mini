@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ContactPageHero } from "@/components/organisms/ContactPageHero";
 import { ContactComplaintLinksSection } from "@/components/organisms/ContactComplaintLinksSection";
 import { ContactPageMainSection } from "@/components/organisms/ContactPageMainSection";
+import { getCompanyProfile } from "@/lib/company-profile";
 import {
   getLocaleConfig,
   getMessages,
@@ -56,23 +57,23 @@ export default async function ContactPage({ params }: ContactPageProps) {
   assertValidLocale(locales);
 
   const page = getMessages(locales).contactPage;
+  const companyProfile = await getCompanyProfile();
+  const complaintLinks = [
+    {
+      href: companyProfile.complaintLink,
+      label: page.complaintLinks.onlineComplaint,
+    },
+    {
+      href: `mailto:${companyProfile.email}`,
+      label: page.complaintLinks.emailComplaint,
+    },
+  ];
 
   return (
     <>
       <ContactPageHero locale={locales} copy={page} />
-      <ContactPageMainSection copy={page} />
-      <ContactComplaintLinksSection
-        items={[
-          {
-            href: "https://pengaduan.bappebti.go.id/",
-            label: "Pengaduan Online",
-          },
-          {
-            href: "mailto:customer.care@solidgold.co.id",
-            label: "Penyampaian Keluhan Online",
-          },
-        ]}
-      />
+      <ContactPageMainSection copy={page} companyProfile={companyProfile} />
+      <ContactComplaintLinksSection items={complaintLinks} />
     </>
   );
 }

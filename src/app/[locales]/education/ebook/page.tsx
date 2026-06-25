@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { EbookHeroSection } from "@/components/organisms/EbookHeroSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { EbookLibrarySection } from "@/components/organisms/EbookLibrarySection";
+import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import {
   getLocaleConfig,
   getMessages,
@@ -57,24 +60,67 @@ export default async function EbookPage({ params }: EbookPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const messages = getMessages(locales).ebookPage;
+  const appMessages = getMessages(locales);
+  const messages = appMessages.ebookPage;
+  const educationLabel =
+    appMessages.navbar.menuGroups.find((group) =>
+      group.items?.some((item) => item.href === "/education/ebook"),
+    )?.label ?? messages.parentLabel;
 
   return (
     <main>
-      <EbookHeroSection
+      <PageHeroBanner
+        locale={locales}
+        homeLabel={appMessages.app.homeLabel}
         eyebrow={messages.hero.eyebrow}
         title={messages.hero.title}
         description={messages.hero.description}
-        primaryCtaLabel={messages.hero.primaryCta}
-        primaryCtaHref={EBOOK_REGISTER_URL}
-        secondaryCtaLabel={messages.hero.secondaryCta}
-        secondaryCtaHref={EBOOK_LOGIN_URL}
-      />
+        breadcrumbs={[
+          {
+            label: educationLabel,
+            href: `/${locales}/education/cara-memulai`,
+            tone: "accent",
+          },
+          {
+            label: messages.breadcrumb,
+            tone: "current",
+          },
+        ]}
+      >
+        <div className="flex flex-col justify-center gap-4 sm:flex-row lg:gap-6">
+          <ButtonLink
+            href={EBOOK_REGISTER_URL}
+            size="lg"
+            className="group w-full sm:min-w-[220px] sm:w-auto"
+          >
+            <FontAwesomeIcon icon={["fas", "book"]} />
+            {messages.hero.primaryCta}
+            <FontAwesomeIcon
+              icon={["fas", "arrow-right"]}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </ButtonLink>
+
+          <ButtonLink
+            href={EBOOK_LOGIN_URL}
+            variant="ghost"
+            size="lg"
+            className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-[220px] sm:w-auto"
+          >
+            {messages.hero.secondaryCta}
+            <FontAwesomeIcon
+              icon={["fas", "arrow-right"]}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </ButtonLink>
+        </div>
+      </PageHeroBanner>
 
       <EbookLibrarySection
         title={messages.libraryTitle}
         subtitle={messages.librarySubtitle}
         items={messages.items}
+        detailCtaLabel={messages.detailCta}
         benefitsTitle={messages.benefitsTitle}
         benefits={messages.benefits}
       />

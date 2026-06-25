@@ -10,6 +10,7 @@ export const idAboutBusinessLegalityPage: AppMessages["aboutBusinessLegalityPage
       description:
         "Berikut adalah dokumen-dokumen legal yang menjadi dasar hukum dan pengakuan resmi atas operasional PT. Solid Gold Berjangka",
     },
+    numberLabel: "Nomor",
     overview: {
       eyebrow: "Ikhtisar Legalitas",
       title:

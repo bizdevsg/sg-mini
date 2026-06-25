@@ -8,6 +8,10 @@ export const enContactPage: AppMessages["contactPage"] = {
     breadcrumbs: {
       supportCenter: "Support Center",
     },
+    complaintLinks: {
+      onlineComplaint: "Online Complaint",
+      emailComplaint: "Submit Complaint by Email",
+    },
     hero: {
       eyebrow: "Official Contact",
       title: "CONTACT US",

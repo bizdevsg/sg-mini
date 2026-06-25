@@ -8,6 +8,10 @@ export const idContactPage: AppMessages["contactPage"] = {
     breadcrumbs: {
       supportCenter: "Pusat Dukungan",
     },
+    complaintLinks: {
+      onlineComplaint: "Pengaduan Online",
+      emailComplaint: "Penyampaian Keluhan Online",
+    },
     hero: {
       eyebrow: "Kontak Resmi",
       title: "HUBUNGI KAMI",

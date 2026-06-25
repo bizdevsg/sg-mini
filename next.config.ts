@@ -15,6 +15,10 @@ const bannerImageBaseUrl = new URL(
   process.env.BANNER_IMAGE_BASE_URL ??
     "http://sg-admin.test/storage/banner-images",
 );
+const penghargaanImageBaseUrl = new URL(
+  process.env.PENGHARGAAN_IMAGE_BASE_URL ??
+    "http://sg-admin.test/storage/penghargaan-images",
+);
 const imgPlaceholder = new URL(
   process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL ?? "https://placehold.co/600x400",
 );
@@ -44,6 +48,11 @@ const nextConfig: NextConfig = {
         protocol: getProtocol(bannerImageBaseUrl),
         hostname: bannerImageBaseUrl.hostname,
         pathname: `${bannerImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
+      },
+      {
+        protocol: getProtocol(penghargaanImageBaseUrl),
+        hostname: penghargaanImageBaseUrl.hostname,
+        pathname: `${penghargaanImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
       },
       {
         protocol: getProtocol(imgPlaceholder),

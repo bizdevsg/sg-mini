@@ -10,6 +10,7 @@ export const enAboutBusinessLegalityPage: AppMessages["aboutBusinessLegalityPage
       description:
         "Below are the legal documents that serve as the legal basis and official recognition for PT. Solid Gold Berjangka operations.",
     },
+    numberLabel: "Number",
     overview: {
       eyebrow: "Legality Overview",
       title:

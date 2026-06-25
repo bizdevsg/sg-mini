@@ -68,6 +68,14 @@ export const idAboutInformationPage: AppMessages["aboutInformationPage"] = {
       },
     ],
   },
+  announcements: {
+    management: "Manajemen",
+    latest: "Terbaru",
+    emptyTitle: "Belum ada pengumuman saat ini",
+    emptyBody: "Silakan kunjungi kembali halaman ini nanti.",
+    close: "Tutup modal",
+    defaultTitle: "Pengumuman PT. Solid Gold Berjangka",
+  },
   commitments: {
     title: "Komitmen yang dijaga perusahaan",
     items: [
