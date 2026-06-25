@@ -55,9 +55,24 @@ export const USE_DUMMY_API_DATA = APP_ENV === "dev-deploy";
 export const LIVE_QUOTE_SOCKET_URL =
   process.env.LIVE_QUOTE_SOCKET_URL ?? DEFAULT_LIVE_QUOTE_SOCKET_URL;
 
+function normalizePublicLiveQuoteSocketUrl(value: string | undefined) {
+  const normalizedValue = value?.trim();
+
+  if (
+    !normalizedValue ||
+    normalizedValue === "$LIVE_QUOTE_SOCKET_URL" ||
+    normalizedValue === "${LIVE_QUOTE_SOCKET_URL}"
+  ) {
+    return LIVE_QUOTE_SOCKET_URL;
+  }
+
+  return normalizedValue;
+}
+
 export const PUBLIC_LIVE_QUOTE_SOCKET_URL =
-  process.env.NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL ??
-  DEFAULT_LIVE_QUOTE_SOCKET_URL;
+  normalizePublicLiveQuoteSocketUrl(
+    process.env.NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL,
+  );
 
 export const PUBLIC_FRAMER_IMAGE_BASE_URL =
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??

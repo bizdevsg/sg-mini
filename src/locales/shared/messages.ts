@@ -1,14 +1,6 @@
-import type {
-  SecurityItem,
-  SpreadItem,
-  Stat,
-} from "@/types/landing";
+import type { SecurityItem, SpreadItem, Stat } from "@/types/landing";
 
-export type HomeWhyChooseItemId =
-  | "legal"
-  | "experience"
-  | "support"
-  | "ebook";
+export type HomeWhyChooseItemId = "legal" | "experience" | "support" | "ebook";
 
 export type AppMessages = {
   app: {
@@ -38,6 +30,7 @@ export type AppMessages = {
   hero: {
     titleLead: string;
     titleBody: string;
+    subTitle: string;
     cta: string;
     visualAlt: string;
   };

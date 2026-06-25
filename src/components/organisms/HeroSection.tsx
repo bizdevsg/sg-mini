@@ -24,13 +24,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
       <SectionContainer className="pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-32 md:pb-20 lg:py-20">
         <div className="relative isolate z-10 flex flex-col gap-8 sm:gap-10 md:gap-12 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           <div className="order-2 relative z-10 mx-auto max-w-[22rem] text-center sm:max-w-[30rem] md:max-w-[38rem] xl:mx-0 lg:max-w-[34rem] xl:text-left xl:max-w-[48rem]">
-            <h1 className="font-mono text-[2.35rem] font-bold leading-[0.96] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3.45rem] xl:text-[4.4rem]">
+            <h1 className="font-mono text-[2.35rem] font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3.45rem] xl:text-[4.4rem]">
               <span className="text-yellow-500">{messages.hero.titleLead}</span>
               <span className="block text-white">
                 {messages.hero.titleBody}
               </span>
             </h1>
-            <div className="mt-6 flex gap-4">
+            <p className="mt-3 max-w-2xl text-white/85 text-center xl:text-left">{messages.hero.subTitle}</p>
+            <div className="mt-6 flex gap-4 mx-auto xl:mx-0 w-fit">
               <a href={googlePlayLink} target="_blank" rel="noreferrer">
                 <Image
                   src="/assets/gp-button.png"

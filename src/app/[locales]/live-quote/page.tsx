@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
+import { LiveQuoteTable } from "@/components/organisms/LiveQuoteTable";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { LiveQuoteTable } from "@/components/molecules/LiveQuoteTable";
 import {
   getLocaleConfig,
   getMessages,

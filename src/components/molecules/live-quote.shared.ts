@@ -1,5 +1,8 @@
-import { getLiveQuoteDisplay, type LiveQuoteDisplay } from "@/lib/live-quotes";
-import { formatLocaleNumber, formatLocaleTime, type AppLocale } from "@/locales";
+import {
+  formatLocaleNumber,
+  formatLocaleTime,
+  type AppLocale,
+} from "@/locales";
 
 export type QuoteDirection = "up" | "down" | "-";
 
@@ -26,7 +29,7 @@ export function getDirectionClassName(direction: string) {
     return "text-rose-400";
   }
 
-  return "text-foreground/58";
+  return "text-white/78";
 }
 
 export function getRowClassName(direction: string) {
@@ -38,11 +41,7 @@ export function getRowClassName(direction: string) {
     return "bg-linear-to-br from-rose-400/20 to-white/5 border-rose-400/40";
   }
 
-  return "bg-white/5 border-line";
-}
-
-export function getLiveQuoteSymbolDisplay(symbol: string): LiveQuoteDisplay {
-  return getLiveQuoteDisplay(symbol);
+  return "bg-linear-to-br from-white/10 to-white/5 border-white/10";
 }
 
 export function formatQuoteNumber(value: string, locale: AppLocale) {

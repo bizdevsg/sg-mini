@@ -20,7 +20,7 @@ const trendStyles = {
   neutral: {
     icon: ["fas", "minus"] as IconProp,
     className:
-      "text-foreground/58 bg-foreground/10 border border-foreground/20",
+      "text-white/58 bg-white/10 border border-white/20",
   },
 } as const;
 

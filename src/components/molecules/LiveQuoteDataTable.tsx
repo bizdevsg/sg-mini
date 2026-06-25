@@ -1,3 +1,4 @@
+import { LiveQuoteSymbol } from "@/components/atoms/LiveQuoteSymbol";
 import { LiveQuoteTrendIndicator } from "@/components/atoms/LiveQuoteTrendIndicator";
 import type { AppLocale, AppMessages } from "@/locales";
 
@@ -5,7 +6,6 @@ import {
   formatQuoteNumber,
   formatQuoteTime,
   getDirectionClassName,
-  getLiveQuoteSymbolDisplay,
   getRowClassName,
   type LiveQuotePayload,
 } from "./live-quote.shared";
@@ -16,27 +16,6 @@ type LiveQuoteDataTableProps = {
   symbols: string[];
   fieldLabels: AppMessages["liveQuoteTable"]["fields"];
 };
-
-function LiveQuoteSymbol({
-  symbol,
-  className,
-}: {
-  symbol: string;
-  className: string;
-}) {
-  const display = getLiveQuoteSymbolDisplay(symbol);
-
-  return (
-    <span className={className}>
-      <span className="text-sm font-semibold md:text-base">{display.label}</span>
-      {display.symbol ? (
-        <span className="ml-1 text-xs font-medium text-foreground/62">
-          ({display.symbol})
-        </span>
-      ) : null}
-    </span>
-  );
-}
 
 export function LiveQuoteDataTable({
   locale,
