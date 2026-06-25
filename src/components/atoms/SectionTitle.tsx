@@ -35,7 +35,7 @@ export function SectionTitle({
       </h2>
       {subtitle ? (
         <p
-          className={`mt-3 text-xs leading-7 sm:text-sm ${subtitleClass} ${subtitleClassName}`}
+          className={`mt-3 text-sm leading-7 sm:text-base ${subtitleClass} ${subtitleClassName}`}
         >
           {subtitle}
         </p>

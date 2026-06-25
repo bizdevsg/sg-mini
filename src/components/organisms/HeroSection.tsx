@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { getMessages, getSolidGoldAppPageContent, type AppLocale } from "@/locales";
 import { SectionContainer } from "../atoms/SectionContainer";
+import Link from "next/link";
 
 type HeroSectionProps = {
   locale: AppLocale;
@@ -32,7 +33,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
             </h1>
             <p className="mt-3 max-w-2xl text-white/85 text-center text-lg xl:text-left">{messages.hero.subTitle}</p>
             <div className="mt-6 flex gap-4 mx-auto xl:mx-0 w-fit">
-              <a href={googlePlayLink} target="_blank" rel="noreferrer">
+              <Link href={googlePlayLink} target="_blank" rel="noreferrer">
                 <Image
                   src="/assets/gp-button.png"
                   alt={appPromoMessages.googlePlayAlt}
@@ -41,9 +42,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   sizes="(max-width: 640px) 144px, 160px"
                   className="h-auto w-36 object-contain sm:w-40"
                 />
-              </a>
+              </Link>
 
-              <a href={appStoreLink} target="_blank" rel="noreferrer">
+              <Link href={appStoreLink} target="_blank" rel="noreferrer">
                 <Image
                   src="/assets/as-button.png"
                   alt={appPromoMessages.appStoreAlt}
@@ -52,14 +53,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   sizes="(max-width: 640px) 144px, 160px"
                   className="h-auto w-36 object-contain sm:w-40"
                 />
-              </a>
+              </Link>
             </div>
           </div>
 
           <div className="relative z-0 order-1 mx-auto w-full max-w-[20rem] sm:max-w-[24rem] md:max-w-[36rem] xl:hidden">
             <div className="pointer-events-none relative flex justify-center md:-mb-6">
               <img
-                src="/assets/BANNER-UTAMA-SOLID.png"
+                src="/assets/Banner SGB-FIX.png"
                 alt={messages.hero.visualAlt}
                 className="w-full object-contain scale-[1.06] sm:scale-[1.08] md:scale-[1.02]"
               />
