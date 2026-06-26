@@ -1,3 +1,4 @@
+import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import { LiveQuoteSymbol } from "@/components/atoms/LiveQuoteSymbol";
 import { LiveQuoteTrendIndicator } from "@/components/atoms/LiveQuoteTrendIndicator";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -68,10 +69,8 @@ export function LiveQuoteDataTable({
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <LiveQuoteTrendIndicator
-                        direction={tick.price_change}
-                        locale={locale}
-                      />
+                      <LiveQuoteInstrumentIcon symbol={symbol} />
+
                       <LiveQuoteSymbol
                         symbol={symbol}
                         className={`font-mono ${directionClassName}`}
@@ -81,7 +80,14 @@ export function LiveQuoteDataTable({
                   <td
                     className={`px-4 py-3 text-center font-mono text-sm font-semibold sm:text-base ${directionClassName}`}
                   >
-                    {formatQuoteNumber(tick.price, locale)}
+                    <div className="flex items-center justify-center gap-3">
+                      <LiveQuoteTrendIndicator
+                        direction={tick.price_change}
+                        locale={locale}
+                      />
+
+                      {formatQuoteNumber(tick.price, locale)}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
                     {formatQuoteNumber(tick.sell, locale)}

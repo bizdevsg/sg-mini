@@ -60,15 +60,6 @@ export function LocoLondonGoldHistorySection({
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
 
       <div className="mx-auto">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
-            {title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-zinc-300">
-            {subtitle}
-          </p>
-        </div>
-
         <div className="grid gap-6">
           {items.map((item) => (
             <HistoryArticle key={item.title} item={item} />

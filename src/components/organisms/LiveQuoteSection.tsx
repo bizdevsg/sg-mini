@@ -13,9 +13,9 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
   const messages = getMessages(locale);
 
   return (
-    <section className="border-y border-line bg-zinc-900">
+    <div className="bg-[#0E0E0E]">
       <SectionContainer className="py-20">
-        <SectionEyebrow align="left" className="mb-3">
+        <SectionEyebrow align="left" className="mb-5">
           {messages.liveQuoteSection.eyebrow}
         </SectionEyebrow>
 
@@ -32,7 +32,7 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
         <div className="flex justify-center">
           <ButtonLink
             href={`/${locale}/live-quote`}
-            variant="dark"
+            variant="primary"
             size="sm"
             className="mt-5"
           >
@@ -40,6 +40,6 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
           </ButtonLink>
         </div>
       </SectionContainer>
-    </section>
+    </div>
   );
 }

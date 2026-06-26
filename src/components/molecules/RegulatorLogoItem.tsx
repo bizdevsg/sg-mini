@@ -20,7 +20,7 @@ export function RegulatorLogoItem({
         height={logo.height}
         priority={priority}
         sizes="120px"
-        className="max-h-10 w-auto object-contain opacity-75"
+        className="max-h-200 w-auto object-contain opacity-75"
       />
     </div>
   );

@@ -32,7 +32,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           alt={messages.app.brandName}
           preload
           sizes="220px"
-          className="hidden h-auto w-60 object-contain sm:block"
+          className="hidden h-auto w-70 object-contain sm:block"
         />
       </Link>
     </div>

@@ -1,7 +1,11 @@
 import "server-only";
 
 import { getDummyBannerRecords } from "@/lib/api-dummy-data";
-import { BANNER_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import {
+  BANNER_API_URL,
+  USE_DUMMY_API_DATA,
+  getBannerAssetUrl,
+} from "@/lib/env";
 
 export type BannerApiRecord = {
   id: number;
@@ -17,6 +21,25 @@ type BannerApiResponse = {
   data?: BannerApiRecord[];
 };
 
+function normalizeText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function mapBannerRecord(item: BannerApiRecord): BannerApiRecord | null {
+  const image = normalizeText(item.image);
+  const imageUrlSource = normalizeText(item.image_url) || image;
+
+  if (!imageUrlSource) {
+    return null;
+  }
+
+  return {
+    ...item,
+    image: image || item.image,
+    image_url: getBannerAssetUrl(imageUrlSource),
+  };
+}
+
 function compareBanners(left: BannerApiRecord, right: BannerApiRecord) {
   if (left.sort_order !== right.sort_order) {
     return left.sort_order - right.sort_order;
@@ -28,7 +51,8 @@ function compareBanners(left: BannerApiRecord, right: BannerApiRecord) {
 export async function getBannerRecords() {
   if (USE_DUMMY_API_DATA) {
     return getDummyBannerRecords()
-      .filter((item) => item.is_active && item.image_url)
+      .map(mapBannerRecord)
+      .filter((item): item is BannerApiRecord => Boolean(item && item.is_active))
       .slice()
       .sort(compareBanners);
   }
@@ -55,7 +79,8 @@ export async function getBannerRecords() {
     }
 
     return payload.data
-      .filter((item) => item.is_active && item.image_url)
+      .map(mapBannerRecord)
+      .filter((item): item is BannerApiRecord => Boolean(item && item.is_active))
       .slice()
       .sort(compareBanners);
   } catch (error) {

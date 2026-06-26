@@ -252,8 +252,8 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
               >
                 <article
                   className={`overflow-hidden transition-opacity duration-300 rounded-xl overflow-hidden ${normalizedIndex === activeIndex
-                      ? "border-line opacity-100"
-                      : "border-line/80 opacity-80 hover:opacity-100"
+                    ? "border-line opacity-100"
+                    : "border-line/80 opacity-80 hover:opacity-100"
                     }`}
                 >
                   <img
@@ -284,8 +284,8 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                 aria-label={formatBannerLabel(labels.slideButtonLabel, index + 1)}
                 aria-pressed={isActive}
                 className={`h-2.5 rounded-full transition-all duration-300 ${isActive
-                    ? "w-8 bg-[#D5A246]"
-                    : "w-2.5 bg-white/35 hover:bg-white/60"
+                  ? "w-8 bg-[#D5A246]"
+                  : "w-2.5 bg-white/35 hover:bg-white/60"
                   }`}
                 onClick={() => {
                   goToSlide(index);

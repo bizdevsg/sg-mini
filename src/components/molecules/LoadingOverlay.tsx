@@ -9,10 +9,7 @@ type LoadingOverlayProps = {
 };
 
 export function LoadingOverlay({
-  brandLabel,
   logoAlt,
-  title,
-  description,
   fadingOut = false,
 }: LoadingOverlayProps) {
   return (
@@ -23,25 +20,27 @@ export function LoadingOverlay({
       className={`fixed inset-0 z-[120] flex items-center justify-center overflow-hidden bg-black px-6 transition-opacity duration-300 ${fadingOut ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
     >
-      <div className="relative w-full max-w-sm rounded-xl border border-white/10 bg-[rgba(10,10,10,0.82)] px-8 py-10 text-center shadow-[0_30px_90px_rgba(0,0,0,0.48)] backdrop-blur-xl">
-        <Image
-          src="/assets/Logo SG-WEB111.png"
-          alt={logoAlt}
-          width={72}
-          height={72}
-          priority
-          className="h-full w-auto object-contain animate-pulse mx-auto"
-        />
+      <div className="relative flex h-32 w-32 items-center justify-center">
+        {/* Outer Glow */}
+        {/* <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-2xl" /> */}
 
-        <p className="mt-6 text-[0.65rem] font-semibold uppercase tracking-[0.36em] text-yellow-500/75">
-          {brandLabel}
-        </p>
-        {/* <h2 className="mt-3 font-mono text-2xl font-bold tracking-[-0.04em] text-white sm:text-[2rem]">
-          {title}
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-white/65 sm:text-base">
-          {description}
-        </p> */}
+        {/* Loading Circle */}
+        {/* <div className="absolute inset-0 rounded-full border border-[#D4AF37]/20" /> */}
+
+        {/* Spinning Gold Ring */}
+        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#D4AF37] border-r-[#F5D76E] animate-spin" />
+
+        {/* Inner Circle */}
+        <div className="relative flex h-20 w-20 items-center justify-center rounded-full backdrop-blur-md">
+          <Image
+            src="/assets/Logo SG-WEB111.png"
+            alt={logoAlt}
+            width={48}
+            height={48}
+            priority
+            className="h-12 w-12 object-contain"
+          />
+        </div>
       </div>
     </div>
   );

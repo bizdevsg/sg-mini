@@ -3,13 +3,10 @@ import { notFound } from "next/navigation";
 
 import { AppPromoSection } from "@/components/organisms/AppPromoSection";
 import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSection";
-import { EbookPromoSection } from "@/components/organisms/EbookPromoSection";
-import { FinalCtaSection } from "@/components/organisms/FinalCtaSection";
 import { HeroSection } from "@/components/organisms/HeroSection";
 import { HomeWhyChooseSection } from "@/components/organisms/HomeWhyChooseSection";
 import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
 import { RegulatorMarqueeSection } from "@/components/organisms/RegulatorMarqueeSection";
-import { SecuritySection } from "@/components/organisms/SecuritySection";
 import { SpreadSection } from "@/components/organisms/SpreadSection";
 import {
   getLocaleConfig,

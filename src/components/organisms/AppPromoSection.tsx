@@ -26,9 +26,9 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
       >
         <div className="bg-black/50 absolute top-0 left-0 w-full h-full" />
 
-        <div className="relative z-10 flex min-h-97.5 items-center justify-between py-10 px-20">
-          <div className="max-w-xl">
-            <h2 className="text-3xl font-bold leading-tight text-white md:text-4xl">
+        <div className="relative z-10 flex min-h-97.5 flex-col items-center gap-10 px-6 py-10 text-center sm:px-8 md:flex-row md:items-center md:justify-between md:px-12 md:text-left lg:px-20">
+          <div className="order-2 max-w-xl md:order-1">
+            <h2 className="text-4xl font-bold leading-tight text-white md:text-5xl">
               {messages.title}
             </h2>
 
@@ -36,7 +36,7 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
               {messages.description}
             </p>
 
-            <div className="mt-6 flex gap-4">
+            <div className="mt-6 flex justify-center gap-4 md:justify-start">
               <a href={googlePlayLink} target="_blank" rel="noreferrer">
                 <Image
                   src="/assets/gp-button.png"
@@ -61,14 +61,13 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
             </div>
           </div>
 
-          {/* Phone */}
-          <div className="relative hidden md:block">
+          <div className="order-1 relative w-full max-w-[20rem] sm:max-w-[23rem] md:order-2 md:max-w-[27rem]">
             <Image
               src="/assets/HP Solid-3.png"
               width={400}
               height={400}
               alt={messages.imageAlt}
-              className="object-cover bg-center max-w-100"
+              className="h-auto w-full object-contain"
             />
           </div>
         </div>

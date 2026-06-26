@@ -29,6 +29,7 @@ import { idNewsDetailPage } from "./content/newsDetailPage";
 import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idFraudAlertPage } from "./content/fraudAlertPage";
 import { idContactPage } from "./content/contactPage";
+import { idClientArea } from "./content/clientArea";
 import { idFooter } from "./content/footer";
 import { idLoadingOverlay } from "./content/loadingOverlay";
 
@@ -63,6 +64,7 @@ export const idMessages: AppMessages = {
   bannerSlideshow: idBannerSlideshow,
   fraudAlertPage: idFraudAlertPage,
   contactPage: idContactPage,
+  clientArea: idClientArea,
   footer: idFooter,
   loadingOverlay: idLoadingOverlay,
 };

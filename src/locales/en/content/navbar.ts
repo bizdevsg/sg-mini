@@ -7,6 +7,7 @@ export const enNavbar: AppMessages["navbar"] = {
     switchLocaleIconAlt: "Indonesia flag icon",
     openMenuLabel: "Open navigation menu",
     closeMenuLabel: "Close navigation menu",
+    scrollToTopLabel: "Scroll back to top",
     menuGroups: [
       {
         label: "Products",

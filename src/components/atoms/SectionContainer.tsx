@@ -13,7 +13,7 @@ export function SectionContainer({
 }: SectionContainerProps) {
   return (
     <div
-      className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 ${className}`}
+      className={`mx-auto max-w-8xl px-4 sm:px-6 lg:px-10 ${className}`}
       style={style}
     >
       {children}

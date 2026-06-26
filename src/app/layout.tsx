@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Poppins } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
-import { LoadingProvider } from "@/components/providers/LoadingProvider";
 import { NEWS_PORTAL_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
 import {
@@ -62,11 +60,7 @@ export default async function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
-        <FontAwesomeProvider>
-          <Suspense fallback={children}>
-            <LoadingProvider locale={locale}>{children}</LoadingProvider>
-          </Suspense>
-        </FontAwesomeProvider>
+        <FontAwesomeProvider>{children}</FontAwesomeProvider>
       </body>
     </html>
   );

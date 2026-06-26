@@ -22,11 +22,11 @@ export type LiveQuotePayload = Record<string, LiveQuoteTick>;
 
 export function getDirectionClassName(direction: string) {
   if (direction === "up") {
-    return "text-emerald-400";
+    return "text-green-500";
   }
 
   if (direction === "down") {
-    return "text-rose-400";
+    return "text-red-500";
   }
 
   return "text-white/78";
@@ -34,11 +34,11 @@ export function getDirectionClassName(direction: string) {
 
 export function getRowClassName(direction: string) {
   if (direction === "up") {
-    return "bg-linear-to-br from-emerald-400/20 to-white/5 border-emerald-400/40";
+    return "bg-linear-to-br from-green-400/20 to-white/5 border-green-400/40";
   }
 
   if (direction === "down") {
-    return "bg-linear-to-br from-rose-400/20 to-white/5 border-rose-400/40";
+    return "bg-linear-to-br from-red-400/20 to-white/5 border-red-400/40";
   }
 
   return "bg-linear-to-br from-white/10 to-white/5 border-white/10";

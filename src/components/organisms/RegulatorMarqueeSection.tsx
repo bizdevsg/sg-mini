@@ -21,14 +21,14 @@ export function RegulatorMarqueeSection({
 
   return (
     <section className="bg-linear-180 from-black to-transparent">
-      <SectionContainer className="py-16 md:py-20">
+      <SectionContainer className="pb-16 md:pb-20 pt-5 md:pt-9">
         <div className="flex flex-col items-center gap-5">
           <SectionEyebrow align="center">
             {messages.regulator.eyebrow}
           </SectionEyebrow>
 
           <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            <div className="border border-yellow-500/16 bg-white/2 py-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
+            <div className="py-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
               <div
                 className="flex w-max min-w-max items-center whitespace-nowrap"
                 style={{

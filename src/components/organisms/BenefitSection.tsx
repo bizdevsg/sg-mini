@@ -31,7 +31,7 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
           >
             <div
               className="absolute top-0 left-0 h-full w-full object-cover opacity-5"
-              style={{ backgroundImage: "url('/assets/bg-card.png')" }}
+              style={{ backgroundImage: "url('/assets/Texture-Fabrik-Film-Grain_05_PR 1.png')" }}
             />
 
             <div className="z-10 space-y-8">

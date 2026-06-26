@@ -29,6 +29,7 @@ import { enNewsDetailPage } from "./content/newsDetailPage";
 import { enBannerSlideshow } from "./content/bannerSlideshow";
 import { enFraudAlertPage } from "./content/fraudAlertPage";
 import { enContactPage } from "./content/contactPage";
+import { enClientArea } from "./content/clientArea";
 import { enFooter } from "./content/footer";
 import { enLoadingOverlay } from "./content/loadingOverlay";
 
@@ -63,6 +64,7 @@ export const enMessages: AppMessages = {
   bannerSlideshow: enBannerSlideshow,
   fraudAlertPage: enFraudAlertPage,
   contactPage: enContactPage,
+  clientArea: enClientArea,
   footer: enFooter,
   loadingOverlay: enLoadingOverlay,
 };

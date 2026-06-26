@@ -68,11 +68,11 @@ export function LocoLondonGoldPage({
         items={page.analysis}
       />
 
-      <LocoLondonGoldDerivativeSection
+      {/* <LocoLondonGoldDerivativeSection
         title={page.sections.derivativeTitle}
         subtitle={page.sections.derivativeSubtitle}
         derivative={page.derivative}
-      />
+      /> */}
     </main>
   );
 }

@@ -15,15 +15,6 @@ export function LocoLondonGoldDerivativeSection({
   return (
     <SectionContainer className="pb-16 md:pb-20">
       <div className="mx-auto">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
-            {title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-zinc-300">
-            {subtitle}
-          </p>
-        </div>
-
         <section className="rounded-[1.75rem] border border-line bg-[linear-gradient(180deg,rgba(205,161,58,0.07),rgba(10,10,10,0.88)_45%)] p-6 sm:p-8">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
             <div className="space-y-4 text-sm leading-7 text-zinc-300 sm:text-base">

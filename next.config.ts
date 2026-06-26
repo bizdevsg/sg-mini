@@ -33,6 +33,14 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 90],
     imageSizes: [32, 48, 64, 96, 128, 256, 384],
+    localPatterns: [
+      {
+        pathname: "/assets/**",
+      },
+      {
+        pathname: "/api/image-proxy/**",
+      },
+    ],
     remotePatterns: [
       {
         protocol: getProtocol(framerImageBaseUrl),

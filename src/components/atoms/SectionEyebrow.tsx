@@ -19,7 +19,7 @@ export function SectionEyebrow({
         } ${className}`}
     >
       <p
-        className={`font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-yellow-400 ${textClassName}`}
+        className={`font-mono text-xxs font-semibold capitalize tracking-[0.22em] text-yellow-400 ${textClassName}`}
       >
         {children}
       </p>

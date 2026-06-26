@@ -1,3 +1,4 @@
+import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import { LiveQuoteSymbol } from "@/components/atoms/LiveQuoteSymbol";
 import { LiveQuoteTrendIndicator } from "@/components/atoms/LiveQuoteTrendIndicator";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -27,14 +28,11 @@ export function LiveQuoteCompactCard({
 
   return (
     <article
-      className={`rounded-xl border px-5 py-5 shadow-[0_16px_36px_rgba(0,0,0,0.24)] sm:px-6 ${rowClassName}`}
+      className={`rounded-xl border px-5 py-5 shadow-[0_16px_36px_rgba(0,0,0,0.24)] sm:px-6 select-none ${rowClassName}`}
     >
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <LiveQuoteTrendIndicator
-            direction={tick.price_change}
-            locale={locale}
-          />
+          <LiveQuoteInstrumentIcon symbol={symbol} />
 
           <LiveQuoteSymbol
             symbol={symbol}
@@ -42,16 +40,19 @@ export function LiveQuoteCompactCard({
           />
         </div>
 
-        <div className={`text-lg font-bold sm:text-xl ${directionClassName}`}>
-          {formatQuoteNumber(tick.price, locale)}
+        <div className="flex items-center gap-2">
+          <LiveQuoteTrendIndicator
+            direction={tick.price_change}
+            locale={locale}
+          />
+
+          <div className={`text-lg font-bold sm:text-xl ${directionClassName}`}>
+            {formatQuoteNumber(tick.price, locale)}
+          </div>
         </div>
       </div>
 
-      <p className="mt-6 text-xs uppercase tracking-[0.14em] text-white/55">
-        {fieldLabels.price}
-      </p>
-
-      <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
+      <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
         <div className="rounded-lg border border-white/10 bg-black/10 px-4 py-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-white/55">
             {fieldLabels.buy}

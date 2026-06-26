@@ -1,9 +1,9 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const enAppPromoSection: AppMessages["appPromoSection"] = {
-  title: "Commodity Trading Opportunities in One Hand",
+  title: "Convenient Trading in a Single App",
   description:
-    "Accessing the commodities market is now easier than ever through a single integrated app. Monitor price movements in real time, manage your account conveniently, and trade commodities flexibly whenever you need to, with 24/5 market access.",
+    "Access the market, monitor prices, read the latest updates, and manage your trading account more conveniently through the Solid Gold Berjangka app.",
   benefits: [
     "Trade commodities anytime and from anywhere",
     "Monitor price movements and market information in real time",

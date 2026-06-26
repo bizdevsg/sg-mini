@@ -1,7 +1,11 @@
 import "server-only";
 
 import { getDummyPengumuman } from "@/lib/api-dummy-data";
-import { PENGUMUMAN_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import {
+  PENGUMUMAN_API_URL,
+  USE_DUMMY_API_DATA,
+  getPengumumanAssetUrl,
+} from "@/lib/env";
 
 export type PengumumanRecord = {
   id: number;
@@ -48,12 +52,14 @@ export type PengumumanResult = {
 const PENGUMUMAN_TIMEOUT_MS = 8000;
 
 function mapPengumumanRecord(item: RawPengumumanRecord): PengumumanRecord {
+  const imagePath = item.image_url?.trim() || item.image?.trim() || null;
+
   return {
     id: item.id,
     judul: item.judul ?? item.title ?? "",
     konten: item.konten ?? item.content ?? null,
     image: item.image,
-    image_url: item.image_url,
+    image_url: imagePath ? getPengumumanAssetUrl(imagePath) : null,
     created_at: item.created_at,
     updated_at: item.updated_at,
   };

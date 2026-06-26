@@ -1,3 +1,4 @@
+import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import { LiveQuoteSymbol } from "@/components/atoms/LiveQuoteSymbol";
 import { LiveQuoteTrendIndicator } from "@/components/atoms/LiveQuoteTrendIndicator";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -28,18 +29,13 @@ export function LiveQuoteFullCard({
 
   return (
     <article
-      className={`rounded-xl border border-line p-4 shadow-[0_16px_36px_rgba(0,0,0,0.24)] ${rowClassName}`}
+      className={`rounded-xl border border-line p-4 shadow-[0_16px_36px_rgba(0,0,0,0.24)] select-none ${rowClassName}`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <LiveQuoteTrendIndicator
-            direction={tick.price_change}
-            locale={locale}
-          />
+          <LiveQuoteInstrumentIcon symbol={symbol} />
+
           <div>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/55">
-              {fieldLabels.symbol}
-            </p>
             <div className={`font-mono text-base font-bold ${directionClassName}`}>
               <LiveQuoteSymbol
                 symbol={symbol}
@@ -49,13 +45,20 @@ export function LiveQuoteFullCard({
           </div>
         </div>
 
-        <div className="text-right">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/55">
-            {fieldLabels.price}
-          </p>
-          <p className={`font-mono text-base font-bold ${directionClassName}`}>
-            {formatQuoteNumber(tick.price, locale)}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/55">
+              {fieldLabels.price}
+            </p>
+            <p className={`font-mono text-base font-bold ${directionClassName}`}>
+              {formatQuoteNumber(tick.price, locale)}
+            </p>
+          </div>
+
+          <LiveQuoteTrendIndicator
+            direction={tick.price_change}
+            locale={locale}
+          />
         </div>
       </div>
 

@@ -7,6 +7,7 @@ export const idNavbar: AppMessages["navbar"] = {
     switchLocaleIconAlt: "Ikon bendera Amerika Serikat",
     openMenuLabel: "Buka menu navigasi",
     closeMenuLabel: "Tutup menu navigasi",
+    scrollToTopLabel: "Kembali ke atas",
     menuGroups: [
       {
         label: "Produk",

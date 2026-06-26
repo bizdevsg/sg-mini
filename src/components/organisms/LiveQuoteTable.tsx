@@ -6,7 +6,6 @@ import { LiveQuoteConnectionBadge } from "@/components/atoms/LiveQuoteConnection
 import { LiveQuoteCards } from "@/components/molecules/LiveQuoteCards";
 import { LiveQuoteDataTable } from "@/components/molecules/LiveQuoteDataTable";
 import { LoadingOverlay } from "@/components/molecules/LoadingOverlay";
-import { PUBLIC_LIVE_QUOTE_SOCKET_URL } from "@/lib/env";
 import { getSortedSymbols } from "@/lib/live-quotes";
 import { formatLocaleTime, getMessages, type AppLocale } from "@/locales";
 
@@ -20,6 +19,11 @@ type LiveQuoteTableProps = {
 };
 
 const RECONNECT_DELAY_MS = 3000;
+const LIVE_QUOTES_STREAM_URL = "/api/live-quotes";
+
+type LiveQuoteStatusEvent = {
+  status?: ConnectionStatus;
+};
 
 export function LiveQuoteTable({
   locale,
@@ -32,7 +36,7 @@ export function LiveQuoteTable({
   const [quotes, setQuotes] = useState<LiveQuotePayload>({});
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
-  const socketRef = useRef<WebSocket | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -47,26 +51,46 @@ export function LiveQuoteTable({
 
     const connect = () => {
       clearReconnectTimer();
-      socketRef.current?.close();
+      eventSourceRef.current?.close();
 
-      const socket = new WebSocket(PUBLIC_LIVE_QUOTE_SOCKET_URL);
-      socketRef.current = socket;
+      const source = new EventSource(LIVE_QUOTES_STREAM_URL);
+      eventSourceRef.current = source;
 
       setStatus((currentStatus) =>
         currentStatus === "live" ? "reconnecting" : "connecting",
       );
 
-      socket.onopen = () => {
-        if (!isActive || socketRef.current !== socket) {
-          socket.close();
+      source.onopen = () => {
+        if (!isActive || eventSourceRef.current !== source) {
+          source.close();
+          return;
+        }
+      };
+
+      const handleStatusEvent = (event: MessageEvent<string>) => {
+        if (!isActive || eventSourceRef.current !== source) {
           return;
         }
 
-        setStatus("live");
+        try {
+          const payload = JSON.parse(event.data) as LiveQuoteStatusEvent;
+          const nextStatus = payload.status;
+
+          if (
+            nextStatus === "connecting" ||
+            nextStatus === "live" ||
+            nextStatus === "reconnecting" ||
+            nextStatus === "error"
+          ) {
+            setStatus(nextStatus);
+          }
+        } catch {
+          setStatus("error");
+        }
       };
 
-      socket.onmessage = (event) => {
-        if (!isActive || socketRef.current !== socket) {
+      const handleQuoteEvent = (event: MessageEvent<string>) => {
+        if (!isActive || eventSourceRef.current !== source) {
           return;
         }
 
@@ -98,21 +122,17 @@ export function LiveQuoteTable({
         }
       };
 
-      socket.onerror = () => {
-        if (!isActive || socketRef.current !== socket) {
+      source.addEventListener("status", handleStatusEvent as EventListener);
+      source.addEventListener("quote", handleQuoteEvent as EventListener);
+
+      source.onerror = () => {
+        if (!isActive || eventSourceRef.current !== source) {
           return;
         }
 
-        setStatus("error");
-      };
-
-      socket.onclose = () => {
-        if (!isActive || socketRef.current !== socket) {
-          return;
-        }
-
-        clearReconnectTimer();
         setStatus("reconnecting");
+        source.close();
+
         reconnectTimerRef.current = setTimeout(() => {
           if (isActive) {
             connect();
@@ -131,7 +151,7 @@ export function LiveQuoteTable({
         reconnectTimerRef.current = null;
       }
 
-      socketRef.current?.close();
+      eventSourceRef.current?.close();
     };
   }, []);
 

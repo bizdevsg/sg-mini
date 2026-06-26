@@ -32,8 +32,15 @@ export function FooterSection({ locale }: FooterSectionProps) {
 
               <div className="space-y-4">
                 <Link href={`/${locale}`} className="flex items-center gap-3">
-                  <Image src={"/assets/Logo SG-WEB111.png"} alt={messages.footer.logoAlt} height={50} width={50} className="w-7 h-auto" />
-                  <h4 className="font-serif text-white font-semibold text-lg">{messages.footer.companyName}</h4>
+                  <Image
+                    src={"/assets/logo-utama.png"}
+                    alt={messages.footer.logoAlt}
+                    preload
+                    sizes="220px"
+                    width={500}
+                    height={500}
+                    className="hidden h-auto w-70 object-contain sm:block"
+                  />
                 </Link>
 
                 <p className="text-white/80 text-sm">

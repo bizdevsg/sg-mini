@@ -9,12 +9,12 @@ type LiveQuoteTrendIndicatorProps = {
 
 const trendStyles = {
   up: {
-    icon: ["fas", "arrow-trend-up"] as IconProp,
+    icon: ["fas", "chevron-up"] as IconProp,
     className:
       "text-emerald-400 bg-emerald-400/10 border border-emerald-400/20",
   },
   down: {
-    icon: ["fas", "arrow-trend-down"] as IconProp,
+    icon: ["fas", "chevron-down"] as IconProp,
     className: "text-rose-400 bg-rose-400/10 border border-rose-400/20",
   },
   neutral: {
@@ -49,7 +49,7 @@ export function LiveQuoteTrendIndicator({
     <div
       aria-label={label}
       title={label}
-      className={`text-sm uppercase tracking-[0.18em] p-3 rounded-lg ${trend.className}`}
+      className={`text-xs uppercase tracking-[0.18em] p-1 rounded-full ${trend.className}`}
     >
       <FontAwesomeIcon icon={trend.icon} />
     </div>

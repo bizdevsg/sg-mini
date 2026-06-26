@@ -18,6 +18,7 @@ export type AppMessages = {
     switchLocaleIconAlt: string;
     openMenuLabel: string;
     closeMenuLabel: string;
+    scrollToTopLabel: string;
     menuGroups: Array<{
       label: string;
       href?: string;
@@ -557,6 +558,85 @@ export type AppMessages = {
         phoneHref?: string;
         email?: string;
         fax?: string;
+      }>;
+    };
+  };
+  clientArea: {
+    pageTitle: string;
+    pageDescription: string;
+    user: {
+      name: string;
+      role: string;
+      accountId: string;
+      status: string;
+    };
+    sidebar: {
+      label: string;
+      backToWebsite: string;
+      tradeCta: string;
+      navItems: Array<{
+        id: string;
+        label: string;
+        href: string;
+      }>;
+    };
+    topbar: {
+      supportLabel: string;
+      supportPhone: string;
+      logoutLabel: string;
+      primaryCta: string;
+      accountMode: string;
+      notificationCount: string;
+      breadcrumb: string;
+      navItems: Array<{
+        label: string;
+        href: string;
+      }>;
+    };
+    accountPanel: {
+      eyebrow: string;
+      title: string;
+      primaryCta: string;
+      items: Array<{
+        id: string;
+        label: string;
+        value: string;
+      }>;
+    };
+    promoPanel: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      cta: string;
+    };
+    quickActions: {
+      items: Array<{
+        id: string;
+        label: string;
+      }>;
+    };
+    shortcutPanel: {
+      items: Array<{
+        id: string;
+        label: string;
+      }>;
+    };
+    signalsPanel: {
+      title: string;
+      cta: string;
+      items: Array<{
+        symbol: string;
+        title: string;
+        time: string;
+        bias: "buy" | "sell" | "neutral";
+      }>;
+    };
+    servicePanel: {
+      title: string;
+      items: Array<{
+        description: string;
+        label: string;
+        cta: string;
       }>;
     };
   };

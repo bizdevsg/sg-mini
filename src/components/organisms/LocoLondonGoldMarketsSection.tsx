@@ -15,15 +15,6 @@ export function LocoLondonGoldMarketsSection({
   return (
     <SectionContainer className="pb-16 md:pb-20">
       <div className="mx-auto">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
-            {title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-zinc-300">
-            {subtitle}
-          </p>
-        </div>
-
         <div className="grid gap-6 xl:grid-cols-3">
           {items.map((item) => (
             <article

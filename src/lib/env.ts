@@ -149,6 +149,10 @@ export const PUBLIC_SOLID_GOLD_APP_STORE_URL =
   process.env.NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL ??
   DEFAULT_SOLID_GOLD_APP_STORE_URL;
 
+function isAbsoluteHttpUrl(value: string) {
+  return /^https?:\/\//i.test(value);
+}
+
 function buildAssetUrl(baseUrl: string, assetPath: string) {
   const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");
   const normalizedAssetPath = assetPath.replace(/^\/+/, "");
@@ -156,30 +160,103 @@ function buildAssetUrl(baseUrl: string, assetPath: string) {
   return `${normalizedBaseUrl}/${normalizedAssetPath}`;
 }
 
+function getAssetOrigin(baseUrl: string) {
+  try {
+    return new URL(baseUrl).origin;
+  } catch {
+    return baseUrl;
+  }
+}
+
+function resolveAssetUrl(baseUrl: string, assetPath: string) {
+  const normalizedAssetPath = assetPath.trim();
+
+  if (!normalizedAssetPath) {
+    return "";
+  }
+
+  if (isAbsoluteHttpUrl(normalizedAssetPath)) {
+    return normalizedAssetPath;
+  }
+
+  if (normalizedAssetPath.startsWith("/")) {
+    return `${getAssetOrigin(baseUrl)}${normalizedAssetPath}`;
+  }
+
+  return buildAssetUrl(baseUrl, normalizedAssetPath);
+}
+
+export function getImageProxyUrl(assetUrl: string) {
+  const normalizedAssetUrl = assetUrl.trim();
+
+  if (!normalizedAssetUrl) {
+    return "";
+  }
+
+  const encodedAssetUrl = Buffer.from(normalizedAssetUrl, "utf8").toString(
+    "base64url",
+  );
+
+  return `/api/image-proxy/${encodedAssetUrl}`;
+}
+
+const IMAGE_PROXY_ALLOWED_HOSTS = new Set(
+  [
+    PUBLIC_FRAMER_IMAGE_BASE_URL,
+    NEWS_PORTAL_BASE_URL,
+    PRODUCT_PORTAL_BASE_URL,
+    BANNER_IMAGE_BASE_URL,
+    PENGHARGAAN_IMAGE_BASE_URL,
+    PENGUMUMAN_API_URL,
+    PUBLIC_PLACEHOLDER_BASE_URL,
+  ]
+    .map((value) => {
+      try {
+        return new URL(value).hostname;
+      } catch {
+        return null;
+      }
+    })
+    .filter((value): value is string => Boolean(value)),
+);
+
+export function isAllowedImageProxySource(assetUrl: string) {
+  try {
+    const parsedUrl = new URL(assetUrl);
+
+    return (
+      (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") &&
+      IMAGE_PROXY_ALLOWED_HOSTS.has(parsedUrl.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function getFramerImageUrl(assetPath: string) {
   return buildAssetUrl(PUBLIC_FRAMER_IMAGE_BASE_URL, assetPath);
 }
 
 export function getNewsAssetUrl(assetPath: string) {
-  if (/^https?:\/\//i.test(assetPath)) {
-    return assetPath;
-  }
-
-  return buildAssetUrl(NEWS_PORTAL_BASE_URL, assetPath);
+  return resolveAssetUrl(NEWS_PORTAL_BASE_URL, assetPath);
 }
 
 export function getProductAssetUrl(assetPath: string) {
-  if (/^https?:\/\//i.test(assetPath)) {
-    return assetPath;
-  }
+  return getImageProxyUrl(resolveAssetUrl(PRODUCT_PORTAL_BASE_URL, assetPath));
+}
 
-  return buildAssetUrl(PRODUCT_PORTAL_BASE_URL, assetPath);
+export function getBannerAssetUrl(assetPath: string) {
+  return getImageProxyUrl(resolveAssetUrl(BANNER_IMAGE_BASE_URL, assetPath));
 }
 
 export function getPenghargaanAssetUrl(assetPath: string) {
-  if (/^https?:\/\//i.test(assetPath)) {
-    return assetPath;
-  }
+  return getImageProxyUrl(
+    resolveAssetUrl(PENGHARGAAN_IMAGE_BASE_URL, assetPath),
+  );
+}
 
-  return buildAssetUrl(PENGHARGAAN_IMAGE_BASE_URL, assetPath);
+export function getPengumumanAssetUrl(assetPath: string) {
+  return getImageProxyUrl(
+    resolveAssetUrl(getAssetOrigin(PENGUMUMAN_API_URL), assetPath),
+  );
 }

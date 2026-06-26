@@ -55,19 +55,19 @@ export function HeaderActions({
     iconSrc: string;
     alt: string;
   }> = [
-    {
-      value: "id",
-      href: resolveLocaleSwitcherHref("id", pathname),
-      iconSrc: "/assets/icon-id.png",
-      alt: "Indonesia",
-    },
-    {
-      value: "en",
-      href: resolveLocaleSwitcherHref("en", pathname),
-      iconSrc: "/assets/icon-us.png",
-      alt: "English",
-    },
-  ];
+      {
+        value: "id",
+        href: resolveLocaleSwitcherHref("id", pathname),
+        iconSrc: "/assets/icon-id.png",
+        alt: "Indonesia",
+      },
+      {
+        value: "en",
+        href: resolveLocaleSwitcherHref("en", pathname),
+        iconSrc: "/assets/icon-us.png",
+        alt: "English",
+      },
+    ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
   const mobileActionButtonClass =
@@ -99,11 +99,10 @@ export function HeaderActions({
       </button>
 
       <div
-        className={`${localeMenuClass} ${
-          isLocaleOpen
-            ? "visible translate-y-0 opacity-100"
-            : "pointer-events-none invisible -translate-y-1 opacity-0"
-        }`}
+        className={`${localeMenuClass} ${isLocaleOpen
+          ? "visible translate-y-0 opacity-100"
+          : "pointer-events-none invisible -translate-y-1 opacity-0"
+          }`}
       >
         {localeOptions.map((option) => {
           const isActive = option.value === locale;
@@ -118,11 +117,10 @@ export function HeaderActions({
               }
               title={option.alt}
               onClick={() => setIsLocaleOpen(false)}
-              className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition-colors duration-200 ${
-                isActive
-                  ? "bg-white/8 text-yellow-400"
-                  : "text-yellow-500/80 hover:bg-white/5 hover:text-yellow-400"
-              }`}
+              className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition-colors duration-200 ${isActive
+                ? "bg-white/8 text-yellow-400"
+                : "text-yellow-500/80 hover:bg-white/5 hover:text-yellow-400"
+                }`}
             >
               <Image
                 src={option.iconSrc}
@@ -208,7 +206,7 @@ export function HeaderActions({
       className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
     >
       <ButtonLink
-        variant="ghost"
+        variant="primary"
         size="sm"
         className="rounded-full text-xs font-medium sm:text-sm"
         href={PUBLIC_LOGIN_URL}
@@ -216,17 +214,6 @@ export function HeaderActions({
         rel="noreferrer"
       >
         {messages.navbar.login}
-      </ButtonLink>
-
-      <ButtonLink
-        variant="dark"
-        size="sm"
-        className="rounded-full text-xs font-medium sm:text-sm"
-        href={PUBLIC_REGISTER_URL}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {messages.navbar.openAccount}
       </ButtonLink>
 
       <div className="hidden h-8 w-px rounded-full bg-yellow-500/50 sm:block" />

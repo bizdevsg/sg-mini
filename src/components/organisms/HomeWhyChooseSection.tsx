@@ -29,8 +29,7 @@ export function HomeWhyChooseSection({
           <SectionEyebrow align="center">{copy.eyebrow}</SectionEyebrow>
 
           <h2 className="mt-5 text-3xl font-bold leading-tight tracking-[-0.04em] text-white sm:text-4xl lg:text-[2.8rem]">
-            <span className="text-yellow-400">{copy.titleLead}</span>{" "}
-            <span>{copy.titleBody}</span>
+            {copy.titleLead}{" "}{copy.titleBody}
           </h2>
 
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-zinc-400 sm:text-base">
