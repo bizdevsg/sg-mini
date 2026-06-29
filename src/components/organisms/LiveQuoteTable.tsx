@@ -1,28 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
 import { LiveQuoteConnectionBadge } from "@/components/atoms/LiveQuoteConnectionBadge";
 import { LiveQuoteCards } from "@/components/molecules/LiveQuoteCards";
 import { LiveQuoteDataTable } from "@/components/molecules/LiveQuoteDataTable";
 import { LoadingOverlay } from "@/components/molecules/LoadingOverlay";
+import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
 import { getSortedSymbols } from "@/lib/live-quotes";
 import { formatLocaleTime, getMessages, type AppLocale } from "@/locales";
-
-import type { LiveQuotePayload } from "../molecules/live-quote.shared";
-
-type ConnectionStatus = "connecting" | "live" | "reconnecting" | "error";
 
 type LiveQuoteTableProps = {
   locale: AppLocale;
   mode?: "compact" | "full";
-};
-
-const RECONNECT_DELAY_MS = 3000;
-const LIVE_QUOTES_STREAM_URL = "/api/live-quotes";
-
-type LiveQuoteStatusEvent = {
-  status?: ConnectionStatus;
 };
 
 export function LiveQuoteTable({
@@ -33,127 +21,7 @@ export function LiveQuoteTable({
   const fieldLabels = messages.liveQuoteTable.fields;
   const connectionStatusMessages = messages.liveQuoteTable.connectionStatus;
   const loadingOverlayMessages = messages.loadingOverlay;
-  const [quotes, setQuotes] = useState<LiveQuotePayload>({});
-  const [status, setStatus] = useState<ConnectionStatus>("connecting");
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
-  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    let isActive = true;
-
-    const clearReconnectTimer = () => {
-      if (reconnectTimerRef.current) {
-        clearTimeout(reconnectTimerRef.current);
-        reconnectTimerRef.current = null;
-      }
-    };
-
-    const connect = () => {
-      clearReconnectTimer();
-      eventSourceRef.current?.close();
-
-      const source = new EventSource(LIVE_QUOTES_STREAM_URL);
-      eventSourceRef.current = source;
-
-      setStatus((currentStatus) =>
-        currentStatus === "live" ? "reconnecting" : "connecting",
-      );
-
-      source.onopen = () => {
-        if (!isActive || eventSourceRef.current !== source) {
-          source.close();
-          return;
-        }
-      };
-
-      const handleStatusEvent = (event: MessageEvent<string>) => {
-        if (!isActive || eventSourceRef.current !== source) {
-          return;
-        }
-
-        try {
-          const payload = JSON.parse(event.data) as LiveQuoteStatusEvent;
-          const nextStatus = payload.status;
-
-          if (
-            nextStatus === "connecting" ||
-            nextStatus === "live" ||
-            nextStatus === "reconnecting" ||
-            nextStatus === "error"
-          ) {
-            setStatus(nextStatus);
-          }
-        } catch {
-          setStatus("error");
-        }
-      };
-
-      const handleQuoteEvent = (event: MessageEvent<string>) => {
-        if (!isActive || eventSourceRef.current !== source) {
-          return;
-        }
-
-        try {
-          const payload = JSON.parse(event.data) as LiveQuotePayload;
-
-          if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-            return;
-          }
-
-          setQuotes((currentQuotes) => ({
-            ...currentQuotes,
-            ...payload,
-          }));
-
-          const latestTick = Object.values(payload)
-            .map((tick) => tick.date_time)
-            .filter(Boolean)
-            .sort()
-            .at(-1);
-
-          if (latestTick) {
-            setLastUpdated(latestTick);
-          }
-
-          setStatus("live");
-        } catch {
-          setStatus("error");
-        }
-      };
-
-      source.addEventListener("status", handleStatusEvent as EventListener);
-      source.addEventListener("quote", handleQuoteEvent as EventListener);
-
-      source.onerror = () => {
-        if (!isActive || eventSourceRef.current !== source) {
-          return;
-        }
-
-        setStatus("reconnecting");
-        source.close();
-
-        reconnectTimerRef.current = setTimeout(() => {
-          if (isActive) {
-            connect();
-          }
-        }, RECONNECT_DELAY_MS);
-      };
-    };
-
-    connect();
-
-    return () => {
-      isActive = false;
-
-      if (reconnectTimerRef.current) {
-        clearTimeout(reconnectTimerRef.current);
-        reconnectTimerRef.current = null;
-      }
-
-      eventSourceRef.current?.close();
-    };
-  }, []);
+  const { quotes, status, lastUpdated } = useLiveQuoteStream();
 
   const symbols = getSortedSymbols(quotes);
   const compactSymbols = symbols.slice(0, 6);

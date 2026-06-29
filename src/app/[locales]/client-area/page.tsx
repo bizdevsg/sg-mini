@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ClientAreaDashboard } from "@/components/organisms/ClientAreaDashboard";
+import { getBannerRecords } from "@/lib/banner";
+import { requireClientAreaSession } from "@/lib/client-area-auth";
 import {
   getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
-  type AppLocale,
 } from "@/locales";
+import type { AppLocale } from "@/locales";
 
 type ClientAreaPageProps = {
   params: Promise<{ locales: string }>;
@@ -54,6 +56,13 @@ export default async function ClientAreaPage({
 }: ClientAreaPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  await requireClientAreaSession(locales);
+  const initialBanners = await getBannerRecords();
 
-  return <ClientAreaDashboard locale={locales} />;
+  return (
+    <ClientAreaDashboard
+      initialBanners={initialBanners}
+      locale={locales}
+    />
+  );
 }

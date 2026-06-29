@@ -4,6 +4,46 @@ export const enClientArea: AppMessages["clientArea"] = {
   pageTitle: "Client Area",
   pageDescription:
     "A post-login home view with account summary, quick actions, and product signals.",
+  login: {
+    badge: "Client Portal",
+    title: "Sign in to SG Berjangka Client Area",
+    description:
+      "Access your demo or live account to monitor balances, market watchlists, and transaction activity from one dashboard.",
+    accountLabel: "Account number or email",
+    accountPlaceholder: "Enter your account number or email",
+    passwordLabel: "Password",
+    passwordPlaceholder: "Enter your password",
+    rememberMe: "Remember me on this device",
+    forgotPassword: "Forgot password?",
+    primaryCta: "Enter demo dashboard",
+    secondaryCta: "Contact support",
+    submitting: "Verifying access...",
+    helper:
+      "Use the demo credentials below to sign in to this preview client area.",
+    captchaTitle: "Security verification",
+    captchaHelper:
+      "Complete the reCAPTCHA challenge before entering the client area.",
+    demoCredentialsTitle: "Quick demo access",
+    demoCredentialsAccount: "Demo account: BBH10158",
+    demoCredentialsPassword: "Password: demo12345",
+    errorRequired:
+      "Enter your account number or email together with your password.",
+    errorInvalidCredentials:
+      "Invalid credentials. Use the provided demo account for this preview.",
+    errorCaptchaRequired:
+      "Complete the reCAPTCHA verification first.",
+    errorCaptchaFailed:
+      "reCAPTCHA verification failed. Please retry the security check.",
+    highlightsTitle: "What you can monitor",
+    highlights: [
+      "Real-time balance, equity, and floating P/L summary.",
+      "Fast access to deposit, withdrawal, education, and products.",
+      "Dedicated market watch, news, and transaction history sections.",
+    ],
+    securityTitle: "Account security",
+    securityBody:
+      "Only sign in through official domains and never share your OTP or password with anyone.",
+  },
   user: {
     name: "Anita",
     role: "My Demo Account",
@@ -26,9 +66,19 @@ export const enClientArea: AppMessages["clientArea"] = {
         href: "#market",
       },
       {
-        id: "services",
-        label: "More",
-        href: "#services",
+        id: "transaction",
+        label: "Transaction",
+        href: "#actions",
+      },
+      {
+        id: "news",
+        label: "News",
+        href: "/news",
+      },
+      {
+        id: "account",
+        label: "Account",
+        href: "#account",
       },
     ],
   },
@@ -86,16 +136,24 @@ export const enClientArea: AppMessages["clientArea"] = {
   quickActions: {
     items: [
       {
-        id: "deposit",
-        label: "Deposit",
+        id: "education",
+        label: "Education",
+      },
+      {
+        id: "products",
+        label: "Product",
       },
       {
         id: "withdraw",
         label: "Withdraw",
       },
       {
-        id: "overbook",
-        label: "Overbook",
+        id: "deposit",
+        label: "Deposit",
+      },
+      {
+        id: "temporary",
+        label: "Temporary",
       },
     ],
   },
@@ -136,8 +194,8 @@ export const enClientArea: AppMessages["clientArea"] = {
     ],
   },
   signalsPanel: {
-    title: "Popular Product Signals",
-    cta: "See All",
+    title: "Recommendations",
+    cta: "See all",
     items: [
       {
         symbol: "XAUUSD",

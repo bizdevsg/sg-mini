@@ -135,6 +135,12 @@ export const PUBLIC_LOGIN_URL =
 export const PUBLIC_REGISTER_URL =
   process.env.NEXT_PUBLIC_REGISTER_URL ?? DEFAULT_REGISTER_URL;
 
+export const PUBLIC_RECAPTCHA_SITE_KEY =
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+
+export const RECAPTCHA_SECRET_KEY =
+  process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
+
 export const PUBLIC_HERO_CTA_URL =
   process.env.NEXT_PUBLIC_HERO_CTA_URL ?? DEFAULT_HERO_CTA_URL;
 

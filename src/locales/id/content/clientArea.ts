@@ -4,6 +4,44 @@ export const idClientArea: AppMessages["clientArea"] = {
   pageTitle: "Client Area",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
+  login: {
+    badge: "Portal Nasabah",
+    title: "Masuk ke Client Area SG Berjangka",
+    description:
+      "Akses akun demo atau live Anda untuk memantau saldo, market watch, dan aktivitas transaksi dalam satu dashboard.",
+    accountLabel: "Nomor akun atau email",
+    accountPlaceholder: "Masukkan nomor akun atau email",
+    passwordLabel: "Password",
+    passwordPlaceholder: "Masukkan password Anda",
+    rememberMe: "Ingat saya di perangkat ini",
+    forgotPassword: "Lupa password?",
+    primaryCta: "Masuk ke dashboard demo",
+    secondaryCta: "Hubungi support",
+    submitting: "Memeriksa akses...",
+    helper:
+      "Gunakan kredensial demo di bawah untuk masuk ke client area versi preview ini.",
+    captchaTitle: "Verifikasi keamanan",
+    captchaHelper:
+      "Selesaikan reCAPTCHA sebelum masuk ke client area.",
+    demoCredentialsTitle: "Akses demo cepat",
+    demoCredentialsAccount: "Akun demo: BBH10158",
+    demoCredentialsPassword: "Password: demo12345",
+    errorRequired: "Masukkan nomor akun atau email beserta password Anda.",
+    errorInvalidCredentials:
+      "Kredensial tidak valid. Gunakan akun demo yang tersedia untuk preview ini.",
+    errorCaptchaRequired: "Selesaikan verifikasi reCAPTCHA terlebih dahulu.",
+    errorCaptchaFailed:
+      "Verifikasi reCAPTCHA gagal. Coba ulangi pemeriksaan keamanan.",
+    highlightsTitle: "Yang bisa Anda pantau",
+    highlights: [
+      "Ringkasan balance, equity, dan floating P/L real-time.",
+      "Akses cepat ke deposit, withdraw, edukasi, dan produk.",
+      "Market watch, berita, dan riwayat transaksi dalam area terpisah.",
+    ],
+    securityTitle: "Keamanan akun",
+    securityBody:
+      "Pastikan Anda hanya login melalui domain resmi dan jangan pernah membagikan OTP atau password kepada pihak lain.",
+  },
   user: {
     name: "Anita",
     role: "Akun Demo Saya",
@@ -26,9 +64,19 @@ export const idClientArea: AppMessages["clientArea"] = {
         href: "#market",
       },
       {
-        id: "services",
-        label: "Lainnya",
-        href: "#services",
+        id: "transaction",
+        label: "Transaksi",
+        href: "#actions",
+      },
+      {
+        id: "news",
+        label: "Berita",
+        href: "/news",
+      },
+      {
+        id: "account",
+        label: "Akun",
+        href: "#account",
       },
     ],
   },
@@ -86,16 +134,24 @@ export const idClientArea: AppMessages["clientArea"] = {
   quickActions: {
     items: [
       {
+        id: "education",
+        label: "Edukasi",
+      },
+      {
+        id: "products",
+        label: "Produk",
+      },
+      {
+        id: "withdraw",
+        label: "Withdraw",
+      },
+      {
         id: "deposit",
         label: "Deposit",
       },
       {
-        id: "withdraw",
-        label: "Tarik Dana",
-      },
-      {
-        id: "overbook",
-        label: "Overbook",
+        id: "temporary",
+        label: "Temporary",
       },
     ],
   },
@@ -136,8 +192,8 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   signalsPanel: {
-    title: "Signal Produk Terpopuler",
-    cta: "Lihat Semua",
+    title: "Rekomendasi",
+    cta: "Lihat semua",
     items: [
       {
         symbol: "XAUUSD",

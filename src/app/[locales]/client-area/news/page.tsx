@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
-import { ClientAreaLayout } from "@/components/layout/ClientAreaLayout";
+import { ClientAreaNewsView } from "@/components/organisms/ClientAreaNewsView";
+import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 
-type ClientLocalizedLayoutProps = {
-  children: React.ReactNode;
+type ClientAreaNewsPageProps = {
   params: Promise<{ locales: string }>;
 };
 
@@ -14,12 +14,12 @@ function assertValidLocale(value: string): asserts value is AppLocale {
   }
 }
 
-export default async function ClientLocalizedLayout({
-  children,
+export default async function ClientAreaNewsPage({
   params,
-}: ClientLocalizedLayoutProps) {
+}: ClientAreaNewsPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  await requireClientAreaSession(locales);
 
-  return <ClientAreaLayout locale={locales}>{children}</ClientAreaLayout>;
+  return <ClientAreaNewsView locale={locales} />;
 }

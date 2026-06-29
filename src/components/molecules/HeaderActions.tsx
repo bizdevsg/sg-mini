@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
+import { submitClientAreaLogout } from "@/app/actions/clientAreaLogout";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
-import { PUBLIC_LOGIN_URL, PUBLIC_REGISTER_URL } from "@/lib/env";
+import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import {
   getMessages,
   isSupportedLocale,
@@ -15,6 +16,7 @@ import Link from "next/link";
 
 type HeaderActionsProps = {
   locale: AppLocale;
+  isClientAreaAuthenticated: boolean;
   compact?: boolean;
   mobilePanel?: boolean;
   className?: string;
@@ -41,6 +43,7 @@ function resolveLocaleSwitcherHref(targetLocale: AppLocale, pathname: string) {
 
 export function HeaderActions({
   locale,
+  isClientAreaAuthenticated,
   compact = false,
   mobilePanel = false,
   className = "",
@@ -70,6 +73,8 @@ export function HeaderActions({
     ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
+  const clientAreaLoginHref = `/${locale}/client-area/login`;
+  const logoutLabel = messages.clientArea.topbar.logoutLabel;
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
   const localeButtonClass = mobilePanel
@@ -171,20 +176,44 @@ export function HeaderActions({
     return <div className={className}>{localeSwitcher}</div>;
   }
 
+  const renderAuthButton = (variant: "primary" | "ghost", extraClassName = "") => {
+    if (!isClientAreaAuthenticated) {
+      return (
+        <ButtonLink
+          variant={variant}
+          size="sm"
+          className={extraClassName}
+          href={clientAreaLoginHref}
+        >
+          {messages.navbar.login}
+        </ButtonLink>
+      );
+    }
+
+    const buttonClasses =
+      variant === "primary"
+        ? "border border-[#f4cf73]/70 bg-[linear-gradient(135deg,#f6d57b_0%,#d7a63c_52%,#b9821e_100%)] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105"
+        : "border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] text-[#f0ca73] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-[rgba(255,255,255,0.04)] hover:border-[rgba(214,166,64,0.24)] hover:bg-[linear-gradient(180deg,rgba(214,166,64,0.12),rgba(255,255,255,0.04))] hover:text-[#ffe29a]";
+
+    return (
+      <form action={submitClientAreaLogout}>
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="redirectPath" value={pathname} />
+        <button
+          type="submit"
+          className={`inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold tracking-[-0.01em] ${buttonClasses} min-h-10 px-8 text-sm ${extraClassName} transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]`}
+        >
+          {logoutLabel}
+        </button>
+      </form>
+    );
+  };
+
   if (mobilePanel) {
     return (
       <div className={`flex w-full items-center gap-3 ${className}`}>
         <div className="flex items-center gap-2.5">
-          <ButtonLink
-            variant="ghost"
-            size="sm"
-            className={mobileActionButtonClass}
-            href={PUBLIC_LOGIN_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {messages.navbar.login}
-          </ButtonLink>
+          {renderAuthButton("ghost", mobileActionButtonClass)}
 
           <ButtonLink
             variant="dark"
@@ -205,16 +234,10 @@ export function HeaderActions({
     <div
       className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
     >
-      <ButtonLink
-        variant="primary"
-        size="sm"
-        className="rounded-full text-xs font-medium sm:text-sm"
-        href={PUBLIC_LOGIN_URL}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {messages.navbar.login}
-      </ButtonLink>
+      {renderAuthButton(
+        "primary",
+        "rounded-full text-xs font-medium sm:text-sm",
+      )}
 
       <div className="hidden h-8 w-px rounded-full bg-yellow-500/50 sm:block" />
 

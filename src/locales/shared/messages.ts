@@ -564,6 +564,34 @@ export type AppMessages = {
   clientArea: {
     pageTitle: string;
     pageDescription: string;
+    login: {
+      badge: string;
+      title: string;
+      description: string;
+      accountLabel: string;
+      accountPlaceholder: string;
+      passwordLabel: string;
+      passwordPlaceholder: string;
+      rememberMe: string;
+      forgotPassword: string;
+      primaryCta: string;
+      secondaryCta: string;
+      submitting: string;
+      helper: string;
+      captchaTitle: string;
+      captchaHelper: string;
+      demoCredentialsTitle: string;
+      demoCredentialsAccount: string;
+      demoCredentialsPassword: string;
+      errorRequired: string;
+      errorInvalidCredentials: string;
+      errorCaptchaRequired: string;
+      errorCaptchaFailed: string;
+      highlightsTitle: string;
+      highlights: string[];
+      securityTitle: string;
+      securityBody: string;
+    };
     user: {
       name: string;
       role: string;

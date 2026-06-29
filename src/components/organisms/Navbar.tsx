@@ -10,6 +10,7 @@ import { LogoMark } from "@/components/atoms/LogoMark";
 import { HeaderActions } from "@/components/molecules/HeaderActions";
 
 type NavbarProps = {
+  isClientAreaAuthenticated: boolean;
   locale: AppLocale;
 };
 
@@ -33,7 +34,10 @@ function resolveLocalizedHref(locale: AppLocale, href = "/") {
   return href;
 }
 
-export function Navbar({ locale }: NavbarProps) {
+export function Navbar({
+  locale,
+  isClientAreaAuthenticated,
+}: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDesktopGroup, setOpenDesktopGroup] = useState<number | null>(null);
@@ -117,7 +121,12 @@ export function Navbar({ locale }: NavbarProps) {
             <LogoMark locale={locale} />
 
             <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
-              <HeaderActions locale={locale} compact className="lg:hidden" />
+              <HeaderActions
+                locale={locale}
+                compact
+                className="lg:hidden"
+                isClientAreaAuthenticated={isClientAreaAuthenticated}
+              />
 
               <button
                 type="button"
@@ -224,7 +233,11 @@ export function Navbar({ locale }: NavbarProps) {
                 })}
               </div>
 
-              <HeaderActions locale={locale} className="hidden lg:flex" />
+              <HeaderActions
+                locale={locale}
+                className="hidden lg:flex"
+                isClientAreaAuthenticated={isClientAreaAuthenticated}
+              />
             </div>
           </div>
         </div>
@@ -326,7 +339,12 @@ export function Navbar({ locale }: NavbarProps) {
               })}
 
               <div className="mt-5 border-t border-[rgba(255,255,255,0.08)] pt-4">
-                <HeaderActions locale={locale} mobilePanel className="w-full" />
+                <HeaderActions
+                  locale={locale}
+                  mobilePanel
+                  className="w-full"
+                  isClientAreaAuthenticated={isClientAreaAuthenticated}
+                />
               </div>
             </div>
           </div>
