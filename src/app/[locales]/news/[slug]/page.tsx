@@ -119,7 +119,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               detailResult.article,
               feedResult.articles,
             ),
-            source: detailResult.source,
           },
           feedResult,
         ] as const;

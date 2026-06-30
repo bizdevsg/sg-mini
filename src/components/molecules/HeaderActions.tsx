@@ -195,7 +195,7 @@ export function HeaderActions({
     const profileLabel =
       clientAreaProfile?.accountId ??
       clientAreaProfile?.displayName ??
-      messages.clientArea.accountTitle;
+      messages.clientArea.pageTitle;
 
     return (
       <ButtonLink
