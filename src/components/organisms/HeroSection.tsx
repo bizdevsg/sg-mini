@@ -111,19 +111,19 @@ export function HeroSection({ locale }: HeroSectionProps) {
             <div className="mt-5">
               <p className="font-bold text-white text-xl">Download Aplikasi Sekarang!</p>
 
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex flex-col mx-auto xl:mx-0 sm:flex-row items-center gap-2 mt-2 sm:w-fit">
                 <AppDownloadModalTriggerButton
                   locale={locale}
                   label="Open Demo Account"
                   variant="primary"
                   size="md"
                   visualVariant="qr"
-                  className="rounded-xl px-5 cursor-pointer"
+                  className="w-full sm:w-fit rounded-xl px-5 cursor-pointer"
                 />
 
                 <Link
                   href={clientAreaLoginHref}
-                  className="py-3 px-5 border rounded-xl font-semibold text-white border-yellow-500"
+                  className="w-full sm:w-fit py-3 px-5 border rounded-xl font-semibold text-white border-yellow-500"
                 >
                   Login Demo Account
                 </Link>
