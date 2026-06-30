@@ -4,6 +4,13 @@ function getProtocol(url: URL) {
   return url.protocol.replace(":", "") as "http" | "https";
 }
 
+function parseAllowedOrigins(value: string | undefined) {
+  return (value ?? "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 const framerImageBaseUrl = new URL(
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
     "https://framerusercontent.com/images",
@@ -26,8 +33,42 @@ const solidGoldImageBaseUrl = new URL(
   process.env.NEXT_PUBLIC_SOLID_GOLD_IMAGE_BASE_URL ??
     "https://sg-berjangka.com/_next/image",
 );
+const allowedLocalOrigins = Array.from(
+  new Set([
+    "localhost",
+    "localhost:3000",
+    "127.0.0.1",
+    "127.0.0.1:3000",
+    "::1",
+    "[::1]:3000",
+    newsPortalBaseUrl.hostname,
+    bannerImageBaseUrl.hostname,
+    penghargaanImageBaseUrl.hostname,
+  ]),
+);
+const allowedTunnelOrigins = [
+  "*.ngrok-free.app",
+  "*.ngrok.io",
+  "*.loca.lt",
+  "*.trycloudflare.com",
+  "*.devtunnels.ms",
+  "**.devtunnels.ms",
+];
+const allowedActionOrigins = Array.from(
+  new Set([
+    ...allowedLocalOrigins,
+    ...allowedTunnelOrigins,
+    ...parseAllowedOrigins(process.env.NEXT_ALLOWED_ORIGINS),
+  ]),
+);
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: allowedActionOrigins,
+  experimental: {
+    serverActions: {
+      allowedOrigins: allowedActionOrigins,
+    },
+  },
   htmlLimitedBots: /.*/,
   images: {
     formats: ["image/avif", "image/webp"],

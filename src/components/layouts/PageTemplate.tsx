@@ -5,7 +5,10 @@ import { LocaleDocumentSync } from "@/components/providers/LocaleDocumentSync";
 import { FooterSection } from "@/components/organisms/FooterSection";
 import { Navbar } from "@/components/organisms/Navbar";
 import { ScrollToTopButton } from "@/components/molecules/ScrollToTopButton";
-import { hasClientAreaSession } from "@/lib/client-area-auth";
+import {
+  getClientAreaSessionProfile,
+  hasClientAreaSession,
+} from "@/lib/client-area-auth";
 import { Blur } from "../molecules/Blur";
 
 type PageTemplateProps = {
@@ -19,7 +22,10 @@ export async function PageTemplate({
   locale,
   bodyClassName = "",
 }: PageTemplateProps) {
-  const isClientAreaAuthenticated = await hasClientAreaSession();
+  const [isClientAreaAuthenticated, clientAreaProfile] = await Promise.all([
+    hasClientAreaSession(),
+    getClientAreaSessionProfile(),
+  ]);
 
   return (
     <div
@@ -29,6 +35,7 @@ export async function PageTemplate({
     >
       <LocaleDocumentSync locale={locale} />
       <Navbar
+        clientAreaProfile={clientAreaProfile}
         locale={locale}
         isClientAreaAuthenticated={isClientAreaAuthenticated}
       />

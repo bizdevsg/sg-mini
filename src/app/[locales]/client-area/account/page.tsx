@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ClientAreaAccountView } from "@/components/organisms/ClientAreaAccountView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
+import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaAccountPageProps = {
@@ -20,6 +21,7 @@ export default async function ClientAreaAccountPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
+  const breakingNews = await getClientAreaBreakingNews(locales);
 
-  return <ClientAreaAccountView locale={locales} />;
+  return <ClientAreaAccountView breakingNews={breakingNews} locale={locales} />;
 }

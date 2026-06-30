@@ -8,8 +8,10 @@ import Link from "next/link";
 import { getMessages, type AppLocale } from "@/locales";
 import { LogoMark } from "@/components/atoms/LogoMark";
 import { HeaderActions } from "@/components/molecules/HeaderActions";
+import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
 
 type NavbarProps = {
+  clientAreaProfile: ClientAreaSessionProfile | null;
   isClientAreaAuthenticated: boolean;
   locale: AppLocale;
 };
@@ -35,6 +37,7 @@ function resolveLocalizedHref(locale: AppLocale, href = "/") {
 }
 
 export function Navbar({
+  clientAreaProfile,
   locale,
   isClientAreaAuthenticated,
 }: NavbarProps) {
@@ -122,6 +125,7 @@ export function Navbar({
 
             <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
               <HeaderActions
+                clientAreaProfile={clientAreaProfile}
                 locale={locale}
                 compact
                 className="lg:hidden"
@@ -157,7 +161,7 @@ export function Navbar({
                       <Link
                         key={`${group.label}-${index}`}
                         href={resolveLocalizedHref(locale, group.href)}
-                        className="rounded-full px-4 py-2 text-sm font-medium text-yellow-300 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-200"
+                        className="rounded-full px-4 py-2 text-sm font-medium text-yellow-500 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-200"
                       >
                         {group.label}
                       </Link>
@@ -234,6 +238,7 @@ export function Navbar({
               </div>
 
               <HeaderActions
+                clientAreaProfile={clientAreaProfile}
                 locale={locale}
                 className="hidden lg:flex"
                 isClientAreaAuthenticated={isClientAreaAuthenticated}
@@ -340,6 +345,7 @@ export function Navbar({
 
               <div className="mt-5 border-t border-[rgba(255,255,255,0.08)] pt-4">
                 <HeaderActions
+                  clientAreaProfile={clientAreaProfile}
                   locale={locale}
                   mobilePanel
                   className="w-full"

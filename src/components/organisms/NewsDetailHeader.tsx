@@ -18,6 +18,7 @@ import {
 type NewsDetailHeaderProps = {
   locale: AppLocale;
   publishedAt: string;
+  sharePathBase?: string;
   slug: string;
   title: string;
 };
@@ -25,6 +26,7 @@ type NewsDetailHeaderProps = {
 export function NewsDetailHeader({
   locale,
   publishedAt,
+  sharePathBase = "/news",
   slug,
   title,
 }: NewsDetailHeaderProps) {
@@ -33,10 +35,17 @@ export function NewsDetailHeader({
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
+    const normalizedSharePath = sharePathBase.startsWith("/")
+      ? sharePathBase
+      : `/${sharePathBase}`;
+
     setShareUrl(
-      new URL(`/${locale}/news/${slug}`, window.location.origin).toString(),
+      new URL(
+        `/${locale}${normalizedSharePath}/${slug}`,
+        window.location.origin,
+      ).toString(),
     );
-  }, [locale, slug]);
+  }, [locale, sharePathBase, slug]);
 
   useEffect(() => {
     if (!isCopied) {
@@ -102,7 +111,7 @@ export function NewsDetailHeader({
   }
 
   return (
-    <header className="mt-8 space-y-4">
+    <header className="space-y-4">
       <h1 className="mx-auto max-w-3xl text-center text-3xl font-bold leading-tight text-zinc-50 sm:text-4xl">
         {title}
       </h1>

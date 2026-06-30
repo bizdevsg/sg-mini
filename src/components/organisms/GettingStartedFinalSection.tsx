@@ -1,13 +1,15 @@
+import type { AppLocale } from "@/locales";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
 
 type GettingStartedFinalSectionProps = {
   eyebrow: string;
   title: string;
   description: string;
+  locale: AppLocale;
   primaryLabel: string;
-  primaryHref: string;
   secondaryLabel: string;
   secondaryHref: string;
 };
@@ -16,8 +18,8 @@ export function GettingStartedFinalSection({
   eyebrow,
   title,
   description,
+  locale,
   primaryLabel,
-  primaryHref,
   secondaryLabel,
   secondaryHref,
 }: GettingStartedFinalSectionProps) {
@@ -36,15 +38,12 @@ export function GettingStartedFinalSection({
           />
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
-            <ButtonLink
-              href={primaryHref}
-              target="_blank"
-              rel="noreferrer"
+            <AppDownloadModalTriggerButton
+              locale={locale}
+              label={primaryLabel}
               size="lg"
               className="w-full sm:min-w-[220px] sm:w-auto"
-            >
-              {primaryLabel}
-            </ButtonLink>
+            />
 
             <ButtonLink
               href={secondaryHref}

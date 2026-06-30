@@ -6,6 +6,7 @@ import { formatLocaleDateTime, type AppLocale } from "@/locales";
 
 type NewsFeedArticleCardProps = {
   article: NewsFeedArticle;
+  hrefBasePath?: string;
   locale: AppLocale;
   readMoreLabel: string;
   prioritizeImage?: boolean;
@@ -15,6 +16,7 @@ type NewsFeedArticleCardProps = {
 
 export function NewsFeedArticleCard({
   article,
+  hrefBasePath = "/news",
   locale,
   readMoreLabel,
   prioritizeImage = false,
@@ -23,12 +25,13 @@ export function NewsFeedArticleCard({
 }: NewsFeedArticleCardProps) {
   const isNewsAppearance = appearance === "news";
   const isFeatured = variant === "featured";
+  const articleHref = `/${locale}${hrefBasePath}/${article.slug}`;
 
   if (!isNewsAppearance) {
     return (
       <article className="h-full">
         <Link
-          href={`/${locale}/news/${article.slug}`}
+          href={articleHref}
           prefetch={false}
           className="group grid h-full min-h-[202px] grid-cols-1 items-start gap-4 rounded-2xl border border-white/10 bg-zinc-950/40 p-4 transition-all duration-300 hover:border-yellow-500/40 hover:bg-zinc-900/40 sm:grid-cols-[10rem_minmax(0,1fr)] lg:grid-cols-[11rem_minmax(0,1fr)]"
         >
@@ -77,7 +80,7 @@ export function NewsFeedArticleCard({
   return (
     <article className={isFeatured ? "h-full sm:col-span-2" : "h-full"}>
       <Link
-        href={`/${locale}/news/${article.slug}`}
+        href={articleHref}
         prefetch={false}
         className={
           isFeatured

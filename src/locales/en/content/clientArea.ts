@@ -6,7 +6,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     "A post-login home view with account summary, quick actions, and product signals.",
   login: {
     badge: "Client Portal",
-    title: "Sign in to SG Berjangka Client Area",
+    title: "Sign in Client Area",
     description:
       "Access your demo or live account to monitor balances, market watchlists, and transaction activity from one dashboard.",
     accountLabel: "Account number or email",
@@ -29,9 +29,8 @@ export const enClientArea: AppMessages["clientArea"] = {
     errorRequired:
       "Enter your account number or email together with your password.",
     errorInvalidCredentials:
-      "Invalid credentials. Use the provided demo account for this preview.",
-    errorCaptchaRequired:
-      "Complete the reCAPTCHA verification first.",
+      "The account number, email, or password you entered is incorrect. Please review your details and try again.",
+    errorCaptchaRequired: "Complete the reCAPTCHA verification first.",
     errorCaptchaFailed:
       "reCAPTCHA verification failed. Please retry the security check.",
     highlightsTitle: "What you can monitor",
@@ -85,7 +84,7 @@ export const enClientArea: AppMessages["clientArea"] = {
   topbar: {
     supportLabel: "Download MIFX App",
     supportPhone: "021-50996650",
-    logoutLabel: "Log Out",
+    logoutLabel: "LogOut",
     primaryCta: "Open Live Account",
     accountMode: "Demo",
     notificationCount: "1",
@@ -234,17 +233,20 @@ export const enClientArea: AppMessages["clientArea"] = {
     items: [
       {
         label: "Live Quote",
-        description: "Track real-time prices to prepare faster entry decisions.",
+        description:
+          "Track real-time prices to prepare faster entry decisions.",
         cta: "Open market feed",
       },
       {
         label: "Economic Calendar",
-        description: "Review high-impact events that may affect daily volatility.",
+        description:
+          "Review high-impact events that may affect daily volatility.",
         cta: "View schedule",
       },
       {
         label: "Client Service Help",
-        description: "Contact support for login, transaction, or verification issues.",
+        description:
+          "Contact support for login, transaction, or verification issues.",
         cta: "Contact support",
       },
     ],

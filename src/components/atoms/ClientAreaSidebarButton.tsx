@@ -19,13 +19,13 @@ export function ClientAreaSidebarButton({
     <Link
       href={href}
       aria-current={isActive ? "page" : undefined}
-      className={`flex h-12 w-12 flex-col items-center justify-center rounded-lg p-5 transition-all duration-300 cursor-pointer ${isActive
+      className={`flex w-full sm:w-20 sm:h-20 flex-col items-center justify-center rounded-lg text-center transition-all duration-300 cursor-pointer ${isActive
         ? "border border-yellow-500/30 bg-zinc-900/80 text-yellow-500"
         : "hover:border hover:border-yellow-500/30 text-zinc-500 hover:text-yellow-500/80"
         }`}
     >
       <FontAwesomeIcon icon={icon} className="text-lg" />
-      <span className="mt-1 text-[9px] font-medium">{label}</span>
+      <span className="mt-1 text-xs font-medium leading-tight">{label}</span>
     </Link>
   );
 }

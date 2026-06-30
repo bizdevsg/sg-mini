@@ -85,9 +85,18 @@ const NEWS_CATEGORY_MAP = new Map<string, (typeof NEWS_FILTER_CATEGORIES)[number
 );
 
 const SUMMARY_MAX_LENGTH = 220;
-const NEWS_API_TIMEOUT_MS = 8000;
+const NEWS_API_TIMEOUT_MS = 20000;
+const NEWS_API_CACHE_TTL_MS = 60 * 1000;
 const NEWS_PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect width='1200' height='675' fill='%23111217'/%3E%3Crect x='30' y='30' width='1140' height='615' rx='28' fill='none' stroke='%23eab308' stroke-opacity='0.4' stroke-width='6'/%3E%3Ctext x='80' y='180' fill='%23eab308' font-family='Arial,sans-serif' font-size='56' font-weight='700'%3ELive Market News%3C/text%3E%3Ctext x='80' y='260' fill='%23f4f4f5' font-family='Arial,sans-serif' font-size='34'%3EPortal News feed placeholder%3C/text%3E%3C/svg%3E";
+
+let cachedPortalNewsArticles:
+  | {
+      articles: PortalNewsApiArticle[];
+      expiresAt: number;
+    }
+  | null = null;
+let inFlightPortalNewsRequest: Promise<PortalNewsApiArticle[]> | null = null;
 
 function getRequestClient(protocol: string) {
   return protocol === "http:" ? requestHttp : requestHttps;
@@ -353,6 +362,18 @@ function toFallbackDetailArticle(
   };
 }
 
+export function createNewsDetailFromFeedArticle(
+  article: NewsFeedArticle,
+  locale: AppLocale,
+): NewsArticleDetail {
+  return {
+    ...article,
+    bodyHtml: `<p>${escapeHtml(article.summary || article.title)}</p>`,
+    readTime: getEstimatedReadTime(article.summary || article.title, locale),
+    tags: [],
+  };
+}
+
 function getFallbackArticles(
   locale: AppLocale,
   limit: number,
@@ -476,12 +497,38 @@ async function requestPortalNewsArticles(): Promise<PortalNewsApiArticle[]> {
   });
 }
 
+async function requestPortalNewsArticlesCached(): Promise<PortalNewsApiArticle[]> {
+  const now = Date.now();
+
+  if (cachedPortalNewsArticles && cachedPortalNewsArticles.expiresAt > now) {
+    return cachedPortalNewsArticles.articles;
+  }
+
+  if (inFlightPortalNewsRequest) {
+    return inFlightPortalNewsRequest;
+  }
+
+  inFlightPortalNewsRequest = requestPortalNewsArticles()
+    .then((articles) => {
+      cachedPortalNewsArticles = {
+        articles,
+        expiresAt: Date.now() + NEWS_API_CACHE_TTL_MS,
+      };
+      return articles;
+    })
+    .finally(() => {
+      inFlightPortalNewsRequest = null;
+    });
+
+  return inFlightPortalNewsRequest;
+}
+
 async function fetchPortalNewsFeedEntries(): Promise<PortalNewsFeedEntry[]> {
   if (!NEWS_API_TOKEN) {
     return [];
   }
 
-  const articles = await requestPortalNewsArticles();
+  const articles = await requestPortalNewsArticlesCached();
   return articles.map(toPortalNewsFeedEntry);
 }
 
@@ -538,7 +585,7 @@ export async function getNewsArticleBySlug(
   }
 
   try {
-    const articles = await requestPortalNewsArticles();
+    const articles = await requestPortalNewsArticlesCached();
     const rawArticle = articles.find((article) => article.slug === slug) ?? null;
 
     if (rawArticle) {

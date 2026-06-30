@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ClientAreaMarketView } from "@/components/organisms/ClientAreaMarketView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
+import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaMarketPageProps = {
@@ -20,6 +21,7 @@ export default async function ClientAreaMarketPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
+  const breakingNews = await getClientAreaBreakingNews(locales);
 
-  return <ClientAreaMarketView locale={locales} />;
+  return <ClientAreaMarketView breakingNews={breakingNews} locale={locales} />;
 }

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ClientAreaDashboard } from "@/components/organisms/ClientAreaDashboard";
 import { getBannerRecords } from "@/lib/banner";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
+import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import {
   getLocaleConfig,
   getMessages,
@@ -57,10 +58,14 @@ export default async function ClientAreaPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
-  const initialBanners = await getBannerRecords();
+  const [initialBanners, breakingNews] = await Promise.all([
+    getBannerRecords(),
+    getClientAreaBreakingNews(locales),
+  ]);
 
   return (
     <ClientAreaDashboard
+      breakingNews={breakingNews}
       initialBanners={initialBanners}
       locale={locales}
     />

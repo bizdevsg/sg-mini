@@ -8,6 +8,7 @@ import { NewsDetailBreadcrumb } from "@/components/organisms/NewsDetailBreadcrum
 import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
 import { NewsDetailSidebar } from "@/components/organisms/NewsDetailSidebar";
 import {
+  createNewsDetailFromFeedArticle,
   getNewsArticleBySlug,
   getNewsFeed,
   getStaticNewsArticleBySlug,
@@ -32,6 +33,20 @@ function assertValidLocale(value: string): asserts value is AppLocale {
   }
 }
 
+function resolveDetailArticle(
+  locale: AppLocale,
+  slug: string,
+  detailedArticle: Awaited<ReturnType<typeof getNewsArticleBySlug>>["article"],
+  feedArticles: Awaited<ReturnType<typeof getNewsFeed>>["articles"],
+) {
+  if (detailedArticle) {
+    return detailedArticle;
+  }
+
+  const feedArticle = feedArticles.find((candidate) => candidate.slug === slug);
+  return feedArticle ? createNewsDetailFromFeedArticle(feedArticle, locale) : null;
+}
+
 export function generateStaticParams() {
   return SUPPORTED_LOCALES.flatMap((locale) =>
     getNewsPageContent(locale).latest.articles.map((article) => ({
@@ -48,9 +63,16 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const staticArticleResult = getStaticNewsArticleBySlug(locales, slug);
-  const { article } = staticArticleResult.article
-    ? staticArticleResult
-    : await getNewsArticleBySlug(locales, slug);
+  const article = staticArticleResult.article
+    ? staticArticleResult.article
+    : await (async () => {
+        const [{ article: detailedArticle }, { articles: feedArticles }] = await Promise.all([
+          getNewsArticleBySlug(locales, slug),
+          getNewsFeed(locales),
+        ]);
+
+        return resolveDetailArticle(locales, slug, detailedArticle, feedArticles);
+      })();
 
   if (!article) {
     notFound();
@@ -76,17 +98,32 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   assertValidLocale(locales);
 
   const staticArticleResult = getStaticNewsArticleBySlug(locales, slug);
-  const staticFeedResult = getStaticNewsFeed(locales, 24);
+  const staticFeedResult = getStaticNewsFeed(locales);
 
   const [{ article }, { articles: feedArticles }] = staticArticleResult.article
     ? await Promise.all([
         Promise.resolve(staticArticleResult),
         Promise.resolve(staticFeedResult),
       ])
-    : await Promise.all([
-        getNewsArticleBySlug(locales, slug),
-        getNewsFeed(locales, 24),
-      ]);
+    : await (async () => {
+        const [detailResult, feedResult] = await Promise.all([
+          getNewsArticleBySlug(locales, slug),
+          getNewsFeed(locales),
+        ]);
+
+        return [
+          {
+            article: resolveDetailArticle(
+              locales,
+              slug,
+              detailResult.article,
+              feedResult.articles,
+            ),
+            source: detailResult.source,
+          },
+          feedResult,
+        ] as const;
+      })();
 
   if (!article) {
     notFound();

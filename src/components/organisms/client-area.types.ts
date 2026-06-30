@@ -34,11 +34,14 @@ export type ClientAreaHeroSlide = SlideItem & {
 };
 
 export type BreakingNewsItem = {
+  id?: string;
   title: string;
   timeAgo: string;
 };
 
 export type ArticleItem = {
+  id?: string;
+  slug?: string;
   category: string;
   title: string;
   excerpt: string;

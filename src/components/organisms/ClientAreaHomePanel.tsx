@@ -56,8 +56,8 @@ export function ClientAreaHomePanel({
   const [goldPrice, oilPrice, silverPrice] = prices;
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-      <div className="flex min-w-0 flex-col gap-6 xl:col-span-8">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+      <div className="flex min-w-0 flex-col gap-6">
         <ClientAreaHeroSlideshow
           slides={heroSlides}
           currentSlide={currentSlide}
@@ -93,6 +93,7 @@ export function ClientAreaHomePanel({
               icon={["fas", "coins"]}
               iconClass="bg-gradient-to-br from-yellow-400 to-amber-600 text-black shadow-yellow-600/20"
             />
+
             <ClientAreaRecommendationCard
               item={oilPrice}
               badge="Energy"
@@ -100,6 +101,7 @@ export function ClientAreaHomePanel({
               icon={["fas", "droplet"]}
               iconClass="bg-zinc-800 text-zinc-300 border border-zinc-700"
             />
+
             <ClientAreaRecommendationCard
               item={silverPrice}
               badge="Metal"
@@ -111,7 +113,7 @@ export function ClientAreaHomePanel({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 xl:col-span-4">
+      <div className="flex flex-col gap-4">
         <div className="relative overflow-hidden rounded-3xl border border-yellow-400/30 bg-gradient-to-b from-amber-500 via-orange-500 to-yellow-500 p-5 text-black shadow-2xl">
           <div className="relative z-50 mb-4 flex items-center justify-between gap-4">
             <div className="relative">
@@ -172,33 +174,22 @@ export function ClientAreaHomePanel({
               </span>
             </div>
 
-            <div className="min-w-0 rounded-xl bg-black/10 px-3 py-2 text-center">
+            <div className="min-w-0 rounded-xl bg-white/50 px-3 py-2 text-center">
               <span className="block text-[9px] font-bold uppercase tracking-tight text-neutral-800">
                 Floating P/L
               </span>
-              <div
-                className={`mt-1 inline-flex max-w-full items-center justify-center gap-0.5 rounded-md px-2 py-1 text-[10px] font-black leading-tight text-white shadow-sm ${currentAccount.floatingPl >= 0
-                  ? "bg-emerald-600"
-                  : "bg-red-600"
-                  }`}
-              >
-                <FontAwesomeIcon
-                  icon={
-                    currentAccount.floatingPl >= 0
-                      ? ["fas", "arrow-up-long"]
-                      : ["fas", "arrow-down-long"]
-                  }
-                  className="text-[8px]"
-                />
-                <span className="break-words">{formatSignedUsd(currentAccount.floatingPl)}</span>
-              </div>
+              <span className={`break-words text-xs font-bold ${currentAccount.floatingPl >= 0
+                ? "text-emerald-600"
+                : "text-red-600"
+                }`}>{formatSignedUsd(currentAccount.floatingPl)}</span>
+
             </div>
 
             <div className="min-w-0 rounded-xl bg-black/10 px-3 py-2 text-center">
               <span className="block text-[9px] font-bold uppercase tracking-tight text-neutral-800">
                 Equity
               </span>
-              <span className="mt-1 block break-words text-sm font-black leading-tight text-neutral-950">
+              <span className="mt-1 block break-words text-xs font-black leading-tight text-neutral-950">
                 {formatUsd(currentAccount.equity)}
               </span>
             </div>

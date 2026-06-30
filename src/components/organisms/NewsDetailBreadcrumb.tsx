@@ -4,12 +4,14 @@ import { getMessages, type AppLocale } from "@/locales";
 type NewsDetailBreadcrumbProps = {
   locale: AppLocale;
   newsLabel: string;
+  newsHref?: string;
   title: string;
 };
 
 export function NewsDetailBreadcrumb({
   locale,
   newsLabel,
+  newsHref,
   title,
 }: NewsDetailBreadcrumbProps) {
   const homeLabel = getMessages(locale).app.homeLabel;
@@ -22,7 +24,7 @@ export function NewsDetailBreadcrumb({
       items={[
         {
           label: newsLabel,
-          href: `/${locale}/news`,
+          href: newsHref ?? `/${locale}/news`,
           tone: "accent",
         },
         {

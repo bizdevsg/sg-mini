@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import {
   getMessages,
-  getSolidGoldAppPageContent,
   type AppLocale,
 } from "@/locales";
+import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { SectionContainer } from "../atoms/SectionContainer";
 
 type HeroSectionProps = {
@@ -14,10 +14,7 @@ type HeroSectionProps = {
 
 export function HeroSection({ locale }: HeroSectionProps) {
   const messages = getMessages(locale);
-  const appPromoMessages = messages.appPromoSection;
-  const primaryPlatform = getSolidGoldAppPageContent(locale).platforms.items[0];
-  const googlePlayLink = primaryPlatform?.stores[0]?.href ?? "#";
-  const appStoreLink = primaryPlatform?.stores[1]?.href ?? "#";
+  const clientAreaLoginHref = `/${locale}/client-area/login`;
 
   const HERO_FLOATING_CARDS = [
     {
@@ -68,7 +65,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
         backgroundImage: "url('/assets/BCG.png')",
       }}
     >
-      <SectionContainer className="relative pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-32 md:pb-20 lg:py-32">
+      <SectionContainer className="relative py-16 mt-10 md:mt-0 md:pt-20">
         <div className="relative isolate z-10 flex flex-col gap-8 sm:gap-10 md:gap-12 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           {/* Mobile Image */}
           <div className="relative order-1 mx-auto h-[360px] w-full sm:h-[430px] md:h-[500px] xl:hidden">
@@ -111,7 +108,29 @@ export function HeroSection({ locale }: HeroSectionProps) {
               {messages.hero.subTitle}
             </p>
 
-            <div className="mx-auto mt-6 flex w-fit gap-4 xl:mx-0">
+            <div className="mt-5">
+              <p className="font-bold text-white text-xl">Download Aplikasi Sekarang!</p>
+
+              <div className="flex items-center gap-2 mt-2">
+                <AppDownloadModalTriggerButton
+                  locale={locale}
+                  label="Open Demo Account"
+                  variant="primary"
+                  size="md"
+                  visualVariant="qr"
+                  className="rounded-xl px-5 cursor-pointer"
+                />
+
+                <Link
+                  href={clientAreaLoginHref}
+                  className="py-3 px-5 border rounded-xl font-semibold text-white border-yellow-500"
+                >
+                  Login Demo Account
+                </Link>
+              </div>
+            </div>
+
+            {/* <div className="mx-auto mt-6 flex w-fit gap-4 xl:mx-0">
               <Link href={googlePlayLink} target="_blank" rel="noreferrer">
                 <Image
                   src="/assets/gp-button.png"
@@ -133,7 +152,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   className="h-auto w-36 object-contain sm:w-40"
                 />
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Desktop Image */}

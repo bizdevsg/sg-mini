@@ -9,16 +9,18 @@ import {
 
 type NewsSidebarArticleCardProps = {
   article: NewsFeedArticle;
+  hrefBasePath?: string;
   locale: AppLocale;
 };
 
 export function NewsSidebarArticleCard({
   article,
+  hrefBasePath = "/news",
   locale,
 }: NewsSidebarArticleCardProps) {
   return (
     <Link
-      href={`/${locale}/news/${article.slug}`}
+      href={`/${locale}${hrefBasePath}/${article.slug}`}
       prefetch={false}
       className="group block rounded-2xl border border-white/10 bg-zinc-900/40 p-3 transition-all duration-300 hover:border-yellow-400/40 hover:bg-zinc-900/70"
     >

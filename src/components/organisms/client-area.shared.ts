@@ -1,10 +1,13 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
+import type { NewsFeedArticle } from "@/lib/news.shared";
 
-import type { AppLocale } from "@/locales";
+import { formatLocaleDateTime, type AppLocale } from "@/locales";
 import type {
   AccountMode,
   ActionId,
+  ArticleItem,
+  BreakingNewsItem,
   ClientAreaBannerRecord,
   ClientAreaHeroSlide,
   DashboardCopy,
@@ -90,6 +93,81 @@ export function formatClock(locale: AppLocale) {
   );
 
   return `${formatter.format(new Date())} WIB`;
+}
+
+function parsePublishedTimestamp(value: string) {
+  const directTimestamp = new Date(value).getTime();
+
+  if (Number.isFinite(directTimestamp)) {
+    return directTimestamp;
+  }
+
+  const normalizedTimestamp = new Date(value.replace(" ", "T")).getTime();
+
+  return Number.isFinite(normalizedTimestamp) ? normalizedTimestamp : null;
+}
+
+export function formatClientAreaNewsTimeAgo(
+  publishedAt: string,
+  locale: AppLocale,
+) {
+  const publishedTimestamp = parsePublishedTimestamp(publishedAt);
+
+  if (publishedTimestamp === null) {
+    return formatLocaleDateTime(publishedAt, locale);
+  }
+
+  const diffMs = Math.max(0, Date.now() - publishedTimestamp);
+  const diffMinutes = Math.floor(diffMs / 60000);
+
+  if (diffMinutes < 1) {
+    return locale === "id" ? "Baru saja" : "Just now";
+  }
+
+  if (diffMinutes < 60) {
+    return locale === "id"
+      ? `${diffMinutes} menit lalu`
+      : `${diffMinutes} mins ago`;
+  }
+
+  const diffHours = Math.floor(diffMinutes / 60);
+
+  if (diffHours < 24) {
+    return locale === "id" ? `${diffHours} jam lalu` : `${diffHours} hours ago`;
+  }
+
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays < 7) {
+    return locale === "id" ? `${diffDays} hari lalu` : `${diffDays} days ago`;
+  }
+
+  return formatLocaleDateTime(publishedAt, locale);
+}
+
+export function mapNewsFeedArticleToBreakingNews(
+  article: NewsFeedArticle,
+  locale: AppLocale,
+): BreakingNewsItem {
+  return {
+    id: article.id,
+    title: article.title,
+    timeAgo: formatClientAreaNewsTimeAgo(article.publishedAt, locale),
+  };
+}
+
+export function mapNewsFeedArticleToClientAreaArticle(
+  article: NewsFeedArticle,
+  locale: AppLocale,
+): ArticleItem {
+  return {
+    id: article.id,
+    slug: article.slug,
+    category: article.displayCategory.toUpperCase(),
+    title: article.title,
+    excerpt: article.summary,
+    timeAgo: formatClientAreaNewsTimeAgo(article.publishedAt, locale),
+  };
 }
 
 export function getDashboardCopy(locale: AppLocale): DashboardCopy {

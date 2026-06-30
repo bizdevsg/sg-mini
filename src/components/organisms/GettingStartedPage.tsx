@@ -1,6 +1,6 @@
-import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import type { AppLocale } from "@/locales";
 import { getGettingStartedPageContent, getMessages } from "@/locales";
+import { AppDownloadModalTriggerButton } from "../molecules/AppDownloadModalTriggerButton";
 import { ButtonLink } from "../atoms/ButtonLink";
 import { GettingStartedChecklistSection } from "./GettingStartedChecklistSection";
 import { GettingStartedFinalSection } from "./GettingStartedFinalSection";
@@ -39,15 +39,12 @@ export function GettingStartedPage({
         ]}
       >
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:gap-6">
-          <ButtonLink
-            href={PUBLIC_REGISTER_URL}
-            target="_blank"
-            rel="noreferrer"
+          <AppDownloadModalTriggerButton
+            locale={locales}
+            label={page.hero.primaryCta}
             size="lg"
             className="w-full sm:min-w-[220px] sm:w-auto"
-          >
-            {page.hero.primaryCta}
-          </ButtonLink>
+          />
 
           <ButtonLink
             href={`/${locales}/education/ebook`}
@@ -94,8 +91,8 @@ export function GettingStartedPage({
         eyebrow={page.sections.ctaEyebrow}
         title={page.sections.ctaTitle}
         description={page.sections.ctaDescription}
+        locale={locales}
         primaryLabel={page.sections.ctaPrimary}
-        primaryHref={PUBLIC_REGISTER_URL}
         secondaryLabel={page.sections.ctaSecondary}
         secondaryHref={`/${locales}/contact-us`}
       />

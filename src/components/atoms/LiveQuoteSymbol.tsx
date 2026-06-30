@@ -15,7 +15,7 @@ export function LiveQuoteSymbol({
     <div className={className}>
       <h6 className="text-sm font-semibold md:text-base">{display.label}</h6>
       {display.symbol ? (
-        <span className="text-xs font-medium">
+        <span className="text-xxs font-medium">
           ({display.symbol})
         </span>
       ) : null}

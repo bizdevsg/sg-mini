@@ -6,7 +6,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
   login: {
     badge: "Portal Nasabah",
-    title: "Masuk ke Client Area SG Berjangka",
+    title: "Masuk Client Area",
     description:
       "Akses akun demo atau live Anda untuk memantau saldo, market watch, dan aktivitas transaksi dalam satu dashboard.",
     accountLabel: "Nomor akun atau email",
@@ -17,18 +17,17 @@ export const idClientArea: AppMessages["clientArea"] = {
     forgotPassword: "Lupa password?",
     primaryCta: "Masuk ke dashboard demo",
     secondaryCta: "Hubungi support",
-    submitting: "Memeriksa akses...",
+    submitting: "Memverifikasi akun...",
     helper:
       "Gunakan kredensial demo di bawah untuk masuk ke client area versi preview ini.",
     captchaTitle: "Verifikasi keamanan",
-    captchaHelper:
-      "Selesaikan reCAPTCHA sebelum masuk ke client area.",
+    captchaHelper: "Selesaikan reCAPTCHA sebelum masuk ke client area.",
     demoCredentialsTitle: "Akses demo cepat",
     demoCredentialsAccount: "Akun demo: BBH10158",
     demoCredentialsPassword: "Password: demo12345",
     errorRequired: "Masukkan nomor akun atau email beserta password Anda.",
     errorInvalidCredentials:
-      "Kredensial tidak valid. Gunakan akun demo yang tersedia untuk preview ini.",
+      "Nomor akun, email, atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
     errorCaptchaRequired: "Selesaikan verifikasi reCAPTCHA terlebih dahulu.",
     errorCaptchaFailed:
       "Verifikasi reCAPTCHA gagal. Coba ulangi pemeriksaan keamanan.",
@@ -83,7 +82,7 @@ export const idClientArea: AppMessages["clientArea"] = {
   topbar: {
     supportLabel: "Download Aplikasi MIFX",
     supportPhone: "021-50996650",
-    logoutLabel: "Log Out",
+    logoutLabel: "LogOut",
     primaryCta: "Buka Akun Live",
     accountMode: "Demo",
     notificationCount: "1",
@@ -232,17 +231,20 @@ export const idClientArea: AppMessages["clientArea"] = {
     items: [
       {
         label: "Live Quote",
-        description: "Pantau harga real-time untuk keputusan entry yang lebih cepat.",
+        description:
+          "Pantau harga real-time untuk keputusan entry yang lebih cepat.",
         cta: "Buka market feed",
       },
       {
         label: "Kalender Ekonomi",
-        description: "Lihat agenda high impact yang bisa memengaruhi volatilitas harian.",
+        description:
+          "Lihat agenda high impact yang bisa memengaruhi volatilitas harian.",
         cta: "Lihat jadwal",
       },
       {
         label: "Bantuan Client Service",
-        description: "Hubungi support untuk kendala login, transaksi, atau verifikasi data.",
+        description:
+          "Hubungi support untuk kendala login, transaksi, atau verifikasi data.",
         cta: "Hubungi support",
       },
     ],

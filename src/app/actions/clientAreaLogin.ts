@@ -69,6 +69,6 @@ export async function submitClientAreaLogin(
     };
   }
 
-  await createClientAreaSession(rememberMe);
+  await createClientAreaSession(account, rememberMe);
   redirect(getClientAreaDashboardHref(locale));
 }

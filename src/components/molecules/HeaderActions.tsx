@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
-import { submitClientAreaLogout } from "@/app/actions/clientAreaLogout";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
+import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
 import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import {
   getMessages,
@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type HeaderActionsProps = {
+  clientAreaProfile?: ClientAreaSessionProfile | null;
   locale: AppLocale;
   isClientAreaAuthenticated: boolean;
   compact?: boolean;
@@ -42,6 +43,7 @@ function resolveLocaleSwitcherHref(targetLocale: AppLocale, pathname: string) {
 }
 
 export function HeaderActions({
+  clientAreaProfile,
   locale,
   isClientAreaAuthenticated,
   compact = false,
@@ -73,8 +75,8 @@ export function HeaderActions({
     ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
+  const clientAreaAccountHref = `/${locale}/client-area/account`;
   const clientAreaLoginHref = `/${locale}/client-area/login`;
-  const logoutLabel = messages.clientArea.topbar.logoutLabel;
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
   const localeButtonClass = mobilePanel
@@ -190,22 +192,20 @@ export function HeaderActions({
       );
     }
 
-    const buttonClasses =
-      variant === "primary"
-        ? "border border-[#f4cf73]/70 bg-[linear-gradient(135deg,#f6d57b_0%,#d7a63c_52%,#b9821e_100%)] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105"
-        : "border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] text-[#f0ca73] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ring-1 ring-[rgba(255,255,255,0.04)] hover:border-[rgba(214,166,64,0.24)] hover:bg-[linear-gradient(180deg,rgba(214,166,64,0.12),rgba(255,255,255,0.04))] hover:text-[#ffe29a]";
+    const profileLabel =
+      clientAreaProfile?.accountId ??
+      clientAreaProfile?.displayName ??
+      messages.clientArea.accountTitle;
 
     return (
-      <form action={submitClientAreaLogout}>
-        <input type="hidden" name="locale" value={locale} />
-        <input type="hidden" name="redirectPath" value={pathname} />
-        <button
-          type="submit"
-          className={`inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold tracking-[-0.01em] ${buttonClasses} min-h-10 px-8 text-sm ${extraClassName} transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]`}
-        >
-          {logoutLabel}
-        </button>
-      </form>
+      <ButtonLink
+        href={clientAreaAccountHref}
+        variant={variant}
+        size="sm"
+        className={extraClassName}
+      >
+        {profileLabel}
+      </ButtonLink>
     );
   };
 
