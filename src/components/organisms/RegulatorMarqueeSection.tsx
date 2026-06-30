@@ -39,12 +39,16 @@ export function RegulatorMarqueeSection({
                 {marqueeLogos.map((logo, index) => (
                   <div
                     key={`${logo.alt}-${index}`}
-                    className="shrink-0 pr-20 last:pr-0"
+                    className="shrink-0 pr-4 sm:pr-6 lg:pr-8 last:pr-0"
                     aria-hidden={index >= regulatorLogos.length}
                   >
                     <RegulatorLogoItem
                       logo={logo}
                       priority={index < regulatorLogos.length}
+                      useFill
+                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 192px, 224px"
+                      imageClassName="object-contain opacity-85"
+                      containerClassName="h-[4.5rem] w-[9.5rem] rounded-2xl border border-white/6 bg-white/[0.03] p-3 sm:h-20 sm:w-[10.5rem] md:h-[5.5rem] md:w-[11.5rem]"
                     />
                   </div>
                 ))}
