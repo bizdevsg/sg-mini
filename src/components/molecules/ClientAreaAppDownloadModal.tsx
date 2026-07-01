@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import type { AppLocale } from "@/locales";
 import { StoreBadgeLink } from "@/components/atoms/StoreBadgeLink";
@@ -104,9 +105,13 @@ export function ClientAreaAppDownloadModal({
     return null;
   }
 
-  return (
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/72 px-4 py-6 backdrop-blur-sm ${isClosing
+      className={`fixed inset-0 z-[140] flex items-center justify-center bg-black/72 px-4 py-6 backdrop-blur-sm ${isClosing
         ? "animate-[pengumuman-modal-overlay-out_220ms_ease_forwards]"
         : "animate-[pengumuman-modal-overlay-in_220ms_ease_forwards]"
         }`}
@@ -192,6 +197,7 @@ export function ClientAreaAppDownloadModal({
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

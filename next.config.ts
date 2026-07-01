@@ -16,7 +16,7 @@ const framerImageBaseUrl = new URL(
     "https://framerusercontent.com/images",
 );
 const newsPortalBaseUrl = new URL(
-  process.env.NEWS_PORTAL_BASE_URL ?? "http://portalnews.newsmaker.test",
+  process.env.NEWS_PORTAL_BASE_URL ?? "https://portalnews.newsmaker.id",
 );
 const bannerImageBaseUrl = new URL(
   process.env.BANNER_IMAGE_BASE_URL ??
@@ -87,6 +87,11 @@ const nextConfig: NextConfig = {
         protocol: getProtocol(framerImageBaseUrl),
         hostname: framerImageBaseUrl.hostname,
         pathname: `${framerImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
+      },
+      {
+        protocol: "https",
+        hostname: "portalnews.newsmaker.id",
+        pathname: "/uploads/**",
       },
       {
         protocol: getProtocol(newsPortalBaseUrl),

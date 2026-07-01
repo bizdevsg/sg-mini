@@ -55,23 +55,6 @@ export function ClientAreaLoginVisualPanel({
       className="relative hidden overflow-hidden xl:block xl:flex-[1.45]"
       aria-hidden="true"
     >
-      <div className="absolute left-8 top-7 z-20 flex flex-col gap-2.5">
-        <StoreBadgeLink
-          href={googlePlayLink}
-          alt={googlePlayAlt}
-          imageSrc="/assets/gp-button.png"
-          sizes="(max-width: 640px) 144px, 160px"
-          imageClassName="h-auto w-36 object-contain sm:w-40"
-        />
-        <StoreBadgeLink
-          href={appStoreLink}
-          alt={appStoreAlt}
-          imageSrc="/assets/as-button.png"
-          sizes="(max-width: 640px) 144px, 160px"
-          imageClassName="h-auto w-36 object-contain sm:w-40"
-        />
-      </div>
-
       <div className="absolute inset-0 isolate">
         <Image
           src="/assets/BANNER-UTAMA-SOLID.png"

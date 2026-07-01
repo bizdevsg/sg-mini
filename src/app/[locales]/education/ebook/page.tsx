@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { EbookLibrarySection } from "@/components/organisms/EbookLibrarySection";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import {
@@ -17,9 +18,6 @@ import {
 type EbookPageProps = {
   params: Promise<{ locales: string }>;
 };
-
-const EBOOK_LOGIN_URL = "https://ebook.newsmaker.id/login";
-const EBOOK_REGISTER_URL = "https://ebook.newsmaker.id/register";
 
 function assertValidLocale(value: string): asserts value is AppLocale {
   if (!isSupportedLocale(value)) {
@@ -62,6 +60,7 @@ export default async function EbookPage({ params }: EbookPageProps) {
 
   const appMessages = getMessages(locales);
   const messages = appMessages.ebookPage;
+  const ebookLoginUrl = `/${locales}/client-area/`;
   const educationLabel =
     appMessages.navbar.menuGroups.find((group) =>
       group.items?.some((item) => item.href === "/education/ebook"),
@@ -88,21 +87,16 @@ export default async function EbookPage({ params }: EbookPageProps) {
         ]}
       >
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:gap-6">
-          <ButtonLink
-            href={EBOOK_REGISTER_URL}
+          <AppDownloadModalTriggerButton
+            locale={locales}
+            label={messages.hero.primaryCta}
             size="lg"
-            className="group w-full sm:min-w-[220px] sm:w-auto"
-          >
-            <FontAwesomeIcon icon={["fas", "book"]} />
-            {messages.hero.primaryCta}
-            <FontAwesomeIcon
-              icon={["fas", "arrow-right"]}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </ButtonLink>
+            visualVariant="qr"
+            className="w-full sm:min-w-[220px] sm:w-auto cursor-pointer"
+          />
 
           <ButtonLink
-            href={EBOOK_LOGIN_URL}
+            href={ebookLoginUrl}
             variant="ghost"
             size="lg"
             className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-[220px] sm:w-auto"

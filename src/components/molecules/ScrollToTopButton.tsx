@@ -34,11 +34,10 @@ export function ScrollToTopButton({ locale }: ScrollToTopButtonProps) {
       type="button"
       aria-label={label}
       onClick={handleClick}
-      className={`fixed right-4 bottom-4 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border border-yellow-500/35 bg-[rgba(16,16,16,0.88)] text-yellow-400 shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-[rgba(24,24,24,0.96)] hover:text-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:right-6 sm:bottom-6 ${
-        isVisible
-          ? "pointer-events-auto translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-3 opacity-0"
-      }`}
+      className={`fixed right-7 bottom-23 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border border-yellow-500/35 bg-[rgba(16,16,16,0.88)] text-yellow-400 shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-[rgba(24,24,24,0.96)] hover:text-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:right-7.5 sm:bottom-25 cursor-pointer ${isVisible
+        ? "pointer-events-auto translate-y-0 opacity-100"
+        : "pointer-events-none translate-y-3 opacity-0"
+        }`}
     >
       <svg
         viewBox="0 0 24 24"

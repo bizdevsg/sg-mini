@@ -16,12 +16,15 @@ export function GettingStartedStepsSection({
   steps,
 }: GettingStartedStepsSectionProps) {
   return (
-    <section id="getting-started-steps" className="py-16 sm:py-20 lg:py-24 relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+    <section
+      id="getting-started-steps"
+      className="relative py-16 sm:py-20 lg:py-24"
+    >
+      <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
 
       <SectionContainer>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-12">
-          <div className="max-w-lg">
+        <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start">
+          <div className="max-w-lg lg:sticky lg:top-25">
             <SectionIntro
               eyebrow={eyebrow}
               title={title}
@@ -30,32 +33,30 @@ export function GettingStartedStepsSection({
             />
           </div>
 
-          <div className="overflow-hidden rounded-[28px] border border-line/40 bg-linear-to-b from-white/[0.04] to-white/[0.02] backdrop-blur-sm">
+          <div className="divide-y divide-zinc-800/60">
             {steps.map((step, index) => (
               <article
                 key={step.title}
-                className="grid gap-4 border-b border-white/10 p-6 last:border-b-0 sm:grid-cols-[72px_minmax(0,1fr)] sm:gap-6 sm:p-8"
+                className="group flex gap-6 py-6 transition-all first:pt-0 last:pb-0"
               >
-                <div className="flex items-start">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-yellow-500 to-amber-600 text-sm font-bold text-white">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                </div>
+                <span className="pt-1 font-mono text-sm font-semibold text-amber-500">
+                  ({String(index + 1).padStart(2, "0")})
+                </span>
 
                 <div className="max-w-2xl">
-                  <h2 className="text-xl font-semibold text-white sm:text-2xl">
+                  <h2 className="text-lg font-semibold text-white transition-colors duration-200 group-hover:text-amber-400">
                     {step.title}
                   </h2>
 
-                  <p className="mt-3 text-sm leading-7 text-zinc-300 sm:text-base">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                     {step.description}
                   </p>
 
-                  <ul className="mt-5 grid gap-3 text-sm text-zinc-200 sm:text-base">
+                  <ul className="mt-4 grid gap-3 text-sm text-zinc-200">
                     {step.bullets.map((bullet) => (
                       <li key={bullet} className="flex items-start gap-3">
-                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-yellow-500" />
-                        <span>{bullet}</span>
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-500" />
+                        <span className="leading-6 text-zinc-300">{bullet}</span>
                       </li>
                     ))}
                   </ul>

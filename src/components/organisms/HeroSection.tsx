@@ -157,7 +157,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
           {/* Desktop Image */}
           <div
-            className="pointer-events-none absolute z-0 hidden xl:bottom-7 xl:right-[-11.5rem] xl:block"
+            className="pointer-events-none absolute z-0 hidden xl:bottom-7 xl:right-[-7.5rem] xl:block"
             aria-hidden="true"
           >
             <img

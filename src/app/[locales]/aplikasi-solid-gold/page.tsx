@@ -70,6 +70,13 @@ export default async function SolidGoldAppPage({
       .flatMap((group) => group.items ?? [])
       .find((item) => item.href === "/aplikasi-solid-gold")?.label ??
     pageContent.meta.title;
+  const primaryPlatform = pageContent.platforms.items[0];
+  const googlePlayLink = primaryPlatform?.stores.find(
+    (store) => store.icon === "google-play",
+  )?.href;
+  const appStoreLink = primaryPlatform?.stores.find(
+    (store) => store.icon === "apple",
+  )?.href;
 
   return (
     <main>
@@ -92,7 +99,7 @@ export default async function SolidGoldAppPage({
       >
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:gap-6">
           <ButtonLink
-            href={pageContent.platforms.items[0]?.stores[0]?.href ?? "#"}
+            href={googlePlayLink ?? "#"}
             target="_blank"
             rel="noreferrer"
             size="lg"
@@ -107,7 +114,7 @@ export default async function SolidGoldAppPage({
           </ButtonLink>
 
           <ButtonLink
-            href={pageContent.platforms.items[0]?.stores[1]?.href ?? "#"}
+            href={appStoreLink ?? "#"}
             target="_blank"
             rel="noreferrer"
             variant="ghost"
@@ -137,10 +144,9 @@ export default async function SolidGoldAppPage({
       </PageHeroBanner>
 
       <SolidGoldAppDownloadSection
-        title={pageContent.platforms.title}
-        subtitle={pageContent.platforms.subtitle}
-        platforms={pageContent.platforms.items}
+        // locale={locales}
         benefitsTitle={pageContent.benefits.title}
+        benefitsDescription={pageContent.benefits.description}
         benefits={pageContent.benefits.items}
       />
     </main>

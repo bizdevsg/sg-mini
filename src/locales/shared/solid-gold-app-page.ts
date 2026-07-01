@@ -29,6 +29,10 @@ export type SolidGoldAppPageContent = {
   };
   benefits: {
     title: string;
-    items: string[];
+    description?: string;
+    items: Array<{
+      title: string;
+      description: string;
+    }>;
   };
 };

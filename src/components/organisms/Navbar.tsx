@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import Link from "next/link";
 
 import { getMessages, type AppLocale } from "@/locales";
@@ -34,6 +35,32 @@ function resolveLocalizedHref(locale: AppLocale, href = "/") {
   }
 
   return href;
+}
+
+function isTradePilotHref(href?: string) {
+  return href === "https://tradepilot.id/";
+}
+
+function renderMenuLabel(label: string, href?: string) {
+  if (!isTradePilotHref(href)) {
+    return <span>{label}</span>;
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="bg-yellow-500/20 rounded-full p-1">
+        <Image
+          src="/assets/icon-512.png"
+          alt=""
+          width={16}
+          height={16}
+          className="h-5 w-5 rounded-[4px] object-cover"
+          aria-hidden="true"
+        />
+      </div>
+      <span>{label.trim()}</span>
+    </div>
+  );
 }
 
 export function Navbar({
@@ -114,7 +141,7 @@ export function Navbar({
   const showHeaderSurface = isScrolled || isMobileMenuOpen;
 
   return (
-    <nav className="fixed top-0 z-50 w-full pointer-events-none">
+    <nav className="fixed top-0 z-40 w-full pointer-events-none">
       <div
         className={`transition-all duration-300 ${showHeaderSurface ? "bg-[rgba(61,61,61,0.5)] backdrop-blur-md" : ""
           }`}
@@ -163,7 +190,7 @@ export function Navbar({
                         href={resolveLocalizedHref(locale, group.href)}
                         className="rounded-full px-4 py-2 text-sm font-medium text-yellow-500 transition-colors duration-300 hover:bg-white/5 hover:text-yellow-200"
                       >
-                        {group.label}
+                        {renderMenuLabel(group.label, group.href)}
                       </Link>
                     );
                   }
@@ -270,7 +297,7 @@ export function Navbar({
                       onClick={closeMobileMenu}
                       className="rounded-[22px] border border-[rgba(255,255,255,0.08)] bg-[rgba(18,18,18,0.92)] px-4 py-4 text-sm font-medium text-yellow-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:text-yellow-200"
                     >
-                      {group.label}
+                      {renderMenuLabel(group.label, group.href)}
                     </Link>
                   );
                 }

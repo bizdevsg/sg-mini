@@ -4,57 +4,38 @@ import type { SolidGoldAppPageContent } from "../../shared/solid-gold-app-page";
 
 export const idSolidGoldAppPageContent: SolidGoldAppPageContent = {
   meta: {
-    title: "Aplikasi Resmi SG Berjangka & Solid Gold",
+    title: "Aplikasi Resmi Solid",
     description:
-      "Temukan aplikasi resmi Solid Gold Berjangka untuk mendapatkan informasi pasar melalui SG Berjangka dan melakukan aktivitas trading melalui aplikasi Solid di Android dan iOS.",
+      "Download aplikasi Solid untuk memantau market dan menjalankan aktivitas trading Solid Gold Berjangka dengan lebih praktis di Android dan iOS.",
   },
 
   hero: {
     eyebrow: "Aplikasi Resmi",
-    title: "Akses informasi pasar dan aktivitas trading dalam satu genggaman.",
+    title: "Trading lebih praktis langsung dari aplikasi Solid.",
     description:
-      "Solid Gold Berjangka menghadirkan dua aplikasi resmi dengan fungsi berbeda. SG Berjangka menyediakan berita dan analisis pasar, sementara Solid memberikan akses praktis untuk aktivitas trading.",
+      "Aplikasi Solid membantu Anda memantau market, melihat pergerakan harga, dan menjalankan aktivitas trading Solid Gold Berjangka dengan lebih cepat dari satu aplikasi.",
     primaryCta: "Download di Play Store",
     secondaryCta: "Download di App Store",
     badges: [
-      "SG Berjangka: Berita & Analisis Pasar",
-      "Solid: Platform Trading",
+      "Solid: Platform Trading Resmi",
+      "Pantau Market Lebih Mudah",
       "Tersedia untuk Android & iOS",
     ],
     visualSrc: getFramerImageUrl(
       "852i2sfEYXSfE1r3eJjVmPA8KZE.webp?height=1020&width=750",
     ),
-    visualAlt:
-      "Tampilan aplikasi resmi Solid Gold Berjangka pada perangkat mobile",
+    visualAlt: "Tampilan aplikasi Solid pada perangkat mobile",
   },
 
   platforms: {
-    title: "Pilih Aplikasi Sesuai Kebutuhan Anda",
+    title: "Download Aplikasi Solid",
     subtitle:
-      "Nikmati kemudahan mengakses informasi pasar dan menjalankan aktivitas trading melalui aplikasi resmi Solid Gold Berjangka. Tersedia untuk perangkat Android dan iOS.",
+      "Gunakan aplikasi Solid untuk memantau market dan mengelola aktivitas trading Anda melalui perangkat Android atau iPhone.",
     items: [
-      {
-        title: "SG Berjangka",
-        description:
-          "Aplikasi informasi pasar yang menyediakan berita terkini, analisis, dan insight seputar perdagangan berjangka dalam satu platform.",
-        availability: ["Android", "iPhone & iPad"],
-        stores: [
-          {
-            label: "Buka Play Store",
-            href: "https://play.google.com/store/apps/details?id=com.nm23.sgberjangkaapps&hl=id",
-            icon: "google-play",
-          },
-          {
-            label: "Buka App Store",
-            href: "https://apps.apple.com/id/app/sg-berjangka/id6760511838?l=id",
-            icon: "apple",
-          },
-        ],
-      },
       {
         title: "Solid",
         description:
-          "Platform trading resmi Solid Gold Berjangka yang memberikan akses mudah untuk memantau pasar dan melakukan transaksi secara praktis.",
+          "Platform trading resmi Solid Gold Berjangka untuk memantau pergerakan market dan melakukan transaksi dengan lebih praktis dalam satu aplikasi.",
         availability: ["Android", "iPhone & iPad"],
         stores: [
           {
@@ -73,11 +54,30 @@ export const idSolidGoldAppPageContent: SolidGoldAppPageContent = {
   },
 
   benefits: {
-    title: "Keunggulan Aplikasi Resmi Solid Gold Berjangka",
+    title: "Kenapa Menggunakan Aplikasi Solid?",
+    description:
+      "Aplikasi Solid dirancang untuk membantu nasabah memantau market dan menjalankan aktivitas trading dengan alur yang lebih cepat, jelas, dan nyaman dari perangkat mobile.",
     items: [
-      "Dapatkan informasi terbaru mengenai pasar melalui berita dan analisis yang tersedia di aplikasi SG Berjangka.",
-      "Akses platform trading Solid untuk memantau pasar dan menjalankan aktivitas transaksi dengan lebih mudah.",
-      "Nikmati kemudahan akses melalui aplikasi resmi yang tersedia di Google Play Store dan App Store.",
+      {
+        title: "Pantau Harga dan Market Secara Real Time",
+        description:
+          "Pergerakan harga dan kondisi market dapat dipantau langsung melalui aplikasi, sehingga Anda bisa mengikuti perubahan pasar lebih cepat saat dibutuhkan.",
+      },
+      {
+        title: "Eksekusi Trading Lebih Praktis",
+        description:
+          "Proses trading dirancang agar lebih ringkas dan mudah dijalankan, membantu Anda masuk ke aktivitas transaksi tanpa alur yang berbelit.",
+      },
+      {
+        title: "Akses Aktivitas Trading Dalam Satu Tempat",
+        description:
+          "Mulai dari memantau market hingga mengelola aktivitas trading, semuanya tersedia dalam satu aplikasi agar penggunaan terasa lebih efisien.",
+      },
+      {
+        title: "Aplikasi Resmi yang Lebih Aman dan Terarah",
+        description:
+          "Sebagai aplikasi resmi Solid Gold Berjangka, Solid memberikan akses yang lebih sesuai untuk kebutuhan nasabah dengan pengalaman penggunaan yang lebih terpercaya.",
+      },
     ],
   },
 };

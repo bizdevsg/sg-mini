@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import Script from "next/script";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import "flag-icons/css/flag-icons.min.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { NEWS_PORTAL_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
@@ -61,6 +63,16 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         <FontAwesomeProvider>{children}</FontAwesomeProvider>
+        <Script id="tawk-init" strategy="lazyOnload">
+          {`window.Tawk_API = window.Tawk_API || {}; window.Tawk_LoadStart = new Date();`}
+        </Script>
+        <Script
+          id="tawk-chat"
+          src="https://embed.tawk.to/6a4477cca4845e1d49d8e720/1jsdn7tul"
+          strategy="lazyOnload"
+          charSet="UTF-8"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );

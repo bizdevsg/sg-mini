@@ -37,7 +37,14 @@ export default function RegulasiSection({ locale }: RegulasiSectionProps) {
               key={logo.alt}
               className="flex min-h-28 items-center justify-center rounded-2xl border border-yellow-500/15 bg-black/20 px-5 py-6 transition-colors duration-300 hover:border-yellow-500/35 hover:bg-yellow-500/[0.06]"
             >
-              <RegulatorLogoItem logo={logo} priority />
+              <RegulatorLogoItem
+                logo={logo}
+                priority
+                useFill
+                sizes="(max-width: 768px) 140px, (max-width: 1280px) 160px, 180px"
+                imageClassName="object-contain opacity-80"
+                containerClassName="h-12 w-full max-w-[9rem] sm:h-14 sm:max-w-[10rem] md:h-16 md:max-w-[11rem]"
+              />
             </div>
           ))}
         </div>

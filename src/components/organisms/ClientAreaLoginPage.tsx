@@ -71,13 +71,13 @@ export function ClientAreaLoginPage({
   const errorModalCopy =
     locale === "id"
       ? {
-          title: "Login Gagal",
-          closeLabel: "COBA LAGI",
-        }
+        title: "Login Gagal",
+        closeLabel: "COBA LAGI",
+      }
       : {
-          title: "Login Failed",
-          closeLabel: "TRY AGAIN",
-        };
+        title: "Login Failed",
+        closeLabel: "TRY AGAIN",
+      };
 
   useEffect(() => {
     if (!isRecaptchaEnabled || state.status !== "error") {
@@ -111,12 +111,6 @@ export function ClientAreaLoginPage({
 
       <SectionContainer className="relative">
         <div className="-mx-4 flex min-h-[520px] items-stretch overflow-hidden sm:-mx-6 lg:-mx-10 lg:min-h-[580px]">
-          <ClientAreaLoginVisualPanel
-            googlePlayLink={googlePlayLink}
-            googlePlayAlt={appPromoMessages.googlePlayAlt}
-            appStoreLink={appStoreLink}
-            appStoreAlt={appPromoMessages.appStoreAlt}
-          />
           <ClientAreaLoginFormPanel
             locale={locale}
             login={login}
@@ -127,6 +121,13 @@ export function ClientAreaLoginPage({
             formAction={formAction}
             onTogglePassword={() => setShowPassword((value) => !value)}
             onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+          />
+
+          <ClientAreaLoginVisualPanel
+            googlePlayLink={googlePlayLink}
+            googlePlayAlt={appPromoMessages.googlePlayAlt}
+            appStoreLink={appStoreLink}
+            appStoreAlt={appPromoMessages.appStoreAlt}
           />
         </div>
       </SectionContainer>

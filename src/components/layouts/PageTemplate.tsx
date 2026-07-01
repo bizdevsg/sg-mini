@@ -41,7 +41,6 @@ export async function PageTemplate({
       />
       <main className={bodyClassName}>{children}</main>
       <ScrollToTopButton locale={locale} />
-      {/* <Blur /> */}
       <FooterSection locale={locale} />
     </div>
   );

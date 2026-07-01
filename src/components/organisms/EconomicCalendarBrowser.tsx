@@ -49,23 +49,26 @@ function getEventGroupDateLabel(
   return formatCalendarDate(value, locale);
 }
 
-function getCountryBadge(currency: string) {
+function getCountryFlagCode(currency: string) {
   const normalizedCurrency = currency.toUpperCase().replace(/\./g, "");
 
-  const badges: Record<string, string> = {
-    US: "US",
-    USD: "US",
-    EUR: "EU",
-    GBP: "GB",
-    JPN: "JP",
-    AUD: "AU",
-    NZD: "NZ",
-    CAD: "CA",
-    CHF: "CH",
-    CHN: "CN",
+  const countryCodes: Record<string, string> = {
+    US: "us",
+    USD: "us",
+    EUR: "eu",
+    GBP: "gb",
+    JPN: "jp",
+    JPY: "jp",
+    AUD: "au",
+    NZD: "nz",
+    CAD: "ca",
+    CHF: "ch",
+    CHN: "cn",
+    CNY: "cn",
+    CNH: "cn",
   };
 
-  return badges[normalizedCurrency] ?? currency.slice(0, 2).toUpperCase();
+  return countryCodes[normalizedCurrency] ?? "xx";
 }
 
 function getImpactColorClassName(impactScore: number) {
@@ -90,6 +93,61 @@ function getImpactSurfaceClassName(impactScore: number) {
   }
 
   return "border-emerald-500/25 bg-emerald-500/10";
+}
+
+function parseEconomicValue(value: string) {
+  const normalizedValue = value.trim().toUpperCase();
+
+  if (!normalizedValue || normalizedValue === "-") {
+    return null;
+  }
+
+  const matchedValue = normalizedValue.match(
+    /-?\d+(?:[.,]\d+)?(?:\s*[KMBT])?/,
+  );
+
+  if (!matchedValue) {
+    return null;
+  }
+
+  const compactValue = matchedValue[0].replace(/\s+/g, "");
+  const suffix = compactValue.match(/[KMBT]$/)?.[0] ?? "";
+  const numericPortion = suffix
+    ? compactValue.slice(0, -1)
+    : compactValue;
+  const parsedNumber = Number(numericPortion.replace(/,/g, ""));
+
+  if (!Number.isFinite(parsedNumber)) {
+    return null;
+  }
+
+  const multipliers: Record<string, number> = {
+    K: 1_000,
+    M: 1_000_000,
+    B: 1_000_000_000,
+    T: 1_000_000_000_000,
+  };
+
+  return parsedNumber * (multipliers[suffix] ?? 1);
+}
+
+function getActualValueColorClassName(actual: string, previous: string) {
+  const actualValue = parseEconomicValue(actual);
+  const previousValue = parseEconomicValue(previous);
+
+  if (actualValue === null || previousValue === null) {
+    return "text-foreground/78";
+  }
+
+  if (actualValue > previousValue) {
+    return "text-emerald-400";
+  }
+
+  if (actualValue < previousValue) {
+    return "text-rose-400";
+  }
+
+  return "text-foreground/78";
 }
 
 function EventDetailList({
@@ -194,7 +252,9 @@ function EventHistoryTable({
               <td className="px-4 py-3 text-sm font-semibold text-foreground/78">
                 {historyEntry.forecast}
               </td>
-              <td className="px-4 py-3 text-sm font-semibold text-foreground/78">
+              <td
+                className={`px-4 py-3 text-sm font-semibold ${getActualValueColorClassName(historyEntry.actual, historyEntry.previous)}`}
+              >
                 {historyEntry.actual}
               </td>
             </tr>
@@ -269,11 +329,10 @@ export function EconomicCalendarBrowser({
                 setSelectedEventId(null);
                 setCurrentPage(1);
               }}
-              className={`rounded-full border px-4 py-2 text-sm transition-colors ${
-                isActive
-                  ? "border-yellow-500 bg-yellow-500 text-black"
-                  : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
-              }`}
+              className={`rounded-full border px-4 py-2 text-sm transition-colors ${isActive
+                ? "border-yellow-500 bg-yellow-500 text-black"
+                : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
+                }`}
             >
               {labels.tabs[rangeKey]}{" "}
               <span
@@ -318,11 +377,10 @@ export function EconomicCalendarBrowser({
                   ) : null}
 
                   <article
-                    className={`overflow-hidden rounded-2xl border transition-colors ${
-                      isSelected
-                        ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_16px_36px_rgba(0,0,0,0.2)]"
-                        : "border-line bg-white/[0.03]"
-                    }`}
+                    className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
+                      ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_16px_36px_rgba(0,0,0,0.2)]"
+                      : "border-line bg-white/[0.03]"
+                      }`}
                   >
                     <button
                       type="button"
@@ -339,7 +397,10 @@ export function EconomicCalendarBrowser({
                             {event.displayTime}
                           </span>
                           <span className="inline-flex min-w-10 justify-center rounded-md border border-line bg-white/5 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/72">
-                            {getCountryBadge(event.currency)}
+                            <span
+                              aria-hidden="true"
+                              className={`fib fi-${getCountryFlagCode(event.currency)} h-3 w-4 overflow-hidden rounded-[2px]`}
+                            />
                           </span>
                           <span className="text-sm font-semibold text-foreground/78">
                             {event.currency}
@@ -373,7 +434,12 @@ export function EconomicCalendarBrowser({
                           </p>
                           <p className="text-sm text-foreground/62">
                             {labels.forecast}: {event.forecast} |{" "}
-                            {labels.actual}: {event.actual}
+                            {labels.actual}:{" "}
+                            <span
+                              className={`font-semibold ${getActualValueColorClassName(event.actual, event.previous)}`}
+                            >
+                              {event.actual}
+                            </span>
                           </p>
                         </div>
                       </div>
@@ -414,7 +480,7 @@ export function EconomicCalendarBrowser({
                   <div key={event.id} className="space-y-3">
                     {hasDateGroupChanged ? (
                       <div className="flex items-center gap-3">
-                        <div className="h-px flex-1 bg-line" />
+                        <div className="h-px flex-1 border border-line border-dashed" />
                         <div className="rounded-full border border-line bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/72">
                           {getEventGroupDateLabel(
                             event.date,
@@ -422,16 +488,15 @@ export function EconomicCalendarBrowser({
                             labels.today,
                           )}
                         </div>
-                        <div className="h-px flex-1 bg-line" />
+                        <div className="h-px flex-1 border border-line border-dashed" />
                       </div>
                     ) : null}
 
                     <article
-                      className={`overflow-hidden rounded-2xl border transition-colors ${
-                        isSelected
-                          ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
-                          : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
-                      }`}
+                      className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
+                        ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+                        : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
+                        }`}
                     >
                       <button
                         type="button"
@@ -447,9 +512,10 @@ export function EconomicCalendarBrowser({
                         </div>
 
                         <div className="flex items-center gap-3 text-sm font-semibold text-foreground/88">
-                          <span className="inline-flex min-w-12 justify-center rounded-md border border-line bg-white/5 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/72">
-                            {getCountryBadge(event.currency)}
-                          </span>
+                          <span
+                            aria-hidden="true"
+                            className={`fib fi-${getCountryFlagCode(event.currency)} h-4 w-5 overflow-hidden rounded-[2px]`}
+                          />
                           <span>{event.currency}</span>
                         </div>
 
@@ -468,7 +534,12 @@ export function EconomicCalendarBrowser({
                           <p className="mt-1 truncate text-sm text-foreground/62">
                             {labels.previous}: {event.previous} |{" "}
                             {labels.forecast}: {event.forecast} |{" "}
-                            {labels.actual}: {event.actual}
+                            {labels.actual}:{" "}
+                            <span
+                              className={`font-semibold ${getActualValueColorClassName(event.actual, event.previous)}`}
+                            >
+                              {event.actual}
+                            </span>
                           </p>
                         </div>
 

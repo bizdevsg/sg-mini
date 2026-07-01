@@ -1,7 +1,7 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
-const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
-const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
+const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
+const DEFAULT_NEWS_PORTAL_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_API_BASE_URL = "http://sg-admin.test/api/v1";
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
@@ -244,7 +244,7 @@ export function getFramerImageUrl(assetPath: string) {
 }
 
 export function getNewsAssetUrl(assetPath: string) {
-  return resolveAssetUrl(NEWS_PORTAL_BASE_URL, assetPath);
+  return getImageProxyUrl(resolveAssetUrl(NEWS_PORTAL_BASE_URL, assetPath));
 }
 
 export function getProductAssetUrl(assetPath: string) {
