@@ -1,10 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  getMessages,
-  type AppLocale,
-} from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { SectionContainer } from "../atoms/SectionContainer";
 
@@ -23,7 +22,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 648,
       height: 264,
       mobileClassName:
-        "right-[1rem] top-[4rem] w-[6.75rem] sm:right-[4rem] sm:top-[5rem] sm:w-32",
+        "right-[48%] top-[20%] w-[6.75rem] sm:right-[48.5%] sm:top-[18%] sm:w-[8.75rem]",
       desktopClassName: "left-[36rem] top-[4.75rem] w-[8rem]",
       animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
     },
@@ -33,7 +32,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 648,
       height: 264,
       mobileClassName:
-        "left-[1rem] top-[8rem] w-[6.75rem] sm:left-[4rem] sm:top-[10rem] sm:w-32",
+        "right-[31%] top-[33%] w-[6.75rem] sm:right-[28%] sm:top-[33%] sm:w-[8.75rem]",
       desktopClassName: "right-[7.5rem] top-[10rem] w-[8rem]",
       animationClass: "animate-[hero-float-alt_7.2s_ease-in-out_infinite]",
     },
@@ -42,7 +41,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
       alt: "Floating growth card",
       width: 684,
       height: 264,
-      mobileClassName: "hidden",
+      mobileClassName:
+        "right-[50%] top-[50%] w-[6.75rem] sm:right-[50.5%] sm:top-[50%] sm:w-[8.75rem]",
       desktopClassName: "left-[34rem] bottom-[13.5rem] w-[8rem]",
       animationClass: "animate-[hero-float_7.6s_ease-in-out_infinite]",
     },
@@ -52,7 +52,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 768,
       height: 264,
       mobileClassName:
-        "right-[1rem] bottom-[2rem] w-[7.5rem] sm:right-[5rem] sm:bottom-[3rem] sm:w-36",
+        "right-[32%] top-[65%] w-[6.75rem] sm:right-[30%] sm:top-[65%] sm:w-[8.75rem]",
       desktopClassName: "right-[8.5rem] bottom-[10rem] w-[8rem]",
       animationClass: "animate-[hero-float-alt_6.8s_ease-in-out_infinite]",
     },
@@ -65,15 +65,16 @@ export function HeroSection({ locale }: HeroSectionProps) {
         backgroundImage: "url('/assets/BCG.png')",
       }}
     >
-      <SectionContainer className="relative py-16 mt-10 md:mt-0 md:pt-20">
-        <div className="relative isolate z-10 flex flex-col gap-8 sm:gap-10 md:gap-12 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
+      <SectionContainer className="relative mb-16 sm:mb-0 sm:pt-16 sm:mt-10 md:mt-0 md:pt-20">
+        <div className="relative isolate z-10 flex flex-col gap-4 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           {/* Mobile Image */}
-          <div className="relative order-1 mx-auto h-[360px] w-full sm:h-[430px] md:h-[500px] xl:hidden">
-            <div className="pointer-events-none absolute left-[40%] top-0 h-full w-[min(920px,160vw)] -translate-x-1/2">
+          <div className="relative order-1 mx-auto h-[500px] w-full xl:hidden sm:h-[620px] md:h-[700px]">
+            <div className="pointer-events-none absolute top-15 left-[57%] h-full w-[min(1320px,210vw)] -translate-x-1/2">
               <img
-                src="/assets/Banner SGB-FIX.png"
+                src="/assets/Banner Utama-HP-NO CUT.png"
                 alt={messages.hero.visualAlt}
-                className="absolute left-1/2 top-0 w-[760px] max-w-none -translate-x-1/2 object-contain sm:w-[880px] md:w-[980px]" />
+                className="h-full w-full object-contain"
+              />
 
               {HERO_FLOATING_CARDS.map((card) => (
                 <div
@@ -85,7 +86,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
                     alt={card.alt}
                     width={card.width}
                     height={card.height}
+                    priority={card.src === "/assets/Floating Info Card 3.png"}
                     sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, 176px"
+                    unoptimized={card.src === "/assets/Floating Info Card 3.png"}
                     className="h-auto w-full object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.32)]"
                   />
                 </div>
@@ -109,7 +112,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
             </p>
 
             <div className="mt-5">
-              <p className="font-bold text-white text-xl">Download Aplikasi Sekarang!</p>
+              <p className="font-bold text-white text-xl">
+                Download Aplikasi Sekarang!
+              </p>
 
               <div className="flex flex-col mx-auto xl:mx-0 sm:flex-row items-center gap-2 mt-2 sm:w-fit">
                 <AppDownloadModalTriggerButton
@@ -129,30 +134,6 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 </Link>
               </div>
             </div>
-
-            {/* <div className="mx-auto mt-6 flex w-fit gap-4 xl:mx-0">
-              <Link href={googlePlayLink} target="_blank" rel="noreferrer">
-                <Image
-                  src="/assets/gp-button.png"
-                  alt={appPromoMessages.googlePlayAlt}
-                  width={5514}
-                  height={1612}
-                  sizes="(max-width: 640px) 144px, 160px"
-                  className="h-auto w-36 object-contain sm:w-40"
-                />
-              </Link>
-
-              <Link href={appStoreLink} target="_blank" rel="noreferrer">
-                <Image
-                  src="/assets/as-button.png"
-                  alt={appPromoMessages.appStoreAlt}
-                  width={5514}
-                  height={1612}
-                  sizes="(max-width: 640px) 144px, 160px"
-                  className="h-auto w-36 object-contain sm:w-40"
-                />
-              </Link>
-            </div> */}
           </div>
 
           {/* Desktop Image */}
@@ -176,7 +157,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   alt={card.alt}
                   width={card.width}
                   height={card.height}
+                  priority={card.src === "/assets/Floating Info Card 3.png"}
                   sizes="256px"
+                  unoptimized={card.src === "/assets/Floating Info Card 3.png"}
                   className="h-auto w-40 object-contain drop-shadow-[0_24px_48px_rgba(0,0,0,0.32)]"
                 />
               </div>

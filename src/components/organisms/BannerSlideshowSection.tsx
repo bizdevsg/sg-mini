@@ -16,7 +16,7 @@ export async function BannerSlideshowSection({
   }
 
   return (
-    <section className="bg-transparent mb-20">
+    <section className="bg-transparent mb-10 sm:mb-16 md:mb-20">
       <BannerSlideshow banners={banners} locale={locale} />
     </section>
   );

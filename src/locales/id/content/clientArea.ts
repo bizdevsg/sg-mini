@@ -82,7 +82,15 @@ export const idClientArea: AppMessages["clientArea"] = {
   topbar: {
     supportLabel: "Download Aplikasi MIFX",
     supportPhone: "021-50996650",
-    logoutLabel: "LogOut",
+    logoutLabel: "Log Out",
+    logoutModal: {
+      title: "Keluar dari Client Area?",
+      description:
+        "Sesi Anda saat ini akan diakhiri dan Anda akan diarahkan kembali ke halaman login.",
+      cancelLabel: "Batal",
+      confirmLabel: "Ya, keluar",
+      submittingLabel: "Sedang keluar...",
+    },
     primaryCta: "Buka Akun Live",
     accountMode: "Demo",
     notificationCount: "1",

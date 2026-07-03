@@ -59,7 +59,7 @@ export const idNavbar: AppMessages["navbar"] = {
     },
     {
       label: "Trade Pilot ",
-      href: "https://tradepilot.id/",
+      href: "/trade-pilot",
     },
   ],
 };

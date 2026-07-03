@@ -1,7 +1,8 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
-const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
-const DEFAULT_NEWS_PORTAL_BASE_URL = "https://portalnews.newsmaker.id";
+const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
+const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
+const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_API_BASE_URL = "http://sg-admin.test/api/v1";
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
@@ -84,6 +85,9 @@ export const NEWS_API_TOKEN = process.env.NEWS_API_TOKEN ?? "";
 
 export const NEWS_PORTAL_BASE_URL =
   process.env.NEWS_PORTAL_BASE_URL ?? DEFAULT_NEWS_PORTAL_BASE_URL;
+
+export const NEWS_IMAGE_BASE_URL =
+  process.env.NEWS_IMAGE_BASE_URL ?? DEFAULT_NEWS_IMAGE_BASE_URL;
 
 export const PRODUCT_API_URL =
   process.env.PRODUCT_API_URL ?? DEFAULT_PRODUCT_API_URL;
@@ -210,6 +214,7 @@ const IMAGE_PROXY_ALLOWED_HOSTS = new Set(
   [
     PUBLIC_FRAMER_IMAGE_BASE_URL,
     NEWS_PORTAL_BASE_URL,
+    NEWS_IMAGE_BASE_URL,
     PRODUCT_PORTAL_BASE_URL,
     BANNER_IMAGE_BASE_URL,
     PENGHARGAAN_IMAGE_BASE_URL,
@@ -244,7 +249,7 @@ export function getFramerImageUrl(assetPath: string) {
 }
 
 export function getNewsAssetUrl(assetPath: string) {
-  return getImageProxyUrl(resolveAssetUrl(NEWS_PORTAL_BASE_URL, assetPath));
+  return getImageProxyUrl(resolveAssetUrl(NEWS_IMAGE_BASE_URL, assetPath));
 }
 
 export function getProductAssetUrl(assetPath: string) {

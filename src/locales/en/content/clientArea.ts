@@ -84,7 +84,15 @@ export const enClientArea: AppMessages["clientArea"] = {
   topbar: {
     supportLabel: "Download MIFX App",
     supportPhone: "021-50996650",
-    logoutLabel: "LogOut",
+    logoutLabel: "Log Out",
+    logoutModal: {
+      title: "Log out from Client Area?",
+      description:
+        "You will be signed out from the current session and returned to the login page.",
+      cancelLabel: "Cancel",
+      confirmLabel: "Yes, log out",
+      submittingLabel: "Logging out...",
+    },
     primaryCta: "Open Live Account",
     accountMode: "Demo",
     notificationCount: "1",

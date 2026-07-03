@@ -21,7 +21,7 @@ type AppDownloadModalTriggerButtonProps = {
 
 const variants = {
   primary:
-    "border border-[#f4cf73]/70 bg-[linear-gradient(135deg,#f6d57b_0%,#d7a63c_52%,#b9821e_100%)] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105",
+    "border border-[#f4cf73]/70 bg-linear-to-b from-[#FF9600] to-[#FFDE00] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105",
   dark:
     "border border-[rgba(214,166,64,0.28)] bg-[linear-gradient(180deg,rgba(31,24,11,0.96),rgba(12,12,12,0.98))] text-[#f1cb74] shadow-[0_14px_34px_rgba(0,0,0,0.3)] ring-1 ring-[rgba(205,161,58,0.16)] hover:border-[rgba(242,207,120,0.42)] hover:bg-[linear-gradient(180deg,rgba(42,31,12,0.98),rgba(16,16,16,0.98))] hover:text-[#ffe29a]",
   ghost:
@@ -50,19 +50,19 @@ export function AppDownloadModalTriggerButton({
   const modalCopy =
     locale === "id"
       ? {
-          title: "Download Aplikasi",
-          subtitle: "Solid Gold Berjangka",
-          description:
-            "Untuk registrasi akun, silakan download aplikasi Solid Gold Berjangka terlebih dahulu melalui store pilihan Anda.",
-          closeLabel: "Tutup",
-        }
+        title: "Download Aplikasi",
+        subtitle: "Solid Gold Berjangka",
+        description:
+          "Untuk registrasi akun, silakan download aplikasi Solid Gold Berjangka terlebih dahulu melalui store pilihan Anda.",
+        closeLabel: "Tutup",
+      }
       : {
-          title: "Download the App",
-          subtitle: "Solid Gold Berjangka",
-          description:
-            "To register an account, please download the Solid Gold Berjangka app first from your preferred app store.",
-          closeLabel: "Close",
-        };
+        title: "Download the App",
+        subtitle: "Solid Gold Berjangka",
+        description:
+          "To register an account, please download the Solid Gold Berjangka app first from your preferred app store.",
+        closeLabel: "Close",
+      };
 
   return (
     <>

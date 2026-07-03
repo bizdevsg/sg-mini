@@ -612,6 +612,13 @@ export type AppMessages = {
       supportLabel: string;
       supportPhone: string;
       logoutLabel: string;
+      logoutModal: {
+        title: string;
+        description: string;
+        cancelLabel: string;
+        confirmLabel: string;
+        submittingLabel: string;
+      };
       primaryCta: string;
       accountMode: string;
       notificationCount: string;
@@ -667,6 +674,15 @@ export type AppMessages = {
         cta: string;
       }>;
     };
+  };
+  cookieConsent: {
+    badge: string;
+    title: string;
+    description: string;
+    essentialTag: string;
+    preferenceTag: string;
+    dismissLabel: string;
+    acceptLabel: string;
   };
   footer: {
     companyName: string;

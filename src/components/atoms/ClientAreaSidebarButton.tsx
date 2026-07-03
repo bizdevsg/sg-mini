@@ -19,9 +19,9 @@ export function ClientAreaSidebarButton({
     <Link
       href={href}
       aria-current={isActive ? "page" : undefined}
-      className={`flex w-full sm:w-20 sm:h-20 flex-col items-center justify-center rounded-lg text-center transition-all duration-300 cursor-pointer ${isActive
-        ? "border border-yellow-500/30 bg-zinc-900/80 text-yellow-500"
-        : "hover:border hover:border-yellow-500/30 text-zinc-500 hover:text-yellow-500/80"
+      className={`flex w-full pl-5 pr-10 py-5 items-center gap-2 text-center transition-all duration-300 cursor-pointer ${isActive
+        ? "border-l-2 border-yellow-500 bg-linear-to-r from-yellow-500/20 to-transparent text-yellow-500"
+        : "hover:border-l-2 hover:border-yellow-500 text-zinc-500 hover:bg-linear-to-r hover:from-yellow-500/20 hover:to-transparent hover:text-yellow-500"
         }`}
     >
       <FontAwesomeIcon icon={icon} className="text-lg" />

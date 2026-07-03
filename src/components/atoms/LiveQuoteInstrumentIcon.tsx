@@ -4,6 +4,7 @@ import { getLiveQuoteDisplay, getLiveQuoteIconSrc } from "@/lib/live-quotes";
 
 type LiveQuoteInstrumentIconProps = {
   symbol: string;
+  className?: string;
 };
 
 function getFallbackText(input: string) {
@@ -21,13 +22,14 @@ function getFallbackText(input: string) {
 
 export function LiveQuoteInstrumentIcon({
   symbol,
+  className = "h-12 w-12",
 }: LiveQuoteInstrumentIconProps) {
   const display = getLiveQuoteDisplay(symbol);
   const iconSrc = getLiveQuoteIconSrc(symbol);
   const fallbackText = getFallbackText(display.label);
 
   return (
-    <div className="flex h-12 w-12 shrink-0 items-center justify-center">
+    <div className={`flex shrink-0 items-center justify-center ${className}`}>
       {iconSrc ? (
         <Image
           src={iconSrc}

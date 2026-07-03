@@ -7,7 +7,6 @@ import { ClientAreaHomePanel } from "@/components/organisms/ClientAreaHomePanel"
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import {
   buildClientAreaHeroSlides,
-  getClientAreaMarketPrices,
   getDashboardCopy,
   getQuickActionIconMap,
 } from "@/components/organisms/client-area.shared";
@@ -17,18 +16,20 @@ import type {
   BreakingNewsItem,
   ClientAreaBannerRecord,
 } from "@/components/organisms/client-area.types";
-import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
+import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
 import { getMessages } from "@/locales";
 import type { AppLocale } from "@/locales";
 
 type ClientAreaDashboardProps = {
   breakingNews?: BreakingNewsItem[];
+  economicCalendarEvents?: EconomicCalendarEvent[];
   initialBanners?: ClientAreaBannerRecord[];
   locale: AppLocale;
 };
 
 export function ClientAreaDashboard({
   breakingNews,
+  economicCalendarEvents = [],
   initialBanners = [],
   locale,
 }: ClientAreaDashboardProps) {
@@ -36,8 +37,6 @@ export function ClientAreaDashboard({
   const copy = getDashboardCopy(locale);
   const quickActionIconMap = getQuickActionIconMap();
   const heroSlides = buildClientAreaHeroSlides(copy, initialBanners);
-  const { quotes } = useLiveQuoteStream();
-  const prices = getClientAreaMarketPrices(quotes);
   const [accountMode, setAccountMode] = useState<AccountMode>("demo");
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<ActionId | null>(null);
@@ -90,7 +89,8 @@ export function ClientAreaDashboard({
         onSelectAccountMode={handleSelectAccountMode}
         quickActionIconMap={quickActionIconMap}
         onActionClick={setActiveModal}
-        prices={prices}
+        economicCalendarEvents={economicCalendarEvents}
+        locale={locale}
       />
     </ClientAreaShell>
   );

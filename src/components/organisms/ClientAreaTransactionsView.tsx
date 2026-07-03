@@ -23,7 +23,7 @@ export function ClientAreaTransactionsView({
       breakingNews={breakingNews}
       locale={locale}
     >
-      <ClientAreaTransactionsPanel copy={copy} />
+      <ClientAreaTransactionsPanel copy={copy} locale={locale} />
     </ClientAreaShell>
   );
 }

@@ -4,7 +4,8 @@ import Script from "next/script";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "flag-icons/css/flag-icons.min.css";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
-import { NEWS_PORTAL_BASE_URL } from "@/lib/env";
+import { LoadingProvider } from "@/components/providers/LoadingProvider";
+import { NEWS_IMAGE_BASE_URL } from "@/lib/env";
 import "@/lib/fontawesome";
 import {
   DEFAULT_LOCALE,
@@ -57,12 +58,14 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="//portalnews.newsmaker.id" />
         <link
           rel="preconnect"
-          href={NEWS_PORTAL_BASE_URL}
+          href={NEWS_IMAGE_BASE_URL}
           crossOrigin="anonymous"
         />
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
-        <FontAwesomeProvider>{children}</FontAwesomeProvider>
+        <FontAwesomeProvider>
+          <LoadingProvider locale={locale}>{children}</LoadingProvider>
+        </FontAwesomeProvider>
         <Script id="tawk-init" strategy="lazyOnload">
           {`window.Tawk_API = window.Tawk_API || {}; window.Tawk_LoadStart = new Date();`}
         </Script>

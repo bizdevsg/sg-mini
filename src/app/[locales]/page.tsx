@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { AppPromoSection } from "@/components/organisms/AppPromoSection";
 import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSection";
 import { HeroSection } from "@/components/organisms/HeroSection";
+import { HomeCookieConsentBanner } from "@/components/organisms/HomeCookieConsentBanner";
 import { HomeWhyChooseSection } from "@/components/organisms/HomeWhyChooseSection";
 import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
 import { RegulatorMarqueeSection } from "@/components/organisms/RegulatorMarqueeSection";
@@ -16,6 +17,7 @@ import {
   type AppLocale,
 } from "@/locales";
 import { BenefitSection } from "@/components/organisms/BenefitSection";
+import { hasCookieConsentPreference } from "@/lib/cookie-consent";
 
 type LocalizedPageProps = {
   params: Promise<{ locales: string }>;
@@ -61,6 +63,7 @@ export async function generateMetadata({
 export default async function LocalizedHome({ params }: LocalizedPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  const shouldShowCookieConsent = !(await hasCookieConsentPreference());
 
   return (
     <>
@@ -72,6 +75,9 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
       <SpreadSection locale={locales} />
       <HomeWhyChooseSection locale={locales} />
       <AppPromoSection locale={locales} />
+      {shouldShowCookieConsent ? (
+        <HomeCookieConsentBanner locale={locales} />
+      ) : null}
     </>
   );
 }

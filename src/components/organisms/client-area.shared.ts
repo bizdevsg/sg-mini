@@ -1,5 +1,6 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
+import { getLiveQuoteDisplay, getSortedSymbols } from "@/lib/live-quotes";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
@@ -12,7 +13,9 @@ import type {
   ClientAreaHeroSlide,
   DashboardCopy,
   MarketPrice,
+  PositionItem,
   TabId,
+  TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
 
 export type {
@@ -25,13 +28,20 @@ export type {
   ClientAreaHeroSlide,
   DashboardCopy,
   MarketPrice,
+  PositionItem,
   SlideGraphic,
   SlideItem,
   TabId,
-  TransactionItem,
+  TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
 
-export const TABS: TabId[] = ["home", "market", "transaction", "news", "account"];
+export const TABS: TabId[] = [
+  "home",
+  "market",
+  "transaction",
+  "news",
+  "account",
+];
 export const ACTION_IDS: ActionId[] = [
   "education",
   "products",
@@ -78,6 +88,76 @@ export function formatSignedUsd(value: number) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+}
+
+export function getClientAreaEconomicCalendarPreview<
+  T extends {
+    impactScore: number;
+    date?: string | null;
+    displayTime?: string;
+  }
+>(events: T[]) {
+  const highImpactEvents: T[] = [];
+  const mediumImpactEvents: T[] = [];
+  const lowImpactEvents: T[] = [];
+
+  for (const event of events) {
+    if (event.impactScore >= 3) {
+      highImpactEvents.push(event);
+      continue;
+    }
+
+    if (event.impactScore === 2) {
+      mediumImpactEvents.push(event);
+      continue;
+    }
+
+    lowImpactEvents.push(event);
+  }
+
+  let remainingSlots = 3;
+  const highQuota = Math.min(highImpactEvents.length, remainingSlots);
+  remainingSlots -= highQuota;
+
+  const mediumQuota = Math.min(mediumImpactEvents.length, remainingSlots);
+  remainingSlots -= mediumQuota;
+
+  const lowQuota = Math.min(lowImpactEvents.length, remainingSlots);
+
+  let remainingHighQuota = highQuota;
+  let remainingMediumQuota = mediumQuota;
+  let remainingLowQuota = lowQuota;
+  const selectedEvents: T[] = [];
+
+  for (const event of events) {
+    if (selectedEvents.length >= 3) {
+      break;
+    }
+
+    if (event.impactScore >= 3 && remainingHighQuota > 0) {
+      selectedEvents.push(event);
+      remainingHighQuota -= 1;
+      continue;
+    }
+
+    if (event.impactScore === 2 && remainingMediumQuota > 0) {
+      selectedEvents.push(event);
+      remainingMediumQuota -= 1;
+      continue;
+    }
+
+    if (event.impactScore <= 1 && remainingLowQuota > 0) {
+      selectedEvents.push(event);
+      remainingLowQuota -= 1;
+    }
+  }
+
+  return {
+    events: selectedEvents,
+    isHighImpactOnly:
+      selectedEvents.length > 0 &&
+      selectedEvents.every((event) => event.impactScore >= 3),
+  };
 }
 
 export function formatClock(locale: AppLocale) {
@@ -174,7 +254,6 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
   if (locale === "id") {
     return {
       breakingLabel: "Breaking News",
-      liveLabel: "SGB LIVE",
       languageLabel: "IDN",
       referenceLabel: "Ref dashboard client",
       quickDepositLabel: "Quick Deposit",
@@ -183,10 +262,15 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       buyersLabel: "BUYERS",
       sellersLabel: "SELLERS",
       marketWatchTitle: "Market Watchlist",
-      transactionTitle: "Riwayat Transaksi",
+      economicCalendarTitle: "Kalender Ekonomi",
+      economicCalendarEmpty: "Belum ada agenda ekonomi untuk ditampilkan.",
+      economicCalendarHighImpactLabel: "High Impact",
+      economicCalendarFallbackLabel: "3 agenda teratas hari ini",
+      viewMoreLabel: "View More...",
+      transactionTitle: "Posisi Berjalan",
+      transactionHistoryTitle: "Transaction History",
       newsTitle: "Market News & Insights",
       accountTitle: "Profil & Pengaturan Akun",
-      recommendationsLabel: "Rekomendasi",
       marketTableHeaders: {
         symbol: "Symbol",
         name: "Nama",
@@ -291,20 +375,62 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         equityRatio: 1292,
         autoLiquidation: 500,
       },
-      transactions: [
+      positions: [
         {
-          id: "loss",
+          id: "xul10-buy",
+          symbol: "XUL10",
+          instrument: "Gold",
+          side: "buy",
+          volume: "1.20 Lot",
+          openPrice: "4,058.20",
+          currentPrice: "4,070.66",
+          floatingPl: "+$1,495.20",
+          openedAt: "Hari ini, 09:02 WIB",
+        },
+        {
+          id: "hkk50-sell",
+          symbol: "HKK50_BBJ",
+          instrument: "Hang Seng",
+          side: "sell",
+          volume: "1.00 Lot",
+          openPrice: "23,110",
+          currentPrice: "23,061",
+          floatingPl: "+$490.00",
+          openedAt: "Hari ini, 10:41 WIB",
+        },
+        {
+          id: "bco10-sell",
+          symbol: "BCO10_BBJ",
+          instrument: "Crude Oil",
+          side: "sell",
+          volume: "0.50 Lot",
+          openPrice: "78.90",
+          currentPrice: "79.12",
+          floatingPl: "-$110.00",
+          openedAt: "Kemarin, 15:18 WIB",
+        },
+      ],
+      transactionHistory: [
+        {
+          id: "history-funding",
+          type: "credit",
+          title: "System Demo Funding",
+          subtitle: "Kemarin, 14:35 WIB",
+          amount: "+$50,000.00",
+        },
+        {
+          id: "history-adjustment",
           type: "debit",
           title: "Loss / Floating Adjust",
           subtitle: "Hari ini, 09:02 WIB",
           amount: "-$3,730.00",
         },
         {
-          id: "funding",
-          type: "credit",
-          title: "System Demo Funding",
-          subtitle: "Kemarin, 14:35 WIB",
-          amount: "+$50,000.00",
+          id: "history-withdrawal",
+          type: "debit",
+          title: "Internal Withdrawal",
+          subtitle: "24 Jun 2026, 11:26 WIB",
+          amount: "-$1,250.00",
         },
       ],
       modalTitles: {
@@ -331,7 +457,6 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
 
   return {
     breakingLabel: "Breaking News",
-    liveLabel: "SGB LIVE",
     languageLabel: "ENG",
     referenceLabel: "Client dashboard reference",
     quickDepositLabel: "Quick Deposit",
@@ -340,10 +465,15 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
     buyersLabel: "BUYERS",
     sellersLabel: "SELLERS",
     marketWatchTitle: "Market Watchlist",
-    transactionTitle: "Transaction History",
+    economicCalendarTitle: "Economic Calendar",
+    economicCalendarEmpty: "No economic events are available right now.",
+    economicCalendarHighImpactLabel: "High Impact",
+    economicCalendarFallbackLabel: "Top 3 events today",
+    viewMoreLabel: "View More...",
+    transactionTitle: "Open Positions",
+    transactionHistoryTitle: "Transaction History",
     newsTitle: "Market News & Insights",
     accountTitle: "Account Profile & Settings",
-    recommendationsLabel: "Recommendations",
     marketTableHeaders: {
       symbol: "Symbol",
       name: "Name",
@@ -448,20 +578,62 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       equityRatio: 1292,
       autoLiquidation: 500,
     },
-    transactions: [
+    positions: [
       {
-        id: "loss",
+        id: "xul10-buy",
+        symbol: "XUL10",
+        instrument: "Gold",
+        side: "buy",
+        volume: "1.20 Lot",
+        openPrice: "4,058.20",
+        currentPrice: "4,070.66",
+        floatingPl: "+$1,495.20",
+        openedAt: "Today, 09:02 WIB",
+      },
+      {
+        id: "hkk50-sell",
+        symbol: "HKK50_BBJ",
+        instrument: "Hang Seng",
+        side: "sell",
+        volume: "1.00 Lot",
+        openPrice: "23,110",
+        currentPrice: "23,061",
+        floatingPl: "+$490.00",
+        openedAt: "Today, 10:41 WIB",
+      },
+      {
+        id: "bco10-sell",
+        symbol: "BCO10_BBJ",
+        instrument: "Crude Oil",
+        side: "sell",
+        volume: "0.50 Lot",
+        openPrice: "78.90",
+        currentPrice: "79.12",
+        floatingPl: "-$110.00",
+        openedAt: "Yesterday, 15:18 WIB",
+      },
+    ],
+    transactionHistory: [
+      {
+        id: "history-funding",
+        type: "credit",
+        title: "System Demo Funding",
+        subtitle: "Yesterday, 14:35 WIB",
+        amount: "+$50,000.00",
+      },
+      {
+        id: "history-adjustment",
         type: "debit",
         title: "Loss / Floating Adjust",
         subtitle: "Today, 09:02 WIB",
         amount: "-$3,730.00",
       },
       {
-        id: "funding",
-        type: "credit",
-        title: "System Demo Funding",
-        subtitle: "Yesterday, 14:35 WIB",
-        amount: "+$50,000.00",
+        id: "history-withdrawal",
+        type: "debit",
+        title: "Internal Withdrawal",
+        subtitle: "24 Jun 2026, 11:26 WIB",
+        amount: "-$1,250.00",
       },
     ],
     modalTitles: {
@@ -486,34 +658,65 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
   };
 }
 
-type ClientAreaMarketFeed = MarketPrice & {
+type ClientAreaMarketFeed = {
+  bid: number;
+  ask: number;
+  change: number;
   liveSymbol: string;
+};
+
+export type ClientAreaMarketCategory = "Commodity" | "Index" | "Forex";
+
+const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
+  string,
+  ClientAreaMarketCategory
+> = {
+  XUL10: "Commodity",
+  BCO10_BBJ: "Commodity",
+  HKK50_BBJ: "Index",
+  JPK50_BBJ: "Index",
+  DX1010_BBJ: "Index",
+  AU1010_BBJ: "Forex",
+  EU1010_BBJ: "Forex",
+  GU1010_BBJ: "Forex",
+  UC1010_BBJ: "Forex",
+  UJ1010_BBJ: "Forex",
+  UI1010_BBJ: "Forex",
+};
+
+const CLIENT_AREA_FEATURED_MARKET_SYMBOLS: Record<
+  ClientAreaMarketCategory,
+  string[]
+> = {
+  Commodity: ["XUL10", "BCO10_BBJ"],
+  Index: ["HKK50_BBJ", "JPK50_BBJ", "DX1010_BBJ"],
+  Forex: ["EU1010_BBJ", "UJ1010_BBJ", "GU1010_BBJ", "AU1010_BBJ", "UC1010_BBJ", "UI1010_BBJ"],
 };
 
 const CLIENT_AREA_MARKET_FEEDS: ClientAreaMarketFeed[] = [
   {
-    symbol: "GOLD",
-    name: "XAU10_BBJ",
     bid: 2550.21,
     ask: 2551.45,
     change: 0.56,
     liveSymbol: "XUL10",
   },
   {
-    symbol: "CRUDE OIL",
-    name: "CL_COAL",
     bid: 78.45,
     ask: 78.5,
     change: -1.12,
     liveSymbol: "BCO10_BBJ",
   },
   {
-    symbol: "SILVER",
-    name: "XAGUSD_BBJ",
-    bid: 30.12,
-    ask: 30.16,
-    change: 0.28,
-    liveSymbol: "XAGUSD",
+    bid: 23069,
+    ask: 23053,
+    change: -0.16,
+    liveSymbol: "HKK50_BBJ",
+  },
+  {
+    bid: 1.1789,
+    ask: 1.1785,
+    change: 0.12,
+    liveSymbol: "EU1010_BBJ",
   },
 ];
 
@@ -537,27 +740,142 @@ function resolveLiveQuoteChange(tick: LiveQuoteTick, fallbackChange: number) {
   return Number((((price - openPrice) / openPrice) * 100).toFixed(2));
 }
 
-export function getClientAreaMarketPrices(quotes: LiveQuotePayload): MarketPrice[] {
-  return CLIENT_AREA_MARKET_FEEDS.map(({ liveSymbol, ...fallback }) => {
+function buildClientAreaMarketPrice(
+  liveSymbol: string,
+  values: {
+    ask: number;
+    bid: number;
+    buy?: string;
+    change: number;
+    dateTime?: string;
+    high?: string;
+    low?: string;
+    open?: string;
+    price?: string;
+    sell?: string;
+    time?: string;
+  },
+): MarketPrice {
+  const display = getLiveQuoteDisplay(liveSymbol);
+
+  return {
+    symbol: display.label,
+    name: display.symbol ?? liveSymbol,
+    code: liveSymbol,
+    bid: values.bid,
+    ask: values.ask,
+    change: values.change,
+    price: values.price,
+    sell: values.sell,
+    buy: values.buy,
+    open: values.open,
+    high: values.high,
+    low: values.low,
+    time: values.time,
+    dateTime: values.dateTime,
+  };
+}
+
+export function getClientAreaMarketCategory(
+  symbol?: string,
+): ClientAreaMarketCategory {
+  if (!symbol) {
+    return "Commodity";
+  }
+
+  return CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL[symbol] ?? "Forex";
+}
+
+export function getClientAreaMarketPrices(
+  quotes: LiveQuotePayload,
+): MarketPrice[] {
+  return CLIENT_AREA_MARKET_FEEDS.map((fallback) => {
+    const { liveSymbol } = fallback;
     const tick = quotes[liveSymbol];
 
     if (!tick) {
-      return fallback;
+      return buildClientAreaMarketPrice(liveSymbol, fallback);
     }
 
-    return {
-      ...fallback,
+    return buildClientAreaMarketPrice(liveSymbol, {
       bid: parseLiveQuoteNumber(tick.buy) ?? fallback.bid,
       ask: parseLiveQuoteNumber(tick.sell) ?? fallback.ask,
       change: resolveLiveQuoteChange(tick, fallback.change),
+      price: tick.price,
+      sell: tick.sell,
+      buy: tick.buy,
+      open: tick.oprice,
+      high: tick.hprice,
+      low: tick.lprice,
+      time: tick.time,
+      dateTime: tick.date_time,
+    });
+  });
+}
+
+export function getClientAreaAllMarketPrices(
+  quotes: LiveQuotePayload,
+): MarketPrice[] {
+  return getSortedSymbols(quotes).map((symbol) => {
+    const tick = quotes[symbol];
+    const display = getLiveQuoteDisplay(symbol);
+
+    return {
+      symbol: display.label,
+      name: display.symbol ?? symbol,
+      code: symbol,
+      bid: parseLiveQuoteNumber(tick.buy) ?? 0,
+      ask: parseLiveQuoteNumber(tick.sell) ?? 0,
+      change: resolveLiveQuoteChange(tick, 0),
+      price: tick.price,
+      sell: tick.sell,
+      buy: tick.buy,
+      open: tick.oprice,
+      high: tick.hprice,
+      low: tick.lprice,
+      time: tick.time,
+      dateTime: tick.date_time,
     };
   });
 }
 
+export function getClientAreaFeaturedMarketPrices(
+  quotes: LiveQuotePayload,
+): MarketPrice[] {
+  const availablePrices = getClientAreaAllMarketPrices(quotes);
+
+  if (availablePrices.length > 0) {
+    return (Object.entries(CLIENT_AREA_FEATURED_MARKET_SYMBOLS) as Array<
+      [ClientAreaMarketCategory, string[]]
+    >)
+      .map(([, symbols]) =>
+        symbols
+          .map((symbol) =>
+            availablePrices.find((item) => (item.code ?? item.name) === symbol),
+          )
+          .find(Boolean),
+      )
+      .filter((item): item is MarketPrice => Boolean(item));
+  }
+
+  return (Object.entries(CLIENT_AREA_FEATURED_MARKET_SYMBOLS) as Array<
+    [ClientAreaMarketCategory, string[]]
+  >)
+    .map(([, symbols]) =>
+      symbols
+        .map((symbol) =>
+          CLIENT_AREA_MARKET_FEEDS.find((item) => item.liveSymbol === symbol),
+        )
+        .find(Boolean),
+    )
+    .filter((item): item is ClientAreaMarketFeed => Boolean(item))
+    .map((item) => buildClientAreaMarketPrice(item.liveSymbol, item));
+}
+
 export function getInitialPrices(): MarketPrice[] {
-  return CLIENT_AREA_MARKET_FEEDS.map(({ liveSymbol: _liveSymbol, ...item }) => ({
-    ...item,
-  }));
+  return CLIENT_AREA_MARKET_FEEDS.map((item) =>
+    buildClientAreaMarketPrice(item.liveSymbol, item),
+  );
 }
 
 export function getQuickActionIconMap(): Record<ActionId, IconProp> {

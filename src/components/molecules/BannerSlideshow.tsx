@@ -284,7 +284,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                 aria-label={formatBannerLabel(labels.slideButtonLabel, index + 1)}
                 aria-pressed={isActive}
                 className={`h-2.5 rounded-full transition-all duration-300 ${isActive
-                  ? "w-8 bg-[#D5A246]"
+                  ? "w-8 bg-linear-to-b from-[#FF9600] to-[#FFDE00]"
                   : "w-2.5 bg-white/35 hover:bg-white/60"
                   }`}
                 onClick={() => {

@@ -1,6 +1,7 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import {
   formatSignedPercent,
   formatUsd,
@@ -24,19 +25,24 @@ export function ClientAreaRecommendationCard({
   iconClass,
 }: ClientAreaRecommendationCardProps) {
   const signal = resolveSignalBadge(item.change);
+  const symbolCode = item.code ?? item.name;
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/80 p-4 transition-all hover:border-yellow-500/30">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div
-            className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${iconClass}`}
-          >
-            <FontAwesomeIcon icon={icon} />
-          </div>
+          {symbolCode ? (
+            <LiveQuoteInstrumentIcon symbol={symbolCode} className="h-8 w-8" />
+          ) : (
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${iconClass}`}
+            >
+              <FontAwesomeIcon icon={icon} />
+            </div>
+          )}
           <div>
             <h3 className="text-xs font-extrabold text-zinc-200">{item.symbol}</h3>
-            <span className="text-[10px] text-zinc-500">{item.name}</span>
+            <span className="text-[10px] text-zinc-500">{symbolCode}</span>
           </div>
         </div>
 

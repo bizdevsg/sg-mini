@@ -1,0 +1,74 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+import { getDashboardCopy } from "@/components/organisms/client-area.shared";
+import {
+  getLocaleConfig,
+  getMessages,
+  isSupportedLocale,
+  SUPPORTED_LOCALES,
+  type AppLocale,
+} from "@/locales";
+
+export type ClientAreaSubpageId =
+  | "account"
+  | "market"
+  | "news"
+  | "transaction";
+
+export type ClientAreaSubpageProps = {
+  params: Promise<{ locales: string }>;
+};
+
+export function assertValidLocale(value: string): asserts value is AppLocale {
+  if (!isSupportedLocale(value)) {
+    notFound();
+  }
+}
+
+export function generateClientAreaStaticParams() {
+  return SUPPORTED_LOCALES.map((locale) => ({
+    locales: locale,
+  }));
+}
+
+function getClientAreaSubpageTitle(
+  locale: AppLocale,
+  pageId: ClientAreaSubpageId,
+) {
+  const copy = getDashboardCopy(locale);
+
+  switch (pageId) {
+    case "account":
+      return copy.accountTitle;
+    case "market":
+      return copy.marketWatchTitle;
+    case "news":
+      return copy.newsTitle;
+    case "transaction":
+      return copy.transactionTitle;
+  }
+}
+
+export function buildClientAreaSubpageMetadata(
+  locale: AppLocale,
+  pageId: ClientAreaSubpageId,
+): Metadata {
+  const { clientArea } = getMessages(locale);
+  const sectionTitle = getClientAreaSubpageTitle(locale, pageId);
+  const path = `/${locale}/client-area/${pageId}`;
+
+  return {
+    title: `${sectionTitle} | ${clientArea.pageTitle}`,
+    description: `${sectionTitle}. ${clientArea.pageDescription}`,
+    alternates: {
+      canonical: path,
+      languages: Object.fromEntries(
+        SUPPORTED_LOCALES.map((supportedLocale) => [
+          getLocaleConfig(supportedLocale).lang,
+          `/${supportedLocale}/client-area/${pageId}`,
+        ]),
+      ),
+    },
+  };
+}

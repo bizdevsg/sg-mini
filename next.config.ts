@@ -16,7 +16,10 @@ const framerImageBaseUrl = new URL(
     "https://framerusercontent.com/images",
 );
 const newsPortalBaseUrl = new URL(
-  process.env.NEWS_PORTAL_BASE_URL ?? "https://portalnews.newsmaker.id",
+  process.env.NEWS_PORTAL_BASE_URL ?? "http://portalnews.newsmaker.test",
+);
+const newsImageBaseUrl = new URL(
+  process.env.NEWS_IMAGE_BASE_URL ?? "https://portalnews.newsmaker.id",
 );
 const bannerImageBaseUrl = new URL(
   process.env.BANNER_IMAGE_BASE_URL ??
@@ -42,6 +45,7 @@ const allowedLocalOrigins = Array.from(
     "::1",
     "[::1]:3000",
     newsPortalBaseUrl.hostname,
+    newsImageBaseUrl.hostname,
     bannerImageBaseUrl.hostname,
     penghargaanImageBaseUrl.hostname,
   ]),
@@ -89,14 +93,14 @@ const nextConfig: NextConfig = {
         pathname: `${framerImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
       },
       {
-        protocol: "https",
-        hostname: "portalnews.newsmaker.id",
-        pathname: "/uploads/**",
-      },
-      {
         protocol: getProtocol(newsPortalBaseUrl),
         hostname: newsPortalBaseUrl.hostname,
         pathname: `${newsPortalBaseUrl.pathname.replace(/\/$/, "")}/**`,
+      },
+      {
+        protocol: getProtocol(newsImageBaseUrl),
+        hostname: newsImageBaseUrl.hostname,
+        pathname: `${newsImageBaseUrl.pathname.replace(/\/$/, "")}/**`,
       },
       {
         protocol: getProtocol(bannerImageBaseUrl),

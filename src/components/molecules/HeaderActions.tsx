@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
@@ -75,7 +76,7 @@ export function HeaderActions({
     ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
-  const clientAreaAccountHref = `/${locale}/client-area/account`;
+  const clientAreaAccountHref = `/${locale}/client-area`;
   const clientAreaLoginHref = `/${locale}/client-area/login`;
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
@@ -94,7 +95,7 @@ export function HeaderActions({
         aria-expanded={isLocaleOpen}
         aria-label={messages.navbar.switchLocaleLabel}
         onClick={() => setIsLocaleOpen((current) => !current)}
-        className={`flex items-center gap-2 text-xs transition-colors duration-300 hover:bg-[#1b1b1b] sm:text-sm ${localeButtonClass}`}
+        className={`flex items-center gap-2 text-xs transition-colors duration-300 hover:bg-[#1b1b1b] sm:text-sm cursor-pointer ${localeButtonClass}`}
       >
         <Image
           src={activeLocale.iconSrc}
@@ -198,14 +199,14 @@ export function HeaderActions({
       messages.clientArea.pageTitle;
 
     return (
-      <ButtonLink
+      <Link
         href={clientAreaAccountHref}
-        variant={variant}
-        size="sm"
-        className={extraClassName}
+        aria-label={profileLabel}
+        title={profileLabel}
+        className={`inline-flex items-center h-8 w-8 justify-center rounded-full p-2 text-yellow-900 bg-linear-to-br from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition duration-300 ease-in-out ${extraClassName}`}
       >
-        {profileLabel}
-      </ButtonLink>
+        <FontAwesomeIcon icon={["fas", "user"]} className="text-sm" />
+      </Link>
     );
   };
 

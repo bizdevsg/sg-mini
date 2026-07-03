@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 
 import { getLocaleConfig, type AppLocale } from "@/locales";
 import { LocaleDocumentSync } from "@/components/providers/LocaleDocumentSync";
@@ -9,7 +9,6 @@ import {
   getClientAreaSessionProfile,
   hasClientAreaSession,
 } from "@/lib/client-area-auth";
-import { Blur } from "../molecules/Blur";
 
 type PageTemplateProps = {
   children: ReactNode;
@@ -17,16 +16,26 @@ type PageTemplateProps = {
   bodyClassName?: string;
 };
 
-export async function PageTemplate({
-  children,
-  locale,
-  bodyClassName = "",
-}: PageTemplateProps) {
+async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
   const [isClientAreaAuthenticated, clientAreaProfile] = await Promise.all([
     hasClientAreaSession(),
     getClientAreaSessionProfile(),
   ]);
 
+  return (
+    <Navbar
+      clientAreaProfile={clientAreaProfile}
+      locale={locale}
+      isClientAreaAuthenticated={isClientAreaAuthenticated}
+    />
+  );
+}
+
+export function PageTemplate({
+  children,
+  locale,
+  bodyClassName = "",
+}: PageTemplateProps) {
   return (
     <div
       lang={getLocaleConfig(locale).lang}
@@ -34,11 +43,17 @@ export async function PageTemplate({
       className="min-h-screen bg-transparent"
     >
       <LocaleDocumentSync locale={locale} />
-      <Navbar
-        clientAreaProfile={clientAreaProfile}
-        locale={locale}
-        isClientAreaAuthenticated={isClientAreaAuthenticated}
-      />
+      <Suspense
+        fallback={
+          <Navbar
+            clientAreaProfile={null}
+            locale={locale}
+            isClientAreaAuthenticated={false}
+          />
+        }
+      >
+        <PageTemplateNavbar locale={locale} />
+      </Suspense>
       <main className={bodyClassName}>{children}</main>
       <ScrollToTopButton locale={locale} />
       <FooterSection locale={locale} />

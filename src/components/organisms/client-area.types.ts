@@ -48,7 +48,19 @@ export type ArticleItem = {
   timeAgo: string;
 };
 
-export type TransactionItem = {
+export type PositionItem = {
+  id: string;
+  symbol: string;
+  instrument: string;
+  side: "buy" | "sell";
+  volume: string;
+  openPrice: string;
+  currentPrice: string;
+  floatingPl: string;
+  openedAt: string;
+};
+
+export type TransactionHistoryItem = {
   id: string;
   type: "credit" | "debit";
   title: string;
@@ -78,7 +90,6 @@ export type AccountSnapshot = {
 
 export type DashboardCopy = {
   breakingLabel: string;
-  liveLabel: string;
   languageLabel: string;
   referenceLabel: string;
   quickDepositLabel: string;
@@ -87,10 +98,15 @@ export type DashboardCopy = {
   buyersLabel: string;
   sellersLabel: string;
   marketWatchTitle: string;
+  economicCalendarTitle: string;
+  economicCalendarEmpty: string;
+  economicCalendarHighImpactLabel: string;
+  economicCalendarFallbackLabel: string;
+  viewMoreLabel: string;
   transactionTitle: string;
+  transactionHistoryTitle: string;
   newsTitle: string;
   accountTitle: string;
-  recommendationsLabel: string;
   marketTableHeaders: {
     symbol: string;
     name: string;
@@ -104,7 +120,8 @@ export type DashboardCopy = {
   articles: ArticleItem[];
   demoAccount: AccountSnapshot;
   realAccount: AccountSnapshot;
-  transactions: TransactionItem[];
+  positions: PositionItem[];
+  transactionHistory: TransactionHistoryItem[];
   modalTitles: Record<ActionId, string>;
   modalDescriptions: Record<ActionId, string>;
 };
@@ -112,7 +129,16 @@ export type DashboardCopy = {
 export type MarketPrice = {
   symbol: string;
   name: string;
+  code?: string;
   bid: number;
   ask: number;
   change: number;
+  price?: string;
+  sell?: string;
+  buy?: string;
+  open?: string;
+  high?: string;
+  low?: string;
+  time?: string;
+  dateTime?: string;
 };

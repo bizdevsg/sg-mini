@@ -6,6 +6,10 @@ import { getBannerRecords } from "@/lib/banner";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import {
+  createEmptyEconomicCalendarRange,
+  getEconomicCalendarRange,
+} from "@/lib/economic-calendar";
+import {
   getLocaleConfig,
   getMessages,
   isSupportedLocale,
@@ -58,14 +62,18 @@ export default async function ClientAreaPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
-  const [initialBanners, breakingNews] = await Promise.all([
+  const [initialBanners, breakingNews, economicCalendarToday] = await Promise.all([
     getBannerRecords(),
     getClientAreaBreakingNews(locales),
+    getEconomicCalendarRange("today").catch(() =>
+      createEmptyEconomicCalendarRange("today"),
+    ),
   ]);
 
   return (
     <ClientAreaDashboard
       breakingNews={breakingNews}
+      economicCalendarEvents={economicCalendarToday.events}
       initialBanners={initialBanners}
       locale={locales}
     />

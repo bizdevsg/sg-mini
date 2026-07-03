@@ -1,18 +1,28 @@
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import { ClientAreaNewsView } from "@/components/organisms/ClientAreaNewsView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaNewsContent } from "@/lib/client-area-news";
-import { isSupportedLocale, type AppLocale } from "@/locales";
+import {
+  assertValidLocale,
+  buildClientAreaSubpageMetadata,
+  generateClientAreaStaticParams,
+  type ClientAreaSubpageProps,
+} from "@/app/[locales]/client-area/client-area-page.shared";
 
-type ClientAreaNewsPageProps = {
-  params: Promise<{ locales: string }>;
-};
+type ClientAreaNewsPageProps = ClientAreaSubpageProps;
 
-function assertValidLocale(value: string): asserts value is AppLocale {
-  if (!isSupportedLocale(value)) {
-    notFound();
-  }
+export function generateStaticParams() {
+  return generateClientAreaStaticParams();
+}
+
+export async function generateMetadata({
+  params,
+}: ClientAreaNewsPageProps): Promise<Metadata> {
+  const { locales } = await params;
+  assertValidLocale(locales);
+
+  return buildClientAreaSubpageMetadata(locales, "news");
 }
 
 export default async function ClientAreaNewsPage({

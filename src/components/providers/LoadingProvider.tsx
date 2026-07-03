@@ -32,10 +32,10 @@ type LoadingProviderProps = {
 
 const LoadingContext = createContext<LoadingContextValue | null>(null);
 const MAX_LOADING_MS = 10000;
-const OVERLAY_MIN_VISIBLE_MS = 5000;
+const OVERLAY_MIN_VISIBLE_MS = 300;
 const ROUTE_LOADING_MIN_MS = 250;
 const ROUTE_LOADING_MAX_MS = 5000;
-const HIDE_AFTER_IDLE_MS = 200;
+const HIDE_AFTER_IDLE_MS = 120;
 
 export function LoadingProvider({
   children,
@@ -51,6 +51,7 @@ export function LoadingProvider({
   const overlayShownAtRef = useRef(0);
   const sawNonRouteTokenRef = useRef(false);
   const routeMaxTimerRef = useRef<number | null>(null);
+  const hasMountedRef = useRef(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchKey = searchParams?.toString() ?? "";
@@ -120,6 +121,11 @@ export function LoadingProvider({
   }, []);
 
   useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
     if (routeTokenRef.current) {
       stop(routeTokenRef.current);
       routeTokenRef.current = null;
