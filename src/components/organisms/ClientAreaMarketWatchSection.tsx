@@ -1,5 +1,7 @@
 "use client";
 
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+
 import { ClientAreaRecommendationCard } from "@/components/molecules/ClientAreaRecommendationCard";
 import { ClientAreaSectionHeader } from "@/components/molecules/ClientAreaSectionHeader";
 import {
@@ -41,14 +43,14 @@ function resolveMarketBadge(symbol?: string) {
 
 function resolveMarketIcon(label: string) {
   if (label === "Commodity") {
-    return ["fas", "coins"] as const;
+    return ["fas", "coins"] as IconProp;
   }
 
   if (label === "Index") {
-    return ["fas", "chart-column"] as const;
+    return ["fas", "chart-column"] as IconProp;
   }
 
-  return ["fas", "dollar-sign"] as const;
+  return ["fas", "dollar-sign"] as IconProp;
 }
 
 function resolveMarketIconClassName(label: string) {

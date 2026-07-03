@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Suspense,
   createContext,
   useCallback,
   useContext,
@@ -37,6 +38,23 @@ const ROUTE_LOADING_MIN_MS = 250;
 const ROUTE_LOADING_MAX_MS = 5000;
 const HIDE_AFTER_IDLE_MS = 120;
 
+type RouteLoadingTrackerProps = {
+  onRouteChange: () => void | (() => void);
+  pathname: string;
+};
+
+function RouteLoadingTracker({
+  onRouteChange,
+  pathname,
+}: RouteLoadingTrackerProps) {
+  const searchParams = useSearchParams();
+  const searchKey = searchParams?.toString() ?? "";
+
+  useEffect(() => onRouteChange(), [onRouteChange, pathname, searchKey]);
+
+  return null;
+}
+
 export function LoadingProvider({
   children,
   locale,
@@ -53,8 +71,6 @@ export function LoadingProvider({
   const routeMaxTimerRef = useRef<number | null>(null);
   const hasMountedRef = useRef(false);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const searchKey = searchParams?.toString() ?? "";
   const activeLocale = useMemo(() => {
     const firstSegment = pathname.split("/").filter(Boolean)[0];
 
@@ -120,7 +136,7 @@ export function LoadingProvider({
     }
   }, []);
 
-  useEffect(() => {
+  const handleRouteChange = useCallback(() => {
     if (!hasMountedRef.current) {
       hasMountedRef.current = true;
       return;
@@ -158,7 +174,7 @@ export function LoadingProvider({
         stop(routeToken);
       }
     };
-  }, [pathname, searchKey, start, stop]);
+  }, [start, stop]);
 
   useEffect(() => {
     const routeToken = routeTokenRef.current;
@@ -256,6 +272,12 @@ export function LoadingProvider({
 
   return (
     <LoadingContext.Provider value={value}>
+      <Suspense fallback={null}>
+        <RouteLoadingTracker
+          onRouteChange={handleRouteChange}
+          pathname={pathname}
+        />
+      </Suspense>
       {children}
       {showOverlay ? (
         <LoadingOverlay

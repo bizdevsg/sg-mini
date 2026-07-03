@@ -92,15 +92,17 @@ export function ClientAreaEconomicCalendarCard({
   return (
     <div className="rounded-2xl border border-white/8 bg-zinc-500/10 p-4 backdrop-blur-sm">
       <div className="flex items-center gap-5">
-        <div className="shrink-0 font-bold text-zinc-200">
-          {event.displayTime}
+        <div className="shrink-0 font-bold text-zinc-200 w-15">
+          <p>{event.displayTime}</p>
         </div>
 
-        <div
-          className={`fib fi-${getCountryFlagCode(event.currency)} h-6 w-7 shrink-0 overflow-hidden rounded-[2px]`}
-          aria-label={event.currency}
-          title={event.currency}
-        />
+        <div className="w-10">
+          <div
+            className={`fib fi-${getCountryFlagCode(event.currency)} h-6 w-7 shrink-0 overflow-hidden rounded-[2px] mx-auto`}
+            aria-label={event.currency}
+            title={event.currency}
+          />
+        </div>
 
         <div className="flex items-center justify-between gap-1 w-full">
           <div className="min-w-0">
