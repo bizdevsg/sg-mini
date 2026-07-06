@@ -54,6 +54,8 @@ type EconomicCalendarApiResponse = {
   data?: EconomicCalendarApiEvent[];
 };
 
+const ECONOMIC_CALENDAR_REQUEST_TIMEOUT_MS = 5000;
+
 const ECONOMIC_CALENDAR_ENDPOINTS: Record<EconomicCalendarRangeKey, string> = {
   today: "today",
   thisWeek: "this-week",
@@ -173,12 +175,30 @@ export async function getEconomicCalendarRange(
   }
 
   const endpoint = ECONOMIC_CALENDAR_ENDPOINTS[key];
-  const response = await fetch(`${ECONOMIC_CALENDAR_API_BASE_URL}/${endpoint}`, {
-    cache: "no-store",
-    headers: {
-      Accept: "application/json",
-    },
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, ECONOMIC_CALENDAR_REQUEST_TIMEOUT_MS);
+
+  let response: Response;
+
+  try {
+    response = await fetch(`${ECONOMIC_CALENDAR_API_BASE_URL}/${endpoint}`, {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(`Economic calendar ${key} request timed out`);
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     throw new Error(

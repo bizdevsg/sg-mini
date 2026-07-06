@@ -1,20 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ClientAreaTransactionRow } from "@/components/molecules/ClientAreaTransactionRow";
-import type { DashboardCopy } from "@/components/organisms/client-area.types";
+import type {
+  DashboardCopy,
+  PositionItem,
+} from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
 type ClientAreaTransactionsPanelProps = {
   copy: DashboardCopy;
   locale: AppLocale;
+  positions: PositionItem[];
 };
 
 export function ClientAreaTransactionsPanel({
   copy,
   locale,
+  positions,
 }: ClientAreaTransactionsPanelProps) {
-  const openBuyCount = copy.positions.filter((item) => item.side === "buy").length;
-  const openSellCount = copy.positions.length - openBuyCount;
+  const openBuyCount = positions.filter((item) => item.side === "buy").length;
+  const openSellCount = positions.length - openBuyCount;
   const labels =
     locale === "id"
       ? {
@@ -41,7 +46,7 @@ export function ClientAreaTransactionsPanel({
             {labels.total}
           </p>
           <p className="mt-2 text-2xl font-bold text-zinc-100">
-            {copy.positions.length}
+            {positions.length}
           </p>
         </div>
 
@@ -65,7 +70,7 @@ export function ClientAreaTransactionsPanel({
       </div>
 
       <div className="space-y-3">
-        {copy.positions.map((item) => (
+        {positions.map((item) => (
           <ClientAreaTransactionRow key={item.id} item={item} locale={locale} />
         ))}
       </div>

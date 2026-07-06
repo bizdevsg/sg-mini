@@ -33,5 +33,9 @@ export default async function ClientAreaMarketPage({
   await requireClientAreaSession(locales);
   const breakingNews = await getClientAreaBreakingNews(locales);
 
-  return <ClientAreaMarketView breakingNews={breakingNews} locale={locales} />;
+  return (
+    <div>
+      <ClientAreaMarketView breakingNews={breakingNews} locale={locales} />
+    </div>
+  );
 }

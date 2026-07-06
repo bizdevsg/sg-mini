@@ -5,151 +5,151 @@ import {
   formatQuoteNumber,
   formatQuoteTime,
   getDirectionClassName,
-  getRowClassName,
 } from "@/components/molecules/live-quote.shared";
-import {
-  formatSignedPercent,
-  formatUsd,
-  resolveSignalBadge,
-} from "@/components/organisms/client-area.shared";
-import type {
-  DashboardCopy,
-  MarketPrice,
-} from "@/components/organisms/client-area.types";
-import {
-  formatLocaleDateTime,
-  type AppLocale,
-  type AppMessages,
-} from "@/locales";
+import { resolveClientAreaMarketChartHref } from "@/components/organisms/client-area.shared";
+import { type MarketPrice } from "@/components/organisms/client-area.types";
+import { type AppLocale, type AppMessages } from "@/locales";
+import { ButtonLink } from "../atoms/ButtonLink";
 
 type ClientAreaMarketCardProps = {
-  copy: DashboardCopy;
   fieldLabels: AppMessages["liveQuoteTable"]["fields"];
   item: MarketPrice;
   locale: AppLocale;
 };
 
 export function ClientAreaMarketCard({
-  copy,
   fieldLabels,
   item,
   locale,
 }: ClientAreaMarketCardProps) {
-  const signal = resolveSignalBadge(item.change);
-  const directionClassName = getDirectionClassName(
-    item.change > 0 ? "up" : item.change < 0 ? "down" : "-",
-  );
-  const rowClassName = getRowClassName(
-    item.change > 0 ? "up" : item.change < 0 ? "down" : "-",
-  );
-  const quoteFields = [
-    {
-      label: fieldLabels.price,
-      value: item.price ? formatQuoteNumber(item.price, locale) : null,
-    },
-    {
-      label: fieldLabels.sell,
-      value: item.sell ? formatQuoteNumber(item.sell, locale) : null,
-    },
-    {
-      label: fieldLabels.buy,
-      value: item.buy ? formatQuoteNumber(item.buy, locale) : null,
-    },
-    {
-      label: fieldLabels.open,
-      value: item.open ? formatQuoteNumber(item.open, locale) : null,
-    },
-    {
-      label: fieldLabels.high,
-      value: item.high ? formatQuoteNumber(item.high, locale) : null,
-    },
-    {
-      label: fieldLabels.low,
-      value: item.low ? formatQuoteNumber(item.low, locale) : null,
-    },
-    {
-      label: fieldLabels.time,
-      value:
-        item.time && item.dateTime
-          ? formatQuoteTime(item.time, item.dateTime, locale)
-          : item.time ?? null,
-    },
-  ].filter((field) => field.value !== null);
-  const hasFullQuoteData = quoteFields.length > 0;
+  const direction = item.change > 0 ? "up" : item.change < 0 ? "down" : "-";
+  const directionClassName = getDirectionClassName(direction);
+  const marketCode = item.code ?? item.name;
+  const directionIcon = direction === "up" ? "arrow-up" : "arrow-down";
+
+  function formatMetricValue(value: string | undefined, fallback?: number) {
+    if (value) {
+      return formatQuoteNumber(value, locale);
+    }
+
+    if (typeof fallback === "number" && Number.isFinite(fallback)) {
+      return formatQuoteNumber(String(fallback), locale);
+    }
+
+    return "-";
+  }
+
+  const marketMetrics = {
+    high: formatMetricValue(item.high, item.ask),
+    low: formatMetricValue(item.low, item.bid),
+    open: formatMetricValue(item.open, item.bid),
+    sell: formatMetricValue(item.sell, item.ask),
+    buy: formatMetricValue(item.buy, item.bid),
+    time:
+      item.time && item.dateTime
+        ? formatQuoteTime(item.time, item.dateTime, locale)
+        : item.time ?? "--:--:--",
+  };
 
   return (
     <article
-      className={`group relative overflow-hidden rounded-3xl border p-5 transition-all ${rowClassName}`}
+      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/10 to-white/5 px-6 py-5 transition-all"
     >
+      <div className="absolute inset-y-0 left-0 w-24 rounded-full bg-white/[0.04] blur-2xl" />
 
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/10 ring-1 ring-yellow-500/20">
+      <div className="relative flex gap-8 items-center">
+        <div className="flex items-center gap-5">
+          <div className="flex h-15 w-15 items-center justify-center rounded-full bg-amber-950/90 shadow-[inset_0_2px_18px_rgba(255,191,36,0.18),0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-amber-400/20">
+            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-radial-[at_30%_30%] from-amber-300/20 via-transparent to-transparent">
               <LiveQuoteInstrumentIcon
-                symbol={item.code ?? item.name}
-                className="h-10 w-10"
+                symbol={marketCode}
+                className="h-14 w-14"
               />
             </div>
-
-            <div>
-              <h3
-                className={`text-lg font-black tracking-tight ${directionClassName}`}
-              >
-                {item.symbol}
-              </h3>
-              <p className={`truncate text-xs ${directionClassName}`}>
-                {item.code ?? item.name}
-              </p>
-            </div>
           </div>
         </div>
 
-        <span
-          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${signal.className} bg-zinc-900/80`}
-        >
-          <FontAwesomeIcon icon={signal.icon} className="text-[10px]" />
-          {formatSignedPercent(item.change)}
-        </span>
+        <div className="w-full">
+          <div className="min-w-0 mb-5">
+            <h3 className="text-2xl font-black uppercase tracking-tight text-white">
+              {item.symbol} <span className="text-base text-zinc-500">({marketCode})</span>
+            </h3>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="grid gap-3 lg:gap-2">
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  {fieldLabels.high}
+                </p>
+                <p className="text-xl font-black tracking-tight text-yellow-400">
+                  {marketMetrics.high}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  {fieldLabels.low}
+                </p>
+                <p className="text-xl font-black tracking-tight text-yellow-400">
+                  {marketMetrics.low}
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden lg:block lg:w-px lg:self-stretch lg:bg-white/30" />
+
+            <div className="grid gap-3 lg:gap-2">
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  {fieldLabels.open}
+                </p>
+                <p className="text-xl font-black tracking-tight text-yellow-400">
+                  {marketMetrics.open}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  <FontAwesomeIcon icon={["far", "alarm-clock"]} className="text-sm text-zinc-300" />
+                </p>
+                <p className="text-xl font-black tracking-tight text-yellow-400">
+                  {marketMetrics.time}
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden lg:block lg:w-px lg:self-stretch lg:bg-white/30" />
+
+            <div className="grid gap-3 lg:gap-2">
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  <FontAwesomeIcon icon={["fas", directionIcon]} className={`text-base ${directionClassName}`} />
+                  {fieldLabels.sell}
+                </p>
+                <p className={`text-xl font-black tracking-tight ${directionClassName}`}>
+                  {marketMetrics.sell}
+                </p>
+              </div>
+              <div className="flex items-center justify-between gap-3 min-w-40">
+                <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-zinc-200">
+                  <FontAwesomeIcon icon={["fas", directionIcon]} className={`text-base ${directionClassName}`} />
+                  {fieldLabels.buy}
+                </p>
+                <p className={`text-xl font-black tracking-tight ${directionClassName}`}>
+                  {marketMetrics.buy}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center lg:pl-8">
+              <ButtonLink href={resolveClientAreaMarketChartHref(locale, marketCode)}>
+                Live Chart
+              </ButtonLink>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {hasFullQuoteData ? (
-        <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-4">
-          {quoteFields.map((field) => (
-            <div
-              key={field.label}
-              className="w-full rounded-2xl border border-zinc-800/80 bg-zinc-900/30 p-3"
-            >
-              <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-200">
-                {field.label}
-              </p>
-              <p className={`text-base font-bold ${directionClassName}`}>
-                {field.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-3">
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
-              {copy.marketTableHeaders.bid}
-            </p>
-            <p className={`text-base font-bold ${directionClassName}`}>
-              {formatUsd(item.bid)}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/70 p-3">
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
-              {copy.marketTableHeaders.ask}
-            </p>
-            <p className={`text-base font-bold ${directionClassName}`}>
-              {formatUsd(item.ask)}
-            </p>
-          </div>
-        </div>
-      )}
     </article>
   );
 }

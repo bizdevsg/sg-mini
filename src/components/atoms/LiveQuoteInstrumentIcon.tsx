@@ -37,7 +37,7 @@ export function LiveQuoteInstrumentIcon({
           width={42}
           height={42}
           sizes="42px"
-          className="h-[42px] w-[42px] object-contain"
+          className="h-full w-full object-contain"
         />
       ) : (
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">

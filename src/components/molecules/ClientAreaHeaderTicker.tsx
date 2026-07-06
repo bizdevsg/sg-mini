@@ -38,7 +38,7 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
   const activeNews = breakingNews[activeIndex];
 
   return (
-    <div className="rounded-[28px] bg-yellow-500/10 p-2 sm:rounded-full">
+    <div className="rounded-[28px] bg-yellow-500/10 p-2 sm:rounded-full select-none">
       <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-[24px] border border-zinc-800 bg-zinc-900/60 px-4 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-4 sm:py-1.5">
         <div className="flex items-center gap-3 sm:shrink-0">
           <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-yellow-500">

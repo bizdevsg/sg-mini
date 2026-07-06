@@ -10,6 +10,7 @@ type PaginationControlsProps = {
   summary?: ReactNode;
   centerContent?: ReactNode;
   className?: string;
+  centerControls?: boolean;
 };
 
 export function PaginationControls({
@@ -22,17 +23,18 @@ export function PaginationControls({
   summary,
   centerContent,
   className = "",
+  centerControls = false,
 }: PaginationControlsProps) {
   const isPreviousDisabled = currentPage === 1;
   const isNextDisabled = currentPage === totalPages;
 
   return (
     <div
-      className={`flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${className}`}
+      className={``}
     >
-      {summary ? <div className="text-sm text-foreground/58">{summary}</div> : <div />}
-
-      <div className="flex items-center gap-2">
+      <div
+        className={`flex items-center gap-2 justify-between`}
+      >
         <button
           type="button"
           onClick={onPrevious}
@@ -53,6 +55,8 @@ export function PaginationControls({
           {nextLabel}
         </button>
       </div>
+
+      {centerControls ? <div className="hidden sm:block" /> : null}
     </div>
   );
 }

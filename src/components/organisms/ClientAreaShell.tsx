@@ -128,7 +128,7 @@ export function ClientAreaShell({
 
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
               <nav className="hidden w-full shrink-0 sm:sticky sm:top-28 sm:block sm:self-start sm:w-fit space-y-4">
-                <div className="flex w-full flex-row items-start justify-between gap-2 rounded-xl bg-zinc-900 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
+                <div className="flex w-full flex-row items-start justify-between gap-2 rounded-r-xl bg-zinc-900 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
                   {TABS.map((tab) => {
                     const tabLabel =
                       clientArea.sidebar.navItems.find((item) => item.id === tab)
@@ -147,11 +147,11 @@ export function ClientAreaShell({
                 </div>
 
                 {/*  */}
-                <div className="flex w-full flex-row items-start justify-between gap-2 rounded-xl bg-zinc-900 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
+                <div className="flex w-full flex-row items-start justify-between rounded-xl bg-red-500/5 gap-2 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
                   <button
                     type="button"
                     onClick={() => setIsLogoutModalOpen(true)}
-                    className="flex w-full py-5 pl-5 pr-10 items-center gap-2 border-l-2 border-red-500 bg-linear-to-r from-red-500/10 text-red-300 transition-all duration-300 hover:border-red-700 hover:from-red-400/10 hover:text-red-200 cursor-pointer"
+                    className="flex w-full py-5 pl-5 pr-10 items-center gap-2 rounded-xl border-2 border-red-500/20 bg-linear-to-r from-red-500/10 text-red-300 transition-all duration-300 hover:border-red-700 hover:from-red-500/30 hover:text-red-500 cursor-pointer"
                   >
                     <FontAwesomeIcon
                       icon={["fas", "power-off"]}

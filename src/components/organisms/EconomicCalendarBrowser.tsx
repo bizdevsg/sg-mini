@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { PaginationControls } from "@/components/molecules/PaginationControls";
 import {
+  createEmptyEconomicCalendarRange,
   ECONOMIC_CALENDAR_RANGE_KEYS,
   type EconomicCalendarEvent,
   type EconomicCalendarOverview,
+  type EconomicCalendarRangeData,
   type EconomicCalendarRangeKey,
 } from "@/lib/economic-calendar.shared";
 import {
@@ -23,6 +25,60 @@ type EconomicCalendarBrowserProps = {
 };
 
 const PAGE_SIZE = 20;
+type PaginationItem = number | "...";
+
+async function fetchEconomicCalendarRange(
+  rangeKey: EconomicCalendarRangeKey,
+): Promise<EconomicCalendarRangeData> {
+  const response = await fetch(`/api/economic-calendar/${rangeKey}`, {
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch economic calendar ${rangeKey}: ${response.status}`,
+    );
+  }
+
+  return (await response.json()) as EconomicCalendarRangeData;
+}
+
+function getVisiblePaginationItems(
+  currentPage: number,
+  totalPages: number,
+): PaginationItem[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  if (currentPage <= 3) {
+    return [1, 2, 3, 4, "...", totalPages];
+  }
+
+  if (currentPage >= totalPages - 2) {
+    return [
+      1,
+      "...",
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    ];
+  }
+
+  return [
+    1,
+    "...",
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+    "...",
+    totalPages,
+  ];
+}
 
 function formatCalendarDate(value: string, locale: AppLocale) {
   const parsedDate = new Date(value);
@@ -300,24 +356,68 @@ export function EconomicCalendarBrowser({
   overview,
 }: EconomicCalendarBrowserProps) {
   const labels = getMessages(locale).economicCalendarBrowser;
+  const isMountedRef = useRef(true);
 
   const [activeRange, setActiveRange] =
     useState<EconomicCalendarRangeKey>("today");
+  const [rangeOverview, setRangeOverview] = useState(overview);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const activeData = overview[activeRange];
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  const activeRangeStatus = rangeOverview[activeRange].status;
+
+  useEffect(() => {
+    if (activeRangeStatus !== "idle") {
+      return;
+    }
+
+    setRangeOverview((currentOverview) => ({
+      ...currentOverview,
+      [activeRange]: createEmptyEconomicCalendarRange(activeRange, "loading"),
+    }));
+
+    void fetchEconomicCalendarRange(activeRange)
+      .then((data) => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        setRangeOverview((currentOverview) => ({
+          ...currentOverview,
+          [activeRange]: data,
+        }));
+      })
+      .catch(() => {
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        setRangeOverview((currentOverview) => ({
+          ...currentOverview,
+          [activeRange]: createEmptyEconomicCalendarRange(activeRange),
+        }));
+      });
+  }, [activeRange, activeRangeStatus]);
+
+  const activeData = rangeOverview[activeRange];
   const activeEvents = activeData.events;
   const totalPages = Math.max(1, Math.ceil(activeEvents.length / PAGE_SIZE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
   const startIndex = (safeCurrentPage - 1) * PAGE_SIZE;
   const visibleEvents = activeEvents.slice(startIndex, startIndex + PAGE_SIZE);
+  const paginationItems = getVisiblePaginationItems(safeCurrentPage, totalPages);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
         {ECONOMIC_CALENDAR_RANGE_KEYS.map((rangeKey) => {
-          const range = overview[rangeKey];
+          const range = rangeOverview[rangeKey];
           const isActive = activeRange === rangeKey;
 
           return (
@@ -334,21 +434,15 @@ export function EconomicCalendarBrowser({
                 : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
                 }`}
             >
-              {labels.tabs[rangeKey]}{" "}
-              <span
-                className={isActive ? "text-black/70" : "text-foreground/55"}
-              >
-                ({range.total})
-              </span>
-              {range.status !== "success"
-                ? ` - ${labels.statusUnavailable}`
-                : ""}
+              {labels.tabs[rangeKey]}
             </button>
           );
         })}
       </div>
 
-      {activeData.status !== "success" ? (
+      {activeData.status === "idle" || activeData.status === "loading" ? (
+        <EmptyStatePanel body={labels.loading} />
+      ) : activeData.status !== "success" ? (
         <EmptyStatePanel body={labels.unavailable} variant="warning" />
       ) : activeEvents.length === 0 ? (
         <EmptyStatePanel body={labels.empty} />
@@ -566,6 +660,7 @@ export function EconomicCalendarBrowser({
 
           {activeEvents.length > PAGE_SIZE ? (
             <PaginationControls
+              centerControls
               previousLabel={labels.previousPage}
               nextLabel={labels.nextPage}
               currentPage={safeCurrentPage}
@@ -584,6 +679,36 @@ export function EconomicCalendarBrowser({
                 <>
                   {labels.page} {safeCurrentPage} {labels.of} {totalPages}
                 </>
+              }
+              centerContent={
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {paginationItems.map((item, index) =>
+                    item === "..." ? (
+                      <span
+                        key={`ellipsis-${safeCurrentPage}-${index}`}
+                        className="px-1 text-sm text-foreground/45"
+                      >
+                        ...
+                      </span>
+                    ) : (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => {
+                          setCurrentPage(item);
+                          setSelectedEventId(null);
+                        }}
+                        aria-current={item === safeCurrentPage ? "page" : undefined}
+                        className={`flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm transition-colors ${item === safeCurrentPage
+                          ? "border-yellow-500 bg-yellow-500 text-black"
+                          : "border-line text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
+                          }`}
+                      >
+                        {item}
+                      </button>
+                    ),
+                  )}
+                </div>
               }
             />
           ) : null}

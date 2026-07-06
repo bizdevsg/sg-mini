@@ -26,6 +26,7 @@ export const enEconomicCalendarBrowser: AppMessages["economicCalendarBrowser"] =
     noHistory: "No history is available for this event yet.",
     empty: "No events are available for this calendar range.",
     unavailable: "This calendar range is currently unavailable from the API.",
+    loading: "Loading economic calendar data...",
     collapse: "Collapse",
     expand: "View details",
     today: "Today",

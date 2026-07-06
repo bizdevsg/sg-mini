@@ -1,10 +1,11 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
-import { getLiveQuoteDisplay, getSortedSymbols } from "@/lib/live-quotes";
+import { getLiveQuoteDisplay, getSortedSymbols, QUOTE_ORDER } from "@/lib/live-quotes";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
 import type {
+  AccountSnapshot,
   AccountMode,
   ActionId,
   ArticleItem,
@@ -34,6 +35,12 @@ export type {
   TabId,
   TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
+
+type ClientAreaAccountModeData = {
+  currentAccount: AccountSnapshot;
+  positions: PositionItem[];
+  transactionHistory: TransactionHistoryItem[];
+};
 
 export const TABS: TabId[] = [
   "home",
@@ -70,6 +77,67 @@ export function resolveClientAreaTabHref(locale: AppLocale, tab: TabId) {
   return resolveLocalizedHref(locale, `/client-area/${tab}`);
 }
 
+type ClientAreaTradingViewSymbolKey = (typeof QUOTE_ORDER)[number];
+
+export type ClientAreaTradingViewPreset = {
+  id: string;
+  label: string;
+  marketCode: ClientAreaTradingViewSymbolKey;
+  symbol: string;
+};
+
+const CLIENT_AREA_TRADING_VIEW_SYMBOL_BY_MARKET_CODE: Record<
+  ClientAreaTradingViewSymbolKey,
+  string
+> = {
+  XUL10: "OANDA:XAUUSD",
+  BCO10_BBJ: "TVC:UKOIL",
+  HKK50_BBJ: "VANTAGE:HK50",
+  JPK50_BBJ: "SPREADEX:NIKKEI",
+  DX1010_BBJ: "CAPITALCOM:DXY",
+  AU1010_BBJ: "OANDA:AUDUSD",
+  EU1010_BBJ: "OANDA:EURUSD",
+  GU1010_BBJ: "OANDA:GBPUSD",
+  UC1010_BBJ: "OANDA:USDCAD",
+  UJ1010_BBJ: "OANDA:USDJPY",
+  UI1010_BBJ: "FX_IDC:USDIDR",
+};
+
+const CLIENT_AREA_TRADING_VIEW_PRESETS: ClientAreaTradingViewPreset[] =
+  QUOTE_ORDER.map((marketCode) => ({
+    id: marketCode.toLowerCase(),
+    label: marketCode,
+    marketCode,
+    symbol: CLIENT_AREA_TRADING_VIEW_SYMBOL_BY_MARKET_CODE[marketCode],
+  }));
+
+export function getClientAreaTradingViewPresets() {
+  return CLIENT_AREA_TRADING_VIEW_PRESETS;
+}
+
+export function getClientAreaTradingViewPresetById(presetId: string) {
+  return CLIENT_AREA_TRADING_VIEW_PRESETS.find((preset) => preset.id === presetId);
+}
+
+export function getClientAreaTradingViewPresetByMarketCode(marketCode: string) {
+  return CLIENT_AREA_TRADING_VIEW_PRESETS.find(
+    (preset) => preset.marketCode === marketCode,
+  );
+}
+
+export function resolveClientAreaMarketChartHref(
+  locale: AppLocale,
+  marketCode: string,
+) {
+  const preset = getClientAreaTradingViewPresetByMarketCode(marketCode);
+
+  if (!preset) {
+    return resolveLocalizedHref(locale, "/client-area/market");
+  }
+
+  return resolveLocalizedHref(locale, `/client-area/market/${preset.id}`);
+}
+
 export function formatUsd(value: number) {
   return `$ ${value.toLocaleString("en-US", {
     minimumFractionDigits: 2,
@@ -88,6 +156,25 @@ export function formatSignedUsd(value: number) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+}
+
+export function getClientAreaAccountModeData(
+  copy: DashboardCopy,
+  accountMode: AccountMode,
+): ClientAreaAccountModeData {
+  if (accountMode === "real") {
+    return {
+      currentAccount: copy.realAccount,
+      positions: copy.realPositions,
+      transactionHistory: copy.realTransactionHistory,
+    };
+  }
+
+  return {
+    currentAccount: copy.demoAccount,
+    positions: copy.demoPositions,
+    transactionHistory: copy.demoTransactionHistory,
+  };
 }
 
 export function getClientAreaEconomicCalendarPreview<
@@ -375,7 +462,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         equityRatio: 1292,
         autoLiquidation: 500,
       },
-      positions: [
+      demoPositions: [
         {
           id: "xul10-buy",
           symbol: "XUL10",
@@ -410,7 +497,31 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
           openedAt: "Kemarin, 15:18 WIB",
         },
       ],
-      transactionHistory: [
+      realPositions: [
+        {
+          id: "xul10-real-buy",
+          symbol: "XUL10",
+          instrument: "Gold",
+          side: "buy",
+          volume: "0.40 Lot",
+          openPrice: "4,051.10",
+          currentPrice: "4,070.66",
+          floatingPl: "+$782.40",
+          openedAt: "Hari ini, 08:24 WIB",
+        },
+        {
+          id: "uj1010-real-sell",
+          symbol: "UJ1010_BBJ",
+          instrument: "USD/JPY",
+          side: "sell",
+          volume: "0.30 Lot",
+          openPrice: "159.220",
+          currentPrice: "159.040",
+          floatingPl: "+$540.00",
+          openedAt: "Hari ini, 13:16 WIB",
+        },
+      ],
+      demoTransactionHistory: [
         {
           id: "history-funding",
           type: "credit",
@@ -431,6 +542,29 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
           title: "Internal Withdrawal",
           subtitle: "24 Jun 2026, 11:26 WIB",
           amount: "-$1,250.00",
+        },
+      ],
+      realTransactionHistory: [
+        {
+          id: "real-history-deposit",
+          type: "credit",
+          title: "Bank Transfer Deposit",
+          subtitle: "Hari ini, 08:05 WIB",
+          amount: "+$10,000.00",
+        },
+        {
+          id: "real-history-profit",
+          type: "credit",
+          title: "Closed Position Profit",
+          subtitle: "Kemarin, 19:40 WIB",
+          amount: "+$1,120.00",
+        },
+        {
+          id: "real-history-fee",
+          type: "debit",
+          title: "Monthly Platform Fee",
+          subtitle: "01 Jul 2026, 09:00 WIB",
+          amount: "-$75.00",
         },
       ],
       modalTitles: {
@@ -578,7 +712,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       equityRatio: 1292,
       autoLiquidation: 500,
     },
-    positions: [
+    demoPositions: [
       {
         id: "xul10-buy",
         symbol: "XUL10",
@@ -613,7 +747,31 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         openedAt: "Yesterday, 15:18 WIB",
       },
     ],
-    transactionHistory: [
+    realPositions: [
+      {
+        id: "xul10-real-buy",
+        symbol: "XUL10",
+        instrument: "Gold",
+        side: "buy",
+        volume: "0.40 Lot",
+        openPrice: "4,051.10",
+        currentPrice: "4,070.66",
+        floatingPl: "+$782.40",
+        openedAt: "Today, 08:24 WIB",
+      },
+      {
+        id: "uj1010-real-sell",
+        symbol: "UJ1010_BBJ",
+        instrument: "USD/JPY",
+        side: "sell",
+        volume: "0.30 Lot",
+        openPrice: "159.220",
+        currentPrice: "159.040",
+        floatingPl: "+$540.00",
+        openedAt: "Today, 13:16 WIB",
+      },
+    ],
+    demoTransactionHistory: [
       {
         id: "history-funding",
         type: "credit",
@@ -634,6 +792,29 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         title: "Internal Withdrawal",
         subtitle: "24 Jun 2026, 11:26 WIB",
         amount: "-$1,250.00",
+      },
+    ],
+    realTransactionHistory: [
+      {
+        id: "real-history-deposit",
+        type: "credit",
+        title: "Bank Transfer Deposit",
+        subtitle: "Today, 08:05 WIB",
+        amount: "+$10,000.00",
+      },
+      {
+        id: "real-history-profit",
+        type: "credit",
+        title: "Closed Position Profit",
+        subtitle: "Yesterday, 19:40 WIB",
+        amount: "+$1,120.00",
+      },
+      {
+        id: "real-history-fee",
+        type: "debit",
+        title: "Monthly Platform Fee",
+        subtitle: "01 Jul 2026, 09:00 WIB",
+        amount: "-$75.00",
       },
     ],
     modalTitles: {

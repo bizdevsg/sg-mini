@@ -120,8 +120,10 @@ export type DashboardCopy = {
   articles: ArticleItem[];
   demoAccount: AccountSnapshot;
   realAccount: AccountSnapshot;
-  positions: PositionItem[];
-  transactionHistory: TransactionHistoryItem[];
+  demoPositions: PositionItem[];
+  realPositions: PositionItem[];
+  demoTransactionHistory: TransactionHistoryItem[];
+  realTransactionHistory: TransactionHistoryItem[];
   modalTitles: Record<ActionId, string>;
   modalDescriptions: Record<ActionId, string>;
 };

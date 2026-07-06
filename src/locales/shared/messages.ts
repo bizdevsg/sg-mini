@@ -356,6 +356,7 @@ export type AppMessages = {
     noHistory: string;
     empty: string;
     unavailable: string;
+    loading: string;
     collapse: string;
     expand: string;
     today: string;

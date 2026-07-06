@@ -27,6 +27,7 @@ export const idEconomicCalendarBrowser: AppMessages["economicCalendarBrowser"] =
     empty: "Belum ada event pada rentang kalender ini.",
     unavailable:
       "Data untuk rentang kalender ini sedang tidak tersedia dari API.",
+    loading: "Memuat data kalender ekonomi...",
     collapse: "Tutup",
     expand: "Lihat detail",
     today: "Hari ini",

@@ -1,7 +1,11 @@
 "use client";
 
+import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
-import { getDashboardCopy } from "@/components/organisms/client-area.shared";
+import {
+  getClientAreaAccountModeData,
+  getDashboardCopy,
+} from "@/components/organisms/client-area.shared";
 import { ClientAreaTransactionsPanel } from "@/components/organisms/ClientAreaTransactionsPanel";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
@@ -16,6 +20,8 @@ export function ClientAreaTransactionsView({
   locale,
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
+  const { accountMode } = useClientAreaAccountMode();
+  const { positions } = getClientAreaAccountModeData(copy, accountMode);
 
   return (
     <ClientAreaShell
@@ -23,7 +29,7 @@ export function ClientAreaTransactionsView({
       breakingNews={breakingNews}
       locale={locale}
     >
-      <ClientAreaTransactionsPanel copy={copy} locale={locale} />
+      <ClientAreaTransactionsPanel copy={copy} locale={locale} positions={positions} />
     </ClientAreaShell>
   );
 }

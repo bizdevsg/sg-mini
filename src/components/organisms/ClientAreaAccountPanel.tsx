@@ -3,16 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type {
   AccountSnapshot,
   DashboardCopy,
+  TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
 
 type ClientAreaAccountPanelProps = {
   copy: DashboardCopy;
   currentAccount: AccountSnapshot;
+  transactionHistory: TransactionHistoryItem[];
 };
 
 export function ClientAreaAccountPanel({
   copy,
   currentAccount,
+  transactionHistory,
 }: ClientAreaAccountPanelProps) {
   return (
     <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6">
@@ -68,7 +71,7 @@ export function ClientAreaAccountPanel({
         </div>
 
         <div className="space-y-3">
-          {copy.transactionHistory.map((item) => (
+          {transactionHistory.map((item) => (
             <div
               key={item.id}
               className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-black/20 p-4"

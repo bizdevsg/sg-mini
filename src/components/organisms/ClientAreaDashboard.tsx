@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 
 import { ClientAreaActionModal } from "@/components/molecules/ClientAreaActionModal";
+import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaHomePanel } from "@/components/organisms/ClientAreaHomePanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import {
   buildClientAreaHeroSlides,
+  getClientAreaAccountModeData,
   getDashboardCopy,
   getQuickActionIconMap,
 } from "@/components/organisms/client-area.shared";
@@ -37,7 +39,7 @@ export function ClientAreaDashboard({
   const copy = getDashboardCopy(locale);
   const quickActionIconMap = getQuickActionIconMap();
   const heroSlides = buildClientAreaHeroSlides(copy, initialBanners);
-  const [accountMode, setAccountMode] = useState<AccountMode>("demo");
+  const { accountMode, setAccountMode } = useClientAreaAccountMode();
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<ActionId | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -52,8 +54,7 @@ export function ClientAreaDashboard({
     };
   }, [heroSlides.length]);
 
-  const currentAccount =
-    accountMode === "demo" ? copy.demoAccount : copy.realAccount;
+  const { currentAccount } = getClientAreaAccountModeData(copy, accountMode);
 
   const handleSelectAccountMode = (mode: AccountMode) => {
     setAccountMode(mode);
