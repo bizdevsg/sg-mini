@@ -57,7 +57,7 @@ export function ClientAreaShell({
   );
 
   return (
-    <section className="relative bg-fixed bg-cover bg-top bg-no-repeat pb-16 pt-24 sm:pb-20 sm:pt-28"
+    <section className="relative bg-fixed bg-cover bg-top bg-no-repeat pb-12 pt-20 sm:pb-20 sm:pt-28"
       style={{
         backgroundImage: "url('/assets/BCG.png')",
       }}
@@ -72,7 +72,7 @@ export function ClientAreaShell({
           />
 
           <section>
-            <div className="sm:hidden mb-5">
+            <div className="mb-5 sm:hidden">
               <details className="overflow-hidden rounded-2xl border border-zinc-800 bg-black/40">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-zinc-100">
                   <span className="flex items-center gap-3">
@@ -126,9 +126,9 @@ export function ClientAreaShell({
               </details>
             </div>
 
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-              <nav className="hidden w-full shrink-0 sm:sticky sm:top-28 sm:block sm:self-start sm:w-fit space-y-4">
-                <div className="flex w-full flex-row items-start justify-between gap-2 rounded-r-xl bg-zinc-900 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">
+              <nav className="hidden w-full shrink-0 space-y-4 lg:sticky lg:top-28 lg:block lg:w-[220px] lg:self-start">
+                <div className="overflow-hidden rounded-2xl bg-zinc-900 backdrop-blur-2xl">
                   {TABS.map((tab) => {
                     const tabLabel =
                       clientArea.sidebar.navItems.find((item) => item.id === tab)
@@ -147,18 +147,18 @@ export function ClientAreaShell({
                 </div>
 
                 {/*  */}
-                <div className="flex w-full flex-row items-start justify-between rounded-xl bg-red-500/5 gap-2 backdrop-blur-2xl overflow-hidden sm:flex-col sm:justify-center">
+                <div className="overflow-hidden rounded-2xl bg-red-500/5 backdrop-blur-2xl">
                   <button
                     type="button"
                     onClick={() => setIsLogoutModalOpen(true)}
-                    className="flex w-full py-5 pl-5 pr-10 items-center gap-2 rounded-xl border-2 border-red-500/20 bg-linear-to-r from-red-500/10 text-red-300 transition-all duration-300 hover:border-red-700 hover:from-red-500/30 hover:text-red-500 cursor-pointer"
+                    className="flex w-full items-center gap-3 rounded-2xl border border-red-500/20 bg-linear-to-r from-red-500/10 px-4 py-4 text-red-300 transition-all duration-300 hover:border-red-700 hover:from-red-500/30 hover:text-red-500"
                   >
                     <FontAwesomeIcon
                       icon={["fas", "power-off"]}
-                      className="text-lg"
+                      className="text-base"
                     />
 
-                    <span className="text-xs font-medium leading-tight">
+                    <span className="text-sm font-medium leading-tight">
                       {clientArea.topbar.logoutLabel}
                     </span>
                   </button>

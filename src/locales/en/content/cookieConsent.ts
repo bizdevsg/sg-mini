@@ -1,10 +1,10 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const enCookieConsent: AppMessages["cookieConsent"] = {
-  badge: "Cookie Notice",
-  title: "We use cookies to keep this website working properly.",
+  badge: "COOKIE SETTINGS",
+  title: "We use cookies to ensure our website functions optimally.",
   description:
-    "This homepage uses essential cookies for features like Client Area sessions and a preference cookie to remember your cookie preference.",
+    "Essential cookies are required for the core functionality of our website. With your consent, preference cookies are used to remember your settings and provide a more consistent and personalized browsing experience.",
   essentialTag: "Essential cookies",
   preferenceTag: "Preference cookie",
   dismissLabel: "Maybe later",

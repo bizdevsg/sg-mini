@@ -18,23 +18,23 @@ export function ClientAreaAccountPanel({
   transactionHistory,
 }: ClientAreaAccountPanelProps) {
   return (
-    <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6">
-      <h2 className="flex items-center gap-2 text-xl font-bold text-yellow-500">
+    <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-6">
+      <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
         <FontAwesomeIcon icon={["fas", "user-gear"]} />
         {copy.accountTitle}
       </h2>
 
-      <div className="grid gap-6 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 md:grid-cols-2">
+      <div className="grid gap-6 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4 sm:p-6 md:grid-cols-2">
         <div className="space-y-3">
           <div>
             <span className="text-xs text-zinc-500">Account Owner</span>
-            <p className="text-sm font-bold text-zinc-200">
+            <p className="break-words text-sm font-bold text-zinc-200">
               {currentAccount.accountOwner}
             </p>
           </div>
           <div>
             <span className="text-xs text-zinc-500">Email Address</span>
-            <p className="text-sm font-bold text-zinc-200">
+            <p className="break-all text-sm font-bold text-zinc-200">
               {currentAccount.email}
             </p>
           </div>
@@ -51,7 +51,7 @@ export function ClientAreaAccountPanel({
         <div className="space-y-3">
           <div>
             <span className="text-xs text-zinc-500">Broker Resmi</span>
-            <p className="text-sm font-bold text-yellow-500">
+            <p className="break-words text-sm font-bold text-yellow-500">
               {currentAccount.broker}
             </p>
           </div>
@@ -64,8 +64,8 @@ export function ClientAreaAccountPanel({
         </div>
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6">
-        <div className="flex items-center gap-2 text-lg font-bold text-zinc-100">
+      <div className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4 sm:p-6">
+        <div className="flex flex-wrap items-center gap-2 text-lg font-bold text-zinc-100">
           <FontAwesomeIcon icon={["fas", "clock-rotate-left"]} className="text-yellow-500" />
           <h3>{copy.transactionHistoryTitle}</h3>
         </div>
@@ -74,7 +74,7 @@ export function ClientAreaAccountPanel({
           {transactionHistory.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-black/20 p-4"
+              className="flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-center gap-3">
                 <div
@@ -93,14 +93,14 @@ export function ClientAreaAccountPanel({
                   />
                 </div>
 
-                <div>
-                  <p className="text-sm font-semibold text-zinc-100">{item.title}</p>
+                <div className="min-w-0">
+                  <p className="break-words text-sm font-semibold text-zinc-100">{item.title}</p>
                   <p className="text-[11px] text-zinc-500">{item.subtitle}</p>
                 </div>
               </div>
 
               <span
-                className={`text-sm font-bold ${
+                className={`text-sm font-bold sm:text-right ${
                   item.type === "credit" ? "text-emerald-400" : "text-rose-400"
                 }`}
               >

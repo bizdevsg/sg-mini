@@ -121,7 +121,7 @@ function TradingView({
 
                 <div
                     id="market-live-chart"
-                    className={`h-[600px] ${embedded ? "rounded-2xl border border-zinc-800/80 bg-black/20 p-2" : "rounded-xl border border-zinc-800/80 bg-black/20 p-2"}`}
+                    className={`h-[420px] sm:h-[520px] lg:h-[600px] ${embedded ? "rounded-2xl border border-zinc-800/80 bg-black/20 p-2" : "rounded-xl border border-zinc-800/80 bg-black/20 p-2"}`}
                 >
                     <div id={containerId} className="h-full w-full" />
                 </div>

@@ -21,7 +21,10 @@ export function ClientAreaTransactionsView({
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
-  const { positions } = getClientAreaAccountModeData(copy, accountMode);
+  const { positions, transactionHistory } = getClientAreaAccountModeData(
+    copy,
+    accountMode,
+  );
 
   return (
     <ClientAreaShell
@@ -29,7 +32,12 @@ export function ClientAreaTransactionsView({
       breakingNews={breakingNews}
       locale={locale}
     >
-      <ClientAreaTransactionsPanel copy={copy} locale={locale} positions={positions} />
+      <ClientAreaTransactionsPanel
+        copy={copy}
+        locale={locale}
+        positions={positions}
+        transactionHistory={transactionHistory}
+      />
     </ClientAreaShell>
   );
 }

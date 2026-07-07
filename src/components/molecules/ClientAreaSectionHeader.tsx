@@ -14,18 +14,21 @@ export function ClientAreaSectionHeader({
   title,
 }: ClientAreaSectionHeaderProps) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3">
-      <div className="space-y-1">
+    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      <div className="min-w-0 space-y-1">
         <h2 className="flex items-center gap-2 text-base font-bold text-zinc-100">
           <span className="h-4 w-1.5 rounded-full bg-yellow-500" />
           {title}
         </h2>
+        {subtitle ? (
+          <p className="text-sm leading-6 text-zinc-400">{subtitle}</p>
+        ) : null}
       </div>
 
       {actionHref && actionLabel ? (
         <Link
           href={actionHref}
-          className="text-sm text-yellow-500 transition duration-300 hover:text-yellow-600"
+          className="w-fit text-sm text-yellow-500 transition duration-300 hover:text-yellow-600"
         >
           {actionLabel}
         </Link>

@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { ClientAreaTradeHistoryRow } from "@/components/molecules/ClientAreaTradeHistoryRow";
 import { ClientAreaTransactionRow } from "@/components/molecules/ClientAreaTransactionRow";
 import type {
   DashboardCopy,
   PositionItem,
+  TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
@@ -11,69 +16,109 @@ type ClientAreaTransactionsPanelProps = {
   copy: DashboardCopy;
   locale: AppLocale;
   positions: PositionItem[];
+  transactionHistory: TransactionHistoryItem[];
 };
 
 export function ClientAreaTransactionsPanel({
   copy,
   locale,
   positions,
+  transactionHistory,
 }: ClientAreaTransactionsPanelProps) {
+  const [activeTab, setActiveTab] = useState<"open" | "history">("open");
   const openBuyCount = positions.filter((item) => item.side === "buy").length;
   const openSellCount = positions.length - openBuyCount;
   const labels =
     locale === "id"
       ? {
-          total: "Total Posisi",
-          buy: "Buy",
-          sell: "Sell",
-        }
+        tabs: {
+          open: "Open Position",
+          history: "Trade History",
+        },
+        total: "Total Posisi",
+        buy: "Buy",
+        sell: "Sell",
+        historyTitle: "Riwayat Trading",
+        historyEmpty: "Belum ada riwayat transaksi untuk akun ini.",
+      }
       : {
-          total: "Open Positions",
-          buy: "Buy",
-          sell: "Sell",
-        };
+        tabs: {
+          open: "Open Position",
+          history: "Trade History",
+        },
+        total: "Open Positions",
+        buy: "Buy",
+        sell: "Sell",
+        historyTitle: "Trade History",
+        historyEmpty: "There is no trade history for this account yet.",
+      };
 
   return (
-    <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6">
-      <h2 className="flex items-center gap-2 text-xl font-bold text-yellow-500">
+    <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-6">
+      <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
         <FontAwesomeIcon icon={["fas", "wave-square"]} />
         {copy.transactionTitle}
       </h2>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-white/8 bg-black/20 p-4">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">
-            {labels.total}
-          </p>
-          <p className="mt-2 text-2xl font-bold text-zinc-100">
-            {positions.length}
-          </p>
-        </div>
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={() => setActiveTab("open")}
+          aria-pressed={activeTab === "open"}
+          className={`inline-flex w-full min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold transition-all cursor-pointer ${activeTab === "open"
+            ? "bg-yellow-500 text-black shadow-[0_10px_24px_rgba(234,179,8,0.28)]"
+            : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            }`}
+        >
+          {labels.tabs.open}
+        </button>
 
-        <div className="rounded-2xl border border-emerald-500/15 bg-emerald-500/5 p-4">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-emerald-300/70">
-            {labels.buy}
-          </p>
-          <p className="mt-2 text-2xl font-bold text-emerald-400">
-            {openBuyCount}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-rose-500/15 bg-rose-500/5 p-4">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-rose-300/70">
-            {labels.sell}
-          </p>
-          <p className="mt-2 text-2xl font-bold text-rose-400">
-            {openSellCount}
-          </p>
-        </div>
+        <button
+          type="button"
+          onClick={() => setActiveTab("history")}
+          aria-pressed={activeTab === "history"}
+          className={`inline-flex w-full min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold transition-all cursor-pointer ${activeTab === "history"
+            ? "bg-yellow-500 text-black shadow-[0_10px_24px_rgba(234,179,8,0.28)]"
+            : "border border-yellow-500/30 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            }`}
+        >
+          {labels.tabs.history}
+        </button>
       </div>
 
-      <div className="space-y-3">
-        {positions.map((item) => (
-          <ClientAreaTransactionRow key={item.id} item={item} locale={locale} />
-        ))}
-      </div>
+      {activeTab === "open" ? (
+        <div className="space-y-3">
+          {positions.map((item) => (
+            <ClientAreaTransactionRow
+              key={item.id}
+              item={item}
+              locale={locale}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-lg font-bold text-zinc-100">
+            <FontAwesomeIcon
+              icon={["fas", "clock-rotate-left"]}
+              className="text-yellow-500"
+            />
+            <h3>{labels.historyTitle}</h3>
+          </div>
+
+          {transactionHistory.length > 0 ? (
+            <div className="space-y-3">
+              {transactionHistory.map((item) => (
+                <ClientAreaTradeHistoryRow key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-zinc-700 bg-black/20 px-4 py-5 text-sm text-zinc-400">
+              {labels.historyEmpty}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

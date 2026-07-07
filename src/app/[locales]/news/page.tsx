@@ -18,6 +18,8 @@ type LocalizedPageProps = {
   params: Promise<{ locales: string }>;
 };
 
+export const revalidate = 60;
+
 function assertValidLocale(value: string): asserts value is AppLocale {
   if (!isSupportedLocale(value)) {
     notFound();

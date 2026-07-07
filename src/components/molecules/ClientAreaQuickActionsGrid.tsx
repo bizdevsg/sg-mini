@@ -17,7 +17,7 @@ export function ClientAreaQuickActionsGrid({
   quickActionIconMap,
 }: ClientAreaQuickActionsGridProps) {
   return (
-    <div className="grid grid-cols-5 gap-2 md:gap-4">
+    <div className="grid grid-cols-2 gap-3 min-[420px]:grid-cols-3 md:grid-cols-5 md:gap-4">
       {ACTION_IDS.map((actionId, index) => {
         const action = clientArea.quickActions.items[index];
 

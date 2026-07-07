@@ -112,7 +112,7 @@ export function NewsDetailHeader({
 
   return (
     <header className="space-y-4">
-      <h1 className="mx-auto max-w-3xl text-center text-3xl font-bold leading-tight text-zinc-50 sm:text-4xl">
+      <h1 className="mx-auto max-w-3xl text-center text-2xl font-bold leading-tight text-zinc-50 sm:text-4xl">
         {title}
       </h1>
 
@@ -124,7 +124,7 @@ export function NewsDetailHeader({
 
       <div className="mx-auto h-1 w-30 rounded-full bg-yellow-400/70" />
 
-      <div className="mx-auto flex w-fit items-center gap-3">
+      <div className="mx-auto flex w-fit flex-wrap items-center justify-center gap-3">
         {shareLinks.map((item) => (
           <a
             key={item.label}

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { submitClientAreaLogout } from "@/app/actions/clientAreaLogout";
 import { getMessages } from "@/locales";
 import type { AppLocale } from "@/locales";
+import { CLIENT_AREA_LAST_ACTIVITY_STORAGE_KEY } from "@/lib/client-area-session";
 
 type ClientAreaLogoutModalProps = {
   isOpen: boolean;
@@ -80,6 +81,14 @@ export function ClientAreaLogoutModal({
     return null;
   }
 
+  const handleLogoutSubmit = () => {
+    try {
+      window.localStorage.removeItem(CLIENT_AREA_LAST_ACTIVITY_STORAGE_KEY);
+    } catch {
+      // Ignore storage cleanup failures in restricted browsers.
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
@@ -101,7 +110,11 @@ export function ClientAreaLogoutModal({
           <FontAwesomeIcon icon={["fas", "xmark"]} className="text-lg" />
         </button>
 
-        <form action={submitClientAreaLogout} className="space-y-5">
+        <form
+          action={submitClientAreaLogout}
+          className="space-y-5"
+          onSubmit={handleLogoutSubmit}
+        >
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="redirectPath" value={redirectPath} />
 

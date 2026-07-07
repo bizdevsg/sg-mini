@@ -21,7 +21,7 @@ export function ClientAreaMarketPanel({
 }: ClientAreaMarketPanelProps) {
   return (
     <div
-      className={`space-y-6 w-full ${embedded ? "" : "rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 backdrop-blur-2xl"} ${className}`}
+      className={`w-full space-y-6 ${embedded ? "" : "rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 backdrop-blur-2xl sm:p-6"} ${className}`}
     >
       <div className="grid grid-cols-1 gap-4">
         {prices.map((item) => (

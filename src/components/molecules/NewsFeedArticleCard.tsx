@@ -35,14 +35,17 @@ export function NewsFeedArticleCard({
           prefetch={false}
           className="group grid h-full min-h-[202px] grid-cols-1 items-start gap-4 rounded-2xl border border-white/10 bg-zinc-950/40 p-4 transition-all duration-300 hover:border-yellow-500/40 hover:bg-zinc-900/40 sm:grid-cols-[10rem_minmax(0,1fr)] lg:grid-cols-[11rem_minmax(0,1fr)]"
         >
-          <div
-            role="img"
-            aria-label={article.title}
-            className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105 sm:h-full sm:min-h-[180px] sm:aspect-auto"
-            style={{
-              backgroundImage: `url('${article.imageSrc}')`,
-            }}
-          />
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl sm:h-full sm:min-h-[180px] sm:aspect-auto">
+            <Image
+              src={article.imageSrc}
+              alt={article.title}
+              fill
+              unoptimized
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 10rem, 11rem"
+              loading={prioritizeImage ? "eager" : "lazy"}
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
 
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex min-h-9 flex-wrap items-start gap-2">

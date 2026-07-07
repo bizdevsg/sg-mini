@@ -91,12 +91,12 @@ export function ClientAreaEconomicCalendarCard({
 }: ClientAreaEconomicCalendarCardProps) {
   return (
     <div className="rounded-2xl border border-white/8 bg-zinc-500/10 p-4 backdrop-blur-sm">
-      <div className="flex items-center gap-5">
-        <div className="shrink-0 font-bold text-zinc-200 w-15">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="w-full shrink-0 font-bold text-zinc-200 sm:w-15">
           <p>{event.displayTime}</p>
         </div>
 
-        <div className="w-10">
+        <div className="w-10 shrink-0">
           <div
             className={`fib fi-${getCountryFlagCode(event.currency)} h-6 w-7 shrink-0 overflow-hidden rounded-[2px] mx-auto`}
             aria-label={event.currency}
@@ -104,26 +104,26 @@ export function ClientAreaEconomicCalendarCard({
           />
         </div>
 
-        <div className="flex items-center justify-between gap-1 w-full">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <h3 className="flex items-center gap-2 text-sm font-bold leading-6 text-zinc-100">
               <span>{event.event}</span>
             </h3>
 
-            <div className="flex items-center gap-3">
-              <p className="text-sm text-yellow-500">
+            <div className="mt-2 grid gap-2 text-sm min-[440px]:grid-cols-2 xl:grid-cols-3">
+              <p className="text-yellow-500">
                 <span className="font-semibold">{previousLabel}</span>:{" "}
                 {event.previous}
               </p>
-              <p className="text-sm text-yellow-500">
+              <p className="text-yellow-500">
                 <span className="font-semibold">{forecastLabel}</span>:{" "}
                 {event.forecast}
               </p>
               <p
-                className={`text-sm ${getActualValueColorClassName(
+                className={getActualValueColorClassName(
                   event.actual,
                   event.previous,
-                )}`}
+                )}
               >
                 <span className="font-semibold">{actualLabel}</span>:{" "}
                 <span>{event.actual}</span>
@@ -131,10 +131,12 @@ export function ClientAreaEconomicCalendarCard({
             </div>
           </div>
 
-          <ClientAreaImpactBadge
-            impactScore={event.impactScore}
-            label={event.impact}
-          />
+          <div className="sm:pt-1">
+            <ClientAreaImpactBadge
+              impactScore={event.impactScore}
+              label={event.impact}
+            />
+          </div>
         </div>
       </div>
     </div>

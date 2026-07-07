@@ -98,12 +98,6 @@ export function ClientAreaHomePanel({
             onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
           />
         </div>
-
-        <ClientAreaSentimentPanel
-          buyersLabel={copy.buyersLabel}
-          sellersLabel={copy.sellersLabel}
-          sentimentLabel={copy.sentimentLabel}
-        />
       </div>
     </div>
   );

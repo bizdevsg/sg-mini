@@ -76,7 +76,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ClientAreaNewsDetailPage({
+export default async function Page({
   params,
 }: ClientAreaNewsDetailPageProps) {
   const { locales, slug } = await params;

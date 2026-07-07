@@ -13,6 +13,11 @@ import {
   type EconomicCalendarRangeKey,
 } from "@/lib/economic-calendar.shared";
 import {
+  hydrateEconomicCalendarStoreFromSessionStorage,
+  readEconomicCalendarStoreEntry,
+  writeEconomicCalendarStoreEntry,
+} from "@/lib/economic-calendar-client-store";
+import {
   formatLocaleDateTime,
   getMessages,
   getLocaleConfig,
@@ -25,6 +30,8 @@ type EconomicCalendarBrowserProps = {
 };
 
 const PAGE_SIZE = 20;
+const ECONOMIC_CALENDAR_CLIENT_STALE_MS = 30_000;
+const ECONOMIC_CALENDAR_REFRESH_INTERVAL_MS = 30_000;
 type PaginationItem = number | "...";
 
 async function fetchEconomicCalendarRange(
@@ -78,6 +85,14 @@ function getVisiblePaginationItems(
     "...",
     totalPages,
   ];
+}
+
+function isRangeDataReady(rangeData: EconomicCalendarRangeData) {
+  return rangeData.status === "success";
+}
+
+function isStoreEntryFresh(fetchedAt: number) {
+  return Date.now() - fetchedAt < ECONOMIC_CALENDAR_CLIENT_STALE_MS;
 }
 
 function formatCalendarDate(value: string, locale: AppLocale) {
@@ -357,6 +372,7 @@ export function EconomicCalendarBrowser({
 }: EconomicCalendarBrowserProps) {
   const labels = getMessages(locale).economicCalendarBrowser;
   const isMountedRef = useRef(true);
+  const activeRangeRef = useRef<EconomicCalendarRangeKey>("today");
 
   const [activeRange, setActiveRange] =
     useState<EconomicCalendarRangeKey>("today");
@@ -365,22 +381,82 @@ export function EconomicCalendarBrowser({
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    activeRangeRef.current = activeRange;
+  }, [activeRange]);
+
+  useEffect(() => {
     return () => {
       isMountedRef.current = false;
     };
   }, []);
 
+  useEffect(() => {
+    hydrateEconomicCalendarStoreFromSessionStorage();
+
+    setRangeOverview((currentOverview) => {
+      const nextOverview = { ...currentOverview };
+      let hasChanged = false;
+
+      for (const rangeKey of ECONOMIC_CALENDAR_RANGE_KEYS) {
+        const currentRange = currentOverview[rangeKey];
+        const storedEntry = readEconomicCalendarStoreEntry(rangeKey);
+
+        if (!storedEntry) {
+          if (isRangeDataReady(currentRange)) {
+            writeEconomicCalendarStoreEntry(rangeKey, currentRange);
+          }
+
+          continue;
+        }
+
+        if (
+          currentRange.status !== "success" ||
+          currentRange.updatedAt !== storedEntry.data.updatedAt
+        ) {
+          nextOverview[rangeKey] = storedEntry.data;
+          hasChanged = true;
+        }
+      }
+
+      return hasChanged ? nextOverview : currentOverview;
+    });
+  }, []);
+
+  useEffect(() => {
+    for (const rangeKey of ECONOMIC_CALENDAR_RANGE_KEYS) {
+      const rangeData = overview[rangeKey];
+
+      if (isRangeDataReady(rangeData)) {
+        writeEconomicCalendarStoreEntry(rangeKey, rangeData);
+      }
+    }
+  }, [overview]);
+
   const activeRangeStatus = rangeOverview[activeRange].status;
 
   useEffect(() => {
-    if (activeRangeStatus !== "idle") {
+    const currentRangeData = rangeOverview[activeRange];
+    const storedEntry = readEconomicCalendarStoreEntry(activeRange);
+    const hasFreshStoredData =
+      storedEntry !== null && isStoreEntryFresh(storedEntry.fetchedAt);
+    const shouldShowLoadingState =
+      currentRangeData.status === "idle" && !hasFreshStoredData;
+    const shouldSkipFetch =
+      isRangeDataReady(currentRangeData) &&
+      storedEntry !== null &&
+      storedEntry.data.updatedAt === currentRangeData.updatedAt &&
+      isStoreEntryFresh(storedEntry.fetchedAt);
+
+    if (shouldSkipFetch) {
       return;
     }
 
-    setRangeOverview((currentOverview) => ({
-      ...currentOverview,
-      [activeRange]: createEmptyEconomicCalendarRange(activeRange, "loading"),
-    }));
+    if (shouldShowLoadingState) {
+      setRangeOverview((currentOverview) => ({
+        ...currentOverview,
+        [activeRange]: createEmptyEconomicCalendarRange(activeRange, "loading"),
+      }));
+    }
 
     void fetchEconomicCalendarRange(activeRange)
       .then((data) => {
@@ -388,6 +464,7 @@ export function EconomicCalendarBrowser({
           return;
         }
 
+        writeEconomicCalendarStoreEntry(activeRange, data);
         setRangeOverview((currentOverview) => ({
           ...currentOverview,
           [activeRange]: data,
@@ -400,10 +477,59 @@ export function EconomicCalendarBrowser({
 
         setRangeOverview((currentOverview) => ({
           ...currentOverview,
-          [activeRange]: createEmptyEconomicCalendarRange(activeRange),
+          [activeRange]:
+            currentOverview[activeRange].status === "success"
+              ? currentOverview[activeRange]
+              : createEmptyEconomicCalendarRange(activeRange),
         }));
       });
-  }, [activeRange, activeRangeStatus]);
+  }, [activeRange, activeRangeStatus, rangeOverview]);
+
+  useEffect(() => {
+    function refreshActiveRange() {
+      if (document.visibilityState !== "visible") {
+        return;
+      }
+
+      const rangeKey = activeRangeRef.current;
+
+      void fetchEconomicCalendarRange(rangeKey)
+        .then((data) => {
+          if (!isMountedRef.current) {
+            return;
+          }
+
+          writeEconomicCalendarStoreEntry(rangeKey, data);
+          setRangeOverview((currentOverview) => ({
+            ...currentOverview,
+            [rangeKey]: data,
+          }));
+        })
+        .catch(() => {
+          // Keep the current snapshot if background refresh fails.
+        });
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        refreshActiveRange();
+      }
+    }
+
+    const intervalId = window.setInterval(
+      refreshActiveRange,
+      ECONOMIC_CALENDAR_REFRESH_INTERVAL_MS,
+    );
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange,
+      );
+    };
+  }, []);
 
   const activeData = rangeOverview[activeRange];
   const activeEvents = activeData.events;

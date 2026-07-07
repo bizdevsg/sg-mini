@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import {
+  ECONOMIC_CALENDAR_REVALIDATE_SECONDS,
   ECONOMIC_CALENDAR_RANGE_KEYS,
   getEconomicCalendarRange,
 } from "@/lib/economic-calendar";
@@ -27,5 +28,9 @@ export async function GET(
   }
 
   const data = await getEconomicCalendarRange(range);
-  return NextResponse.json(data);
+  return NextResponse.json(data, {
+    headers: {
+      "Cache-Control": `public, s-maxage=${ECONOMIC_CALENDAR_REVALIDATE_SECONDS}, stale-while-revalidate=${ECONOMIC_CALENDAR_REVALIDATE_SECONDS}`,
+    },
+  });
 }

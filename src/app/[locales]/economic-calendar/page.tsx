@@ -9,6 +9,7 @@ import { EconomicCalendarBrowser } from "@/components/organisms/EconomicCalendar
 import {
   createEmptyEconomicCalendarRange,
   ECONOMIC_CALENDAR_RANGE_KEYS,
+  getEconomicCalendarRange,
   type EconomicCalendarOverview,
 } from "@/lib/economic-calendar";
 import {
@@ -57,9 +58,17 @@ export async function generateMetadata({
   };
 }
 
-function createInitialCalendarOverview() {
+async function createInitialCalendarOverview() {
+  const todayData = await getEconomicCalendarRange("today").catch(() =>
+    createEmptyEconomicCalendarRange("today"),
+  );
+
   return Object.fromEntries(
     ECONOMIC_CALENDAR_RANGE_KEYS.map((rangeKey) => {
+      if (rangeKey === "today") {
+        return [rangeKey, todayData];
+      }
+
       return [rangeKey, createEmptyEconomicCalendarRange(rangeKey, "idle")];
     }),
   ) as EconomicCalendarOverview;
@@ -71,7 +80,7 @@ export default async function EconomicCalendarPage({
   const { locales } = await params;
   assertValidLocale(locales);
   const labels = getMessages(locales).economicCalendarPage;
-  const overview = createInitialCalendarOverview();
+  const overview = await createInitialCalendarOverview();
 
   return (
     <SectionContainer className="py-16 sm:py-20">

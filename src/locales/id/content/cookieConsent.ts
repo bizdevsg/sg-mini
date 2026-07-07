@@ -1,10 +1,10 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const idCookieConsent: AppMessages["cookieConsent"] = {
-  badge: "Persetujuan Cookie",
-  title: "Kami menggunakan cookie agar website ini berjalan dengan baik.",
+  badge: "PENGATURAN COOKIE",
+  title: "Privasi dan kenyamanan Anda adalah prioritas kami.",
   description:
-    "Homepage ini menggunakan cookie esensial untuk fitur seperti sesi Client Area dan satu cookie preferensi untuk mengingat preferensi cookie Anda.",
+    "Website ini menggunakan cookie esensial untuk memastikan layanan dan fitur utama berfungsi dengan baik. Dengan persetujuan Anda, kami juga menggunakan cookie preferensi untuk menyimpan pengaturan sehingga pengalaman penggunaan menjadi lebih nyaman dan konsisten.",
   essentialTag: "Cookie esensial",
   preferenceTag: "Cookie preferensi",
   dismissLabel: "Nanti saja",

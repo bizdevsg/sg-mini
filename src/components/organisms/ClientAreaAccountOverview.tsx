@@ -89,8 +89,8 @@ export function ClientAreaAccountOverview({
         className="relative h-fit overflow-hidden rounded-3xl border border-yellow-400/30 bg-cover bg-center bg-no-repeat p-5 text-black shadow-2xl"
         style={{ backgroundImage: "url('/assets/bg-profile.svg')" }}
       >
-        <div className="relative mb-4 flex items-center justify-between gap-4">
-          <div className="flex flex-col items-center gap-3">
+        <div className="relative mb-4 flex items-start justify-between gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
             <div className="relative">
               <button
                 type="button"
@@ -128,12 +128,12 @@ export function ClientAreaAccountOverview({
               ) : null}
             </div>
 
-            <span className="text-base font-extrabold tracking-tight text-neutral-900">
+            <span className="break-all text-sm font-extrabold tracking-tight text-neutral-900 sm:text-base">
               {currentAccount.accountId}
             </span>
           </div>
 
-          <div className="flex h-13 w-13 items-center justify-center overflow-hidden rounded-full border border-black/20 bg-zinc-900 shadow">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/20 bg-zinc-900 shadow sm:h-13 sm:w-13">
             <FontAwesomeIcon
               icon={["fas", "user"]}
               className="text-yellow-400"

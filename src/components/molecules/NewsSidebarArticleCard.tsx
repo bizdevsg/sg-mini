@@ -30,7 +30,7 @@ export function NewsSidebarArticleCard({
             src={article.imageSrc}
             alt={article.title}
             fill
-            sizes="96px"
+            sizes="720"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>

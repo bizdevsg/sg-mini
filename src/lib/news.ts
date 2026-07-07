@@ -87,6 +87,7 @@ const NEWS_CATEGORY_MAP = new Map<string, (typeof NEWS_FILTER_CATEGORIES)[number
 const SUMMARY_MAX_LENGTH = 220;
 const NEWS_API_TIMEOUT_MS = 20000;
 const NEWS_API_CACHE_TTL_MS = 60 * 1000;
+export const NEWS_REVALIDATE_SECONDS = NEWS_API_CACHE_TTL_MS / 1000;
 const NEWS_PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect width='1200' height='675' fill='%23111217'/%3E%3Crect x='30' y='30' width='1140' height='615' rx='28' fill='none' stroke='%23eab308' stroke-opacity='0.4' stroke-width='6'/%3E%3Ctext x='80' y='180' fill='%23eab308' font-family='Arial,sans-serif' font-size='56' font-weight='700'%3ELive Market News%3C/text%3E%3Ctext x='80' y='260' fill='%23f4f4f5' font-family='Arial,sans-serif' font-size='34'%3EPortal News feed placeholder%3C/text%3E%3C/svg%3E";
 
@@ -194,9 +195,13 @@ function getTimestamp(value?: string) {
   return Number.isFinite(timestamp) ? timestamp : null;
 }
 
+function getArticlePublishedTimestamp(article: PortalNewsApiArticle) {
+  return getTimestamp(article.created_at ?? article.updated_at);
+}
+
 function compareArticleDates(a: PortalNewsApiArticle, b: PortalNewsApiArticle) {
-  const firstDate = getTimestamp(a.updated_at ?? a.created_at);
-  const secondDate = getTimestamp(b.updated_at ?? b.created_at);
+  const firstDate = getArticlePublishedTimestamp(a);
+  const secondDate = getArticlePublishedTimestamp(b);
 
   if (firstDate === null && secondDate === null) {
     return 0;
@@ -236,7 +241,7 @@ function comparePublishedAtStrings(
 }
 
 function getPublishedAt(article: PortalNewsApiArticle) {
-  return article.updated_at ?? article.created_at ?? "";
+  return article.created_at ?? article.updated_at ?? "";
 }
 
 function getArticleImage(article: PortalNewsApiArticle) {
@@ -321,7 +326,7 @@ function toPortalNewsFeedEntry(article: PortalNewsApiArticle): PortalNewsFeedEnt
     slug: article.slug,
     summary: getArticleSummary(article),
     categoryName: article.kategori?.name?.trim() || "",
-    publishedAt: article.updated_at ?? article.created_at ?? "",
+    publishedAt: getPublishedAt(article),
     imagePath:
       article.images?.find((image) => image.trim().length > 0) ?? null,
   };

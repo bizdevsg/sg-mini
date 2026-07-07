@@ -4,6 +4,7 @@ import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard"
 import { NewsDetailArticleBody } from "@/components/organisms/NewsDetailArticleBody";
 import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
 import { NewsDetailSidebar } from "@/components/organisms/NewsDetailSidebar";
+import Image from "next/image";
 
 type ClientAreaNewsDetailPanelProps = {
   article: NewsArticleDetail;
@@ -26,7 +27,7 @@ export function ClientAreaNewsDetailPanel({
   const labels = messages.newsDetailPage;
 
   return (
-    <div className="space-y-8 rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6 sm:p-8">
+    <div className="space-y-8 py-5">
       <NewsDetailHeader
         locale={locale}
         publishedAt={article.publishedAt}
@@ -35,14 +36,15 @@ export function ClientAreaNewsDetailPanel({
         title={article.title}
       />
 
-      <div className="overflow-hidden rounded-3xl border border-yellow-500/20 bg-zinc-950/40">
-        <img
+      <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-yellow-500/20 bg-zinc-950/40">
+        <Image
           src={article.imageSrc}
           alt={article.title}
-          width={1280}
-          height={720}
+          fill
+          unoptimized
+          sizes="1080"
           decoding="async"
-          className="block max-h-[520px] w-full object-cover"
+          className="object-cover"
         />
       </div>
 

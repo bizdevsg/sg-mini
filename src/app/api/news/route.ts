@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { DEFAULT_LOCALE, isSupportedLocale } from "@/locales";
-import { getNewsArticleBySlug, getNewsFeed } from "@/lib/news";
+import {
+  getNewsArticleBySlug,
+  getNewsFeed,
+  NEWS_REVALIDATE_SECONDS,
+} from "@/lib/news";
 
 export const runtime = "nodejs";
+
+const NEWS_CACHE_CONTROL_HEADER = `public, s-maxage=${NEWS_REVALIDATE_SECONDS}, stale-while-revalidate=${NEWS_REVALIDATE_SECONDS}`;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -16,9 +22,17 @@ export async function GET(request: NextRequest) {
 
   if (slug) {
     const result = await getNewsArticleBySlug(locale, slug);
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+      headers: {
+        "Cache-Control": NEWS_CACHE_CONTROL_HEADER,
+      },
+    });
   }
 
   const result = await getNewsFeed(locale, limit);
-  return NextResponse.json(result);
+  return NextResponse.json(result, {
+    headers: {
+      "Cache-Control": NEWS_CACHE_CONTROL_HEADER,
+    },
+  });
 }

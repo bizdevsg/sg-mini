@@ -42,6 +42,7 @@ export type BreakingNewsItem = {
 export type ArticleItem = {
   id?: string;
   slug?: string;
+  imageUrl?: string;
   category: string;
   title: string;
   excerpt: string;
@@ -53,19 +54,38 @@ export type PositionItem = {
   symbol: string;
   instrument: string;
   side: "buy" | "sell";
+  orderNumber?: string;
   volume: string;
   openPrice: string;
   currentPrice: string;
   floatingPl: string;
+  storageFee?: string;
+  facilityFee?: string;
+  vat?: string;
   openedAt: string;
 };
 
 export type TransactionHistoryItem = {
   id: string;
   type: "credit" | "debit";
-  title: string;
-  subtitle: string;
-  amount: string;
+  instrument: string;
+  symbol: string;
+  statusLabel: string;
+  statusTone?: "profit" | "loss" | "warning" | "muted";
+  orderNumber: string;
+  volume: string;
+  date: string;
+  time: string;
+  sideLabel?: string;
+  sidePrice?: string;
+  openLabel?: string;
+  openPrice?: string;
+  closeLabel?: string;
+  closePrice?: string;
+  currentPrice?: string;
+  facilityFee?: string;
+  vat?: string;
+  profitLoss?: string;
 };
 
 export type AccountSnapshot = {
@@ -101,7 +121,6 @@ export type DashboardCopy = {
   economicCalendarTitle: string;
   economicCalendarEmpty: string;
   economicCalendarHighImpactLabel: string;
-  economicCalendarFallbackLabel: string;
   viewMoreLabel: string;
   transactionTitle: string;
   transactionHistoryTitle: string;

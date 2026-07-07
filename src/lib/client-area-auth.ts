@@ -2,11 +2,23 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import type { AppLocale } from "@/locales";
+import {
+  CLIENT_AREA_IDENTIFIER_COOKIE,
+  CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
+  CLIENT_AREA_LAST_ACTIVITY_COOKIE,
+  CLIENT_AREA_REMEMBER_ME_MAX_AGE,
+  CLIENT_AREA_SESSION_COOKIE,
+  CLIENT_AREA_SESSION_VALUE,
+  getClientAreaDashboardHref,
+  getClientAreaLoginHref,
+  isClientAreaLastActivityActive,
+  normalizeClientAreaIdentifier,
+} from "@/lib/client-area-session";
+export {
+  getClientAreaDashboardHref,
+  getClientAreaLoginHref,
+} from "@/lib/client-area-session";
 
-const CLIENT_AREA_SESSION_COOKIE = "sgb_client_area_session";
-const CLIENT_AREA_IDENTIFIER_COOKIE = "sgb_client_area_identifier";
-const CLIENT_AREA_SESSION_VALUE = "demo-authenticated";
-const CLIENT_AREA_REMEMBER_ME_MAX_AGE = 60 * 60 * 24 * 30;
 const CLIENT_AREA_ALLOWED_IDENTIFIERS = new Set([
   "bbh10158",
   "user.sgb@demo-trading.com",
@@ -19,21 +31,11 @@ export type ClientAreaSessionProfile = {
   email: string;
 };
 
-function normalizeIdentifier(value: string) {
-  return value.trim().toLowerCase();
-}
-
-export function getClientAreaDashboardHref(locale: AppLocale) {
-  return `/${locale}/client-area`;
-}
-
-export function getClientAreaLoginHref(locale: AppLocale) {
-  return `/${locale}/client-area/login`;
-}
-
 export function isValidClientAreaCredentials(account: string, password: string) {
   return (
-    CLIENT_AREA_ALLOWED_IDENTIFIERS.has(normalizeIdentifier(account)) &&
+    CLIENT_AREA_ALLOWED_IDENTIFIERS.has(
+      normalizeClientAreaIdentifier(account),
+    ) &&
     password === CLIENT_AREA_DEMO_PASSWORD
   );
 }
@@ -41,14 +43,21 @@ export function isValidClientAreaCredentials(account: string, password: string) 
 export async function hasClientAreaSession() {
   const cookieStore = await cookies();
 
-  return (
+  const hasAuthenticatedCookie =
     cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
-    CLIENT_AREA_SESSION_VALUE
+    CLIENT_AREA_SESSION_VALUE;
+
+  if (!hasAuthenticatedCookie) {
+    return false;
+  }
+
+  return isClientAreaLastActivityActive(
+    cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
   );
 }
 
 function resolveClientAreaSessionProfile(identifier?: string | null): ClientAreaSessionProfile {
-  const normalizedIdentifier = normalizeIdentifier(identifier ?? "");
+  const normalizedIdentifier = normalizeClientAreaIdentifier(identifier ?? "");
 
   if (normalizedIdentifier === "user.sgb@demo-trading.com") {
     return {
@@ -67,11 +76,16 @@ function resolveClientAreaSessionProfile(identifier?: string | null): ClientArea
 
 export async function getClientAreaSessionProfile() {
   const cookieStore = await cookies();
-  const hasSession =
+  const hasAuthenticatedCookie =
     cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
     CLIENT_AREA_SESSION_VALUE;
 
-  if (!hasSession) {
+  if (
+    !hasAuthenticatedCookie ||
+    !isClientAreaLastActivityActive(
+      cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
+    )
+  ) {
     return null;
   }
 
@@ -85,7 +99,8 @@ export async function createClientAreaSession(
   rememberMe: boolean,
 ) {
   const cookieStore = await cookies();
-  const normalizedAccount = normalizeIdentifier(account);
+  const normalizedAccount = normalizeClientAreaIdentifier(account);
+  const now = Date.now().toString();
   const cookieOptions = {
     httpOnly: true,
     sameSite: "lax" as const,
@@ -104,12 +119,21 @@ export async function createClientAreaSession(
     value: normalizedAccount,
     ...cookieOptions,
   });
+  cookieStore.set({
+    name: CLIENT_AREA_LAST_ACTIVITY_COOKIE,
+    value: now,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
+  });
 }
 
 export async function clearClientAreaSession() {
   const cookieStore = await cookies();
   cookieStore.delete(CLIENT_AREA_SESSION_COOKIE);
   cookieStore.delete(CLIENT_AREA_IDENTIFIER_COOKIE);
+  cookieStore.delete(CLIENT_AREA_LAST_ACTIVITY_COOKIE);
 }
 
 export async function requireClientAreaSession(locale: AppLocale) {

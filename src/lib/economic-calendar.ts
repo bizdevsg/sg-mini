@@ -55,6 +55,7 @@ type EconomicCalendarApiResponse = {
 };
 
 const ECONOMIC_CALENDAR_REQUEST_TIMEOUT_MS = 5000;
+export const ECONOMIC_CALENDAR_REVALIDATE_SECONDS = 30;
 
 const ECONOMIC_CALENDAR_ENDPOINTS: Record<EconomicCalendarRangeKey, string> = {
   today: "today",
@@ -184,9 +185,11 @@ export async function getEconomicCalendarRange(
 
   try {
     response = await fetch(`${ECONOMIC_CALENDAR_API_BASE_URL}/${endpoint}`, {
-      cache: "no-store",
       headers: {
         Accept: "application/json",
+      },
+      next: {
+        revalidate: ECONOMIC_CALENDAR_REVALIDATE_SECONDS,
       },
       signal: controller.signal,
     });

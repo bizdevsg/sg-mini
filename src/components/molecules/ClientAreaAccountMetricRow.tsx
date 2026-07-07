@@ -16,15 +16,14 @@ export function ClientAreaAccountMetricRow({
 }: ClientAreaAccountMetricRowProps) {
   return (
     <div
-      className={`flex flex-col items-center gap-3 ${
-        withDivider ? "border-b border-black/10 pb-1.5" : ""
-      }`}
+      className={`flex flex-col items-center justify-between gap-3 ${withDivider ? "border-b border-black/10 pb-1.5" : ""
+        }`}
     >
-      <span className="flex items-center gap-1 text-sm text-neutral-800">
+      <span className="flex min-w-0 items-center gap-2 text-sm text-neutral-800">
         <FontAwesomeIcon icon={icon} className="text-neutral-900/60" />
         {label}
       </span>
-      <span className="text-xl font-bold text-black">{value}</span>
+      <span className="text-right text-lg font-bold text-black sm:text-xl">{value}</span>
     </div>
   );
 }

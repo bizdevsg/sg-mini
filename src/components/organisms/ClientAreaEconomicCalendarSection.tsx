@@ -23,11 +23,6 @@ export function ClientAreaEconomicCalendarSection({
     <div>
       <ClientAreaSectionHeader
         title={copy.economicCalendarTitle}
-        subtitle={
-          preview.isHighImpactOnly
-            ? copy.economicCalendarHighImpactLabel
-            : copy.economicCalendarFallbackLabel
-        }
         actionHref={`/${locale}/economic-calendar`}
         actionLabel={copy.viewMoreLabel}
       />
