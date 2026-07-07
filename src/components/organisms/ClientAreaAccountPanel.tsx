@@ -12,6 +12,18 @@ type ClientAreaAccountPanelProps = {
   transactionHistory: TransactionHistoryItem[];
 };
 
+function getTransactionSummary(item: TransactionHistoryItem) {
+  return `${item.date} • ${item.time} • Order ${item.orderNumber}`;
+}
+
+function getTransactionValue(item: TransactionHistoryItem) {
+  if (item.profitLoss && item.profitLoss !== "-") {
+    return item.profitLoss;
+  }
+
+  return item.volume;
+}
+
 export function ClientAreaAccountPanel({
   copy,
   currentAccount,
@@ -94,8 +106,12 @@ export function ClientAreaAccountPanel({
                 </div>
 
                 <div className="min-w-0">
-                  <p className="break-words text-sm font-semibold text-zinc-100">{item.title}</p>
-                  <p className="text-[11px] text-zinc-500">{item.subtitle}</p>
+                  <p className="break-words text-sm font-semibold text-zinc-100">
+                    {item.instrument} ({item.symbol})
+                  </p>
+                  <p className="text-[11px] text-zinc-500">
+                    {getTransactionSummary(item)}
+                  </p>
                 </div>
               </div>
 
@@ -104,7 +120,7 @@ export function ClientAreaAccountPanel({
                   item.type === "credit" ? "text-emerald-400" : "text-rose-400"
                 }`}
               >
-                {item.amount}
+                {getTransactionValue(item)}
               </span>
             </div>
           ))}
