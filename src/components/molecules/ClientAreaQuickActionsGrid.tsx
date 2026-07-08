@@ -1,18 +1,23 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 import { ClientAreaQuickActionButton } from "@/components/atoms/ClientAreaQuickActionButton";
-import { ACTION_IDS } from "@/components/organisms/client-area.shared";
+import {
+  ACTION_IDS,
+  resolveLocalizedHref,
+} from "@/components/organisms/client-area.shared";
 import type { ActionId } from "@/components/organisms/client-area.types";
-import type { AppMessages } from "@/locales";
+import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaQuickActionsGridProps = {
   clientArea: AppMessages["clientArea"];
+  locale: AppLocale;
   onActionClick: (actionId: ActionId) => void;
   quickActionIconMap: Record<ActionId, IconProp>;
 };
 
 export function ClientAreaQuickActionsGrid({
   clientArea,
+  locale,
   onActionClick,
   quickActionIconMap,
 }: ClientAreaQuickActionsGridProps) {
@@ -24,9 +29,18 @@ export function ClientAreaQuickActionsGrid({
         return (
           <ClientAreaQuickActionButton
             key={actionId}
+            href={
+              actionId === "education"
+                ? resolveLocalizedHref(locale, "/client-area/ebook")
+                : undefined
+            }
             icon={quickActionIconMap[actionId]}
             label={action?.label ?? actionId}
-            onClick={() => onActionClick(actionId)}
+            onClick={
+              actionId === "education"
+                ? undefined
+                : () => onActionClick(actionId)
+            }
           />
         );
       })}

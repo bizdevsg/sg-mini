@@ -73,6 +73,11 @@ export const idClientArea: AppMessages["clientArea"] = {
         href: "/news",
       },
       {
+        id: "ebook",
+        label: "Ebook",
+        href: "/ebook",
+      },
+      {
         id: "account",
         label: "Akun",
         href: "#account",
@@ -142,7 +147,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     items: [
       {
         id: "education",
-        label: "Edukasi",
+        label: "Ebook",
       },
       {
         id: "products",
@@ -256,5 +261,185 @@ export const idClientArea: AppMessages["clientArea"] = {
         cta: "Hubungi support",
       },
     ],
+  },
+  accountPage: {
+    activeAccount: "Akun aktif",
+    backLabel: "Back",
+    pendingSectionNote:
+      "Detail untuk section ini menyusul. Untuk sekarang fokusnya baru di Data Pribadi.",
+    saveLabel: "Simpan",
+    sections: {
+      personal: "Data Pribadi",
+      purpose: "Tujuan Pembukaan Rekening",
+      emergency: "Data Darurat Yang Bisa Dihubungi",
+      job: "Data Pekerjaan",
+      wealth: "Data Kekayaan",
+    },
+    menuItems: {
+      profile: "Profil",
+      referral: "Referral SG Solid",
+      documentApproval: "Dokumen Persetujuan",
+      dailyStatement: "Daily Statement",
+      withdrawal: "Withdrawal",
+      deposit: "Deposit",
+    },
+    fields: {
+      fullName: "Nama Lengkap",
+      email: "Email",
+      birthPlace: "Tempat Lahir",
+      birthDate: "Tanggal Lahir",
+      identityNumber: "No. Identitas (KTP / Paspor)",
+      taxNumber: "No. NPWP",
+      gender: "Jenis Kelamin",
+      maritalStatus: "Status Perkawinan",
+      spouseName: "Nama Istri / Suami",
+      homeAddress: "Alamat Rumah",
+      rt: "RT",
+      rw: "RW",
+      province: "Provinsi",
+      city: "Kabupaten / Kota",
+      subdistrict: "Kelurahan",
+      postalCode: "Kode Pos",
+      phone: "No. Handphone",
+      openingPurpose: "Tujuan Pembukaan Rekening",
+      investmentExperience: "Pengalaman Investasi",
+      investmentField: "Bidang Investasi",
+      futuresExperience: "Pengalaman Transaksi Perdagangan Berjangka",
+      familyAffiliation:
+        "Memiliki keluarga yang bekerja di BAPPEBTI / Bursa Berjangka / Lembaga Kliring Berjangka",
+      familyAffiliationDetail: "Keterangan",
+      bankruptStatus: "Apakah Anda telah dinyatakan pailit oleh Pengadilan",
+      emergencyName: "Nama",
+      emergencyAddress: "Alamat Rumah",
+      emergencyNeighborhood: "RT / RW",
+      emergencyProvince: "Provinsi",
+      emergencyCity: "Kabupaten / Kota",
+      emergencySubdistrict: "Kelurahan",
+      emergencyPostalCode: "Kode Pos",
+      emergencyPhone: "No. Telepon",
+      occupation: "Pekerjaan",
+      companyName: "Nama Perusahaan",
+      businessSector: "Bidang Usaha",
+      position: "Jabatan",
+      yearsWorking: "Lama Bekerja",
+      previousOffice: "Kantor Sebelumnya",
+      officeAddress: "Alamat Kantor",
+      officePostalCode: "Kode Pos",
+      officePhone: "No. Telepon Kantor",
+      annualIncome: "Penghasilan Pertahun",
+      houseLocation: "Rumah, Lokasi",
+      njop: "Nilai Jual Objek Pajak (NJOP)",
+      bankDeposit: "Deposit Bank",
+      amount: "Jumlah",
+      otherAssets: "Lainnya",
+      occupationOther: "Lainnya, sebutkan",
+    },
+    options: {
+      binary: [
+        {
+          value: "yes",
+          label: "Ya",
+        },
+        {
+          value: "no",
+          label: "Tidak",
+        },
+      ],
+      purpose: [
+        {
+          value: "hedging",
+          label: "Lindung Nilai",
+        },
+        {
+          value: "speculation",
+          label: "Spekulasi",
+        },
+        {
+          value: "other",
+          label: "Lainnya,",
+        },
+      ],
+      investmentExperience: [
+        {
+          value: "yes",
+          label: "Ya, Bidang:",
+        },
+        {
+          value: "no",
+          label: "Tidak",
+        },
+      ],
+      occupation: [
+        {
+          value: "private",
+          label: "Swasta",
+        },
+        {
+          value: "entrepreneur",
+          label: "Wiraswasta",
+        },
+        {
+          value: "homemaker",
+          label: "Ibu RT",
+        },
+        {
+          value: "professional",
+          label: "Professional",
+        },
+        {
+          value: "government",
+          label: "Peg. Negeri",
+        },
+        {
+          value: "stateOwned",
+          label: "Peg. BUMN",
+        },
+        {
+          value: "student",
+          label: "Mahasiswa",
+        },
+        {
+          value: "other",
+          label: "Lainnya, sebutkan",
+        },
+      ],
+      annualIncome: [
+        {
+          value: "100to250",
+          label: "Antara Rp 100 - 250 Juta",
+        },
+        {
+          value: "250to500",
+          label: "Antara Rp 250 - 500 Juta",
+        },
+        {
+          value: "gt500",
+          label: "Diatas Rp 500 Juta",
+        },
+      ],
+    },
+  },
+  referralPage: {
+    title: "Kode Referal",
+    description:
+      "Ajak teman untuk bergabung dan nikmati reward dari aktivitas trading mereka.",
+    hero: {
+      eyebrow: "Program Referral SG Solid",
+      title: "Ajak Teman,\nDapatkan Reward",
+      description:
+        "Bagikan peluang ke jaringan kamu dan nikmati komisi dari teman yang aktif.",
+      cta: "Daftar Sekarang",
+      brandAlt: "PT Solid Gold Berjangka",
+      visualAlt: "Visual program referral SG Solid",
+    },
+    stepsTitle: "Cara Kerja Program Referral SG Solid",
+    steps: [
+      "Dapatkan link atau kode referal dari akun SG Solid Anda.",
+      "Bagikan kepada calon pengguna.",
+      "Pengguna mendaftar akun trading melalui referral Anda.",
+      "Anda memperoleh komisi dari aktivitas trading sesuai ketentuan yang berlaku.",
+    ],
+    closing:
+      "Segera bergabung dengan Program Referral dan mulai bagikan link Anda untuk mendapatkan keuntungan. Daftarkan diri Anda sekarang dan maksimalkan peluang melalui Program Referral SG Solid.",
   },
 };

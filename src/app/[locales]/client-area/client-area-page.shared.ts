@@ -12,6 +12,7 @@ import {
 
 export type ClientAreaSubpageId =
   | "account"
+  | "ebook"
   | "market"
   | "news"
   | "transaction";
@@ -41,6 +42,8 @@ function getClientAreaSubpageTitle(
   switch (pageId) {
     case "account":
       return copy.accountTitle;
+    case "ebook":
+      return getMessages(locale).ebookPage.title;
     case "market":
       return copy.marketWatchTitle;
     case "news":

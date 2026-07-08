@@ -118,6 +118,10 @@ export type AppMessages = {
     breadcrumb: string;
     parentLabel: string;
     detailCta: string;
+    previewCta: string;
+    downloadCta: string;
+    backToCategoriesCta: string;
+    closeCta: string;
     hero: {
       eyebrow: string;
       title: string;
@@ -674,6 +678,114 @@ export type AppMessages = {
         label: string;
         cta: string;
       }>;
+    };
+    accountPage: {
+      activeAccount: string;
+      backLabel: string;
+      pendingSectionNote: string;
+      saveLabel: string;
+      sections: {
+        personal: string;
+        purpose: string;
+        emergency: string;
+        job: string;
+        wealth: string;
+      };
+      menuItems: {
+        profile: string;
+        referral: string;
+        documentApproval: string;
+        dailyStatement: string;
+        withdrawal: string;
+        deposit: string;
+      };
+      fields: {
+        fullName: string;
+        email: string;
+        birthPlace: string;
+        birthDate: string;
+        identityNumber: string;
+        taxNumber: string;
+        gender: string;
+        maritalStatus: string;
+        spouseName: string;
+        homeAddress: string;
+        rt: string;
+        rw: string;
+        province: string;
+        city: string;
+        subdistrict: string;
+        postalCode: string;
+        phone: string;
+        openingPurpose: string;
+        investmentExperience: string;
+        investmentField: string;
+        futuresExperience: string;
+        familyAffiliation: string;
+        familyAffiliationDetail: string;
+        bankruptStatus: string;
+        emergencyName: string;
+        emergencyAddress: string;
+        emergencyNeighborhood: string;
+        emergencyProvince: string;
+        emergencyCity: string;
+        emergencySubdistrict: string;
+        emergencyPostalCode: string;
+        emergencyPhone: string;
+        occupation: string;
+        companyName: string;
+        businessSector: string;
+        position: string;
+        yearsWorking: string;
+        previousOffice: string;
+        officeAddress: string;
+        officePostalCode: string;
+        officePhone: string;
+        annualIncome: string;
+        houseLocation: string;
+        njop: string;
+        bankDeposit: string;
+        amount: string;
+        otherAssets: string;
+        occupationOther: string;
+      };
+      options: {
+        binary: Array<{
+          value: string;
+          label: string;
+        }>;
+        purpose: Array<{
+          value: string;
+          label: string;
+        }>;
+        investmentExperience: Array<{
+          value: string;
+          label: string;
+        }>;
+        occupation: Array<{
+          value: string;
+          label: string;
+        }>;
+        annualIncome: Array<{
+          value: string;
+          label: string;
+        }>;
+      };
+    };
+    referralPage: {
+      title: string;
+      description: string;
+      hero: {
+        eyebrow: string;
+        title: string;
+        description: string;
+        cta: string;
+        brandAlt: string;
+        visualAlt: string;
+      };
+      stepsTitle: string;
+      steps: string[];
+      closing: string;
     };
   };
   cookieConsent: {

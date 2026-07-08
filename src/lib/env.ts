@@ -4,6 +4,8 @@ const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
 const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_API_BASE_URL = "http://sg-admin.test/api/v1";
+const DEFAULT_EBOOK_CATEGORY_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
 const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
@@ -91,6 +93,9 @@ export const NEWS_IMAGE_BASE_URL =
 
 export const PRODUCT_API_URL =
   process.env.PRODUCT_API_URL ?? DEFAULT_PRODUCT_API_URL;
+
+export const EBOOK_CATEGORY_API_URL =
+  process.env.EBOOK_CATEGORY_API_URL ?? DEFAULT_EBOOK_CATEGORY_API_URL;
 
 export const PRODUCT_PORTAL_BASE_URL =
   process.env.PRODUCT_PORTAL_BASE_URL ?? DEFAULT_PRODUCT_PORTAL_BASE_URL;

@@ -1393,6 +1393,7 @@ export function getSidebarIconMap(): Record<TabId, IconProp> {
     market: ["fas", "chart-line"],
     transaction: ["fas", "wallet"],
     news: ["fas", "newspaper"],
+    ebook: ["fas", "book-open"],
     account: ["fas", "user-gear"],
   };
 }

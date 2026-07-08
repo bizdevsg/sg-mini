@@ -75,6 +75,11 @@ export const enClientArea: AppMessages["clientArea"] = {
         href: "/news",
       },
       {
+        id: "ebook",
+        label: "Ebook",
+        href: "/ebook",
+      },
+      {
         id: "account",
         label: "Account",
         href: "#account",
@@ -144,7 +149,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     items: [
       {
         id: "education",
-        label: "Education",
+        label: "Ebook",
       },
       {
         id: "products",
@@ -258,5 +263,185 @@ export const enClientArea: AppMessages["clientArea"] = {
         cta: "Contact support",
       },
     ],
+  },
+  accountPage: {
+    activeAccount: "Active account",
+    backLabel: "Back",
+    pendingSectionNote:
+      "The details for this section will be added next. For now only Personal Data has been finalized.",
+    saveLabel: "Save",
+    sections: {
+      personal: "Personal Data",
+      purpose: "Account Opening Purpose",
+      emergency: "Emergency Contact",
+      job: "Employment Data",
+      wealth: "Wealth Data",
+    },
+    menuItems: {
+      profile: "Profile",
+      referral: "SG Solid Referral",
+      documentApproval: "Approval Document",
+      dailyStatement: "Daily Statement",
+      withdrawal: "Withdrawal",
+      deposit: "Deposit",
+    },
+    fields: {
+      fullName: "Full Name",
+      email: "Email",
+      birthPlace: "Place of Birth",
+      birthDate: "Date of Birth",
+      identityNumber: "Identity Number (ID / Passport)",
+      taxNumber: "Tax Number",
+      gender: "Gender",
+      maritalStatus: "Marital Status",
+      spouseName: "Spouse Name",
+      homeAddress: "Home Address",
+      rt: "RT",
+      rw: "RW",
+      province: "Province",
+      city: "City / Regency",
+      subdistrict: "Subdistrict",
+      postalCode: "Postal Code",
+      phone: "Mobile Number",
+      openingPurpose: "Account Opening Purpose",
+      investmentExperience: "Investment Experience",
+      investmentField: "Investment Field",
+      futuresExperience: "Futures Trading Experience",
+      familyAffiliation:
+        "Do you have a family member working at BAPPEBTI / Futures Exchange / Clearing Institution",
+      familyAffiliationDetail: "Details",
+      bankruptStatus: "Have you ever been declared bankrupt by a court",
+      emergencyName: "Name",
+      emergencyAddress: "Home Address",
+      emergencyNeighborhood: "RT / RW",
+      emergencyProvince: "Province",
+      emergencyCity: "City / Regency",
+      emergencySubdistrict: "Subdistrict",
+      emergencyPostalCode: "Postal Code",
+      emergencyPhone: "Phone Number",
+      occupation: "Occupation",
+      companyName: "Company Name",
+      businessSector: "Business Sector",
+      position: "Position",
+      yearsWorking: "Years Working",
+      previousOffice: "Previous Office",
+      officeAddress: "Office Address",
+      officePostalCode: "Postal Code",
+      officePhone: "Office Phone",
+      annualIncome: "Annual Income",
+      houseLocation: "House, Location",
+      njop: "Tax Object Sales Value",
+      bankDeposit: "Bank Deposit",
+      amount: "Amount",
+      otherAssets: "Other Assets",
+      occupationOther: "Other, specify",
+    },
+    options: {
+      binary: [
+        {
+          value: "yes",
+          label: "Yes",
+        },
+        {
+          value: "no",
+          label: "No",
+        },
+      ],
+      purpose: [
+        {
+          value: "hedging",
+          label: "Hedging",
+        },
+        {
+          value: "speculation",
+          label: "Speculation",
+        },
+        {
+          value: "other",
+          label: "Other,",
+        },
+      ],
+      investmentExperience: [
+        {
+          value: "yes",
+          label: "Yes, Field:",
+        },
+        {
+          value: "no",
+          label: "No",
+        },
+      ],
+      occupation: [
+        {
+          value: "private",
+          label: "Private Employee",
+        },
+        {
+          value: "entrepreneur",
+          label: "Entrepreneur",
+        },
+        {
+          value: "homemaker",
+          label: "Homemaker",
+        },
+        {
+          value: "professional",
+          label: "Professional",
+        },
+        {
+          value: "government",
+          label: "Government Employee",
+        },
+        {
+          value: "stateOwned",
+          label: "State-Owned Employee",
+        },
+        {
+          value: "student",
+          label: "Student",
+        },
+        {
+          value: "other",
+          label: "Other, specify",
+        },
+      ],
+      annualIncome: [
+        {
+          value: "100to250",
+          label: "Between IDR 100 - 250 Million",
+        },
+        {
+          value: "250to500",
+          label: "Between IDR 250 - 500 Million",
+        },
+        {
+          value: "gt500",
+          label: "Above IDR 500 Million",
+        },
+      ],
+    },
+  },
+  referralPage: {
+    title: "Referral Code",
+    description:
+      "Invite friends to join and earn rewards from their trading activity.",
+    hero: {
+      eyebrow: "SG Solid Referral Program",
+      title: "Invite Friends,\nEarn Rewards",
+      description:
+        "Share the opportunity with your network and enjoy commissions from active referrals.",
+      cta: "Register Now",
+      brandAlt: "PT Solid Gold Berjangka",
+      visualAlt: "SG Solid referral program visual",
+    },
+    stepsTitle: "How The SG Solid Referral Program Works",
+    steps: [
+      "Get your referral link or code from your SG Solid account.",
+      "Share it with potential users.",
+      "The user registers a trading account through your referral.",
+      "You receive commissions from their trading activity based on the applicable terms.",
+    ],
+    closing:
+      "Join the Referral Program and start sharing your link to unlock more opportunities. Register now and maximize your earning potential with the SG Solid Referral Program.",
   },
 };

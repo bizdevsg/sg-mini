@@ -1,22 +1,22 @@
 "use client";
 
-import { ClientAreaAccountPanel } from "@/components/organisms/ClientAreaAccountPanel";
+import { ClientAreaAccountReferralPanel } from "@/components/organisms/ClientAreaAccountReferralPanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
-type ClientAreaAccountViewProps = {
+type ClientAreaAccountReferralViewProps = {
   breakingNews?: BreakingNewsItem[];
   locale: AppLocale;
 };
 
-export function ClientAreaAccountView({
+export function ClientAreaAccountReferralView({
   breakingNews,
   locale,
-}: ClientAreaAccountViewProps) {
+}: ClientAreaAccountReferralViewProps) {
   return (
     <ClientAreaShell activeTab="account" breakingNews={breakingNews} locale={locale}>
-      <ClientAreaAccountPanel locale={locale} />
+      <ClientAreaAccountReferralPanel locale={locale} />
     </ClientAreaShell>
   );
 }

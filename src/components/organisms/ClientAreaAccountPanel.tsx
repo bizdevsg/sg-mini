@@ -1,130 +1,96 @@
+"use client";
+
+import Link from "next/link";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import type {
-  AccountSnapshot,
-  DashboardCopy,
-  TransactionHistoryItem,
-} from "@/components/organisms/client-area.types";
+import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountPanelProps = {
-  copy: DashboardCopy;
-  currentAccount: AccountSnapshot;
-  transactionHistory: TransactionHistoryItem[];
+  locale: AppLocale;
 };
 
-function getTransactionSummary(item: TransactionHistoryItem) {
-  return `${item.date} • ${item.time} • Order ${item.orderNumber}`;
-}
+type AccountMenuItem = {
+  href?: string;
+  icon: IconProp;
+  label: string;
+};
 
-function getTransactionValue(item: TransactionHistoryItem) {
-  if (item.profitLoss && item.profitLoss !== "-") {
-    return item.profitLoss;
+function AccountMenuCard({ href, icon, label }: AccountMenuItem) {
+  const className =
+    "group flex min-h-[118px] w-full flex-col items-center justify-center rounded-[18px] border border-zinc-700 bg-zinc-900/85 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/60 hover:bg-zinc-800/90";
+
+  const content = (
+    <>
+      <div className="flex h-12 w-12 items-center justify-center text-yellow-400 transition-transform duration-300 group-hover:scale-110">
+        <FontAwesomeIcon icon={icon} className="text-4xl" />
+      </div>
+      <span className="mt-4 text-base font-semibold leading-tight text-white">
+        {label}
+      </span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} prefetch={false} className={className}>
+        {content}
+      </Link>
+    );
   }
 
-  return item.volume;
+  return (
+    <button type="button" className={className}>
+      {content}
+    </button>
+  );
 }
 
 export function ClientAreaAccountPanel({
-  copy,
-  currentAccount,
-  transactionHistory,
+  locale,
 }: ClientAreaAccountPanelProps) {
+  const accountPage = getMessages(locale).clientArea.accountPage;
+  const items: AccountMenuItem[] = [
+    {
+      href: resolveLocalizedHref(locale, "/client-area/account/profile"),
+      icon: ["fas", "user-pen"],
+      label: accountPage.menuItems.profile,
+    },
+    {
+      href: resolveLocalizedHref(locale, "/client-area/account/kode-referal"),
+      icon: ["fas", "user-group"],
+      label: accountPage.menuItems.referral,
+    },
+    {
+      icon: ["fas", "file-signature"],
+      label: accountPage.menuItems.documentApproval,
+    },
+    {
+      icon: ["fas", "file-invoice-dollar"],
+      label: accountPage.menuItems.dailyStatement,
+    },
+    {
+      icon: ["fas", "arrow-up-from-bracket"],
+      label: accountPage.menuItems.withdrawal,
+    },
+    {
+      icon: ["fas", "circle-down"],
+      label: accountPage.menuItems.deposit,
+    },
+  ];
+
   return (
-    <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-6">
-      <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
-        <FontAwesomeIcon icon={["fas", "user-gear"]} />
-        {copy.accountTitle}
-      </h2>
-
-      <div className="grid gap-6 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4 sm:p-6 md:grid-cols-2">
-        <div className="space-y-3">
-          <div>
-            <span className="text-xs text-zinc-500">Account Owner</span>
-            <p className="break-words text-sm font-bold text-zinc-200">
-              {currentAccount.accountOwner}
-            </p>
-          </div>
-          <div>
-            <span className="text-xs text-zinc-500">Email Address</span>
-            <p className="break-all text-sm font-bold text-zinc-200">
-              {currentAccount.email}
-            </p>
-          </div>
-          <div>
-            <span className="text-xs text-zinc-500">Status Akun</span>
-            <div className="mt-1">
-              <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-500">
-                {currentAccount.status}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <div>
-            <span className="text-xs text-zinc-500">Broker Resmi</span>
-            <p className="break-words text-sm font-bold text-yellow-500">
-              {currentAccount.broker}
-            </p>
-          </div>
-          <div>
-            <span className="text-xs text-zinc-500">Tipe Likuidasi</span>
-            <p className="text-sm font-bold text-zinc-200">
-              {currentAccount.liquidationType}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-4 sm:p-6">
-        <div className="flex flex-wrap items-center gap-2 text-lg font-bold text-zinc-100">
-          <FontAwesomeIcon icon={["fas", "clock-rotate-left"]} className="text-yellow-500" />
-          <h3>{copy.transactionHistoryTitle}</h3>
-        </div>
-
-        <div className="space-y-3">
-          {transactionHistory.map((item) => (
-            <div
-              key={item.id}
-              className="flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                    item.type === "credit"
-                      ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-rose-500/10 text-rose-400"
-                  }`}
-                >
-                  <FontAwesomeIcon
-                    icon={
-                      item.type === "credit"
-                        ? ["fas", "arrow-down"]
-                        : ["fas", "arrow-up"]
-                    }
-                  />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="break-words text-sm font-semibold text-zinc-100">
-                    {item.instrument} ({item.symbol})
-                  </p>
-                  <p className="text-[11px] text-zinc-500">
-                    {getTransactionSummary(item)}
-                  </p>
-                </div>
-              </div>
-
-              <span
-                className={`text-sm font-bold sm:text-right ${
-                  item.type === "credit" ? "text-emerald-400" : "text-rose-400"
-                }`}
-              >
-                {getTransactionValue(item)}
-              </span>
-            </div>
-          ))}
-        </div>
+    <div className="rounded-[34px] border border-zinc-800 bg-black/35 p-4 backdrop-blur-xl sm:p-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+        {items.map((item) => (
+          <AccountMenuCard
+            key={item.label}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+          />
+        ))}
       </div>
     </div>
   );

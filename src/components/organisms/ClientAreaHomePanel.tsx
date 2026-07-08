@@ -74,6 +74,7 @@ export function ClientAreaHomePanel({
 
         <ClientAreaQuickActionsGrid
           clientArea={clientArea}
+          locale={locale}
           onActionClick={onActionClick}
           quickActionIconMap={quickActionIconMap}
         />

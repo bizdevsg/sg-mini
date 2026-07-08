@@ -1,6 +1,12 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-export type TabId = "home" | "market" | "transaction" | "news" | "account";
+export type TabId =
+  | "home"
+  | "market"
+  | "transaction"
+  | "news"
+  | "ebook"
+  | "account";
 export type AccountMode = "demo" | "real";
 export type ActionId =
   | "education"
