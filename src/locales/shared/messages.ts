@@ -33,6 +33,8 @@ export type AppMessages = {
     titleBody: string;
     subTitle: string;
     cta: string;
+    demoLoginCta: string;
+    demoDisclaimer: string;
     visualAlt: string;
   };
   regulator: {

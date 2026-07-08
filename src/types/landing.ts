@@ -155,37 +155,37 @@ export const spreads: SpreadItem[] = [
 
 export const regulatorLogos: RegulatorLogo[] = [
   {
-    src: "/assets/bappeti.png",
+    src: "/assets/regulator/KEMENDAG-1 2.png",
     alt: "Logo Bappebti",
     width: 1367,
     height: 327,
   },
   {
-    src: "/assets/OJK_Logo-2.png",
+    src: "/assets/regulator/OJK_Logo-3 2.png",
     alt: "Logo OJK",
     width: 1200,
     height: 522,
   },
   {
-    src: "/assets/aspeb-logo.png",
+    src: "/assets/regulator/aspeb-logo-2 2.png",
     alt: "Logo Aspebtindo",
     width: 1574,
     height: 1694,
   },
   {
-    src: "/assets/kbi-logo.png",
+    src: "/assets/regulator/KBI.png",
     alt: "Logo KBI",
     width: 429,
     height: 189,
   },
   {
-    src: "/assets/logo-JFX.png",
+    src: "/assets/regulator/logo JFX-black 3.png",
     alt: "Logo JFX",
     width: 4393,
     height: 1390,
   },
   {
-    src: "/assets/bi-logo.png",
+    src: "/assets/regulator/BI_Logo-3 2.png",
     alt: "Logo BI",
     width: 4393,
     height: 1390,

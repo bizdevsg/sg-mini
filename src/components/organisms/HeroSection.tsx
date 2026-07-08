@@ -130,9 +130,13 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   href={clientAreaLoginHref}
                   className="w-full sm:w-fit py-3 px-5 border rounded-xl font-semibold text-white border-yellow-500"
                 >
-                  Login Demo Account
+                  {messages.hero.demoLoginCta}
                 </Link>
               </div>
+
+              <p className="text-white text-xs mt-3">
+                {messages.hero.demoDisclaimer}
+              </p>
             </div>
           </div>
 
