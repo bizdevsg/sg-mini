@@ -12,7 +12,6 @@ import { getMessages, type AppLocale } from "@/locales";
 import {
   NEWS_API_TOKEN,
   NEWS_API_URL,
-  USE_DUMMY_API_DATA,
   getNewsAssetUrl,
 } from "@/lib/env";
 import {
@@ -544,7 +543,7 @@ export async function getNewsFeed(
   const fallbackLimit = limit ?? Number.MAX_SAFE_INTEGER;
   const fallbackArticles = getFallbackArticles(locale, fallbackLimit);
 
-  if (USE_DUMMY_API_DATA || !NEWS_API_TOKEN) {
+  if (!NEWS_API_TOKEN) {
     return {
       articles: fallbackArticles,
       source: "fallback",
@@ -582,7 +581,7 @@ export async function getNewsArticleBySlug(
 ): Promise<NewsArticleDetailResult> {
   const fallbackArticle = getFallbackArticleBySlug(locale, slug);
 
-  if (USE_DUMMY_API_DATA || !NEWS_API_TOKEN) {
+  if (!NEWS_API_TOKEN) {
     return {
       article: fallbackArticle,
       source: "fallback",

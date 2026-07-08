@@ -451,8 +451,8 @@ function createDummyEconomicCalendarOverview() {
 const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   {
     id: 1,
-    image: "dummy-banner-1",
-    image_url: createBannerImage("Trade Gold With Confidence"),
+    image: "Banner SG Solid Web New-1.jpg.jpeg",
+    image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-1.jpg.jpeg",
     is_active: true,
     sort_order: 1,
     created_at: `${getIsoDate(-3)}T03:00:00.000Z`,
@@ -460,8 +460,8 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 2,
-    image: "dummy-banner-2",
-    image_url: createBannerImage("Global Market Access"),
+    image: "Banner SG Solid Web New-2.jpg.jpeg",
+    image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-2.jpg.jpeg",
     is_active: true,
     sort_order: 2,
     created_at: `${getIsoDate(-4)}T03:00:00.000Z`,
@@ -469,11 +469,29 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 3,
-    image: "dummy-banner-3",
-    image_url: createBannerImage("Dummy Campaign Creative"),
+    image: "Banner SG Solid Web New-3.jpg.jpeg",
+    image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-3.jpg.jpeg",
     is_active: true,
     sort_order: 3,
     created_at: `${getIsoDate(-5)}T03:00:00.000Z`,
+    updated_at: `${getIsoDate(-1)}T06:00:00.000Z`,
+  },
+  {
+    id: 4,
+    image: "Banner SG Solid Web New-4.jpg.jpeg",
+    image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-4.jpg.jpeg",
+    is_active: true,
+    sort_order: 4,
+    created_at: `${getIsoDate(-6)}T03:00:00.000Z`,
+    updated_at: `${getIsoDate(-1)}T06:00:00.000Z`,
+  },
+  {
+    id: 5,
+    image: "Banner SG Solid Web New-5.jpg.jpeg",
+    image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-5.jpg.jpeg",
+    is_active: true,
+    sort_order: 5,
+    created_at: `${getIsoDate(-7)}T03:00:00.000Z`,
     updated_at: `${getIsoDate(-1)}T06:00:00.000Z`,
   },
 ];

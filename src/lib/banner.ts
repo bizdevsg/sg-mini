@@ -25,6 +25,10 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function isLocalBannerAssetPath(value: string) {
+  return value.startsWith("/assets/");
+}
+
 function mapBannerRecord(item: BannerApiRecord): BannerApiRecord | null {
   const image = normalizeText(item.image);
   const imageUrlSource = normalizeText(item.image_url) || image;
@@ -36,7 +40,9 @@ function mapBannerRecord(item: BannerApiRecord): BannerApiRecord | null {
   return {
     ...item,
     image: image || item.image,
-    image_url: getBannerAssetUrl(imageUrlSource),
+    image_url: isLocalBannerAssetPath(imageUrlSource)
+      ? imageUrlSource
+      : getBannerAssetUrl(imageUrlSource),
   };
 }
 
