@@ -228,7 +228,7 @@ export function AboutInformationAnnouncements({
             role="dialog"
             aria-modal="true"
             aria-labelledby={`pengumuman-title-${selectedItem.id}`}
-            className={`relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
+            className={`relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
               ? "translate-y-0 scale-100 opacity-100"
               : "translate-y-6 scale-[0.96] opacity-0"
               }`}
@@ -243,24 +243,24 @@ export function AboutInformationAnnouncements({
               <FontAwesomeIcon icon={["fas", "xmark"]} />
             </button>
 
-            <div className="max-h-[90vh] overflow-y-auto">
-              {selectedItem.image_url ? (
-                <div className="relative h-64 w-full sm:h-80">
-                  <Image
-                    src={selectedItem.image_url}
-                    alt={selectedItem.judul?.trim() || labels.defaultTitle}
-                    fill
-                    className="object-cover"
-                    sizes="100vw"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                </div>
-              ) : null}
+            {selectedItem.image_url ? (
+              <div className="relative h-64 w-full shrink-0 sm:h-80">
+                <Image
+                  src={selectedItem.image_url}
+                  alt={selectedItem.judul?.trim() || labels.defaultTitle}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+              </div>
+            ) : null}
 
+            <div className="pengumuman-modal-scroll min-h-0 flex-1 overflow-y-auto">
               <div className="p-6 sm:p-8">
-                <div className="flex flex-wrap items-center gap-3 text-xs text-yellow-500/70">
-                  <span className="flex items-center gap-1.5">
+                <div className="flex items-center gap-3 text-xs text-yellow-500/70 w-full">
+                  <p className="flex items-center w-fit text-nowrap gap-1.5">
                     <FontAwesomeIcon
                       icon={["fas", "calendar-days"]}
                       className="text-[10px]"
@@ -269,9 +269,9 @@ export function AboutInformationAnnouncements({
                       selectedItem.updated_at || selectedItem.created_at,
                       locale,
                     )}
-                  </span>
-                  <span className="h-px w-8 bg-yellow-500/20" />
-                  <span className="flex items-center gap-1.5">
+                  </p>
+                  <span className="h-px w-full bg-yellow-500/20" />
+                  <span className="flex w-fit text-nowrap items-center gap-1.5">
                     <FontAwesomeIcon
                       icon={["fas", "building"]}
                       className="text-[10px]"
@@ -280,18 +280,20 @@ export function AboutInformationAnnouncements({
                   </span>
                 </div>
 
-                <h2
-                  id={`pengumuman-title-${selectedItem.id}`}
-                  className="mt-4 max-w-3xl font-mono text-2xl font-bold tracking-[-0.03em] text-white sm:text-[2rem]"
-                >
-                  {selectedItem.judul?.trim() || labels.defaultTitle}
-                </h2>
+                <div>
+                  <h2
+                    id={`pengumuman-title-${selectedItem.id}`}
+                    className="mt-4 max-w-3xl font-mono text-2xl font-bold tracking-[-0.03em] text-white sm:text-[2rem]"
+                  >
+                    {selectedItem.judul?.trim() || labels.defaultTitle}
+                  </h2>
 
-                <div
-                  className="pengumuman-content prose-sm mt-6 max-w-none text-sm leading-7 text-foreground/75"
-                  // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: selectedItem.konten ?? "" }}
-                />
+                  <div
+                    className="pengumuman-content prose-sm mt-6 max-w-none text-sm leading-7 text-white"
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{ __html: selectedItem.konten ?? "" }}
+                  />
+                </div>
               </div>
             </div>
           </div>

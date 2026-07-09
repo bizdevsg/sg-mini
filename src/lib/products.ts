@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+
 import { getDummyProductCatalog } from "@/lib/api-dummy-data";
 import { PRODUCT_API_URL, USE_DUMMY_API_DATA, getProductAssetUrl } from "@/lib/env";
 
@@ -47,6 +49,12 @@ type ProductApiResponse = {
   data?: ProductApiRecord[];
 };
 
+type ProductDetailApiResponse = {
+  status?: string;
+  http?: number;
+  data?: ProductApiRecord | null;
+};
+
 function getDummyCatalogForCategory(category: ProductPageCategory) {
   return getDummyProductCatalog(category);
 }
@@ -66,6 +74,20 @@ function getProductCategoryApiUrl(category: ProductPageCategory) {
   const categoryPath = PRODUCT_API_CATEGORY_PATH_MAP[category];
 
   return `${baseUrl}/${categoryPath}`;
+}
+
+function mapProductApiRecord(item: ProductApiRecord): ProductCatalogItem {
+  return {
+    id: item.id,
+    slug: item.slug,
+    name: item.nama_produk,
+    description: item.deskripsi_produk?.trim() || item.nama_produk,
+    specsHtml: item.specs?.trim() || "",
+    imageSrc:
+      item.image_url?.trim() ||
+      (item.image ? getProductAssetUrl(item.image) : null),
+    sourceCategory: item.kategori,
+  };
 }
 
 async function getProductApiRecords(category: ProductPageCategory) {
@@ -95,13 +117,44 @@ async function getProductApiRecords(category: ProductPageCategory) {
   return payload.data.slice().sort(compareProducts);
 }
 
+async function getProductApiRecordBySlug(
+  category: ProductPageCategory,
+  slug: string,
+) {
+  const response = await fetch(
+    `${getProductCategoryApiUrl(category)}/${encodeURIComponent(slug)}`,
+    {
+      next: {
+        revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
+      },
+      headers: {
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as ProductDetailApiResponse;
+
+  if (!payload?.data) {
+    return null;
+  }
+
+  return payload.data;
+}
+
 export function isProductPageCategory(
   value: string,
 ): value is ProductPageCategory {
   return PRODUCT_PAGE_CATEGORIES.includes(value as ProductPageCategory);
 }
 
-export async function getProductCatalog(category: ProductPageCategory) {
+export const getProductCatalog = cache(async function getProductCatalog(
+  category: ProductPageCategory,
+) {
   if (USE_DUMMY_API_DATA) {
     return getDummyCatalogForCategory(category);
   }
@@ -116,17 +169,7 @@ export async function getProductCatalog(category: ProductPageCategory) {
 
     return records
       .filter((item) => item.kategori === sourceCategory)
-      .map<ProductCatalogItem>((item) => ({
-        id: item.id,
-        slug: item.slug,
-        name: item.nama_produk,
-        description: item.deskripsi_produk?.trim() || item.nama_produk,
-        specsHtml: item.specs?.trim() || "",
-        imageSrc:
-          item.image_url?.trim() ||
-          (item.image ? getProductAssetUrl(item.image) : null),
-        sourceCategory: item.kategori,
-      }));
+      .map(mapProductApiRecord);
   } catch (error) {
     console.warn(
       "Failed to fetch product catalog. Falling back to dummy data.",
@@ -134,4 +177,36 @@ export async function getProductCatalog(category: ProductPageCategory) {
     );
     return getDummyCatalogForCategory(category);
   }
-}
+});
+
+export const getProductBySlug = cache(async function getProductBySlug(
+  category: ProductPageCategory,
+  slug: string,
+) {
+  if (USE_DUMMY_API_DATA) {
+    const catalog = await getProductCatalog(category);
+    return catalog.find((candidate) => candidate.slug === slug) ?? null;
+  }
+
+  try {
+    const record = await getProductApiRecordBySlug(category, slug);
+
+    if (!record) {
+      const catalog = await getProductCatalog(category);
+      const fallbackItem =
+        catalog.find((candidate) => candidate.slug === slug) ?? null;
+      return fallbackItem;
+    }
+
+    return mapProductApiRecord(record);
+  } catch (error) {
+    const catalog = await getProductCatalog(category);
+    const fallbackItem =
+      catalog.find((candidate) => candidate.slug === slug) ?? null;
+    console.warn(
+      `Failed to fetch product detail for slug "${slug}". Falling back to catalog item.`,
+      error,
+    );
+    return fallbackItem;
+  }
+});

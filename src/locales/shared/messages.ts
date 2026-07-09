@@ -789,6 +789,67 @@ export type AppMessages = {
       steps: string[];
       closing: string;
     };
+    withdrawalHistoryPage: {
+      title: string;
+      description: string;
+      summary: {
+        totalCompleted: string;
+        activeRequests: string;
+        lastProcessed: string;
+        destinationBank: string;
+      };
+      list: {
+        requestId: string;
+        requestDate: string;
+        processedDate: string;
+        destination: string;
+        amount: string;
+        fee: string;
+        netAmount: string;
+        reference: string;
+        accountHolder: string;
+        note: string;
+      };
+      status: {
+        completed: string;
+        pending: string;
+        processing: string;
+        rejected: string;
+      };
+      emptyTitle: string;
+      emptyBody: string;
+    };
+    depositHistoryPage: {
+      title: string;
+      description: string;
+      summary: {
+        totalCompleted: string;
+        activeRequests: string;
+        lastProcessed: string;
+        sourceBank: string;
+      };
+      list: {
+        requestId: string;
+        requestDate: string;
+        processedDate: string;
+        source: string;
+        amount: string;
+        fee: string;
+        creditedAmount: string;
+        reference: string;
+        senderName: string;
+        tradingAccount: string;
+        note: string;
+      };
+      status: {
+        completed: string;
+        pending: string;
+        processing: string;
+        rejected: string;
+      };
+      emptyTitle: string;
+      emptyBody: string;
+    };
   };
   cookieConsent: {
     badge: string;

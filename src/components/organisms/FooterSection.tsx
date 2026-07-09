@@ -122,7 +122,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
               </div>
             </div>
 
-            <div className="text-xs text-zinc-400 bg-zinc-800 rounded-lg p-4 space-y-2">
+            <div className="text-xs text-zinc-100 bg-red-800 rounded-lg p-4 space-y-2">
               <p>{messages.footer.disclaimerLabel}</p>
               <p>{messages.footer.disclaimerBody}</p>
             </div>

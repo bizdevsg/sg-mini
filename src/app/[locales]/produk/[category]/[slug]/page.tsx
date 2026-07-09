@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ProductDetailPage } from "@/components/organisms/ProductDetailPage";
 import {
+  getProductBySlug,
   getProductCatalog,
   isProductPageCategory,
   PRODUCT_PAGE_CATEGORIES,
@@ -16,7 +17,7 @@ import {
   type AppLocale,
 } from "@/locales";
 
-type ProductDetailRouteProps = {
+type ProductDetailPageProps = {
   params: Promise<{ locales: string; category: string; slug: string }>;
 };
 
@@ -53,13 +54,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: ProductDetailRouteProps): Promise<Metadata> {
+}: ProductDetailPageProps): Promise<Metadata> {
   const { locales, category, slug } = await params;
   assertValidLocale(locales);
   assertValidCategory(category);
 
-  const items = await getProductCatalog(category);
-  const item = items.find((candidate) => candidate.slug === slug);
+  const item = await getProductBySlug(category, slug);
 
   if (!item) {
     notFound();
@@ -80,18 +80,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductDetailRoute({
+export default async function Page({
   params,
-}: ProductDetailRouteProps) {
+}: ProductDetailPageProps) {
   const { locales, category, slug } = await params;
   assertValidLocale(locales);
   assertValidCategory(category);
 
   const messages = getMessages(locales);
   const copy = messages.productPage;
-  const items = await getProductCatalog(category);
   const homeLabel = messages.app.homeLabel;
-  const item = items.find((candidate) => candidate.slug === slug);
+  const item = await getProductBySlug(category, slug);
 
   if (!item) {
     notFound();

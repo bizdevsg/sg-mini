@@ -111,7 +111,7 @@ export function NewsDetailHeader({
   }
 
   return (
-    <header className="space-y-4">
+    <header className="space-y-4 mt-5">
       <h1 className="mx-auto max-w-3xl text-center text-2xl font-bold leading-tight text-zinc-50 sm:text-4xl">
         {title}
       </h1>

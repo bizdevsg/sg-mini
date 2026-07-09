@@ -31,6 +31,7 @@ export function FallbackPanel({
             width={1000}
             height={1000}
             alt="Error Illustration"
+            loading="eager"
           />
         </div>
 

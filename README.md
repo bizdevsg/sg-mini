@@ -88,6 +88,7 @@ Variabel yang dipakai project ini:
 
 ```env
 APP_ENV=dev
+INTERNAL_API_TOKEN=
 
 LIVE_QUOTE_SOCKET_URL=
 NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL=
@@ -124,6 +125,12 @@ Nilai `APP_ENV` yang dipakai untuk switch data:
 - `dev` atau `prod`: pakai API asli
 - `dev-deploy`: pakai dummy data untuk seluruh API server-side
 - websocket `LIVE_QUOTE_SOCKET_URL` tetap tidak diubah oleh switch ini
+
+Proteksi route `src/app/api`:
+
+- saat `APP_ENV=dev`, proteksi API dilonggarkan untuk memudahkan local debugging
+- saat `APP_ENV` bukan `dev`, endpoint internal hanya bisa diakses dengan header `x-internal-api-token` yang cocok dengan `INTERNAL_API_TOKEN`
+- endpoint browser seperti SSE, economic calendar, dan image proxy hanya menerima request browser same-origin
 
 ## Development
 

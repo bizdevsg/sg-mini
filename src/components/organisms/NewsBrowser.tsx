@@ -336,7 +336,7 @@ export function NewsBrowser({
         </div>
 
         {visibleArticles.length ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2">
             {visibleArticles.map((article, index) => {
               const shouldPrioritizeImage = index < EAGER_IMAGE_COUNT;
               const isFeaturedArticle =
@@ -373,8 +373,8 @@ export function NewsBrowser({
                 onClick={handlePreviousPage}
                 disabled={safeCurrentPage === 1}
                 className={`rounded-lg border px-3 py-2 text-sm transition ${safeCurrentPage === 1
-                    ? "pointer-events-none border-white/8 text-zinc-600"
-                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                  ? "pointer-events-none border-white/8 text-zinc-600"
+                  : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                   }`}
               >
                 {labels.pagination.previous}
@@ -385,8 +385,8 @@ export function NewsBrowser({
                 onClick={handleNextPage}
                 disabled={safeCurrentPage === totalPages}
                 className={`rounded-lg border px-3 py-2 text-sm transition ${safeCurrentPage === totalPages
-                    ? "pointer-events-none border-white/8 text-zinc-600"
-                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                  ? "pointer-events-none border-white/8 text-zinc-600"
+                  : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                   }`}
               >
                 {labels.pagination.next}

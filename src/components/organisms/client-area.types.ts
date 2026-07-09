@@ -15,6 +15,12 @@ export type ActionId =
   | "deposit"
   | "temporary";
 export type SlideGraphic = "padlock" | "education" | "gift";
+export type WithdrawalHistoryStatus =
+  | "completed"
+  | "pending"
+  | "processing"
+  | "rejected";
+export type DepositHistoryStatus = WithdrawalHistoryStatus;
 
 export type SlideItem = {
   badge: string;
@@ -94,6 +100,37 @@ export type TransactionHistoryItem = {
   profitLoss?: string;
 };
 
+export type WithdrawalHistoryItem = {
+  id: string;
+  amount: number;
+  fee: number;
+  netAmount: number;
+  bankName: string;
+  accountNumber: string;
+  accountHolder: string;
+  requestedAt: string;
+  processedAt?: string;
+  referenceNumber: string;
+  note?: string;
+  status: WithdrawalHistoryStatus;
+};
+
+export type DepositHistoryItem = {
+  id: string;
+  amount: number;
+  fee: number;
+  creditedAmount: number;
+  sourceBank: string;
+  sourceAccountNumber: string;
+  senderName: string;
+  tradingAccountId: string;
+  requestedAt: string;
+  processedAt?: string;
+  referenceNumber: string;
+  note?: string;
+  status: DepositHistoryStatus;
+};
+
 export type AccountSnapshot = {
   typeLabel: string;
   accountId: string;
@@ -149,6 +186,10 @@ export type DashboardCopy = {
   realPositions: PositionItem[];
   demoTransactionHistory: TransactionHistoryItem[];
   realTransactionHistory: TransactionHistoryItem[];
+  demoWithdrawalHistory: WithdrawalHistoryItem[];
+  realWithdrawalHistory: WithdrawalHistoryItem[];
+  demoDepositHistory: DepositHistoryItem[];
+  realDepositHistory: DepositHistoryItem[];
   modalTitles: Record<ActionId, string>;
   modalDescriptions: Record<ActionId, string>;
 };

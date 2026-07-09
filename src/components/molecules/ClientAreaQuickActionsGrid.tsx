@@ -32,12 +32,14 @@ export function ClientAreaQuickActionsGrid({
             href={
               actionId === "education"
                 ? resolveLocalizedHref(locale, "/client-area/ebook")
+                : actionId === "products"
+                  ? resolveLocalizedHref(locale, "/client-area/market")
                 : undefined
             }
             icon={quickActionIconMap[actionId]}
             label={action?.label ?? actionId}
             onClick={
-              actionId === "education"
+              actionId === "education" || actionId === "products"
                 ? undefined
                 : () => onActionClick(actionId)
             }

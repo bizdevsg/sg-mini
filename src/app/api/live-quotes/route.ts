@@ -1,4 +1,8 @@
 import type { LiveQuotePayload } from "@/lib/live-quotes";
+import {
+  protectSameOriginBrowserApiRoute,
+  withApiProtectionHeaders,
+} from "@/lib/api-protection";
 import { LIVE_QUOTE_SOCKET_URL } from "@/lib/env";
 
 export const runtime = "nodejs";
@@ -12,6 +16,12 @@ function formatSse(event: string, data: string) {
 }
 
 export async function GET(request: Request) {
+  const blockedResponse = protectSameOriginBrowserApiRoute(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({
@@ -137,12 +147,14 @@ export async function GET(request: Request) {
     },
   });
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream; charset=utf-8",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-      "X-Accel-Buffering": "no",
-    },
-  });
+  return withApiProtectionHeaders(
+    new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-cache, no-transform",
+        Connection: "keep-alive",
+        "X-Accel-Buffering": "no",
+      },
+    }),
+  );
 }

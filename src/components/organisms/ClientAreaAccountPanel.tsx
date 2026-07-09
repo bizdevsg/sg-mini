@@ -71,10 +71,12 @@ export function ClientAreaAccountPanel({
       label: accountPage.menuItems.dailyStatement,
     },
     {
+      href: resolveLocalizedHref(locale, "/client-area/account/withdrawal"),
       icon: ["fas", "arrow-up-from-bracket"],
       label: accountPage.menuItems.withdrawal,
     },
     {
+      href: resolveLocalizedHref(locale, "/client-area/account/deposit"),
       icon: ["fas", "circle-down"],
       label: accountPage.menuItems.deposit,
     },

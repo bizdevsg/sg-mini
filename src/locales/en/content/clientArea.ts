@@ -444,4 +444,69 @@ export const enClientArea: AppMessages["clientArea"] = {
     closing:
       "Join the Referral Program and start sharing your link to unlock more opportunities. Register now and maximize your earning potential with the SG Solid Referral Program.",
   },
+  withdrawalHistoryPage: {
+    title: "Withdrawal History",
+    description:
+      "Monitor your latest withdrawal requests, destination bank account, and processing references from one place.",
+    summary: {
+      totalCompleted: "Completed Withdrawals",
+      activeRequests: "Active Requests",
+      lastProcessed: "Last Processed",
+      destinationBank: "Primary Destination Bank",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Requested At",
+      processedDate: "Processed At",
+      destination: "Destination",
+      amount: "Amount",
+      fee: "Fee",
+      netAmount: "Net Amount",
+      reference: "Reference",
+      accountHolder: "Account Holder",
+      note: "Note",
+    },
+    status: {
+      completed: "Completed",
+      pending: "Pending",
+      processing: "Processing",
+      rejected: "Rejected",
+    },
+    emptyTitle: "There is no withdrawal history yet.",
+    emptyBody:
+      "Your withdrawal requests will appear here after they have been recorded by the system.",
+  },
+  depositHistoryPage: {
+    title: "Deposit History",
+    description:
+      "Review your funding history, source bank account, and the credit status to your trading account.",
+    summary: {
+      totalCompleted: "Completed Deposits",
+      activeRequests: "Active Requests",
+      lastProcessed: "Last Processed",
+      sourceBank: "Primary Source Bank",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Requested At",
+      processedDate: "Processed At",
+      source: "Funding Source",
+      amount: "Transfer Amount",
+      fee: "Fee",
+      creditedAmount: "Credited Amount",
+      reference: "Reference",
+      senderName: "Sender Name",
+      tradingAccount: "Trading Account",
+      note: "Note",
+    },
+    status: {
+      completed: "Completed",
+      pending: "Pending",
+      processing: "Processing",
+      rejected: "Rejected",
+    },
+    emptyTitle: "There is no deposit history yet.",
+    emptyBody:
+      "Your deposit requests will appear here after they have been recorded by the system.",
+  },
 };

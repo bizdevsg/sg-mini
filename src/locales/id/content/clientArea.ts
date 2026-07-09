@@ -442,4 +442,69 @@ export const idClientArea: AppMessages["clientArea"] = {
     closing:
       "Segera bergabung dengan Program Referral dan mulai bagikan link Anda untuk mendapatkan keuntungan. Daftarkan diri Anda sekarang dan maksimalkan peluang melalui Program Referral SG Solid.",
   },
+  withdrawalHistoryPage: {
+    title: "Riwayat Withdrawal",
+    description:
+      "Pantau status penarikan dana, rekening tujuan, dan referensi transaksi withdraw terbaru Anda.",
+    summary: {
+      totalCompleted: "Total Withdraw Selesai",
+      activeRequests: "Permintaan Aktif",
+      lastProcessed: "Terakhir Diproses",
+      destinationBank: "Bank Tujuan Utama",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Tanggal Request",
+      processedDate: "Diproses",
+      destination: "Tujuan Dana",
+      amount: "Nominal",
+      fee: "Biaya",
+      netAmount: "Dana Bersih",
+      reference: "Referensi",
+      accountHolder: "Nama Pemilik Rekening",
+      note: "Catatan",
+    },
+    status: {
+      completed: "Berhasil",
+      pending: "Menunggu",
+      processing: "Diproses",
+      rejected: "Ditolak",
+    },
+    emptyTitle: "Belum ada riwayat withdrawal.",
+    emptyBody:
+      "Permintaan withdrawal yang Anda buat akan tampil di halaman ini setelah tercatat di sistem.",
+  },
+  depositHistoryPage: {
+    title: "Riwayat Deposit",
+    description:
+      "Lihat histori setoran dana, rekening pengirim, dan status kredit saldo ke akun trading Anda.",
+    summary: {
+      totalCompleted: "Total Deposit Berhasil",
+      activeRequests: "Permintaan Aktif",
+      lastProcessed: "Terakhir Diproses",
+      sourceBank: "Bank Pengirim Utama",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Tanggal Request",
+      processedDate: "Diproses",
+      source: "Sumber Dana",
+      amount: "Nominal Transfer",
+      fee: "Biaya",
+      creditedAmount: "Dana Terkredit",
+      reference: "Referensi",
+      senderName: "Nama Pengirim",
+      tradingAccount: "Akun Trading",
+      note: "Catatan",
+    },
+    status: {
+      completed: "Berhasil",
+      pending: "Menunggu",
+      processing: "Diproses",
+      rejected: "Ditolak",
+    },
+    emptyTitle: "Belum ada riwayat deposit.",
+    emptyBody:
+      "Permintaan deposit Anda akan muncul di halaman ini setelah tercatat di sistem.",
+  },
 };

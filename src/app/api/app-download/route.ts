@@ -4,6 +4,7 @@ import {
   DEFAULT_LOCALE,
   isSupportedLocale,
 } from "@/locales";
+import { withApiProtectionHeaders } from "@/lib/api-protection";
 import { getClientAreaAppStoreLinks } from "@/lib/solidGoldAppLinks";
 
 function resolveStoreLinks(localeParam: string | null) {
@@ -34,12 +35,21 @@ export async function GET(request: Request) {
   );
 
   if (isIosDevice(userAgent)) {
-    return NextResponse.redirect(appStoreUrl);
+    return withApiProtectionHeaders(NextResponse.redirect(appStoreUrl), {
+      cacheControl: "private, no-store, max-age=0",
+    });
   }
 
   if (isAndroidDevice(userAgent)) {
-    return NextResponse.redirect(googlePlayUrl);
+    return withApiProtectionHeaders(NextResponse.redirect(googlePlayUrl), {
+      cacheControl: "private, no-store, max-age=0",
+    });
   }
 
-  return NextResponse.redirect(new URL(fallbackUrl, request.url));
+  return withApiProtectionHeaders(
+    NextResponse.redirect(new URL(fallbackUrl, request.url)),
+    {
+      cacheControl: "private, no-store, max-age=0",
+    },
+  );
 }

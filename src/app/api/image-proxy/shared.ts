@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 
+import { withApiProtectionHeaders } from "@/lib/api-protection";
 import { isAllowedImageProxySource } from "@/lib/env";
 
 function buildErrorResponse(status: number, message: string) {
-  return NextResponse.json({ error: message }, { status });
+  return withApiProtectionHeaders(
+    NextResponse.json({ error: message }, { status }),
+    {
+      cacheControl: "private, no-store, max-age=0",
+    },
+  );
 }
 
 function decodeBase64Url(value: string) {
@@ -62,6 +68,10 @@ export async function proxyImageSource(sourceUrl: string) {
   const etag = upstreamResponse.headers.get("etag");
   const lastModified = upstreamResponse.headers.get("last-modified");
 
+  if (!contentType?.toLowerCase().startsWith("image/")) {
+    return buildErrorResponse(415, "Upstream response is not an image.");
+  }
+
   if (contentType) {
     responseHeaders.set("content-type", contentType);
   }
@@ -83,8 +93,10 @@ export async function proxyImageSource(sourceUrl: string) {
     responseHeaders.set("last-modified", lastModified);
   }
 
-  return new NextResponse(upstreamResponse.body, {
-    status: upstreamResponse.status,
-    headers: responseHeaders,
-  });
+  return withApiProtectionHeaders(
+    new NextResponse(upstreamResponse.body, {
+      status: upstreamResponse.status,
+      headers: responseHeaders,
+    }),
+  );
 }

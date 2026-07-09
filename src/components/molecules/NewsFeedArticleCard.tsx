@@ -106,8 +106,8 @@ export function NewsFeedArticleCard({
 
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.58)_42%,rgba(0,0,0,0.88))]" />
 
-            <div className="relative flex h-full min-w-0 flex-1 flex-col justify-end p-5 sm:p-8">
-              <div className="flex min-h-9 flex-wrap items-start gap-2">
+            <div className="relative flex h-full min-w-0 flex-1 flex-col justify-between p-5 sm:p-8">
+              <div className="flex min-h-9 w-full flex-wrap items-start gap-2">
                 <span className="inline-flex min-w-0 max-w-full rounded-full border border-yellow-500/20 bg-yellow-500/12 px-3 py-1 text-[11px] font-medium text-yellow-300">
                   {article.displayCategory}
                 </span>
@@ -117,21 +117,23 @@ export function NewsFeedArticleCard({
                 </span>
               </div>
 
-              <h2 className="mt-4 max-w-3xl text-2xl font-bold leading-tight text-white transition-colors group-hover:text-yellow-300 sm:text-[2rem]">
-                {article.title}
-              </h2>
+              <div className="w-full">
+                <h2 className="max-w-3xl text-2xl font-bold leading-tight text-white transition-colors group-hover:text-yellow-300 sm:text-[2rem]">
+                  {article.title}
+                </h2>
 
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-200/82 sm:text-[15px]">
-                {article.summary}
-              </p>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-200/82 sm:text-[15px]">
+                  {article.summary}
+                </p>
 
-              <div className="mt-5">
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-yellow-300">
-                  {readMoreLabel}
-                  <span className="transition-transform group-hover:translate-x-1">
-                    {">"}
+                <div className="mt-5">
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-yellow-300">
+                    {readMoreLabel}
+                    <span className="transition-transform group-hover:translate-x-1">
+                      {">"}
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
             </div>
           </>

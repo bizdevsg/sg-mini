@@ -191,30 +191,38 @@ button {
 
 .pengumuman-content strong,
 .pengumuman-content b {
-  color: rgba(242, 217, 138, 0.9);
   font-weight: 600;
 }
 
 .pengumuman-content ol {
   list-style: decimal;
-  padding-left: 1.25rem;
-  margin-bottom: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0 0.75rem 1rem;
 }
 
 .pengumuman-content ul {
   list-style: disc;
-  padding-left: 1.25rem;
-  margin-bottom: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0 0.75rem 1rem;
 }
 
 .pengumuman-content li {
   line-height: 1.75;
+  padding-left: 0.25rem;
+}
+
+.pengumuman-content li + li {
+  margin-top: 0.35rem;
+}
+
+.pengumuman-content ul ul,
+.pengumuman-content ul ol,
+.pengumuman-content ol ul,
+.pengumuman-content ol ol {
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .pengumuman-content h1,
@@ -231,8 +239,105 @@ button {
   color: inherit;
 }
 
+.pengumuman-content img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin: 1rem 0;
+}
+
+.pengumuman-content figure {
+  margin: 1rem 0;
+}
+
+.pengumuman-content figure img {
+  margin: 0;
+}
+
+.pengumuman-content figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pengumuman-content blockquote {
+  margin: 1rem 0;
+  border-left: 3px solid rgba(234, 179, 8, 0.55);
+  padding-left: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.pengumuman-content hr {
+  margin: 1.25rem 0;
+  border: 0;
+  border-top: 1px solid rgba(234, 179, 8, 0.18);
+}
+
+.pengumuman-content .pengumuman-table-wrap {
+  margin: 1rem 0;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.pengumuman-content table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pengumuman-content thead {
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.pengumuman-content th,
+.pengumuman-content td {
+  border: 1px solid rgba(234, 179, 8, 0.12);
+  padding: 0.75rem 0.875rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.pengumuman-content th {
+  font-weight: 600;
+  color: #fff;
+}
+
+.pengumuman-content td {
+  color: rgba(255, 255, 255, 0.82);
+}
+
 .pengumuman-content a {
   color: #eab308;
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.pengumuman-modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 179, 8, 0.75) rgba(255, 255, 255, 0.06);
+}
+
+.pengumuman-modal-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.pengumuman-modal-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-left: 1px solid rgba(234, 179, 8, 0.08);
+}
+
+.pengumuman-modal-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 222, 0, 0.95), rgba(255, 150, 0, 0.95));
+  border-radius: 9999px;
+  border: 2px solid rgba(8, 8, 8, 0.9);
+}
+
+.pengumuman-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(255, 236, 92, 1), rgba(255, 171, 46, 1));
 }

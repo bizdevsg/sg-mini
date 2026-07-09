@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
+  protectInternalApiRoute,
+  withApiProtectionHeaders,
+} from "@/lib/api-protection";
+import {
   getProductCatalog,
   isProductPageCategory,
   PRODUCT_PAGE_CATEGORIES,
@@ -9,14 +13,25 @@ import {
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
+  const blockedResponse = protectInternalApiRoute(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
   const category = request.nextUrl.searchParams.get("category");
 
   if (category && isProductPageCategory(category)) {
     const items = await getProductCatalog(category);
-    return NextResponse.json({
-      category,
-      items,
-    });
+    return withApiProtectionHeaders(
+      NextResponse.json({
+        category,
+        items,
+      }),
+      {
+        cacheControl: "private, no-store, max-age=0",
+      },
+    );
   }
 
   const entries = await Promise.all(
@@ -26,7 +41,12 @@ export async function GET(request: NextRequest) {
     })),
   );
 
-  return NextResponse.json({
-    categories: entries,
-  });
+  return withApiProtectionHeaders(
+    NextResponse.json({
+      categories: entries,
+    }),
+    {
+      cacheControl: "private, no-store, max-age=0",
+    },
+  );
 }
