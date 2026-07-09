@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { NewsBrowser } from "@/components/organisms/NewsBrowser";
-import { NewsPageHeroSection } from "@/components/organisms/NewsPageHeroSection";
 import { getNewsFeed } from "@/lib/news";
 import { getNewsPageContent } from "@/locales/news-page-content";
 import {

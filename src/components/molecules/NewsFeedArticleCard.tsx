@@ -49,11 +49,11 @@ export function NewsFeedArticleCard({
 
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex min-h-9 flex-wrap items-start gap-2">
-              <span className="line-clamp-1 inline-flex min-w-0 max-w-full rounded-full bg-yellow-500/15 px-2.5 py-1 text-[11px] font-medium text-yellow-400 sm:max-w-[150px]">
+              <span className="line-clamp-1 inline-flex min-w-0 max-w-full rounded-full bg-yellow-500/45 px-2.5 py-1 text-[11px] font-medium text-yellow-400 sm:max-w-[150px]">
                 {article.displayCategory}
               </span>
 
-              <span className="pt-1 text-[11px] text-zinc-500 sm:ml-auto sm:shrink-0 sm:whitespace-nowrap">
+              <span className="pt-1 text-[11px] text-zinc-500 text-shadow-black sm:ml-auto sm:shrink-0 sm:whitespace-nowrap">
                 {formatLocaleDateTime(article.publishedAt, locale)}
               </span>
             </div>
@@ -104,11 +104,11 @@ export function NewsFeedArticleCard({
               />
             </div>
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.58)_42%,rgba(0,0,0,0.88))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.50),rgba(0,0,0,0.50)_42%,rgba(0,0,0,0.50))]" />
 
             <div className="relative flex h-full min-w-0 flex-1 flex-col justify-between p-5 sm:p-8">
               <div className="flex min-h-9 w-full flex-wrap items-start gap-2">
-                <span className="inline-flex min-w-0 max-w-full rounded-full border border-yellow-500/20 bg-yellow-500/12 px-3 py-1 text-[11px] font-medium text-yellow-300">
+                <span className="inline-flex min-w-0 max-w-full rounded-full border border-yellow-500/50 bg-yellow-500/12 px-3 py-1 text-[11px] font-medium text-yellow-300">
                   {article.displayCategory}
                 </span>
 

@@ -1,10 +1,6 @@
 import "server-only";
 
-import { getDummyEconomicCalendarRange } from "@/lib/api-dummy-data";
-import {
-  ECONOMIC_CALENDAR_API_BASE_URL,
-  USE_DUMMY_API_DATA,
-} from "@/lib/env";
+import { ECONOMIC_CALENDAR_API_BASE_URL } from "@/lib/env";
 import type {
   EconomicCalendarEvent,
   EconomicCalendarEventDetails,
@@ -171,10 +167,6 @@ function normalizeEvent(
 export async function getEconomicCalendarRange(
   key: EconomicCalendarRangeKey,
 ): Promise<EconomicCalendarRangeData> {
-  if (USE_DUMMY_API_DATA) {
-    return getDummyEconomicCalendarRange(key);
-  }
-
   const endpoint = ECONOMIC_CALENDAR_ENDPOINTS[key];
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
