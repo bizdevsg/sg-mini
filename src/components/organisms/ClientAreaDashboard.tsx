@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { ClientAreaActionModal } from "@/components/molecules/ClientAreaActionModal";
+import { ClientAreaFundTransferUnavailableModal } from "@/components/molecules/ClientAreaFundTransferUnavailableModal";
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaHomePanel } from "@/components/organisms/ClientAreaHomePanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
@@ -68,12 +69,21 @@ export function ClientAreaDashboard({
       locale={locale}
       modal={
         activeModal ? (
-          <ClientAreaActionModal
-            actionId={activeModal}
-            copy={copy}
-            locale={locale}
-            onClose={() => setActiveModal(null)}
-          />
+          activeModal === "deposit" || activeModal === "withdraw" ? (
+            <ClientAreaFundTransferUnavailableModal
+              action={activeModal === "deposit" ? "deposit" : "withdrawal"}
+              isOpen
+              locale={locale}
+              onClose={() => setActiveModal(null)}
+            />
+          ) : (
+            <ClientAreaActionModal
+              actionId={activeModal}
+              copy={copy}
+              locale={locale}
+              onClose={() => setActiveModal(null)}
+            />
+          )
         ) : null
       }
     >

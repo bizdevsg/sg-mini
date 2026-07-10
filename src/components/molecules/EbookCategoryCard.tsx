@@ -19,7 +19,7 @@ export function EbookCategoryCard({
   return (
     <Link
       href={href}
-      className="group relative flex h-full flex-col rounded-[24px] border border-line bg-linear-to-br from-slate-900/55 to-black/35 p-6 transition-all duration-300 hover:border-yellow-500/40 hover:shadow-[0_22px_48px_rgba(250,204,21,0.08)]"
+      className="group relative flex h-full flex-col rounded-[24px] border border-line bg-linear-to-br from-zinc-900/55 to-black/35 p-6 transition-all duration-300 hover:border-yellow-500/40 hover:shadow-[0_22px_48px_rgba(250,204,21,0.08)]"
     >
       <div className="mb-5 flex items-start justify-between gap-3">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-500/12 text-yellow-400">

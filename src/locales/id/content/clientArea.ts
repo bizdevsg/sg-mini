@@ -507,4 +507,13 @@ export const idClientArea: AppMessages["clientArea"] = {
     emptyBody:
       "Permintaan deposit Anda akan muncul di halaman ini setelah tercatat di sistem.",
   },
+  fundTransferModal: {
+    closeLabel: "Tutup",
+    depositTitle: "Oops! Deposit Belum Bisa Dilakukan di Website",
+    withdrawalTitle: "Oops! Withdrawal Belum Bisa Dilakukan di Website",
+    depositDescription:
+      "Jangan khawatir, Anda tetap dapat melakukan deposit dengan mudah melalui aplikasi.",
+    withdrawalDescription:
+      "Jangan khawatir, Anda tetap dapat melakukan withdrawal dengan mudah melalui aplikasi.",
+  },
 };

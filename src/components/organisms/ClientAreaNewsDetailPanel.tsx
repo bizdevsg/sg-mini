@@ -5,6 +5,8 @@ import { NewsDetailArticleBody } from "@/components/organisms/NewsDetailArticleB
 import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
 import { NewsDetailSidebar } from "@/components/organisms/NewsDetailSidebar";
 import Image from "next/image";
+import { ClientAreaSectionHeader } from "../molecules/ClientAreaSectionHeader";
+import { title } from "process";
 
 type ClientAreaNewsDetailPanelProps = {
   article: NewsArticleDetail;
@@ -61,9 +63,11 @@ export function ClientAreaNewsDetailPanel({
 
       {latestArticles.length ? (
         <section className="border-t border-white/10 pt-8">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          {/* <h2 className="text-2xl font-bold text-white sm:text-3xl">
             {labels.latestNews}
-          </h2>
+          </h2> */}
+
+          <ClientAreaSectionHeader title={labels.latestNews} titleClassname="text-2xl sm:text-3xl" />
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
             {latestArticles.map((latestArticle, index) => (

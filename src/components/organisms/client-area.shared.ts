@@ -1,4 +1,5 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { LucideIcon } from "lucide-react";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
 import {
   getLiveQuoteDisplay,
@@ -6,6 +7,16 @@ import {
   QUOTE_ORDER,
 } from "@/lib/live-quotes";
 import type { NewsFeedArticle } from "@/lib/news.shared";
+import {
+  House,
+  ChartNoAxesCombined,
+  Wallet,
+  Newspaper,
+  BookOpen,
+  CircleUserRound,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
 import type {
@@ -1757,26 +1768,29 @@ export function getQuickActionIconMap(): Record<ActionId, IconProp> {
   };
 }
 
-export function getSidebarIconMap(): Record<TabId, IconProp> {
+export function getSidebarIconMap(): Record<TabId, LucideIcon> {
   return {
-    home: ["fas", "house"],
-    market: ["fas", "chart-line"],
-    transaction: ["fas", "wallet"],
-    news: ["fas", "newspaper"],
-    ebook: ["fas", "book-open"],
-    account: ["fas", "user-gear"],
+    home: House,
+    market: ChartNoAxesCombined,
+    transaction: Wallet,
+    news: Newspaper,
+    ebook: BookOpen,
+    account: CircleUserRound,
   };
 }
 
-export function resolveSignalBadge(change: number) {
+export function resolveSignalBadge(change: number): {
+  className: string;
+  icon: LucideIcon;
+} {
   return change >= 0
     ? {
         className: "text-emerald-500",
-        icon: ["fas", "arrow-up"] as IconProp,
+        icon: ArrowUp,
       }
     : {
         className: "text-rose-500",
-        icon: ["fas", "arrow-down"] as IconProp,
+        icon: ArrowDown,
       };
 }
 

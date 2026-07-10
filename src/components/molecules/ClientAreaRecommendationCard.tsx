@@ -25,6 +25,7 @@ export function ClientAreaRecommendationCard({
   iconClass,
 }: ClientAreaRecommendationCardProps) {
   const signal = resolveSignalBadge(item.change);
+  const SignalIcon = signal.icon;
   const symbolCode = item.code ?? item.name;
 
   return (
@@ -65,7 +66,7 @@ export function ClientAreaRecommendationCard({
           <span
             className={`flex items-center justify-end gap-1 text-xs font-bold ${signal.className}`}
           >
-            <FontAwesomeIcon icon={signal.icon} className="text-[10px]" />
+            <SignalIcon className="h-3 w-3" />
             {formatSignedPercent(item.change)}
           </span>
           <span className="text-[9px] text-zinc-500">Live Tick</span>

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { Power } from "lucide-react";
+
 import { ClientAreaSidebarButton } from "@/components/atoms/ClientAreaSidebarButton";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ClientAreaHeaderTicker } from "@/components/molecules/ClientAreaHeaderTicker";
@@ -43,9 +45,6 @@ export function ClientAreaShell({
   const pathname = usePathname();
   const copy = useMemo(() => getDashboardCopy(locale), [locale]);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const activeTabLabel =
-    clientArea.sidebar.navItems.find((item) => item.id === activeTab)?.label ??
-    activeTab;
   const logoutRedirectPath =
     pathname ?? resolveClientAreaTabHref(locale, "home");
   const resolvedBreakingNews = useMemo(
@@ -72,41 +71,27 @@ export function ClientAreaShell({
           />
 
           <section>
-            <div className="mb-5 sm:hidden">
-              <details className="overflow-hidden rounded-2xl border border-zinc-800 bg-black/40">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-zinc-100">
-                  <span className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-yellow-500/20 bg-zinc-900/80 text-yellow-500">
-                      <FontAwesomeIcon icon={sidebarIconMap[activeTab]} className="text-base" />
-                    </span>
-                    <span>{activeTabLabel}</span>
-                  </span>
-                  <FontAwesomeIcon
-                    icon={["fas", "chevron-down"]}
-                    className="text-xs text-zinc-400"
-                  />
-                </summary>
-
-                <div className="space-y-2 border-t border-zinc-800 p-3">
+            <div className="mb-5 lg:hidden">
+              <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-black/40 p-3">
+                <div className="flex flex-nowrap gap-2">
                   {TABS.map((tab) => {
                     const tabLabel =
                       clientArea.sidebar.navItems.find((item) => item.id === tab)
                         ?.label ?? tab;
+                    const Icon = sidebarIconMap[tab];
 
                     return (
                       <Link
                         key={tab}
                         href={resolveClientAreaTabHref(locale, tab)}
-                        className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm transition-colors ${activeTab === tab
-                          ? "bg-zinc-900 text-yellow-500"
-                          : "text-zinc-300 hover:bg-zinc-900/80 hover:text-yellow-400"
+                        aria-label={tabLabel}
+                        title={tabLabel}
+                        className={`inline-flex py-1 w-full items-center justify-center rounded-full border text-xs transition-colors ${activeTab === tab
+                          ? "border-yellow-500/30 bg-zinc-900 text-yellow-500"
+                          : "border-zinc-800 text-zinc-300 hover:bg-zinc-900/80 hover:text-yellow-400"
                           }`}
                       >
-                        <FontAwesomeIcon
-                          icon={sidebarIconMap[tab]}
-                          className="w-4 text-center"
-                        />
-                        <span>{tabLabel}</span>
+                        <Icon className="h-5 w-5 shrink-0" />
                       </Link>
                     );
                   })}
@@ -114,16 +99,14 @@ export function ClientAreaShell({
                   <button
                     type="button"
                     onClick={() => setIsLogoutModalOpen(true)}
-                    className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 px-3 py-3 text-left text-sm text-red-300 transition-all duration-300 hover:border-red-400/40 hover:bg-red-500/15 hover:text-red-200"
+                    aria-label={clientArea.topbar.logoutLabel}
+                    title={clientArea.topbar.logoutLabel}
+                    className="inline-flex py-1 w-full cursor-pointer items-center justify-center rounded-full border border-red-500/20 bg-red-500/10 text-xs text-red-300 transition-all duration-300 hover:border-red-400/40 hover:bg-red-500/15 hover:text-red-200"
                   >
-                    <FontAwesomeIcon
-                      icon={["fas", "right-from-bracket"]}
-                      className="w-4 text-center"
-                    />
-                    <span>{clientArea.topbar.logoutLabel}</span>
+                    <Power className="w-5" />
                   </button>
                 </div>
-              </details>
+              </div>
             </div>
 
             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-6">

@@ -1,6 +1,7 @@
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import type { AppLocale } from "@/locales";
 import { NewsSidebarArticleCard } from "@/components/molecules/NewsSidebarArticleCard";
+import { ClientAreaSectionHeader } from "../molecules/ClientAreaSectionHeader";
 
 type NewsDetailSidebarProps = {
   hrefBasePath?: string;
@@ -26,9 +27,11 @@ function SidebarSection({
 }: SidebarSectionProps) {
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-100">
+      <ClientAreaSectionHeader title={title} />
+
+      {/* <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-100">
         {title}
-      </p>
+      </p> */}
       <div className="mt-4 space-y-4">
         {articles.length ? (
           articles.map((article) => (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Eye, EyeClosed } from "lucide-react";
 
 import { PUBLIC_RECAPTCHA_SITE_KEY } from "@/lib/env";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -80,7 +81,8 @@ export function ClientAreaLoginFormPanel({
               aria-label={passwordToggleLabel}
               tabIndex={-1}
             >
-              <FontAwesomeIcon icon={["fas", showPassword ? "eye-slash" : "eye"]} />
+              {showPassword ? <EyeClosed /> : <Eye />}
+              {/* <FontAwesomeIcon icon={["fas", showPassword ? "eye-slash" : "eye"]} /> */}
             </button>
           </div>
 

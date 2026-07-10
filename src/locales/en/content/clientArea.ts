@@ -509,4 +509,13 @@ export const enClientArea: AppMessages["clientArea"] = {
     emptyBody:
       "Your deposit requests will appear here after they have been recorded by the system.",
   },
+  fundTransferModal: {
+    closeLabel: "Close",
+    depositTitle: "Oops! Deposit Isn't Available on the Website Yet",
+    withdrawalTitle: "Oops! Withdrawal Isn't Available on the Website Yet",
+    depositDescription:
+      "Don't worry, you can still make a deposit quickly and easily through the mobile app.",
+    withdrawalDescription:
+      "Don't worry! You can still complete your withdrawal quickly and easily through the mobile app.",
+  },
 };

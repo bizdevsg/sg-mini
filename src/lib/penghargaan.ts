@@ -36,6 +36,39 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function stripHtml(value: string) {
+  return value.replace(/<[^>]+>/g, " ");
+}
+
+function normalizeRichText(value: unknown) {
+  const normalizedValue = normalizeText(value);
+
+  if (!normalizedValue) {
+    return "";
+  }
+
+  return stripHtml(normalizedValue).replace(/\s+/g, " ").trim();
+}
+
+function resolvePenghargaanImageUrl(item: RawPenghargaanRecord) {
+  const imageUrl = normalizeText(item.image_url);
+  const image = normalizeText(item.image);
+
+  if (imageUrl) {
+    if (
+      imageUrl.startsWith("/api/image-proxy/") ||
+      imageUrl.startsWith("/assets/") ||
+      imageUrl.startsWith("data:image/")
+    ) {
+      return imageUrl;
+    }
+
+    return getPenghargaanAssetUrl(imageUrl);
+  }
+
+  return image ? getPenghargaanAssetUrl(image) : null;
+}
+
 function mapPenghargaanRecord(
   item: RawPenghargaanRecord,
 ): PenghargaanRecord | null {
@@ -48,14 +81,10 @@ function mapPenghargaanRecord(
   return {
     id: typeof item.id === "number" && Number.isFinite(item.id) ? item.id : 0,
     title,
-    subtitle: normalizeText(item.subtitle),
+    subtitle: normalizeRichText(item.subtitle),
     slug: normalizeText(item.slug),
     image: normalizeText(item.image) || null,
-    imageUrl: normalizeText(item.image)
-      ? getPenghargaanAssetUrl(normalizeText(item.image))
-      : normalizeText(item.image_url)
-        ? getPenghargaanAssetUrl(normalizeText(item.image_url))
-        : null,
+    imageUrl: resolvePenghargaanImageUrl(item),
     createdAt: normalizeText(item.created_at) || null,
     updatedAt: normalizeText(item.updated_at) || null,
   };

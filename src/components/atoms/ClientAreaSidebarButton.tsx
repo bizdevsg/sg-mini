@@ -1,17 +1,16 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 type ClientAreaSidebarButtonProps = {
   href: string;
-  icon: IconProp;
+  icon: LucideIcon;
   label: string;
   isActive: boolean;
 };
 
 export function ClientAreaSidebarButton({
   href,
-  icon,
+  icon: Icon,
   label,
   isActive,
 }: ClientAreaSidebarButtonProps) {
@@ -24,7 +23,7 @@ export function ClientAreaSidebarButton({
         : "text-zinc-500 hover:border-l-2 hover:border-yellow-500 hover:bg-linear-to-r hover:from-yellow-500/20 hover:to-transparent hover:text-yellow-500"
         }`}
     >
-      <FontAwesomeIcon icon={icon} className="w-4 shrink-0 text-base" />
+      <Icon className="h-4 w-4 shrink-0" />
       <span className="text-sm font-medium leading-tight">{label}</span>
     </Link>
   );

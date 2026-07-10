@@ -850,6 +850,13 @@ export type AppMessages = {
       emptyTitle: string;
       emptyBody: string;
     };
+    fundTransferModal: {
+      closeLabel: string;
+      depositTitle: string;
+      withdrawalTitle: string;
+      depositDescription: string;
+      withdrawalDescription: string;
+    };
   };
   cookieConsent: {
     badge: string;

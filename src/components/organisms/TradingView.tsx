@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { memo, useEffect, useId } from "react";
+import { memo, useEffect, useId, useRef } from "react";
 
 const TRADING_VIEW_SCRIPT_URL =
     "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -77,15 +77,17 @@ function TradingView({
     marketDetails,
     presets = DEFAULT_PRESETS,
 }: TradingViewProps) {
+    const resolvedPresets = presets.length > 0 ? presets : DEFAULT_PRESETS;
     const chartId = useId().replace(/:/g, "");
     const containerId = `tradingview-widget-${chartId}`;
-    const fallbackPreset = presets[0];
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const fallbackPreset = resolvedPresets[0];
     const resolvedPresetId = activePresetId ?? defaultPresetId ?? fallbackPreset.id;
     const activePreset =
-        presets.find((preset) => preset.id === resolvedPresetId) ?? fallbackPreset;
+        resolvedPresets.find((preset) => preset.id === resolvedPresetId) ?? fallbackPreset;
 
     useEffect(() => {
-        const container = document.getElementById(containerId);
+        const container = containerRef.current;
 
         if (!container) {
             return;
@@ -109,24 +111,20 @@ function TradingView({
     }, [activePreset.symbol, containerId, defaultInterval]);
 
     return (
-        <section
-            className={`overflow-hidden ${embedded ? "" : "rounded-2xl border border-zinc-500/50 bg-zinc-950/50 p-5 backdrop-blur-2xl"} ${className}`}
-        >
-            <div className="flex flex-col gap-4">
-                {headerAction ? <div>{headerAction}</div> : null}
-
-                {marketDetails ? (
-                    <div className="border-t border-zinc-800 pt-6">{marketDetails}</div>
-                ) : null}
-
-                <div
-                    id="market-live-chart"
-                    className={`h-[420px] sm:h-[520px] lg:h-[600px] ${embedded ? "rounded-2xl border border-zinc-800/80 bg-black/20 p-2" : "rounded-xl border border-zinc-800/80 bg-black/20 p-2"}`}
-                >
-                    <div id={containerId} className="h-full w-full" />
+        <div className={`space-y-4 ${className}`}>
+            {headerAction || marketDetails ? (
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    {marketDetails ? <div className="min-w-0">{marketDetails}</div> : <div />}
+                    {headerAction ? <div className="shrink-0">{headerAction}</div> : null}
                 </div>
+            ) : null}
+
+            <div
+                className={`h-[420px] sm:h-[520px] lg:h-[600px] ${embedded ? "rounded-2xl border border-zinc-800/80 bg-black/20" : "rounded-xl border border-zinc-800/80 bg-black/20"}`}
+            >
+                <div ref={containerRef} id={containerId} className="h-full w-full" />
             </div>
-        </section>
+        </div>
     );
 }
 

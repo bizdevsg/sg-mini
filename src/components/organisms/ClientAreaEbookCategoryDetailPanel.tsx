@@ -23,7 +23,7 @@ export function ClientAreaEbookCategoryDetailPanel({
 
   return (
     <div className="space-y-6">
-      <section className="space-y-5 rounded-[2rem] border border-zinc-800 bg-zinc-900/70 p-5 sm:p-6">
+      <section className="space-y-5">
         <div className="flex items-center gap-3">
           <Link
             href={`/${locale}/client-area/ebook`}

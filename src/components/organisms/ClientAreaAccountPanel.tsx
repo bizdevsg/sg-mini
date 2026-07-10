@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { ClientAreaFundTransferUnavailableModal } from "@/components/molecules/ClientAreaFundTransferUnavailableModal";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -13,11 +15,19 @@ type ClientAreaAccountPanelProps = {
 
 type AccountMenuItem = {
   href?: string;
+  helperText?: string;
   icon: IconProp;
   label: string;
+  onClick?: () => void;
 };
 
-function AccountMenuCard({ href, icon, label }: AccountMenuItem) {
+function AccountMenuCard({
+  helperText,
+  href,
+  icon,
+  label,
+  onClick,
+}: AccountMenuItem) {
   const className =
     "group flex min-h-[118px] w-full flex-col items-center justify-center rounded-[18px] border border-zinc-700 bg-zinc-900/85 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/60 hover:bg-zinc-800/90";
 
@@ -29,6 +39,11 @@ function AccountMenuCard({ href, icon, label }: AccountMenuItem) {
       <span className="mt-4 text-base font-semibold leading-tight text-white">
         {label}
       </span>
+      {helperText ? (
+        <span className="mt-2 text-xs font-medium text-zinc-500">
+          {helperText}
+        </span>
+      ) : null}
     </>
   );
 
@@ -40,17 +55,30 @@ function AccountMenuCard({ href, icon, label }: AccountMenuItem) {
     );
   }
 
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={className}>
+        {content}
+      </button>
+    );
+  }
+
   return (
-    <button type="button" className={className}>
+    <div aria-disabled="true" className={className}>
       {content}
-    </button>
+    </div>
   );
 }
 
 export function ClientAreaAccountPanel({
   locale,
 }: ClientAreaAccountPanelProps) {
-  const accountPage = getMessages(locale).clientArea.accountPage;
+  const { clientArea } = getMessages(locale);
+  const accountPage = clientArea.accountPage;
+  const modalCopy = clientArea.fundTransferModal;
+  const [activeTransferModal, setActiveTransferModal] = useState<
+    "deposit" | "withdrawal" | null
+  >(null);
   const items: AccountMenuItem[] = [
     {
       href: resolveLocalizedHref(locale, "/client-area/account/profile"),
@@ -71,14 +99,14 @@ export function ClientAreaAccountPanel({
       label: accountPage.menuItems.dailyStatement,
     },
     {
-      href: resolveLocalizedHref(locale, "/client-area/account/withdrawal"),
       icon: ["fas", "arrow-up-from-bracket"],
       label: accountPage.menuItems.withdrawal,
+      onClick: () => setActiveTransferModal("withdrawal"),
     },
     {
-      href: resolveLocalizedHref(locale, "/client-area/account/deposit"),
       icon: ["fas", "circle-down"],
       label: accountPage.menuItems.deposit,
+      onClick: () => setActiveTransferModal("deposit"),
     },
   ];
 
@@ -87,13 +115,22 @@ export function ClientAreaAccountPanel({
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
         {items.map((item) => (
           <AccountMenuCard
+            helperText={item.helperText}
             key={item.label}
             href={item.href}
             icon={item.icon}
             label={item.label}
+            onClick={item.onClick}
           />
         ))}
       </div>
+
+      <ClientAreaFundTransferUnavailableModal
+        action={activeTransferModal ?? "deposit"}
+        isOpen={activeTransferModal !== null}
+        locale={locale}
+        onClose={() => setActiveTransferModal(null)}
+      />
     </div>
   );
 }
