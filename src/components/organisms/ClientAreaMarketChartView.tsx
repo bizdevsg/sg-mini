@@ -46,15 +46,19 @@ export function ClientAreaMarketChartView({
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-yellow-500/80">
               Live Chart
             </p>
-            <h1 className="break-words text-2xl font-black tracking-tight text-white sm:text-3xl">
-              {marketLabel}{" "}
-              <span className="text-base text-zinc-400 sm:text-lg">({selectedPreset.marketCode})</span>
-            </h1>
+            <div className="flex items-end gap-0.5">
+              <h1 className="break-words text-2xl font-black tracking-tight text-white sm:text-3xl">
+                {marketLabel}
+              </h1>
+
+              <p className="text-xs text-zinc-400 sm:text-sm font-semibold">({selectedPreset.marketCode})</p>
+            </div>
           </div>
         </div>
 
         <TradingView
           defaultPresetId={selectedPreset.id}
+          locale={locale}
           presets={tradingViewPresets}
         />
       </div>

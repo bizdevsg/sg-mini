@@ -8,14 +8,23 @@ import {
 } from "@/lib/live-quotes";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import {
+  AudioWaveform,
+  ArrowUpFromLine,
   House,
   ChartNoAxesCombined,
   Wallet,
   Newspaper,
   BookOpen,
+  CircleArrowDown,
   CircleUserRound,
   ArrowUp,
   ArrowDown,
+  PackageOpen,
+  NotebookText,
+  PackageSearch,
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  BadgeDollarSign,
 } from "lucide-react";
 
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
@@ -930,7 +939,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         products: "Produk Keuangan SGB",
         withdraw: "Withdraw Dana Berjangka",
         deposit: "Deposit Dana Aman",
-        temporary: "Temporary Mode",
+        temporary: "Transaksi",
       },
       modalDescriptions: {
         education:
@@ -942,7 +951,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         deposit:
           "Simulasi top-up dana langsung untuk menyokong margin dan kelancaran eksekusi akun.",
         temporary:
-          "Gunakan menu ini untuk melacak status transaksi gantung atau verifikasi dokumen sementara.",
+          "Pantau posisi terbuka dan riwayat trading Anda melalui halaman transaksi client area.",
       },
     };
   }
@@ -1510,7 +1519,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       products: "SGB Financial Products",
       withdraw: "Futures Withdrawal",
       deposit: "Secure Deposit",
-      temporary: "Temporary Mode",
+      temporary: "Transactions",
     },
     modalDescriptions: {
       education:
@@ -1522,7 +1531,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       deposit:
         "Simulate an instant account top-up to support available margin and trading continuity.",
       temporary:
-        "Use this section to track pending transactions or temporary document verification status.",
+        "Track your open positions and trading history from the client area transaction page.",
     },
   };
 }
@@ -1758,13 +1767,13 @@ export function getInitialPrices(): MarketPrice[] {
   );
 }
 
-export function getQuickActionIconMap(): Record<ActionId, IconProp> {
+export function getQuickActionIconMap(): Record<ActionId, LucideIcon> {
   return {
-    education: ["fas", "book-open"],
-    products: ["fas", "box-open"],
-    withdraw: ["fas", "arrow-up-from-bracket"],
-    deposit: ["fas", "circle-down"],
-    temporary: ["fas", "clipboard-question"],
+    education: NotebookText,
+    products: PackageSearch,
+    withdraw: BanknoteArrowDown,
+    deposit: BanknoteArrowUp,
+    temporary: BadgeDollarSign,
   };
 }
 

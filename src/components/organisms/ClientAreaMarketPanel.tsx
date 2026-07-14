@@ -20,19 +20,15 @@ export function ClientAreaMarketPanel({
   prices,
 }: ClientAreaMarketPanelProps) {
   return (
-    <div
-      className={`w-full space-y-6 ${embedded ? "" : "rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 backdrop-blur-2xl sm:p-6"} ${className}`}
-    >
-      <div className="grid grid-cols-1 gap-4">
-        {prices.map((item) => (
-          <ClientAreaMarketCard
-            key={item.code ?? item.symbol}
-            fieldLabels={fieldLabels}
-            item={item}
-            locale={locale}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-4">
+      {prices.map((item) => (
+        <ClientAreaMarketCard
+          key={item.code ?? item.symbol}
+          fieldLabels={fieldLabels}
+          item={item}
+          locale={locale}
+        />
+      ))}
     </div>
   );
 }

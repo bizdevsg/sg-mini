@@ -165,7 +165,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
       {
         id: "temporary",
-        label: "Temporary",
+        label: "Transaction",
       },
     ],
   },
@@ -508,6 +508,13 @@ export const enClientArea: AppMessages["clientArea"] = {
     emptyTitle: "There is no deposit history yet.",
     emptyBody:
       "Your deposit requests will appear here after they have been recorded by the system.",
+  },
+  tradingView: {
+    disclaimerLabel: "Disclaimer:",
+    disclaimerBeforeProvider:
+      "The price chart on this page is provided by",
+    disclaimerAfterProvider:
+      "The information shown is indicative and may be delayed or differ from actual market prices.",
   },
   fundTransferModal: {
     closeLabel: "Close",

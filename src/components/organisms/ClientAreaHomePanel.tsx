@@ -1,6 +1,6 @@
 "use client";
 
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { LucideIcon } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { ClientAreaHeroSlideshow } from "@/components/molecules/ClientAreaHeroSlideshow";
@@ -31,7 +31,7 @@ type ClientAreaHomePanelProps = {
   locale: AppLocale;
   onActionClick: (actionId: ActionId) => void;
   onSelectAccountMode: (mode: AccountMode) => void;
-  quickActionIconMap: Record<ActionId, IconProp>;
+  quickActionIconMap: Record<ActionId, LucideIcon>;
   setCurrentSlide: Dispatch<SetStateAction<number>>;
   setIsAccountMenuOpen: Dispatch<SetStateAction<boolean>>;
 };

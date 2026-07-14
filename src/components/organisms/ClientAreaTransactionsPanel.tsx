@@ -11,6 +11,7 @@ import type {
   TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
+import { BadgeDollarSign } from "lucide-react";
 
 type ClientAreaTransactionsPanelProps = {
   copy: DashboardCopy;
@@ -56,7 +57,7 @@ export function ClientAreaTransactionsPanel({
   return (
     <div className="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-6">
       <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
-        <FontAwesomeIcon icon={["fas", "wave-square"]} />
+        <BadgeDollarSign />
         {copy.transactionTitle}
       </h2>
 

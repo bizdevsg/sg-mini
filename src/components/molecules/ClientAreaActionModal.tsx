@@ -99,10 +99,26 @@ function renderActionModalContent(
   }
 
   if (actionId === "temporary") {
+    const transactionHref = resolveLocalizedHref(locale, "/client-area/transaction");
+    const transactionLabels =
+      locale === "id"
+        ? {
+          summaryLabel: "Ringkasan transaksi",
+          summaryTitle: "Posisi aktif dan riwayat trading",
+          summaryStatus: "Buka halaman transaksi",
+          cta: "Lihat transaksi",
+        }
+        : {
+          summaryLabel: "Transaction summary",
+          summaryTitle: "Open positions and trade history",
+          summaryStatus: "Open transaction page",
+          cta: "View transactions",
+        };
+
     return (
       <div className="space-y-4 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800 text-3xl text-zinc-400">
-          <FontAwesomeIcon icon={["fas", "hourglass-half"]} />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/10 text-3xl text-yellow-500">
+          <FontAwesomeIcon icon={["fas", "wave-square"]} />
         </div>
         <div>
           <h3 className="text-lg font-bold text-zinc-100">
@@ -115,15 +131,25 @@ function renderActionModalContent(
 
         <div className="rounded-xl border border-zinc-700 bg-zinc-800/60 p-4 text-left">
           <span className="block text-[10px] uppercase text-zinc-500">
-            Status dokumen
+            {transactionLabels.summaryLabel}
           </span>
           <span className="mt-1 block text-sm font-bold text-zinc-200">
-            Verifikasi Rekening Terpisah
+            {transactionLabels.summaryTitle}
           </span>
-          <span className="mt-2 inline-block rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2 py-0.5 text-[10px] font-bold text-yellow-500">
-            Menunggu persetujuan
-          </span>
+          <Link
+            href={transactionHref}
+            className="mt-3 inline-flex rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-[10px] font-bold text-yellow-500 transition hover:border-yellow-400/40 hover:bg-yellow-500/20"
+          >
+            {transactionLabels.summaryStatus}
+          </Link>
         </div>
+
+        <Link
+          href={transactionHref}
+          className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 px-4 py-3 text-sm font-bold text-black transition hover:from-yellow-400 hover:to-amber-500"
+        >
+          {transactionLabels.cta}
+        </Link>
       </div>
     );
   }

@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "flag-icons/css/flag-icons.min.css";
+import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { LoadingProvider } from "@/components/providers/LoadingProvider";
 import { NEWS_IMAGE_BASE_URL } from "@/lib/env";
@@ -64,6 +65,7 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         <FontAwesomeProvider>
+          <FirebaseBootstrap />
           <LoadingProvider locale={locale}>{children}</LoadingProvider>
         </FontAwesomeProvider>
         <Script id="tawk-init" strategy="lazyOnload">

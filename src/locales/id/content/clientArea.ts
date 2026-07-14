@@ -163,7 +163,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
       {
         id: "temporary",
-        label: "Temporary",
+        label: "Transaksi",
       },
     ],
   },
@@ -506,6 +506,13 @@ export const idClientArea: AppMessages["clientArea"] = {
     emptyTitle: "Belum ada riwayat deposit.",
     emptyBody:
       "Permintaan deposit Anda akan muncul di halaman ini setelah tercatat di sistem.",
+  },
+  tradingView: {
+    disclaimerLabel: "Disclaimer:",
+    disclaimerBeforeProvider:
+      "Grafik harga pada halaman ini disediakan oleh",
+    disclaimerAfterProvider:
+      "Informasi yang ditampilkan bersifat indikatif dan dapat mengalami keterlambatan atau perbedaan dibandingkan dengan harga pasar sebenarnya.",
   },
   fundTransferModal: {
     closeLabel: "Tutup",

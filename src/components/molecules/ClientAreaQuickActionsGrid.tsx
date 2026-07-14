@@ -1,4 +1,4 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { LucideIcon } from "lucide-react";
 
 import { ClientAreaQuickActionButton } from "@/components/atoms/ClientAreaQuickActionButton";
 import {
@@ -12,7 +12,7 @@ type ClientAreaQuickActionsGridProps = {
   clientArea: AppMessages["clientArea"];
   locale: AppLocale;
   onActionClick: (actionId: ActionId) => void;
-  quickActionIconMap: Record<ActionId, IconProp>;
+  quickActionIconMap: Record<ActionId, LucideIcon>;
 };
 
 export function ClientAreaQuickActionsGrid({
@@ -25,24 +25,26 @@ export function ClientAreaQuickActionsGrid({
     <div className="grid grid-cols-2 gap-3 min-[420px]:grid-cols-3 md:grid-cols-5 md:gap-4">
       {ACTION_IDS.map((actionId, index) => {
         const action = clientArea.quickActions.items[index];
+        const href =
+          actionId === "education"
+            ? resolveLocalizedHref(locale, "/client-area/ebook")
+            : actionId === "products"
+              ? resolveLocalizedHref(locale, "/client-area/market")
+              : actionId === "temporary"
+                ? resolveLocalizedHref(locale, "/client-area/transaction")
+                : undefined;
+        const isDirectLink =
+          actionId === "education" ||
+          actionId === "products" ||
+          actionId === "temporary";
 
         return (
           <ClientAreaQuickActionButton
             key={actionId}
-            href={
-              actionId === "education"
-                ? resolveLocalizedHref(locale, "/client-area/ebook")
-                : actionId === "products"
-                  ? resolveLocalizedHref(locale, "/client-area/market")
-                : undefined
-            }
+            href={href}
             icon={quickActionIconMap[actionId]}
             label={action?.label ?? actionId}
-            onClick={
-              actionId === "education" || actionId === "products"
-                ? undefined
-                : () => onActionClick(actionId)
-            }
+            onClick={isDirectLink ? undefined : () => onActionClick(actionId)}
           />
         );
       })}

@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { type ReactNode } from "react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
@@ -21,25 +22,34 @@ type ClientAreaMarketCardProps = {
 type MetricItemProps = {
   label: ReactNode;
   value: ReactNode;
+  valuePrefix?: ReactNode;
   valueClassName?: string;
 };
 
 function MetricItem({
   label,
   value,
+  valuePrefix,
   valueClassName,
 }: MetricItemProps) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-black/10 px-3 py-2 xl:min-w-40 xl:border-0 xl:bg-transparent xl:px-0 xl:py-0">
+    <div className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-white/5 bg-black/10 px-3 py-2 xl:min-w-40 xl:border-0 xl:bg-transparent xl:px-0 xl:py-0">
       <div className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-200 sm:text-sm">
         {label}
       </div>
 
       <div
-        className={`text-base font-black tracking-tight sm:text-xl ${valueClassName ?? "text-yellow-400"
+        className={`flex items-center gap-1 text-base font-black tracking-tight sm:text-xl ${valueClassName ?? "text-yellow-400"
           }`}
       >
-        {value}
+        {valuePrefix ? (
+          <span className="text-xs">
+            {valuePrefix}
+          </span>
+        ) : null}
+        <div>
+          {value}
+        </div>
       </div>
     </div>
   );
@@ -55,12 +65,12 @@ export function ClientAreaMarketCard({
 
   const directionClassName = getDirectionClassName(direction);
 
-  const directionIcon =
+  const DirectionIcon =
     direction === "up"
-      ? "arrow-up"
+      ? ArrowUp
       : direction === "down"
-        ? "arrow-down"
-        : "minus";
+        ? ArrowDown
+        : Minus;
 
   const marketCode = item.code ?? item.name;
 
@@ -105,7 +115,7 @@ export function ClientAreaMarketCard({
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-radial-[at_30%_30%] from-amber-300/20 via-transparent to-transparent sm:h-15 sm:w-15">
               <LiveQuoteInstrumentIcon
                 symbol={marketCode}
-                className="h-12 w-12 sm:h-14 sm:w-14"
+                className="h-12 w-12"
               />
             </div>
           </div>
@@ -113,16 +123,16 @@ export function ClientAreaMarketCard({
           <div className="min-w-0">
             <h3 className="break-words text-lg font-black uppercase tracking-tight text-white sm:text-xl">
               {item.symbol}
-              <br />
-              <span className="text-sm text-zinc-500 sm:text-base">
-                ({marketCode})
-              </span>
+
             </h3>
+            <p className="text-xs font-semibold text-zinc-500">
+              ({marketCode})
+            </p>
           </div>
         </div>
 
         {/* Metrics */}
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           <div className="grid gap-1">
             <MetricItem
               label={fieldLabels.high}
@@ -154,29 +164,19 @@ export function ClientAreaMarketCard({
 
           <div className="grid gap-1 sm:col-span-2 xl:col-span-1">
             <MetricItem
-              label={
-                <div className="flex items-center gap-2">
-                  <FontAwesomeIcon
-                    icon={["fas", directionIcon]}
-                    className={directionClassName}
-                  />
-                  {fieldLabels.sell}
-                </div>
+              valuePrefix={
+                <DirectionIcon className={directionClassName} size={14} />
               }
+              label={fieldLabels.sell}
               value={marketMetrics.sell}
               valueClassName={directionClassName}
             />
 
             <MetricItem
-              label={
-                <div className="flex items-center gap-2">
-                  <FontAwesomeIcon
-                    icon={["fas", directionIcon]}
-                    className={directionClassName}
-                  />
-                  {fieldLabels.buy}
-                </div>
+              valuePrefix={
+                <DirectionIcon className={directionClassName} size={14} />
               }
+              label={fieldLabels.buy}
               value={marketMetrics.buy}
               valueClassName={directionClassName}
             />

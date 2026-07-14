@@ -116,9 +116,22 @@ NEXT_PUBLIC_LOGIN_URL=
 NEXT_PUBLIC_REGISTER_URL=
 NEXT_PUBLIC_HERO_CTA_URL=
 NEXT_PUBLIC_SPREAD_CTA_URL=
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
 Kalau tidak diisi, project akan memakai default value yang sudah didefinisikan di [src/lib/env.ts](src/lib/env.ts).
+
+Konfigurasi Firebase client ada di:
+
+- [src/lib/firebase/config.ts](src/lib/firebase/config.ts)
+- [src/lib/firebase/client.ts](src/lib/firebase/client.ts)
+- [src/components/providers/FirebaseBootstrap.tsx](src/components/providers/FirebaseBootstrap.tsx)
 
 Nilai `APP_ENV` yang dipakai untuk switch data:
 

@@ -23,6 +23,7 @@ export function ClientAreaArticleCard({
             src={imageUrl}
             alt={imageAlt}
             fill
+            unoptimized
             sizes="300"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />

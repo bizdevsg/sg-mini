@@ -850,6 +850,11 @@ export type AppMessages = {
       emptyTitle: string;
       emptyBody: string;
     };
+    tradingView: {
+      disclaimerLabel: string;
+      disclaimerBeforeProvider: string;
+      disclaimerAfterProvider: string;
+    };
     fundTransferModal: {
       closeLabel: string;
       depositTitle: string;

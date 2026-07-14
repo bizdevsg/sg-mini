@@ -4,6 +4,6 @@ export const enLiveQuoteSection: AppMessages["liveQuoteSection"] = {
   eyebrow: "Real-Time Market Movement",
   title: "Live Market Quotes",
   subtitle:
-    "Monitor real-time market price movements through our internal live quote API.",
+    "Access real-time, transparent, and instantly updated market price movements.",
   cta: "See More",
 };

@@ -98,6 +98,7 @@ export function NewsFeedArticleCard({
                 src={article.imageSrc}
                 alt={article.title}
                 fill
+                unoptimized
                 sizes="(max-width: 640px) 100vw, (max-width: 1280px) 70vw, 860px"
                 loading={prioritizeImage ? "eager" : "lazy"}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -144,6 +145,7 @@ export function NewsFeedArticleCard({
                 src={article.imageSrc}
                 alt={article.title}
                 fill
+                unoptimized
                 sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 420px"
                 loading={prioritizeImage ? "eager" : "lazy"}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"

@@ -4,6 +4,6 @@ export const idLiveQuoteSection: AppMessages["liveQuoteSection"] = {
   eyebrow: "Pergerakan Market Realtime",
   title: "Live Quote Market",
   subtitle:
-    "Pantau pergerakan harga market secara realtime melalui live quote API internal.",
+    "Access real-time, transparent market price updates, updated every single time.",
   cta: "Lihat Lainnya",
 };

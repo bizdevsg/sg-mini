@@ -69,8 +69,18 @@ const allowedActionOrigins = Array.from(
     ...parseAllowedOrigins(process.env.NEXT_ALLOWED_ORIGINS),
   ]),
 );
+const DEFAULT_LOCALE = "id";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: `/${DEFAULT_LOCALE}`,
+        permanent: false,
+      },
+    ];
+  },
   allowedDevOrigins: allowedActionOrigins,
   experimental: {
     serverActions: {
@@ -85,9 +95,6 @@ const nextConfig: NextConfig = {
     localPatterns: [
       {
         pathname: "/assets/**",
-      },
-      {
-        pathname: "/api/image-proxy/**",
       },
     ],
     remotePatterns: [
