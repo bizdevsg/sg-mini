@@ -82,8 +82,8 @@ export function ClientAreaAccountOverview({
         className="relative h-fit overflow-hidden rounded-3xl border border-yellow-400/30 bg-cover bg-center bg-no-repeat p-5 text-black shadow-2xl"
         style={{ backgroundImage: "url('/assets/bg-profile.svg')" }}
       >
-        <div className="relative mb-4 flex items-center justify-between gap-4">
-          <div className="flex min-w-0 flex-col gap-1 items-center">
+        <div className="relative mb-4 flex items-start justify-between gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
             <div className="relative">
               <button
                 type="button"
@@ -101,7 +101,7 @@ export function ClientAreaAccountOverview({
               </button>
 
               {isAccountMenuOpen ? (
-                <div className="absolute left-0 top-8 z-10 w-36 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 text-xs text-white shadow-xl">
+                <div className="absolute left-0 top-8 z-10 w-40 max-w-[calc(100vw-5rem)] overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 text-xs text-white shadow-xl">
                   <button
                     type="button"
                     onClick={() => onSelectAccountMode("demo")}
@@ -120,7 +120,7 @@ export function ClientAreaAccountOverview({
               ) : null}
             </div>
 
-            <span className="break-all text-sm font-extrabold tracking-tight text-neutral-900 sm:text-base">
+            <span className="break-all pr-2 text-sm font-extrabold tracking-tight text-neutral-900 sm:text-base">
               {currentAccount.accountId}
             </span>
           </div>
@@ -133,7 +133,7 @@ export function ClientAreaAccountOverview({
           </div>
         </div>
 
-        <div className="relative grid gap-2">
+        <div className="relative grid gap-2 sm:gap-2.5">
           <ClientAreaAccountValueCard
             label="New Balance"
             surfaceClassName="bg-orange-500/70"

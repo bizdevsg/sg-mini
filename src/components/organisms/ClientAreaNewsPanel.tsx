@@ -89,7 +89,7 @@ export function ClientAreaNewsPanel({
         {copy.newsTitle}
       </h2>
 
-      <div className="flex items-center gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
         {CLIENT_AREA_NEWS_FILTERS.map((filter) => {
           const isActive = filter.id === activeFilter;
 
@@ -98,7 +98,7 @@ export function ClientAreaNewsPanel({
               key={filter.id}
               type="button"
               onClick={() => setActiveFilter(filter.id)}
-              className={`rounded-full w-full border px-4 py-2 text-sm font-semibold transition-colors duration-200 ${isActive
+              className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors duration-200 sm:w-auto ${isActive
                 ? "border-yellow-500 bg-linear-to-b from-[#FF9600] to-[#FFDE00] text-black"
                 : "border-zinc-700 bg-zinc-900/70 text-zinc-300 hover:border-yellow-500/50 hover:text-yellow-400"
                 }`}

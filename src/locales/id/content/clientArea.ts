@@ -1,7 +1,7 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const idClientArea: AppMessages["clientArea"] = {
-  pageTitle: "Client Area",
+  pageTitle: "Beranda",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
   login: {
@@ -509,8 +509,7 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   tradingView: {
     disclaimerLabel: "Disclaimer:",
-    disclaimerBeforeProvider:
-      "Grafik harga pada halaman ini disediakan oleh",
+    disclaimerBeforeProvider: "Grafik harga pada halaman ini disediakan oleh",
     disclaimerAfterProvider:
       "Informasi yang ditampilkan bersifat indikatif dan dapat mengalami keterlambatan atau perbedaan dibandingkan dengan harga pasar sebenarnya.",
   },

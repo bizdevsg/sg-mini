@@ -4,17 +4,13 @@ import { notFound } from "next/navigation";
 import { ClientAreaNewsDetailView } from "@/components/organisms/ClientAreaNewsDetailView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
+import { buildPrivateMetadata } from "@/lib/metadata";
 import {
   createNewsDetailFromFeedArticle,
   getNewsArticleBySlug,
   getNewsFeed,
 } from "@/lib/news";
-import {
-  getLocaleConfig,
-  isSupportedLocale,
-  SUPPORTED_LOCALES,
-  type AppLocale,
-} from "@/locales";
+import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaNewsDetailPageProps = {
   params: Promise<{ locales: string; slug: string }>;
@@ -61,19 +57,12 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
-    title: resolvedArticle.title,
+  return buildPrivateMetadata({
+    title: `${resolvedArticle.title} | Client Area News`,
     description: resolvedArticle.summary,
-    alternates: {
-      canonical: `/${locales}/client-area/news/${resolvedArticle.slug}`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}/client-area/news/${resolvedArticle.slug}`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area/news/${resolvedArticle.slug}`,
+  });
 }
 
 export default async function Page({

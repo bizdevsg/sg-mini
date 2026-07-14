@@ -8,14 +8,11 @@ import {
 } from "@/components/organisms/client-area.shared";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
+import { buildPrivateMetadata } from "@/lib/metadata";
 import {
   assertValidLocale,
   generateClientAreaStaticParams,
 } from "@/app/[locales]/client-area/client-area-page.shared";
-import {
-  getLocaleConfig,
-  SUPPORTED_LOCALES,
-} from "@/locales";
 
 type ClientAreaMarketChartPageProps = {
   params: Promise<{ locales: string; symbol: string }>;
@@ -44,19 +41,12 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
-    title: `${preset.label} Live Chart`,
+  return buildPrivateMetadata({
+    title: `${preset.label} Live Chart | Client Area`,
     description: `Live chart for ${preset.marketCode}.`,
-    alternates: {
-      canonical: `/${locales}/client-area/market/${preset.id}`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}/client-area/market/${preset.id}`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area/market/${preset.id}`,
+  });
 }
 
 export default async function ClientAreaMarketChartPage({

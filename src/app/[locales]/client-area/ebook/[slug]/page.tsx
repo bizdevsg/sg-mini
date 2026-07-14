@@ -6,12 +6,8 @@ import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import { getEbookCategoryDetail } from "@/lib/ebook";
 import { buildEbookCategoryPageDescription } from "@/lib/ebook.shared";
-import {
-  getLocaleConfig,
-  isSupportedLocale,
-  SUPPORTED_LOCALES,
-  type AppLocale,
-} from "@/locales";
+import { buildPrivateMetadata } from "@/lib/metadata";
+import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaEbookCategoryPageProps = {
   params: Promise<{ locales: string; slug: string }>;
@@ -35,23 +31,16 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
+  return buildPrivateMetadata({
     title: `${detail.category.name} | Client Area`,
     description: buildEbookCategoryPageDescription(
       detail.category.name,
       detail.category.ebooksCount,
       locales,
     ),
-    alternates: {
-      canonical: `/${locales}/client-area/ebook/${detail.category.slug}`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}/client-area/ebook/${detail.category.slug}`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area/ebook/${detail.category.slug}`,
+  });
 }
 
 export default async function ClientAreaEbookCategoryPage({

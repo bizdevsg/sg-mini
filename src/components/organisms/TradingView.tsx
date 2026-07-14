@@ -169,7 +169,7 @@ function TradingView({
                 ) : null}
 
                 <div
-                    className={`h-[420px] sm:h-[520px] lg:h-[600px] ${embedded
+                    className={`h-[340px] sm:h-[460px] lg:h-[600px] ${embedded
                         ? "rounded-2xl border border-zinc-800/80 bg-black/20"
                         : "rounded-xl border border-zinc-800/80 bg-black/20"
                         }`}
@@ -182,8 +182,8 @@ function TradingView({
                 </div>
             </div>
 
-            <div className="rounded-xl border border-red-500/20 bg-red-500/10 backdrop-blur-xs p-4">
-                <div className="flex gap-3">
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 backdrop-blur-xs">
+                <div className="flex flex-col gap-3 sm:flex-row">
                     <div
                         style={{
                             width: iconSize,

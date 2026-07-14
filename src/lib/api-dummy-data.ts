@@ -154,6 +154,11 @@ function createDummyHistoricalDataRecords() {
 const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   {
     id: 1,
+    slug: "bonus-edukasi-solid-gold",
+    title: "Bonus Edukasi Solid Gold",
+    excerpt: "Program edukasi untuk nasabah yang ingin memahami pasar lebih terstruktur.",
+    content:
+      "<p>Dummy detail banner untuk program edukasi. Ganti dengan konten dari admin API saat backend aktif.</p><p>Konten ini dipakai agar route detail banner tetap bisa direview pada mode dummy.</p>",
     image: "Banner SG Solid Web New-1.jpg.jpeg",
     image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-1.jpg.jpeg",
     is_active: true,
@@ -163,6 +168,11 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 2,
+    slug: "strategi-trading-harian",
+    title: "Strategi Trading Harian",
+    excerpt: "Materi promo strategi trading harian dengan pendekatan market update dan risk control.",
+    content:
+      "<p>Dummy detail banner untuk strategi trading harian.</p><ul><li>Fokus pada disiplin entry dan exit.</li><li>Perhatikan manajemen risiko sebelum mengambil posisi.</li></ul>",
     image: "Banner SG Solid Web New-2.jpg.jpeg",
     image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-2.jpg.jpeg",
     is_active: true,
@@ -172,6 +182,11 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 3,
+    slug: "webinar-produk-unggulan",
+    title: "Webinar Produk Unggulan",
+    excerpt: "Informasi webinar mengenai produk unggulan dan peluang market terkini.",
+    content:
+      "<p>Dummy detail banner untuk webinar produk unggulan.</p><p>Silakan sesuaikan title, slug, dan HTML dari API banner detail.</p>",
     image: "Banner SG Solid Web New-3.jpg.jpeg",
     image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-3.jpg.jpeg",
     is_active: true,
@@ -181,6 +196,11 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 4,
+    slug: "promo-layanan-prioritas",
+    title: "Promo Layanan Prioritas",
+    excerpt: "Penawaran informasi layanan prioritas untuk pengalaman trading yang lebih nyaman.",
+    content:
+      "<p>Dummy detail banner untuk layanan prioritas.</p><p>Konten ini hanya fallback saat mode dummy aktif.</p>",
     image: "Banner SG Solid Web New-4.jpg.jpeg",
     image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-4.jpg.jpeg",
     is_active: true,
@@ -190,6 +210,11 @@ const DUMMY_BANNER_RECORDS: BannerApiRecord[] = [
   },
   {
     id: 5,
+    slug: "update-kampanye-nasabah",
+    title: "Update Kampanye Nasabah",
+    excerpt: "Ringkasan kampanye terbaru yang sedang berjalan untuk nasabah aktif.",
+    content:
+      "<p>Dummy detail banner untuk kampanye nasabah.</p><p>Backend dapat menggantikan konten ini melalui endpoint detail berdasarkan slug.</p>",
     image: "Banner SG Solid Web New-5.jpg.jpeg",
     image_url: "/assets/banner/Banner%20SG%20Solid%20Web%20New-5.jpg.jpeg",
     is_active: true,
@@ -309,6 +334,10 @@ const DUMMY_HISTORICAL_DATA = createDummyHistoricalDataRecords();
 
 export function getDummyBannerRecords() {
   return DUMMY_BANNER_RECORDS.slice();
+}
+
+export function getDummyBannerDetailBySlug(slug: string) {
+  return DUMMY_BANNER_RECORDS.find((item) => item.slug === slug) ?? null;
 }
 
 export function getDummyHistoricalData() {

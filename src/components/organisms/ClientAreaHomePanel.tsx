@@ -25,6 +25,7 @@ type ClientAreaHomePanelProps = {
   copy: DashboardCopy;
   currentAccount: AccountSnapshot;
   currentSlide: number;
+  detailLabel: string;
   economicCalendarEvents: EconomicCalendarEvent[];
   heroSlides: ClientAreaHeroSlide[];
   isAccountMenuOpen: boolean;
@@ -42,6 +43,7 @@ export function ClientAreaHomePanel({
   copy,
   currentAccount,
   currentSlide,
+  detailLabel,
   economicCalendarEvents,
   heroSlides,
   isAccountMenuOpen,
@@ -69,6 +71,7 @@ export function ClientAreaHomePanel({
         <ClientAreaHeroSlideshow
           slides={heroSlides}
           currentSlide={currentSlide}
+          detailLabel={detailLabel}
           setCurrentSlide={setCurrentSlide}
         />
 

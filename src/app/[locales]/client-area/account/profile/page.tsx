@@ -3,14 +3,12 @@ import type { Metadata } from "next";
 import { ClientAreaAccountProfileView } from "@/components/organisms/ClientAreaAccountProfileView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
-import {
-  getLocaleConfig,
-  getMessages,
-  SUPPORTED_LOCALES,
-} from "@/locales";
+import { buildPrivateMetadata } from "@/lib/metadata";
+import { getMessages } from "@/locales";
 import {
   assertValidLocale,
   generateClientAreaStaticParams,
+  getClientAreaSeoLabel,
   type ClientAreaSubpageProps,
 } from "@/app/[locales]/client-area/client-area-page.shared";
 
@@ -27,22 +25,15 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const { clientArea } = getMessages(locales);
-  const title = `${clientArea.accountPage.sections.personal} | ${clientArea.pageTitle}`;
+  const title = `${clientArea.accountPage.sections.personal} | ${getClientAreaSeoLabel(locales)}`;
   const path = `/${locales}/client-area/account/profile`;
 
-  return {
+  return buildPrivateMetadata({
     title,
     description: `${clientArea.accountPage.sections.personal}. ${clientArea.pageDescription}`,
-    alternates: {
-      canonical: path,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((supportedLocale) => [
-          getLocaleConfig(supportedLocale).lang,
-          `/${supportedLocale}/client-area/account/profile`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path,
+  });
 }
 
 export default async function ClientAreaAccountProfilePage({

@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 
 import { ClientAreaLoginPage } from "@/components/organisms/ClientAreaLoginPage";
 import { redirectAuthenticatedClientAreaUser } from "@/lib/client-area-auth";
+import { buildPrivateMetadata } from "@/lib/metadata";
 import { isRecaptchaEnabled, resolveRequestHostname } from "@/lib/recaptcha";
 import {
-  getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
@@ -36,20 +36,15 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const { clientArea } = getMessages(locales);
+  const title =
+    locales === "id" ? "Login Client Area" : "Client Area Login";
 
-  return {
-    title: `${clientArea.pageTitle} Login`,
+  return buildPrivateMetadata({
+    title,
     description: clientArea.login.description,
-    alternates: {
-      canonical: `/${locales}/client-area/login`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}/client-area/login`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area/login`,
+  });
 }
 
 export default async function ClientAreaLoginRoute({

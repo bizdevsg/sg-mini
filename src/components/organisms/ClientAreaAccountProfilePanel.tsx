@@ -162,9 +162,9 @@ function AccordionItem({
       <button
         type="button"
         onClick={onToggle}
-        className="flex w-full cursor-pointer items-center justify-between rounded-[26px] bg-gradient-to-r from-yellow-500 to-amber-400 px-5 py-4 text-left text-lg font-bold text-black shadow-[0_10px_30px_rgba(245,158,11,0.18)] transition hover:brightness-105 sm:px-7"
+        className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-[26px] bg-gradient-to-r from-yellow-500 to-amber-400 px-4 py-4 text-left text-base font-bold text-black shadow-[0_10px_30px_rgba(245,158,11,0.18)] transition hover:brightness-105 sm:px-7 sm:text-lg"
       >
-        <span>{title}</span>
+        <span className="min-w-0">{title}</span>
         <FontAwesomeIcon
           icon={["fas", "chevron-down"]}
           className={`text-base transition-transform ${isOpen ? "rotate-180" : ""}`}
@@ -172,7 +172,7 @@ function AccordionItem({
       </button>
 
       {isOpen ? (
-        <div className="rounded-[18px] border border-zinc-800 bg-[#232428] p-4 sm:p-4">
+        <div className="rounded-[18px] border border-zinc-800 bg-[#232428] p-4">
           {children}
         </div>
       ) : null}
@@ -204,7 +204,7 @@ export function ClientAreaAccountProfilePanel({
 
   return (
     <div className="space-y-4 rounded-[34px] border border-zinc-800 bg-black/45 p-4 backdrop-blur-xl sm:p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <Link
           href={accountHref}
           className="inline-flex items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/70 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-yellow-500/40 hover:text-yellow-400"
@@ -213,7 +213,7 @@ export function ClientAreaAccountProfilePanel({
           <span>{accountPage.backLabel}</span>
         </Link>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 py-3 text-right">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 py-3 text-left sm:text-right">
           <p className="text-[11px] uppercase tracking-[0.24em] text-zinc-500">
             {accountPage.activeAccount}
           </p>
@@ -284,7 +284,7 @@ export function ClientAreaAccountProfilePanel({
               required
             />
 
-            <div className="grid gap-3 md:grid-cols-[80px_80px_minmax(0,1fr)]">
+            <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
               <AccountField
                 defaultValue="01"
                 label={accountPage.fields.rt}
@@ -421,7 +421,7 @@ export function ClientAreaAccountProfilePanel({
               required
             />
 
-            <div className="grid gap-3 md:grid-cols-[80px_80px_minmax(0,1fr)]">
+            <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
               <AccountField
                 defaultValue=""
                 label={accountPage.fields.rt}

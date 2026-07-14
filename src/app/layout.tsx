@@ -7,6 +7,11 @@ import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { LoadingProvider } from "@/components/providers/LoadingProvider";
 import { NEWS_IMAGE_BASE_URL } from "@/lib/env";
+import {
+  DEFAULT_SITE_DESCRIPTION,
+  DEFAULT_SITE_TITLE,
+  SITE_METADATA_BASE,
+} from "@/lib/metadata";
 import "@/lib/fontawesome";
 import {
   DEFAULT_LOCALE,
@@ -24,12 +29,31 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: SITE_METADATA_BASE,
   title: {
-    default: "Solid Gold Berjangka",
+    default: DEFAULT_SITE_TITLE,
     template: "%s | Solid Gold Berjangka",
   },
-  description:
-    "PT Solid Gold Berjangka provides trusted futures trading services, market insights, and investment education to help traders make informed decisions.",
+  description: DEFAULT_SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Solid Gold Berjangka",
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/assets/BANNER-UTAMA-SOLID.png",
+        alt: "Solid Gold Berjangka",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: ["/assets/BANNER-UTAMA-SOLID.png"],
+  },
   icons: {
     icon: "/assets/Logo SG-WEB111.png",
     shortcut: "/assets/Logo SG-WEB111.png",

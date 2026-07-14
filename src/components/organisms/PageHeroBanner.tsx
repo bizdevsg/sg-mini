@@ -8,9 +8,9 @@ import type { AppLocale } from "@/locales";
 type PageHeroBannerProps = {
   locale: AppLocale;
   homeLabel: string;
-  eyebrow: string;
-  title: string;
-  description: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
   breadcrumbs: Array<{
     label: string;
     href?: string;

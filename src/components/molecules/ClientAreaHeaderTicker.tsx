@@ -38,8 +38,8 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
   const activeNews = breakingNews[activeIndex];
 
   return (
-    <div className="rounded-[28px] bg-yellow-500/10 p-2 sm:rounded-full select-none">
-      <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-[24px] border border-zinc-800 bg-zinc-900/60 px-4 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-4 sm:py-1.5">
+    <div className="select-none rounded-[24px] bg-yellow-500/10 p-2 sm:rounded-full">
+      <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-[20px] border border-zinc-800 bg-zinc-900/60 px-3 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-4 sm:py-1.5">
         <div className="flex items-center gap-3 sm:shrink-0">
           <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-yellow-500">
             {breakingLabel}
@@ -55,12 +55,12 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
             <span className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full bg-amber-500 sm:mt-0" />
             <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <div className="min-w-0">
-                <span className="block truncate leading-snug sm:leading-none">
+                <span className="block line-clamp-2 leading-snug sm:line-clamp-1 sm:leading-none">
                   {activeNews.title}
                 </span>
               </div>
 
-              <span className="shrink-0 text-xs leading-none text-zinc-500">
+              <span className="shrink-0 text-[11px] leading-none text-zinc-500 sm:text-xs">
                 {activeNews.timeAgo}
               </span>
             </div>

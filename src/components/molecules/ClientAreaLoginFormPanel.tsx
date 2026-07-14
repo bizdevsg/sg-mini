@@ -86,7 +86,7 @@ export function ClientAreaLoginFormPanel({
             </button>
           </div>
 
-          <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="mb-3 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
             <label className="flex cursor-pointer select-none items-center gap-2 text-[0.82rem] text-gray-400">
               <input
                 name="rememberMe"
@@ -106,9 +106,9 @@ export function ClientAreaLoginFormPanel({
 
           {isRecaptchaEnabled ? (
             <div className="rounded-[0.6rem] border border-zinc-700/70 bg-black/30 p-3">
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto pb-1">
                 <div
-                  className="g-recaptcha min-w-[304px]"
+                  className="g-recaptcha mx-auto min-w-[304px] w-fit"
                   data-sitekey={PUBLIC_RECAPTCHA_SITE_KEY}
                   data-theme="dark"
                 />

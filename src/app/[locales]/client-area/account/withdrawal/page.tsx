@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import { ClientAreaAccountWithdrawalHistoryView } from "@/components/organisms/ClientAreaAccountWithdrawalHistoryView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
-import { getLocaleConfig, getMessages, SUPPORTED_LOCALES } from "@/locales";
+import { buildPrivateMetadata } from "@/lib/metadata";
+import { getMessages } from "@/locales";
 import {
   assertValidLocale,
   generateClientAreaStaticParams,
+  getClientAreaSeoLabel,
   type ClientAreaSubpageProps,
 } from "@/app/[locales]/client-area/client-area-page.shared";
 
@@ -23,21 +25,14 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const { clientArea } = getMessages(locales);
-  const title = `${clientArea.withdrawalHistoryPage.title} | ${clientArea.pageTitle}`;
+  const title = `${clientArea.withdrawalHistoryPage.title} | ${getClientAreaSeoLabel(locales)}`;
 
-  return {
+  return buildPrivateMetadata({
     title,
     description: `${clientArea.withdrawalHistoryPage.description} ${clientArea.pageDescription}`,
-    alternates: {
-      canonical: `/${locales}/client-area/account/withdrawal`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((supportedLocale) => [
-          getLocaleConfig(supportedLocale).lang,
-          `/${supportedLocale}/client-area/account/withdrawal`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area/account/withdrawal`,
+  });
 }
 
 export default async function ClientAreaAccountWithdrawalHistoryPage({

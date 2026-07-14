@@ -6,4 +6,5 @@ export const idBannerSlideshow: AppMessages["bannerSlideshow"] = {
   slideImageAlt: "Banner promo {index}",
   previousLabel: "Banner sebelumnya",
   nextLabel: "Banner berikutnya",
+  detailCta: "Lihat detail banner promo",
 };

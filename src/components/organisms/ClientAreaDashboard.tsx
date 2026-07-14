@@ -36,10 +36,12 @@ export function ClientAreaDashboard({
   initialBanners = [],
   locale,
 }: ClientAreaDashboardProps) {
-  const clientArea = getMessages(locale).clientArea;
+  const messages = getMessages(locale);
+  const clientArea = messages.clientArea;
+  const bannerDetailLabel = messages.bannerDetailPage.breadcrumb;
   const copy = getDashboardCopy(locale);
   const quickActionIconMap = getQuickActionIconMap();
-  const heroSlides = buildClientAreaHeroSlides(copy, initialBanners);
+  const heroSlides = buildClientAreaHeroSlides(copy, initialBanners, locale);
   const { accountMode, setAccountMode } = useClientAreaAccountMode();
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<ActionId | null>(null);
@@ -92,6 +94,7 @@ export function ClientAreaDashboard({
         copy={copy}
         heroSlides={heroSlides}
         currentSlide={currentSlide}
+        detailLabel={bannerDetailLabel}
         setCurrentSlide={setCurrentSlide}
         currentAccount={currentAccount}
         accountMode={accountMode}

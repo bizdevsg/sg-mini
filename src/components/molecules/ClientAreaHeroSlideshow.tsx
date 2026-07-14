@@ -1,17 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import type { Dispatch, SetStateAction } from "react";
 
 import type { ClientAreaHeroSlide } from "@/components/organisms/client-area.types";
 
 type ClientAreaHeroSlideshowProps = {
   currentSlide: number;
+  detailLabel: string;
   setCurrentSlide: Dispatch<SetStateAction<number>>;
   slides: ClientAreaHeroSlide[];
 };
 
 export function ClientAreaHeroSlideshow({
   currentSlide,
+  detailLabel,
   setCurrentSlide,
   slides,
 }: ClientAreaHeroSlideshowProps) {
@@ -27,16 +30,12 @@ export function ClientAreaHeroSlideshow({
       {slides.map((slide, index) => {
         const isActive = index === safeCurrentSlide;
         const hasImage = Boolean(slide.imageUrl);
-
-        return (
-          <article
-            key={slide.id}
-            className={`absolute inset-0 transition-all duration-500 ${isActive
-              ? "translate-x-0 opacity-100"
-              : "pointer-events-none translate-x-4 opacity-0"
-              }`}
-            aria-hidden={!isActive}
-          >
+        const cardClassName = `absolute inset-0 overflow-hidden transition-all duration-500 ${isActive
+          ? "translate-x-0 opacity-100"
+          : "pointer-events-none translate-x-4 opacity-0"
+          }`;
+        const content = (
+          <>
             {hasImage ? (
               <>
                 <img
@@ -45,6 +44,8 @@ export function ClientAreaHeroSlideshow({
                   loading={isActive ? "eager" : "lazy"}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
+                {/* <div className="absolute inset-0 bg-linear-to-r from-black/45 via-black/12 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/55 to-transparent" /> */}
               </>
             ) : (
               <>
@@ -54,7 +55,35 @@ export function ClientAreaHeroSlideshow({
                 <div className="absolute inset-0 bg-linear-to-r from-black/18 via-transparent to-transparent" />
               </>
             )}
-          </article>
+
+            {/* {slide.href ? (
+              <div className="absolute right-4 top-4 z-10 rounded-full border border-yellow-400/30 bg-black/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-yellow-300 backdrop-blur-sm">
+                {detailLabel}
+              </div>
+            ) : null} */}
+          </>
+        );
+
+        return (
+          slide.href ? (
+            <Link
+              key={slide.id}
+              href={slide.href}
+              aria-label={`${slide.title} - ${detailLabel}`}
+              className={`${cardClassName} cursor-pointer`}
+              aria-hidden={!isActive}
+            >
+              {content}
+            </Link>
+          ) : (
+            <article
+              key={slide.id}
+              className={cardClassName}
+              aria-hidden={!isActive}
+            >
+              {content}
+            </article>
+          )
         );
       })}
 

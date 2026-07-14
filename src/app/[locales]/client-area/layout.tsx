@@ -20,6 +20,7 @@ export default async function ClientAreaLayout({
   params,
 }: ClientAreaLayoutProps) {
   const { locales } = await params;
+
   const cookieStore = await cookies();
   const initialAccountMode = resolveClientAreaAccountMode(
     cookieStore.get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value,

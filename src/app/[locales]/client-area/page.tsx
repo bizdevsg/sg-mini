@@ -10,12 +10,12 @@ import {
   getEconomicCalendarRange,
 } from "@/lib/economic-calendar";
 import {
-  getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
 } from "@/locales";
 import type { AppLocale } from "@/locales";
+import { buildPrivateMetadata } from "@/lib/metadata";
 
 type ClientAreaPageProps = {
   params: Promise<{ locales: string }>;
@@ -40,20 +40,15 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const messages = getMessages(locales);
+  const title =
+    locales === "id" ? "Dashboard Client Area" : "Client Area Dashboard";
 
-  return {
-    title: messages.clientArea.pageTitle,
+  return buildPrivateMetadata({
+    title,
     description: messages.clientArea.pageDescription,
-    alternates: {
-      canonical: `/${locales}/client-area`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}/client-area`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}/client-area`,
+  });
 }
 
 export default async function ClientAreaPage({

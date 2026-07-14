@@ -32,6 +32,7 @@ export type SlideItem = {
 
 export type ClientAreaBannerRecord = {
   id: number;
+  slug?: string;
   image: string;
   image_url: string;
   is_active: boolean;
@@ -42,6 +43,7 @@ export type ClientAreaBannerRecord = {
 
 export type ClientAreaHeroSlide = SlideItem & {
   id: string;
+  href?: string;
   imageUrl?: string;
 };
 

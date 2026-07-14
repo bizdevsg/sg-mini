@@ -10,7 +10,6 @@ import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
 import { RegulatorMarqueeSection } from "@/components/organisms/RegulatorMarqueeSection";
 import { SpreadSection } from "@/components/organisms/SpreadSection";
 import {
-  getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
@@ -18,6 +17,7 @@ import {
 } from "@/locales";
 import { BenefitSection } from "@/components/organisms/BenefitSection";
 import { hasCookieConsentPreference } from "@/lib/cookie-consent";
+import { buildPublicMetadata } from "@/lib/metadata";
 
 type LocalizedPageProps = {
   params: Promise<{ locales: string }>;
@@ -42,22 +42,17 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const messages = getMessages(locales);
+  const title =
+    locales === "id"
+      ? "Live Quote, Edukasi Trading, dan Informasi Market"
+      : "Live Quotes, Trading Education, and Market Insights";
 
-  return {
-    title: {
-      absolute: messages.app.title,
-    },
+  return buildPublicMetadata({
+    title,
     description: messages.app.description,
-    alternates: {
-      canonical: `/${locales}`,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((locale) => [
-          getLocaleConfig(locale).lang,
-          `/${locale}`,
-        ]),
-      ),
-    },
-  };
+    locale: locales,
+    path: `/${locales}`,
+  });
 }
 
 export default async function LocalizedHome({ params }: LocalizedPageProps) {

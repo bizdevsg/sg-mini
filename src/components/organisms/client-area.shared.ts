@@ -64,6 +64,8 @@ export type {
   WithdrawalHistoryItem,
 } from "@/components/organisms/client-area.types";
 
+export type ClientAreaAdvertiseVisibilityMode = "auto" | "show" | "hide";
+
 type ClientAreaAccountModeData = {
   currentAccount: AccountSnapshot;
   depositHistory: DepositHistoryItem[];
@@ -1806,6 +1808,7 @@ export function resolveSignalBadge(change: number): {
 export function buildClientAreaHeroSlides(
   copy: DashboardCopy,
   banners: ClientAreaBannerRecord[],
+  locale: AppLocale,
 ): ClientAreaHeroSlide[] {
   if (!banners.length) {
     return copy.slides.map((slide, index) => ({
@@ -1817,6 +1820,12 @@ export function buildClientAreaHeroSlides(
   return banners.map((banner, index) => ({
     ...copy.slides[index % copy.slides.length],
     id: String(banner.id),
+    href: banner.slug
+      ? resolveLocalizedHref(
+        locale,
+        `/syarat-dan-ketentuan/${encodeURIComponent(banner.slug)}`,
+      )
+      : undefined,
     imageUrl: banner.image_url,
   }));
 }

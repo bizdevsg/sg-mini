@@ -6,4 +6,5 @@ export const enBannerSlideshow: AppMessages["bannerSlideshow"] = {
   slideImageAlt: "Promotional banner {index}",
   previousLabel: "Previous banner",
   nextLabel: "Next banner",
+  detailCta: "View promotional banner detail",
 };

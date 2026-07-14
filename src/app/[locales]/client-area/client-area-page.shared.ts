@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getDashboardCopy } from "@/components/organisms/client-area.shared";
+import { buildPrivateMetadata } from "@/lib/metadata";
 import {
-  getLocaleConfig,
   getMessages,
   isSupportedLocale,
   SUPPORTED_LOCALES,
@@ -33,6 +33,10 @@ export function generateClientAreaStaticParams() {
   }));
 }
 
+export function getClientAreaSeoLabel(locale: AppLocale) {
+  return locale === "id" ? "Client Area" : "Client Area";
+}
+
 function getClientAreaSubpageTitle(
   locale: AppLocale,
   pageId: ClientAreaSubpageId,
@@ -59,19 +63,13 @@ export function buildClientAreaSubpageMetadata(
 ): Metadata {
   const { clientArea } = getMessages(locale);
   const sectionTitle = getClientAreaSubpageTitle(locale, pageId);
+  const clientAreaLabel = getClientAreaSeoLabel(locale);
   const path = `/${locale}/client-area/${pageId}`;
 
-  return {
-    title: `${sectionTitle} | ${clientArea.pageTitle}`,
+  return buildPrivateMetadata({
+    title: `${sectionTitle} | ${clientAreaLabel}`,
     description: `${sectionTitle}. ${clientArea.pageDescription}`,
-    alternates: {
-      canonical: path,
-      languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((supportedLocale) => [
-          getLocaleConfig(supportedLocale).lang,
-          `/${supportedLocale}/client-area/${pageId}`,
-        ]),
-      ),
-    },
-  };
+    locale,
+    path,
+  });
 }

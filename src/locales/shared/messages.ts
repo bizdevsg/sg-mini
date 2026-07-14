@@ -460,6 +460,14 @@ export type AppMessages = {
     slideImageAlt: string;
     previousLabel: string;
     nextLabel: string;
+    detailCta: string;
+  };
+  bannerDetailPage: {
+    breadcrumb: string;
+    eyebrow: string;
+    updatedLabel: string;
+    backLabel: string;
+    emptyContent: string;
   };
   fraudAlertPage: {
     title: string;

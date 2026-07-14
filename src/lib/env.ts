@@ -9,6 +9,7 @@ const DEFAULT_EBOOK_CATEGORY_API_URL =
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
 const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
+const DEFAULT_BANNER_DETAIL_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
 const DEFAULT_BANNER_IMAGE_BASE_URL = "http://sg-admin.test/storage/banner-images";
 const DEFAULT_PENGHARGAAN_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/penghargaan`;
@@ -34,6 +35,7 @@ const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
 const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
+const DEFAULT_SITE_URL = "https://sg-berjangka.com";
 
 export type AppEnvMode = "dev" | "prod" | "dev-deploy";
 const DEFAULT_APP_ENV: AppEnvMode = "dev";
@@ -103,6 +105,9 @@ export const PRODUCT_PORTAL_BASE_URL =
 export const BANNER_API_URL =
   process.env.BANNER_API_URL ?? DEFAULT_BANNER_API_URL;
 
+export const BANNER_DETAIL_API_URL =
+  process.env.BANNER_DETAIL_API_URL ?? DEFAULT_BANNER_DETAIL_API_URL;
+
 export const BANNER_IMAGE_BASE_URL =
   process.env.BANNER_IMAGE_BASE_URL ?? DEFAULT_BANNER_IMAGE_BASE_URL;
 
@@ -155,6 +160,24 @@ export const PUBLIC_HERO_CTA_URL =
 
 export const PUBLIC_SPREAD_CTA_URL =
   process.env.NEXT_PUBLIC_SPREAD_CTA_URL ?? DEFAULT_SPREAD_CTA_URL;
+
+function normalizePublicSiteUrl(value: string | undefined) {
+  const normalizedValue = value?.trim();
+
+  if (!normalizedValue) {
+    return DEFAULT_SITE_URL;
+  }
+
+  try {
+    return new URL(normalizedValue).origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
+export const PUBLIC_SITE_URL = normalizePublicSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL ?? PUBLIC_HERO_CTA_URL,
+);
 
 export const PUBLIC_SOLID_GOLD_PLAY_STORE_URL =
   process.env.NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL ??

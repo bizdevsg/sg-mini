@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { TransitionEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -163,8 +164,8 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   const trackOffset =
     resolvedViewportWidth > 0
       ? resolvedViewportWidth / 2 -
-      slideWidth / 2 -
-      effectiveTrackIndex * (slideWidth + slideGap)
+        slideWidth / 2 -
+        effectiveTrackIndex * (slideWidth + slideGap)
       : 0;
 
   function goToSlide(targetIndex: number) {
@@ -228,45 +229,61 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
           {repeatedBanners.map((banner, index) => {
             const normalizedIndex =
               banners.length > 0 ? index % banners.length : 0;
+            const bannerHref = banner.slug
+              ? `/${locale}/syarat-dan-ketentuan/${encodeURIComponent(banner.slug)}`
+              : undefined;
+            const slideCardClassName = `block shrink-0 text-left ${
+              bannerHref ? "cursor-pointer" : "cursor-default"
+            }`;
+            const slideContent = (
+              <article
+                className={`overflow-hidden rounded-xl transition-opacity duration-300 ${
+                  normalizedIndex === activeIndex
+                    ? "border-line opacity-100"
+                    : "border-line/80 opacity-80 hover:opacity-100"
+                }`}
+              >
+                <img
+                  src={banner.image_url}
+                  alt={formatBannerLabel(
+                    labels.slideImageAlt,
+                    normalizedIndex + 1,
+                  )}
+                  loading={index < 3 ? "eager" : "lazy"}
+                  className="block h-auto w-full"
+                />
+              </article>
+            );
+
+            if (!bannerHref) {
+              return (
+                <div
+                  key={`${banner.id}-${index}`}
+                  className={slideCardClassName}
+                  style={{
+                    width: `${slideWidth}px`,
+                  }}
+                >
+                  {slideContent}
+                </div>
+              );
+            }
 
             return (
-              <button
+              <Link
                 key={`${banner.id}-${index}`}
-                type="button"
-                aria-label={formatBannerLabel(
-                  labels.slideButtonLabel,
+                href={bannerHref}
+                aria-label={`${labels.detailCta} - ${formatBannerLabel(
+                  labels.slideImageAlt,
                   normalizedIndex + 1,
-                )}
-                aria-pressed={normalizedIndex === activeIndex}
-                className="shrink-0 text-left"
+                )}`}
+                className={slideCardClassName}
                 style={{
                   width: `${slideWidth}px`,
                 }}
-                onClick={() => {
-                  if (banners.length <= 1) {
-                    return;
-                  }
-
-                  goToSlide(normalizedIndex);
-                }}
               >
-                <article
-                  className={`overflow-hidden transition-opacity duration-300 rounded-xl overflow-hidden ${normalizedIndex === activeIndex
-                    ? "border-line opacity-100"
-                    : "border-line/80 opacity-80 hover:opacity-100"
-                    }`}
-                >
-                  <img
-                    src={banner.image_url}
-                    alt={formatBannerLabel(
-                      labels.slideImageAlt,
-                      normalizedIndex + 1,
-                    )}
-                    loading={index < 3 ? "eager" : "lazy"}
-                    className="block h-auto w-full"
-                  />
-                </article>
-              </button>
+                {slideContent}
+              </Link>
             );
           })}
         </div>
@@ -283,10 +300,11 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                 type="button"
                 aria-label={formatBannerLabel(labels.slideButtonLabel, index + 1)}
                 aria-pressed={isActive}
-                className={`h-2.5 rounded-full transition-all duration-300 ${isActive
-                  ? "w-8 bg-linear-to-b from-[#FF9600] to-[#FFDE00]"
-                  : "w-2.5 bg-white/35 hover:bg-white/60"
-                  }`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  isActive
+                    ? "w-8 bg-linear-to-b from-[#FF9600] to-[#FFDE00]"
+                    : "w-2.5 bg-white/35 hover:bg-white/60"
+                }`}
                 onClick={() => {
                   goToSlide(index);
                 }}
