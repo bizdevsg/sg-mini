@@ -67,7 +67,7 @@ function BusinessLegalityCard({
         </div>
       </div>
 
-      <div className="relative border-t border-white/8 bg-black/20 p-6">
+      <div className="relative h-full border-t border-white/8 bg-black/20 p-6">
         {metaLabel && metaValue ? (
           <div className="flex items-center gap-3 text-xs text-yellow-500/60">
             <span className="flex items-center gap-1.5">
