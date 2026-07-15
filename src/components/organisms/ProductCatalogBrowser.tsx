@@ -49,43 +49,40 @@ export function ProductCatalogBrowser({
 
         {items.length ? (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {items.map((item) => (
+            {items.map((item, index) => (
               <Link
                 key={item.id}
                 href={`/${locale}/produk/${category}/${item.slug}`}
                 className="group block"
+                data-aos="fade-up"
+                data-aos-delay={String(Math.min(index * 80, 240))}
               >
-                <article className="flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]">
-                  <div className="relative h-52 w-full overflow-hidden">
+                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(180deg,#1a1a1a,#101010)] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_18px_45px_rgba(205,161,58,0.12)]">
+                  <div className="relative flex h-60 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,rgba(205,161,58,0.18),transparent_70%),linear-gradient(180deg,#1c1c1c,#121212)]">
                     {item.imageSrc ? (
-                      <>
-                        <img
-                          src={item.imageSrc}
-                          alt={item.name}
-                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      </>
+                      <img
+                        src={item.imageSrc}
+                        alt={item.name}
+                        className="max-h-full max-w-full w-full object-cover transition duration-500 group-hover:scale-110"
+                      />
                     ) : (
-                      <div className="relative flex h-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
-                        <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
-                          <FontAwesomeIcon
-                            icon={["fas", "box-open"]}
-                            className="text-sm"
-                          />
-                        </div>
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                        <FontAwesomeIcon
+                          icon={["fas", "box-open"]}
+                          className="text-2xl"
+                        />
                       </div>
                     )}
 
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="font-mono text-lg font-bold leading-snug text-white drop-shadow-lg line-clamp-2 transition-colors group-hover:text-yellow-300">
+                    <div className="absolute bottom-0 w-full bg-linear-to-t from-black to-transparent p-4">
+                      <h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-yellow-300">
                         {item.name}
                       </h3>
                     </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="flex items-center gap-3 text-xs text-yellow-500/60">
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex items-center gap-3 text-xs text-yellow-500/70">
                       <span className="flex items-center gap-1.5">
                         <FontAwesomeIcon
                           icon={["fas", "layer-group"]}
@@ -93,7 +90,9 @@ export function ProductCatalogBrowser({
                         />
                         {copy.sourceLabel}
                       </span>
+
                       <span className="h-px flex-1 bg-yellow-500/10" />
+
                       <span className="flex items-center gap-1.5">
                         <FontAwesomeIcon
                           icon={["fas", "tag"]}
@@ -103,19 +102,20 @@ export function ProductCatalogBrowser({
                       </span>
                     </div>
 
-                    <p className="mt-4 line-clamp-3 min-h-[4.5rem] text-sm leading-7 text-foreground/72">
+                    <p className="mt-4 line-clamp-3 min-h-[4.8rem] text-sm leading-7 text-zinc-400">
                       {item.description}
                     </p>
 
-                    <div className="mt-auto pt-4">
-                      <div className="flex items-center justify-between border-t border-white/8 pt-3">
-                        <span className="text-sm font-medium text-zinc-200 transition-colors group-hover:text-yellow-400">
+                    <div className="mt-auto pt-6">
+                      <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                        <span className="font-medium text-zinc-200 transition group-hover:text-yellow-400">
                           {copy.viewDetailCta}
                         </span>
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-500/25 bg-yellow-500/8 text-yellow-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:bg-yellow-500 group-hover:text-black">
+
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 transition-all duration-300 group-hover:translate-x-1 group-hover:bg-yellow-500 group-hover:text-black">
                           <FontAwesomeIcon
                             icon={["fas", "arrow-right"]}
-                            className="text-xs"
+                            className="text-sm"
                           />
                         </span>
                       </div>
@@ -126,7 +126,10 @@ export function ProductCatalogBrowser({
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-3xl border border-yellow-500/20 bg-yellow-500/[0.04] p-6 sm:p-8">
+          <div
+            className="mt-10 rounded-3xl border border-yellow-500/20 bg-yellow-500/[0.04] p-6 sm:p-8"
+            data-aos="fade-up"
+          >
             <h2 className="text-xl font-bold text-white">{copy.emptyTitle}</h2>
             <p className="mt-2 text-sm leading-7 text-zinc-400">
               {copy.emptyBody}

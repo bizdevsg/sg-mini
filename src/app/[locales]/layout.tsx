@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 
 import { PageTemplate } from "@/components/layouts/PageTemplate";
 import { isSupportedLocale, type AppLocale } from "@/locales";
+import { HomeCookieConsentBanner } from "@/components/organisms/HomeCookieConsentBanner";
+import { hasAcceptedCookieConsent } from "@/lib/cookie-consent";
 
 type LocalizedLayoutProps = {
   children: React.ReactNode;
@@ -20,6 +22,13 @@ export default async function LocalizedLayout({
 }: LocalizedLayoutProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  const shouldShowCookieConsent = !(await hasAcceptedCookieConsent());
 
-  return <PageTemplate locale={locales}>{children}</PageTemplate>;
+  return (
+    <PageTemplate locale={locales}>{children}
+      {shouldShowCookieConsent ? (
+        <HomeCookieConsentBanner locale={locales} />
+      ) : null}
+    </PageTemplate>
+  );
 }

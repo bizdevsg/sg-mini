@@ -24,7 +24,8 @@ export function LogoMark({ locale }: LogoMarkProps) {
           alt={messages.app.brandName}
           preload
           sizes="44px"
-          className="h-ato w-6 object-contain sm:hidden"
+          className="w-6 object-contain sm:hidden"
+          style={{ height: "auto" }}
         />
 
         <Image
@@ -33,6 +34,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           preload
           sizes="220px"
           className="hidden h-auto w-70 object-contain sm:block"
+          style={{ height: "auto" }}
         />
       </Link>
     </div>

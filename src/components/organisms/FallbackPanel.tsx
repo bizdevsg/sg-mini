@@ -27,7 +27,7 @@ export function FallbackPanel({
       <div className="relative mx-auto max-w-3xl text-center">
         <div className="mx-auto mb-10 max-w-lg">
           <Image
-            src="/assets/error-image.svg"
+            src="/assets/icon-impact/error-image.svg"
             width={1000}
             height={1000}
             alt="Error Illustration"

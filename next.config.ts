@@ -96,6 +96,12 @@ const nextConfig: NextConfig = {
       {
         pathname: "/assets/**",
       },
+      {
+        pathname: "/api/image-proxy",
+      },
+      {
+        pathname: "/api/image-proxy/**",
+      },
     ],
     remotePatterns: [
       {

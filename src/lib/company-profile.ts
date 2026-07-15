@@ -1,6 +1,7 @@
 import "server-only";
 
 import { COMPANY_PROFILE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { getMessages, type AppLocale } from "@/locales";
 
 export type CompanyProfile = {
   id: number;
@@ -22,9 +23,13 @@ export type CompanyProfile = {
 type CompanyProfileApiRecord = {
   id?: number;
   company_name?: string | null;
+  company_name_en?: string | null;
   description?: string | null;
+  description_en?: string | null;
   mission?: unknown;
+  mission_en?: unknown;
   vision?: unknown;
+  vision_en?: unknown;
   address?: string | null;
   maps_embed_url?: string | null;
   phone?: string | null;
@@ -39,40 +44,43 @@ type CompanyProfileApiResponse = {
   data?: CompanyProfileApiRecord | null;
 };
 
-const FALLBACK_COMPANY_PROFILE: CompanyProfile = {
-  id: 1,
-  companyName: "PT. Solid Gold Berjangka",
-  description:
-    "Berdiri sejak tahun 2002, PT Solid Gold Berjangka (SGB) merupakan perusahaan pialang berjangka yang terdaftar dan diawasi oleh BAPPEBTI. Dengan pengalaman lebih dari dua dekade, SGB menjadi salah satu pelaku utama dalam industri Perdagangan Berjangka Komoditi di Indonesia.\n\nSGB merupakan anggota Bursa Berjangka Jakarta (BBJ) dan Kliring Berjangka Indonesia (Persero), serta terus memperluas layanan melalui kantor operasional di Jakarta, Semarang, dan Makassar.",
-  descriptionParagraphs: [
-    "Berdiri sejak tahun 2002, PT Solid Gold Berjangka (SGB) merupakan perusahaan pialang berjangka yang terdaftar dan diawasi oleh BAPPEBTI. Dengan pengalaman lebih dari dua dekade, SGB menjadi salah satu pelaku utama dalam industri Perdagangan Berjangka Komoditi di Indonesia.",
-    "SGB merupakan anggota Bursa Berjangka Jakarta (BBJ) dan Kliring Berjangka Indonesia (Persero), serta terus memperluas layanan melalui kantor operasional di Jakarta, Semarang, dan Makassar.",
-  ],
-  mission: [
-    "Menjadi sebuah perusahaan pialang berjangka yang memiliki skala internasional",
-    "Menjadi market leader, baik itu secara regional ataupun internasional",
-  ],
-  vision: [
-    "Mengembangkan dan memajukan Perdagangan Berjangka di Indonesia sehingga dapat memberikan dampak positif kepada perekonomian Nasional baik dari segi mikro dan makro",
-    "Memberdayakan Perdagangan Berjangka di Indonesia dan membantu semua pihak yang membutuhkannya untuk dapat mempergunakannya sebagai sarana lindung nilai (Hedging)",
-  ],
-  address:
-    "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220",
-  mapsEmbedUrl:
-    "https://www.google.com/maps?q=TCC%20Batavia%20Tower%20One%20Lt.%2010%20Jl.%20K.H.%20Mas%20Mansyur%20Kav.%20126%20Jakarta%20Pusat%2010220&z=15&output=embed",
-  phone: "021-29675088",
-  email: "berjangka@solidgold.co.id",
-  fax: "021-29675089",
-  complaintLink: "https://pengaduan.bappebti.go.id/",
-  createdAt: null,
-  updatedAt: null,
-};
+const DEFAULT_ADDRESS =
+  "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220";
+const DEFAULT_MAPS_EMBED_URL =
+  "https://www.google.com/maps?q=TCC%20Batavia%20Tower%20One%20Lt.%2010%20Jl.%20K.H.%20Mas%20Mansyur%20Kav.%20126%20Jakarta%20Pusat%2010220&z=15&output=embed";
+const DEFAULT_PHONE = "021-29675088";
+const DEFAULT_EMAIL = "berjangka@solidgold.co.id";
+const DEFAULT_FAX = "021-29675089";
+const DEFAULT_COMPLAINT_LINK = "https://pengaduan.bappebti.go.id/";
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
 function normalizeTextList(value: unknown) {
+  if (typeof value === "string") {
+    const normalizedValue = value.trim();
+
+    if (!normalizedValue) {
+      return [];
+    }
+
+    try {
+      const parsedValue = JSON.parse(normalizedValue) as unknown;
+
+      if (Array.isArray(parsedValue)) {
+        return parsedValue
+          .map((item) => normalizeText(item))
+          .filter((item) => item.length > 0);
+      }
+    } catch {
+      return normalizedValue
+        .split(/\r?\n+/g)
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+    }
+  }
+
   if (!Array.isArray(value)) {
     return [];
   }
@@ -90,40 +98,76 @@ function splitDescriptionParagraphs(description: string) {
 
   return paragraphs.length > 0
     ? paragraphs
-    : FALLBACK_COMPANY_PROFILE.descriptionParagraphs;
+      : [];
+}
+
+function getFallbackCompanyProfile(locale: AppLocale): CompanyProfile {
+  const { companyProfile, visiMisi } = getMessages(locale).aboutPage;
+
+  return {
+    id: 1,
+    companyName: companyProfile.title,
+    description: companyProfile.paragraphs.join("\n\n"),
+    descriptionParagraphs: companyProfile.paragraphs,
+    mission: visiMisi.missionItems,
+    vision: visiMisi.visionItems,
+    address: DEFAULT_ADDRESS,
+    mapsEmbedUrl: DEFAULT_MAPS_EMBED_URL,
+    phone: DEFAULT_PHONE,
+    email: DEFAULT_EMAIL,
+    fax: DEFAULT_FAX,
+    complaintLink: DEFAULT_COMPLAINT_LINK,
+    createdAt: null,
+    updatedAt: null,
+  };
+}
+
+function pickLocalizedValue(
+  locale: AppLocale,
+  defaultValue: unknown,
+  englishValue: unknown,
+) {
+  return locale === "en" ? englishValue ?? defaultValue : defaultValue;
 }
 
 function normalizeCompanyProfile(
   record: CompanyProfileApiRecord | null | undefined,
+  locale: AppLocale,
 ): CompanyProfile {
+  const fallbackProfile = getFallbackCompanyProfile(locale);
   const companyName =
-    normalizeText(record?.company_name) || FALLBACK_COMPANY_PROFILE.companyName;
+    normalizeText(
+      pickLocalizedValue(locale, record?.company_name, record?.company_name_en),
+    ) || fallbackProfile.companyName;
   const description =
-    normalizeText(record?.description) || FALLBACK_COMPANY_PROFILE.description;
-  const mission = normalizeTextList(record?.mission);
-  const vision = normalizeTextList(record?.vision);
-  const address =
-    normalizeText(record?.address) || FALLBACK_COMPANY_PROFILE.address;
+    normalizeText(
+      pickLocalizedValue(locale, record?.description, record?.description_en),
+    ) || fallbackProfile.description;
+  const mission = normalizeTextList(
+    pickLocalizedValue(locale, record?.mission, record?.mission_en),
+  );
+  const vision = normalizeTextList(
+    pickLocalizedValue(locale, record?.vision, record?.vision_en),
+  );
+  const address = normalizeText(record?.address) || fallbackProfile.address;
   const mapsEmbedUrl =
-    normalizeText(record?.maps_embed_url) ||
-    FALLBACK_COMPANY_PROFILE.mapsEmbedUrl;
-  const phone = normalizeText(record?.phone) || FALLBACK_COMPANY_PROFILE.phone;
-  const email = normalizeText(record?.email) || FALLBACK_COMPANY_PROFILE.email;
-  const fax = normalizeText(record?.fax) || FALLBACK_COMPANY_PROFILE.fax;
+    normalizeText(record?.maps_embed_url) || fallbackProfile.mapsEmbedUrl;
+  const phone = normalizeText(record?.phone) || fallbackProfile.phone;
+  const email = normalizeText(record?.email) || fallbackProfile.email;
+  const fax = normalizeText(record?.fax) || fallbackProfile.fax;
   const complaintLink =
-    normalizeText(record?.complaint_link) ||
-    FALLBACK_COMPANY_PROFILE.complaintLink;
+    normalizeText(record?.complaint_link) || fallbackProfile.complaintLink;
 
   return {
     id:
       typeof record?.id === "number" && Number.isFinite(record.id)
         ? record.id
-        : FALLBACK_COMPANY_PROFILE.id,
+        : fallbackProfile.id,
     companyName,
     description,
     descriptionParagraphs: splitDescriptionParagraphs(description),
-    mission: mission.length > 0 ? mission : FALLBACK_COMPANY_PROFILE.mission,
-    vision: vision.length > 0 ? vision : FALLBACK_COMPANY_PROFILE.vision,
+    mission: mission.length > 0 ? mission : fallbackProfile.mission,
+    vision: vision.length > 0 ? vision : fallbackProfile.vision,
     address,
     mapsEmbedUrl,
     phone,
@@ -135,9 +179,11 @@ function normalizeCompanyProfile(
   };
 }
 
-export async function getCompanyProfile() {
+export async function getCompanyProfile(locale: AppLocale = "id") {
+  const fallbackProfile = getFallbackCompanyProfile(locale);
+
   if (USE_DUMMY_API_DATA) {
-    return FALLBACK_COMPANY_PROFILE;
+    return fallbackProfile;
   }
 
   try {
@@ -152,13 +198,13 @@ export async function getCompanyProfile() {
       console.error(
         `Failed to fetch company profile: ${response.status} ${response.statusText}`,
       );
-      return FALLBACK_COMPANY_PROFILE;
+      return fallbackProfile;
     }
 
     const payload = (await response.json()) as CompanyProfileApiResponse;
-    return normalizeCompanyProfile(payload.data);
+    return normalizeCompanyProfile(payload.data, locale);
   } catch (error) {
     console.error("Failed to fetch company profile", error);
-    return FALLBACK_COMPANY_PROFILE;
+    return fallbackProfile;
   }
 }

@@ -16,7 +16,6 @@ import {
   type AppLocale,
 } from "@/locales";
 import { BenefitSection } from "@/components/organisms/BenefitSection";
-import { hasCookieConsentPreference } from "@/lib/cookie-consent";
 import { buildPublicMetadata } from "@/lib/metadata";
 
 type LocalizedPageProps = {
@@ -58,7 +57,7 @@ export async function generateMetadata({
 export default async function LocalizedHome({ params }: LocalizedPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
-  const shouldShowCookieConsent = !(await hasCookieConsentPreference());
+
 
   return (
     <>
@@ -70,9 +69,6 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
       <SpreadSection locale={locales} />
       <HomeWhyChooseSection locale={locales} />
       <AppPromoSection locale={locales} />
-      {shouldShowCookieConsent ? (
-        <HomeCookieConsentBanner locale={locales} />
-      ) : null}
     </>
   );
 }

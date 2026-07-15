@@ -18,8 +18,8 @@ export async function getCookieConsentValue() {
   return value && isCookieConsentValue(value) ? value : null;
 }
 
-export async function hasCookieConsentPreference() {
-  return (await getCookieConsentValue()) !== null;
+export async function hasAcceptedCookieConsent() {
+  return (await getCookieConsentValue()) === "accepted";
 }
 
 export async function setCookieConsent(value: CookieConsentValue) {

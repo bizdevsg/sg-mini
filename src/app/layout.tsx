@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import "aos/dist/aos.css";
 import "flag-icons/css/flag-icons.min.css";
+import { AosProvider } from "@/components/providers/AosProvider";
 import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { LoadingProvider } from "@/components/providers/LoadingProvider";
@@ -90,7 +92,9 @@ export default async function RootLayout({
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         <FontAwesomeProvider>
           <FirebaseBootstrap />
-          <LoadingProvider locale={locale}>{children}</LoadingProvider>
+          <AosProvider>
+            <LoadingProvider locale={locale}>{children}</LoadingProvider>
+          </AosProvider>
         </FontAwesomeProvider>
         <Script id="tawk-init" strategy="lazyOnload">
           {`window.Tawk_API = window.Tawk_API || {}; window.Tawk_LoadStart = new Date();`}

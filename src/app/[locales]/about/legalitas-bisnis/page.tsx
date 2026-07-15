@@ -58,7 +58,7 @@ export default async function AboutBusinessLegalityPage({
 }: AboutBusinessLegalityPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
-  const items = await getLegalitasRecords();
+  const items = await getLegalitasRecords(locales);
 
   return (
     <main>

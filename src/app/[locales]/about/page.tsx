@@ -64,7 +64,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const fallbackAwardImageSrc =
     awards.items[0]?.imageSrc || "/assets/security-awards.svg";
   const [companyProfile, penghargaanRecords] = await Promise.all([
-    getCompanyProfile(),
+    getCompanyProfile(locales),
     getPenghargaanRecords(),
   ]);
   const showcaseItems =

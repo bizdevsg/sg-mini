@@ -1,8 +1,10 @@
+"use client";
+
+import { startTransition, useState } from "react";
 import { Cookie, ShieldCheck, X } from "lucide-react";
 
 import {
   acceptCookieConsent,
-  dismissCookieConsent,
 } from "@/app/actions/cookieConsent";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -14,6 +16,28 @@ export function HomeCookieConsentBanner({
   locale,
 }: HomeCookieConsentBannerProps) {
   const copy = getMessages(locale).cookieConsent;
+  const [isVisible, setIsVisible] = useState(true);
+  const [pendingAction, setPendingAction] = useState<"accept" | "dismiss" | null>(
+    null,
+  );
+
+  async function handleConsentAction(action: "accept" | "dismiss") {
+    setPendingAction(action);
+
+    try {
+      if (action === "accept") {
+        await acceptCookieConsent();
+      }
+
+      setIsVisible(false);
+    } catch {
+      setPendingAction(null);
+    }
+  }
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div className="pointer-events-none fixed inset-x-4 bottom-4 z-[999] mx-auto max-w-8xl">
@@ -29,17 +53,20 @@ export function HomeCookieConsentBanner({
 
           <div className="relative p-6 sm:p-8">
             {/* Close */}
-            <form
-              action={dismissCookieConsent}
-              className="absolute right-5 top-5"
-            >
+            <div className="absolute right-5 top-5">
               <button
-                type="submit"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-400 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
+                type="button"
+                onClick={() =>
+                  startTransition(() => {
+                    void handleConsentAction("dismiss");
+                  })
+                }
+                disabled={pendingAction !== null}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-400 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <X size={16} />
               </button>
-            </form>
+            </div>
 
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               {/* Left */}
@@ -84,23 +111,31 @@ export function HomeCookieConsentBanner({
               {/* Right */}
               <div className="flex flex-col gap-3 sm:flex-row">
 
-                <form action={dismissCookieConsent}>
-                  <button
-                    type="submit"
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:border-white/20 hover:bg-white/10 sm:w-auto"
-                  >
-                    {copy.dismissLabel}
-                  </button>
-                </form>
+                <button
+                  type="button"
+                  onClick={() =>
+                    startTransition(() => {
+                      void handleConsentAction("dismiss");
+                    })
+                  }
+                  disabled={pendingAction !== null}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                >
+                  {copy.dismissLabel}
+                </button>
 
-                <form action={acceptCookieConsent}>
-                  <button
-                    type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 px-7 py-3 text-sm font-semibold text-black shadow-[0_18px_35px_rgba(245,158,11,.25)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_24px_45px_rgba(245,158,11,.35)] active:scale-95 sm:w-auto"
-                  >
-                    {copy.acceptLabel}
-                  </button>
-                </form>
+                <button
+                  type="button"
+                  onClick={() =>
+                    startTransition(() => {
+                      void handleConsentAction("accept");
+                    })
+                  }
+                  disabled={pendingAction !== null}
+                  className="w-full rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 px-7 py-3 text-sm font-semibold text-black shadow-[0_18px_35px_rgba(245,158,11,.25)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_24px_45px_rgba(245,158,11,.35)] active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-70 sm:w-auto"
+                >
+                  {copy.acceptLabel}
+                </button>
               </div>
             </div>
           </div>
