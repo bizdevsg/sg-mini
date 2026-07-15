@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { AboutInformationAnnouncementsEmptyState } from "@/components/molecules/AboutInformationAnnouncementsEmptyState";
 import type { PengumumanRecord } from "@/lib/pengumuman";
 import type { AppLocale } from "@/locales";
 
@@ -33,27 +34,6 @@ function formatDate(dateStr: string, locale: AppLocale) {
   } catch {
     return dateStr;
   }
-}
-
-function EmptyPengumuman({
-  title,
-  body,
-}: {
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-[2rem] border border-yellow-500/10 bg-yellow-500/[0.03] py-20 text-center">
-      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-yellow-500/20 bg-yellow-500/10">
-        <FontAwesomeIcon
-          icon={["fas", "bell-slash"]}
-          className="text-2xl text-yellow-500/60"
-        />
-      </div>
-      <p className="text-base font-semibold text-white/60">{title}</p>
-      <p className="mt-2 text-sm text-foreground/40">{body}</p>
-    </div>
-  );
 }
 
 export function AboutInformationAnnouncements({
@@ -119,7 +99,12 @@ export function AboutInformationAnnouncements({
   }, [isModalVisible, selectedItem]);
 
   if (!items.length) {
-    return <EmptyPengumuman title={labels.emptyTitle} body={labels.emptyBody} />;
+    return (
+      <AboutInformationAnnouncementsEmptyState
+        title={labels.emptyTitle}
+        body={labels.emptyBody}
+      />
+    );
   }
 
   return (

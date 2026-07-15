@@ -3,11 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { EconomicCalendarExpandedEventPanel } from "@/components/molecules/EconomicCalendarExpandedEventPanel";
 import { PaginationControls } from "@/components/molecules/PaginationControls";
+import {
+  formatCalendarDate,
+  getActualValueColorClassName,
+  getEventGroupDateLabel,
+} from "@/components/organisms/economic-calendar-browser.shared";
 import {
   createEmptyEconomicCalendarRange,
   ECONOMIC_CALENDAR_RANGE_KEYS,
-  type EconomicCalendarEvent,
   type EconomicCalendarOverview,
   type EconomicCalendarRangeData,
   type EconomicCalendarRangeKey,
@@ -20,7 +25,6 @@ import {
 import {
   formatLocaleDateTime,
   getMessages,
-  getLocaleConfig,
   type AppLocale,
 } from "@/locales";
 
@@ -95,31 +99,6 @@ function isStoreEntryFresh(fetchedAt: number) {
   return Date.now() - fetchedAt < ECONOMIC_CALENDAR_CLIENT_STALE_MS;
 }
 
-function formatCalendarDate(value: string, locale: AppLocale) {
-  const parsedDate = new Date(value);
-
-  if (Number.isNaN(parsedDate.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
-    dateStyle: "medium",
-    timeZone: getLocaleConfig(locale).timeZone,
-  }).format(parsedDate);
-}
-
-function getEventGroupDateLabel(
-  value: string | null,
-  locale: AppLocale,
-  fallbackLabel: string,
-) {
-  if (!value) {
-    return fallbackLabel;
-  }
-
-  return formatCalendarDate(value, locale);
-}
-
 function getCountryFlagCode(currency: string) {
   const normalizedCurrency = currency.toUpperCase().replace(/\./g, "");
 
@@ -164,206 +143,6 @@ function getImpactSurfaceClassName(impactScore: number) {
   }
 
   return "border-emerald-500/25 bg-emerald-500/10";
-}
-
-function parseEconomicValue(value: string) {
-  const normalizedValue = value.trim().toUpperCase();
-
-  if (!normalizedValue || normalizedValue === "-") {
-    return null;
-  }
-
-  const matchedValue = normalizedValue.match(
-    /-?\d+(?:[.,]\d+)?(?:\s*[KMBT])?/,
-  );
-
-  if (!matchedValue) {
-    return null;
-  }
-
-  const compactValue = matchedValue[0].replace(/\s+/g, "");
-  const suffix = compactValue.match(/[KMBT]$/)?.[0] ?? "";
-  const numericPortion = suffix
-    ? compactValue.slice(0, -1)
-    : compactValue;
-  const parsedNumber = Number(numericPortion.replace(/,/g, ""));
-
-  if (!Number.isFinite(parsedNumber)) {
-    return null;
-  }
-
-  const multipliers: Record<string, number> = {
-    K: 1_000,
-    M: 1_000_000,
-    B: 1_000_000_000,
-    T: 1_000_000_000_000,
-  };
-
-  return parsedNumber * (multipliers[suffix] ?? 1);
-}
-
-function getActualValueColorClassName(actual: string, previous: string) {
-  const actualValue = parseEconomicValue(actual);
-  const previousValue = parseEconomicValue(previous);
-
-  if (actualValue === null || previousValue === null) {
-    return "text-foreground/78";
-  }
-
-  if (actualValue > previousValue) {
-    return "text-emerald-400";
-  }
-
-  if (actualValue < previousValue) {
-    return "text-rose-400";
-  }
-
-  return "text-foreground/78";
-}
-
-function EventDetailList({
-  event,
-  labels,
-}: {
-  event: EconomicCalendarEvent;
-  labels: {
-    source: string;
-    measures: string;
-    effect: string;
-    frequency: string;
-    nextRelease: string;
-    notes: string;
-    whyCare: string;
-  };
-}) {
-  const detailItems = [
-    { label: labels.source, value: event.details.sources },
-    { label: labels.measures, value: event.details.measures },
-    { label: labels.effect, value: event.details.usualEffect },
-    { label: labels.frequency, value: event.details.frequency },
-    { label: labels.nextRelease, value: event.details.nextReleased },
-    { label: labels.notes, value: event.details.notes },
-    { label: labels.whyCare, value: event.details.whyTraderCare },
-  ];
-
-  return (
-    <div className="rounded-xl border border-line bg-black/20 p-5">
-      <div className="space-y-5">
-        {detailItems.map((item) => (
-          <div key={item.label}>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/55">
-              {item.label}:
-            </p>
-            <p className="mt-2 text-sm leading-6 text-foreground/78">
-              {item.value}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function EventHistoryTable({
-  event,
-  locale,
-  labels,
-}: {
-  event: EconomicCalendarEvent;
-  locale: AppLocale;
-  labels: {
-    date: string;
-    previous: string;
-    forecast: string;
-    actual: string;
-    noHistory: string;
-  };
-}) {
-  if (event.details.history.length === 0) {
-    return (
-      <div className="rounded-xl border border-line bg-white/5 px-4 py-4 text-sm text-foreground/58">
-        {labels.noHistory}
-      </div>
-    );
-  }
-
-  return (
-    <div className="overflow-hidden rounded-xl border border-line bg-white/5">
-      <table className="min-w-full border-collapse">
-        <thead>
-          <tr className="bg-white/5">
-            <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-              {labels.date}
-            </th>
-            <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-              {labels.previous}
-            </th>
-            <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-              {labels.forecast}
-            </th>
-            <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-              {labels.actual}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {event.details.history.map((historyEntry, index) => (
-            <tr
-              key={`${event.id}-${historyEntry.date}`}
-              className={
-                index % 2 === 0 ? "bg-white/[0.08]" : "bg-white/[0.03]"
-              }
-            >
-              <td className="px-4 py-3 text-sm text-foreground/78">
-                {formatCalendarDate(historyEntry.date, locale)}
-              </td>
-              <td className="px-4 py-3 text-sm font-semibold text-foreground/78">
-                {historyEntry.previous}
-              </td>
-              <td className="px-4 py-3 text-sm font-semibold text-foreground/78">
-                {historyEntry.forecast}
-              </td>
-              <td
-                className={`px-4 py-3 text-sm font-semibold ${getActualValueColorClassName(historyEntry.actual, historyEntry.previous)}`}
-              >
-                {historyEntry.actual}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function ExpandedEventPanel({
-  event,
-  locale,
-  labels,
-}: {
-  event: EconomicCalendarEvent;
-  locale: AppLocale;
-  labels: {
-    source: string;
-    measures: string;
-    effect: string;
-    frequency: string;
-    nextRelease: string;
-    notes: string;
-    whyCare: string;
-    date: string;
-    previous: string;
-    forecast: string;
-    actual: string;
-    noHistory: string;
-  };
-}) {
-  return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.96fr)]">
-      <EventDetailList event={event} labels={labels} />
-      <EventHistoryTable event={event} locale={locale} labels={labels} />
-    </div>
-  );
 }
 
 export function EconomicCalendarBrowser({
@@ -667,7 +446,7 @@ export function EconomicCalendarBrowser({
 
                     {isSelected ? (
                       <div className="border-t border-line px-4 py-4">
-                        <ExpandedEventPanel
+                        <EconomicCalendarExpandedEventPanel
                           event={event}
                           locale={locale}
                           labels={labels}
@@ -770,7 +549,7 @@ export function EconomicCalendarBrowser({
 
                       {isSelected ? (
                         <div className="border-t border-line px-4 py-4">
-                          <ExpandedEventPanel
+                          <EconomicCalendarExpandedEventPanel
                             event={event}
                             locale={locale}
                             labels={labels}

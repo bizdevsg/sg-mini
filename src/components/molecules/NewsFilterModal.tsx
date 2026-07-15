@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-type FilterOption = {
-  value: string;
-  label: string;
-};
+import {
+  NewsFilterOptionButtonGroup,
+  type NewsFilterOption,
+} from "@/components/molecules/NewsFilterOptionButtonGroup";
 
 type NewsFilterModalProps = {
   isOpen: boolean;
@@ -16,8 +16,8 @@ type NewsFilterModalProps = {
     reset: string;
     close: string;
   };
-  sortOptions: FilterOption[];
-  periodOptions: FilterOption[];
+  sortOptions: NewsFilterOption[];
+  periodOptions: NewsFilterOption[];
   draftSort: string;
   draftPeriod: string;
   onDraftSortChange: (value: string) => void;
@@ -26,55 +26,6 @@ type NewsFilterModalProps = {
   onApply: () => void;
   onReset: () => void;
 };
-
-type OptionButtonGroupProps = {
-  title: string;
-  options: FilterOption[];
-  selectedValue: string;
-  onChange: (value: string) => void;
-};
-
-function OptionButtonGroup({
-  title,
-  options,
-  selectedValue,
-  onChange,
-}: OptionButtonGroupProps) {
-  return (
-    <div>
-      <p className="mb-3 text-sm font-semibold text-yellow-400">{title}</p>
-
-      <div className="grid gap-3">
-        {options.map((option) => {
-          const isSelected = selectedValue === option.value;
-
-          return (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => onChange(option.value)}
-              className={`flex items-center justify-between rounded-xl border p-4 text-left transition ${
-                isSelected
-                  ? "border-yellow-500 bg-yellow-500/10"
-                  : "border-white/10 bg-white/[0.02] hover:border-white/20"
-              }`}
-            >
-              <span className="text-sm text-white">{option.label}</span>
-
-              <div
-                className={`h-5 w-5 rounded-full border-2 transition ${
-                  isSelected
-                    ? "border-yellow-500 bg-yellow-500"
-                    : "border-zinc-600"
-                }`}
-              />
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 export function NewsFilterModal({
   isOpen,
@@ -131,14 +82,14 @@ export function NewsFilterModal({
         </div>
 
         <div className="mt-6 space-y-6">
-          <OptionButtonGroup
+          <NewsFilterOptionButtonGroup
             title={labels.sortBy}
             options={sortOptions}
             selectedValue={draftSort}
             onChange={onDraftSortChange}
           />
 
-          <OptionButtonGroup
+          <NewsFilterOptionButtonGroup
             title={labels.period}
             options={periodOptions}
             selectedValue={draftPeriod}

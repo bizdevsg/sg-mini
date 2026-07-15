@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
-import { type ReactNode } from "react";
 
+import { ClientAreaMarketMetricItem } from "@/components/atoms/ClientAreaMarketMetricItem";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import {
@@ -18,42 +18,6 @@ type ClientAreaMarketCardProps = {
   item: MarketPrice;
   locale: AppLocale;
 };
-
-type MetricItemProps = {
-  label: ReactNode;
-  value: ReactNode;
-  valuePrefix?: ReactNode;
-  valueClassName?: string;
-};
-
-function MetricItem({
-  label,
-  value,
-  valuePrefix,
-  valueClassName,
-}: MetricItemProps) {
-  return (
-    <div className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-white/5 bg-black/10 px-3 py-2 xl:min-w-40 xl:border-0 xl:bg-transparent xl:px-0 xl:py-0">
-      <div className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-200 sm:text-sm">
-        {label}
-      </div>
-
-      <div
-        className={`flex items-center gap-1 text-base font-black tracking-tight sm:text-xl ${valueClassName ?? "text-yellow-400"
-          }`}
-      >
-        {valuePrefix ? (
-          <span className="text-xs">
-            {valuePrefix}
-          </span>
-        ) : null}
-        <div>
-          {value}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function ClientAreaMarketCard({
   fieldLabels,
@@ -134,24 +98,24 @@ export function ClientAreaMarketCard({
         {/* Metrics */}
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           <div className="grid gap-1">
-            <MetricItem
+            <ClientAreaMarketMetricItem
               label={fieldLabels.high}
               value={marketMetrics.high}
             />
 
-            <MetricItem
+            <ClientAreaMarketMetricItem
               label={fieldLabels.low}
               value={marketMetrics.low}
             />
           </div>
 
           <div className="grid gap-1">
-            <MetricItem
+            <ClientAreaMarketMetricItem
               label={fieldLabels.open}
               value={marketMetrics.open}
             />
 
-            <MetricItem
+            <ClientAreaMarketMetricItem
               label={
                 <FontAwesomeIcon
                   icon={["far", "alarm-clock"]}
@@ -163,7 +127,7 @@ export function ClientAreaMarketCard({
           </div>
 
           <div className="grid gap-1 sm:col-span-2 xl:col-span-1">
-            <MetricItem
+            <ClientAreaMarketMetricItem
               valuePrefix={
                 <DirectionIcon className={directionClassName} size={14} />
               }
@@ -172,7 +136,7 @@ export function ClientAreaMarketCard({
               valueClassName={directionClassName}
             />
 
-            <MetricItem
+            <ClientAreaMarketMetricItem
               valuePrefix={
                 <DirectionIcon className={directionClassName} size={14} />
               }

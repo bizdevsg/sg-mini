@@ -1,14 +1,19 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { ClientAreaAccountDateField } from "@/components/atoms/ClientAreaAccountDateField";
+import { ClientAreaAccountField } from "@/components/atoms/ClientAreaAccountField";
+import { ClientAreaAccordionItem } from "@/components/molecules/ClientAreaAccordionItem";
+import { ClientAreaInlineRadioGroup } from "@/components/molecules/ClientAreaInlineRadioGroup";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import type {
   AccountSnapshot,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
+import { type ClientAreaRadioOption } from "@/components/organisms/client-area-account-profile.shared";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountProfilePanelProps = {
@@ -23,162 +28,6 @@ type AccordionSectionId =
   | "emergency"
   | "job"
   | "wealth";
-
-type RadioOption = {
-  label: string;
-  value: string;
-};
-
-const inputClassName =
-  "mt-2 h-11 w-full rounded-xl border border-zinc-700 bg-[#6a6a6a] px-4 text-base text-white outline-none transition placeholder:text-zinc-200/70 focus:border-yellow-500/50";
-const inputLabelClassName = "text-base font-semibold text-zinc-100";
-const inlineInputClassName =
-  "h-8 w-24 rounded-md border border-zinc-700 bg-[#6a6a6a] px-2 text-sm text-white outline-none transition focus:border-yellow-500/50";
-
-function AccountField({
-  defaultValue,
-  label,
-  required = false,
-  span = 1,
-}: {
-  defaultValue: string;
-  label: string;
-  required?: boolean;
-  span?: 1 | 2;
-}) {
-  return (
-    <div className={span === 2 ? "col-span-full" : undefined}>
-      <label className={inputLabelClassName}>
-        <span>
-          {label}
-          {required ? <span className="text-red-400">*</span> : null}
-        </span>
-        <input className={inputClassName} defaultValue={defaultValue} type="text" />
-      </label>
-    </div>
-  );
-}
-
-function AccountDateField({
-  defaultValue,
-  label,
-}: {
-  defaultValue: string;
-  label: string;
-}) {
-  return (
-    <div>
-      <label className={inputLabelClassName}>
-        <span>{label}</span>
-        <div className="relative">
-          <input className={`${inputClassName} pr-11`} defaultValue={defaultValue} type="text" />
-          <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-zinc-200">
-            <FontAwesomeIcon icon={["fas", "calendar-days"]} className="text-sm" />
-          </span>
-        </div>
-      </label>
-    </div>
-  );
-}
-
-function PlaceholderSection({ message }: { message: string }) {
-  return (
-    <div className="rounded-[24px] border border-zinc-800 bg-zinc-900/70 p-4 text-base leading-7 text-zinc-300">
-      {message}
-    </div>
-  );
-}
-
-function InlineRadioGroup({
-  label,
-  name,
-  onChange,
-  options,
-  required = false,
-  selectedValue,
-  trailingInputForValue,
-}: {
-  label: string;
-  name: string;
-  onChange: (value: string) => void;
-  options: RadioOption[];
-  required?: boolean;
-  selectedValue: string;
-  trailingInputForValue?: string;
-}) {
-  return (
-    <div className="space-y-2">
-      <p className={inputLabelClassName}>
-        {label}
-        {required ? <span className="text-red-400">*</span> : null}
-      </p>
-
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-100">
-        {options.map((option) => {
-          const isSelected = selectedValue === option.value;
-
-          return (
-            <label
-              key={`${name}-${option.value}`}
-              className="inline-flex items-center gap-1.5"
-            >
-              <input
-                checked={isSelected}
-                className="h-4 w-4 accent-yellow-400"
-                name={name}
-                onChange={() => onChange(option.value)}
-                type="radio"
-                value={option.value}
-              />
-              <span>{option.label}</span>
-              {trailingInputForValue === option.value ? (
-                <input
-                  className={inlineInputClassName}
-                  defaultValue=""
-                  type="text"
-                />
-              ) : null}
-            </label>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function AccordionItem({
-  children,
-  isOpen,
-  onToggle,
-  title,
-}: {
-  children: ReactNode;
-  isOpen: boolean;
-  onToggle: () => void;
-  title: string;
-}) {
-  return (
-    <div className="space-y-3">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-[26px] bg-gradient-to-r from-yellow-500 to-amber-400 px-4 py-4 text-left text-base font-bold text-black shadow-[0_10px_30px_rgba(245,158,11,0.18)] transition hover:brightness-105 sm:px-7 sm:text-lg"
-      >
-        <span className="min-w-0">{title}</span>
-        <FontAwesomeIcon
-          icon={["fas", "chevron-down"]}
-          className={`text-base transition-transform ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {isOpen ? (
-        <div className="rounded-[18px] border border-zinc-800 bg-[#232428] p-4">
-          {children}
-        </div>
-      ) : null}
-    </div>
-  );
-}
 
 export function ClientAreaAccountProfilePanel({
   copy,
@@ -232,7 +81,7 @@ export function ClientAreaAccountProfilePanel({
         </h2>
       </div>
 
-      <AccordionItem
+      <ClientAreaAccordionItem
         isOpen={openSection === "personal"}
         onToggle={() =>
           setOpenSection((current) =>
@@ -243,81 +92,81 @@ export function ClientAreaAccountProfilePanel({
       >
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
           <div className="grid gap-4">
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Franky Reagan Law"
               label={accountPage.fields.fullName}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="frankyreaganlaw@gmail.com"
               label={accountPage.fields.email}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Makassar"
               label={accountPage.fields.birthPlace}
             />
-            <AccountDateField
+            <ClientAreaAccountDateField
               defaultValue="12/03, 1987"
               label={accountPage.fields.birthDate}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="frankyreaganlaw@gmail.com"
               label={accountPage.fields.identityNumber}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="1234567890111213"
               label={accountPage.fields.taxNumber}
               required
             />
-            <AccountField defaultValue="Pria" label={accountPage.fields.gender} />
-            <AccountField
+            <ClientAreaAccountField defaultValue="Pria" label={accountPage.fields.gender} />
+            <ClientAreaAccountField
               defaultValue="Kawin"
               label={accountPage.fields.maritalStatus}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Istri"
               label={accountPage.fields.spouseName}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Jl. Sudirman Raya"
               label={accountPage.fields.homeAddress}
               required
             />
 
             <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue="01"
                 label={accountPage.fields.rt}
                 required
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue="03"
                 label={accountPage.fields.rw}
                 required
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue="DKI Jakarta"
                 label={accountPage.fields.province}
                 required
               />
             </div>
 
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Jakarta Selatan"
               label={accountPage.fields.city}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="Kebayoran Lama"
               label={accountPage.fields.subdistrict}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="12240"
               label={accountPage.fields.postalCode}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue="081234567890"
               label={accountPage.fields.phone}
               required
@@ -331,9 +180,9 @@ export function ClientAreaAccountProfilePanel({
             {accountPage.saveLabel}
           </button>
         </form>
-      </AccordionItem>
+      </ClientAreaAccordionItem>
 
-      <AccordionItem
+      <ClientAreaAccordionItem
         isOpen={openSection === "purpose"}
         onToggle={() =>
           setOpenSection((current) =>
@@ -343,7 +192,7 @@ export function ClientAreaAccountProfilePanel({
         title={accountPage.sections.purpose}
       >
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.openingPurpose}
             name="openingPurpose"
             onChange={setOpeningPurpose}
@@ -353,7 +202,7 @@ export function ClientAreaAccountProfilePanel({
             trailingInputForValue="other"
           />
 
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.investmentExperience}
             name="investmentExperience"
             onChange={setInvestmentExperience}
@@ -363,30 +212,30 @@ export function ClientAreaAccountProfilePanel({
             trailingInputForValue="yes"
           />
 
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.futuresExperience}
             name="futuresExperience"
             onChange={setFuturesExperience}
-            options={accountPage.options.binary as RadioOption[]}
+            options={accountPage.options.binary as ClientAreaRadioOption[]}
             required
             selectedValue={futuresExperience}
           />
 
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.familyAffiliation}
             name="familyAffiliation"
             onChange={setFamilyAffiliation}
-            options={accountPage.options.binary as RadioOption[]}
+            options={accountPage.options.binary as ClientAreaRadioOption[]}
             required
             selectedValue={familyAffiliation}
             trailingInputForValue="yes"
           />
 
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.bankruptStatus}
             name="bankruptStatus"
             onChange={setBankruptStatus}
-            options={accountPage.options.binary as RadioOption[]}
+            options={accountPage.options.binary as ClientAreaRadioOption[]}
             selectedValue={bankruptStatus}
           />
 
@@ -397,9 +246,9 @@ export function ClientAreaAccountProfilePanel({
             {accountPage.saveLabel}
           </button>
         </form>
-      </AccordionItem>
+      </ClientAreaAccordionItem>
 
-      <AccordionItem
+      <ClientAreaAccordionItem
         isOpen={openSection === "emergency"}
         onToggle={() =>
           setOpenSection((current) =>
@@ -410,51 +259,51 @@ export function ClientAreaAccountProfilePanel({
       >
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
           <div className="grid gap-4">
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencyName}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencyAddress}
               required
             />
 
             <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.rt}
                 required
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.rw}
                 required
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.emergencyProvince}
                 required
               />
             </div>
 
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencyCity}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencySubdistrict}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencyPostalCode}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.emergencyPhone}
               required
@@ -468,9 +317,9 @@ export function ClientAreaAccountProfilePanel({
             {accountPage.saveLabel}
           </button>
         </form>
-      </AccordionItem>
+      </ClientAreaAccordionItem>
 
-      <AccordionItem
+      <ClientAreaAccordionItem
         isOpen={openSection === "job"}
         onToggle={() =>
           setOpenSection((current) => (current === "job" ? null : "job"))
@@ -478,7 +327,7 @@ export function ClientAreaAccountProfilePanel({
         title={accountPage.sections.job}
       >
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.occupation}
             name="occupation"
             onChange={setOccupation}
@@ -489,19 +338,19 @@ export function ClientAreaAccountProfilePanel({
           />
 
           <div className="grid gap-4">
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.companyName}
               required
             />
 
             <div className="grid gap-4 md:grid-cols-2">
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.businessSector}
                 required
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.position}
                 required
@@ -509,26 +358,26 @@ export function ClientAreaAccountProfilePanel({
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.yearsWorking}
               />
-              <AccountField
+              <ClientAreaAccountField
                 defaultValue=""
                 label={accountPage.fields.previousOffice}
               />
             </div>
 
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.officeAddress}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.officePostalCode}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.officePhone}
             />
@@ -541,9 +390,9 @@ export function ClientAreaAccountProfilePanel({
             {accountPage.saveLabel}
           </button>
         </form>
-      </AccordionItem>
+      </ClientAreaAccordionItem>
 
-      <AccordionItem
+      <ClientAreaAccordionItem
         isOpen={openSection === "wealth"}
         onToggle={() =>
           setOpenSection((current) => (current === "wealth" ? null : "wealth"))
@@ -551,7 +400,7 @@ export function ClientAreaAccountProfilePanel({
         title={accountPage.sections.wealth}
       >
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <InlineRadioGroup
+          <ClientAreaInlineRadioGroup
             label={accountPage.fields.annualIncome}
             name="annualIncome"
             onChange={setAnnualIncome}
@@ -561,25 +410,25 @@ export function ClientAreaAccountProfilePanel({
           />
 
           <div className="grid gap-4">
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.houseLocation}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.njop}
               required
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.bankDeposit}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.amount}
             />
-            <AccountField
+            <ClientAreaAccountField
               defaultValue=""
               label={accountPage.fields.otherAssets}
             />
@@ -592,7 +441,7 @@ export function ClientAreaAccountProfilePanel({
             {accountPage.saveLabel}
           </button>
         </form>
-      </AccordionItem>
+      </ClientAreaAccordionItem>
     </div>
   );
 }

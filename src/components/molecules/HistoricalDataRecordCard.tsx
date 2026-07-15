@@ -1,3 +1,4 @@
+import { HistoricalDataValueField } from "@/components/atoms/HistoricalDataValueField";
 import { type HistoricalDataRecord } from "@/lib/historical-data";
 import { formatLocaleNumber, type AppLocale } from "@/locales";
 
@@ -17,22 +18,6 @@ type HistoricalDataRecordCardProps = {
   };
   formatDate: (value: string, locale: AppLocale) => string;
 };
-
-type ValueFieldProps = {
-  label: string;
-  value: string;
-};
-
-function ValueField({ label, value }: ValueFieldProps) {
-  return (
-    <div className="rounded-xl border border-line bg-black/20 px-3 py-3">
-      <p className="text-[11px] uppercase tracking-[0.14em] text-foreground/55">
-        {label}
-      </p>
-      <p className="mt-1 font-mono text-foreground/78">{value}</p>
-    </div>
-  );
-}
 
 export function HistoricalDataRecordCard({
   locale,
@@ -63,19 +48,19 @@ export function HistoricalDataRecordCard({
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-        <ValueField
+        <HistoricalDataValueField
           label={labels.open}
           value={formatLocaleNumber(record.open, locale)}
         />
-        <ValueField
+        <HistoricalDataValueField
           label={labels.high}
           value={formatLocaleNumber(record.high, locale)}
         />
-        <ValueField
+        <HistoricalDataValueField
           label={labels.low}
           value={formatLocaleNumber(record.low, locale)}
         />
-        <ValueField
+        <HistoricalDataValueField
           label={labels.close}
           value={formatLocaleNumber(record.close, locale)}
         />

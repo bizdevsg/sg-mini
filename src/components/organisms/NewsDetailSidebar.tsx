@@ -1,7 +1,6 @@
+import { NewsDetailSidebarSection } from "@/components/molecules/NewsDetailSidebarSection";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import type { AppLocale } from "@/locales";
-import { NewsSidebarArticleCard } from "@/components/molecules/NewsSidebarArticleCard";
-import { ClientAreaSectionHeader } from "../molecules/ClientAreaSectionHeader";
 
 type NewsDetailSidebarProps = {
   hrefBasePath?: string;
@@ -12,44 +11,6 @@ type NewsDetailSidebarProps = {
   };
 };
 
-type SidebarSectionProps = {
-  hrefBasePath?: string;
-  title: string;
-  articles: NewsFeedArticle[];
-  locale: AppLocale;
-};
-
-function SidebarSection({
-  title,
-  articles,
-  hrefBasePath,
-  locale,
-}: SidebarSectionProps) {
-  return (
-    <div>
-      <ClientAreaSectionHeader title={title} />
-
-      {/* <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-100">
-        {title}
-      </p> */}
-      <div className="mt-4 space-y-4">
-        {articles.length ? (
-          articles.map((article) => (
-            <NewsSidebarArticleCard
-              key={article.slug}
-              article={article}
-              hrefBasePath={hrefBasePath}
-              locale={locale}
-            />
-          ))
-        ) : (
-          <p className="text-sm text-zinc-300">-</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export function NewsDetailSidebar({
   hrefBasePath,
   locale,
@@ -58,7 +19,7 @@ export function NewsDetailSidebar({
 }: NewsDetailSidebarProps) {
   return (
     <aside className="space-y-4">
-      <SidebarSection
+      <NewsDetailSidebarSection
         title={labels.relatedNews}
         articles={relatedArticles}
         hrefBasePath={hrefBasePath}
