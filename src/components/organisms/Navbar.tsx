@@ -55,19 +55,14 @@ function renderMenuLabel(label: string, href?: string) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {/* <div className="bg-yellow-500/20 rounded-full p-1">
-        <Image
-          src="/assets/icon-512.png"
-          alt=""
-          width={16}
-          height={16}
-          className="h-5 w-5 rounded-[4px] object-cover"
-          aria-hidden="true"
-        />
-      </div> */}
-      <span className="text-sm">{label.trim()}</span>
-    </div>
+    <Image
+      src="/assets/logo-tp.png"
+      alt=""
+      width={16}
+      height={16}
+      className="h-7 w-7 rounded-[4px] object-cover"
+      aria-hidden="true"
+    />
   );
 }
 

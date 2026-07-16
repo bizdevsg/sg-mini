@@ -5,6 +5,7 @@ import {
   USE_DUMMY_API_DATA,
   getPenghargaanAssetUrl,
 } from "@/lib/env";
+import { parseJsonResponse } from "@/lib/parse-json-response";
 
 export type PenghargaanRecord = {
   id: number;
@@ -110,7 +111,8 @@ export async function getPenghargaanRecords() {
       return [];
     }
 
-    const payload = (await response.json()) as PenghargaanApiResponse;
+    const responseBody = await response.text();
+    const payload = parseJsonResponse<PenghargaanApiResponse>(responseBody);
 
     if (!payload?.data || !Array.isArray(payload.data)) {
       return [];

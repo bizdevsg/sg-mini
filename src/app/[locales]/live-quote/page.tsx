@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
+import {
+  ExchangeRatePanel,
+  ExchangeRatePanelFallback,
+} from "@/components/organisms/ExchangeRatePanel";
 import { LiveQuoteTable } from "@/components/organisms/LiveQuoteTable";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import {
@@ -83,10 +88,19 @@ export default async function LiveQuotePage({ params }: LiveQuotePageProps) {
       />
 
       <SectionContainer className="relative py-16 sm:py-20">
-        <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
+        <div
+          className="pointer-events-none absolute top-0 left-1/2 h-100 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent"
+          aria-hidden="true"
+        />
 
-        <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
-          <LiveQuoteTable locale={locales} mode="full" />
+        <div className="relative z-10 space-y-6">
+          <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
+            <LiveQuoteTable locale={locales} mode="full" />
+          </div>
+
+          <Suspense fallback={<ExchangeRatePanelFallback locale={locales} />}>
+            <ExchangeRatePanel locale={locales} />
+          </Suspense>
         </div>
       </SectionContainer>
     </main>

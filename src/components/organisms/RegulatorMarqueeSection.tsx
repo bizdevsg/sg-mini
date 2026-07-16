@@ -1,5 +1,6 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { regulatorLogos } from "@/types/landing";
 import { getMessages, type AppLocale } from "@/locales";
 import { RegulatorLogoItem } from "@/components/molecules/RegulatorLogoItem";
@@ -23,14 +24,19 @@ export function RegulatorMarqueeSection({
     <section className="bg-linear-180 from-black to-transparent">
       <SectionContainer className="py-10 sm:py-16 md:py-20">
         <div className="flex flex-col items-center gap-5">
-          <SectionEyebrow align="center">
-            {messages.regulator.eyebrow}
-          </SectionEyebrow>
+          <ScrollReveal effect="zoom-in">
+            <SectionEyebrow align="center">
+              {messages.regulator.eyebrow}
+            </SectionEyebrow>
+          </ScrollReveal>
 
-          <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+          <div
+            className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+          >
             <div className="py-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)]">
-              <div
+              <ScrollReveal
                 className="flex w-max min-w-max items-center whitespace-nowrap"
+                effect="fade-up"
                 style={{
                   animation: "regulator-marquee 30s linear infinite",
                   willChange: "transform",
@@ -52,7 +58,7 @@ export function RegulatorMarqueeSection({
                     />
                   </div>
                 ))}
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>

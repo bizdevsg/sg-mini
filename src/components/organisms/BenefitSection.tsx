@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { SectionContainer } from "../atoms/SectionContainer";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -18,6 +19,12 @@ const benefitCardImages = [
   "/assets/img-card-3.png",
 ] as const;
 
+const benefitCardAos = [
+  "fade-right",
+  "fade-up",
+  "fade-left",
+] as const;
+
 export function BenefitSection({ locale }: BenefitSectionProps) {
   const items = getMessages(locale).benefitSection.items;
 
@@ -25,9 +32,11 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
     <SectionContainer className="py-16 md:py-20">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {items.map((item, index) => (
-          <div
+          <ScrollReveal
             key={`${item.eyebrow}-${item.title}`}
             className={`relative overflow-hidden rounded-2xl border-2 border-white/20 p-6 ${benefitCardStyles[index] ?? benefitCardStyles[0]}`}
+            effect={benefitCardAos[index] ?? "fade-up"}
+            delay={index * 80}
           >
             <div
               className="absolute top-0 left-0 h-full w-full object-cover opacity-5"
@@ -51,7 +60,7 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
                 />
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </SectionContainer>

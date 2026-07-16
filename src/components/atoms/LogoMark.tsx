@@ -13,28 +13,28 @@ export function LogoMark({ locale }: LogoMarkProps) {
   const messages = getMessages(locale);
 
   return (
-    <div className="flex items-center">
+    <div className="flex shrink-0 items-center">
       <Link
         href={`/${locale}`}
         aria-label={messages.app.homeLabel}
-        className="flex items-center gap-4"
+        className="flex items-center"
       >
+        {/* Mobile Logo */}
         <Image
           src={mobileLogoMark}
           alt={messages.app.brandName}
-          preload
-          sizes="44px"
-          className="w-6 object-contain sm:hidden"
-          style={{ height: "auto" }}
+          priority
+          sizes="28px"
+          className="h-7 w-7 object-contain sm:hidden"
         />
 
+        {/* Desktop Logo */}
         <Image
           src={logoMark}
           alt={messages.app.brandName}
-          preload
-          sizes="220px"
-          className="hidden h-auto w-70 object-contain sm:block"
-          style={{ height: "auto" }}
+          priority
+          sizes="(min-width: 1280px) 300px, (min-width: 1024px) 260px, (min-width: 640px) 220px, 0px"
+          className="hidden h-12 w-auto object-contain sm:block lg:h-13 xl:h-14"
         />
       </Link>
     </div>

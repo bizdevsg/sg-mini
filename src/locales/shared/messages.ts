@@ -113,6 +113,24 @@ export type AppMessages = {
   };
   liveQuotePage: {
     breadcrumb: string;
+    exchangeRate: {
+      eyebrow: string;
+      title: string;
+      amountLabel: string;
+      fromLabel: string;
+      toLabel: string;
+      searchCurrencyPlaceholder: string;
+      noCurrencyFound: string;
+      matrixToggleLabel: string;
+      calculatorToggleLabel: string;
+      matrixTitle: string;
+      matrixBaseLabel: string;
+      matrixUnitLabel: string;
+      outputLabel: string;
+      swapLabel: string;
+      updatedLabel: string;
+      unavailable: string;
+    };
   };
   ebookPage: {
     title: string;

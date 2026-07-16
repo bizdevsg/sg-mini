@@ -1,8 +1,7 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { getMessages, type AppLocale } from "@/locales";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { SectionContainer } from "../atoms/SectionContainer";
@@ -68,10 +67,10 @@ export function HeroSection({ locale }: HeroSectionProps) {
       <SectionContainer className="relative mb-16 sm:mb-0 sm:pt-16 sm:mt-10 md:mt-0 md:pt-20">
         <div className="relative isolate z-10 flex flex-col gap-4 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           {/* Mobile Image */}
-          <div
+          <ScrollReveal
             className="relative order-1 mx-auto h-[500px] w-full xl:hidden sm:h-[620px] md:h-[700px]"
-            data-aos="fade-left"
-            data-aos-delay="120"
+            effect="fade-left"
+            delay={120}
           >
             <div className="pointer-events-none absolute top-15 left-[57%] h-full w-[min(1320px,210vw)] -translate-x-1/2">
               <img
@@ -98,12 +97,12 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 </div>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Text Content */}
-          <div
+          <ScrollReveal
             className="relative order-2 z-10 mx-auto max-w-[22rem] text-center sm:max-w-[30rem] md:max-w-[38rem] lg:max-w-[34rem] xl:mx-0 xl:max-w-[48rem] xl:text-left"
-            data-aos="fade-up"
+            effect="fade-up"
           >
             <h1 className="font-mono text-[2.35rem] font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3.45rem] xl:text-[4.4rem]">
               <span className="text-yellow-500">
@@ -145,14 +144,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 {messages.hero.demoDisclaimer}
               </p>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Desktop Image */}
-          <div
+          <ScrollReveal
             className="pointer-events-none absolute z-0 hidden xl:bottom-7 xl:right-[-7.5rem] xl:block"
             aria-hidden="true"
-            data-aos="fade-left"
-            data-aos-delay="160"
+            effect="fade-left"
+            delay={160}
           >
             <img
               src="/assets/Banner SGB-FIX.png"
@@ -177,7 +176,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 />
               </div>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
 
         <div className="pointer-events-none absolute bottom-0 right-0 h-25 w-full bg-linear-to-t from-black to-transparent" />

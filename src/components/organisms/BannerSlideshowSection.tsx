@@ -1,4 +1,5 @@
 import { BannerSlideshow } from "@/components/molecules/BannerSlideshow";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { getBannerRecords } from "@/lib/banner";
 import type { AppLocale } from "@/locales";
 
@@ -16,8 +17,12 @@ export async function BannerSlideshowSection({
   }
 
   return (
-    <section className="bg-transparent mb-10 sm:mb-16 md:mb-20">
+    <ScrollReveal
+      as="section"
+      className="bg-transparent mb-10 sm:mb-16 md:mb-20"
+      effect="fade-up"
+    >
       <BannerSlideshow banners={banners} locale={locale} />
-    </section>
+    </ScrollReveal>
   );
 }

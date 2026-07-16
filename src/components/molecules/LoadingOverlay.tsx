@@ -39,7 +39,7 @@ export function LoadingOverlay({
             height={48}
             priority
             className="w-12 object-contain"
-            style={{ height: "auto" }}
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
       </div>

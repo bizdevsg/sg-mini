@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { getMessages, type AppLocale } from "@/locales";
 
 type AboutCompanyProfileSectionProps = {
@@ -30,9 +31,9 @@ export function AboutCompanyProfileSection({
     >
       <SectionContainer className="py-16 sm:py-20">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-12">
-          <div
+          <ScrollReveal
             className="rounded-[28px] border border-white/8 bg-black/20 p-8"
-            data-aos="zoom-in"
+            effect="zoom-in"
           >
             <div className="relative flex h-full items-center justify-center">
               <Image
@@ -41,12 +42,12 @@ export function AboutCompanyProfileSection({
                 width={180}
                 height={180}
                 className="h-auto w-40 object-contain lg:w-48"
-                style={{ height: "auto" }}
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
-          </div>
+          </ScrollReveal>
 
-          <div data-aos="fade-up" data-aos-delay="120">
+          <ScrollReveal effect="fade-up" delay={120}>
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-yellow-500">
               {companyProfile.eyebrow}
             </span>
@@ -66,7 +67,7 @@ export function AboutCompanyProfileSection({
                 </p>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </SectionContainer >
 

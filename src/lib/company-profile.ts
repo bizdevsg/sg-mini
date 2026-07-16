@@ -1,6 +1,7 @@
 import "server-only";
 
 import { COMPANY_PROFILE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { parseJsonResponse } from "@/lib/parse-json-response";
 import { getMessages, type AppLocale } from "@/locales";
 
 export type CompanyProfile = {
@@ -201,7 +202,8 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
       return fallbackProfile;
     }
 
-    const payload = (await response.json()) as CompanyProfileApiResponse;
+    const responseBody = await response.text();
+    const payload = parseJsonResponse<CompanyProfileApiResponse>(responseBody);
     return normalizeCompanyProfile(payload.data, locale);
   } catch (error) {
     console.error("Failed to fetch company profile", error);
