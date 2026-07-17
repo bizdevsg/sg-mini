@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { EbookCategoryCard } from "@/components/molecules/EbookCategoryCard";
@@ -69,7 +66,6 @@ export default async function EbookPage({ params }: EbookPageProps) {
 
   const appMessages = getMessages(locales);
   const messages = appMessages.ebookPage;
-  const ebookLoginUrl = `/${locales}/client-area/`;
   const categories = await getEbookCategories();
   const emptyState = getEbookEmptyState(locales);
   const educationLabel =
@@ -106,18 +102,14 @@ export default async function EbookPage({ params }: EbookPageProps) {
             className="w-full sm:min-w-[220px] sm:w-auto cursor-pointer"
           />
 
-          <ButtonLink
-            href={ebookLoginUrl}
+          <AppDownloadModalTriggerButton
+            locale={locales}
+            label={messages.hero.secondaryCta}
             variant="ghost"
             size="lg"
-            className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-[220px] sm:w-auto"
-          >
-            {messages.hero.secondaryCta}
-            <FontAwesomeIcon
-              icon={["fas", "arrow-right"]}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </ButtonLink>
+            visualVariant="qr"
+            className="w-full sm:min-w-[220px] sm:w-auto cursor-pointer"
+          />
         </div>
       </PageHeroBanner>
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
@@ -44,9 +43,7 @@ function resolveLocaleSwitcherHref(targetLocale: AppLocale, pathname: string) {
 }
 
 export function HeaderActions({
-  clientAreaProfile,
   locale,
-  isClientAreaAuthenticated,
   compact = false,
   mobilePanel = false,
   className = "",
@@ -76,8 +73,6 @@ export function HeaderActions({
     ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
-  const clientAreaAccountHref = `/${locale}/client-area`;
-  const clientAreaLoginHref = `/${locale}/client-area/login`;
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
   const localeButtonClass = mobilePanel
@@ -179,43 +174,10 @@ export function HeaderActions({
     return <div className={className}>{localeSwitcher}</div>;
   }
 
-  const renderAuthButton = (variant: "primary" | "ghost", extraClassName = "") => {
-    if (!isClientAreaAuthenticated) {
-      return (
-        <ButtonLink
-          variant={variant}
-          size="sm"
-          className={extraClassName}
-          href={clientAreaLoginHref}
-        >
-          {messages.navbar.login}
-        </ButtonLink>
-      );
-    }
-
-    const profileLabel =
-      clientAreaProfile?.accountId ??
-      clientAreaProfile?.displayName ??
-      messages.clientArea.pageTitle;
-
-    return (
-      <Link
-        href={clientAreaAccountHref}
-        aria-label={profileLabel}
-        title={profileLabel}
-        className={`inline-flex items-center h-8 w-8 justify-center rounded-full p-2 text-yellow-900 bg-linear-to-br from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition duration-300 ease-in-out ${extraClassName}`}
-      >
-        <FontAwesomeIcon icon={["fas", "user"]} className="text-sm" />
-      </Link>
-    );
-  };
-
   if (mobilePanel) {
     return (
       <div className={`flex w-full items-center gap-3 ${className}`}>
         <div className="flex items-center gap-2.5">
-          {renderAuthButton("ghost", mobileActionButtonClass)}
-
           <ButtonLink
             variant="dark"
             size="sm"
@@ -235,13 +197,6 @@ export function HeaderActions({
     <div
       className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
     >
-      {renderAuthButton(
-        "primary",
-        "rounded-full text-xs font-medium sm:text-sm",
-      )}
-
-      <div className="hidden h-8 w-px rounded-full bg-yellow-500/50 sm:block" />
-
       {localeSwitcher}
     </div>
   );

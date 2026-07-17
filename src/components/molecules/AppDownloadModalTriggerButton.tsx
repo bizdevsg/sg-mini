@@ -8,6 +8,7 @@ import {
   getMessages,
   type AppLocale,
 } from "@/locales";
+import { getAppDownloadModalCopy } from "@/lib/app-download-modal-copy";
 import { getClientAreaAppStoreLinks } from "@/lib/solidGoldAppLinks";
 
 type AppDownloadModalTriggerButtonProps = {
@@ -47,22 +48,7 @@ export function AppDownloadModalTriggerButton({
   const appPromoMessages = messages.appPromoSection;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
   const supportHref = resolveLocalizedHref(locale, "/contact-us");
-  const modalCopy =
-    locale === "id"
-      ? {
-        title: "Download Aplikasi",
-        subtitle: "Solid Gold Berjangka",
-        description:
-          "Untuk registrasi akun, silakan download aplikasi Solid Gold Berjangka terlebih dahulu melalui store pilihan Anda.",
-        closeLabel: "Tutup",
-      }
-      : {
-        title: "Download the App",
-        subtitle: "Solid Gold Berjangka",
-        description:
-          "To register an account, please download the Solid Gold Berjangka app first from your preferred app store.",
-        closeLabel: "Close",
-      };
+  const modalCopy = getAppDownloadModalCopy(locale);
 
   return (
     <>

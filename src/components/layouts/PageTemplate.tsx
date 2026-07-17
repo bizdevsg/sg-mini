@@ -9,6 +9,7 @@ import {
   getClientAreaSessionProfile,
   hasClientAreaSession,
 } from "@/lib/client-area-auth";
+import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
 
 type PageTemplateProps = {
   children: ReactNode;
@@ -17,6 +18,16 @@ type PageTemplateProps = {
 };
 
 async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
+  if (!CLIENT_AREA_ENABLED) {
+    return (
+      <Navbar
+        clientAreaProfile={null}
+        locale={locale}
+        isClientAreaAuthenticated={false}
+      />
+    );
+  }
+
   const [isClientAreaAuthenticated, clientAreaProfile] = await Promise.all([
     hasClientAreaSession(),
     getClientAreaSessionProfile(),

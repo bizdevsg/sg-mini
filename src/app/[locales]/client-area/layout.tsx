@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessionTimeout";
@@ -8,6 +9,7 @@ import {
   resolveClientAreaAccountMode,
 } from "@/lib/client-area-account-mode";
 import { hasClientAreaSession } from "@/lib/client-area-auth";
+import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaLayoutProps = {
@@ -19,6 +21,10 @@ export default async function ClientAreaLayout({
   children,
   params,
 }: ClientAreaLayoutProps) {
+  if (!CLIENT_AREA_ENABLED) {
+    notFound();
+  }
+
   const { locales } = await params;
 
   const cookieStore = await cookies();

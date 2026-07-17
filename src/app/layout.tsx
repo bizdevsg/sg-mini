@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
+import "aos/dist/aos.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "flag-icons/css/flag-icons.min.css";
 import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";

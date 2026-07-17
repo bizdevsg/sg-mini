@@ -1,13 +1,12 @@
 "use client";
 
+import AOS from "aos";
 import {
   type ComponentPropsWithoutRef,
   type CSSProperties,
   type ElementType,
   type ReactNode,
   useEffect,
-  useRef,
-  useState,
 } from "react";
 
 type ScrollRevealEffect =
@@ -34,32 +33,22 @@ type ScrollRevealProps<T extends ElementType> = {
   "as" | "children" | "className" | "style"
 >;
 
-function getHiddenTransform(effect: ScrollRevealEffect) {
-  switch (effect) {
-    case "fade-up":
-      return "translate3d(0, 28px, 0)";
-    case "fade-down":
-      return "translate3d(0, -28px, 0)";
-    case "fade-left":
-      return "translate3d(28px, 0, 0)";
-    case "fade-right":
-      return "translate3d(-28px, 0, 0)";
-    case "zoom-in":
-      return "scale(0.94)";
-    case "fade":
-    default:
-      return "translate3d(0, 0, 0)";
+let hasInitializedAos = false;
+
+function resolveAosAnchorPlacement(rootMargin: string) {
+  if (rootMargin.includes("-25%")) {
+    return "top-center";
   }
+
+  if (rootMargin.includes("-10%")) {
+    return "top-bottom";
+  }
+
+  return undefined;
 }
 
-function isElementInViewport(element: HTMLElement) {
-  const rect = element.getBoundingClientRect();
-
-  return rect.top < window.innerHeight && rect.bottom > 0;
-}
-
-function isElementAboveViewport(element: HTMLElement) {
-  return element.getBoundingClientRect().bottom <= 0;
+function toAosBoolean(value: boolean) {
+  return value ? "true" : "false";
 }
 
 export function ScrollReveal<T extends ElementType = "div">({
@@ -76,107 +65,46 @@ export function ScrollReveal<T extends ElementType = "div">({
   ...props
 }: ScrollRevealProps<T>) {
   const Component = (as ?? "div") as ElementType;
-  const elementRef = useRef<HTMLElement | null>(null);
-  const hasBeenVisibleRef = useRef(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const aosAnchorPlacement = resolveAosAnchorPlacement(rootMargin);
+  const aosOffset = Math.max(0, Math.round(threshold * 120));
 
   useEffect(() => {
-    const element = elementRef.current;
-
-    if (!element) {
+    if (typeof window === "undefined") {
       return;
     }
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    setIsMounted(true);
-
-    if (prefersReducedMotion) {
-      hasBeenVisibleRef.current = true;
-      setIsVisible(true);
-      return;
+    if (!hasInitializedAos) {
+      AOS.init({
+        duration: 700,
+        delay: 0,
+        once: true,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        disable: () =>
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      });
+      hasInitializedAos = true;
     }
 
-    if (
-      isElementInViewport(element) ||
-      (once && isElementAboveViewport(element))
-    ) {
-      hasBeenVisibleRef.current = true;
-      setIsVisible(true);
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-
-        if (!entry) {
-          return;
-        }
-
-        if (entry.isIntersecting) {
-          hasBeenVisibleRef.current = true;
-          setIsVisible(true);
-          return;
-        }
-
-        if (!once) {
-          setIsVisible(false);
-          return;
-        }
-
-        const viewportBottom = entry.rootBounds?.bottom ?? window.innerHeight;
-        const isAboveViewport = entry.boundingClientRect.bottom <= 0;
-        const isBelowViewport = entry.boundingClientRect.top >= viewportBottom;
-
-        if (isAboveViewport && hasBeenVisibleRef.current) {
-          setIsVisible(true);
-          return;
-        }
-
-        if (isBelowViewport) {
-          hasBeenVisibleRef.current = false;
-          setIsVisible(false);
-          return;
-        }
-
-        setIsVisible(hasBeenVisibleRef.current);
-      },
-      {
-        threshold,
-        rootMargin,
-      },
-    );
-
-    observer.observe(element);
+    const frameId = window.requestAnimationFrame(() => {
+      AOS.refreshHard();
+    });
 
     return () => {
-      observer.disconnect();
+      window.cancelAnimationFrame(frameId);
     };
-  }, [once, rootMargin, threshold]);
-
-  const shouldHide = isMounted && !isVisible;
+  }, [delay, duration, once, threshold, rootMargin]);
 
   return (
     <Component
-      ref={elementRef}
       className={className}
-      style={{
-        ...style,
-        opacity: shouldHide ? 0 : 1,
-        transform: shouldHide
-          ? getHiddenTransform(effect)
-          : "translate3d(0, 0, 0) scale(1)",
-        transitionProperty: isMounted ? "opacity, transform" : undefined,
-        transitionDuration: isMounted ? `${duration}ms` : undefined,
-        transitionTimingFunction: isMounted
-          ? "cubic-bezier(0.22, 1, 0.36, 1)"
-          : undefined,
-        transitionDelay: isMounted ? `${delay}ms` : undefined,
-        willChange: shouldHide ? "opacity, transform" : undefined,
-      }}
+      style={style}
+      data-aos={effect}
+      data-aos-delay={delay}
+      data-aos-duration={duration}
+      data-aos-once={toAosBoolean(once)}
+      data-aos-offset={aosOffset}
+      data-aos-easing="cubic-bezier(0.22, 1, 0.36, 1)"
+      data-aos-anchor-placement={aosAnchorPlacement}
       {...props}
     >
       {children}

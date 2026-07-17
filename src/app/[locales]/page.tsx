@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { AppPromoSection } from "@/components/organisms/AppPromoSection";
 import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSection";
 import { HeroSection } from "@/components/organisms/HeroSection";
-import { HomeCookieConsentBanner } from "@/components/organisms/HomeCookieConsentBanner";
 import { HomeWhyChooseSection } from "@/components/organisms/HomeWhyChooseSection";
 import { LiveQuoteSection } from "@/components/organisms/LiveQuoteSection";
 import { RegulatorMarqueeSection } from "@/components/organisms/RegulatorMarqueeSection";

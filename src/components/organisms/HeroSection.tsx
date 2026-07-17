@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { getMessages, type AppLocale } from "@/locales";
@@ -12,7 +11,6 @@ type HeroSectionProps = {
 
 export function HeroSection({ locale }: HeroSectionProps) {
   const messages = getMessages(locale);
-  const clientAreaLoginHref = `/${locale}/client-area/login`;
 
   const HERO_FLOATING_CARDS = [
     {
@@ -132,12 +130,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   className="w-full sm:w-fit rounded-xl px-5 cursor-pointer"
                 />
 
-                <Link
-                  href={clientAreaLoginHref}
-                  className="w-full sm:w-fit py-3 px-5 border rounded-xl font-semibold text-white border-yellow-500"
-                >
-                  {messages.hero.demoLoginCta}
-                </Link>
+                <AppDownloadModalTriggerButton
+                  locale={locale}
+                  label={messages.hero.demoLoginCta}
+                  variant="ghost"
+                  size="md"
+                  visualVariant="qr"
+                  className="w-full sm:w-fit rounded-xl px-5 cursor-pointer"
+                />
               </div>
 
               <p className="text-white text-xs mt-3">

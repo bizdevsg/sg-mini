@@ -2,6 +2,7 @@ import type { AppLocale, AppMessages } from "@/locales";
 
 import type { LiveQuotePayload } from "./live-quote.shared";
 import { LiveQuoteCard } from "./LiveQuoteCard";
+import { ScrollReveal } from "./ScrollReveal";
 
 type LiveQuoteCardsProps = {
   locale: AppLocale;
@@ -20,17 +21,22 @@ export function LiveQuoteCards({
 }: LiveQuoteCardsProps) {
   return (
     <div className={mode === "full" ? "grid gap-4 md:hidden" : "grid gap-4 lg:grid-cols-3"}>
-      {symbols.map((symbol) => {
+      {symbols.map((symbol, index) => {
         const tick = quotes[symbol];
         return (
-          <LiveQuoteCard
+          <ScrollReveal
             key={symbol}
-            locale={locale}
-            mode={mode}
-            symbol={symbol}
-            tick={tick}
-            fieldLabels={fieldLabels}
-          />
+            effect="fade-up"
+            delay={index * 100}
+          >
+            <LiveQuoteCard
+              locale={locale}
+              mode={mode}
+              symbol={symbol}
+              tick={tick}
+              fieldLabels={fieldLabels}
+            />
+          </ScrollReveal>
         );
       })}
     </div>
