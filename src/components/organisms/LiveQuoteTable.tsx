@@ -7,6 +7,7 @@ import { LoadingOverlay } from "@/components/molecules/LoadingOverlay";
 import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
 import { getSortedSymbols } from "@/lib/live-quotes";
 import { formatLocaleTime, getMessages, type AppLocale } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type LiveQuoteTableProps = {
   locale: AppLocale;
@@ -44,12 +45,16 @@ export function LiveQuoteTable({
 
       <div>
         <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
-            {messages.liveQuoteTable.feedLabel}
-          </div>
-          <div className="flex flex-col items-start gap-3 sm:items-end">
-            <LiveQuoteConnectionBadge locale={locale} status={status} />
-          </div>
+          <ScrollReveal effect="fade-right">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
+              {messages.liveQuoteTable.feedLabel}
+            </div>
+          </ScrollReveal>
+          <ScrollReveal effect="fade-left">
+            <div className="flex flex-col items-start gap-3 sm:items-end">
+              <LiveQuoteConnectionBadge locale={locale} status={status} />
+            </div>
+          </ScrollReveal>
         </div>
 
         {symbols.length === 0 && status === "error" ? (
@@ -95,11 +100,17 @@ export function LiveQuoteTable({
       </div>
 
       <div className="mt-2">
-        <div className="px-2 text-right text-xs text-white/58 md:pr-3">
-          {lastUpdated
-            ? `${messages.liveQuoteTable.lastUpdated}: ${formatLocaleTime(lastUpdated, lastUpdated, locale)}`
-            : messages.liveQuoteTable.firstTick}
-        </div>
+        <ScrollReveal
+          key={lastUpdated ? "live-quote-last-updated-ready" : "live-quote-last-updated-pending"}
+          effect="fade-up"
+          delay={600}
+        >
+          <div className="px-2 text-right text-xs text-white/58 md:pr-3">
+            {lastUpdated
+              ? `${messages.liveQuoteTable.lastUpdated}: ${formatLocaleTime(lastUpdated, lastUpdated, locale)}`
+              : messages.liveQuoteTable.firstTick}
+          </div>
+        </ScrollReveal>
       </div>
     </>
   );

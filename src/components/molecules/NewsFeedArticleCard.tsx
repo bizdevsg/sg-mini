@@ -81,7 +81,7 @@ export function NewsFeedArticleCard({
   }
 
   return (
-    <article className={isFeatured ? "h-full sm:col-span-2" : "h-full"}>
+    <article className="h-full">
       <Link
         href={articleHref}
         prefetch={false}

@@ -27,6 +27,7 @@ import {
   getMessages,
   type AppLocale,
 } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type EconomicCalendarBrowserProps = {
   locale: AppLocale;
@@ -150,6 +151,7 @@ export function EconomicCalendarBrowser({
   overview,
 }: EconomicCalendarBrowserProps) {
   const labels = getMessages(locale).economicCalendarBrowser;
+  const browserRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
   const activeRangeRef = useRef<EconomicCalendarRangeKey>("today");
 
@@ -318,29 +320,47 @@ export function EconomicCalendarBrowser({
   const visibleEvents = activeEvents.slice(startIndex, startIndex + PAGE_SIZE);
   const paginationItems = getVisiblePaginationItems(safeCurrentPage, totalPages);
 
+  function scrollToBrowserTop() {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const browserTop = browserRef.current?.getBoundingClientRect().top;
+
+    if (typeof browserTop !== "number") {
+      return;
+    }
+
+    window.scrollTo({
+      top: Math.max(0, window.scrollY + browserTop - 96),
+      behavior: "smooth",
+    });
+  }
+
   return (
-    <div className="space-y-6">
+    <div ref={browserRef} className="space-y-6">
       <div className="flex flex-wrap gap-2">
-        {ECONOMIC_CALENDAR_RANGE_KEYS.map((rangeKey) => {
+        {ECONOMIC_CALENDAR_RANGE_KEYS.map((rangeKey, index) => {
           const range = rangeOverview[rangeKey];
           const isActive = activeRange === rangeKey;
 
           return (
-            <button
-              key={rangeKey}
-              type="button"
-              onClick={() => {
-                setActiveRange(rangeKey);
-                setSelectedEventId(null);
-                setCurrentPage(1);
-              }}
-              className={`rounded-full border px-4 py-2 text-sm transition-colors ${isActive
-                ? "border-yellow-500 bg-yellow-500 text-black"
-                : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
-                }`}
-            >
-              {labels.tabs[rangeKey]}
-            </button>
+            <ScrollReveal key={rangeKey} effect="fade-left" delay={index * 100}>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveRange(rangeKey);
+                  setSelectedEventId(null);
+                  setCurrentPage(1);
+                }}
+                className={`rounded-full border px-4 py-2 text-sm transition-colors ${isActive
+                  ? "border-yellow-500 bg-yellow-500 text-black"
+                  : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
+                  }`}
+              >
+                {labels.tabs[rangeKey]}
+              </button>
+            </ScrollReveal>
           );
         })}
       </div>
@@ -460,13 +480,15 @@ export function EconomicCalendarBrowser({
           </div>
 
           <div className="hidden md:block">
-            <div className="grid grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] gap-3 px-4 pb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/55">
-              <div>{labels.time}</div>
-              <div>{labels.country}</div>
-              <div>{labels.impact}</div>
-              <div>{labels.event}</div>
-              <div className="text-right">{labels.expand}</div>
-            </div>
+            <ScrollReveal>
+              <div className="grid grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] gap-3 px-4 pb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/55">
+                <div>{labels.time}</div>
+                <div>{labels.country}</div>
+                <div>{labels.impact}</div>
+                <div>{labels.event}</div>
+                <div className="text-right">{labels.expand}</div>
+              </div>
+            </ScrollReveal>
 
             <div className="space-y-3">
               {visibleEvents.map((event, index) => {
@@ -477,86 +499,90 @@ export function EconomicCalendarBrowser({
 
                 return (
                   <div key={event.id} className="space-y-3">
-                    {hasDateGroupChanged ? (
-                      <div className="flex items-center gap-3">
-                        <div className="h-px flex-1 border border-line border-dashed" />
-                        <div className="rounded-full border border-line bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/72">
-                          {getEventGroupDateLabel(
-                            event.date,
-                            locale,
-                            labels.today,
-                          )}
-                        </div>
-                        <div className="h-px flex-1 border border-line border-dashed" />
-                      </div>
-                    ) : null}
-
-                    <article
-                      className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
-                        ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
-                        : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
-                        }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setSelectedEventId((currentEventId) =>
-                            currentEventId === event.id ? null : event.id,
-                          )
-                        }
-                        className="grid w-full grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left"
-                      >
-                        <div className="font-mono text-base font-semibold text-foreground/88">
-                          {event.displayTime}
-                        </div>
-
-                        <div className="flex items-center gap-3 text-sm font-semibold text-foreground/88">
-                          <span
-                            aria-hidden="true"
-                            className={`fib fi-${getCountryFlagCode(event.currency)} h-4 w-5 overflow-hidden rounded-[2px]`}
-                          />
-                          <span>{event.currency}</span>
-                        </div>
-
-                        <div>
-                          <span
-                            className={`inline-flex min-w-16 justify-center rounded-full border px-3 py-1 text-sm font-bold ${getImpactColorClassName(event.impactScore)} ${getImpactSurfaceClassName(event.impactScore)}`}
-                          >
-                            {event.impact}
-                          </span>
-                        </div>
-
-                        <div className="min-w-0">
-                          <p className="truncate text-base font-bold text-foreground">
-                            {event.event}
-                          </p>
-                          <p className="mt-1 truncate text-sm text-foreground/62">
-                            {labels.previous}: {event.previous} |{" "}
-                            {labels.forecast}: {event.forecast} |{" "}
-                            {labels.actual}:{" "}
-                            <span
-                              className={`font-semibold ${getActualValueColorClassName(event.actual, event.previous)}`}
-                            >
-                              {event.actual}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div className="text-right text-xs font-semibold uppercase tracking-[0.12em] text-foreground/55">
-                          {isSelected ? labels.collapse : labels.expand}
-                        </div>
-                      </button>
-
-                      {isSelected ? (
-                        <div className="border-t border-line px-4 py-4">
-                          <EconomicCalendarExpandedEventPanel
-                            event={event}
-                            locale={locale}
-                            labels={labels}
-                          />
+                    <ScrollReveal>
+                      {hasDateGroupChanged ? (
+                        <div className="flex items-center gap-3">
+                          <div className="h-px flex-1 border border-line border-dashed" />
+                          <div className="rounded-full border border-line bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/72">
+                            {getEventGroupDateLabel(
+                              event.date,
+                              locale,
+                              labels.today,
+                            )}
+                          </div>
+                          <div className="h-px flex-1 border border-line border-dashed" />
                         </div>
                       ) : null}
-                    </article>
+                    </ScrollReveal>
+
+                    <ScrollReveal>
+                      <article
+                        className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
+                          ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+                          : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
+                          }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedEventId((currentEventId) =>
+                              currentEventId === event.id ? null : event.id,
+                            )
+                          }
+                          className="grid w-full grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left"
+                        >
+                          <div className="font-mono text-base font-semibold text-foreground/88">
+                            {event.displayTime}
+                          </div>
+
+                          <div className="flex items-center gap-3 text-sm font-semibold text-foreground/88">
+                            <span
+                              aria-hidden="true"
+                              className={`fib fi-${getCountryFlagCode(event.currency)} h-4 w-5 overflow-hidden rounded-[2px]`}
+                            />
+                            <span>{event.currency}</span>
+                          </div>
+
+                          <div>
+                            <span
+                              className={`inline-flex min-w-16 justify-center rounded-full border px-3 py-1 text-sm font-bold ${getImpactColorClassName(event.impactScore)} ${getImpactSurfaceClassName(event.impactScore)}`}
+                            >
+                              {event.impact}
+                            </span>
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="truncate text-base font-bold text-foreground">
+                              {event.event}
+                            </p>
+                            <p className="mt-1 truncate text-sm text-foreground/62">
+                              {labels.previous}: {event.previous} |{" "}
+                              {labels.forecast}: {event.forecast} |{" "}
+                              {labels.actual}:{" "}
+                              <span
+                                className={`font-semibold ${getActualValueColorClassName(event.actual, event.previous)}`}
+                              >
+                                {event.actual}
+                              </span>
+                            </p>
+                          </div>
+
+                          <div className="text-right text-xs font-semibold uppercase tracking-[0.12em] text-foreground/55">
+                            {isSelected ? labels.collapse : labels.expand}
+                          </div>
+                        </button>
+
+                        {isSelected ? (
+                          <div className="border-t border-line px-4 py-4">
+                            <EconomicCalendarExpandedEventPanel
+                              event={event}
+                              locale={locale}
+                              labels={labels}
+                            />
+                          </div>
+                        ) : null}
+                      </article>
+                    </ScrollReveal>
                   </div>
                 );
               })}
@@ -573,12 +599,14 @@ export function EconomicCalendarBrowser({
               onPrevious={() => {
                 setCurrentPage((pageValue) => Math.max(1, pageValue - 1));
                 setSelectedEventId(null);
+                scrollToBrowserTop();
               }}
               onNext={() => {
                 setCurrentPage((pageValue) =>
                   Math.min(totalPages, pageValue + 1),
                 );
                 setSelectedEventId(null);
+                scrollToBrowserTop();
               }}
               summary={
                 <>
@@ -602,6 +630,7 @@ export function EconomicCalendarBrowser({
                         onClick={() => {
                           setCurrentPage(item);
                           setSelectedEventId(null);
+                          scrollToBrowserTop();
                         }}
                         aria-current={item === safeCurrentPage ? "page" : undefined}
                         className={`flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm transition-colors ${item === safeCurrentPage
@@ -618,11 +647,13 @@ export function EconomicCalendarBrowser({
             />
           ) : null}
 
-          <div className="rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-sm text-foreground/62">
-            {activeData.updatedAt
-              ? formatLocaleDateTime(activeData.updatedAt, locale)
-              : ""}
-          </div>
+          <ScrollReveal delay={700} effect="zoom-in">
+            <div className="rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-sm text-foreground/62">
+              {activeData.updatedAt
+                ? formatLocaleDateTime(activeData.updatedAt, locale)
+                : ""}
+            </div>
+          </ScrollReveal>
         </>
       )}
     </div>

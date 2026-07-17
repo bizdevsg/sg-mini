@@ -19,6 +19,7 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 
 type EconomicCalendarPageProps = {
   params: Promise<{ locales: string }>;
@@ -83,27 +84,32 @@ export default async function EconomicCalendarPage({
   const overview = await createInitialCalendarOverview();
 
   return (
-    <SectionContainer className="py-16 sm:py-20">
-      <nav
-        aria-label="Breadcrumb"
-        className="flex flex-wrap items-center gap-2 text-sm text-gray-500"
-      >
-        <Link
-          href={`/${locales}`}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-500 transition hover:bg-yellow-500/30"
+    <SectionContainer className="py-16 sm:py-20 mt-5">
+      <div className="space-y-5">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex flex-wrap items-center gap-2 text-sm text-gray-500"
         >
-          <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
-        </Link>
-        <span>{">"}</span>
-        <span className="font-medium text-white">{labels.breadcrumb}</span>
-      </nav>
+          <Link
+            href={`/${locales}`}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-500 transition hover:bg-yellow-500/30"
+          >
+            <FontAwesomeIcon icon={["fas", "house"]} className="text-xs" />
+          </Link>
+          <span>{">"}</span>
+          <span className="font-medium text-white">{labels.breadcrumb}</span>
+
+        </nav>
+
+        <SectionTitle title={labels.title} />
+      </div>
 
       <div className="mt-8">
-        <SectionTitle title={labels.title} />
-
-        <div className="mt-6 rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
-          <EconomicCalendarBrowser locale={locales} overview={overview} />
-        </div>
+        <ScrollReveal>
+          <div className="mt-6 rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
+            <EconomicCalendarBrowser locale={locales} overview={overview} />
+          </div>
+        </ScrollReveal>
       </div>
     </SectionContainer>
   );

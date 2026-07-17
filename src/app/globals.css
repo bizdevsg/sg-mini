@@ -78,6 +78,14 @@ button {
     box-shadow 180ms ease;
 }
 
+[data-aos][data-aos][data-aos-delay] {
+  transition-delay: 0ms;
+}
+
+[data-aos][data-aos][data-aos-delay].aos-animate {
+  transition-delay: var(--scroll-reveal-delay, 0ms);
+}
+
 ::selection {
   background: rgba(215, 170, 69, 0.35);
   color: #fff7df;

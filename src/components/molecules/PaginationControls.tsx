@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ScrollReveal } from "./ScrollReveal";
 
 type PaginationControlsProps = {
   previousLabel: string;
@@ -35,25 +36,31 @@ export function PaginationControls({
       <div
         className={`flex items-center gap-2 justify-between`}
       >
-        <button
-          type="button"
-          onClick={onPrevious}
-          disabled={isPreviousDisabled}
-          className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {previousLabel}
-        </button>
+        <ScrollReveal effect="fade-right" delay={500}>
+          <button
+            type="button"
+            onClick={onPrevious}
+            disabled={isPreviousDisabled}
+            className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {previousLabel}
+          </button>
+        </ScrollReveal>
 
-        {centerContent}
+        <ScrollReveal effect="fade-up" delay={500}>
+          {centerContent}
+        </ScrollReveal>
 
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={isNextDisabled}
-          className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {nextLabel}
-        </button>
+        <ScrollReveal effect="fade-left" delay={1000}>
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={isNextDisabled}
+            className="rounded-full border border-line px-4 py-2 text-sm text-foreground/78 transition-colors hover:border-yellow-500/60 hover:text-yellow-400 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {nextLabel}
+          </button>
+        </ScrollReveal>
       </div>
 
       {centerControls ? <div className="hidden sm:block" /> : null}

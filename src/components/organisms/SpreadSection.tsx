@@ -36,34 +36,38 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
           />
         </ScrollReveal>
 
-        {articles.length ? (
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
-            {articles.map((article, index) => (
-              <ScrollReveal
-                key={article.id}
-                effect={(index + 1) % 2 === 1 ? "fade-right" : "fade-left"}
-                delay={index * 180}
-              >
-                <NewsFeedArticleCard
-                  article={article}
-                  locale={locale}
-                  readMoreLabel={messages.newsBrowser.readArticle}
-                  prioritizeImage={index < 2}
-                />
-              </ScrollReveal>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-10">
-            <EmptyStatePanel body={messages.newsPage.emptyBody} />
-          </div>
-        )}
+        <ScrollReveal effect="fade-up">
+          {articles.length ? (
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
+              {articles.map((article, index) => (
+                <ScrollReveal
+                  key={article.id}
+                  effect={(index + 1) % 2 === 1 ? "fade-right" : "fade-left"}
+                  delay={index * 150}
+                >
+                  <NewsFeedArticleCard
+                    article={article}
+                    locale={locale}
+                    readMoreLabel={messages.newsBrowser.readArticle}
+                    prioritizeImage={index < 2}
+                  />
+                </ScrollReveal>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10">
+              <EmptyStatePanel body={messages.newsPage.emptyBody} />
+            </div>
+          )}
+        </ScrollReveal>
 
-        <div className="mt-8 flex justify-center">
-          <ButtonLink href={`/${locale}/news`} size="sm" variant="dark" className="mx-auto">
-            {newsPageContent.newsPage.hero.primaryCta}
-          </ButtonLink>
-        </div>
+        <ScrollReveal effect="zoom-in">
+          <div className="mt-8 flex justify-center">
+            <ButtonLink href={`/${locale}/news`} size="sm" variant="dark" className="mx-auto">
+              {newsPageContent.newsPage.hero.primaryCta}
+            </ButtonLink>
+          </div>
+        </ScrollReveal>
       </SectionContainer>
     </section>
   );

@@ -129,7 +129,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const labels = messages.newsDetailPage;
 
   return (
-    <SectionContainer className="py-16 sm:py-20">
+    <SectionContainer className="py-16 sm:py-20 mt-5">
       <NewsDetailBreadcrumb
         locale={locales}
         newsLabel={labels.news}

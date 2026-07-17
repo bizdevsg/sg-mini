@@ -9,13 +9,15 @@ import {
   useEffect,
 } from "react";
 
-type ScrollRevealEffect =
+type KnownScrollRevealEffect =
   | "fade"
   | "fade-up"
   | "fade-down"
   | "fade-left"
   | "fade-right"
   | "zoom-in";
+
+type ScrollRevealEffect = KnownScrollRevealEffect | (string & {});
 
 type ScrollRevealProps<T extends ElementType> = {
   as?: T;
@@ -67,6 +69,18 @@ export function ScrollReveal<T extends ElementType = "div">({
   const Component = (as ?? "div") as ElementType;
   const aosAnchorPlacement = resolveAosAnchorPlacement(rootMargin);
   const aosOffset = Math.max(0, Math.round(threshold * 120));
+  const refreshKey = [
+    effect,
+    delay,
+    duration,
+    once,
+    threshold,
+    rootMargin,
+  ].join("|");
+  const mergedStyle = {
+    ...style,
+    "--scroll-reveal-delay": `${delay}ms`,
+  } as CSSProperties;
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -92,12 +106,12 @@ export function ScrollReveal<T extends ElementType = "div">({
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [delay, duration, once, threshold, rootMargin]);
+  }, [refreshKey]);
 
   return (
     <Component
       className={className}
-      style={style}
+      style={mergedStyle}
       data-aos={effect}
       data-aos-delay={delay}
       data-aos-duration={duration}

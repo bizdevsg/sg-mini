@@ -1,6 +1,7 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
 import type { GettingStartedSupportCard } from "@/locales/getting-started-page";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type GettingStartedChecklistSectionProps = {
   checklistEyebrow: string;
@@ -24,30 +25,34 @@ export function GettingStartedChecklistSection({
   supportCards,
 }: GettingStartedChecklistSectionProps) {
   return (
-    <section className="py-16 sm:py-20 lg:py-24">
+    <section className="py-16 sm:py-20a">
       <SectionContainer>
         <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start">
           <div className="max-w-lg lg:sticky lg:top-25">
-            <SectionIntro
-              eyebrow={checklistEyebrow}
-              title={checklistTitle}
-              description={checklistSubtitle}
-              titleClassName="text-balance"
-            />
+            <ScrollReveal effect="fade-right">
+              <SectionIntro
+                eyebrow={checklistEyebrow}
+                title={checklistTitle}
+                description={checklistSubtitle}
+                titleClassName="text-balance"
+              />
+            </ScrollReveal>
           </div>
 
           <div className="space-y-12">
             <div>
-              <div className="text-xs font-medium uppercase tracking-[0.22em] text-yellow-400/90">
-                {checklistEyebrow}
-              </div>
-              <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl">
-                {checklistTitle}
-              </h2>
+              <ScrollReveal effect="fade-up">
+                <div className="text-xs font-medium uppercase tracking-[0.22em] text-yellow-400/90">
+                  {checklistEyebrow}
+                </div>
+                <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl">
+                  {checklistTitle}
+                </h2>
+              </ScrollReveal>
 
               <div className="mt-6 divide-y divide-zinc-800/60">
                 {checklist.map((item, index) => (
-                  <article
+                  <ScrollReveal
                     key={item}
                     className="group flex gap-6 py-5 first:pt-0 last:pb-0"
                   >
@@ -57,25 +62,27 @@ export function GettingStartedChecklistSection({
                     <p className="text-sm leading-7 text-zinc-300 transition-colors duration-200 group-hover:text-zinc-100 sm:text-base">
                       {item}
                     </p>
-                  </article>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
 
             <div>
-              <div className="text-xs font-medium uppercase tracking-[0.22em] text-yellow-400/90">
-                {supportEyebrow}
-              </div>
-              <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl">
-                {supportTitle}
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
-                {supportSubtitle}
-              </p>
+              <ScrollReveal effect="fade-up">
+                <div className="text-xs font-medium uppercase tracking-[0.22em] text-yellow-400/90">
+                  {supportEyebrow}
+                </div>
+                <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl">
+                  {supportTitle}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
+                  {supportSubtitle}
+                </p>
+              </ScrollReveal>
 
               <div className="mt-6 divide-y divide-zinc-800/60">
                 {supportCards.map((card, index) => (
-                  <article
+                  <ScrollReveal
                     key={card.title}
                     className="group flex gap-6 py-6 first:pt-0 last:pb-0"
                   >
@@ -90,7 +97,7 @@ export function GettingStartedChecklistSection({
                         {card.description}
                       </p>
                     </div>
-                  </article>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>

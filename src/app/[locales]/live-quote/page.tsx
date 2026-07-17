@@ -16,6 +16,7 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 
 type LiveQuotePageProps = {
   params: Promise<{ locales: string }>;
@@ -95,11 +96,17 @@ export default async function LiveQuotePage({ params }: LiveQuotePageProps) {
 
         <div className="relative z-10 space-y-6">
           <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6">
-            <LiveQuoteTable locale={locales} mode="full" />
+            <ScrollReveal
+              effect="fade-up"
+            >
+              <LiveQuoteTable locale={locales} mode="full" />
+            </ScrollReveal>
           </div>
 
           <Suspense fallback={<ExchangeRatePanelFallback locale={locales} />}>
-            <ExchangeRatePanel locale={locales} />
+            <ScrollReveal>
+              <ExchangeRatePanel locale={locales} />
+            </ScrollReveal>
           </Suspense>
         </div>
       </SectionContainer>

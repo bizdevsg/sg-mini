@@ -23,7 +23,7 @@ export function FallbackPanel({
   const hasActions = Boolean(primaryAction || secondaryAction);
 
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-[rgba(214,166,64,0.18)] bg-[radial-gradient(circle_at_top,rgba(214,166,64,0.14),transparent_42%),linear-gradient(180deg,rgba(20,16,10,0.96),rgba(6,6,6,0.98))] px-6 py-10 shadow-[0_30px_80px_rgba(0,0,0,0.32)] sm:px-10 sm:py-12">
+    <section className="relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-12">
       <div className="relative mx-auto max-w-3xl text-center">
         <div className="mx-auto mb-10 max-w-lg">
           <Image

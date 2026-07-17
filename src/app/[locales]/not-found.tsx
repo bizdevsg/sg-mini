@@ -15,7 +15,7 @@ export default function LocalizedNotFound() {
   const copy = getRouteFallbackCopy(locale).siteNotFound;
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
+    <main className="mx-auto w-full max-w-8xl px-5 py-12 sm:px-8 sm:py-16 mt-5">
       <FallbackPanel
         badge={copy.badge}
         code="404"
