@@ -76,6 +76,24 @@ function getProductCategoryApiUrl(category: ProductPageCategory) {
   return `${baseUrl}/${categoryPath}`;
 }
 
+function resolveProductImageSrc(item: ProductApiRecord) {
+  const imageUrl = item.image_url?.trim();
+
+  if (imageUrl) {
+    if (
+      imageUrl.startsWith("/api/image-proxy/") ||
+      imageUrl.startsWith("/assets/") ||
+      imageUrl.startsWith("data:image/")
+    ) {
+      return imageUrl;
+    }
+
+    return getProductAssetUrl(imageUrl);
+  }
+
+  return item.image ? getProductAssetUrl(item.image) : null;
+}
+
 function mapProductApiRecord(item: ProductApiRecord): ProductCatalogItem {
   return {
     id: item.id,
@@ -83,9 +101,7 @@ function mapProductApiRecord(item: ProductApiRecord): ProductCatalogItem {
     name: item.nama_produk,
     description: item.deskripsi_produk?.trim() || item.nama_produk,
     specsHtml: item.specs?.trim() || "",
-    imageSrc:
-      item.image_url?.trim() ||
-      (item.image ? getProductAssetUrl(item.image) : null),
+    imageSrc: resolveProductImageSrc(item),
     sourceCategory: item.kategori,
   };
 }

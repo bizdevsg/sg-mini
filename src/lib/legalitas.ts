@@ -37,6 +37,8 @@ type LegalitasApiResponse = {
   meta?: LegalitasApiMeta;
 };
 
+const LEGALITAS_REVALIDATE_SECONDS = 300;
+
 const FALLBACK_LEGALITAS_BY_LOCALE: Record<AppLocale, LegalitasRecord[]> = {
   id: [
     {
@@ -131,7 +133,9 @@ export async function getLegalitasRecords(locale: AppLocale = "id") {
 
   try {
     const response = await fetch(LEGALITAS_API_URL, {
-      cache: "no-store",
+      next: {
+        revalidate: LEGALITAS_REVALIDATE_SECONDS,
+      },
       headers: {
         Accept: "application/json",
       },

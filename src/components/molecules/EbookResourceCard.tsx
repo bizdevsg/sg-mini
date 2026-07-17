@@ -1,6 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 
 type EbookResourceCardProps = {
   categoryLabel: string;
@@ -28,14 +29,18 @@ export function EbookResourceCard({
       <div className="relative overflow-hidden">
         {imageSrc ? (
           <>
-            <Image
+            <ResilientImage
               src={imageSrc}
               alt={title}
-              width={960}
-              height={540}
+              loading="lazy"
               className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              unoptimized
+              fallback={
+                <div className="relative flex h-56 items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+                  <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                    <FontAwesomeIcon icon={["fas", "book-open"]} className="text-sm" />
+                  </div>
+                </div>
+              }
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
           </>

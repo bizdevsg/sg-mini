@@ -53,6 +53,7 @@ const DEFAULT_PHONE = "021-29675088";
 const DEFAULT_EMAIL = "berjangka@solidgold.co.id";
 const DEFAULT_FAX = "021-29675089";
 const DEFAULT_COMPLAINT_LINK = "https://pengaduan.bappebti.go.id/";
+const COMPANY_PROFILE_REVALIDATE_SECONDS = 300;
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -189,7 +190,9 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
 
   try {
     const response = await fetch(COMPANY_PROFILE_API_URL, {
-      cache: "no-store",
+      next: {
+        revalidate: COMPANY_PROFILE_REVALIDATE_SECONDS,
+      },
       headers: {
         Accept: "application/json",
       },

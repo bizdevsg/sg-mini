@@ -3,18 +3,21 @@ const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
 const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
 const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
-const DEFAULT_SG_ADMIN_API_BASE_URL = "http://sg-admin.test/api/v1";
+const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
+const DEFAULT_SG_ADMIN_LEGACY_ORIGIN = "http://sg-admin.test";
+const DEFAULT_SG_ADMIN_API_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/api/v1`;
 const DEFAULT_EBOOK_CATEGORY_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
-const DEFAULT_PRODUCT_PORTAL_BASE_URL = "http://sg-admin.test";
+const DEFAULT_PRODUCT_PORTAL_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/`;
 const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
 const DEFAULT_BANNER_DETAIL_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
-const DEFAULT_BANNER_IMAGE_BASE_URL = "http://sg-admin.test/storage/banner-images";
+const DEFAULT_BANNER_IMAGE_BASE_URL =
+  `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/banner`;
 const DEFAULT_PENGHARGAAN_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/penghargaan`;
 const DEFAULT_PENGHARGAAN_IMAGE_BASE_URL =
-  "http://sg-admin.test/storage/penghargaan-images";
+  `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/penghargaan-images`;
 const DEFAULT_PENGUMUMAN_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/pengumuman`;
 const DEFAULT_CONTACT_MESSAGE_API_URL =
@@ -210,6 +213,63 @@ function getAssetOrigin(baseUrl: string) {
   }
 }
 
+function isSameHostname(left: string, right: string) {
+  return left.trim().toLowerCase() === right.trim().toLowerCase();
+}
+
+function getActiveSgAdminOrigin() {
+  return getAssetOrigin(PRODUCT_PORTAL_BASE_URL);
+}
+
+function isSgAdminHostname(hostname: string) {
+  try {
+    const activeHostname = new URL(getActiveSgAdminOrigin()).hostname;
+    const defaultHostname = new URL(DEFAULT_SG_ADMIN_ORIGIN).hostname;
+    const legacyHostname = new URL(DEFAULT_SG_ADMIN_LEGACY_ORIGIN).hostname;
+
+    return (
+      isSameHostname(hostname, activeHostname) ||
+      isSameHostname(hostname, defaultHostname) ||
+      isSameHostname(hostname, legacyHostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function isSgAdminUrl(assetUrl: string) {
+  try {
+    return isSgAdminHostname(new URL(assetUrl).hostname);
+  } catch {
+    return false;
+  }
+}
+
+export function normalizeSgAdminUrl(assetUrl: string) {
+  const normalizedAssetUrl = assetUrl.trim();
+
+  if (!normalizedAssetUrl || !isAbsoluteHttpUrl(normalizedAssetUrl)) {
+    return normalizedAssetUrl;
+  }
+
+  try {
+    const parsedUrl = new URL(normalizedAssetUrl);
+
+    if (!isSgAdminHostname(parsedUrl.hostname)) {
+      return normalizedAssetUrl;
+    }
+
+    const normalizedUrl = new URL(
+      `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`,
+      getActiveSgAdminOrigin(),
+    );
+
+    return normalizedUrl.toString();
+  } catch {
+    return normalizedAssetUrl;
+  }
+}
+
 function resolveAssetUrl(baseUrl: string, assetPath: string) {
   const normalizedAssetPath = assetPath.trim();
 
@@ -218,7 +278,7 @@ function resolveAssetUrl(baseUrl: string, assetPath: string) {
   }
 
   if (isAbsoluteHttpUrl(normalizedAssetPath)) {
-    return normalizedAssetPath;
+    return normalizeSgAdminUrl(normalizedAssetPath);
   }
 
   if (normalizedAssetPath.startsWith("/")) {
@@ -229,7 +289,7 @@ function resolveAssetUrl(baseUrl: string, assetPath: string) {
 }
 
 export function getImageProxyUrl(assetUrl: string) {
-  const normalizedAssetUrl = assetUrl.trim();
+  const normalizedAssetUrl = normalizeSgAdminUrl(assetUrl.trim());
 
   if (!normalizedAssetUrl) {
     return "";
@@ -265,7 +325,7 @@ const IMAGE_PROXY_ALLOWED_HOSTS = new Set(
 
 export function isAllowedImageProxySource(assetUrl: string) {
   try {
-    const parsedUrl = new URL(assetUrl);
+    const parsedUrl = new URL(normalizeSgAdminUrl(assetUrl));
 
     return (
       (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") &&

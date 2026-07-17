@@ -6,7 +6,12 @@ import {
   type EbookCategoryDetail,
   type EbookResource,
 } from "@/lib/ebook.shared";
-import { EBOOK_CATEGORY_API_URL, PRODUCT_PORTAL_BASE_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import {
+  EBOOK_CATEGORY_API_URL,
+  PRODUCT_PORTAL_BASE_URL,
+  USE_DUMMY_API_DATA,
+  normalizeSgAdminUrl,
+} from "@/lib/env";
 
 type EbookCategoryApiRecord = {
   id?: number;
@@ -81,7 +86,7 @@ function resolveStorageAssetUrl(value: unknown) {
   }
 
   if (isAbsoluteHttpUrl(normalizedValue)) {
-    return normalizedValue;
+    return normalizeSgAdminUrl(normalizedValue);
   }
 
   const normalizedBaseUrl = PRODUCT_PORTAL_BASE_URL.replace(/\/+$/, "");

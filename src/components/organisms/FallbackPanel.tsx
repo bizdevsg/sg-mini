@@ -25,13 +25,14 @@ export function FallbackPanel({
   return (
     <section className="relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-12">
       <div className="relative mx-auto max-w-3xl text-center">
-        <div className="mx-auto mb-10 max-w-lg">
+        <div className="mx-auto mb-10 max-w-lg ">
           <Image
             src="/assets/icon-impact/error-image.svg"
             width={1000}
             height={1000}
             alt="Error Illustration"
             loading="eager"
+            className="overflow-hidden"
           />
         </div>
 

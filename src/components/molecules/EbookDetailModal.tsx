@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 import type { EbookResource } from "@/lib/ebook.shared";
-import Image from "next/image";
 import Link from "next/link";
 
 type EbookDetailModalProps = {
@@ -64,12 +63,17 @@ export function EbookDetailModal({
           {/* Area Cover Ebook */}
           <div className="relative flex min-h-[280px] items-center justify-center bg-gradient-to-b from-zinc-800 to-zinc-900 p-6 lg:h-full lg:min-h-full">
             {item.imageSrc ? (
-              <Image
+              <ResilientImage
                 src={item.imageSrc}
                 alt={item.title}
-                fill
-                sizes="1080"
-                className="object-cover"
+                loading="eager"
+                className="absolute inset-0 h-full w-full object-cover"
+                fallback={
+                  <div className="z-10 flex flex-col items-center gap-3 text-amber-400">
+                    <FontAwesomeIcon icon={["fas", "book-open"]} className="text-6xl drop-shadow-[0_4px_12px_rgba(251,191,36,0.3)]" />
+                    <span className="text-xs font-medium tracking-wider text-zinc-500 uppercase">No Cover</span>
+                  </div>
+                }
               />
             ) : (
               <div className="z-10 flex flex-col items-center gap-3 text-amber-400">

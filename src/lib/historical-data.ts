@@ -5,6 +5,8 @@ import {
   HISTORICAL_DATA_API_URL,
 } from "@/lib/env";
 
+const HISTORICAL_DATA_REVALIDATE_SECONDS = 300;
+
 export type HistoricalDataRecord = {
   id: number;
   tanggal: string;
@@ -50,7 +52,9 @@ function compareHistoricalRecords(
 
 export async function getHistoricalData() {
   const response = await fetch(HISTORICAL_DATA_API_URL, {
-    cache: "no-store",
+    next: {
+      revalidate: HISTORICAL_DATA_REVALIDATE_SECONDS,
+    },
     headers: {
       Authorization: `Bearer ${HISTORICAL_DATA_API_TOKEN}`,
       Accept: "application/json",

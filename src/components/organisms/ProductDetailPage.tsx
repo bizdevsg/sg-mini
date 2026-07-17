@@ -1,3 +1,4 @@
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
@@ -74,10 +75,15 @@ export function ProductDetailPage({
           <div className="relative z-10 grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-8">
             <div className="h-fit rounded-[28px] border border-white/10 bg-[rgba(8,8,8,0.78)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-6">
               {item.imageSrc ? (
-                <img
+                <ResilientImage
                   src={item.imageSrc}
                   alt={item.name}
                   className="w-full rounded-2xl object-contain"
+                  fallback={
+                    <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">
+                      {item.name}
+                    </div>
+                  }
                 />
               ) : (
                 <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">

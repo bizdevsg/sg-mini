@@ -5,6 +5,8 @@ import {
   PENGUMUMAN_API_URL,
   USE_DUMMY_API_DATA,
   getPengumumanAssetUrl,
+  isSgAdminUrl,
+  normalizeSgAdminUrl,
 } from "@/lib/env";
 
 export type PengumumanRecord = {
@@ -50,6 +52,7 @@ export type PengumumanResult = {
 };
 
 const PENGUMUMAN_TIMEOUT_MS = 8000;
+const PENGUMUMAN_REVALIDATE_SECONDS = 300;
 
 function normalizeWhitespace(value: string) {
   return value.replace(/\s+/g, " ").trim();
@@ -66,7 +69,15 @@ function resolvePengumumanHtmlUrl(value: string) {
     return normalizedValue;
   }
 
-  if (/^https?:\/\//i.test(normalizedValue) || normalizedValue.startsWith("/")) {
+  if (/^https?:\/\//i.test(normalizedValue)) {
+    const normalizedAbsoluteUrl = normalizeSgAdminUrl(normalizedValue);
+
+    return isSgAdminUrl(normalizedAbsoluteUrl)
+      ? getPengumumanAssetUrl(normalizedAbsoluteUrl)
+      : normalizedAbsoluteUrl;
+  }
+
+  if (normalizedValue.startsWith("/")) {
     return getPengumumanAssetUrl(normalizedValue);
   }
 
@@ -136,7 +147,9 @@ export async function getPengumuman(page = 1): Promise<PengumumanResult> {
     url.searchParams.set("page", String(page));
 
     const response = await fetch(url.toString(), {
-      cache: "no-store",
+      next: {
+        revalidate: PENGUMUMAN_REVALIDATE_SECONDS,
+      },
       signal: controller.signal,
       headers: {
         Accept: "application/json",

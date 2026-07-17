@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
@@ -64,10 +65,18 @@ export function ProductCatalogBrowser({
                   <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(180deg,#1a1a1a,#101010)] transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_18px_45px_rgba(205,161,58,0.12)]">
                     <div className="relative flex h-60 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,rgba(205,161,58,0.18),transparent_70%),linear-gradient(180deg,#1c1c1c,#121212)]">
                       {item.imageSrc ? (
-                        <img
+                        <ResilientImage
                           src={item.imageSrc}
                           alt={item.name}
-                          className="max-h-full max-w-full w-full object-cover transition duration-500 group-hover:scale-110"
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                          fallback={
+                            <div className="flex h-full w-full items-center justify-center bg-yellow-500/15 text-yellow-400">
+                              <FontAwesomeIcon
+                                icon={["fas", "box-open"]}
+                                className="text-2xl"
+                              />
+                            </div>
+                          }
                         />
                       ) : (
                         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">

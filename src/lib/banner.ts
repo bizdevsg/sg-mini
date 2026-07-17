@@ -9,6 +9,7 @@ import {
   BANNER_IMAGE_BASE_URL,
   USE_DUMMY_API_DATA,
   getBannerAssetUrl,
+  normalizeSgAdminUrl,
 } from "@/lib/env";
 
 export type BannerApiRecord = {
@@ -54,6 +55,7 @@ type BannerDetailApiResponse = {
 };
 
 const BANNER_TIMEOUT_MS = 8000;
+const BANNER_REVALIDATE_SECONDS = 300;
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -119,7 +121,7 @@ function buildDirectBannerAssetUrl(value: string) {
   }
 
   if (isAbsoluteHttpUrl(normalizedValue)) {
-    return normalizedValue;
+    return normalizeSgAdminUrl(normalizedValue);
   }
 
   if (normalizedValue.startsWith("/")) {
@@ -148,12 +150,13 @@ function sanitizeBannerHtml(content: string | null | undefined) {
     })
     .replace(/<a\b([^>]*)\bhref=(['"])(.*?)\2([^>]*)>/gi, (_match, before, quote, href, after) => {
       const normalizedHref = normalizeText(href);
-      const isAbsoluteOrSafeHref =
-        /^(mailto:|tel:|#|https?:\/\/)/i.test(normalizedHref) ||
-        normalizedHref.startsWith("/");
       const resolvedHref =
-        !normalizedHref || isAbsoluteOrSafeHref
+        !normalizedHref
           ? normalizedHref
+          : normalizedHref.startsWith("/") || /^(mailto:|tel:|#)/i.test(normalizedHref)
+            ? normalizedHref
+            : isAbsoluteHttpUrl(normalizedHref)
+              ? normalizeSgAdminUrl(normalizedHref)
           : buildDirectBannerAssetUrl(normalizedHref);
       const target = /target\s*=/i.test(`${before} ${after}`)
         ? ""
@@ -215,7 +218,9 @@ async function fetchBannerList() {
 
   try {
     const response = await fetch(BANNER_API_URL, {
-      cache: "no-store",
+      next: {
+        revalidate: BANNER_REVALIDATE_SECONDS,
+      },
       signal: controller.signal,
       headers: {
         Accept: "application/json",
@@ -254,7 +259,9 @@ async function fetchBannerDetail(slug: string) {
 
   try {
     const response = await fetch(buildBannerDetailApiUrl(slug), {
-      cache: "no-store",
+      next: {
+        revalidate: BANNER_REVALIDATE_SECONDS,
+      },
       signal: controller.signal,
       headers: {
         Accept: "application/json",

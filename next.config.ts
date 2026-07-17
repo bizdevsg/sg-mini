@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
+
 function getProtocol(url: URL) {
   return url.protocol.replace(":", "") as "http" | "https";
 }
@@ -23,14 +25,14 @@ const newsImageBaseUrl = new URL(
 );
 const bannerImageBaseUrl = new URL(
   process.env.BANNER_IMAGE_BASE_URL ??
-    "http://sg-admin.test/storage/banner-images",
+    `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/banner`,
 );
 const productPortalBaseUrl = new URL(
-  process.env.PRODUCT_PORTAL_BASE_URL ?? "http://sg-admin.test",
+  process.env.PRODUCT_PORTAL_BASE_URL ?? `${DEFAULT_SG_ADMIN_ORIGIN}/`,
 );
 const penghargaanImageBaseUrl = new URL(
   process.env.PENGHARGAAN_IMAGE_BASE_URL ??
-    "http://sg-admin.test/storage/penghargaan-images",
+    `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/penghargaan-images`,
 );
 const picsumBaseUrl = new URL("https://picsum.photos");
 const imgPlaceholder = new URL(

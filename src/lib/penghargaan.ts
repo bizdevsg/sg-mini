@@ -33,6 +33,8 @@ type PenghargaanApiResponse = {
   data?: RawPenghargaanRecord[];
 };
 
+const PENGHARGAAN_REVALIDATE_SECONDS = 300;
+
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -98,7 +100,9 @@ export async function getPenghargaanRecords() {
 
   try {
     const response = await fetch(PENGHARGAAN_API_URL, {
-      cache: "no-store",
+      next: {
+        revalidate: PENGHARGAAN_REVALIDATE_SECONDS,
+      },
       headers: {
         Accept: "application/json",
       },

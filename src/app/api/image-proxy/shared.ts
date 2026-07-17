@@ -1,7 +1,21 @@
 import { NextResponse } from "next/server";
 
 import { withApiProtectionHeaders } from "@/lib/api-protection";
-import { isAllowedImageProxySource } from "@/lib/env";
+import { isAllowedImageProxySource, normalizeSgAdminUrl } from "@/lib/env";
+
+const IMAGE_CONTENT_TYPES_BY_EXTENSION: Record<string, string> = {
+  ".avif": "image/avif",
+  ".bmp": "image/bmp",
+  ".gif": "image/gif",
+  ".ico": "image/x-icon",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+  ".tif": "image/tiff",
+  ".tiff": "image/tiff",
+  ".webp": "image/webp",
+};
 
 function buildErrorResponse(status: number, message: string) {
   return withApiProtectionHeaders(
@@ -32,19 +46,57 @@ export function getImageProxySourceFromEncodedParam(encodedSource?: string) {
   }
 }
 
+function inferImageContentTypeFromUrl(sourceUrl: string) {
+  try {
+    const { pathname } = new URL(sourceUrl);
+    const normalizedPathname = pathname.toLowerCase();
+
+    for (const [extension, contentType] of Object.entries(
+      IMAGE_CONTENT_TYPES_BY_EXTENSION,
+    )) {
+      if (normalizedPathname.endsWith(extension)) {
+        return contentType;
+      }
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function resolveImageContentType(
+  sourceUrl: string,
+  upstreamContentType: string | null,
+) {
+  const normalizedContentType = upstreamContentType?.toLowerCase().trim() ?? "";
+
+  if (normalizedContentType.startsWith("image/")) {
+    return upstreamContentType;
+  }
+
+  if (normalizedContentType === "application/octet-stream") {
+    return inferImageContentTypeFromUrl(sourceUrl);
+  }
+
+  return null;
+}
+
 export async function proxyImageSource(sourceUrl: string) {
-  if (!sourceUrl) {
+  const normalizedSourceUrl = normalizeSgAdminUrl(sourceUrl);
+
+  if (!normalizedSourceUrl) {
     return buildErrorResponse(400, "Missing src parameter.");
   }
 
-  if (!isAllowedImageProxySource(sourceUrl)) {
+  if (!isAllowedImageProxySource(normalizedSourceUrl)) {
     return buildErrorResponse(400, "Unsupported image source.");
   }
 
   let upstreamResponse: Response;
 
   try {
-    upstreamResponse = await fetch(sourceUrl, {
+    upstreamResponse = await fetch(normalizedSourceUrl, {
       cache: "no-store",
       headers: {
         Accept: "image/*,*/*;q=0.8",
@@ -62,7 +114,10 @@ export async function proxyImageSource(sourceUrl: string) {
   }
 
   const responseHeaders = new Headers();
-  const contentType = upstreamResponse.headers.get("content-type");
+  const contentType = resolveImageContentType(
+    normalizedSourceUrl,
+    upstreamResponse.headers.get("content-type"),
+  );
   const cacheControl = upstreamResponse.headers.get("cache-control");
   const contentLength = upstreamResponse.headers.get("content-length");
   const etag = upstreamResponse.headers.get("etag");

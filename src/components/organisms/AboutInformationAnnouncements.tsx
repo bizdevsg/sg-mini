@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { AboutInformationAnnouncementsEmptyState } from "@/components/molecules/AboutInformationAnnouncementsEmptyState";
@@ -128,13 +128,21 @@ export function AboutInformationAnnouncements({
             >
               {item.image_url ? (
                 <div className="relative h-52 w-full overflow-hidden">
-                  <Image
+                  <ResilientImage
                     src={item.image_url}
                     alt={imageAlt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    unoptimized
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fallback={
+                      <div className="relative flex h-full w-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+                        <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                          <FontAwesomeIcon
+                            icon={["fas", "bullhorn"]}
+                            className="text-sm"
+                          />
+                        </div>
+                      </div>
+                    }
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -229,15 +237,33 @@ export function AboutInformationAnnouncements({
             </button>
 
             {selectedItem.image_url ? (
-              <div className="relative h-64 w-full shrink-0 sm:h-80">
-                <Image
+              <div className="relative h-64 w-full shrink-0 overflow-hidden sm:h-80">
+                <ResilientImage
                   src={selectedItem.image_url}
                   alt={selectedItem.judul?.trim() || labels.defaultTitle}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  unoptimized
+                  loading="eager"
+                  className="h-full w-full object-center object-cover"
+                  fallback={
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-yellow-500/10 via-black to-black overflow-hidden">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                        <FontAwesomeIcon
+                          icon={["fas", "bullhorn"]}
+                          className="text-xl"
+                        />
+                      </div>
+                    </div>
+                  }
                 />
+                <div className="absolute bottom-0 left-0 z-10 px-4 py-6 w-full">
+                  <h2
+                    id={`pengumuman-title-${selectedItem.id}`}
+                    className="absolute bottom-3 z-10 font-mono text-2xl font-bold tracking-[-0.03em] text-white sm:text-[2rem]"
+                  >
+                    {selectedItem.judul?.trim() || labels.defaultTitle}
+                  </h2>
+                </div>
+
+
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
               </div>
             ) : null}
@@ -266,12 +292,7 @@ export function AboutInformationAnnouncements({
                 </div>
 
                 <div>
-                  <h2
-                    id={`pengumuman-title-${selectedItem.id}`}
-                    className="mt-4 max-w-3xl font-mono text-2xl font-bold tracking-[-0.03em] text-white sm:text-[2rem]"
-                  >
-                    {selectedItem.judul?.trim() || labels.defaultTitle}
-                  </h2>
+
 
                   <div
                     className="pengumuman-content prose-sm mt-6 max-w-none text-sm leading-7 text-white"
