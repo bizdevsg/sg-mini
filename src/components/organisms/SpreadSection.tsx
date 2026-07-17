@@ -6,6 +6,7 @@ import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { getNewsFeed } from "@/lib/news";
 import { getNewsPageContent } from "@/locales/news-page-content";
 import { getMessages, type AppLocale } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type SpreadSectionProps = {
   locale: AppLocale;
@@ -22,25 +23,34 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
   return (
     <section className="bg-transparent pb-20 text-white">
       <SectionContainer>
-        <SectionIntro
-          eyebrow={latestSection.eyebrow}
-          title={latestSection.title}
-          description={latestSection.subtitle}
-          align="center"
-          className="mx-auto max-w-3xl"
-          eyebrowClassName="text-yellow-500"
-        />
+        <ScrollReveal
+          effect="fade-up"
+        >
+          <SectionIntro
+            eyebrow={latestSection.eyebrow}
+            title={latestSection.title}
+            description={latestSection.subtitle}
+            align="center"
+            className="mx-auto max-w-3xl"
+            eyebrowClassName="text-yellow-500"
+          />
+        </ScrollReveal>
 
         {articles.length ? (
           <div className="mt-10 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
             {articles.map((article, index) => (
-              <NewsFeedArticleCard
+              <ScrollReveal
                 key={article.id}
-                article={article}
-                locale={locale}
-                readMoreLabel={messages.newsBrowser.readArticle}
-                prioritizeImage={index < 2}
-              />
+                effect={(index + 1) % 2 === 1 ? "fade-right" : "fade-left"}
+                delay={index * 180}
+              >
+                <NewsFeedArticleCard
+                  article={article}
+                  locale={locale}
+                  readMoreLabel={messages.newsBrowser.readArticle}
+                  prioritizeImage={index < 2}
+                />
+              </ScrollReveal>
             ))}
           </div>
         ) : (

@@ -57,7 +57,7 @@ export function ScrollReveal<T extends ElementType = "div">({
   effect = "fade-up",
   delay = 0,
   duration = 700,
-  once = true,
+  once = false,
   threshold = 0.18,
   rootMargin = "0px 0px -10% 0px",
   className,
