@@ -1,4 +1,5 @@
 import { LocoLondonGoldHistoryArticle } from "@/components/molecules/LocoLondonGoldHistoryArticle";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import type { LocoLondonGoldArticleSection } from "@/locales/loco-london-gold-page";
 
@@ -19,8 +20,14 @@ export function LocoLondonGoldHistorySection({
 
       <div className="mx-auto">
         <div className="grid gap-6">
-          {items.map((item) => (
-            <LocoLondonGoldHistoryArticle key={item.title} item={item} />
+          {items.map((item, index) => (
+            <ScrollReveal
+              key={item.title}
+              effect={index % 2 === 0 ? "fade-right" : "fade-left"}
+              delay={Math.min(index * 140, 420)}
+            >
+              <LocoLondonGoldHistoryArticle item={item} />
+            </ScrollReveal>
           ))}
         </div>
       </div>

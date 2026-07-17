@@ -16,17 +16,20 @@ export function IndexSymbolsOverviewSection({
     <SectionContainer className="py-16 md:py-20 relative">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
 
-      <div className="mx-auto">
-        <div className="mb-12 text-center">
-          <h2
-            id="index-symbols-list"
-            className="text-3xl font-bold leading-tight text-white sm:text-4xl"
-          >
-            {title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-zinc-300">
-            {subtitle}
-          </p>
+      <div className="">
+        <div className="mb-12 flex gap-3">
+          <div className="w-2 h-7 bg-yellow-500 rounded-full mt-2" />
+          <div>
+            <h2
+              id="index-symbols-list"
+              className="text-3xl font-bold leading-tight text-white sm:text-4xl"
+            >
+              {title}
+            </h2>
+            <p className="max-w-3xl text-base leading-7 text-zinc-300">
+              {subtitle}
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

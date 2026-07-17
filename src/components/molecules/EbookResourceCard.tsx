@@ -1,6 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { ButtonLink } from "@/components/atoms/ButtonLink";
 
 type EbookResourceCardProps = {
   categoryLabel: string;
@@ -24,50 +24,94 @@ export function EbookResourceCard({
   title,
 }: EbookResourceCardProps) {
   return (
-    <article className="flex h-full flex-col rounded-[24px] border border-line bg-linear-to-br from-zinc-900/55 to-black/35 p-5 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
-      <div className="overflow-hidden rounded-2xl border border-white/8 bg-black/20">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]">
+      <div className="relative overflow-hidden">
         {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={title}
-            className="h-48 min-h-48 w-full object-cover"
-            loading="lazy"
-          />
+          <>
+            <Image
+              src={imageSrc}
+              alt={title}
+              width={960}
+              height={540}
+              className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+          </>
         ) : (
-          <div className="flex h-48 items-center justify-center text-yellow-400">
-            <FontAwesomeIcon icon={["fas", "book"]} className="text-3xl" />
+          <div className="relative flex h-56 items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+            <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+              <FontAwesomeIcon icon={["fas", "book-open"]} className="text-sm" />
+            </div>
           </div>
         )}
-      </div>
 
-      <div className="mt-5 flex flex-1 flex-col justify-between">
-        <div>
-          <div className="flex flex-wrap gap-2">
-            <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-yellow-300">
-              {categoryLabel}
-            </span>
-            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-300">
-              PDF
-            </span>
-          </div>
-
-          <h3 className="mt-4 text-lg font-bold tracking-[-0.02em] text-white sm:text-xl line-clamp-1">
-            {title}
-          </h3>
-          <p className="mt-3 flex-1 overflow-hidden text-sm leading-7 text-zinc-300 line-clamp-2 max-h-14">
-            {description}
-          </p>
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          <span className="rounded-full bg-yellow-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">
+            {categoryLabel}
+          </span>
+          <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/82 backdrop-blur-sm">
+            PDF
+          </span>
         </div>
 
-        <div className="mt-6 w-full">
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="font-mono text-lg font-bold leading-snug text-white drop-shadow-lg line-clamp-2">
+            {title}
+          </h3>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <p className="line-clamp-3 text-sm leading-7 text-zinc-300/88">
+          {description}
+        </p>
+
+        <div className="mt-5 flex items-center gap-3 text-xs text-yellow-500/60">
+          <span className="flex items-center gap-1.5">
+            <FontAwesomeIcon
+              icon={["fas", "book-open-reader"]}
+              className="text-[10px]"
+            />
+            {previewLabel}
+          </span>
+          <span className="h-px flex-1 bg-yellow-500/10" />
+          <span className="flex items-center gap-1.5">
+            <FontAwesomeIcon
+              icon={["fas", "download"]}
+              className="text-[10px]"
+            />
+            {fileUrl ? ctaLabel : "Unavailable"}
+          </span>
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <button
             type="button"
             onClick={onPreviewClick}
-            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-2xl border cursor-pointer border-white/10 bg-white/[0.03] px-4 text-sm font-semibold text-zinc-200 transition hover:border-yellow-500/30 hover:bg-yellow-500/10 hover:text-yellow-200"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm font-semibold text-zinc-200 transition hover:border-yellow-500/30 hover:bg-yellow-500/10 hover:text-yellow-200"
           >
             <FontAwesomeIcon icon={["fas", "circle-info"]} />
             {previewLabel}
           </button>
+
+          {fileUrl ? (
+            <Link
+              href={fileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-yellow-500 px-4 text-sm font-semibold text-black transition hover:bg-yellow-400"
+            >
+              <FontAwesomeIcon icon={["fas", "arrow-up-right-from-square"]} />
+              {ctaLabel}
+            </Link>
+          ) : (
+            <div className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/8 bg-white/[0.02] px-4 text-sm font-semibold text-zinc-500">
+              <FontAwesomeIcon icon={["fas", "ban"]} />
+              {ctaLabel}
+            </div>
+          )}
         </div>
       </div>
     </article>

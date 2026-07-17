@@ -3,6 +3,7 @@ import { LocoLondonGoldDerivativeSection } from "./LocoLondonGoldDerivativeSecti
 import { LocoLondonGoldHistorySection } from "./LocoLondonGoldHistorySection";
 import { LocoLondonGoldMarketsSection } from "./LocoLondonGoldMarketsSection";
 import { PageHeroBanner } from "./PageHeroBanner";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 import type { AppLocale } from "@/locales";
 import type { LocoLondonGoldPageContent } from "@/locales/loco-london-gold-page";
 
@@ -38,14 +39,17 @@ export function LocoLondonGoldPage({
         ]}
       >
         <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
-          {page.hero.badges.map((badge) => (
-            <div
+          {page.hero.badges.map((badge, index) => (
+            <ScrollReveal
               key={badge}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md"
+              effect="zoom-in"
+              delay={index * 120}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
-              <span>{badge}</span>
-            </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
+                <span>{badge}</span>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </PageHeroBanner>

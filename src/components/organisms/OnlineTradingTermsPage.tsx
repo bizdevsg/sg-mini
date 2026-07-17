@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { OnlineTradingTermsArticleList } from "./OnlineTradingTermsArticleList";
 import { PageHeroBanner } from "./PageHeroBanner";
 import {
@@ -41,29 +42,34 @@ export function OnlineTradingTermsPage({
         ]}
       >
         <div className="flex justify-center">
-          <ButtonLink
-            href="#terms-article"
-            size="lg"
-            className="group w-full sm:min-w-[220px] sm:w-auto"
-          >
-            <FontAwesomeIcon icon={["fas", "book"]} />
-            {page.hero.primaryCta}
-            <FontAwesomeIcon
-              icon={["fas", "arrow-right"]}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </ButtonLink>
+          <ScrollReveal effect="fade-up" delay={80}>
+            <ButtonLink
+              href="#terms-article"
+              size="lg"
+              className="group w-full sm:min-w-[220px] sm:w-auto"
+            >
+              <FontAwesomeIcon icon={["fas", "book"]} />
+              {page.hero.primaryCta}
+              <FontAwesomeIcon
+                icon={["fas", "arrow-right"]}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </ButtonLink>
+          </ScrollReveal>
         </div>
 
         <div className="mt-12 flex flex-wrap justify-center gap-3 lg:gap-4">
-          {page.hero.badges.map((badge) => (
-            <div
+          {page.hero.badges.map((badge, index) => (
+            <ScrollReveal
               key={badge}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md"
+              effect="zoom-in"
+              delay={index * 120}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
-              <span>{badge}</span>
-            </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium text-zinc-200 backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
+                <span>{badge}</span>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </PageHeroBanner>
