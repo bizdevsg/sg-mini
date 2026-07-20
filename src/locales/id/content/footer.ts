@@ -8,7 +8,7 @@ export const idFooter: AppMessages["footer"] = {
   disclaimerLabel: "Disclaimer:",
   disclaimerBody:
     "Perdagangan berjangka memiliki risiko tinggi dan memerlukan pemahaman yang memadai sebelum melakukan transaksi. Informasi pada website ini hanya bersifat edukasi dan referensi, bukan ajakan atau jaminan keuntungan. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab nasabah.",
-  brandTitle: "SG Mini",
+  brandTitle: "Menu",
   brandItems: [
     { label: "Tentang Kami", href: "/about" },
     { label: "Ebook", href: "/education/ebook" },
@@ -60,4 +60,8 @@ export const idFooter: AppMessages["footer"] = {
   copyrightProtected: "Hak cipta dilindungi.",
   komdigiAlt: "Logo Komdigi",
   tsiAlt: "Logo TSI",
+  faqItem: {
+    label: "FAQ",
+    href: "/faq",
+  },
 };

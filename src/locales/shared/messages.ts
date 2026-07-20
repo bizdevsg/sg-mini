@@ -594,6 +594,30 @@ export type AppMessages = {
       }>;
     };
   };
+  faqPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    sections: Array<{
+      title: string;
+      description: string;
+      items: Array<{
+        question: string;
+        answer: string;
+      }>;
+    }>;
+    helpCard: {
+      title: string;
+      description: string;
+      primaryCta: string;
+      secondaryCta: string;
+    };
+  };
   clientArea: {
     pageTitle: string;
     pageDescription: string;
@@ -923,6 +947,10 @@ export type AppMessages = {
     copyrightProtected: string;
     komdigiAlt: string;
     tsiAlt: string;
+    faqItem: {
+      label: string;
+      href: string;
+    };
   };
   loadingOverlay: {
     title: string;

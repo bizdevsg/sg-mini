@@ -98,7 +98,7 @@ export default async function RootLayout({
         </Script>
         <Script
           id="tawk-chat"
-          src="https://embed.tawk.to/6a4477cca4845e1d49d8e720/1jsdn7tul"
+          src="https://embed.tawk.to/6a5db82e9953a51d4ac277ec/1jtv1eu8t"
           strategy="lazyOnload"
           charSet="UTF-8"
           crossOrigin="anonymous"

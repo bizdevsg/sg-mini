@@ -8,7 +8,7 @@ export const enFooter: AppMessages["footer"] = {
   disclaimerLabel: "Disclaimer:",
   disclaimerBody:
     "Futures trading carries high risk and requires adequate understanding before placing transactions. The information on this website is for education and reference only, not an invitation or guarantee of profit. Every transaction decision remains fully the client's responsibility.",
-  brandTitle: "SG Mini",
+  brandTitle: "Menu",
   brandItems: [
     { label: "About Us", href: "/about" },
     { label: "Ebook", href: "/education/ebook" },
@@ -60,4 +60,8 @@ export const enFooter: AppMessages["footer"] = {
   copyrightProtected: "All rights reserved.",
   komdigiAlt: "Komdigi logo",
   tsiAlt: "TSI logo",
+  faqItem: {
+    label: "FAQ",
+    href: "/faq",
+  },
 };

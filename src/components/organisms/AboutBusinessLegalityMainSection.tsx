@@ -59,12 +59,13 @@ export function AboutBusinessLegalityMainSection({
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {legalitasItems.map((card, index) => {
-            const revealDelay = Math.min(index * 250, 750);
+            const desktopRevealDelay = (index % 3) * 250;
 
             return (
               <ScrollReveal
                 key={`${card.title}-${card.nomor || "overview"}`}
-                delay={revealDelay}
+                delay={0}
+                desktopDelay={desktopRevealDelay}
                 className="h-full"
               >
                 <AboutBusinessLegalityCard

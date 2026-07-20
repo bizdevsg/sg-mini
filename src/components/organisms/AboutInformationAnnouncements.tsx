@@ -38,7 +38,7 @@ function formatDate(dateStr: string, locale: AppLocale) {
 }
 
 function getAnnouncementTimestamp(item: PengumumanRecord) {
-  const timestamp = Date.parse(item.updated_at || item.created_at);
+  const timestamp = Date.parse(item.created_at);
 
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
@@ -125,15 +125,18 @@ export function AboutInformationAnnouncements({
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {sortedItems.map((item, index) => {
           const isNew = index === 0;
+          const desktopRevealDelay = (index % 3) * 250;
           const title = item.judul?.trim() || labels.defaultTitle;
           const imageAlt = item.judul?.trim() || title;
-          const dateLabel = formatDate(
-            item.updated_at || item.created_at,
-            locale,
-          );
+          const dateLabel = formatDate(item.created_at, locale);
 
           return (
-            <ScrollReveal key={item.id} delay={index * 250} className="w-full h-full">
+            <ScrollReveal
+              key={item.id}
+              delay={0}
+              desktopDelay={desktopRevealDelay}
+              className="w-full h-full"
+            >
               <button
                 type="button"
                 onClick={() => handleOpenItem(item)}
@@ -290,10 +293,7 @@ export function AboutInformationAnnouncements({
                       icon={["fas", "calendar-days"]}
                       className="text-[10px]"
                     />
-                    {formatDate(
-                      selectedItem.updated_at || selectedItem.created_at,
-                      locale,
-                    )}
+                    {formatDate(selectedItem.created_at, locale)}
                   </p>
                   <span className="h-px w-full bg-yellow-500/20" />
                   <span className="flex w-fit text-nowrap items-center gap-1.5">

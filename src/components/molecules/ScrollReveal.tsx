@@ -7,6 +7,7 @@ import {
   type ElementType,
   type ReactNode,
   useEffect,
+  useState,
 } from "react";
 
 type KnownScrollRevealEffect =
@@ -24,6 +25,7 @@ type ScrollRevealProps<T extends ElementType> = {
   children: ReactNode;
   effect?: ScrollRevealEffect;
   delay?: number;
+  desktopDelay?: number;
   duration?: number;
   once?: boolean;
   threshold?: number;
@@ -58,6 +60,7 @@ export function ScrollReveal<T extends ElementType = "div">({
   children,
   effect = "fade-up",
   delay = 0,
+  desktopDelay,
   duration = 700,
   once = false,
   threshold = 0.18,
@@ -67,11 +70,36 @@ export function ScrollReveal<T extends ElementType = "div">({
   ...props
 }: ScrollRevealProps<T>) {
   const Component = (as ?? "div") as ElementType;
+  const [resolvedDelay, setResolvedDelay] = useState(delay);
   const aosAnchorPlacement = resolveAosAnchorPlacement(rootMargin);
   const aosOffset = Math.max(0, Math.round(threshold * 120));
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (desktopDelay === undefined) {
+      setResolvedDelay(delay);
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+    const syncDelay = () => {
+      setResolvedDelay(mediaQuery.matches ? desktopDelay : delay);
+    };
+
+    syncDelay();
+    mediaQuery.addEventListener("change", syncDelay);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncDelay);
+    };
+  }, [delay, desktopDelay]);
+
   const refreshKey = [
     effect,
-    delay,
+    resolvedDelay,
     duration,
     once,
     threshold,
@@ -79,7 +107,7 @@ export function ScrollReveal<T extends ElementType = "div">({
   ].join("|");
   const mergedStyle = {
     ...style,
-    "--scroll-reveal-delay": `${delay}ms`,
+    "--scroll-reveal-delay": `${resolvedDelay}ms`,
   } as CSSProperties;
 
   useEffect(() => {
@@ -113,7 +141,7 @@ export function ScrollReveal<T extends ElementType = "div">({
       className={className}
       style={mergedStyle}
       data-aos={effect}
-      data-aos-delay={delay}
+      data-aos-delay={resolvedDelay}
       data-aos-duration={duration}
       data-aos-once={toAosBoolean(once)}
       data-aos-offset={aosOffset}

@@ -106,10 +106,22 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function sanitizeLegalitasHtml(content: string) {
+  if (!content) {
+    return "";
+  }
+
+  return content
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*(['"]).*?\1/gi, "")
+    .replace(/\s+(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, "");
+}
+
 function toLegalitasRecord(item: LegalitasApiRecord): LegalitasRecord | null {
   const title = normalizeText(item.title);
   const nomor = normalizeText(item.nomor);
-  const description = normalizeText(item.description);
+  const description = sanitizeLegalitasHtml(normalizeText(item.description));
 
   if (!title || !description) {
     return null;

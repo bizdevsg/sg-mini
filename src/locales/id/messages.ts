@@ -30,6 +30,7 @@ import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idBannerDetailPage } from "./content/bannerDetailPage";
 import { idFraudAlertPage } from "./content/fraudAlertPage";
 import { idContactPage } from "./content/contactPage";
+import { idFaqPage } from "./content/faqPage";
 import { idClientArea } from "./content/clientArea";
 import { idCookieConsent } from "./content/cookieConsent";
 import { idFooter } from "./content/footer";
@@ -67,6 +68,7 @@ export const idMessages: AppMessages = {
   bannerDetailPage: idBannerDetailPage,
   fraudAlertPage: idFraudAlertPage,
   contactPage: idContactPage,
+  faqPage: idFaqPage,
   clientArea: idClientArea,
   cookieConsent: idCookieConsent,
   footer: idFooter,

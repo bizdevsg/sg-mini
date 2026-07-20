@@ -3,6 +3,7 @@ import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
 import type { AppLocale, AppMessages } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type ProductDetailPageProps = {
   item: ProductCatalogItem;
@@ -73,50 +74,54 @@ export function ProductDetailPage({
 
         <SectionContainer className="py-16 sm:py-20">
           <div className="relative z-10 grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-8">
-            <div className="h-fit rounded-[28px] border border-white/10 bg-[rgba(8,8,8,0.78)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-6">
-              {item.imageSrc ? (
-                <ResilientImage
-                  src={item.imageSrc}
-                  alt={item.name}
-                  className="w-full rounded-2xl object-contain"
-                  fallback={
-                    <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">
-                      {item.name}
-                    </div>
-                  }
-                />
-              ) : (
-                <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">
-                  {item.name}
-                </div>
-              )}
-
-              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:mt-6 sm:p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-yellow-500/80">
-                  {copy.descriptionTitle}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-zinc-300">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-[28px] border border-white/10 bg-[rgba(8,8,8,0.78)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-8">
-              <h2 className="text-2xl font-bold tracking-[-0.02em] text-white sm:text-3xl">
-                {copy.specificationTitle}
-              </h2>
-
-              <div className="mt-10">
-                {item.specsHtml ? (
-                  <div
-                    className={specificationContentClassName}
-                    dangerouslySetInnerHTML={{ __html: item.specsHtml }}
+            <ScrollReveal effect="fade-right">
+              <div className="h-fit rounded-[28px] border border-white/10 bg-[rgba(8,8,8,0.78)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-6">
+                {item.imageSrc ? (
+                  <ResilientImage
+                    src={item.imageSrc}
+                    alt={item.name}
+                    className="w-full rounded-2xl object-contain"
+                    fallback={
+                      <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">
+                        {item.name}
+                      </div>
+                    }
                   />
                 ) : (
-                  <p className="mt-6 text-sm text-zinc-400">{copy.emptyBody}</p>
+                  <div className="flex min-h-72 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 text-center text-sm text-zinc-500">
+                    {item.name}
+                  </div>
                 )}
+
+                <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:mt-6 sm:p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-yellow-500/80">
+                    {copy.descriptionTitle}
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-zinc-300">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
+
+            <ScrollReveal effect="fade-left">
+              <div className="rounded-[28px] border border-white/10 bg-[rgba(8,8,8,0.78)] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-8">
+                <h2 className="text-2xl font-bold tracking-[-0.02em] text-white sm:text-3xl">
+                  {copy.specificationTitle}
+                </h2>
+
+                <div className="mt-10">
+                  {item.specsHtml ? (
+                    <div
+                      className={specificationContentClassName}
+                      dangerouslySetInnerHTML={{ __html: item.specsHtml }}
+                    />
+                  ) : (
+                    <p className="mt-6 text-sm text-zinc-400">{copy.emptyBody}</p>
+                  )}
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
         </SectionContainer>
       </div>

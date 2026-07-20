@@ -30,6 +30,7 @@ import { enBannerSlideshow } from "./content/bannerSlideshow";
 import { enBannerDetailPage } from "./content/bannerDetailPage";
 import { enFraudAlertPage } from "./content/fraudAlertPage";
 import { enContactPage } from "./content/contactPage";
+import { enFaqPage } from "./content/faqPage";
 import { enClientArea } from "./content/clientArea";
 import { enCookieConsent } from "./content/cookieConsent";
 import { enFooter } from "./content/footer";
@@ -67,6 +68,7 @@ export const enMessages: AppMessages = {
   bannerDetailPage: enBannerDetailPage,
   fraudAlertPage: enFraudAlertPage,
   contactPage: enContactPage,
+  faqPage: enFaqPage,
   clientArea: enClientArea,
   cookieConsent: enCookieConsent,
   footer: enFooter,

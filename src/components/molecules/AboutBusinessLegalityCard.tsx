@@ -73,11 +73,11 @@ export function AboutBusinessLegalityCard({
           </div>
         ) : null}
 
-        <p
-          className={`line-clamp-1 ${metaLabel && metaValue ? "mt-4" : ""} text-sm leading-7 text-zinc-300`}
-        >
-          {body}
-        </p>
+        <div
+          className={`${metaLabel && metaValue ? "mt-4" : ""} text-sm prose prose-sm max-w-none text-zinc-300 prose-p:my-0 prose-p:text-inherit prose-p:leading-7 prose-strong:text-white/90 prose-b:text-white/90 prose-a:text-yellow-400`}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: body }}
+        />
       </div>
     </article>
   );
