@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { FaqAccordionItem } from "@/components/molecules/FaqAccordionItem";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import type { AppMessages, AppLocale } from "@/locales";
 
@@ -17,6 +21,15 @@ export function FaqMainSection({
   copy,
   homeLabel,
 }: FaqMainSectionProps) {
+  const [openItemKey, setOpenItemKey] = useState<string | null>(null);
+  const faqItems = copy.sections.flatMap((section) =>
+    section.items.map((item) => ({
+      ...item,
+      key: `${section.title}-${item.question}`,
+      sectionTitle: section.title,
+    })),
+  );
+
   return (
     <>
       <PageHeroBanner
@@ -39,52 +52,29 @@ export function FaqMainSection({
       <SectionContainer className="relative py-16 sm:py-20">
         <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
 
-        <div className="grid gap-6 xl:grid-cols-3">
-          {copy.sections.map((section, sectionIndex) => (
+        <div className="mx-auto grid grid-cols-1 gap-4">
+          {faqItems.map((item, index) => (
             <ScrollReveal
-              key={section.title}
+              key={item.key}
               delay={0}
-              desktopDelay={(sectionIndex % 3) * 250}
-              className="h-full"
             >
-              <section className="h-full rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.24))] p-6 shadow-[0_16px_50px_rgba(0,0,0,0.18)] sm:p-7">
-                <div className="rounded-2xl border border-yellow-500/16 bg-yellow-500/[0.06] px-4 py-3">
-                  <h2 className="font-mono text-2xl font-bold tracking-[-0.03em] text-white">
-                    {section.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-7 text-zinc-300">
-                    {section.description}
-                  </p>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  {section.items.map((item) => (
-                    <details
-                      key={item.question}
-                      className="rounded-2xl border border-white/10 bg-black/25 p-4 transition-colors"
-                    >
-                      <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left">
-                        <span className="text-base font-semibold leading-7 text-white">
-                          {item.question}
-                        </span>
-                        <span className="mt-1 shrink-0 rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2 py-0.5 text-xs font-bold text-yellow-400 transition">
-                          Q
-                        </span>
-                      </summary>
-
-                      <p className="mt-4 border-t border-white/8 pt-4 text-sm leading-7 text-zinc-300">
-                        {item.answer}
-                      </p>
-                    </details>
-                  ))}
-                </div>
-              </section>
+              <FaqAccordionItem
+                answer={item.answer}
+                isOpen={openItemKey === item.key}
+                onToggle={() =>
+                  setOpenItemKey((current) =>
+                    current === item.key ? null : item.key,
+                  )
+                }
+                question={item.question}
+                sectionTitle={item.sectionTitle}
+              />
             </ScrollReveal>
           ))}
         </div>
 
         <ScrollReveal effect="fade-up" className="mt-8">
-          <section className="rounded-[32px] border border-yellow-500/18 bg-[linear-gradient(135deg,rgba(205,161,58,0.14),rgba(14,14,14,0.96)_45%,rgba(8,8,8,0.98))] p-6 sm:p-8">
+          <section className="rounded-3xl border border-yellow-500/18 bg-[linear-gradient(135deg,rgba(205,161,58,0.14),rgba(14,14,14,0.96)_45%,rgba(8,8,8,0.98))] p-6 sm:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-yellow-500/85">
@@ -104,13 +94,6 @@ export function FaqMainSection({
                   className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[linear-gradient(180deg,#f2cf78_0%,#cda13a_100%)] px-5 text-sm font-semibold text-[#120f08] shadow-[0_14px_32px_rgba(205,161,58,0.25)] transition hover:brightness-105"
                 >
                   {copy.helpCard.primaryCta}
-                </Link>
-
-                <Link
-                  href={`/${locale}/about/informasi`}
-                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-5 text-sm font-semibold text-zinc-200 transition hover:border-yellow-500/30 hover:bg-yellow-500/10 hover:text-yellow-200"
-                >
-                  {copy.helpCard.secondaryCta}
                 </Link>
               </div>
             </div>

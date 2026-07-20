@@ -13,6 +13,28 @@ export const enFaqPage: AppMessages["faqPage"] = {
   },
   sections: [
     {
+      title: "About The Company",
+      description:
+        "Common questions about the company profile, official updates, and website usage.",
+      items: [
+        {
+          question: "Where can I find the latest company information?",
+          answer:
+            "The latest updates are available through the Information page, News page, and other official PT. Solid Gold Berjangka channels.",
+        },
+        {
+          question: "Does this website provide trading recommendations?",
+          answer:
+            "The information on this website is provided for educational and reference purposes. Every trading decision remains the client's own responsibility.",
+        },
+        {
+          question: "Where can I view the company's business legality information?",
+          answer:
+            "You can review the company’s legality and licensing summary on the Business Legality page available on the website.",
+        },
+      ],
+    },
+    {
       title: "Account & Registration",
       description:
         "Basic guidance for account opening and document verification.",
@@ -65,16 +87,6 @@ export const enFaqPage: AppMessages["faqPage"] = {
           question: "Where should I report a complaint?",
           answer:
             "You can use the official complaint channels listed on the Contact Us page, including the form, email, or complaint support number.",
-        },
-        {
-          question: "Where can I find the latest company information?",
-          answer:
-            "The latest updates are available through the Information page, News page, and other official PT. Solid Gold Berjangka channels.",
-        },
-        {
-          question: "Does this website provide trading recommendations?",
-          answer:
-            "The information on this website is provided for educational and reference purposes. Every trading decision remains the client's own responsibility.",
         },
       ],
     },

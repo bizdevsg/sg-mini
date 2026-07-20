@@ -355,7 +355,7 @@ export function NewsBrowser({
                 <ScrollReveal
                   key={`${safeCurrentPage}-${article.id}`}
                   effect="fade-up"
-                  delay={index * 100}
+                  delay={Math.floor(index / 2) * 100}
                   className={isFeaturedArticle ? "sm:col-span-2" : undefined}
                   once
                 >

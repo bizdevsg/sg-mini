@@ -13,6 +13,28 @@ export const idFaqPage: AppMessages["faqPage"] = {
   },
   sections: [
     {
+      title: "Tentang Perusahaan",
+      description:
+        "Pertanyaan umum terkait profil, informasi resmi, dan fungsi website.",
+      items: [
+        {
+          question: "Di mana saya bisa melihat informasi perusahaan terbaru?",
+          answer:
+            "Informasi terbaru dapat Anda lihat pada halaman Informasi, Berita, serta kanal resmi PT. Solid Gold Berjangka.",
+        },
+        {
+          question: "Apakah website ini memberikan rekomendasi transaksi?",
+          answer:
+            "Informasi pada website ini bersifat edukasi dan referensi. Setiap keputusan transaksi tetap menjadi tanggung jawab masing-masing nasabah.",
+        },
+        {
+          question: "Di mana saya bisa melihat legalitas perusahaan?",
+          answer:
+            "Anda dapat melihat ringkasan legalitas dan perizinan perusahaan melalui halaman Legalitas Bisnis yang tersedia di website.",
+        },
+      ],
+    },
+    {
       title: "Akun & Registrasi",
       description:
         "Informasi awal seputar pembukaan akun dan proses verifikasi data.",
@@ -65,16 +87,6 @@ export const idFaqPage: AppMessages["faqPage"] = {
           question: "Jika saya memiliki keluhan, harus menghubungi ke mana?",
           answer:
             "Anda dapat menghubungi jalur pengaduan resmi yang tersedia pada halaman Hubungi Kami, baik melalui formulir, email, maupun nomor layanan pengaduan.",
-        },
-        {
-          question: "Di mana saya bisa melihat informasi perusahaan terbaru?",
-          answer:
-            "Informasi terbaru dapat Anda lihat pada halaman Informasi, Berita, serta kanal resmi PT. Solid Gold Berjangka.",
-        },
-        {
-          question: "Apakah website ini memberikan rekomendasi transaksi?",
-          answer:
-            "Informasi pada website ini bersifat edukasi dan referensi. Setiap keputusan transaksi tetap menjadi tanggung jawab masing-masing nasabah.",
         },
       ],
     },

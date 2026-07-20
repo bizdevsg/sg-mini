@@ -529,7 +529,7 @@ export function EconomicCalendarBrowser({
                               currentEventId === event.id ? null : event.id,
                             )
                           }
-                          className="grid w-full grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left"
+                          className="grid w-full grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left cursor-pointer"
                         >
                           <div className="font-mono text-base font-semibold text-foreground/88">
                             {event.displayTime}
