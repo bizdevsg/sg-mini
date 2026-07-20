@@ -1,6 +1,7 @@
 import { NewsDetailSidebarSection } from "@/components/molecules/NewsDetailSidebarSection";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import type { AppLocale } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type NewsDetailSidebarProps = {
   hrefBasePath?: string;
@@ -18,13 +19,15 @@ export function NewsDetailSidebar({
   labels,
 }: NewsDetailSidebarProps) {
   return (
-    <aside className="space-y-4">
-      <NewsDetailSidebarSection
-        title={labels.relatedNews}
-        articles={relatedArticles}
-        hrefBasePath={hrefBasePath}
-        locale={locale}
-      />
-    </aside>
+    <ScrollReveal effect="fade-left">
+      <aside className="space-y-4">
+        <NewsDetailSidebarSection
+          title={labels.relatedNews}
+          articles={relatedArticles}
+          hrefBasePath={hrefBasePath}
+          locale={locale}
+        />
+      </aside>
+    </ScrollReveal>
   );
 }

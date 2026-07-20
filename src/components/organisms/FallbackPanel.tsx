@@ -32,7 +32,7 @@ export function FallbackPanel({
             height={1000}
             alt="Error Illustration"
             loading="eager"
-            className="overflow-hidden"
+            className="overflow-hiddenoverflow-hidden"
           />
         </div>
 

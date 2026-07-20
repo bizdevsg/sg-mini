@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import { formatLocaleDateTime, type AppLocale } from "@/locales";
+import { ScrollReveal } from "./ScrollReveal";
 
 type NewsFeedArticleCardProps = {
   article: NewsFeedArticle;
@@ -12,6 +13,7 @@ type NewsFeedArticleCardProps = {
   prioritizeImage?: boolean;
   variant?: "default" | "featured";
   appearance?: "legacy" | "news";
+  delay?: number;
 };
 
 export function NewsFeedArticleCard({
@@ -22,6 +24,7 @@ export function NewsFeedArticleCard({
   prioritizeImage = false,
   variant = "default",
   appearance = "legacy",
+  delay,
 }: NewsFeedArticleCardProps) {
   const isNewsAppearance = appearance === "news";
   const isFeatured = variant === "featured";
@@ -29,7 +32,7 @@ export function NewsFeedArticleCard({
 
   if (!isNewsAppearance) {
     return (
-      <article className="h-full">
+      <ScrollReveal delay={delay} className="h-full">
         <Link
           href={articleHref}
           prefetch={false}
@@ -76,7 +79,7 @@ export function NewsFeedArticleCard({
             </div>
           </div>
         </Link>
-      </article>
+      </ScrollReveal>
     );
   }
 

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AboutInformationAnnouncementsEmptyState } from "@/components/molecules/AboutInformationAnnouncementsEmptyState";
 import type { PengumumanRecord } from "@/lib/pengumuman";
 import type { AppLocale } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type AboutInformationAnnouncementsProps = {
   items: PengumumanRecord[];
@@ -36,11 +37,23 @@ function formatDate(dateStr: string, locale: AppLocale) {
   }
 }
 
+function getAnnouncementTimestamp(item: PengumumanRecord) {
+  const timestamp = Date.parse(item.updated_at || item.created_at);
+
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
 export function AboutInformationAnnouncements({
   items,
   locale,
   labels,
 }: AboutInformationAnnouncementsProps) {
+  const sortedItems = items
+    .slice()
+    .sort(
+      (left, right) =>
+        getAnnouncementTimestamp(right) - getAnnouncementTimestamp(left),
+    );
   const [selectedItem, setSelectedItem] = useState<PengumumanRecord | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -110,7 +123,7 @@ export function AboutInformationAnnouncements({
   return (
     <>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item, index) => {
+        {sortedItems.map((item, index) => {
           const isNew = index === 0;
           const title = item.judul?.trim() || labels.defaultTitle;
           const imageAlt = item.judul?.trim() || title;
@@ -120,91 +133,92 @@ export function AboutInformationAnnouncements({
           );
 
           return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleOpenItem(item)}
-              className="group overflow-hidden rounded-xl cursor-pointer border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]"
-            >
-              {item.image_url ? (
-                <div className="relative h-52 w-full overflow-hidden">
-                  <ResilientImage
-                    src={item.image_url}
-                    alt={imageAlt}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    fallback={
-                      <div className="relative flex h-full w-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
-                        <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
-                          <FontAwesomeIcon
-                            icon={["fas", "bullhorn"]}
-                            className="text-sm"
-                          />
+            <ScrollReveal key={item.id} delay={index * 250} className="w-full h-full">
+              <button
+                type="button"
+                onClick={() => handleOpenItem(item)}
+                className="group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),rgba(0,0,0,0.25))] text-left transition-all duration-300 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              >
+                {item.image_url ? (
+                  <div className="relative h-52 w-full overflow-hidden">
+                    <ResilientImage
+                      src={item.image_url}
+                      alt={imageAlt}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fallback={
+                        <div className="relative flex h-full w-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+                          <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                            <FontAwesomeIcon
+                              icon={["fas", "bullhorn"]}
+                              className="text-sm"
+                            />
+                          </div>
                         </div>
+                      }
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                    {isNew ? (
+                      <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-black" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-black">
+                          {labels.latest}
+                        </span>
                       </div>
-                    }
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    ) : null}
 
-                  {isNew ? (
-                    <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-black" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-black">
-                        {labels.latest}
-                      </span>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h2 className="font-mono text-lg font-bold leading-snug text-white drop-shadow-lg line-clamp-2">
+                        {title}
+                      </h2>
                     </div>
-                  ) : null}
+                  </div>
+                ) : (
+                  <div className="relative flex h-32 items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
+                    <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
+                      <FontAwesomeIcon
+                        icon={["fas", "bullhorn"]}
+                        className="text-sm"
+                      />
+                    </div>
 
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h2 className="font-mono text-lg font-bold leading-snug text-white drop-shadow-lg line-clamp-2">
+                    {isNew ? (
+                      <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-black" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-black">
+                          {labels.latest}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    <h2 className="font-mono text-lg font-bold leading-snug text-white line-clamp-2">
                       {title}
                     </h2>
                   </div>
-                </div>
-              ) : (
-                <div className="relative flex h-32 items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
-                  <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
-                    <FontAwesomeIcon
-                      icon={["fas", "bullhorn"]}
-                      className="text-sm"
-                    />
+                )}
+
+                <div className="mt-auto p-5">
+                  <div className="flex items-center gap-3 text-xs text-yellow-500/60">
+                    <span className="flex items-center gap-1.5">
+                      <FontAwesomeIcon
+                        icon={["fas", "calendar-days"]}
+                        className="text-[10px]"
+                      />
+                      {dateLabel}
+                    </span>
+                    <span className="h-px flex-1 bg-yellow-500/10" />
+                    <span className="flex items-center gap-1.5">
+                      <FontAwesomeIcon
+                        icon={["fas", "building"]}
+                        className="text-[10px]"
+                      />
+                      {labels.management}
+                    </span>
                   </div>
-
-                  {isNew ? (
-                    <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-black" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-black">
-                        {labels.latest}
-                      </span>
-                    </div>
-                  ) : null}
-
-                  <h2 className="font-mono text-lg font-bold leading-snug text-white line-clamp-2">
-                    {title}
-                  </h2>
                 </div>
-              )}
-
-              <div className="p-5">
-                <div className="flex items-center gap-3 text-xs text-yellow-500/60">
-                  <span className="flex items-center gap-1.5">
-                    <FontAwesomeIcon
-                      icon={["fas", "calendar-days"]}
-                      className="text-[10px]"
-                    />
-                    {dateLabel}
-                  </span>
-                  <span className="h-px flex-1 bg-yellow-500/10" />
-                  <span className="flex items-center gap-1.5">
-                    <FontAwesomeIcon
-                      icon={["fas", "building"]}
-                      className="text-[10px]"
-                    />
-                    {labels.management}
-                  </span>
-                </div>
-              </div>
-            </button>
+              </button>
+            </ScrollReveal>
           );
         })}
       </div>

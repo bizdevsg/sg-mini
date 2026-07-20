@@ -20,6 +20,7 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 
 type NewsDetailPageProps = {
   params: Promise<{ locales: string; slug: string }>;
@@ -130,11 +131,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   return (
     <SectionContainer className="py-16 sm:py-20 mt-5">
-      <NewsDetailBreadcrumb
-        locale={locales}
-        newsLabel={labels.news}
-        title={article.title}
-      />
+      <ScrollReveal effect="fade-right">
+        <NewsDetailBreadcrumb
+          locale={locales}
+          newsLabel={labels.news}
+          title={article.title}
+        />
+      </ScrollReveal>
 
       <NewsDetailHeader
         locale={locales}
@@ -143,7 +146,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         title={article.title}
       />
 
-      <div className="mt-8 overflow-hidden rounded-2xl border border-yellow-500/20 bg-zinc-950/40">
+      <ScrollReveal className="mt-8 overflow-hidden rounded-2xl border border-yellow-500/20 bg-zinc-950/40">
         <img
           src={article.imageSrc}
           alt={article.title}
@@ -152,7 +155,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           decoding="async"
           className="block max-h-[520px] w-full object-cover"
         />
-      </div>
+      </ScrollReveal>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <NewsDetailArticleBody bodyHtml={article.bodyHtml} />
@@ -166,13 +169,16 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
       {latestArticles.length ? (
         <section className="mt-16 border-t border-white/10 pt-16 sm:mt-20 sm:pt-20">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            {labels.latestNews}
-          </h2>
+          <ScrollReveal effect="fade-right">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              {labels.latestNews}
+            </h2>
+          </ScrollReveal>
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:auto-rows-fr sm:grid-cols-2">
             {latestArticles.map((latestArticle, index) => (
               <NewsFeedArticleCard
+                delay={index * 250}
                 key={latestArticle.slug}
                 article={latestArticle}
                 locale={locales}

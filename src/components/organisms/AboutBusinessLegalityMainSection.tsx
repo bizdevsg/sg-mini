@@ -1,5 +1,6 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { AboutBusinessLegalityCard } from "@/components/molecules/AboutBusinessLegalityCard";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import type { LegalitasRecord } from "@/lib/legalitas";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -57,16 +58,25 @@ export function AboutBusinessLegalityMainSection({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {legalitasItems.map((card) => (
-            <AboutBusinessLegalityCard
-              key={`${card.title}-${card.nomor || "overview"}`}
-              title={card.title}
-              body={card.body}
-              icon="file-lines"
-              metaLabel={card.nomor ? page.numberLabel : undefined}
-              metaValue={card.nomor || undefined}
-            />
-          ))}
+          {legalitasItems.map((card, index) => {
+            const revealDelay = Math.min(index * 250, 750);
+
+            return (
+              <ScrollReveal
+                key={`${card.title}-${card.nomor || "overview"}`}
+                delay={revealDelay}
+                className="h-full"
+              >
+                <AboutBusinessLegalityCard
+                  title={card.title}
+                  body={card.body}
+                  icon="file-lines"
+                  metaLabel={card.nomor ? page.numberLabel : undefined}
+                  metaValue={card.nomor || undefined}
+                />
+              </ScrollReveal>
+            );
+          })}
         </div>
       </SectionContainer>
     </>

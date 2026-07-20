@@ -14,6 +14,7 @@ import {
   getMessages,
   type AppLocale,
 } from "@/locales";
+import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type NewsDetailHeaderProps = {
   locale: AppLocale;
@@ -111,46 +112,48 @@ export function NewsDetailHeader({
   }
 
   return (
-    <header className="space-y-4 mt-5">
-      <h1 className="mx-auto max-w-3xl text-center text-2xl font-bold leading-tight text-zinc-50 sm:text-4xl">
-        {title}
-      </h1>
+    <ScrollReveal>
+      <header className="space-y-4 mt-5">
+        <h1 className="mx-auto max-w-3xl text-center text-2xl font-bold leading-tight text-zinc-50 sm:text-4xl">
+          {title}
+        </h1>
 
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <span className="text-center text-sm font-medium text-zinc-300">
-          {formatLocaleArticleDateTime(publishedAt, locale)}
-        </span>
-      </div>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <span className="text-center text-sm font-medium text-zinc-300">
+            {formatLocaleArticleDateTime(publishedAt, locale)}
+          </span>
+        </div>
 
-      <div className="mx-auto h-1 w-30 rounded-full bg-yellow-400/70" />
+        <div className="mx-auto h-1 w-30 rounded-full bg-yellow-400/70" />
 
-      <div className="mx-auto flex w-fit flex-wrap items-center justify-center gap-3">
-        {shareLinks.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            aria-label={item.label}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950"
+        <div className="mx-auto flex w-fit flex-wrap items-center justify-center gap-3">
+          {shareLinks.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              aria-label={item.label}
+              target="_blank"
+              rel="noreferrer"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950"
+            >
+              <FontAwesomeIcon icon={item.icon} />
+            </a>
+          ))}
+
+          <button
+            type="button"
+            disabled={!shareUrl}
+            aria-label={isCopied ? shareLabels.copied : shareLabels.copy}
+            title={isCopied ? shareLabels.copied : shareLabels.copy}
+            onClick={handleCopyLink}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <FontAwesomeIcon icon={item.icon} />
-          </a>
-        ))}
-
-        <button
-          type="button"
-          disabled={!shareUrl}
-          aria-label={isCopied ? shareLabels.copied : shareLabels.copy}
-          title={isCopied ? shareLabels.copied : shareLabels.copy}
-          onClick={handleCopyLink}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10 text-yellow-300 transition-all duration-300 hover:border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <FontAwesomeIcon
-            icon={isCopied ? faCheck : faCopy}
-          />
-        </button>
-      </div>
-    </header>
+            <FontAwesomeIcon
+              icon={isCopied ? faCheck : faCopy}
+            />
+          </button>
+        </div>
+      </header>
+    </ScrollReveal>
   );
 }
