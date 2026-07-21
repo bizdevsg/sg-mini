@@ -92,9 +92,9 @@ export function HomeCookieConsentBanner({
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-3 bottom-3 z-[999] mx-auto max-w-8xl sm:inset-x-4 sm:bottom-4">
-      <div className="pointer-events-auto">
-        <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-zinc-950/95 shadow-[0_35px_100px_rgba(0,0,0,.55)] backdrop-blur-3xl sm:rounded-[30px]">
+    <div className="pointer-events-none fixed bottom-3 left-3 right-3 z-[999] sm:bottom-4 sm:left-4 sm:right-4">
+      <div className="pointer-events-auto mx-auto w-full max-w-8xl">
+        <div className="relative w-full max-w-full overflow-hidden rounded-[26px] border border-white/10 bg-zinc-950/95 shadow-[0_35px_100px_rgba(0,0,0,.55)] backdrop-blur-3xl sm:rounded-[30px]">
 
           {/* Background */}
           <div className="absolute inset-0">
@@ -104,16 +104,16 @@ export function HomeCookieConsentBanner({
           </div>
 
           <div className="relative p-4 sm:p-8">
-            <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex min-w-0 flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
               {/* Left */}
-              <div className="max-w-3xl">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+              <div className="min-w-0 max-w-3xl">
+                <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-yellow-500/20 bg-yellow-500/10 sm:h-14 sm:w-14">
                     <Cookie className="h-6 w-6 text-yellow-400 sm:h-7 sm:w-7" />
                   </div>
 
                   <div className="min-w-0">
-                    <p className="text-2xs font-semibold uppercase tracking-[0.32em] text-yellow-500">
+                    <p className="text-2xs font-semibold uppercase tracking-[0.24em] text-yellow-500 sm:tracking-[0.32em]">
                       {copy.badge}
                     </p>
 
@@ -125,7 +125,7 @@ export function HomeCookieConsentBanner({
                       {copy.description}
                     </p>
 
-                    <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
+                    <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-3">
 
                       <div className="flex items-center gap-2 text-sm text-zinc-300">
                         <ShieldCheck
@@ -145,7 +145,7 @@ export function HomeCookieConsentBanner({
               </div>
 
               {/* Right */}
-              <div className="flex w-full flex-col gap-3 sm:grid sm:grid-cols-2 lg:w-auto lg:min-w-[320px] lg:flex-shrink-0 lg:grid-cols-none lg:flex-row">
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:grid sm:grid-cols-2 lg:w-auto lg:min-w-[320px] lg:flex-shrink-0 lg:grid-cols-none lg:flex-row">
 
                 <button
                   type="button"
@@ -155,7 +155,7 @@ export function HomeCookieConsentBanner({
                     })
                   }
                   disabled={pendingAction !== null}
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 lg:min-w-[148px]"
+                  className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 lg:min-w-[148px]"
                 >
                   {copy.dismissLabel}
                 </button>
@@ -168,7 +168,7 @@ export function HomeCookieConsentBanner({
                     })
                   }
                   disabled={pendingAction !== null}
-                  className="w-full rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 px-7 py-3 text-sm font-semibold text-black shadow-[0_18px_35px_rgba(245,158,11,.25)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_24px_45px_rgba(245,158,11,.35)] active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-70 lg:min-w-[148px]"
+                  className="w-full min-w-0 rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 px-7 py-3 text-sm font-semibold text-black shadow-[0_18px_35px_rgba(245,158,11,.25)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_24px_45px_rgba(245,158,11,.35)] active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-70 lg:min-w-[148px]"
                 >
                   {copy.acceptLabel}
                 </button>
