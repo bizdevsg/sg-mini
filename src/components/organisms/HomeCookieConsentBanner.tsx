@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useState } from "react";
-import { Cookie, ShieldCheck, X } from "lucide-react";
+import { Cookie, ShieldCheck } from "lucide-react";
 
 import {
   acceptCookieConsent,
@@ -40,7 +40,7 @@ export function HomeCookieConsentBanner({
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-3 bottom-3 z-[999] mx-auto max-w-8xl sm:inset-x-4 sm:bottom-4">
+    <div className="pointer-events-none fixed inset-x-3 bottom-[5.75rem] z-[999] mx-auto max-w-8xl sm:inset-x-4 sm:bottom-4">
       <div className="pointer-events-auto">
         <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-zinc-950/95 shadow-[0_35px_100px_rgba(0,0,0,.55)] backdrop-blur-3xl sm:rounded-[30px]">
 
@@ -51,23 +51,7 @@ export function HomeCookieConsentBanner({
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,193,7,.08),transparent_45%)]" />
           </div>
 
-          <div className="relative p-4 pr-14 sm:p-8 sm:pr-16">
-            {/* Close */}
-            <div className="absolute right-4 top-4 sm:right-5 sm:top-5">
-              <button
-                type="button"
-                onClick={() =>
-                  startTransition(() => {
-                    void handleConsentAction("dismiss");
-                  })
-                }
-                disabled={pendingAction !== null}
-                className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-400 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:h-9 sm:w-9"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
+          <div className="relative p-4 sm:p-8">
             <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
               {/* Left */}
               <div className="max-w-3xl">
