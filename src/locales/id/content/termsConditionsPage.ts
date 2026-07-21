@@ -7,7 +7,7 @@ export const idTermsConditionsPage: AppMessages["termsConditionsPage"] = {
   breadcrumb: "Syarat dan Ketentuan",
   hero: {
     eyebrow: "Informasi Penting",
-    title: "Halaman Syarat dan Ketentuan",
+    title: "Syarat dan Ketentuan",
     description:
       "Baca detail syarat dan ketentuan dari setiap banner, promo, atau informasi yang sedang ditampilkan oleh PT. Solid Gold Berjangka.",
     primaryCta: "Lihat daftar informasi",
@@ -19,7 +19,7 @@ export const idTermsConditionsPage: AppMessages["termsConditionsPage"] = {
     readMore: "Baca detail",
     emptyTitle: "Belum ada informasi tersedia",
     emptyBody:
-      "Saat ini belum ada banner aktif yang memiliki halaman syarat dan ketentuan.",
+      "Saat ini belum ada banner aktif yang memiliki syarat dan ketentuan.",
     untitledFallback: "Informasi tanpa judul",
   },
 };
