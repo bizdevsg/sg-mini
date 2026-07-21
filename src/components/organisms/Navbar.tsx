@@ -17,6 +17,7 @@ type NavbarProps = {
   locale: AppLocale;
 };
 
+// Maps shared menu href values to the active locale namespace.
 function resolveLocalizedHref(locale: AppLocale, href = "/") {
   if (/^(https?:)?\/\//.test(href)) {
     return href;
@@ -49,6 +50,7 @@ function isTradePilotHref(href?: string) {
   );
 }
 
+// Swaps the TradePilot text label with its brand mark in the nav.
 function renderMenuLabel(label: string, href?: string) {
   if (!isTradePilotHref(href)) {
     return <span>{label}</span>;
@@ -71,6 +73,7 @@ export function Navbar({
   locale,
   isClientAreaAuthenticated,
 }: NavbarProps) {
+  // Navbar interaction state.
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDesktopGroup, setOpenDesktopGroup] = useState<number | null>(null);
@@ -83,6 +86,7 @@ export function Navbar({
     ? (["fas", "xmark"] as IconProp)
     : (["fas", "bars"] as IconProp);
 
+  // Enables the glass header treatment after the page leaves the top.
   useEffect(() => {
     const syncScrollState = () => {
       setIsScrolled(window.scrollY > 0);
@@ -96,6 +100,7 @@ export function Navbar({
     };
   }, []);
 
+  // Lets Escape close any open navbar surface.
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -112,6 +117,7 @@ export function Navbar({
     };
   }, []);
 
+  // Closes desktop flyouts when clicking outside the desktop nav cluster.
   useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {
       if (!desktopMenuRef.current) {
@@ -130,12 +136,14 @@ export function Navbar({
     };
   }, []);
 
+  // Clears expanded mobile groups whenever the mobile panel closes.
   useEffect(() => {
     if (!isMobileMenuOpen) {
       setExpandedMobileGroup(null);
     }
   }, [isMobileMenuOpen]);
 
+  // Resets mobile-only state once the layout crosses back to desktop.
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 56rem)");
 
@@ -176,6 +184,7 @@ export function Navbar({
             <LogoMark locale={locale} />
 
             <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
+              {/* Mobile header locale trigger. */}
               <HeaderActions
                 clientAreaProfile={clientAreaProfile}
                 locale={locale}
@@ -207,6 +216,7 @@ export function Navbar({
                 ref={desktopMenuRef}
                 className="hidden nav:flex nav:items-center nav:gap-1 xl:gap-2"
               >
+                {/* Desktop menu links and flyout groups. */}
                 {messages.navbar.menuGroups.map((group, index) => {
                   if (!group.items?.length) {
                     return (
@@ -291,6 +301,7 @@ export function Navbar({
 
               <div className="hidden md:block border border-yellow-500/50 h-7 rounded-full" />
 
+              {/* Desktop right-side actions. */}
               <HeaderActions
                 clientAreaProfile={clientAreaProfile}
                 locale={locale}
@@ -309,6 +320,7 @@ export function Navbar({
           >
             <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(12,12,12,0.96)] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.72)] ring-1 ring-[rgba(205,161,58,0.08)] backdrop-blur-xl">
               <div className="flex flex-col gap-3">
+                {/* Mobile accordion menu. */}
                 {messages.navbar.menuGroups.map((group, index) => {
                   const hasItems = Boolean(group.items?.length);
                   const isExpanded = expandedMobileGroup === index;
@@ -395,6 +407,7 @@ export function Navbar({
                 })}
 
                 <div className="mt-5 border-t border-[rgba(255,255,255,0.08)] pt-4">
+                  {/* Mobile panel footer actions. */}
                   <HeaderActions
                     clientAreaProfile={clientAreaProfile}
                     locale={locale}

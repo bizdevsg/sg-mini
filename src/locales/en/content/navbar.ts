@@ -3,7 +3,7 @@ import type { AppMessages } from "../../shared/messages";
 export const enNavbar: AppMessages["navbar"] = {
   login: "Login",
   openAccount: "Sign Up",
-  switchLocaleLabel: "Switch to Indonesian",
+  switchLocaleLabel: "Select a Language",
   switchLocaleIconAlt: "Indonesia flag icon",
   openMenuLabel: "Open navigation menu",
   closeMenuLabel: "Close navigation menu",

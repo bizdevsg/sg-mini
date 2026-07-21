@@ -3,7 +3,7 @@ import type { AppMessages } from "../../shared/messages";
 export const idNavbar: AppMessages["navbar"] = {
   login: "Masuk",
   openAccount: "Daftar",
-  switchLocaleLabel: "Ganti ke English",
+  switchLocaleLabel: "Pilih Bahasa",
   switchLocaleIconAlt: "Ikon bendera Amerika Serikat",
   openMenuLabel: "Buka menu navigasi",
   closeMenuLabel: "Tutup menu navigasi",
