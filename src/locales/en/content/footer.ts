@@ -10,7 +10,7 @@ export const enFooter: AppMessages["footer"] = {
   brandTitle: "Quick Links",
   brandItems: [
     { label: "About Us", href: "/about" },
-    { label: "Ebook", href: "/education/ebook" },
+    { label: "Ebook", href: "/syarat-dan-ketentuan" },
     { label: "Live Quote", href: "/live-quote" },
     { label: "News", href: "/news" },
   ],

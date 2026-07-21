@@ -10,7 +10,7 @@ export const idFooter: AppMessages["footer"] = {
   brandTitle: "Tautan Cepat",
   brandItems: [
     { label: "Kebijakan Privasi", href: "/about" },
-    { label: "Syarat & Ketentuan", href: "/education/ebook" },
+    { label: "Syarat & Ketentuan", href: "/syarat-dan-ketentuan" },
     { label: "FAQ", href: "/faq" },
     { label: "Pengaduan", href: "/contact-us" },
     { label: "Kontak", href: "/contact-us" },
