@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { PageTemplate } from "@/components/layouts/PageTemplate";
+import { TawkChatWidget } from "@/components/providers/TawkChatWidget";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 import { HomeCookieConsentBanner } from "@/components/organisms/HomeCookieConsentBanner";
 import { hasAcceptedCookieConsent } from "@/lib/cookie-consent";
@@ -25,7 +26,9 @@ export default async function LocalizedLayout({
   const shouldShowCookieConsent = !(await hasAcceptedCookieConsent());
 
   return (
-    <PageTemplate locale={locales}>{children}
+    <PageTemplate locale={locales}>
+      {children}
+      <TawkChatWidget enabledInitially={!shouldShowCookieConsent} />
       {shouldShowCookieConsent ? (
         <HomeCookieConsentBanner locale={locales} />
       ) : null}

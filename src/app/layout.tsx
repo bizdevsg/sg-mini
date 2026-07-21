@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import Script from "next/script";
 import "aos/dist/aos.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "flag-icons/css/flag-icons.min.css";
@@ -62,6 +61,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-visual",
+};
+
 export default async function RootLayout({
   children,
   params,
@@ -93,16 +98,6 @@ export default async function RootLayout({
           <FirebaseBootstrap />
           <LoadingProvider locale={locale}>{children}</LoadingProvider>
         </FontAwesomeProvider>
-        <Script id="tawk-init" strategy="lazyOnload">
-          {`window.Tawk_API = window.Tawk_API || {}; window.Tawk_LoadStart = new Date();`}
-        </Script>
-        <Script
-          id="tawk-chat"
-          src="https://embed.tawk.to/6a5db82e9953a51d4ac277ec/1jtv1eu8t"
-          strategy="lazyOnload"
-          charSet="UTF-8"
-          crossOrigin="anonymous"
-        />
       </body>
     </html>
   );

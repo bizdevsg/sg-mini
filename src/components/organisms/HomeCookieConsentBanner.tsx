@@ -1,77 +1,26 @@
 "use client";
 
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useState } from "react";
 import { Cookie, ShieldCheck } from "lucide-react";
 
 import {
   acceptCookieConsent,
 } from "@/app/actions/cookieConsent";
+import { TAWK_CHAT_ENABLE_EVENT } from "@/lib/tawk";
 import { getMessages, type AppLocale } from "@/locales";
 
 type HomeCookieConsentBannerProps = {
   locale: AppLocale;
 };
 
-declare global {
-  interface Window {
-    Tawk_API?: {
-      hideWidget?: () => void;
-      onLoad?: () => void;
-      showWidget?: () => void;
-    };
-  }
-}
-
 export function HomeCookieConsentBanner({
   locale,
 }: HomeCookieConsentBannerProps) {
   const copy = getMessages(locale).cookieConsent;
   const [isVisible, setIsVisible] = useState(true);
-  const isVisibleRef = useRef(isVisible);
   const [pendingAction, setPendingAction] = useState<"accept" | "dismiss" | null>(
     null,
   );
-
-  useEffect(() => {
-    isVisibleRef.current = isVisible;
-
-    const tawkApi = window.Tawk_API;
-    if (!tawkApi) {
-      return;
-    }
-
-    if (isVisible) {
-      tawkApi.hideWidget?.();
-      return;
-    }
-
-    tawkApi.showWidget?.();
-  }, [isVisible]);
-
-  useEffect(() => {
-    const tawkApi = window.Tawk_API ?? {};
-    const previousOnLoad = tawkApi.onLoad;
-
-    tawkApi.onLoad = () => {
-      previousOnLoad?.();
-
-      if (isVisibleRef.current) {
-        tawkApi.hideWidget?.();
-        return;
-      }
-
-      tawkApi.showWidget?.();
-    };
-
-    window.Tawk_API = tawkApi;
-
-    return () => {
-      if (window.Tawk_API) {
-        window.Tawk_API.onLoad = previousOnLoad;
-        window.Tawk_API.showWidget?.();
-      }
-    };
-  }, []);
 
   async function handleConsentAction(action: "accept" | "dismiss") {
     setPendingAction(action);
@@ -82,6 +31,7 @@ export function HomeCookieConsentBanner({
       }
 
       setIsVisible(false);
+      window.dispatchEvent(new Event(TAWK_CHAT_ENABLE_EVENT));
     } catch {
       setPendingAction(null);
     }
