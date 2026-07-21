@@ -487,6 +487,25 @@ export type AppMessages = {
     backLabel: string;
     emptyContent: string;
   };
+  termsConditionsPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      primaryCta: string;
+    };
+    list: {
+      title: string;
+      description: string;
+      readMore: string;
+      emptyTitle: string;
+      emptyBody: string;
+      untitledFallback: string;
+    };
+  };
   fraudAlertPage: {
     title: string;
     description: string;
@@ -925,7 +944,7 @@ export type AppMessages = {
   footer: {
     companyName: string;
     logoAlt: string;
-    investmentWarning: string;
+    desc: string;
     disclaimerLabel: string;
     disclaimerBody: string;
     brandTitle: string;
@@ -933,12 +952,11 @@ export type AppMessages = {
       label: string;
       href: string;
     }>;
-    helpTitle: string;
-    helpItems: Array<{
+    legalTitle: string;
+    legalItems: {
       label: string;
-      href: string;
-    }>;
-    legalItems: string[];
+      number: string;
+    }[];
     socials: Array<{
       name: string;
       url: string;
@@ -947,10 +965,6 @@ export type AppMessages = {
     copyrightProtected: string;
     komdigiAlt: string;
     tsiAlt: string;
-    faqItem: {
-      label: string;
-      href: string;
-    };
   };
   loadingOverlay: {
     title: string;

@@ -33,6 +33,8 @@ export function BannerDetailPage({
         breadcrumbs={[
           {
             label: labels.breadcrumb,
+            href: `/${locale}/syarat-dan-ketentuan`,
+            tone: "accent",
           },
           {
             label: title,
@@ -97,7 +99,7 @@ export function BannerDetailPage({
 
             <div className="mt-8 flex justify-center">
               <Link
-                href={`/${locale}`}
+                href={`/${locale}/syarat-dan-ketentuan`}
                 className="inline-flex items-center rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm font-medium text-zinc-200 transition hover:border-yellow-500/35 hover:text-yellow-400"
               >
                 {labels.backLabel}

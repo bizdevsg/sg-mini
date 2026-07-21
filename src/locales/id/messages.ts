@@ -28,6 +28,7 @@ import { idNewsBrowser } from "./content/newsBrowser";
 import { idNewsDetailPage } from "./content/newsDetailPage";
 import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idBannerDetailPage } from "./content/bannerDetailPage";
+import { idTermsConditionsPage } from "./content/termsConditionsPage";
 import { idFraudAlertPage } from "./content/fraudAlertPage";
 import { idContactPage } from "./content/contactPage";
 import { idFaqPage } from "./content/faqPage";
@@ -66,6 +67,7 @@ export const idMessages: AppMessages = {
   newsDetailPage: idNewsDetailPage,
   bannerSlideshow: idBannerSlideshow,
   bannerDetailPage: idBannerDetailPage,
+  termsConditionsPage: idTermsConditionsPage,
   fraudAlertPage: idFraudAlertPage,
   contactPage: idContactPage,
   faqPage: idFaqPage,

@@ -102,7 +102,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
             className="relative order-2 z-10 mx-auto max-w-[22rem] text-center sm:max-w-[30rem] md:max-w-[38rem] lg:max-w-[34rem] xl:mx-0 xl:max-w-[48rem] xl:text-left"
             effect="fade-up"
           >
-            <h1 className="font-mono text-[2.35rem] font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3.45rem] xl:text-[4.4rem]">
+            <h1 className="font-mono text-3xl font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3.45rem] xl:text-[4.4rem]">
               <span className="text-yellow-500">
                 {messages.hero.titleLead}
               </span>

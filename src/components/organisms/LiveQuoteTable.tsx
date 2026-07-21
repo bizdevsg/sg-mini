@@ -29,7 +29,7 @@ export function LiveQuoteTable({
   const isLoading = symbols.length === 0 && status !== "error";
 
   return (
-    <>
+    <div className="overflow-hidden">
       {isLoading ? (
         <LoadingOverlay
           brandLabel={messages.app.brandWordmark}
@@ -104,6 +104,7 @@ export function LiveQuoteTable({
           key={lastUpdated ? "live-quote-last-updated-ready" : "live-quote-last-updated-pending"}
           effect="fade-up"
           delay={600}
+          once
         >
           <div className="px-2 text-right text-xs text-white/58 md:pr-3">
             {lastUpdated
@@ -112,6 +113,6 @@ export function LiveQuoteTable({
           </div>
         </ScrollReveal>
       </div>
-    </>
+    </div>
   );
 }

@@ -70,7 +70,7 @@ function renderMenuLabel(label: string, href?: string) {
         aria-hidden="true"
       />
 
-      <p>Trade Pilot</p>
+      <p className="block md:hidden">Trade Pilot</p>
     </div>
   );
 }

@@ -3,35 +3,66 @@ import type { AppMessages } from "../../shared/messages";
 export const enFooter: AppMessages["footer"] = {
   companyName: "PT. Solid Gold Berjangka",
   logoAlt: "Solid Gold Berjangka logo",
-  investmentWarning:
-    "PT Solid Gold Berjangka urges the public to stay alert against investment scams. All transaction fund transfers must only be made to official Segregated Accounts under PT Solid Gold Berjangka.",
+  desc: "PT Solid Gold Berjangka urges the public to stay alert against investment scams. All transaction fund transfers must only be made to official Segregated Accounts under PT Solid Gold Berjangka.",
   disclaimerLabel: "Disclaimer:",
   disclaimerBody:
     "Futures trading carries high risk and requires adequate understanding before placing transactions. The information on this website is for education and reference only, not an invitation or guarantee of profit. Every transaction decision remains fully the client's responsibility.",
-  brandTitle: "Menu",
+  brandTitle: "Quick Links",
   brandItems: [
     { label: "About Us", href: "/about" },
     { label: "Ebook", href: "/education/ebook" },
     { label: "Live Quote", href: "/live-quote" },
     { label: "News", href: "/news" },
   ],
-  helpTitle: "Help",
-  helpItems: [
-    { label: "Contact Us", href: "/contact-us" },
-    { label: "Fraud Alert", href: "/fraud-alert" },
-  ],
+  legalTitle: "Legality",
   legalItems: [
-    "Commodity Futures Trading Regulatory Agency: Number 1156/BAPPEBTI/SI/3/2007",
-    "Financial Services Authority: Number S-126/PM.02/2025",
-    "Bank Indonesia: Number 27/663/DPPK/Srt/B",
-    "Indonesian Commodity and Derivatives Exchange: Number S-373/PM.02/2025",
-    "Jakarta Futures Exchange: Number SPAB-047/BBJ/07/02",
-    "Indonesian Clearing House: Number 15/AK-KBI/V/2003",
+    {
+      label: "Approval by the Ministry of Justice and Human Rights",
+      number: "C-05612 HT.01.01.TH.2002",
+    },
+    {
+      label: "Exchange Membership Approval Letter (SPAB)",
+      number: "SPAB-047/BBJ/07/02",
+    },
+    {
+      label: "Futures Brokerage Business License",
+      number: "161/BAPPEBTI/SI/IX/2002",
+    },
+    {
+      label: "Futures Clearing Membership",
+      number: "15/AK-KBI/V/2003",
+    },
+    {
+      label: "Cooperation Agreement with PT Royal Assetindo",
+      number: "262/CO-BOD/SGB/VI/2005",
+    },
+    {
+      label: "BAPPEBTI Decree",
+      number: "1156/BAPPEBTI/SI/3/2007",
+    },
+    {
+      label: "Online Electronic Customer Acceptance",
+      number: "27/BAPPEBTI/KEP-PBK/09/2014",
+    },
+    {
+      label: "Financial Derivatives Securities Intermediary License (OJK)",
+      number: "S-373/PM.02/2025",
+    },
+    {
+      label:
+        "Participant of the PUVA Derivatives Alternative Trading System (Bank Indonesia)",
+      number: "27/663/DPPK/Srt/B",
+    },
+    {
+      label:
+        "Online Electronic Customer Acceptance with Simplified CDD Mechanism",
+      number: "004/BAPPEBTI/KEP-PBK/CDDS/007/2026",
+    },
   ],
   socials: [
     {
       name: "Instagram",
-      url: "https://instagram.com/example",
+      url: "https://www.instagram.com/solidgoldjakarta.official/",
       icon: "instagram",
     },
     {
@@ -41,7 +72,7 @@ export const enFooter: AppMessages["footer"] = {
     },
     {
       name: "YouTube",
-      url: "https://youtube.com/example",
+      url: "https://www.youtube.com/@Ptsolidgoldberjangka",
       icon: "youtube",
     },
     {
@@ -51,15 +82,11 @@ export const enFooter: AppMessages["footer"] = {
     },
     {
       name: "TikTok",
-      url: "https://tiktok.com/@example",
+      url: "https://www.tiktok.com/@solid.prime",
       icon: "tiktok",
     },
   ],
   copyrightProtected: "All rights reserved.",
   komdigiAlt: "Komdigi logo",
   tsiAlt: "TSI logo",
-  faqItem: {
-    label: "FAQ",
-    href: "/faq",
-  },
 };
