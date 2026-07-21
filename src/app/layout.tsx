@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Poppins } from "next/font/google";
 import "aos/dist/aos.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -81,6 +82,7 @@ export default async function RootLayout({
   return (
     <html
       lang={getLocaleConfig(locale).lang}
+      data-locale={locale}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${poppins.variable} h-full antialiased`}
@@ -98,6 +100,7 @@ export default async function RootLayout({
           <FirebaseBootstrap />
           <LoadingProvider locale={locale}>{children}</LoadingProvider>
         </FontAwesomeProvider>
+        <Analytics />
       </body>
     </html>
   );

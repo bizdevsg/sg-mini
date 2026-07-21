@@ -22,7 +22,7 @@ export function RegulatorMarqueeSection({
 
   return (
     <section className="bg-linear-180 from-black to-transparent">
-      <SectionContainer className="py-10 sm:py-16 md:py-20">
+      <SectionContainer className="py-10 sm:pb-16 md:pb-20 pt-10 md:pt-14">
         <div className="flex flex-col items-center gap-5">
           <ScrollReveal effect="zoom-in">
             <SectionEyebrow align="center">

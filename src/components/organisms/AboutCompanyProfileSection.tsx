@@ -42,7 +42,7 @@ export function AboutCompanyProfileSection({
                 width={180}
                 height={180}
                 className="h-auto w-40 object-contain lg:w-48"
-                style={{ width: "auto", height: "auto" }}
+                style={{ height: "auto" }}
               />
             </div>
           </ScrollReveal>

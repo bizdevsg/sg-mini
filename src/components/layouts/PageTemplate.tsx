@@ -1,13 +1,11 @@
 import { Suspense, type ReactNode } from "react";
 
 import { getLocaleConfig, type AppLocale } from "@/locales";
-import { LocaleDocumentSync } from "@/components/providers/LocaleDocumentSync";
 import { FooterSection } from "@/components/organisms/FooterSection";
 import { Navbar } from "@/components/organisms/Navbar";
 import { ScrollToTopButton } from "@/components/molecules/ScrollToTopButton";
 import {
-  getClientAreaSessionProfile,
-  hasClientAreaSession,
+  getClientAreaSessionState,
 } from "@/lib/client-area-auth";
 import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
 
@@ -28,16 +26,13 @@ async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
     );
   }
 
-  const [isClientAreaAuthenticated, clientAreaProfile] = await Promise.all([
-    hasClientAreaSession(),
-    getClientAreaSessionProfile(),
-  ]);
+  const { isAuthenticated, profile } = await getClientAreaSessionState();
 
   return (
     <Navbar
-      clientAreaProfile={clientAreaProfile}
+      clientAreaProfile={profile}
       locale={locale}
-      isClientAreaAuthenticated={isClientAreaAuthenticated}
+      isClientAreaAuthenticated={isAuthenticated}
     />
   );
 }
@@ -53,7 +48,6 @@ export function PageTemplate({
       data-locale={locale}
       className="min-h-screen bg-transparent"
     >
-      <LocaleDocumentSync locale={locale} />
       <Suspense
         fallback={
           <Navbar

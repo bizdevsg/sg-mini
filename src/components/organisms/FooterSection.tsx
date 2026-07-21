@@ -39,7 +39,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
     <footer className="border-t border-line bg-black">
       <SectionContainer className="py-10 sm:py-12">
         <div className="flex flex-col gap-6">
-          <div className="grid grid-cols-1 gap-10 xl:grid-cols-[2fr_1fr_1fr_2fr]">
+          <div className="grid grid-cols-1 gap-10 xl:grid-cols-[2fr_1fr_1fr_1.5fr]">
             <div className="space-y-4">
               <Link href={`/${locale}`} className="flex items-center gap-3">
                 <Image
@@ -49,23 +49,23 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   sizes="220px"
                   width={500}
                   height={500}
-                  className="hidden h-auto w-70 object-contain sm:block"
+                  className="h-auto w-70 object-contain"
                 />
               </Link>
 
-              <p className="text-sm text-white/80 leading-7">
+              <p className="text-sm text-white/80 leading-7 text-justify">
                 {messages.footer.investmentWarning}
               </p>
 
               {/* Certification */}
-              <div className="mt-5 flex items-center gap-4">
+              <div className="mt-5 grid grid-cols-2 gap-4">
                 <div className="flex items-center justify-center rounded-xl bg-white p-4">
                   <Image
-                    src="/assets/logo-komdigi.png"
+                    src="/assets/logo-komdigi-nav-4.png"
                     alt={messages.footer.komdigiAlt}
-                    width={140}
-                    height={40}
-                    className="h-10 max-h-13 w-auto object-contain"
+                    width={100}
+                    height={29}
+                    className="h-10 max-h-10 w-auto object-contain"
                   />
                 </div>
 
@@ -73,9 +73,9 @@ export function FooterSection({ locale }: FooterSectionProps) {
                   <Image
                     src="/assets/logo TSI.png"
                     alt={messages.footer.tsiAlt}
-                    width={140}
-                    height={40}
-                    className="h-10 max-h-13 w-auto object-contain"
+                    width={100}
+                    height={29}
+                    className="h-10 max-h-10 w-auto object-contain"
                   />
                 </div>
               </div>

@@ -19,8 +19,6 @@ export const enFooter: AppMessages["footer"] = {
   helpItems: [
     { label: "Contact Us", href: "/contact-us" },
     { label: "Fraud Alert", href: "/fraud-alert" },
-    { label: "Economic Calendar", href: "/economic-calendar" },
-    { label: "Historical Data", href: "/historical-data" },
   ],
   legalItems: [
     "Commodity Futures Trading Regulatory Agency: Number 1156/BAPPEBTI/SI/3/2007",

@@ -15,7 +15,7 @@ export function LiveQuoteSection({ locale }: LiveQuoteSectionProps) {
 
   return (
     <div className="bg-[#0E0E0E]">
-      <SectionContainer className="py-20">
+      <SectionContainer className="py-10 md:py-20">
         <ScrollReveal effect="fade-right">
           <SectionEyebrow align="left" className="mb-5">
             {messages.liveQuoteSection.eyebrow}

@@ -19,8 +19,6 @@ export const idFooter: AppMessages["footer"] = {
   helpItems: [
     { label: "Hubungi Kami", href: "/contact-us" },
     { label: "Waspada Penipuan", href: "/fraud-alert" },
-    { label: "Kalender Ekonomi", href: "/economic-calendar" },
-    { label: "Historical Data", href: "/historical-data" },
   ],
   legalItems: [
     "Badan Pengawas Perdagangan Berjangka Komoditi: Nomor 1156/BAPPEBTI/SI/3/2007",

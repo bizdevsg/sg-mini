@@ -6,6 +6,7 @@ import { TAWK_CHAT_ENABLE_EVENT, TAWK_CHAT_WIDGET_URL } from "@/lib/tawk";
 
 declare global {
   interface Window {
+    __sgbTawkBooted?: boolean;
     Tawk_API?: Record<string, unknown>;
     Tawk_LoadStart?: Date;
   }
@@ -44,11 +45,24 @@ export function TawkChatWidget({
       return;
     }
 
-    if (document.getElementById(TAWK_SCRIPT_ID)) {
+    if (window.__sgbTawkBooted || document.getElementById(TAWK_SCRIPT_ID)) {
+      window.__sgbTawkBooted = true;
       return;
     }
 
-    window.Tawk_API = window.Tawk_API || {};
+    try {
+      const existingApi = window.Tawk_API as
+        | { shutdown?: () => void }
+        | undefined;
+      existingApi?.shutdown?.();
+    } catch {
+      // Ignore stale widget shutdown failures and continue with a fresh init.
+    }
+
+    delete window.Tawk_API;
+    delete window.Tawk_LoadStart;
+
+    window.Tawk_API = {};
     window.Tawk_LoadStart = new Date();
 
     const script = document.createElement("script");
@@ -57,15 +71,14 @@ export function TawkChatWidget({
     script.src = TAWK_CHAT_WIDGET_URL;
     script.charset = "UTF-8";
     script.setAttribute("crossorigin", "*");
+    script.addEventListener("load", () => {
+      window.__sgbTawkBooted = true;
+    });
+    script.addEventListener("error", () => {
+      window.__sgbTawkBooted = false;
+    });
 
-    const firstScript = document.getElementsByTagName("script")[0];
-
-    if (firstScript?.parentNode) {
-      firstScript.parentNode.insertBefore(script, firstScript);
-      return;
-    }
-
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   }, [isEnabled]);
 
   return null;

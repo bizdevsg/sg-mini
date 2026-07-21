@@ -25,7 +25,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           alt={messages.app.brandName}
           priority
           sizes="28px"
-          className="h-7 w-7 object-contain sm:hidden"
+          className="h-auto w-7 object-contain sm:hidden"
         />
 
         {/* Desktop Logo */}

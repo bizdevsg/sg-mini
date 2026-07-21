@@ -62,11 +62,11 @@ export function HeroSection({ locale }: HeroSectionProps) {
         backgroundImage: "url('/assets/BCG.png')",
       }}
     >
-      <SectionContainer className="relative mb-16 sm:mb-0 sm:pt-16 sm:mt-10 md:mt-0 md:pt-20">
+      <SectionContainer className="relative mb-10 sm:mb-0 sm:pt-16 sm:mt-10 md:mt-0 md:pt-20">
         <div className="relative isolate z-10 flex flex-col gap-4 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           {/* Mobile Image */}
           <ScrollReveal
-            className="relative order-1 mx-auto h-[450px] w-full xl:hidden sm:h-[570px] md:h-[650px] mt-10 sm:mt-0"
+            className="relative order-1 mx-auto h-[450px] w-full xl:hidden sm:h-[570px] md:h-[650px] mt-5 sm:mt-0"
             effect="fade-left"
             delay={120}
           >
@@ -111,7 +111,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </span>
             </h1>
 
-            <p className="mt-3 max-w-2xl text-center text-lg text-white/85 text-shadow-lg text-shadow-black xl:text-left">
+            <p className="mt-3 max-w-2xl text-center sm:text-lg text-white/85 text-shadow-lg text-shadow-black xl:text-left">
               {messages.hero.subTitle}
             </p>
 
@@ -140,7 +140,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
                 />
               </div>
 
-              <p className="text-white text-xs mt-3">
+              <p className="text-white/50 text-xs mt-3">
                 {messages.hero.demoDisclaimer}
               </p>
             </div>

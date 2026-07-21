@@ -29,7 +29,7 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
   const items = getMessages(locale).benefitSection.items;
 
   return (
-    <SectionContainer className="py-16 md:py-20">
+    <SectionContainer className="py-10 md:py-20">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {items.map((item, index) => (
           <ScrollReveal

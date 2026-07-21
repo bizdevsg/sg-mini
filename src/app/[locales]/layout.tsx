@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { PageTemplate } from "@/components/layouts/PageTemplate";
-import { TawkChatWidget } from "@/components/providers/TawkChatWidget";
+import { LocalizedLayoutEnhancements } from "@/components/providers/LocalizedLayoutEnhancements";
 import { isSupportedLocale, type AppLocale } from "@/locales";
-import { HomeCookieConsentBanner } from "@/components/organisms/HomeCookieConsentBanner";
 import { hasAcceptedCookieConsent } from "@/lib/cookie-consent";
 
 type LocalizedLayoutProps = {
@@ -28,10 +27,10 @@ export default async function LocalizedLayout({
   return (
     <PageTemplate locale={locales}>
       {children}
-      <TawkChatWidget enabledInitially={!shouldShowCookieConsent} />
-      {shouldShowCookieConsent ? (
-        <HomeCookieConsentBanner locale={locales} />
-      ) : null}
+      <LocalizedLayoutEnhancements
+        locale={locales}
+        shouldShowCookieConsent={shouldShowCookieConsent}
+      />
     </PageTemplate>
   );
 }
