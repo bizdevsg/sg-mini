@@ -66,7 +66,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
         <div className="relative isolate z-10 flex flex-col gap-4 lg:min-h-[620px] lg:justify-center xl:min-h-[680px]">
           {/* Mobile Image */}
           <ScrollReveal
-            className="relative order-1 mx-auto h-[500px] w-full xl:hidden sm:h-[620px] md:h-[700px]"
+            className="relative order-1 mx-auto h-[450px] w-full xl:hidden sm:h-[570px] md:h-[650px] mt-10 sm:mt-0"
             effect="fade-left"
             delay={120}
           >
