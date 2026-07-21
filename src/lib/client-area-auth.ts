@@ -31,6 +31,11 @@ export type ClientAreaSessionProfile = {
   email: string;
 };
 
+export type ClientAreaSessionState = {
+  isAuthenticated: boolean;
+  profile: ClientAreaSessionProfile | null;
+};
+
 export function isValidClientAreaCredentials(account: string, password: string) {
   return (
     CLIENT_AREA_ALLOWED_IDENTIFIERS.has(
@@ -41,19 +46,7 @@ export function isValidClientAreaCredentials(account: string, password: string) 
 }
 
 export async function hasClientAreaSession() {
-  const cookieStore = await cookies();
-
-  const hasAuthenticatedCookie =
-    cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
-    CLIENT_AREA_SESSION_VALUE;
-
-  if (!hasAuthenticatedCookie) {
-    return false;
-  }
-
-  return isClientAreaLastActivityActive(
-    cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
-  );
+  return (await getClientAreaSessionState()).isAuthenticated;
 }
 
 function resolveClientAreaSessionProfile(identifier?: string | null): ClientAreaSessionProfile {
@@ -75,6 +68,10 @@ function resolveClientAreaSessionProfile(identifier?: string | null): ClientArea
 }
 
 export async function getClientAreaSessionProfile() {
+  return (await getClientAreaSessionState()).profile;
+}
+
+export async function getClientAreaSessionState(): Promise<ClientAreaSessionState> {
   const cookieStore = await cookies();
   const hasAuthenticatedCookie =
     cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
@@ -86,12 +83,18 @@ export async function getClientAreaSessionProfile() {
       cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
     )
   ) {
-    return null;
+    return {
+      isAuthenticated: false,
+      profile: null,
+    };
   }
 
-  return resolveClientAreaSessionProfile(
-    cookieStore.get(CLIENT_AREA_IDENTIFIER_COOKIE)?.value,
-  );
+  return {
+    isAuthenticated: true,
+    profile: resolveClientAreaSessionProfile(
+      cookieStore.get(CLIENT_AREA_IDENTIFIER_COOKIE)?.value,
+    ),
+  };
 }
 
 export async function createClientAreaSession(
