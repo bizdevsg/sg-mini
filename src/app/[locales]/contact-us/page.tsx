@@ -57,7 +57,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
   assertValidLocale(locales);
 
   const page = getMessages(locales).contactPage;
-  const companyProfile = await getCompanyProfile();
+  const companyProfile = await getCompanyProfile(locales);
   const complaintLinks = [
     {
       href: companyProfile.complaintLink,
@@ -72,7 +72,11 @@ export default async function ContactPage({ params }: ContactPageProps) {
   return (
     <>
       <ContactPageHero locale={locales} copy={page} />
-      <ContactPageMainSection copy={page} companyProfile={companyProfile} />
+      <ContactPageMainSection
+        locale={locales}
+        copy={page}
+        companyProfile={companyProfile}
+      />
       <ContactComplaintLinksSection items={complaintLinks} />
     </>
   );

@@ -14,7 +14,7 @@ export default function RegulasiSection({ locale }: RegulasiSectionProps) {
 
   return (
     <section className="bg-zinc-900/40">
-      <SectionContainer className="py-16 sm:py-20">
+      <SectionContainer className="py-10 sm:py-16">
         <ScrollReveal>
           <SectionIntro
             align="center"

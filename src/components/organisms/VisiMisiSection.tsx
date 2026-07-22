@@ -29,7 +29,7 @@ export default function VisiMisiSection({
       : visiMisi.visionItems;
 
   return (
-    <SectionContainer className="py-16 md:py-20">
+    <SectionContainer className="py-10 md:py-16">
       <ScrollReveal effect="fade-right">
         <SectionIntro
           eyebrow={visiMisi.eyebrow}

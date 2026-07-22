@@ -3,6 +3,7 @@ import Image from "next/image";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { getMessages, type AppLocale } from "@/locales";
+import { SectionEyebrow } from "../atoms/SectionEyebrow";
 
 type AboutCompanyProfileSectionProps = {
   locale: AppLocale;
@@ -29,7 +30,7 @@ export function AboutCompanyProfileSection({
         backgroundImage: "url('/assets/BCG.png')",
       }}
     >
-      <SectionContainer className="py-16 sm:py-20">
+      <SectionContainer className="relative z-10 py-10 sm:py-16 mt-5">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-12">
           <ScrollReveal
             className="rounded-[28px] border border-white/8 bg-black/20 p-8"
@@ -48,11 +49,11 @@ export function AboutCompanyProfileSection({
           </ScrollReveal>
 
           <ScrollReveal effect="fade-up" delay={120}>
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-yellow-500">
+            <SectionEyebrow className="text-xs font-semibold uppercase tracking-[0.22em] text-yellow-500">
               {companyProfile.eyebrow}
-            </span>
+            </SectionEyebrow>
 
-            <h2 className="mt-5 text-3xl font-bold leading-tight text-white md:text-4xl ">
+            <h2 className="mt-5 text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl ">
               {companyName || companyProfile.title}
             </h2>
 

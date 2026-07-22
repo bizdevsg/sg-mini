@@ -28,15 +28,15 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
             backgroundImage: "url('/assets/bg-tengah.png')",
           }}
         >
-          <div className="bg-black/50 absolute top-0 left-0 w-full h-full" />
+          <div className="bg-black/50 absolute top-0 left-0 w-full h-full backdrop-blur-xs" />
 
           <div className="relative z-10 flex min-h-97.5 flex-col items-center gap-10 px-6 py-10 text-center sm:px-8 md:flex-row md:items-center md:justify-between md:px-12 md:text-left lg:px-20">
-            <div className="order-2 max-w-xl md:order-1">
-              <h2 className="text-4xl font-bold leading-tight text-white md:text-5xl">
+            <div className="order-2 max-w-xl md:order-1 ">
+              <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
                 {messages.title}
               </h2>
 
-              <p className="mt-5 text-gray-300 md:text-lg">
+              <p className="mt-2 text-gray-300 text-sm sm:text-base md:text-lg">
                 {messages.description}
               </p>
 

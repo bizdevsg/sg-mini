@@ -1,29 +1,29 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import type { AppMessages } from "@/locales";
+import { ContactMapSection } from "@/components/organisms/ContactMapSection";
+import { ContactSupportSection } from "@/components/organisms/ContactSupportSection";
+import { formatLocaleDateTime, type AppLocale, type AppMessages } from "@/locales";
 import type { CompanyProfile } from "@/lib/company-profile";
 
-import { ContactFormCard } from "./ContactFormCard";
-import { ScrollReveal } from "../molecules/ScrollReveal";
-
 type ContactPageMainSectionProps = {
+  locale: AppLocale;
   copy: AppMessages["contactPage"];
   companyProfile: Pick<
     CompanyProfile,
-    "address" | "mapsEmbedUrl" | "phone" | "email" | "fax"
+    | "companyName"
+    | "address"
+    | "mapsEmbedUrl"
+    | "phone"
+    | "email"
+    | "fax"
+    | "complaintLink"
+    | "updatedAt"
   >;
 };
 
-const SUPPORT_ICON_MAP = {
-  phone: ["fas", "phone"] as IconProp,
-  envelope: ["fas", "envelope"] as IconProp,
-  headset: ["fas", "headset"] as IconProp,
-  fax: ["fas", "fax"] as IconProp,
-};
-
 export function ContactPageMainSection({
+  locale,
   copy,
   companyProfile,
 }: ContactPageMainSectionProps) {
@@ -38,115 +38,66 @@ export function ContactPageMainSection({
   const mapEmbedUrl =
     companyProfile.mapsEmbedUrl ||
     `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
-  const supportItems = [
-    {
-      title: copy.support.callTitle,
-      description: copy.support.callDescription,
-      value: phone,
-      href: phoneHref,
-      icon: SUPPORT_ICON_MAP.phone,
-    },
-    {
-      title: copy.support.emailTitle,
-      description: copy.support.emailDescription,
-      value: email,
-      href: `mailto:${email}`,
-      icon: SUPPORT_ICON_MAP.envelope,
-    },
-    {
-      title: copy.support.complaintTitle,
-      description: copy.support.complaintDescription,
-      value: copy.headOffice.complaintPhone,
-      href: copy.headOffice.complaintPhoneHref,
-      icon: SUPPORT_ICON_MAP.headset,
-    },
-    {
-      title: copy.support.faxTitle,
-      description: copy.support.faxDescription,
-      value: fax,
-      icon: SUPPORT_ICON_MAP.fax,
-    },
-  ];
+  const companyName = companyProfile.companyName || copy.headOffice.title;
+  const updatedAtLabel = companyProfile.updatedAt
+    ? formatLocaleDateTime(companyProfile.updatedAt, locale)
+    : null;
+  const supportItems: Array<{
+    title: string;
+    description: string;
+    value: string;
+    icon: IconProp;
+    href?: string;
+  }> = [
+      {
+        title: copy.support.callTitle,
+        description: copy.support.callDescription,
+        value: phone,
+        href: phoneHref,
+        icon: ["fas", "phone"] as IconProp,
+      },
+      {
+        title: copy.support.emailTitle,
+        description: copy.support.emailDescription,
+        value: email,
+        href: `mailto:${email}`,
+        icon: ["fas", "envelope"] as IconProp,
+      },
+      {
+        title: copy.support.complaintTitle,
+        description: copy.support.complaintDescription,
+        value: copy.support.complaintValue,
+        href: companyProfile.complaintLink,
+        icon: ["fas", "headset"] as IconProp,
+      },
+      {
+        title: copy.support.faxTitle,
+        description: copy.support.faxDescription,
+        value: fax,
+        icon: ["fas", "fax"] as IconProp,
+      },
+    ];
 
   return (
-    <SectionContainer className="py-16 sm:py-20 relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
+    <SectionContainer className="relative py-16 sm:py-20">
+      <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <ScrollReveal effect="fade-left" className="rounded-2xl h-fit border border-line bg-[#0f0f0f] shadow-lg overflow-hidden">
-          <iframe
-            title={copy.map.iframeTitle}
-            src={mapEmbedUrl}
-            className="h-125 w-full border-0"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </ScrollReveal>
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <ContactMapSection
+          copy={copy.map}
+          overviewCopy={copy.overview}
+          mapEmbedUrl={mapEmbedUrl}
+          address={address}
+          companyName={companyName}
+        />
 
-        <ScrollReveal effect="fade-left" className="rounded-2xl border border-line bg-[#0f0f0f] p-6 shadow-lg sm:p-8">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-500/20 text-yellow-500">
-              <FontAwesomeIcon
-                icon={["fas", "headset"]}
-                className="text-lg"
-              />
-            </div>
-
-            <h3 className="text-lg font-bold text-white sm:text-xl">
-              {copy.support.title}
-            </h3>
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <p className="mt-2 text-sm leading-relaxed text-gray-300">
-              {copy.support.description}
-            </p>
-
-            <div className="mt-6 space-y-4">
-              <div>
-                <p className="text-xs font-medium uppercase text-gray-400">
-                  {copy.support.hoursLabel}
-                </p>
-                <p className="mt-1 text-sm font-semibold text-white">
-                  {copy.support.hoursValue}
-                </p>
-              </div>
-
-              <div className="grid gap-3 grid-cols-1">
-                {supportItems.map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-lg bg-white/5 p-4"
-                  >
-                    <div className="mb-2 flex items-center gap-3">
-                      <div className="text-yellow-500">
-                        <FontAwesomeIcon icon={item.icon} />
-                      </div>
-                      <p className="text-xs font-medium uppercase text-gray-400">
-                        {item.title}
-                      </p>
-                    </div>
-                    <p className="mb-2 text-xs leading-relaxed text-gray-400">
-                      {item.description}
-                    </p>
-                    {item.href ? (
-                      <a
-                        href={item.href}
-                        className="break-all text-sm font-semibold text-yellow-500 transition hover:text-yellow-400"
-                      >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <p className="break-all text-sm font-semibold text-yellow-500">
-                        {item.value}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
+        <ContactSupportSection
+          copy={copy.support}
+          overviewCopy={copy.overview}
+          companyName={companyName}
+          updatedAtLabel={updatedAtLabel}
+          items={supportItems}
+        />
       </div>
     </SectionContainer>
   );

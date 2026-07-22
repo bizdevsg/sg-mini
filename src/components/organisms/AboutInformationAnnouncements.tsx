@@ -238,7 +238,7 @@ export function AboutInformationAnnouncements({
             role="dialog"
             aria-modal="true"
             aria-labelledby={`pengumuman-title-${selectedItem.id}`}
-            className={`relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
+            className={`relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl md:rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
               ? "translate-y-0 scale-100 opacity-100"
               : "translate-y-6 scale-[0.96] opacity-0"
               }`}
@@ -306,8 +306,6 @@ export function AboutInformationAnnouncements({
                 </div>
 
                 <div>
-
-
                   <div
                     className="pengumuman-content prose-sm mt-6 max-w-none text-sm leading-7 text-white"
                     // eslint-disable-next-line react/no-danger

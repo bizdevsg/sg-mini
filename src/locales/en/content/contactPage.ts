@@ -18,6 +18,15 @@ export const enContactPage: AppMessages["contactPage"] = {
       description:
         "PT. Solid Gold Berjangka offices are present in Jakarta and selected operating cities across Indonesia.",
     },
+    overview: {
+      eyebrow: "Primary Contact",
+      title: "Official Contact Information",
+      description:
+        "Use the details below to reach the head office, open the location map, or submit a complaint through the official channels.",
+      companyLabel: "Company",
+      addressLabel: "Address",
+      updatedLabel: "Last updated",
+    },
     form: {
       title: "Send Us a Message",
       description:
@@ -67,14 +76,13 @@ export const enContactPage: AppMessages["contactPage"] = {
       title: "Customer Support",
       description:
         "Choose the right official contact channel for general questions, direct communication, or complaint handling.",
-      hoursLabel: "Operating Hours",
-      hoursValue: "Monday - Friday",
       callTitle: "Phone",
       callDescription: "Main phone line for the head office.",
       emailTitle: "Email",
       emailDescription: "Official email address for general inquiries.",
       complaintTitle: "Complaint Unit",
       complaintDescription: "Use extension 116 for complaint handling.",
+      complaintValue: "Official Complaint",
       faxTitle: "Fax",
       faxDescription: "Official company fax line.",
     },

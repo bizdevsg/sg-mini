@@ -54,7 +54,7 @@ export function AboutBusinessLegalityMainSection({
         ]}
       />
 
-      <SectionContainer className="py-16 sm:py-20 relative">
+      <SectionContainer className="py-10 sm:py-16 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-25 bg-linear-to-b from-black to-transparent" />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

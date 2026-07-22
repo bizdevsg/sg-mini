@@ -18,6 +18,15 @@ export const idContactPage: AppMessages["contactPage"] = {
       description:
         "PT. Solid Gold Berjangka hadir di Jakarta dan beberapa kota operasional lain di Indonesia.",
     },
+    overview: {
+      eyebrow: "Kontak Utama",
+      title: "Informasi Kontak Resmi",
+      description:
+        "Gunakan detail berikut untuk menghubungi kantor pusat, membuka peta lokasi, atau menyampaikan pengaduan melalui kanal resmi.",
+      companyLabel: "Perusahaan",
+      addressLabel: "Alamat",
+      updatedLabel: "Terakhir diperbarui",
+    },
     form: {
       title: "Kirimkan Pesan Anda",
       description:
@@ -67,14 +76,13 @@ export const idContactPage: AppMessages["contactPage"] = {
       title: "Customer Support",
       description:
         "Pilih kanal kontak resmi sesuai kebutuhan Anda, mulai dari pertanyaan umum sampai unit pengaduan.",
-      hoursLabel: "Waktu Operasional",
-      hoursValue: "Senin - Jumat",
       callTitle: "Telepon",
       callDescription: "Jalur telepon utama kantor pusat.",
       emailTitle: "Email",
       emailDescription: "Alamat email resmi untuk pertanyaan umum.",
       complaintTitle: "Unit Pengaduan",
       complaintDescription: "Gunakan ext. 116 untuk kebutuhan pengaduan.",
+      complaintValue: "Pengaduan Resmi",
       faxTitle: "Fax",
       faxDescription: "Kanal fax resmi perusahaan.",
     },

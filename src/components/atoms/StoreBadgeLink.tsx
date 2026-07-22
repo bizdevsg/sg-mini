@@ -7,6 +7,8 @@ type StoreBadgeLinkProps = {
   sizes: string;
   imageClassName: string;
   className?: string;
+  width?: number;
+  height?: number;
 };
 
 export function StoreBadgeLink({
@@ -16,6 +18,8 @@ export function StoreBadgeLink({
   sizes,
   imageClassName,
   className = "",
+  width = 300,
+  height = 90,
 }: StoreBadgeLinkProps) {
   return (
     <a
@@ -27,8 +31,8 @@ export function StoreBadgeLink({
       <Image
         src={imageSrc}
         alt={alt}
-        width={5514}
-        height={1612}
+        width={width}
+        height={height}
         sizes={sizes}
         className={imageClassName}
       />

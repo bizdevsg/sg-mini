@@ -27,7 +27,7 @@ export function AboutShowcaseSection({
 }: AboutShowcaseSectionProps) {
   return (
     <section className={surfaceClassName}>
-      <SectionContainer className="py-16 sm:py-20">
+      <SectionContainer className="py-10 sm:py-16">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
           <ScrollReveal effect="fade-right">
             <SectionIntro
@@ -39,7 +39,7 @@ export function AboutShowcaseSection({
             />
           </ScrollReveal>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             {items.map((item, index) => (
               <ScrollReveal key={`${item.title}-${item.subtitle}`} effect="fade-left" delay={index * 500}>
                 <AboutShowcaseCard

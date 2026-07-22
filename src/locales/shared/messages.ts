@@ -544,6 +544,14 @@ export type AppMessages = {
       title: string;
       description: string;
     };
+    overview: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      companyLabel: string;
+      addressLabel: string;
+      updatedLabel: string;
+    };
     form: {
       title: string;
       description: string;
@@ -586,14 +594,13 @@ export type AppMessages = {
     support: {
       title: string;
       description: string;
-      hoursLabel: string;
-      hoursValue: string;
       callTitle: string;
       callDescription: string;
       emailTitle: string;
       emailDescription: string;
       complaintTitle: string;
       complaintDescription: string;
+      complaintValue: string;
       faxTitle: string;
       faxDescription: string;
     };

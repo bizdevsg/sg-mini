@@ -113,23 +113,23 @@ export function FooterSection({ locale }: FooterSectionProps) {
             </div>
 
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-row xl:flex-col items-center gap-3 w-fit">
                 <StoreBadgeLink
                   href={googlePlayLink}
                   alt={googlePlayAlt}
-                  imageSrc="/assets/gp-button.png"
-                  sizes="(max-width: 640px) 120px, 140px"
+                  imageSrc="/assets/GOOGLE-PLAY.png"
+                  sizes="300"
                   imageClassName="h-auto w-full object-contain"
-                  className="inline-flex w-full"
+                  className="inline-flex w-full max-w-50"
                 />
 
                 <StoreBadgeLink
                   href={appStoreLink}
                   alt={appStoreAlt}
-                  imageSrc="/assets/as-button.png"
-                  sizes="(max-width: 640px) 120px, 140px"
+                  imageSrc="/assets/APPS-STORE.png"
+                  sizes="300"
                   imageClassName="h-auto w-full object-contain"
-                  className="inline-flex w-full"
+                  className="inline-flex w-full max-w-50"
                 />
               </div>
 
