@@ -18,23 +18,23 @@ export const idFooter: AppMessages["footer"] = {
   legalTitle: "Legalitas",
   legalItems: [
     {
-      label: "Pengesahan Departemen Kehakiman dan HAM",
+      label: "Kemenkumham",
       number: "C-05612 HT.01.01.TH.2002",
     },
     {
-      label: "Surat Persetujuan Anggota Bursa (SPAB)",
+      label: "SPAB",
       number: "SPAB-047/BBJ/07/02",
     },
     {
-      label: "Izin Usaha Pialang Berjangka",
+      label: "Izin Pialang Berjangka",
       number: "161/BAPPEBTI/SI/IX/2002",
     },
     {
-      label: "Keanggotaan Lembaga Kliring Berjangka",
+      label: "Keanggotaan KBI",
       number: "15/AK-KBI/V/2003",
     },
     {
-      label: "Perjanjian Kerjasama dengan PT. Royal Assetindo",
+      label: "PKS PT Royal Assetindo",
       number: "262/CO-BOD/SGB/VI/2005",
     },
     {
@@ -42,21 +42,19 @@ export const idFooter: AppMessages["footer"] = {
       number: "1156/BAPPEBTI/SI/3/2007",
     },
     {
-      label: "Penerimaan Nasabah Secara Elektronik On-Line",
+      label: "Penerimaan Nasabah Online",
       number: "27/BAPPEBTI/KEP-PBK/09/2014",
     },
     {
-      label: "Perantara Perdagangan Efek Derivatif Keuangan (OJK)",
+      label: "Perantara PEDK (OJK)",
       number: "S-373/PM.02/2025",
     },
     {
-      label:
-        "Peserta Sistem Perdagangan Alternatif Derivatif PUVA (Bank Indonesia)",
+      label: "Peserta SPA PUVA (BI)",
       number: "27/663/DPPK/Srt/B",
     },
     {
-      label:
-        "Penerimaan Nasabah Secara Elektronik On-Line dengan Mekanisme CDD Sederhana",
+      label: "CDD Sederhana",
       number: "004/BAPPEBTI/KEP-PBK/CDDS/007/2026",
     },
   ],

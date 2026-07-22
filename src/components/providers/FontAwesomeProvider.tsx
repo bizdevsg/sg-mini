@@ -11,4 +11,3 @@ export function FontAwesomeProvider({
 }: FontAwesomeProviderProps) {
   return <>{children}</>;
 }
-

@@ -17,23 +17,23 @@ export const enFooter: AppMessages["footer"] = {
   legalTitle: "Legality",
   legalItems: [
     {
-      label: "Approval by the Ministry of Justice and Human Rights",
+      label: "Ministry of Justice & Human Rights",
       number: "C-05612 HT.01.01.TH.2002",
     },
     {
-      label: "Exchange Membership Approval Letter (SPAB)",
+      label: "SPAB",
       number: "SPAB-047/BBJ/07/02",
     },
     {
-      label: "Futures Brokerage Business License",
+      label: "Futures Brokerage License",
       number: "161/BAPPEBTI/SI/IX/2002",
     },
     {
-      label: "Futures Clearing Membership",
+      label: "KBI Membership",
       number: "15/AK-KBI/V/2003",
     },
     {
-      label: "Cooperation Agreement with PT Royal Assetindo",
+      label: "Royal Assetindo Agreement",
       number: "262/CO-BOD/SGB/VI/2005",
     },
     {
@@ -41,21 +41,19 @@ export const enFooter: AppMessages["footer"] = {
       number: "1156/BAPPEBTI/SI/3/2007",
     },
     {
-      label: "Online Electronic Customer Acceptance",
+      label: "Online Customer Acceptance",
       number: "27/BAPPEBTI/KEP-PBK/09/2014",
     },
     {
-      label: "Financial Derivatives Securities Intermediary License (OJK)",
+      label: "PEDK License (OJK)",
       number: "S-373/PM.02/2025",
     },
     {
-      label:
-        "Participant of the PUVA Derivatives Alternative Trading System (Bank Indonesia)",
+      label: "PUVA ATS Participant (BI)",
       number: "27/663/DPPK/Srt/B",
     },
     {
-      label:
-        "Online Electronic Customer Acceptance with Simplified CDD Mechanism",
+      label: "Simplified CDD",
       number: "004/BAPPEBTI/KEP-PBK/CDDS/007/2026",
     },
   ],

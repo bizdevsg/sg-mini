@@ -1,4 +1,9 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import {
+  faChevronDown,
+  faChevronUp,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -9,18 +14,17 @@ type LiveQuoteTrendIndicatorProps = {
 
 const trendStyles = {
   up: {
-    icon: ["fas", "chevron-up"] as IconProp,
+    icon: faChevronUp as IconDefinition,
     className:
       "text-emerald-400 bg-emerald-400/10 border border-emerald-400/20",
   },
   down: {
-    icon: ["fas", "chevron-down"] as IconProp,
+    icon: faChevronDown as IconDefinition,
     className: "text-rose-400 bg-rose-400/10 border border-rose-400/20",
   },
   neutral: {
-    icon: ["fas", "minus"] as IconProp,
-    className:
-      "text-white/58 bg-white/10 border border-white/20",
+    icon: faMinus as IconDefinition,
+    className: "text-white/58 bg-white/10 border border-white/20",
   },
 } as const;
 

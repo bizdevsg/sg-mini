@@ -6,6 +6,7 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 import { getMessages, type AppLocale } from "@/locales";
 import { LogoMark } from "@/components/atoms/LogoMark";
@@ -60,17 +61,21 @@ function renderMenuLabel(label: string, href?: string) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Image
-        src="/assets/logo-tp.png"
-        alt=""
-        width={16}
-        height={16}
-        className="h-7 w-7 rounded-[4px] object-cover"
-        aria-hidden="true"
-      />
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Image
+          src="/assets/logo-tp.png"
+          alt=""
+          width={16}
+          height={16}
+          className="h-7 w-7 rounded-[4px] object-cover"
+          aria-hidden="true"
+        />
 
-      <p className="block md:hidden">Trade Pilot</p>
+        <p className="block md:hidden">Trade Pilot</p>
+      </div>
+
+      <ExternalLink className="h-4 w-4 text-yellow-400 block md:hidden" aria-hidden="true" />
     </div>
   );
 }
