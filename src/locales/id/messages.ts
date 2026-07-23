@@ -28,7 +28,10 @@ import { idNewsBrowser } from "./content/newsBrowser";
 import { idNewsDetailPage } from "./content/newsDetailPage";
 import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idBannerDetailPage } from "./content/bannerDetailPage";
+import { idPromoDetailPage } from "./content/promoDetailPage";
 import { idTermsConditionsPage } from "./content/termsConditionsPage";
+import { idPromoPage } from "./content/promoPage";
+import { idPrivacyPolicyPage } from "./content/privacyPolicyPage";
 import { idFraudAlertPage } from "./content/fraudAlertPage";
 import { idContactPage } from "./content/contactPage";
 import { idFaqPage } from "./content/faqPage";
@@ -67,7 +70,10 @@ export const idMessages: AppMessages = {
   newsDetailPage: idNewsDetailPage,
   bannerSlideshow: idBannerSlideshow,
   bannerDetailPage: idBannerDetailPage,
+  promoDetailPage: idPromoDetailPage,
   termsConditionsPage: idTermsConditionsPage,
+  promoPage: idPromoPage,
+  privacyPolicyPage: idPrivacyPolicyPage,
   fraudAlertPage: idFraudAlertPage,
   contactPage: idContactPage,
   faqPage: idFaqPage,

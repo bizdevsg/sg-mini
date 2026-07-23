@@ -3,23 +3,23 @@ import type { AppMessages } from "../../shared/messages";
 export const enTermsConditionsPage: AppMessages["termsConditionsPage"] = {
   title: "Terms and Conditions",
   description:
-    "A collection of terms and conditions for promotional banners, programs, and related supporting information.",
+    "Terms and conditions for using PT. Solid Gold Berjangka's electronic trading system.",
   breadcrumb: "Terms and Conditions",
   hero: {
     eyebrow: "Important Information",
-    title: "Terms and Conditions Page",
+    title: "Terms and Conditions",
     description:
-      "Review the detailed terms and conditions for each banner, promotion, or information item published by PT. Solid Gold Berjangka.",
-    primaryCta: "Browse the information list",
+      "Review the terms and conditions for using PT. Solid Gold Berjangka's electronic trading system.",
+    primaryCta: "Read the document",
   },
   list: {
-    title: "Information list",
+    title: "Document unavailable",
     description:
-      "Choose a banner to view its available terms, conditions, and supporting details.",
+      "The terms and conditions document will appear on this page when available.",
     readMore: "Read details",
-    emptyTitle: "No information available yet",
+    emptyTitle: "Document not available yet",
     emptyBody:
-      "There are currently no active banners with an available terms and conditions page.",
+      "The terms and conditions content is not available right now.",
     untitledFallback: "Untitled information",
   },
 };

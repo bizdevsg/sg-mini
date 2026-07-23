@@ -30,6 +30,7 @@ export type SpreadItem = {
 
 export type RegulatorLogo = {
   src: string;
+  hoverSrc?: string;
   alt: string;
   width: number;
   height: number;
@@ -156,39 +157,45 @@ export const spreads: SpreadItem[] = [
 export const regulatorLogos: RegulatorLogo[] = [
   {
     src: "/assets/regulator/KEMENDAG-1 2.png",
+    hoverSrc: "/assets/regulator/KEMENDAG 1-color.png",
     alt: "Logo Bappebti",
-    width: 1367,
-    height: 327,
+    width: 308,
+    height: 90,
   },
   {
     src: "/assets/regulator/OJK_Logo-3 2.png",
+    hoverSrc: "/assets/regulator/OJK_Logo-3 2-color-fixed.png",
     alt: "Logo OJK",
-    width: 1200,
-    height: 522,
+    width: 244,
+    height: 106,
   },
   {
     src: "/assets/regulator/aspeb-logo-2 2.png",
+    hoverSrc: "/assets/regulator/aspeb-logo 1-color.png",
     alt: "Logo Aspebtindo",
-    width: 1574,
-    height: 1694,
+    width: 90,
+    height: 96,
   },
   {
-    src: "/assets/regulator/KBI.png",
+    src: "/assets/regulator/Kliring Berjangka Logo-1 1.png",
+    hoverSrc: "/assets/regulator/Kliring Berjangka Logo-1 1-color-fixed.png",
     alt: "Logo KBI",
-    width: 429,
-    height: 189,
+    width: 212,
+    height: 118,
   },
   {
     src: "/assets/regulator/logo JFX-black 3.png",
+    hoverSrc: "/assets/regulator/logo JFX 1-color.png",
     alt: "Logo JFX",
-    width: 4393,
-    height: 1390,
+    width: 284,
+    height: 90,
   },
   {
     src: "/assets/regulator/BI_Logo-3 2.png",
+    hoverSrc: "/assets/regulator/BI_Logo-2 4-color-fixed.png",
     alt: "Logo BI",
-    width: 4393,
-    height: 1390,
+    width: 335,
+    height: 106,
   },
 ];
 

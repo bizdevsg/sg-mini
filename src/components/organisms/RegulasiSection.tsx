@@ -38,7 +38,7 @@ export default function RegulasiSection({ locale }: RegulasiSectionProps) {
           {regulatorLogos.map((logo, index) => (
             <ScrollReveal effect="fade-up" delay={index * 250}
               key={logo.alt}
-              className="flex min-h-28 items-center justify-center rounded-2xl border border-yellow-500/15 bg-black/20 px-5 py-6 transition-colors duration-300 hover:border-yellow-500/35 hover:bg-yellow-500/[0.06]"
+              className="group flex min-h-28 items-center justify-center rounded-2xl border border-yellow-500/15 bg-black/20 px-5 py-6 shadow-[0_18px_40px_rgba(0,0,0,0.16)] transition-[transform,background-color,border-color,box-shadow] duration-500 ease-out hover:border-yellow-400/40 hover:bg-yellow-500/[0.08] hover:shadow-[0_24px_50px_rgba(234,179,8,0.12)]"
             >
               <RegulatorLogoItem
                 logo={logo}

@@ -3,23 +3,23 @@ import type { AppMessages } from "../../shared/messages";
 export const idTermsConditionsPage: AppMessages["termsConditionsPage"] = {
   title: "Syarat dan Ketentuan",
   description:
-    "Kumpulan informasi syarat dan ketentuan dari banner promosi, program, dan informasi pendukung lainnya.",
+    "Syarat dan ketentuan penggunaan sistem perdagangan elektronik PT. Solid Gold Berjangka.",
   breadcrumb: "Syarat dan Ketentuan",
   hero: {
     eyebrow: "Informasi Penting",
     title: "Syarat dan Ketentuan",
     description:
-      "Baca detail syarat dan ketentuan dari setiap banner, promo, atau informasi yang sedang ditampilkan oleh PT. Solid Gold Berjangka.",
-    primaryCta: "Lihat daftar informasi",
+      "Baca syarat dan ketentuan penggunaan sistem perdagangan elektronik yang berlaku di PT. Solid Gold Berjangka.",
+    primaryCta: "Baca dokumen",
   },
   list: {
-    title: "Daftar informasi",
+    title: "Dokumen tidak tersedia",
     description:
-      "Pilih salah satu banner untuk melihat syarat, ketentuan, dan detail informasi yang tersedia.",
+      "Konten syarat dan ketentuan akan ditampilkan pada halaman ini saat tersedia.",
     readMore: "Baca detail",
-    emptyTitle: "Belum ada informasi tersedia",
+    emptyTitle: "Dokumen belum tersedia",
     emptyBody:
-      "Saat ini belum ada banner aktif yang memiliki syarat dan ketentuan.",
+      "Saat ini konten syarat dan ketentuan belum tersedia.",
     untitledFallback: "Informasi tanpa judul",
   },
 };

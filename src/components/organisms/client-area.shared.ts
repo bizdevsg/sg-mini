@@ -1823,7 +1823,7 @@ export function buildClientAreaHeroSlides(
     href: banner.slug
       ? resolveLocalizedHref(
         locale,
-        `/syarat-dan-ketentuan/${encodeURIComponent(banner.slug)}`,
+        `/promo/${encodeURIComponent(banner.slug)}`,
       )
       : undefined,
     imageUrl: banner.image_url,

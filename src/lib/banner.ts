@@ -55,7 +55,6 @@ type BannerDetailApiResponse = {
 };
 
 const BANNER_TIMEOUT_MS = 8000;
-const BANNER_REVALIDATE_SECONDS = 300;
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -172,11 +171,33 @@ function sanitizeBannerHtml(content: string | null | undefined) {
     .replace(/<\/table>/gi, "</table></div>");
 }
 
+function appendBannerAssetVersion(assetUrl: string, version: string) {
+  const normalizedAssetUrl = assetUrl.trim();
+  const normalizedVersion = version.trim();
+
+  if (!normalizedAssetUrl || !normalizedVersion) {
+    return normalizedAssetUrl;
+  }
+
+  const hashIndex = normalizedAssetUrl.indexOf("#");
+  const hasHash = hashIndex >= 0;
+  const assetUrlWithoutHash = hasHash
+    ? normalizedAssetUrl.slice(0, hashIndex)
+    : normalizedAssetUrl;
+  const hash = hasHash ? normalizedAssetUrl.slice(hashIndex) : "";
+  const separator = assetUrlWithoutHash.includes("?") ? "&" : "?";
+
+  return `${assetUrlWithoutHash}${separator}v=${encodeURIComponent(normalizedVersion)}${hash}`;
+}
+
 function mapBannerRecord(item: RawBannerApiRecord): BannerApiRecord | null {
   const image = normalizeText(item.image);
   const imageUrlSource = normalizeText(item.image_url) || image;
   const title = normalizeText(item.title ?? item.judul);
   const slug = normalizeText(item.slug);
+  const createdAt = normalizeText(item.created_at);
+  const updatedAt = normalizeText(item.updated_at);
+  const imageVersion = updatedAt || createdAt;
 
   if (!imageUrlSource) {
     return null;
@@ -191,11 +212,14 @@ function mapBannerRecord(item: RawBannerApiRecord): BannerApiRecord | null {
       item.content ?? item.konten ?? item.terms_and_conditions ?? "",
     ),
     image,
-    image_url: resolveBannerAssetUrl(imageUrlSource),
+    image_url: appendBannerAssetVersion(
+      resolveBannerAssetUrl(imageUrlSource),
+      imageVersion,
+    ),
     is_active: normalizeBoolean(item.is_active),
     sort_order: normalizeNumber(item.sort_order),
-    created_at: normalizeText(item.created_at),
-    updated_at: normalizeText(item.updated_at),
+    created_at: createdAt,
+    updated_at: updatedAt,
   };
 }
 
@@ -218,9 +242,7 @@ async function fetchBannerList() {
 
   try {
     const response = await fetch(BANNER_API_URL, {
-      next: {
-        revalidate: BANNER_REVALIDATE_SECONDS,
-      },
+      cache: "no-store",
       signal: controller.signal,
       headers: {
         Accept: "application/json",
@@ -259,9 +281,7 @@ async function fetchBannerDetail(slug: string) {
 
   try {
     const response = await fetch(buildBannerDetailApiUrl(slug), {
-      next: {
-        revalidate: BANNER_REVALIDATE_SECONDS,
-      },
+      cache: "no-store",
       signal: controller.signal,
       headers: {
         Accept: "application/json",

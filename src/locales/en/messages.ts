@@ -28,7 +28,10 @@ import { enNewsBrowser } from "./content/newsBrowser";
 import { enNewsDetailPage } from "./content/newsDetailPage";
 import { enBannerSlideshow } from "./content/bannerSlideshow";
 import { enBannerDetailPage } from "./content/bannerDetailPage";
+import { enPromoDetailPage } from "./content/promoDetailPage";
 import { enTermsConditionsPage } from "./content/termsConditionsPage";
+import { enPromoPage } from "./content/promoPage";
+import { enPrivacyPolicyPage } from "./content/privacyPolicyPage";
 import { enFraudAlertPage } from "./content/fraudAlertPage";
 import { enContactPage } from "./content/contactPage";
 import { enFaqPage } from "./content/faqPage";
@@ -67,7 +70,10 @@ export const enMessages: AppMessages = {
   newsDetailPage: enNewsDetailPage,
   bannerSlideshow: enBannerSlideshow,
   bannerDetailPage: enBannerDetailPage,
+  promoDetailPage: enPromoDetailPage,
   termsConditionsPage: enTermsConditionsPage,
+  promoPage: enPromoPage,
+  privacyPolicyPage: enPrivacyPolicyPage,
   fraudAlertPage: enFraudAlertPage,
   contactPage: enContactPage,
   faqPage: enFaqPage,

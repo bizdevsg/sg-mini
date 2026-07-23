@@ -1,23 +1,22 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
-import type { TermsConditionsRecord } from "@/lib/terms-conditions";
+import type { PrivacyPolicyRecord } from "@/lib/privacy-policy";
 import { formatLocaleDateTime, getMessages, type AppLocale } from "@/locales";
 import { PageHeroBanner } from "./PageHeroBanner";
 
-type TermsConditionsPageProps = {
-  termsConditions: TermsConditionsRecord;
+type PrivacyPolicyPageProps = {
+  privacyPolicy: PrivacyPolicyRecord;
   locale: AppLocale;
   messages: ReturnType<typeof getMessages>;
 };
 
-export function TermsConditionsPage({
-  termsConditions,
+export function PrivacyPolicyPage({
+  privacyPolicy,
   locale,
   messages,
-}: TermsConditionsPageProps) {
-  const page = messages.termsConditionsPage;
-  const updatedAt = termsConditions.updatedAt || termsConditions.createdAt;
-  const updatedLabel = locale === "id" ? "Diperbarui" : "Updated";
+}: PrivacyPolicyPageProps) {
+  const page = messages.privacyPolicyPage;
+  const updatedAt = privacyPolicy.updatedAt || privacyPolicy.createdAt;
 
   return (
     <main>
@@ -33,17 +32,16 @@ export function TermsConditionsPage({
             tone: "current",
           },
         ]}
-      >
-      </PageHeroBanner>
+      />
 
-      <section id="terms-conditions-content" className="relative">
+      <section id="privacy-policy-content" className="relative">
         <div className="absolute h-50 w-full bg-linear-to-b from-black to-transparent" />
         <SectionContainer className="py-16 sm:py-20">
           <ScrollReveal effect="fade-up" delay={80}>
             <div className="relative mx-auto max-w-8xl overflow-hidden rounded-[28px] border border-white/10 bg-zinc-950/60 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.22)] sm:p-8 md:p-10">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-yellow-500/60 to-transparent" />
 
-              {termsConditions.content ? (
+              {privacyPolicy.content ? (
                 <div>
                   {updatedAt ? (
                     <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-white/8 pb-5">
@@ -51,7 +49,8 @@ export function TermsConditionsPage({
                         {page.breadcrumb}
                       </span>
                       <span className="text-xs text-zinc-400 sm:text-sm">
-                        {updatedLabel} {formatLocaleDateTime(updatedAt, locale)}
+                        {page.content.updatedLabel}{" "}
+                        {formatLocaleDateTime(updatedAt, locale)}
                       </span>
                     </div>
                   ) : null}
@@ -78,16 +77,16 @@ export function TermsConditionsPage({
                       "[&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_td]:text-zinc-200",
                       "[&_th]:border [&_th]:border-line [&_th]:bg-white/5 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:text-white",
                     ].join(" ")}
-                    dangerouslySetInnerHTML={{ __html: termsConditions.content }}
+                    dangerouslySetInnerHTML={{ __html: privacyPolicy.content }}
                   />
                 </div>
               ) : (
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-white">
-                    {page.list.emptyTitle}
+                    {page.content.emptyTitle}
                   </h3>
                   <p className="mt-3 text-sm leading-7 text-zinc-300 sm:text-base sm:leading-8">
-                    {page.list.emptyBody}
+                    {page.content.emptyBody}
                   </p>
                 </div>
               )}
