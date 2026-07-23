@@ -38,7 +38,7 @@ export function ClientAreaDashboard({
 }: ClientAreaDashboardProps) {
   const messages = getMessages(locale);
   const clientArea = messages.clientArea;
-  const bannerDetailLabel = messages.bannerDetailPage.breadcrumb;
+  const bannerDetailLabel = messages.promoDetailPage.breadcrumb;
   const copy = getDashboardCopy(locale);
   const quickActionIconMap = getQuickActionIconMap();
   const heroSlides = buildClientAreaHeroSlides(copy, initialBanners, locale);

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { TermsConditionsPage } from "@/components/organisms/TermsConditionsPage";
-import { getTermsConditionsRecord } from "@/lib/terms-conditions";
+import { PrivacyPolicyPage } from "@/components/organisms/PrivacyPolicyPage";
+import { getPrivacyPolicyRecord } from "@/lib/privacy-policy";
 import {
   getLocaleConfig,
   getMessages,
@@ -11,7 +11,7 @@ import {
   type AppLocale,
 } from "@/locales";
 
-type TermsConditionsRouteProps = {
+type PrivacyPolicyRouteProps = {
   params: Promise<{ locales: string }>;
 };
 
@@ -29,41 +29,41 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: TermsConditionsRouteProps): Promise<Metadata> {
+}: PrivacyPolicyRouteProps): Promise<Metadata> {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const page = getMessages(locales).termsConditionsPage;
+  const page = getMessages(locales).privacyPolicyPage;
 
   return {
     title: page.title,
     description: page.description,
     alternates: {
-      canonical: `/${locales}/syarat-dan-ketentuan`,
+      canonical: `/${locales}/privacy-policy`,
       languages: Object.fromEntries(
         SUPPORTED_LOCALES.map((locale) => [
           getLocaleConfig(locale).lang,
-          `/${locale}/syarat-dan-ketentuan`,
+          `/${locale}/privacy-policy`,
         ]),
       ),
     },
   };
 }
 
-export default async function TermsConditionsRoute({
+export default async function PrivacyPolicyRoute({
   params,
-}: TermsConditionsRouteProps) {
+}: PrivacyPolicyRouteProps) {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const [messages, termsConditions] = await Promise.all([
+  const [messages, privacyPolicy] = await Promise.all([
     Promise.resolve(getMessages(locales)),
-    getTermsConditionsRecord(locales),
+    getPrivacyPolicyRecord(locales),
   ]);
 
   return (
-    <TermsConditionsPage
-      termsConditions={termsConditions}
+    <PrivacyPolicyPage
+      privacyPolicy={privacyPolicy}
       locale={locales}
       messages={messages}
     />

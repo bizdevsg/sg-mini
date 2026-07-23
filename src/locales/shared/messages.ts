@@ -487,6 +487,13 @@ export type AppMessages = {
     backLabel: string;
     emptyContent: string;
   };
+  promoDetailPage: {
+    breadcrumb: string;
+    eyebrow: string;
+    updatedLabel: string;
+    backLabel: string;
+    emptyContent: string;
+  };
   termsConditionsPage: {
     title: string;
     description: string;
@@ -504,6 +511,40 @@ export type AppMessages = {
       emptyTitle: string;
       emptyBody: string;
       untitledFallback: string;
+    };
+  };
+  promoPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      primaryCta: string;
+    };
+    list: {
+      title: string;
+      description: string;
+      readMore: string;
+      emptyTitle: string;
+      emptyBody: string;
+      untitledFallback: string;
+    };
+  };
+  privacyPolicyPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    content: {
+      updatedLabel: string;
+      emptyTitle: string;
+      emptyBody: string;
     };
   };
   fraudAlertPage: {

@@ -9,8 +9,9 @@ export const idFooter: AppMessages["footer"] = {
     "Perdagangan berjangka memiliki risiko tinggi dan memerlukan pemahaman yang memadai sebelum melakukan transaksi. Informasi pada website ini hanya bersifat edukasi dan referensi, bukan ajakan atau jaminan keuntungan. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab nasabah.",
   brandTitle: "Tautan Cepat",
   brandItems: [
-    { label: "Kebijakan Privasi", href: "/about" },
-    { label: "Syarat & Ketentuan", href: "/syarat-dan-ketentuan" },
+    { label: "Kebijakan Privasi", href: "/privacy-policy" },
+    { label: "Syarat dan Ketentuan", href: "/syarat-dan-ketentuan" },
+    { label: "Promo", href: "/promo" },
     { label: "FAQ", href: "/faq" },
     { label: "Pengaduan", href: "/contact-us" },
     { label: "Kontak", href: "/contact-us" },

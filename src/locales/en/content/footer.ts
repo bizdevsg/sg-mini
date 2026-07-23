@@ -9,10 +9,12 @@ export const enFooter: AppMessages["footer"] = {
     "Futures trading carries high risk and requires adequate understanding before placing transactions. The information on this website is for education and reference only, not an invitation or guarantee of profit. Every transaction decision remains fully the client's responsibility.",
   brandTitle: "Quick Links",
   brandItems: [
-    { label: "About Us", href: "/about" },
-    { label: "Ebook", href: "/syarat-dan-ketentuan" },
-    { label: "Live Quote", href: "/live-quote" },
-    { label: "News", href: "/news" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms and Conditions", href: "/syarat-dan-ketentuan" },
+    { label: "Promo", href: "/promo" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Complaints", href: "/contact-us" },
+    { label: "Contact", href: "/contact-us" },
   ],
   legalTitle: "Legality",
   legalItems: [

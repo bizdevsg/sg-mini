@@ -26,6 +26,8 @@ const DEFAULT_COMPANY_PROFILE_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/company-profile`;
 const DEFAULT_LEGALITAS_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/legalitas`;
+const DEFAULT_PRIVACY_POLICY_API_URL =
+  `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/privacy-policy`;
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
@@ -133,6 +135,18 @@ export const COMPANY_PROFILE_API_URL =
 
 export const LEGALITAS_API_URL =
   process.env.LEGALITAS_API_URL ?? DEFAULT_LEGALITAS_API_URL;
+
+export const PRIVACY_POLICY_API_URL =
+  process.env.PRIVACY_POLICY_API_URL ??
+  (APP_ENV === "dev"
+    ? DEFAULT_PRIVACY_POLICY_API_URL
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/privacy-policy`);
+
+export const TERMS_CONDITIONS_API_URL =
+  process.env.TERMS_CONDITIONS_API_URL ??
+  (APP_ENV === "dev"
+    ? `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/terms-and-conditions`
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/terms-and-conditions`);
 
 export const HISTORICAL_DATA_API_URL =
   process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;

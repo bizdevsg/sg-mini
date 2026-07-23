@@ -19,20 +19,39 @@ export function RegulatorLogoItem({
   containerClassName = "",
   useFill = false,
 }: RegulatorLogoItemProps) {
+  const baseImageClassName = logo.hoverSrc
+    ? `${imageClassName} transition-opacity duration-500 ease-out group-hover:!opacity-0`
+    : imageClassName;
+  const hoverImageClassName = `${imageClassName} !opacity-0 pointer-events-none transition-opacity duration-500 ease-out group-hover:!opacity-100`;
+
   if (useFill) {
     return (
       <div
         className={`flex shrink-0 items-center justify-center ${containerClassName}`}
       >
         <div className="relative h-full w-full">
-          <Image
-            src={logo.src}
-            alt={logo.alt}
-            fill
-            priority={priority}
-            sizes={sizes}
-            className={imageClassName}
-          />
+          <div className="relative h-full w-full">
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              fill
+              priority={priority}
+              sizes={sizes}
+              className={baseImageClassName}
+            />
+          </div>
+          {logo.hoverSrc ? (
+            <div className="absolute inset-0">
+              <Image
+                src={logo.hoverSrc}
+                alt=""
+                fill
+                priority={priority}
+                sizes={sizes}
+                className={hoverImageClassName}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -40,7 +59,7 @@ export function RegulatorLogoItem({
 
   return (
     <div
-      className={`flex shrink-0 items-center justify-center ${containerClassName}`}
+      className={`relative flex shrink-0 items-center justify-center ${containerClassName}`}
     >
       <Image
         src={logo.src}
@@ -49,8 +68,19 @@ export function RegulatorLogoItem({
         height={logo.height}
         priority={priority}
         sizes={sizes}
-        className={imageClassName}
+        className={baseImageClassName}
       />
+      {logo.hoverSrc ? (
+        <Image
+          src={logo.hoverSrc}
+          alt=""
+          width={logo.width}
+          height={logo.height}
+          priority={priority}
+          sizes={sizes}
+          className={`absolute inset-0 m-auto ${hoverImageClassName}`}
+        />
+      ) : null}
     </div>
   );
 }

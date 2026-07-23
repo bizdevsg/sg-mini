@@ -230,7 +230,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
             const normalizedIndex =
               banners.length > 0 ? index % banners.length : 0;
             const bannerHref = banner.slug
-              ? `/${locale}/syarat-dan-ketentuan/${encodeURIComponent(banner.slug)}`
+              ? `/${locale}/promo/${encodeURIComponent(banner.slug)}`
               : undefined;
             const slideCardClassName = `block shrink-0 text-left ${
               bannerHref ? "cursor-pointer" : "cursor-default"

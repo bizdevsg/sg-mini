@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { TermsConditionsPage } from "@/components/organisms/TermsConditionsPage";
-import { getTermsConditionsRecord } from "@/lib/terms-conditions";
+import { PromoPage } from "@/components/organisms/PromoPage";
+import { getBannerRecords } from "@/lib/banner";
 import {
   getLocaleConfig,
   getMessages,
@@ -11,7 +11,7 @@ import {
   type AppLocale,
 } from "@/locales";
 
-type TermsConditionsRouteProps = {
+type PromoRouteProps = {
   params: Promise<{ locales: string }>;
 };
 
@@ -29,41 +29,39 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: TermsConditionsRouteProps): Promise<Metadata> {
+}: PromoRouteProps): Promise<Metadata> {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const page = getMessages(locales).termsConditionsPage;
+  const page = getMessages(locales).promoPage;
 
   return {
     title: page.title,
     description: page.description,
     alternates: {
-      canonical: `/${locales}/syarat-dan-ketentuan`,
+      canonical: `/${locales}/promo`,
       languages: Object.fromEntries(
         SUPPORTED_LOCALES.map((locale) => [
           getLocaleConfig(locale).lang,
-          `/${locale}/syarat-dan-ketentuan`,
+          `/${locale}/promo`,
         ]),
       ),
     },
   };
 }
 
-export default async function TermsConditionsRoute({
-  params,
-}: TermsConditionsRouteProps) {
+export default async function PromoRoute({ params }: PromoRouteProps) {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const [messages, termsConditions] = await Promise.all([
+  const [messages, banners] = await Promise.all([
     Promise.resolve(getMessages(locales)),
-    getTermsConditionsRecord(locales),
+    getBannerRecords(),
   ]);
 
   return (
-    <TermsConditionsPage
-      termsConditions={termsConditions}
+    <PromoPage
+      banners={banners}
       locale={locales}
       messages={messages}
     />
