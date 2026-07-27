@@ -18,8 +18,7 @@ export const idTermsConditionsPage: AppMessages["termsConditionsPage"] = {
       "Konten syarat dan ketentuan akan ditampilkan pada halaman ini saat tersedia.",
     readMore: "Baca detail",
     emptyTitle: "Dokumen belum tersedia",
-    emptyBody:
-      "Saat ini konten syarat dan ketentuan belum tersedia.",
+    emptyBody: "Saat ini konten syarat dan ketentuan belum tersedia.",
     untitledFallback: "Informasi tanpa judul",
   },
 };

@@ -12,6 +12,7 @@ type PageHeroBannerProps = {
   eyebrow?: string;
   title?: string;
   description?: string;
+  backgroundImageUrl?: string;
   breadcrumbs: Array<{
     label: string;
     href?: string;
@@ -31,6 +32,7 @@ export function PageHeroBanner({
   eyebrow,
   title,
   description,
+  backgroundImageUrl = "/assets/BCG.png",
   breadcrumbs,
   className = "py-20 md:py-24",
   breadcrumbClassName = "mb-6",
@@ -43,7 +45,7 @@ export function PageHeroBanner({
     <div
       className={`relative bg-cover bg-top bg-no-repeat ${className}`}
       style={{
-        backgroundImage: "url('/assets/BCG.png')",
+        backgroundImage: `url('${backgroundImageUrl}')`,
       }}
     >
       <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black to-transparent" />

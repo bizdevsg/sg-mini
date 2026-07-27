@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LocaleSwitcherButton } from "@/components/atoms/LocaleSwitcherButton";
+import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
 import {
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
@@ -86,6 +87,17 @@ export function HeaderActions({
   const clientAreaTitle = clientAreaProfile?.displayName
     ? `${messages.clientArea.pageTitle} - ${clientAreaProfile.displayName}`
     : messages.clientArea.pageTitle;
+  const clientAreaAction = CLIENT_AREA_ENABLED ? (
+    <ButtonLink
+      variant="ghost"
+      size="sm"
+      className={mobilePanel ? mobileActionButtonClass : undefined}
+      href={clientAreaHref}
+      title={clientAreaTitle}
+    >
+      {messages.clientArea.pageTitle}
+    </ButtonLink>
+  ) : null;
 
   const localeSwitcher = (
     <div className="relative">
@@ -158,15 +170,7 @@ export function HeaderActions({
       <>
         <div className={`flex w-full items-center gap-3 ${className}`}>
           <div className="flex items-center gap-2.5">
-            <ButtonLink
-              variant="ghost"
-              size="sm"
-              className={mobileActionButtonClass}
-              href={clientAreaHref}
-              title={clientAreaTitle}
-            >
-              {messages.clientArea.pageTitle}
-            </ButtonLink>
+            {clientAreaAction}
             <ButtonLink
               variant="dark"
               size="sm"
@@ -189,14 +193,7 @@ export function HeaderActions({
       <div
         className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
       >
-        <ButtonLink
-          variant="ghost"
-          size="sm"
-          href={clientAreaHref}
-          title={clientAreaTitle}
-        >
-          {messages.clientArea.pageTitle}
-        </ButtonLink>
+        {clientAreaAction}
         {localeSwitcher}
       </div>
       {localeDialog}

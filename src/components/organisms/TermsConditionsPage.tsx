@@ -27,14 +27,14 @@ export function TermsConditionsPage({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
+        backgroundImageUrl="/assets/syarat-dan-ketentuan.png"
         breadcrumbs={[
           {
             label: page.breadcrumb,
             tone: "current",
           },
         ]}
-      >
-      </PageHeroBanner>
+      />
 
       <section id="terms-conditions-content" className="relative">
         <div className="absolute h-50 w-full bg-linear-to-b from-black to-transparent" />
@@ -46,10 +46,11 @@ export function TermsConditionsPage({
               {termsConditions.content ? (
                 <div>
                   {updatedAt ? (
-                    <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-white/8 pb-5">
+                    <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-white/8 pb-5">
                       <span className="inline-flex items-center rounded-full border border-yellow-500/20 bg-yellow-500/8 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-300/90">
                         {page.breadcrumb}
                       </span>
+
                       <span className="text-xs text-zinc-400 sm:text-sm">
                         {updatedLabel} {formatLocaleDateTime(updatedAt, locale)}
                       </span>

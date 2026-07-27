@@ -26,6 +26,7 @@ export function PrivacyPolicyPage({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
+        backgroundImageUrl="/assets/kebijakan-privasi.png"
         breadcrumbs={[
           {
             label: page.breadcrumb,
