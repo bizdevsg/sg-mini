@@ -2,6 +2,7 @@ import "server-only";
 
 import { COMPANY_PROFILE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import { getMessages, type AppLocale } from "@/locales";
 
 export type CompanyProfile = {
@@ -193,9 +194,7 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
       next: {
         revalidate: COMPANY_PROFILE_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

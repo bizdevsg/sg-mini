@@ -4,6 +4,7 @@ import { cache } from "react";
 
 import { getDummyProductCatalog } from "@/lib/api-dummy-data";
 import { PRODUCT_API_URL, USE_DUMMY_API_DATA, getProductAssetUrl } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
 const PRODUCT_CATALOG_REVALIDATE_SECONDS = 300;
@@ -111,9 +112,7 @@ async function getProductApiRecords(category: ProductPageCategory) {
     next: {
       revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
     },
-    headers: {
-      Accept: "application/json",
-    },
+    headers: getSgAdminApiHeaders(),
   });
 
   if (!response.ok) {
@@ -143,9 +142,7 @@ async function getProductApiRecordBySlug(
       next: {
         revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     },
   );
 

@@ -8,6 +8,7 @@ import {
   getClientAreaDashboardHref,
   isValidClientAreaCredentials,
 } from "@/lib/client-area-auth";
+import { isClientAreaEnabled } from "@/lib/client-area-config";
 import {
   isRecaptchaEnabled,
   resolveRequestHostname,
@@ -36,6 +37,13 @@ export async function submitClientAreaLogin(
   const password = String(formData.get("password") ?? "").trim();
   const recaptchaToken = String(formData.get("g-recaptcha-response") ?? "").trim();
   const rememberMe = formData.get("rememberMe") === "on";
+
+  if (!(await isClientAreaEnabled())) {
+    return {
+      status: "error",
+      message: login.errorUnavailable,
+    };
+  }
 
   if (!account || !password) {
     return {

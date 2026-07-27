@@ -2,6 +2,7 @@ import "server-only";
 
 import { TERMS_CONDITIONS_API_URL, USE_DUMMY_API_DATA, normalizeSgAdminUrl } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import type { AppLocale } from "@/locales";
 
 export type TermsConditionsRecord = {
@@ -142,9 +143,7 @@ export async function getTermsConditionsRecord(locale: AppLocale = "id") {
   try {
     const response = await fetch(TERMS_CONDITIONS_API_URL, {
       cache: "no-store",
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

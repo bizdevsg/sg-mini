@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LocaleSwitcherButton } from "@/components/atoms/LocaleSwitcherButton";
-import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
 import {
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
@@ -24,6 +23,7 @@ import {
 
 type HeaderActionsProps = {
   clientAreaProfile?: ClientAreaSessionProfile | null;
+  isClientAreaEnabled: boolean;
   locale: AppLocale;
   isClientAreaAuthenticated: boolean;
   compact?: boolean;
@@ -52,6 +52,7 @@ function resolveLocaleSwitcherHref(targetLocale: AppLocale, pathname: string) {
 
 export function HeaderActions({
   clientAreaProfile,
+  isClientAreaEnabled,
   locale,
   isClientAreaAuthenticated,
   compact = false,
@@ -87,7 +88,7 @@ export function HeaderActions({
   const clientAreaTitle = clientAreaProfile?.displayName
     ? `${messages.clientArea.pageTitle} - ${clientAreaProfile.displayName}`
     : messages.clientArea.pageTitle;
-  const clientAreaAction = CLIENT_AREA_ENABLED ? (
+  const clientAreaAction = isClientAreaEnabled ? (
     <ButtonLink
       variant="ghost"
       size="sm"

@@ -25,6 +25,8 @@ export const idClientArea: AppMessages["clientArea"] = {
     demoCredentialsTitle: "Akses demo cepat",
     demoCredentialsAccount: "Akun demo: BBH10158",
     demoCredentialsPassword: "Password: demo12345",
+    errorUnavailable:
+      "Client area sedang dinonaktifkan dari sistem admin. Coba lagi beberapa saat lagi.",
     errorRequired: "Masukkan nomor akun atau email beserta password Anda.",
     errorInvalidCredentials:
       "Nomor akun, email, atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
