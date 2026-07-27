@@ -1,6 +1,7 @@
 import "server-only";
 
 import { LEGALITAS_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import type { AppLocale } from "@/locales";
 
 export type LegalitasRecord = {
@@ -148,9 +149,7 @@ export async function getLegalitasRecords(locale: AppLocale = "id") {
       next: {
         revalidate: LEGALITAS_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

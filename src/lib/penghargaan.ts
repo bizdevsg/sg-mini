@@ -6,6 +6,7 @@ import {
   getPenghargaanAssetUrl,
 } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export type PenghargaanRecord = {
   id: number;
@@ -103,9 +104,7 @@ export async function getPenghargaanRecords() {
       next: {
         revalidate: PENGHARGAAN_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

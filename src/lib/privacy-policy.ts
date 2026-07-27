@@ -6,6 +6,7 @@ import {
   normalizeSgAdminUrl,
 } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import type { AppLocale } from "@/locales";
 
 export type PrivacyPolicyRecord = {
@@ -176,9 +177,7 @@ export async function getPrivacyPolicyRecord(locale: AppLocale = "id") {
   try {
     const response = await fetch(PRIVACY_POLICY_API_URL, {
       cache: "no-store",
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

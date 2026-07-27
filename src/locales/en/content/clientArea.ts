@@ -26,6 +26,8 @@ export const enClientArea: AppMessages["clientArea"] = {
     demoCredentialsTitle: "Quick demo access",
     demoCredentialsAccount: "Demo account: BBH10158",
     demoCredentialsPassword: "Password: demo12345",
+    errorUnavailable:
+      "The client area is currently disabled from the admin system. Please try again later.",
     errorRequired:
       "Enter your account number or email together with your password.",
     errorInvalidCredentials:

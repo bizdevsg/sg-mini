@@ -9,7 +9,7 @@ import {
   resolveClientAreaAccountMode,
 } from "@/lib/client-area-account-mode";
 import { hasClientAreaSession } from "@/lib/client-area-auth";
-import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
+import { isClientAreaEnabled } from "@/lib/client-area-config";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaLayoutProps = {
@@ -21,7 +21,7 @@ export default async function ClientAreaLayout({
   children,
   params,
 }: ClientAreaLayoutProps) {
-  if (!CLIENT_AREA_ENABLED) {
+  if (!(await isClientAreaEnabled())) {
     notFound();
   }
 

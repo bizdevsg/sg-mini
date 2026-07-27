@@ -6,6 +6,8 @@ const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
 const DEFAULT_SG_ADMIN_LEGACY_ORIGIN = "http://sg-admin.test";
 const DEFAULT_SG_ADMIN_API_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/api/v1`;
+const DEFAULT_CLIENT_AREA_CONFIG_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/feature-flags/client-area`;
 const DEFAULT_EBOOK_CATEGORY_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
@@ -107,6 +109,13 @@ export const EBOOK_CATEGORY_API_URL =
 
 export const PRODUCT_PORTAL_BASE_URL =
   process.env.PRODUCT_PORTAL_BASE_URL ?? DEFAULT_PRODUCT_PORTAL_BASE_URL;
+
+export const CLIENT_AREA_CONFIG_API_URL =
+  process.env.CLIENT_AREA_CONFIG_API_URL ??
+  DEFAULT_CLIENT_AREA_CONFIG_API_URL;
+
+export const CLIENT_AREA_CONFIG_API_TOKEN =
+  process.env.CLIENT_AREA_CONFIG_API_TOKEN?.trim() ?? "";
 
 export const BANNER_API_URL =
   process.env.BANNER_API_URL ?? DEFAULT_BANNER_API_URL;

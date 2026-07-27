@@ -2,6 +2,7 @@
 
 import { createDummyContactMessageState } from "@/lib/api-dummy-data";
 import { CONTACT_MESSAGE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export type ContactMessageState = {
   status: "idle" | "success" | "error";
@@ -43,10 +44,9 @@ export async function submitContactMessage(
     const response = await fetch(CONTACT_MESSAGE_API_URL, {
       method: "POST",
       cache: "no-store",
-      headers: {
-        Accept: "application/json",
+      headers: getSgAdminApiHeaders({
         "Content-Type": "application/json",
-      },
+      }),
       body: JSON.stringify({
         nama,
         email,

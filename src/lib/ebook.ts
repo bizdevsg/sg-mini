@@ -12,6 +12,7 @@ import {
   USE_DUMMY_API_DATA,
   normalizeSgAdminUrl,
 } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 type EbookCategoryApiRecord = {
   id?: number;
@@ -180,9 +181,7 @@ export async function getEbookCategories() {
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {
@@ -220,9 +219,7 @@ export async function getEbookCategoryDetail(
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

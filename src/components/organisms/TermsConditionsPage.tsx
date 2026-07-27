@@ -27,7 +27,7 @@ export function TermsConditionsPage({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
-        backgroundImageUrl="/assets/syarat-dan-ketentuan.png"
+        backgroundImageUrl="/assets/syarat-dan-ketentuan.webp"
         breadcrumbs={[
           {
             label: page.breadcrumb,
