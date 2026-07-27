@@ -984,8 +984,6 @@ export type AppMessages = {
     badge: string;
     title: string;
     description: string;
-    essentialTag: string;
-    preferenceTag: string;
     dismissLabel: string;
     acceptLabel: string;
   };
