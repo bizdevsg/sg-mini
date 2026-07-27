@@ -1,1 +1,1 @@
-export const CLIENT_AREA_ENABLED = false;
+export const CLIENT_AREA_ENABLED = true;

@@ -123,7 +123,7 @@ const CLIENT_AREA_TRADING_VIEW_SYMBOL_BY_MARKET_CODE: Record<
   string
 > = {
   XUL10: "OANDA:XAUUSD",
-  BCO10_BBJ: "TVC:UKOIL",
+  BCO10_BBJ: "VELOCITY:BRENT",
   HKK50_BBJ: "VANTAGE:HK50",
   JPK50_BBJ: "SPREADEX:NIKKEI",
   DX1010_BBJ: "CAPITALCOM:DXY",
@@ -1822,9 +1822,9 @@ export function buildClientAreaHeroSlides(
     id: String(banner.id),
     href: banner.slug
       ? resolveLocalizedHref(
-        locale,
-        `/promo/${encodeURIComponent(banner.slug)}`,
-      )
+          locale,
+          `/promo/${encodeURIComponent(banner.slug)}`,
+        )
       : undefined,
     imageUrl: banner.image_url,
   }));

@@ -347,8 +347,7 @@ export function Navbar({
             </div>
           </div>
 
-          {/* <div className="border-t border-[rgba(255,255,255,0.08)] p-4">
-            Mobile panel footer actions.
+          <div className="border-t border-[rgba(255,255,255,0.08)] p-4">
             <HeaderActions
               clientAreaProfile={clientAreaProfile}
               locale={locale}
@@ -356,7 +355,7 @@ export function Navbar({
               className="w-full"
               isClientAreaAuthenticated={isClientAreaAuthenticated}
             />
-          </div> */}
+          </div>
         </aside>
       </div>,
       document.body,

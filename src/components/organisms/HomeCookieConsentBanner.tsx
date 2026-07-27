@@ -8,6 +8,7 @@ import {
 } from "@/app/actions/cookieConsent";
 import { TAWK_CHAT_ENABLE_EVENT } from "@/lib/tawk";
 import { getMessages, type AppLocale } from "@/locales";
+import Image from "next/image";
 
 type HomeCookieConsentBannerProps = {
   locale: AppLocale;
@@ -95,19 +96,11 @@ export function HomeCookieConsentBanner({
 
       <div className="pointer-events-none absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4">
         <div className="pointer-events-auto mx-auto w-full max-w-8xl">
-          <div className="relative w-full max-w-full overflow-hidden rounded-[26px] border border-white/10 bg-zinc-950/95 shadow-[0_35px_100px_rgba(0,0,0,.55)] backdrop-blur-3xl sm:rounded-[30px]">
-
-            {/* Background */}
-            <div className="absolute inset-0">
-              <div className="absolute -left-32 -top-32 h-72 w-72 rounded-full bg-yellow-500/10 blur-3xl" />
-              <div className="absolute right-0 bottom-0 h-56 w-56 rounded-full bg-amber-500/5 blur-3xl" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,193,7,.08),transparent_45%)]" />
-            </div>
-
+          <div className="relative w-full max-w-full overflow-hidden rounded-2xl border border-white/10 bg-[#2F2F2F]/95 shadow-[0_35px_100px_rgba(0,0,0,.55)] backdrop-blur-3xl sm:rounded-3xl  ">
             <div className="relative p-4 sm:p-8">
               <div className="flex min-w-0 flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
                 {/* Left */}
-                <div className="min-w-0 max-w-3xl">
+                {/* <div className="min-w-0 max-w-3xl">
                   <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-yellow-500/20 bg-yellow-500/10 sm:h-14 sm:w-14">
                       <Cookie className="h-6 w-6 text-yellow-400 sm:h-7 sm:w-7" />
@@ -143,11 +136,14 @@ export function HomeCookieConsentBanner({
                       </div>
                     </div>
                   </div>
+                </div> */}
+
+                <div>
+                  <Image src={"/assets/cookies.png"} alt="Icon Cookies" sizes="300" fill className="w-auto h-[200px]" />
                 </div>
 
                 {/* Right */}
-                <div className="flex w-full min-w-0 flex-col gap-3 sm:grid sm:grid-cols-2 lg:w-auto lg:min-w-[320px] lg:flex-shrink-0 lg:grid-cols-none lg:flex-row">
-
+                {/* <div className="flex w-full min-w-0 flex-col gap-3 sm:grid sm:grid-cols-2 lg:w-auto lg:min-w-[320px] lg:flex-shrink-0 lg:grid-cols-none lg:flex-row">
                   <button
                     type="button"
                     onClick={() =>
@@ -173,7 +169,7 @@ export function HomeCookieConsentBanner({
                   >
                     {copy.acceptLabel}
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

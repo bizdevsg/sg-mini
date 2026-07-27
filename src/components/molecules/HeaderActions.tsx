@@ -5,6 +5,10 @@ import { usePathname } from "next/navigation";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LocaleSwitcherButton } from "@/components/atoms/LocaleSwitcherButton";
+import {
+  getClientAreaDashboardHref,
+  getClientAreaLoginHref,
+} from "@/lib/client-area-session";
 import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
 import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import {
@@ -46,7 +50,9 @@ function resolveLocaleSwitcherHref(targetLocale: AppLocale, pathname: string) {
 }
 
 export function HeaderActions({
+  clientAreaProfile,
   locale,
+  isClientAreaAuthenticated,
   compact = false,
   mobilePanel = false,
   className = "",
@@ -74,6 +80,12 @@ export function HeaderActions({
   const activeLocaleLabel = locale === "id" ? "Aktif" : "Active";
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
+  const clientAreaHref = isClientAreaAuthenticated
+    ? getClientAreaDashboardHref(locale)
+    : getClientAreaLoginHref(locale);
+  const clientAreaTitle = clientAreaProfile?.displayName
+    ? `${messages.clientArea.pageTitle} - ${clientAreaProfile.displayName}`
+    : messages.clientArea.pageTitle;
 
   const localeSwitcher = (
     <div className="relative">
@@ -147,6 +159,15 @@ export function HeaderActions({
         <div className={`flex w-full items-center gap-3 ${className}`}>
           <div className="flex items-center gap-2.5">
             <ButtonLink
+              variant="ghost"
+              size="sm"
+              className={mobileActionButtonClass}
+              href={clientAreaHref}
+              title={clientAreaTitle}
+            >
+              {messages.clientArea.pageTitle}
+            </ButtonLink>
+            <ButtonLink
               variant="dark"
               size="sm"
               className={mobileActionButtonClass}
@@ -168,6 +189,14 @@ export function HeaderActions({
       <div
         className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
       >
+        <ButtonLink
+          variant="ghost"
+          size="sm"
+          href={clientAreaHref}
+          title={clientAreaTitle}
+        >
+          {messages.clientArea.pageTitle}
+        </ButtonLink>
         {localeSwitcher}
       </div>
       {localeDialog}
