@@ -11,6 +11,7 @@ import {
   getBannerAssetUrl,
   normalizeSgAdminUrl,
 } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export type BannerApiRecord = {
   id: number;
@@ -244,9 +245,7 @@ async function fetchBannerList() {
     const response = await fetch(BANNER_API_URL, {
       cache: "no-store",
       signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {
@@ -283,9 +282,7 @@ async function fetchBannerDetail(slug: string) {
     const response = await fetch(buildBannerDetailApiUrl(slug), {
       cache: "no-store",
       signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

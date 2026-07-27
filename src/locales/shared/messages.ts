@@ -707,6 +707,7 @@ export type AppMessages = {
       demoCredentialsTitle: string;
       demoCredentialsAccount: string;
       demoCredentialsPassword: string;
+      errorUnavailable: string;
       errorRequired: string;
       errorInvalidCredentials: string;
       errorCaptchaRequired: string;

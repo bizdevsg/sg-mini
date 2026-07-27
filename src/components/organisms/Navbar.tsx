@@ -17,6 +17,7 @@ import logoMark from "../../../public/assets/logo-utama.png";
 
 type NavbarProps = {
   clientAreaProfile: ClientAreaSessionProfile | null;
+  isClientAreaEnabled: boolean;
   isClientAreaAuthenticated: boolean;
   locale: AppLocale;
 };
@@ -82,6 +83,7 @@ function renderMenuLabel(label: string, href?: string) {
 
 export function Navbar({
   clientAreaProfile,
+  isClientAreaEnabled,
   locale,
   isClientAreaAuthenticated,
 }: NavbarProps) {
@@ -350,6 +352,7 @@ export function Navbar({
           <div className="border-t border-[rgba(255,255,255,0.08)] p-4">
             <HeaderActions
               clientAreaProfile={clientAreaProfile}
+              isClientAreaEnabled={isClientAreaEnabled}
               locale={locale}
               mobilePanel
               className="w-full"
@@ -378,6 +381,7 @@ export function Navbar({
               {/* Mobile header locale trigger. */}
               <HeaderActions
                 clientAreaProfile={clientAreaProfile}
+                isClientAreaEnabled={isClientAreaEnabled}
                 locale={locale}
                 compact
                 className="nav:hidden"
@@ -495,6 +499,7 @@ export function Navbar({
               {/* Desktop right-side actions. */}
               <HeaderActions
                 clientAreaProfile={clientAreaProfile}
+                isClientAreaEnabled={isClientAreaEnabled}
                 locale={locale}
                 className="hidden nav:flex"
                 isClientAreaAuthenticated={isClientAreaAuthenticated}

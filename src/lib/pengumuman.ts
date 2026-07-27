@@ -8,6 +8,7 @@ import {
   isSgAdminUrl,
   normalizeSgAdminUrl,
 } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export type PengumumanRecord = {
   id: number;
@@ -151,9 +152,7 @@ export async function getPengumuman(page = 1): Promise<PengumumanResult> {
         revalidate: PENGUMUMAN_REVALIDATE_SECONDS,
       },
       signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-      },
+      headers: getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

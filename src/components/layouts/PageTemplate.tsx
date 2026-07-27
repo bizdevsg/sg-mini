@@ -7,7 +7,7 @@ import { ScrollToTopButton } from "@/components/molecules/ScrollToTopButton";
 import {
   getClientAreaSessionState,
 } from "@/lib/client-area-auth";
-import { CLIENT_AREA_ENABLED } from "@/lib/client-area-config";
+import { isClientAreaEnabled } from "@/lib/client-area-config";
 
 type PageTemplateProps = {
   children: ReactNode;
@@ -16,11 +16,14 @@ type PageTemplateProps = {
 };
 
 async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
-  if (!CLIENT_AREA_ENABLED) {
+  const clientAreaEnabled = await isClientAreaEnabled();
+
+  if (!clientAreaEnabled) {
     return (
       <Navbar
         clientAreaProfile={null}
         locale={locale}
+        isClientAreaEnabled={false}
         isClientAreaAuthenticated={false}
       />
     );
@@ -32,6 +35,7 @@ async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
     <Navbar
       clientAreaProfile={profile}
       locale={locale}
+      isClientAreaEnabled
       isClientAreaAuthenticated={isAuthenticated}
     />
   );
@@ -53,6 +57,7 @@ export function PageTemplate({
           <Navbar
             clientAreaProfile={null}
             locale={locale}
+            isClientAreaEnabled={false}
             isClientAreaAuthenticated={false}
           />
         }
