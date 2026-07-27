@@ -494,8 +494,6 @@ export function Navbar({
                 })}
               </div>
 
-              <div className="hidden md:block border border-yellow-500/50 h-7 rounded-full" />
-
               {/* Desktop right-side actions. */}
               <HeaderActions
                 clientAreaProfile={clientAreaProfile}

@@ -1,6 +1,7 @@
 import "server-only";
 
 import {
+  APP_ENV,
   CLIENT_AREA_CONFIG_API_TOKEN,
   CLIENT_AREA_CONFIG_API_URL,
 } from "@/lib/env";
@@ -29,6 +30,10 @@ const NESTED_CONFIG_KEYS = [
   "clientArea",
   "client_area",
 ] as const;
+
+function resolveClientAreaEnvironmentKey() {
+  return APP_ENV === "prod" ? "prod" : "dev";
+}
 
 function parseBooleanValue(value: unknown) {
   if (typeof value === "boolean") {
@@ -72,6 +77,22 @@ function resolveClientAreaEnabledValue(payload: unknown): boolean | null {
   }
 
   const record = payload as Record<string, unknown>;
+  const environmentKey = resolveClientAreaEnvironmentKey();
+  const environmentScopedData = record.data;
+
+  if (
+    environmentScopedData &&
+    typeof environmentScopedData === "object" &&
+    !Array.isArray(environmentScopedData)
+  ) {
+    const resolvedEnvironmentValue = parseBooleanValue(
+      (environmentScopedData as Record<string, unknown>)[environmentKey],
+    );
+
+    if (resolvedEnvironmentValue !== null) {
+      return resolvedEnvironmentValue;
+    }
+  }
 
   for (const key of BOOLEAN_CONFIG_KEYS) {
     const resolvedValue = parseBooleanValue(record[key]);

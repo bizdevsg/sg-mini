@@ -88,15 +88,16 @@ export function HeaderActions({
   const clientAreaTitle = clientAreaProfile?.displayName
     ? `${messages.clientArea.pageTitle} - ${clientAreaProfile.displayName}`
     : messages.clientArea.pageTitle;
+  const clientAreaLabel = isClientAreaAuthenticated ? "Client Area" : "Login";
   const clientAreaAction = isClientAreaEnabled ? (
     <ButtonLink
-      variant="ghost"
+      variant="primary"
       size="sm"
       className={mobilePanel ? mobileActionButtonClass : undefined}
       href={clientAreaHref}
       title={clientAreaTitle}
     >
-      {messages.clientArea.pageTitle}
+      {clientAreaLabel}
     </ButtonLink>
   ) : null;
 
@@ -195,6 +196,9 @@ export function HeaderActions({
         className={`flex shrink-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-3 ${className}`}
       >
         {clientAreaAction}
+
+        <div className="hidden md:block border border-yellow-500/50 h-7 rounded-full" />
+
         {localeSwitcher}
       </div>
       {localeDialog}

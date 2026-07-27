@@ -7,7 +7,7 @@ const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
 const DEFAULT_SG_ADMIN_LEGACY_ORIGIN = "http://sg-admin.test";
 const DEFAULT_SG_ADMIN_API_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/api/v1`;
 const DEFAULT_CLIENT_AREA_CONFIG_API_URL =
-  `${DEFAULT_SG_ADMIN_API_BASE_URL}/feature-flags/client-area`;
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/client-area`;
 const DEFAULT_EBOOK_CATEGORY_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
