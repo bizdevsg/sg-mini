@@ -31,6 +31,7 @@ export function ClientAreaNewsDetailPanel({
   return (
     <div className="space-y-8 py-5">
       <NewsDetailHeader
+        categoryLabel={article.displayCategory}
         locale={locale}
         publishedAt={article.publishedAt}
         sharePathBase={CLIENT_AREA_NEWS_BASE_PATH}

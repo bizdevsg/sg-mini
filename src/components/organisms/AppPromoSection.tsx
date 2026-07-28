@@ -18,29 +18,27 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
   const appStoreLink = primaryPlatform?.stores[1]?.href ?? "#";
 
   return (
-    <SectionContainer className="pb-16 md:pb-20">
-      <ScrollReveal
-        effect="fade-up"
-      >
+    <SectionContainer className="pb-14 md:pb-18">
+      <ScrollReveal effect="fade-up">
         <div
-          className="relative overflow-hidden rounded-6xl border-2 border-yellow-500/50 bg-black bg-cover bg-center rounded-4xl"
+          className="relative overflow-hidden rounded-4xl border-2 border-yellow-500/50 bg-black bg-cover bg-center"
           style={{
             backgroundImage: "url('/assets/bg-tengah.png')",
           }}
         >
-          <div className="bg-black/50 absolute top-0 left-0 w-full h-full backdrop-blur-xs" />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
 
-          <div className="relative z-10 flex min-h-97.5 flex-col items-center gap-10 px-6 py-10 text-center sm:px-8 md:flex-row md:items-center md:justify-between md:px-12 md:text-left lg:px-20">
-            <div className="order-2 max-w-xl md:order-1 ">
+          <div className="relative z-10 flex min-h-[22rem] flex-col items-center gap-7 px-4 py-7 text-center sm:px-5 sm:py-8 md:min-h-[24rem] md:flex-row md:items-center md:justify-between md:gap-4 md:px-5 md:py-8 md:text-left lg:gap-5 lg:px-6">
+            <div className="order-2 max-w-xl md:order-1 md:max-w-none md:flex-1">
               <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
                 {messages.title}
               </h2>
 
-              <p className="mt-2 text-gray-300 text-sm sm:text-base md:text-lg">
+              <p className="mt-3 text-sm text-gray-300 sm:text-base md:text-lg">
                 {messages.description}
               </p>
 
-              <div className="mt-6 flex justify-center gap-4 md:justify-start">
+              <div className="mt-5 flex flex-wrap justify-center gap-4 md:justify-start">
                 <a href={googlePlayLink} target="_blank" rel="noreferrer">
                   <Image
                     src="/assets/gp-button.png"
@@ -65,13 +63,14 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
               </div>
             </div>
 
-            <div className="order-1 relative w-full max-w-[20rem] sm:max-w-[23rem] md:order-2 md:max-w-[27rem]">
+            <div className="order-1 relative w-full max-w-[17rem] shrink-0 sm:max-w-[19rem] md:order-2 md:max-w-[20rem] lg:max-w-[22rem]">
               <Image
                 src="/assets/HP Solid-3.png"
                 width={400}
-                height={400}
+                height={520}
                 alt={messages.imageAlt}
-                className="h-auto w-full object-contain"
+                sizes="(max-width: 640px) 272px, (max-width: 1024px) 320px, 384px"
+                className="mx-auto h-auto max-h-[18rem] w-full object-contain sm:max-h-[20rem] md:max-h-[24rem] lg:max-h-[26rem]"
               />
             </div>
           </div>

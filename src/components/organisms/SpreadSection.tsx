@@ -63,7 +63,7 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
 
         <ScrollReveal effect="zoom-in">
           <div className="mt-8 flex justify-center">
-            <ButtonLink href={`/${locale}/news`} size="sm" variant="dark" className="mx-auto">
+            <ButtonLink href={`/${locale}/news`} size="sm" variant="primary" className="mx-auto">
               {newsPageContent.newsPage.hero.primaryCta}
             </ButtonLink>
           </div>

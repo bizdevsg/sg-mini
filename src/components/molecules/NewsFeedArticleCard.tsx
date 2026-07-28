@@ -52,7 +52,7 @@ export function NewsFeedArticleCard({
 
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex min-h-9 flex-wrap items-start gap-2">
-              <span className="line-clamp-1 inline-flex min-w-0 max-w-full rounded-full bg-yellow-500/45 px-2.5 py-1 text-[11px] font-medium text-yellow-400 sm:max-w-[150px]">
+              <span className="line-clamp-1 inline-flex min-w-0 max-w-full rounded-full bg-yellow-500/5 border border-yellow-500/20 px-2.5 py-1 text-[11px] font-medium text-yellow-400 sm:max-w-[150px]">
                 {article.displayCategory}
               </span>
 

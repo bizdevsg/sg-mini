@@ -129,9 +129,15 @@ export async function isClientAreaEnabled() {
     const response = await fetch(CLIENT_AREA_CONFIG_API_URL, {
       method: "GET",
       headers,
-      next: {
-        revalidate: CLIENT_AREA_CONFIG_REVALIDATE_SECONDS,
-      },
+      ...(APP_ENV === "prod"
+        ? {
+            next: {
+              revalidate: CLIENT_AREA_CONFIG_REVALIDATE_SECONDS,
+            },
+          }
+        : {
+            cache: "no-store" as const,
+          }),
       signal: AbortSignal.timeout(CLIENT_AREA_CONFIG_TIMEOUT_MS),
     });
 

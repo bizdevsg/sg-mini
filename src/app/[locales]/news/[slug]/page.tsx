@@ -140,6 +140,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </ScrollReveal>
 
       <NewsDetailHeader
+        categoryLabel={article.displayCategory}
         locale={locales}
         publishedAt={article.publishedAt}
         slug={article.slug}

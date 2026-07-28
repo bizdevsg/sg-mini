@@ -17,6 +17,7 @@ import {
 import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type NewsDetailHeaderProps = {
+  categoryLabel: string;
   locale: AppLocale;
   publishedAt: string;
   sharePathBase?: string;
@@ -25,6 +26,7 @@ type NewsDetailHeaderProps = {
 };
 
 export function NewsDetailHeader({
+  categoryLabel,
   locale,
   publishedAt,
   sharePathBase = "/news",
@@ -121,6 +123,10 @@ export function NewsDetailHeader({
         <div className="flex flex-wrap items-center justify-center gap-3">
           <span className="text-center text-sm font-medium text-zinc-300">
             {formatLocaleArticleDateTime(publishedAt, locale)}
+          </span>
+          <span>|</span>
+          <span className="line-clamp-1 inline-flex min-w-0 max-w-full rounded-full border border-yellow-500/20 bg-yellow-500/5 px-2.5 py-1 text-[11px] font-medium text-yellow-400 sm:max-w-[150px]">
+            {categoryLabel}
           </span>
         </div>
 
