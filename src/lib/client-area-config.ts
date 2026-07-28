@@ -118,7 +118,7 @@ export async function isClientAreaEnabled() {
     return false;
   }
 
-  const headers = getSgAdminApiHeaders();
+  const headers = await getSgAdminApiHeaders();
 
   if (CLIENT_AREA_CONFIG_API_TOKEN) {
     headers.set("Authorization", `Bearer ${CLIENT_AREA_CONFIG_API_TOKEN}`);

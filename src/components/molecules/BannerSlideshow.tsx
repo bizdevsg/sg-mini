@@ -163,6 +163,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   }, []);
 
   const resolvedViewportWidth = viewportWidth || 1280;
+  const isSwipeEnabled = resolvedViewportWidth < 1024;
   const slideGap = getSlideGap(resolvedViewportWidth);
   const slideWidth = getSlideWidth(resolvedViewportWidth);
   const effectiveTrackIndex = banners.length > 1 ? trackIndex : 0;
@@ -199,7 +200,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   }
 
   function startDrag(clientX: number) {
-    if (banners.length <= 1) {
+    if (banners.length <= 1 || !isSwipeEnabled) {
       return;
     }
 
@@ -234,8 +235,11 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
 
     isDraggingRef.current = false;
 
+    const dragIntentThreshold = 8;
     const swipeThreshold = Math.min(120, Math.max(40, slideWidth * 0.14));
     const finalDeltaX = dragDeltaXRef.current;
+    const hasDragIntent = Math.abs(finalDeltaX) > dragIntentThreshold;
+    blockClickRef.current = hasDragIntent;
 
     setDragOffset(0);
 
@@ -254,11 +258,14 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   }
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "mouse" && event.button !== 0) {
+    if (!isSwipeEnabled) {
       return;
     }
 
-    event.currentTarget.setPointerCapture(event.pointerId);
+    if (event.pointerType === "mouse" || event.button !== 0) {
+      return;
+    }
+
     startDrag(event.clientX);
   }
 
@@ -267,10 +274,6 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   }
 
   function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-
     endDrag();
   }
 
@@ -316,15 +319,16 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
     >
       <div
         ref={viewportRef}
-        className="overflow-hidden touch-pan-y select-none [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
-        onClickCapture={handleClickCapture}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
+        className={`overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)] ${isSwipeEnabled ? "touch-pan-y select-none" : ""}`}
+        onClickCapture={isSwipeEnabled ? handleClickCapture : undefined}
+        onPointerDown={isSwipeEnabled ? handlePointerDown : undefined}
+        onPointerMove={isSwipeEnabled ? handlePointerMove : undefined}
+        onPointerUp={isSwipeEnabled ? handlePointerUp : undefined}
+        onPointerCancel={isSwipeEnabled ? handlePointerUp : undefined}
+        onPointerLeave={isSwipeEnabled ? handlePointerUp : undefined}
       >
         <div
-          className={`flex items-start ease-out ${banners.length > 1 ? "cursor-grab active:cursor-grabbing" : ""}`}
+          className={`flex items-start ease-out ${banners.length > 1 && isSwipeEnabled ? "cursor-grab active:cursor-grabbing" : ""}`}
           style={{
             gap: `${slideGap}px`,
             transform: `translateX(${trackOffset}px)`,

@@ -112,7 +112,7 @@ async function getProductApiRecords(category: ProductPageCategory) {
     next: {
       revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
     },
-    headers: getSgAdminApiHeaders(),
+    headers: await getSgAdminApiHeaders(),
   });
 
   if (!response.ok) {
@@ -142,7 +142,7 @@ async function getProductApiRecordBySlug(
       next: {
         revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     },
   );
 

@@ -149,7 +149,7 @@ export async function getLegalitasRecords(locale: AppLocale = "id") {
       next: {
         revalidate: LEGALITAS_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

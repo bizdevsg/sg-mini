@@ -194,7 +194,7 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
       next: {
         revalidate: COMPANY_PROFILE_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

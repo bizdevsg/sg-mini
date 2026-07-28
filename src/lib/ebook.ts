@@ -181,7 +181,7 @@ export async function getEbookCategories() {
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {
@@ -219,7 +219,7 @@ export async function getEbookCategoryDetail(
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

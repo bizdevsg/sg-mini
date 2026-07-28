@@ -152,7 +152,7 @@ export async function getPengumuman(page = 1): Promise<PengumumanResult> {
         revalidate: PENGUMUMAN_REVALIDATE_SECONDS,
       },
       signal: controller.signal,
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

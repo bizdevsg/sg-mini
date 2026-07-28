@@ -104,7 +104,7 @@ export async function getPenghargaanRecords() {
       next: {
         revalidate: PENGHARGAAN_REVALIDATE_SECONDS,
       },
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

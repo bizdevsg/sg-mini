@@ -1,13 +1,13 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const idPromoPage: AppMessages["promoPage"] = {
-  title: "Halaman Promo",
+  title: "Promo",
   description:
     "Kumpulan informasi promo, banner, program, dan informasi pendukung lainnya.",
-  breadcrumb: "Halaman Promo",
+  breadcrumb: "Promo",
   hero: {
     eyebrow: "Informasi Penting",
-    title: "Halaman Promo",
+    title: "Promo",
     description:
       "Baca detail dari setiap banner promo atau informasi yang sedang ditampilkan oleh PT. Solid Gold Berjangka.",
     primaryCta: "Lihat daftar promo",

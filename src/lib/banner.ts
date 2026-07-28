@@ -245,7 +245,7 @@ async function fetchBannerList() {
     const response = await fetch(BANNER_API_URL, {
       cache: "no-store",
       signal: controller.signal,
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {
@@ -282,7 +282,7 @@ async function fetchBannerDetail(slug: string) {
     const response = await fetch(buildBannerDetailApiUrl(slug), {
       cache: "no-store",
       signal: controller.signal,
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

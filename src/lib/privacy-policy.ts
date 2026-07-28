@@ -177,7 +177,7 @@ export async function getPrivacyPolicyRecord(locale: AppLocale = "id") {
   try {
     const response = await fetch(PRIVACY_POLICY_API_URL, {
       cache: "no-store",
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {

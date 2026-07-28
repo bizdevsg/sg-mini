@@ -143,7 +143,7 @@ export async function getTermsConditionsRecord(locale: AppLocale = "id") {
   try {
     const response = await fetch(TERMS_CONDITIONS_API_URL, {
       cache: "no-store",
-      headers: getSgAdminApiHeaders(),
+      headers: await getSgAdminApiHeaders(),
     });
 
     if (!response.ok) {
