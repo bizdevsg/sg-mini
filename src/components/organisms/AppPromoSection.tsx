@@ -28,8 +28,8 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
         >
           <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
 
-          <div className="relative z-10 flex min-h-[22rem] flex-col items-center gap-7 px-4 py-7 text-center sm:px-5 sm:py-8 md:min-h-[24rem] md:flex-row md:items-center md:justify-between md:gap-4 md:px-5 md:py-8 md:text-left lg:gap-5 lg:px-6">
-            <div className="order-2 max-w-xl md:order-1 md:max-w-none md:flex-1">
+          <div className="relative z-10 flex min-h-[22rem] flex-col items-center gap-7 px-4 py-7 text-center sm:px-5 sm:py-8 md:min-h-[24rem] md:flex-row md:items-center md:justify-between md:gap-4 md:px-5 md:py-8 md:text-left lg:gap-5 lg:px-20">
+            <div className="order-2 max-w-2xl md:order-1 md:flex-1">
               <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
                 {messages.title}
               </h2>
