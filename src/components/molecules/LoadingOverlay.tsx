@@ -38,7 +38,7 @@ export function LoadingOverlay({
             width={48}
             height={48}
             priority
-            className="h-auto w-12 object-contain"
+            className="h-auto w-12 object-contain animate-pulse"
             style={{ height: "auto" }}
           />
         </div>

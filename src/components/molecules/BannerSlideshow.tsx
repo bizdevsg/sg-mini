@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { TransitionEvent } from "react";
+import type { PointerEvent as ReactPointerEvent, TransitionEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import type { BannerApiRecord } from "@/lib/banner";
@@ -57,10 +57,15 @@ function formatBannerLabel(template: string, index: number) {
 export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const autoplayTimerRef = useRef<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragDeltaXRef = useRef(0);
+  const blockClickRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [trackIndex, setTrackIndex] = useState(banners.length);
   const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
   const labels = getMessages(locale).bannerSlideshow;
   const repeatedBanners =
     banners.length > 1 ? [...banners, ...banners, ...banners] : banners;
@@ -165,8 +170,22 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
     resolvedViewportWidth > 0
       ? resolvedViewportWidth / 2 -
         slideWidth / 2 -
-        effectiveTrackIndex * (slideWidth + slideGap)
+        effectiveTrackIndex * (slideWidth + slideGap) +
+        dragOffset
       : 0;
+
+  function moveToRelativeSlide(offset: -1 | 1) {
+    if (banners.length <= 1) {
+      return;
+    }
+
+    setIsTransitionEnabled(true);
+    setTrackIndex((currentIndex) => currentIndex + offset);
+    setActiveIndex((currentIndex) => {
+      const nextIndex = currentIndex + offset;
+      return ((nextIndex % banners.length) + banners.length) % banners.length;
+    });
+  }
 
   function goToSlide(targetIndex: number) {
     if (banners.length <= 1) {
@@ -177,6 +196,92 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
     setIsTransitionEnabled(true);
     setTrackIndex(banners.length + targetIndex);
     setActiveIndex(targetIndex);
+  }
+
+  function startDrag(clientX: number) {
+    if (banners.length <= 1) {
+      return;
+    }
+
+    clearAutoplayTimer();
+    isDraggingRef.current = true;
+    dragStartXRef.current = clientX;
+    dragDeltaXRef.current = 0;
+    blockClickRef.current = false;
+    setIsTransitionEnabled(false);
+    setDragOffset(0);
+  }
+
+  function updateDrag(clientX: number) {
+    if (!isDraggingRef.current) {
+      return;
+    }
+
+    const deltaX = clientX - dragStartXRef.current;
+    dragDeltaXRef.current = deltaX;
+
+    if (Math.abs(deltaX) > 8) {
+      blockClickRef.current = true;
+    }
+
+    setDragOffset(deltaX);
+  }
+
+  function endDrag() {
+    if (!isDraggingRef.current) {
+      return;
+    }
+
+    isDraggingRef.current = false;
+
+    const swipeThreshold = Math.min(120, Math.max(40, slideWidth * 0.14));
+    const finalDeltaX = dragDeltaXRef.current;
+
+    setDragOffset(0);
+
+    if (finalDeltaX >= swipeThreshold) {
+      moveToRelativeSlide(-1);
+      return;
+    }
+
+    if (finalDeltaX <= -swipeThreshold) {
+      moveToRelativeSlide(1);
+      return;
+    }
+
+    setIsTransitionEnabled(true);
+    scheduleNextAutoplay();
+  }
+
+  function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse" && event.button !== 0) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    startDrag(event.clientX);
+  }
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    updateDrag(event.clientX);
+  }
+
+  function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    endDrag();
+  }
+
+  function handleClickCapture(event: React.MouseEvent<HTMLDivElement>) {
+    if (!blockClickRef.current) {
+      return;
+    }
+
+    blockClickRef.current = false;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   function handleTrackTransitionEnd(event: TransitionEvent<HTMLDivElement>) {
@@ -211,10 +316,15 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
     >
       <div
         ref={viewportRef}
-        className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
+        className="overflow-hidden touch-pan-y select-none [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
+        onClickCapture={handleClickCapture}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
       >
         <div
-          className="flex items-start ease-out"
+          className={`flex items-start ease-out ${banners.length > 1 ? "cursor-grab active:cursor-grabbing" : ""}`}
           style={{
             gap: `${slideGap}px`,
             transform: `translateX(${trackOffset}px)`,
@@ -249,6 +359,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
                     labels.slideImageAlt,
                     normalizedIndex + 1,
                   )}
+                  draggable={false}
                   loading={index < 3 ? "eager" : "lazy"}
                   className="block h-auto w-full"
                 />
