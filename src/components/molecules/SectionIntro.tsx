@@ -44,7 +44,7 @@ export function SectionIntro({
 
       {description ? (
         <p
-          className={`mt-4 text-sm leading-7 text-zinc-300 sm:text-base ${descriptionClassName}`}
+          className={`mt-4 text-sm leading-7 text-zinc-300 text-shadow-lg text-shadow-black/80 sm:text-base ${descriptionClassName}`}
         >
           {description}
         </p>

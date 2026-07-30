@@ -50,10 +50,6 @@ function getIsoDate(dayOffset: number) {
   return addDays(new Date(), dayOffset).toISOString().slice(0, 10);
 }
 
-function createBannerImage(label: string) {
-  return createSvgPlaceholder(label, "Dummy Banner", 1440, 720);
-}
-
 function createProductImage(label: string) {
   return createSvgPlaceholder(label, "Dummy Product", 1200, 900);
 }

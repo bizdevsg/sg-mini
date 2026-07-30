@@ -1,10 +1,8 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
 import { VisiMisiCard } from "@/components/molecules/VisiMisiCard";
 import { VisiMisiSummary } from "@/components/molecules/VisiMisiSummary";
 import { getMessages, type AppLocale } from "@/locales";
 import { SectionIntro } from "../molecules/SectionIntro";
-import { title } from "process";
 import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type VisiMisiSectionProps = {

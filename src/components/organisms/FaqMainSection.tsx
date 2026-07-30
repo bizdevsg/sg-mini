@@ -53,7 +53,7 @@ export function FaqMainSection({
         <div className="absolute top-0 left-1/2 h-25 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
 
         <div className="mx-auto grid grid-cols-1 gap-4">
-          {faqItems.map((item, index) => (
+          {faqItems.map((item) => (
             <ScrollReveal
               key={item.key}
               delay={0}

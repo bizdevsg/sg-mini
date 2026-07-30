@@ -7,15 +7,20 @@ import type { AppLocale } from "@/locales";
 type LocalizedLayoutEnhancementsProps = {
   locale: AppLocale;
   shouldShowCookieConsent: boolean;
+  tawkChatEnabled: boolean;
 };
 
 export function LocalizedLayoutEnhancements({
   locale,
   shouldShowCookieConsent,
+  tawkChatEnabled,
 }: LocalizedLayoutEnhancementsProps) {
   return (
     <>
-      <TawkChatWidget enabledInitially={!shouldShowCookieConsent} />
+      <TawkChatWidget
+        canEnable={tawkChatEnabled}
+        enabledInitially={tawkChatEnabled && !shouldShowCookieConsent}
+      />
       {shouldShowCookieConsent ? (
         <HomeCookieConsentBanner locale={locale} />
       ) : null}

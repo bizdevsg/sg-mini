@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Eye, EyeClosed } from "lucide-react";
 
 import { PUBLIC_RECAPTCHA_SITE_KEY } from "@/lib/env";

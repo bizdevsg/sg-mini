@@ -17,7 +17,6 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
-import { Scroll } from "lucide-react";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 
 type HistoricalDataPageProps = {

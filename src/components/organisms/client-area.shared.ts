@@ -1,4 +1,3 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import type { LucideIcon } from "lucide-react";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
 import {
@@ -8,18 +7,14 @@ import {
 } from "@/lib/live-quotes";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import {
-  AudioWaveform,
-  ArrowUpFromLine,
   House,
   ChartNoAxesCombined,
   Wallet,
   Newspaper,
   BookOpen,
-  CircleArrowDown,
   CircleUserRound,
   ArrowUp,
   ArrowDown,
-  PackageOpen,
   NotebookText,
   PackageSearch,
   BanknoteArrowDown,

@@ -27,8 +27,6 @@ export function ClientAreaTransactionsPanel({
   transactionHistory,
 }: ClientAreaTransactionsPanelProps) {
   const [activeTab, setActiveTab] = useState<"open" | "history">("open");
-  const openBuyCount = positions.filter((item) => item.side === "buy").length;
-  const openSellCount = positions.length - openBuyCount;
   const labels =
     locale === "id"
       ? {

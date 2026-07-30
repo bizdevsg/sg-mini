@@ -273,7 +273,7 @@ export function BannerSlideshow({ banners, locale }: BannerSlideshowProps) {
     updateDrag(event.clientX);
   }
 
-  function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+  function handlePointerUp() {
     endDrag();
   }
 

@@ -5,16 +5,12 @@ import type { MarketPrice } from "@/components/organisms/client-area.types";
 import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaMarketPanelProps = {
-  className?: string;
-  embedded?: boolean;
   fieldLabels: AppMessages["liveQuoteTable"]["fields"];
   locale: AppLocale;
   prices: MarketPrice[];
 };
 
 export function ClientAreaMarketPanel({
-  className = "",
-  embedded = false,
   fieldLabels,
   locale,
   prices,

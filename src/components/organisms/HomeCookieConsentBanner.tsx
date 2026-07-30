@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useEffect, useRef, useState } from "react";
-import { ChevronDown, ShieldCheck } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import {
   acceptCookieConsent,
@@ -28,7 +28,6 @@ export function HomeCookieConsentBanner({
   const [pendingAction, setPendingAction] = useState<"accept" | "dismiss" | null>(
     null,
   );
-  const activeLocaleLabel = modalLocale === "id" ? "Aktif" : "Active";
   const localeOptions = [
     {
       value: "id" as const,

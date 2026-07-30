@@ -1,6 +1,5 @@
 "use client";
 
-import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { X } from "lucide-react";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import TradingView from "@/components/organisms/TradingView";

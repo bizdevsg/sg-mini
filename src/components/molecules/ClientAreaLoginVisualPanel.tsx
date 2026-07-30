@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { StoreBadgeLink } from "@/components/atoms/StoreBadgeLink";
-
 type ClientAreaLoginVisualPanelProps = {
   googlePlayLink: string;
   googlePlayAlt: string;

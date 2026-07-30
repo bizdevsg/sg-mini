@@ -22,7 +22,6 @@ export function ExchangeRateConverterResult({
   locale,
   fromCurrency,
   toCurrency,
-  amount,
   convertedAmount,
   exchangeRate,
   outputDecimals,

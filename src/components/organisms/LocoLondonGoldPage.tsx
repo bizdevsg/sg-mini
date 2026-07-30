@@ -1,5 +1,4 @@
 import { LocoLondonGoldAnalysisSection } from "./LocoLondonGoldAnalysisSection";
-import { LocoLondonGoldDerivativeSection } from "./LocoLondonGoldDerivativeSection";
 import { LocoLondonGoldHistorySection } from "./LocoLondonGoldHistorySection";
 import { LocoLondonGoldMarketsSection } from "./LocoLondonGoldMarketsSection";
 import { PageHeroBanner } from "./PageHeroBanner";
@@ -71,12 +70,6 @@ export function LocoLondonGoldPage({
         subtitle={page.sections.analysisSubtitle}
         items={page.analysis}
       />
-
-      {/* <LocoLondonGoldDerivativeSection
-        title={page.sections.derivativeTitle}
-        subtitle={page.sections.derivativeSubtitle}
-        derivative={page.derivative}
-      /> */}
     </main>
   );
 }

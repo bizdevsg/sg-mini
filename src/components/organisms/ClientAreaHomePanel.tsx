@@ -8,7 +8,6 @@ import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQui
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
 import { ClientAreaMarketWatchSection } from "@/components/organisms/ClientAreaMarketWatchSection";
-import { ClientAreaSentimentPanel } from "@/components/organisms/ClientAreaSentimentPanel";
 import type {
   AccountMode,
   AccountSnapshot,

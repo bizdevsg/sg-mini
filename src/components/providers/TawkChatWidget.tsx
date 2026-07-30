@@ -13,24 +13,33 @@ declare global {
 }
 
 type TawkChatWidgetProps = {
+  canEnable: boolean;
   enabledInitially: boolean;
 };
 
 const TAWK_SCRIPT_ID = "tawk-chat-script";
 
 export function TawkChatWidget({
+  canEnable,
   enabledInitially,
 }: TawkChatWidgetProps) {
   const [isEnabled, setIsEnabled] = useState(enabledInitially);
 
   useEffect(() => {
+    if (!canEnable) {
+      setIsEnabled(false);
+      return;
+    }
+
     if (enabledInitially) {
       setIsEnabled(true);
       return;
     }
 
     function handleEnable() {
-      setIsEnabled(true);
+      if (canEnable) {
+        setIsEnabled(true);
+      }
     }
 
     window.addEventListener(TAWK_CHAT_ENABLE_EVENT, handleEnable);
@@ -38,10 +47,10 @@ export function TawkChatWidget({
     return () => {
       window.removeEventListener(TAWK_CHAT_ENABLE_EVENT, handleEnable);
     };
-  }, [enabledInitially]);
+  }, [canEnable, enabledInitially]);
 
   useEffect(() => {
-    if (!isEnabled) {
+    if (!canEnable || !isEnabled) {
       return;
     }
 
@@ -79,7 +88,7 @@ export function TawkChatWidget({
     });
 
     document.head.appendChild(script);
-  }, [isEnabled]);
+  }, [canEnable, isEnabled]);
 
   return null;
 }

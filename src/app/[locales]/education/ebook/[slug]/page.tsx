@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { EbookResourceLibrary } from "@/components/organisms/EbookResourceLibrary";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";

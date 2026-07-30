@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PageTemplate } from "@/components/layouts/PageTemplate";
 import { LocalizedLayoutEnhancements } from "@/components/providers/LocalizedLayoutEnhancements";
 import { isSupportedLocale, type AppLocale } from "@/locales";
+import { isTawkChatEnabled } from "@/lib/client-area-config";
 import { hasAcceptedCookieConsent } from "@/lib/cookie-consent";
 
 type LocalizedLayoutProps = {
@@ -23,6 +24,7 @@ export default async function LocalizedLayout({
   const { locales } = await params;
   assertValidLocale(locales);
   const shouldShowCookieConsent = !(await hasAcceptedCookieConsent());
+  const tawkChatEnabled = await isTawkChatEnabled();
 
   return (
     <PageTemplate locale={locales}>
@@ -30,6 +32,7 @@ export default async function LocalizedLayout({
       <LocalizedLayoutEnhancements
         locale={locales}
         shouldShowCookieConsent={shouldShowCookieConsent}
+        tawkChatEnabled={tawkChatEnabled}
       />
     </PageTemplate>
   );

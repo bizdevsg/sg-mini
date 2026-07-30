@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+
 import {
   APP_ENV,
   CLIENT_AREA_CONFIG_API_TOKEN,
@@ -29,6 +31,25 @@ const NESTED_CONFIG_KEYS = [
   "flag",
   "clientArea",
   "client_area",
+] as const;
+const CLIENT_AREA_FEATURE_KEYS = [
+  "clientArea",
+  "client_area",
+  "clientAreaEnabled",
+  "client_area_enabled",
+  "clientAreaActive",
+  "client_area_active",
+] as const;
+const TAWK_CHAT_FEATURE_KEYS = [
+  "tawk",
+  "tawkTo",
+  "tawk_to",
+  "tawkChat",
+  "tawk_chat",
+  "tawkEnabled",
+  "tawk_enabled",
+  "tawkActive",
+  "tawk_active",
 ] as const;
 
 function resolveClientAreaEnvironmentKey() {
@@ -65,13 +86,10 @@ function parseBooleanValue(value: unknown) {
   return null;
 }
 
-function resolveClientAreaEnabledValue(payload: unknown): boolean | null {
-  const directValue = parseBooleanValue(payload);
-
-  if (directValue !== null) {
-    return directValue;
-  }
-
+function resolveEnvironmentScopedValue(
+  payload: unknown,
+  featureKeys: readonly string[],
+) {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     return null;
   }
@@ -85,12 +103,77 @@ function resolveClientAreaEnabledValue(payload: unknown): boolean | null {
     typeof environmentScopedData === "object" &&
     !Array.isArray(environmentScopedData)
   ) {
-    const resolvedEnvironmentValue = parseBooleanValue(
-      (environmentScopedData as Record<string, unknown>)[environmentKey],
+    const dataRecord = environmentScopedData as Record<string, unknown>;
+
+    for (const featureKey of featureKeys) {
+      const flatEnvironmentValue = parseBooleanValue(
+        dataRecord[`${featureKey}_${environmentKey}`],
+      );
+
+      if (flatEnvironmentValue !== null) {
+        return flatEnvironmentValue;
+      }
+
+      const featureValue = dataRecord[featureKey];
+
+      if (
+        featureValue &&
+        typeof featureValue === "object" &&
+        !Array.isArray(featureValue)
+      ) {
+        const environmentValue = parseBooleanValue(
+          (featureValue as Record<string, unknown>)[environmentKey],
+        );
+
+        if (environmentValue !== null) {
+          return environmentValue;
+        }
+      }
+    }
+
+    const directEnvironmentValue = parseBooleanValue(dataRecord[environmentKey]);
+
+    if (directEnvironmentValue !== null) {
+      return directEnvironmentValue;
+    }
+  }
+
+  return null;
+}
+
+function resolveFeatureEnabledValue(
+  payload: unknown,
+  featureKeys: readonly string[],
+): boolean | null {
+  const environmentScopedValue = resolveEnvironmentScopedValue(
+    payload,
+    featureKeys,
+  );
+
+  if (environmentScopedValue !== null) {
+    return environmentScopedValue;
+  }
+
+  const directValue = parseBooleanValue(payload);
+
+  if (directValue !== null) {
+    return directValue;
+  }
+
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return null;
+  }
+
+  const record = payload as Record<string, unknown>;
+
+  for (const featureKey of featureKeys) {
+    const resolvedFeatureValue = resolveFeatureEnabledValue(
+      record[featureKey],
+      featureKeys,
     );
 
-    if (resolvedEnvironmentValue !== null) {
-      return resolvedEnvironmentValue;
+    if (resolvedFeatureValue !== null) {
+      return resolvedFeatureValue;
     }
   }
 
@@ -103,7 +186,7 @@ function resolveClientAreaEnabledValue(payload: unknown): boolean | null {
   }
 
   for (const key of NESTED_CONFIG_KEYS) {
-    const resolvedValue = resolveClientAreaEnabledValue(record[key]);
+    const resolvedValue = resolveFeatureEnabledValue(record[key], featureKeys);
 
     if (resolvedValue !== null) {
       return resolvedValue;
@@ -113,9 +196,12 @@ function resolveClientAreaEnabledValue(payload: unknown): boolean | null {
   return null;
 }
 
-export async function isClientAreaEnabled() {
+const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureConfig() {
   if (!CLIENT_AREA_CONFIG_API_URL) {
-    return false;
+    return {
+      clientAreaEnabled: false,
+      tawkChatEnabled: false,
+    };
   }
 
   const headers = await getSgAdminApiHeaders();
@@ -142,12 +228,31 @@ export async function isClientAreaEnabled() {
     });
 
     if (!response.ok) {
-      return false;
+      return {
+        clientAreaEnabled: false,
+        tawkChatEnabled: false,
+      };
     }
 
     const payload = (await response.json()) as unknown;
-    return resolveClientAreaEnabledValue(payload) ?? false;
+    return {
+      clientAreaEnabled:
+        resolveFeatureEnabledValue(payload, CLIENT_AREA_FEATURE_KEYS) ?? false,
+      tawkChatEnabled:
+        resolveFeatureEnabledValue(payload, TAWK_CHAT_FEATURE_KEYS) ?? false,
+    };
   } catch {
-    return false;
+    return {
+      clientAreaEnabled: false,
+      tawkChatEnabled: false,
+    };
   }
+});
+
+export async function isClientAreaEnabled() {
+  return (await getWebsiteFeatureConfig()).clientAreaEnabled;
+}
+
+export async function isTawkChatEnabled() {
+  return (await getWebsiteFeatureConfig()).tawkChatEnabled;
 }

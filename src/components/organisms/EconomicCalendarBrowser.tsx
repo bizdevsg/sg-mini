@@ -6,7 +6,6 @@ import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { EconomicCalendarExpandedEventPanel } from "@/components/molecules/EconomicCalendarExpandedEventPanel";
 import { PaginationControls } from "@/components/molecules/PaginationControls";
 import {
-  formatCalendarDate,
   getActualValueColorClassName,
   getEventGroupDateLabel,
 } from "@/components/organisms/economic-calendar-browser.shared";
@@ -341,7 +340,6 @@ export function EconomicCalendarBrowser({
     <div ref={browserRef} className="space-y-6">
       <div className="flex flex-wrap gap-2">
         {ECONOMIC_CALENDAR_RANGE_KEYS.map((rangeKey, index) => {
-          const range = rangeOverview[rangeKey];
           const isActive = activeRange === rangeKey;
 
           return (

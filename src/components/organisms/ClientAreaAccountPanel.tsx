@@ -25,7 +25,6 @@ export function ClientAreaAccountPanel({
 }: ClientAreaAccountPanelProps) {
   const { clientArea } = getMessages(locale);
   const accountPage = clientArea.accountPage;
-  const modalCopy = clientArea.fundTransferModal;
   const [activeTransferModal, setActiveTransferModal] = useState<
     "deposit" | "withdrawal" | null
   >(null);

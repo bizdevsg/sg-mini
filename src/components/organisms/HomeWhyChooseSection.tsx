@@ -1,5 +1,3 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { SectionEyebrow } from "@/components/atoms/SectionEyebrow";
@@ -11,7 +9,7 @@ type HomeWhyChooseSectionProps = {
   locale: AppLocale;
 };
 
-export const ICON_MAP: Record<HomeWhyChooseItemId, string> = {
+const ICON_MAP: Record<HomeWhyChooseItemId, string> = {
   legal: "/assets/justice_1781185.png",
   experience: "/assets/experience_9295588.png",
   support: "/assets/online-chat_2600350.png",

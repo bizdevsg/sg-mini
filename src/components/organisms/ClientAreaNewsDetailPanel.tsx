@@ -6,7 +6,6 @@ import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
 import { NewsDetailSidebar } from "@/components/organisms/NewsDetailSidebar";
 import Image from "next/image";
 import { ClientAreaSectionHeader } from "../molecules/ClientAreaSectionHeader";
-import { title } from "process";
 
 type ClientAreaNewsDetailPanelProps = {
   article: NewsArticleDetail;

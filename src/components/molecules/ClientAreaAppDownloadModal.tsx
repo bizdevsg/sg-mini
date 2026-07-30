@@ -48,10 +48,6 @@ export function ClientAreaAppDownloadModal({
 }: ClientAreaAppDownloadModalProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isClosing, setIsClosing] = useState(false);
-  const scanLabel =
-    locale === "id"
-      ? "Scan QR Code untuk membuka store sesuai device"
-      : "Scan the QR code to open the correct store for your device";
   const smartDownloadUrl =
     typeof window === "undefined"
       ? ""
