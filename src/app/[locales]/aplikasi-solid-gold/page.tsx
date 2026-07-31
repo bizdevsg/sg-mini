@@ -144,7 +144,7 @@ export default async function SolidGoldAppPage({
       </PageHeroBanner>
 
       <SolidGoldAppDownloadSection
-        // locale={locales}
+        locale={locales}
         benefitsTitle={pageContent.benefits.title}
         benefitsDescription={pageContent.benefits.description}
         benefits={pageContent.benefits.items}

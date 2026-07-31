@@ -1,9 +1,12 @@
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { SectionIntro } from "@/components/molecules/SectionIntro";
+import { getMessages, type AppLocale } from "@/locales";
 import { regulatorLogos } from "@/types/landing";
 import { RegulatorLogoItem } from "../molecules/RegulatorLogoItem";
 import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type SolidGoldAppDownloadSectionProps = {
+  locale: AppLocale;
   benefitsTitle: string;
   benefitsDescription?: string;
   benefits: Array<{
@@ -13,43 +16,58 @@ type SolidGoldAppDownloadSectionProps = {
 };
 
 export function SolidGoldAppDownloadSection({
+  locale,
   benefitsTitle,
   benefitsDescription,
   benefits,
 }: SolidGoldAppDownloadSectionProps) {
+  const { regulation } = getMessages(locale).aboutPage;
   const trustedLogos = regulatorLogos.slice(0, 6);
 
   return (
     <>
-      <div className="bg-linear-to-b from-black to-transparent">
-        <SectionContainer className="pt-16 md:pt-20 ">
-          <p className="text-center text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-            Didukung dalam ekosistem lembaga terkait
-          </p>
-          <div className="mx-auto mt-8 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+      <section className="border-y border-white/6 bg-zinc-900/40">
+        <SectionContainer className="py-10 sm:py-16">
+          <ScrollReveal>
+            <SectionIntro
+              align="center"
+              className="mx-auto max-w-3xl"
+              eyebrow={regulation.eyebrow}
+              title={
+                <>
+                  {regulation.title}
+                  <span className="text-yellow-500">
+                    {" "}
+                    {regulation.highlightedTitle}
+                  </span>
+                </>
+              }
+              description={regulation.description}
+              eyebrowClassName="text-yellow-500"
+            />
+          </ScrollReveal>
+
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
             {trustedLogos.map((logo, index) => (
               <ScrollReveal
                 key={logo.alt}
                 effect="fade-up"
                 delay={index * 150}
+                className="group flex min-h-28 items-center justify-center rounded-2xl border border-yellow-500/15 bg-black/20 px-5 py-6 shadow-[0_18px_40px_rgba(0,0,0,0.16)] transition-[transform,background-color,border-color,box-shadow] duration-500 ease-out hover:border-yellow-400/40 hover:bg-yellow-500/[0.08] hover:shadow-[0_24px_50px_rgba(234,179,8,0.12)]"
               >
-                <div
-                  className="flex min-h-28 items-center justify-center rounded-2xl border border-yellow-500/15 bg-black/20 px-5 py-6 transition-colors duration-300 hover:border-yellow-500/35 hover:bg-yellow-500/[0.06]"
-                >
-                  <RegulatorLogoItem
-                    logo={logo}
-                    priority
-                    useFill
-                    sizes="(max-width: 768px) 140px, (max-width: 1280px) 160px, 180px"
-                    imageClassName="object-contain opacity-80"
-                    containerClassName="h-12 w-full max-w-[9rem] sm:h-14 sm:max-w-[10rem] md:h-16 md:max-w-[11rem]"
-                  />
-                </div>
+                <RegulatorLogoItem
+                  logo={logo}
+                  priority
+                  useFill
+                  sizes="(max-width: 768px) 140px, (max-width: 1280px) 160px, 180px"
+                  imageClassName="object-contain opacity-80"
+                  containerClassName="h-12 w-full max-w-[9rem] sm:h-14 sm:max-w-[10rem] md:h-16 md:max-w-[11rem]"
+                />
               </ScrollReveal>
             ))}
           </div>
         </SectionContainer>
-      </div>
+      </section>
 
       <SectionContainer className="py-16 md:py-20">
         <div className="mx-auto">
