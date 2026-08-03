@@ -17,7 +17,7 @@ type ClientAreaLoginFormPanelProps = {
 };
 
 const inputClassName =
-  "h-[3.125rem] w-full rounded-xl border border-[rgba(80,80,90,0.55)] px-4 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 focus:border-[rgba(245,158,11,0.55)] focus:shadow-[0_0_0_3px_rgba(245,158,11,0.1)] disabled:cursor-not-allowed disabled:opacity-50";
+  "h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ClientAreaLoginFormPanel({
   locale,
@@ -75,7 +75,7 @@ export function ClientAreaLoginFormPanel({
             />
             <button
               type="button"
-              className="absolute right-[0.9rem] top-1/2 -translate-y-1/2 p-1 text-[0.9rem] leading-none text-gray-500 transition-colors hover:text-gray-300"
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-[0.9rem] leading-none text-gray-500 transition-colors hover:text-gray-300"
               onClick={onTogglePassword}
               aria-label={passwordToggleLabel}
               tabIndex={-1}

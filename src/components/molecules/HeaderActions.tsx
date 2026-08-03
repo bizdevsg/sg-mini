@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CircleUserRound } from "lucide-react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LocaleSwitcherButton } from "@/components/atoms/LocaleSwitcherButton";
@@ -82,6 +84,12 @@ export function HeaderActions({
   const activeLocaleLabel = locale === "id" ? "Aktif" : "Active";
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
+  const authenticatedActionButtonClass =
+    "h-10 w-10 min-h-10 min-w-10 px-0 rounded-full shadow-none [&_svg]:size-4";
+  const clientAreaButtonClass = `inline-flex items-center justify-center gap-2 text-center font-semibold tracking-[-0.01em] border border-[#f4cf73]/70 bg-linear-to-b from-[#FF9600] to-[#FFDE00] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] transition-all duration-300 hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${isClientAreaAuthenticated
+      ? authenticatedActionButtonClass
+      : `min-h-10 rounded-full px-8 text-sm ${mobilePanel ? mobileActionButtonClass : ""}`
+    }`;
   const clientAreaHref = isClientAreaAuthenticated
     ? getClientAreaDashboardHref(locale)
     : getClientAreaLoginHref(locale);
@@ -90,15 +98,23 @@ export function HeaderActions({
     : messages.clientArea.pageTitle;
   const clientAreaLabel = isClientAreaAuthenticated ? "Client Area" : "Login";
   const clientAreaAction = isClientAreaEnabled ? (
-    <ButtonLink
-      variant="primary"
-      size="sm"
-      className={mobilePanel ? mobileActionButtonClass : undefined}
+    <Link
+      aria-label={clientAreaTitle}
+      className={clientAreaButtonClass}
       href={clientAreaHref}
       title={clientAreaTitle}
     >
-      {clientAreaLabel}
-    </ButtonLink>
+      {isClientAreaAuthenticated ? (
+        <span className="flex items-center justify-center text-[#1b1307]">
+          <CircleUserRound
+            aria-hidden="true"
+            className="h-[18px] w-[18px] stroke-[2.25]"
+          />
+        </span>
+      ) : (
+        <span className="leading-none text-[#1b1307]">{clientAreaLabel}</span>
+      )}
+    </Link>
   ) : null;
 
   const localeSwitcher = (

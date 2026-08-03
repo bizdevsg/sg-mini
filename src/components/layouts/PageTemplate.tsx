@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { getLocaleConfig, type AppLocale } from "@/locales";
 import { FooterSection } from "@/components/organisms/FooterSection";
@@ -15,55 +15,42 @@ type PageTemplateProps = {
   bodyClassName?: string;
 };
 
-async function PageTemplateNavbar({ locale }: { locale: AppLocale }) {
+async function getNavbarState(locale: AppLocale) {
   const clientAreaEnabled = await isClientAreaEnabled();
 
   if (!clientAreaEnabled) {
-    return (
-      <Navbar
-        clientAreaProfile={null}
-        locale={locale}
-        isClientAreaEnabled={false}
-        isClientAreaAuthenticated={false}
-      />
-    );
+    return {
+      clientAreaProfile: null,
+      isClientAreaEnabled: false,
+      isClientAreaAuthenticated: false,
+      locale,
+    };
   }
 
   const { isAuthenticated, profile } = await getClientAreaSessionState();
 
-  return (
-    <Navbar
-      clientAreaProfile={profile}
-      locale={locale}
-      isClientAreaEnabled
-      isClientAreaAuthenticated={isAuthenticated}
-    />
-  );
+  return {
+    clientAreaProfile: profile,
+    isClientAreaEnabled: true,
+    isClientAreaAuthenticated: isAuthenticated,
+    locale,
+  };
 }
 
-export function PageTemplate({
+export async function PageTemplate({
   children,
   locale,
   bodyClassName = "",
 }: PageTemplateProps) {
+  const navbarState = await getNavbarState(locale);
+
   return (
     <div
       lang={getLocaleConfig(locale).lang}
       data-locale={locale}
       className="min-h-screen bg-transparent"
     >
-      <Suspense
-        fallback={
-          <Navbar
-            clientAreaProfile={null}
-            locale={locale}
-            isClientAreaEnabled={false}
-            isClientAreaAuthenticated={false}
-          />
-        }
-      >
-        <PageTemplateNavbar locale={locale} />
-      </Suspense>
+      <Navbar {...navbarState} />
       <main className={bodyClassName}>{children}</main>
       <ScrollToTopButton locale={locale} />
       <FooterSection locale={locale} />
