@@ -514,9 +514,11 @@ export const enClientArea: AppMessages["clientArea"] = {
   tradingView: {
     disclaimerLabel: "Disclaimer:",
     disclaimerBeforeProvider:
-      "The price chart on this page is provided by",
+      "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as",
+    eurusdChartLabel: "EURUSD chart",
+    eurusdChartUrl: "https://www.tradingview.com/symbols/EURUSD/",
     disclaimerAfterProvider:
-      "The information shown is indicative and may be delayed or differ from actual market prices.",
+      ", XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more - simply everything a prepared trader may need.",
   },
   fundTransferModal: {
     closeLabel: "Close",

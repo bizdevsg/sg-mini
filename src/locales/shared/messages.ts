@@ -971,6 +971,8 @@ export type AppMessages = {
     tradingView: {
       disclaimerLabel: string;
       disclaimerBeforeProvider: string;
+      eurusdChartLabel: string;
+      eurusdChartUrl: string;
       disclaimerAfterProvider: string;
     };
     fundTransferModal: {

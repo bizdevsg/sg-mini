@@ -512,6 +512,8 @@ export const idClientArea: AppMessages["clientArea"] = {
   tradingView: {
     disclaimerLabel: "Disclaimer:",
     disclaimerBeforeProvider: "Grafik harga pada halaman ini disediakan oleh",
+    eurusdChartLabel: "chart EURUSD",
+    eurusdChartUrl: "https://www.tradingview.com/symbols/EURUSD/",
     disclaimerAfterProvider:
       "Informasi yang ditampilkan bersifat indikatif dan dapat mengalami keterlambatan atau perbedaan dibandingkan dengan harga pasar sebenarnya.",
   },

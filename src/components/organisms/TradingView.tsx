@@ -13,6 +13,7 @@ import {
 } from "react";
 
 import { getMessages, type AppLocale } from "@/locales";
+import Image from "next/image";
 
 const TRADING_VIEW_SCRIPT_URL =
     "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -184,7 +185,7 @@ function TradingView({
 
             <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 backdrop-blur-xs">
                 <div className="flex flex-col gap-3 sm:flex-row">
-                    <div
+                    {/* <div
                         style={{
                             width: iconSize,
                             height: iconSize,
@@ -192,26 +193,32 @@ function TradingView({
                         className="flex shrink-0 items-center justify-center rounded-lg bg-red-500/15"
                     >
                         <TriangleAlert className="h-7 w-7 text-red-400" />
-                    </div>
+                    </div> */}
 
-                    <p
-                        ref={disclaimerTextRef}
-                        className="flex-1 text-sm leading-8 text-zinc-200"
-                    >
-                        <span className="font-semibold text-red-300">
-                            {tradingViewCopy.disclaimerLabel}
-                        </span>{" "}
-                        {tradingViewCopy.disclaimerBeforeProvider}{" "}
-                        <Link
-                            href="https://www.tradingview.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold text-red-200 transition-colors hover:text-white"
-                        >
-                            TradingView
-                        </Link>
-                        . {tradingViewCopy.disclaimerAfterProvider}
-                    </p>
+                    <div>
+                        <div className="relative h-10 w-[170px] shrink-0">
+                            <Image
+                                src="/assets/TradingView.png"
+                                alt="Logo TradingView"
+                                fill
+                                sizes="240px"
+                                className="object-contain object-left"
+                            />
+                        </div>
+
+                        <p className="text-sm leading-7 text-zinc-300">
+                            {tradingViewCopy.disclaimerBeforeProvider}{" "}
+                            <Link
+                                href={tradingViewCopy.eurusdChartUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-red-200 transition-colors hover:text-white"
+                            >
+                                {tradingViewCopy.eurusdChartLabel}
+                            </Link>
+                            {tradingViewCopy.disclaimerAfterProvider}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

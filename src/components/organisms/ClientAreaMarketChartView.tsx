@@ -13,6 +13,7 @@ import type { BreakingNewsItem } from "@/components/organisms/client-area.types"
 import { getLiveQuoteDisplay } from "@/lib/live-quotes";
 import type { AppLocale } from "@/locales";
 import Link from "next/link";
+import Image from "next/image";
 
 type ClientAreaMarketChartViewProps = {
   breakingNews?: BreakingNewsItem[];
@@ -84,6 +85,27 @@ export function ClientAreaMarketChartView({
           />
         )}
       </div>
+
+      {/* <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5 backdrop-blur-sm mt-6">
+        <div className="relative h-10 w-[170px] shrink-0">
+          <Image
+            src="/assets/TradingView.png"
+            alt="Logo TradingView"
+            fill
+            sizes="240px"
+            className="object-contain object-left"
+          />
+        </div>
+
+        <p className="text-sm leading-7 text-zinc-300">
+          Chart yang kami gunakan disediakan oleh TradingView, sebuah platform
+          charting bagi para trader dan investor dari seluruh penjuru dunia.
+          Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD,
+          dan instrumen forex lainnya, beserta kalender ekonomi, berita
+          finansial, dan fitur lain yang dapat membantu aktivitas trading dan
+          investasi Anda.
+        </p>
+      </div> */}
     </ClientAreaShell>
   );
 }
