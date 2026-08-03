@@ -35,6 +35,8 @@ const DEFAULT_HISTORICAL_DATA_API_URL =
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
 const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
   "https://endpoapi-production-3202.up.railway.app/api/calendar";
+const DEFAULT_TRADINGVIEW_SYMBOL_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/tradingview-symbol`;
 const DEFAULT_FRANKFURTER_API_URL = "https://api.frankfurter.dev/v1/latest";
 const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
 const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
@@ -166,6 +168,9 @@ export const HISTORICAL_DATA_API_TOKEN =
 export const ECONOMIC_CALENDAR_API_BASE_URL =
   process.env.ECONOMIC_CALENDAR_API_BASE_URL ??
   DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL;
+
+export const TRADINGVIEW_SYMBOL_API_URL =
+  process.env.TRADINGVIEW_SYMBOL_API_URL ?? DEFAULT_TRADINGVIEW_SYMBOL_API_URL;
 
 export const FRANKFURTER_API_URL =
   process.env.FRANKFURTER_API_URL ?? DEFAULT_FRANKFURTER_API_URL;

@@ -3,8 +3,13 @@ import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
 import {
   getLiveQuoteDisplay,
   getSortedSymbols,
-  QUOTE_ORDER,
 } from "@/lib/live-quotes";
+import {
+  getClientAreaTradingViewPresetById as getTradingViewPresetById,
+  getClientAreaTradingViewPresetByMarketCode as getTradingViewPresetByMarketCode,
+  getClientAreaTradingViewPresets as getTradingViewPresets,
+  type ClientAreaTradingViewPreset as SharedClientAreaTradingViewPreset,
+} from "@/lib/client-area-tradingview.shared";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import {
   House,
@@ -104,54 +109,26 @@ export function resolveClientAreaTabHref(locale: AppLocale, tab: TabId) {
   return resolveLocalizedHref(locale, `/client-area/${tab}`);
 }
 
-type ClientAreaTradingViewSymbolKey = (typeof QUOTE_ORDER)[number];
+export type { ClientAreaTradingViewPreset } from "@/lib/client-area-tradingview.shared";
 
-export type ClientAreaTradingViewPreset = {
-  id: string;
-  label: string;
-  marketCode: ClientAreaTradingViewSymbolKey;
-  symbol: string;
-};
-
-const CLIENT_AREA_TRADING_VIEW_SYMBOL_BY_MARKET_CODE: Record<
-  ClientAreaTradingViewSymbolKey,
-  string
-> = {
-  XUL10: "OANDA:XAUUSD",
-  BCO10_BBJ: "VELOCITY:BRENT",
-  HKK50_BBJ: "VANTAGE:HK50",
-  JPK50_BBJ: "SPREADEX:NIKKEI",
-  DX1010_BBJ: "CAPITALCOM:DXY",
-  AU1010_BBJ: "OANDA:AUDUSD",
-  EU1010_BBJ: "OANDA:EURUSD",
-  GU1010_BBJ: "OANDA:GBPUSD",
-  UC1010_BBJ: "OANDA:USDCAD",
-  UJ1010_BBJ: "OANDA:USDJPY",
-  UI1010_BBJ: "FX_IDC:USDIDR",
-};
-
-const CLIENT_AREA_TRADING_VIEW_PRESETS: ClientAreaTradingViewPreset[] =
-  QUOTE_ORDER.map((marketCode) => ({
-    id: marketCode.toLowerCase(),
-    label: marketCode,
-    marketCode,
-    symbol: CLIENT_AREA_TRADING_VIEW_SYMBOL_BY_MARKET_CODE[marketCode],
-  }));
-
-export function getClientAreaTradingViewPresets() {
-  return CLIENT_AREA_TRADING_VIEW_PRESETS;
+export function getClientAreaTradingViewPresets(
+  presets?: SharedClientAreaTradingViewPreset[],
+) {
+  return getTradingViewPresets(presets);
 }
 
-export function getClientAreaTradingViewPresetById(presetId: string) {
-  return CLIENT_AREA_TRADING_VIEW_PRESETS.find(
-    (preset) => preset.id === presetId,
-  );
+export function getClientAreaTradingViewPresetById(
+  presetId: string,
+  presets?: SharedClientAreaTradingViewPreset[],
+) {
+  return getTradingViewPresetById(presetId, presets);
 }
 
-export function getClientAreaTradingViewPresetByMarketCode(marketCode: string) {
-  return CLIENT_AREA_TRADING_VIEW_PRESETS.find(
-    (preset) => preset.marketCode === marketCode,
-  );
+export function getClientAreaTradingViewPresetByMarketCode(
+  marketCode: string,
+  presets?: SharedClientAreaTradingViewPreset[],
+) {
+  return getTradingViewPresetByMarketCode(marketCode, presets);
 }
 
 export function resolveClientAreaMarketChartHref(

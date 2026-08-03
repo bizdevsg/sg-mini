@@ -2,11 +2,12 @@
 
 import { X } from "lucide-react";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
+import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import TradingView from "@/components/organisms/TradingView";
 import {
   getClientAreaTradingViewPresetById,
-  getClientAreaTradingViewPresets,
   resolveLocalizedHref,
+  type ClientAreaTradingViewPreset,
 } from "@/components/organisms/client-area.shared";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import { getLiveQuoteDisplay } from "@/lib/live-quotes";
@@ -17,18 +18,27 @@ type ClientAreaMarketChartViewProps = {
   breakingNews?: BreakingNewsItem[];
   initialPresetId: string;
   locale: AppLocale;
+  presets: ClientAreaTradingViewPreset[];
+  hasMarketData?: boolean;
 };
 
 export function ClientAreaMarketChartView({
   breakingNews,
   initialPresetId,
   locale,
+  presets,
+  hasMarketData = true,
 }: ClientAreaMarketChartViewProps) {
-  const tradingViewPresets = getClientAreaTradingViewPresets();
-  const fallbackPreset = tradingViewPresets[0];
-  const selectedPreset =
-    getClientAreaTradingViewPresetById(initialPresetId) ?? fallbackPreset;
-  const marketLabel = getLiveQuoteDisplay(selectedPreset.marketCode).label;
+  const fallbackPreset = presets[0];
+  const selectedPreset = hasMarketData
+    ? getClientAreaTradingViewPresetById(initialPresetId, presets) ?? fallbackPreset
+    : null;
+  const marketLabel = selectedPreset
+    ? getLiveQuoteDisplay(selectedPreset.marketCode).label
+    : locale === "id"
+      ? "Data Tidak Ada"
+      : "Data Unavailable";
+  const marketCodeLabel = selectedPreset?.marketCode ?? initialPresetId.toUpperCase();
 
   return (
     <ClientAreaShell activeTab="market" breakingNews={breakingNews} locale={locale}>
@@ -50,16 +60,29 @@ export function ClientAreaMarketChartView({
                 {marketLabel}
               </h1>
 
-              <p className="text-xs font-semibold text-zinc-400 sm:text-sm">({selectedPreset.marketCode})</p>
+              <p className="text-xs font-semibold text-zinc-400 sm:text-sm">({marketCodeLabel})</p>
             </div>
           </div>
         </div>
 
-        <TradingView
-          defaultPresetId={selectedPreset.id}
-          locale={locale}
-          presets={tradingViewPresets}
-        />
+        {hasMarketData && selectedPreset ? (
+          <TradingView
+            defaultPresetId={selectedPreset.id}
+            locale={locale}
+            presets={presets}
+          />
+        ) : (
+          <EmptyStatePanel
+            title={locale === "id" ? "Data Tidak Ada" : "Data Unavailable"}
+            body={
+              locale === "id"
+                ? "Kode market ini belum tersedia di data TradingView dari API."
+                : "This market code is not available in the TradingView API data yet."
+            }
+            variant="warning"
+            className="py-10"
+          />
+        )}
       </div>
     </ClientAreaShell>
   );

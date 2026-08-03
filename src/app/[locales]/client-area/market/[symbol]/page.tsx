@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { ClientAreaMarketChartView } from "@/components/organisms/ClientAreaMarketChartView";
-import {
-  getClientAreaTradingViewPresetById,
-  getClientAreaTradingViewPresets,
-} from "@/components/organisms/client-area.shared";
+import { getClientAreaTradingViewPresetById } from "@/components/organisms/client-area.shared";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import { buildPrivateMetadata } from "@/lib/metadata";
+import {
+  getTradingViewApiPresets,
+  getTradingViewPresets,
+} from "@/lib/tradingview-symbol";
 import {
   assertValidLocale,
   generateClientAreaStaticParams,
@@ -18,8 +18,8 @@ type ClientAreaMarketChartPageProps = {
   params: Promise<{ locales: string; symbol: string }>;
 };
 
-export function generateStaticParams() {
-  const presets = getClientAreaTradingViewPresets();
+export async function generateStaticParams() {
+  const presets = await getTradingViewApiPresets();
 
   return generateClientAreaStaticParams().flatMap(({ locales }) =>
     presets.map((preset) => ({
@@ -35,17 +35,22 @@ export async function generateMetadata({
   const { locales, symbol } = await params;
   assertValidLocale(locales);
 
-  const preset = getClientAreaTradingViewPresetById(symbol);
-
-  if (!preset) {
-    notFound();
-  }
+  const apiPresets = await getTradingViewApiPresets();
+  const preset = getClientAreaTradingViewPresetById(symbol, apiPresets);
 
   return buildPrivateMetadata({
-    title: `${preset.label} Live Chart | Client Area`,
-    description: `Live chart for ${preset.marketCode}.`,
+    title: preset
+      ? `${preset.label} Live Chart | Client Area`
+      : locales === "id"
+        ? "Data Tidak Ada | Client Area"
+        : "Data Unavailable | Client Area",
+    description: preset
+      ? `Live chart for ${preset.marketCode}.`
+      : locales === "id"
+        ? "Data TradingView untuk kode market ini belum tersedia."
+        : "TradingView data for this market code is not available yet.",
     locale: locales,
-    path: `/${locales}/client-area/market/${preset.id}`,
+    path: `/${locales}/client-area/market/${symbol}`,
   });
 }
 
@@ -56,19 +61,18 @@ export default async function ClientAreaMarketChartPage({
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
 
-  const preset = getClientAreaTradingViewPresetById(symbol);
-
-  if (!preset) {
-    notFound();
-  }
-
+  const apiPresets = await getTradingViewApiPresets();
+  const allPresets = await getTradingViewPresets();
+  const preset = getClientAreaTradingViewPresetById(symbol, apiPresets);
   const breakingNews = await getClientAreaBreakingNews(locales);
 
   return (
     <ClientAreaMarketChartView
       breakingNews={breakingNews}
-      initialPresetId={preset.id}
+      initialPresetId={preset?.id ?? symbol}
+      hasMarketData={Boolean(preset)}
       locale={locales}
+      presets={allPresets}
     />
   );
 }
