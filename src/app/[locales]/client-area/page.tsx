@@ -9,6 +9,7 @@ import {
   createEmptyEconomicCalendarRange,
   getEconomicCalendarRange,
 } from "@/lib/economic-calendar";
+import { getMarketSignalFeedByCategory } from "@/lib/market-signal";
 import {
   getMessages,
   isSupportedLocale,
@@ -57,13 +58,15 @@ export default async function ClientAreaPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
-  const [initialBanners, breakingNews, economicCalendarToday] = await Promise.all([
-    getBannerRecords(),
-    getClientAreaBreakingNews(locales),
-    getEconomicCalendarRange("today").catch(() =>
-      createEmptyEconomicCalendarRange("today"),
-    ),
-  ]);
+  const [initialBanners, breakingNews, economicCalendarToday, marketSignalFeed] =
+    await Promise.all([
+      getBannerRecords(),
+      getClientAreaBreakingNews(locales),
+      getEconomicCalendarRange("today").catch(() =>
+        createEmptyEconomicCalendarRange("today"),
+      ),
+      getMarketSignalFeedByCategory(),
+    ]);
 
   return (
     <ClientAreaDashboard
@@ -71,6 +74,7 @@ export default async function ClientAreaPage({
       economicCalendarEvents={economicCalendarToday.events}
       initialBanners={initialBanners}
       locale={locales}
+      marketSignals={marketSignalFeed.items}
     />
   );
 }

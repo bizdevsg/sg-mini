@@ -1,7 +1,7 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { NewsCategoryFilter } from "@/components/molecules/NewsCategoryFilter";
@@ -37,6 +37,7 @@ const NEWS_PAGE_SIZE = 15;
 const EAGER_IMAGE_COUNT = 2;
 const DEFAULT_SORT = "newest";
 const DEFAULT_PERIOD = "all";
+const SEARCH_DEBOUNCE_MS = 350;
 
 type SortOption = "newest" | "oldest";
 type PeriodOption = "all" | "today" | "week" | "month";
@@ -164,6 +165,7 @@ export function NewsBrowser({
   const categories = NEWS_FILTER_CATEGORIES;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [appliedSort, setAppliedSort] = useState<SortOption>(DEFAULT_SORT);
@@ -171,7 +173,7 @@ export function NewsBrowser({
     useState<PeriodOption>(DEFAULT_PERIOD);
   const [draftSort, setDraftSort] = useState<SortOption>(DEFAULT_SORT);
   const [draftPeriod, setDraftPeriod] = useState<PeriodOption>(DEFAULT_PERIOD);
-  const normalizedSearchQuery = normalizeSearchText(searchQuery);
+  const normalizedSearchQuery = normalizeSearchText(debouncedSearchQuery);
   const now = new Date();
   const filterModalLabels = browserLabels.filterModal;
   const sortOptions: Array<{ value: SortOption; label: string }> = [
@@ -236,6 +238,15 @@ export function NewsBrowser({
       ? browserLabels.emptyFiltered
       : labels.emptyBody;
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setCurrentPage(1);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
+
   function handleCategoryChange(category: string | null) {
     setSelectedCategory(category);
     setCurrentPage(1);
@@ -243,7 +254,6 @@ export function NewsBrowser({
 
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchQuery(event.target.value);
-    setCurrentPage(1);
   }
 
   function handleOpenFilterModal() {

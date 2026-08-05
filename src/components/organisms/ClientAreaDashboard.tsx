@@ -20,6 +20,7 @@ import type {
   ClientAreaBannerRecord,
 } from "@/components/organisms/client-area.types";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
+import type { MarketSignalRecord } from "@/lib/market-signal";
 import { getMessages } from "@/locales";
 import type { AppLocale } from "@/locales";
 
@@ -28,6 +29,7 @@ type ClientAreaDashboardProps = {
   economicCalendarEvents?: EconomicCalendarEvent[];
   initialBanners?: ClientAreaBannerRecord[];
   locale: AppLocale;
+  marketSignals?: MarketSignalRecord[];
 };
 
 export function ClientAreaDashboard({
@@ -35,6 +37,7 @@ export function ClientAreaDashboard({
   economicCalendarEvents = [],
   initialBanners = [],
   locale,
+  marketSignals = [],
 }: ClientAreaDashboardProps) {
   const messages = getMessages(locale);
   const clientArea = messages.clientArea;
@@ -105,6 +108,7 @@ export function ClientAreaDashboard({
         onActionClick={setActiveModal}
         economicCalendarEvents={economicCalendarEvents}
         locale={locale}
+        marketSignals={marketSignals}
       />
     </ClientAreaShell>
   );

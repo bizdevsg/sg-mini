@@ -3,6 +3,10 @@ import "server-only";
 import type { ContactMessageState } from "@/app/actions/contactMessage";
 import type { BannerApiRecord } from "@/lib/banner";
 import type { HistoricalDataRecord } from "@/lib/historical-data";
+import type {
+  MarketSignalRecord,
+  MarketSignalResult,
+} from "@/lib/market-signal";
 import type { PengumumanResult } from "@/lib/pengumuman";
 import type { ProductCatalogItem, ProductPageCategory } from "@/lib/products";
 
@@ -328,6 +332,54 @@ const DUMMY_PENGUMUMAN_ITEMS = [
 
 const DUMMY_HISTORICAL_DATA = createDummyHistoricalDataRecords();
 
+const DUMMY_MARKET_SIGNAL_ITEMS: MarketSignalRecord[] = [
+  {
+    id: 1,
+    categoryId: 1,
+    categoryName: "Gold",
+    categorySlug: "gold",
+    title: "BUY 15M",
+    potensi: "buy",
+    timeframe: "15M",
+    takingProfit: "4136.90",
+    stopLoss: "4065.60",
+    source: "Newsmaker",
+    imageUrl: "",
+    createdAt: `${getIsoDate(0)}T11:41:29+07:00`,
+    updatedAt: `${getIsoDate(0)}T11:41:29+07:00`,
+  },
+  {
+    id: 2,
+    categoryId: 2,
+    categoryName: "Silver",
+    categorySlug: "silver",
+    title: "SELL 30M",
+    potensi: "sell",
+    timeframe: "30M",
+    takingProfit: "47.10",
+    stopLoss: "48.35",
+    source: "Newsmaker",
+    imageUrl: "",
+    createdAt: `${getIsoDate(0)}T10:05:12+07:00`,
+    updatedAt: `${getIsoDate(0)}T10:05:12+07:00`,
+  },
+  {
+    id: 3,
+    categoryId: 3,
+    categoryName: "Oil",
+    categorySlug: "oil",
+    title: "BUY 1H",
+    potensi: "buy",
+    timeframe: "1H",
+    takingProfit: "68.40",
+    stopLoss: "65.90",
+    source: "Newsmaker",
+    imageUrl: "",
+    createdAt: `${getIsoDate(0)}T09:20:47+07:00`,
+    updatedAt: `${getIsoDate(0)}T09:20:47+07:00`,
+  },
+];
+
 export function getDummyBannerRecords() {
   return DUMMY_BANNER_RECORDS.slice();
 }
@@ -338,6 +390,13 @@ export function getDummyBannerDetailBySlug(slug: string) {
 
 export function getDummyHistoricalData() {
   return DUMMY_HISTORICAL_DATA.slice();
+}
+
+export function getDummyMarketSignalFeed(): MarketSignalResult {
+  return {
+    items: DUMMY_MARKET_SIGNAL_ITEMS.slice(),
+    source: "api",
+  };
 }
 
 export function getDummyProductCatalog(category: ProductPageCategory) {

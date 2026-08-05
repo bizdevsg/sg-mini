@@ -67,7 +67,7 @@ export function ClientAreaShell({
 
   return (
     <section
-      className="relative overflow-x-clip bg-cover bg-top bg-no-repeat pb-10 pt-[4.5rem] sm:pb-16 sm:pt-24 lg:pb-20 lg:pt-28"
+      className="relative overflow-x-clip bg-cover bg-top bg-no-repeat bg-fixed pb-10 pt-[4.5rem] sm:pb-16 sm:pt-24 lg:pb-20 lg:pt-28"
       style={{
         backgroundImage: "url('/assets/BCG.png')",
       }}

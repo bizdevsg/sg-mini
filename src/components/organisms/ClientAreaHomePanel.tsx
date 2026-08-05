@@ -1,12 +1,13 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import { TrendingUp, type LucideIcon } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { ClientAreaHeroSlideshow } from "@/components/molecules/ClientAreaHeroSlideshow";
 import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQuickActionsGrid";
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
+import { ClientAreaMarketInsightSection } from "@/components/organisms/ClientAreaMarketInsightSection";
 import { ClientAreaMarketWatchSection } from "@/components/organisms/ClientAreaMarketWatchSection";
 import type {
   AccountMode,
@@ -16,6 +17,7 @@ import type {
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
+import type { MarketSignalRecord } from "@/lib/market-signal";
 import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaHomePanelProps = {
@@ -29,6 +31,7 @@ type ClientAreaHomePanelProps = {
   heroSlides: ClientAreaHeroSlide[];
   isAccountMenuOpen: boolean;
   locale: AppLocale;
+  marketSignals: MarketSignalRecord[];
   onActionClick: (actionId: ActionId) => void;
   onSelectAccountMode: (mode: AccountMode) => void;
   quickActionIconMap: Record<ActionId, LucideIcon>;
@@ -47,6 +50,7 @@ export function ClientAreaHomePanel({
   heroSlides,
   isAccountMenuOpen,
   locale,
+  marketSignals,
   onActionClick,
   onSelectAccountMode,
   quickActionIconMap,
@@ -86,6 +90,12 @@ export function ClientAreaHomePanel({
         <ClientAreaEconomicCalendarSection
           copy={copy}
           events={economicCalendarEvents}
+          locale={locale}
+        />
+
+        <ClientAreaMarketInsightSection
+          copy={copy}
+          items={marketSignals}
           locale={locale}
         />
       </div>

@@ -37,6 +37,10 @@ const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
   "https://endpoapi-production-3202.up.railway.app/api/calendar";
 const DEFAULT_TRADINGVIEW_SYMBOL_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/tradingview-symbol`;
+const DEFAULT_MARKET_SIGNAL_API_URL =
+  `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/signal`;
+const DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL =
+  `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/signal`;
 const DEFAULT_FRANKFURTER_API_URL = "https://api.frankfurter.dev/v1/latest";
 const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
 const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
@@ -171,6 +175,16 @@ export const ECONOMIC_CALENDAR_API_BASE_URL =
 
 export const TRADINGVIEW_SYMBOL_API_URL =
   process.env.TRADINGVIEW_SYMBOL_API_URL ?? DEFAULT_TRADINGVIEW_SYMBOL_API_URL;
+
+export const MARKET_SIGNAL_API_URL =
+  process.env.MARKET_SIGNAL_API_URL ??
+  (APP_ENV === "dev"
+    ? DEFAULT_MARKET_SIGNAL_API_URL
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/signal`);
+
+export const MARKET_SIGNAL_IMAGE_BASE_URL =
+  process.env.MARKET_SIGNAL_IMAGE_BASE_URL ??
+  DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL;
 
 export const FRANKFURTER_API_URL =
   process.env.FRANKFURTER_API_URL ?? DEFAULT_FRANKFURTER_API_URL;
@@ -340,6 +354,7 @@ const IMAGE_PROXY_ALLOWED_HOSTS = new Set(
     PENGHARGAAN_IMAGE_BASE_URL,
     PENGUMUMAN_API_URL,
     PUBLIC_PLACEHOLDER_BASE_URL,
+    MARKET_SIGNAL_IMAGE_BASE_URL,
   ]
     .map((value) => {
       try {
@@ -389,5 +404,11 @@ export function getPenghargaanAssetUrl(assetPath: string) {
 export function getPengumumanAssetUrl(assetPath: string) {
   return getImageProxyUrl(
     resolveAssetUrl(getAssetOrigin(PENGUMUMAN_API_URL), assetPath),
+  );
+}
+
+export function getMarketSignalAssetUrl(assetPath: string) {
+  return getImageProxyUrl(
+    resolveAssetUrl(MARKET_SIGNAL_IMAGE_BASE_URL, assetPath),
   );
 }

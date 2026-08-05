@@ -212,3 +212,4 @@ export type MarketPrice = {
   time?: string;
   dateTime?: string;
 };
+

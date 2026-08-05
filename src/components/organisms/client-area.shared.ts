@@ -272,6 +272,29 @@ export function formatClock(locale: AppLocale) {
   return `${formatter.format(new Date())} WIB`;
 }
 
+export function formatMarketSignalUpdateTime(
+  updatedAt: string,
+  locale: AppLocale,
+) {
+  const parsedDate = new Date(updatedAt);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "";
+  }
+
+  const formatter = new Intl.DateTimeFormat(
+    locale === "id" ? "id-ID" : "en-US",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta",
+    },
+  );
+
+  return `${formatter.format(parsedDate)} WIB`;
+}
+
 function parsePublishedTimestamp(value: string) {
   const directTimestamp = new Date(value).getTime();
 
