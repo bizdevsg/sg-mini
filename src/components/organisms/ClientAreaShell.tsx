@@ -67,7 +67,7 @@ export function ClientAreaShell({
 
   return (
     <section
-      className="relative overflow-x-clip bg-cover bg-top bg-no-repeat bg-fixed pb-10 pt-[4.5rem] sm:pb-16 sm:pt-24 lg:pb-20 lg:pt-28"
+      className="relative overflow-x-clip lg:overflow-visible bg-cover bg-top bg-no-repeat bg-fixed pb-10 pt-[4.5rem] sm:pb-16 sm:pt-24 lg:pb-20 lg:pt-28"
       style={{
         backgroundImage: "url('/assets/BCG.png')",
       }}
@@ -102,24 +102,30 @@ export function ClientAreaShell({
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
-              <nav className="hidden w-full shrink-0 space-y-4 lg:sticky lg:top-28 lg:block lg:w-[220px] lg:self-start">
-                <ClientAreaDesktopSidebarNav
-                  activeTab={activeTab}
-                  clientArea={clientArea}
-                  locale={locale}
-                  onLogoutClick={() => setIsLogoutModalOpen(true)}
-                  sidebarIconMap={sidebarIconMap}
-                />
-                <ClientAreaAdvertiseSlot
-                  key={`desktop-${pathname ?? "root"}`}
-                  locale={locale}
-                  pathname={pathname}
-                  visibility={advertiseVisibility}
-                />
-              </nav>
+            <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-6">
+              <aside className="hidden w-full shrink-0 lg:block lg:w-[220px] lg:self-start">
+                <div className="lg:sticky lg:top-28 lg:h-fit">
+                  <nav>
+                    <ClientAreaDesktopSidebarNav
+                      activeTab={activeTab}
+                      clientArea={clientArea}
+                      locale={locale}
+                      onLogoutClick={() => setIsLogoutModalOpen(true)}
+                      sidebarIconMap={sidebarIconMap}
+                    />
+                  </nav>
+                </div>
+                <div className="mt-4">
+                  <ClientAreaAdvertiseSlot
+                    key={`desktop-${pathname ?? "root"}`}
+                    locale={locale}
+                    pathname={pathname}
+                    visibility={advertiseVisibility}
+                  />
+                </div>
+              </aside>
 
-              <div className="w-full min-w-0 flex-1 self-start">{children}</div>
+              <div className="w-full min-w-0 self-start">{children}</div>
             </div>
           </section>
 

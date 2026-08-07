@@ -349,6 +349,30 @@ export type AppMessages = {
       };
     };
   };
+  produkRegulerPage: {
+    title: string;
+    description: string;
+    breadcrumb: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      primaryCta: string;
+      secondaryCta: string;
+      badges: string[];
+    };
+    benefitsTitle: string;
+    benefitsDescription: string;
+    benefits: Array<{
+      title: string;
+      description: string;
+    }>;
+    cta: {
+      title: string;
+      description: string;
+      buttonLabel: string;
+    };
+  };
   economicCalendarPage: {
     title: string;
     description: string;

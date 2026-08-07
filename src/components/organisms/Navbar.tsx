@@ -22,14 +22,14 @@ type NavbarProps = {
   locale: AppLocale;
 };
 
+function isExternalHref(href?: string) {
+  return Boolean(href && /^(https?:)?\/\//.test(href));
+}
+
 // Maps shared menu href values to the active locale namespace.
 function resolveLocalizedHref(locale: AppLocale, href = "/") {
-  if (/^(https?:)?\/\//.test(href)) {
+  if (isExternalHref(href)) {
     return href;
-  }
-
-  if (href === "/trade-pilot") {
-    return `/trade-pilot/${locale}`;
   }
 
   if (href === "/") {
@@ -48,11 +48,7 @@ function resolveLocalizedHref(locale: AppLocale, href = "/") {
 }
 
 function isTradePilotHref(href?: string) {
-  return (
-    href === "/trade-pilot" ||
-    href === `/trade-pilot` ||
-    href === "https://tradepilot.id/"
-  );
+  return href === "https://tradepilot.id/";
 }
 
 // Swaps the TradePilot text label with its brand mark in the nav.
@@ -272,6 +268,8 @@ export function Navbar({
                       key={`${group.label}-${index}`}
                       href={resolveLocalizedHref(locale, group.href)}
                       onClick={closeMobileMenu}
+                      target={isExternalHref(group.href) ? "_blank" : undefined}
+                      rel={isExternalHref(group.href) ? "noopener noreferrer" : undefined}
                       className="rounded-[22px] border border-[rgba(255,255,255,0.08)] bg-black/20 hover:bg-black/50 px-4 py-4 text-sm font-medium text-yellow-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:text-yellow-200"
                     >
                       {renderMenuLabel(group.label, group.href)}
@@ -326,6 +324,8 @@ export function Navbar({
                                 key={item.label}
                                 href={resolveLocalizedHref(locale, item.href)}
                                 onClick={closeMobileMenu}
+                                target={isExternalHref(item.href) ? "_blank" : undefined}
+                                rel={isExternalHref(item.href) ? "noopener noreferrer" : undefined}
                                 className="rounded-2xl px-3 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-100"
                               >
                                 {item.label}
@@ -418,6 +418,8 @@ export function Navbar({
                       <Link
                         key={`${group.label}-${index}`}
                         href={resolveLocalizedHref(locale, group.href)}
+                        target={isExternalHref(group.href) ? "_blank" : undefined}
+                        rel={isExternalHref(group.href) ? "noopener noreferrer" : undefined}
                         className="rounded-full px-3 py-2 text-sm font-medium text-yellow-500 transition-colors duration-300 hover:bg-white/10 hover:text-yellow-200"
                       >
                         {renderMenuLabel(group.label, group.href)}
@@ -472,6 +474,8 @@ export function Navbar({
                                 key={item.label}
                                 href={resolveLocalizedHref(locale, item.href)}
                                 onClick={() => setOpenDesktopGroup(null)}
+                                target={isExternalHref(item.href) ? "_blank" : undefined}
+                                rel={isExternalHref(item.href) ? "noopener noreferrer" : undefined}
                                 className="flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm text-yellow-200/90 transition-colors duration-200 hover:bg-white/5 hover:text-yellow-500"
                               >
                                 {item.label}

@@ -25,18 +25,6 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (firstSegment === "trade-pilot") {
-    const localeSegment = segments[1];
-
-    if (!localeSegment) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = `/trade-pilot/${DEFAULT_LOCALE}`;
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    return NextResponse.next();
-  }
-
   if (
     SUPPORTED_LOCALES.has(firstSegment) ||
     RESERVED_SEGMENTS.has(firstSegment) ||

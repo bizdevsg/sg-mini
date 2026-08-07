@@ -17,6 +17,7 @@ export const idNavbar: AppMessages["navbar"] = {
           href: "/produk/multilateral",
         },
         { label: "Produk Bilateral", href: "/produk/bilateral" },
+        { label: "Produk Reguler", href: "/produk/reguler" },
         { label: "Aplikasi Solid Gold", href: "/aplikasi-solid-gold" },
         { label: "Live Quote", href: "/live-quote" },
       ],
@@ -59,7 +60,7 @@ export const idNavbar: AppMessages["navbar"] = {
     },
     {
       label: "Trade Pilot ",
-      href: "/trade-pilot",
+      href: "https://tradepilot.id/",
     },
   ],
 };

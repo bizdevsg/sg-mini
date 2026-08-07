@@ -19,6 +19,7 @@ import { idAboutPage } from "./content/aboutPage";
 import { idAboutInformationPage } from "./content/aboutInformationPage";
 import { idAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
 import { idProductPage } from "./content/productPage";
+import { idProdukRegulerPage } from "./content/produkRegulerPage";
 import { idEconomicCalendarPage } from "./content/economicCalendarPage";
 import { idEconomicCalendarBrowser } from "./content/economicCalendarBrowser";
 import { idHistoricalDataPage } from "./content/historicalDataPage";
@@ -61,6 +62,7 @@ export const idMessages: AppMessages = {
   aboutInformationPage: idAboutInformationPage,
   aboutBusinessLegalityPage: idAboutBusinessLegalityPage,
   productPage: idProductPage,
+  produkRegulerPage: idProdukRegulerPage,
   economicCalendarPage: idEconomicCalendarPage,
   economicCalendarBrowser: idEconomicCalendarBrowser,
   historicalDataPage: idHistoricalDataPage,

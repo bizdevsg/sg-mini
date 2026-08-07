@@ -19,6 +19,7 @@ import { enAboutPage } from "./content/aboutPage";
 import { enAboutInformationPage } from "./content/aboutInformationPage";
 import { enAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
 import { enProductPage } from "./content/productPage";
+import { enProdukRegulerPage } from "./content/produkRegulerPage";
 import { enEconomicCalendarPage } from "./content/economicCalendarPage";
 import { enEconomicCalendarBrowser } from "./content/economicCalendarBrowser";
 import { enHistoricalDataPage } from "./content/historicalDataPage";
@@ -61,6 +62,7 @@ export const enMessages: AppMessages = {
   aboutInformationPage: enAboutInformationPage,
   aboutBusinessLegalityPage: enAboutBusinessLegalityPage,
   productPage: enProductPage,
+  produkRegulerPage: enProdukRegulerPage,
   economicCalendarPage: enEconomicCalendarPage,
   economicCalendarBrowser: enEconomicCalendarBrowser,
   historicalDataPage: enHistoricalDataPage,

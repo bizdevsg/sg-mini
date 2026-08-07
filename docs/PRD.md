@@ -54,7 +54,7 @@ Berdasarkan `README.md` dan struktur `src/app/[locales]`:
 | Privacy policy | `/{locale}/privacy-policy` | |
 | Syarat & ketentuan | `/{locale}/syarat-dan-ketentuan` | |
 | Aplikasi Solid Gold | `/{locale}/aplikasi-solid-gold` | |
-| Trade Pilot | `/{locale}/trade-pilot`, `/trade-pilot/[locales]` | |
+| Trade Pilot | Link navbar eksternal ke `https://tradepilot.id/` (buka tab baru) | Bukan route internal — sebelumnya webview iframe, sekarang cukup redirect keluar |
 | Banner | `/{locale}/banner` | |
 | Contact us | `/{locale}/contact-us` | |
 | Client area | `/{locale}/client-area/*` | login, account (profile, deposit, withdrawal, kode referal), market, market/[symbol], news, ebook, transaction — lihat §5 |
