@@ -43,7 +43,8 @@ next-env.d.ts
 
 .agents
 
-.codex/*
+.codex/
 .vercel
 .env*
-.claude
+.claude/
+tmp

@@ -344,7 +344,7 @@ export function HistoricalDataBrowser({
                   alt="Logo Solid Gold Berjangka"
                   height={300}
                   width={300}
-                  className="object-contain object-center opacity-20"
+                  className="object-contain object-center opacity-10"
                 />
               </div>
 

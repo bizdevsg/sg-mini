@@ -42,8 +42,8 @@ export async function generateMetadata({
   const messages = getMessages(locales);
   const title =
     locales === "id"
-      ? "Live Quote, Edukasi Trading, dan Informasi Market"
-      : "Live Quotes, Trading Education, and Market Insights";
+      ? "Home"
+      : "Home";
 
   return buildPublicMetadata({
     title,
