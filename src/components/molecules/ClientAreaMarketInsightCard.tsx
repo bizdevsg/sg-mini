@@ -1,7 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { ClientAreaMarketInsightBiasIndicator } from "@/components/atoms/ClientAreaMarketInsightBiasIndicator";
-import { formatMarketSignalUpdateTime } from "@/components/organisms/client-area.shared";
+import {
+  formatMarketSignalUpdateTime,
+  resolveMarketSignalCategoryIconSrc,
+} from "@/components/organisms/client-area.shared";
 import type { AppLocale } from "@/locales";
 import type { MarketSignalRecord } from "@/lib/market-signal";
 
@@ -9,27 +13,6 @@ type ClientAreaMarketInsightCardProps = {
   item: MarketSignalRecord;
   locale: AppLocale;
 };
-
-const CATEGORY_ICON_BY_SLUG: Record<string, string> = {
-  gold: "/assets/icon-symbol/gold-icon.png",
-  silver: "/assets/icon-symbol/silver-icon.png",
-  oil: "/assets/icon-symbol/oil-icon.png",
-  dxy: "/assets/icon-symbol/dxy-icon.png",
-  audusd: "/assets/icon-symbol/audusd-icon.png",
-  eurusd: "/assets/icon-symbol/eurousd-icon.png",
-  eurousd: "/assets/icon-symbol/eurousd-icon.png",
-  gbpusd: "/assets/icon-symbol/gbpusd-icon.png",
-  usdcad: "/assets/icon-symbol/usdcad-icon.png",
-  usdchf: "/assets/icon-symbol/usdchf-icon.png",
-  usdjpy: "/assets/icon-symbol/usdjpy-icon.png",
-  usdidr: "/assets/icon-symbol/usdidr-icon.png",
-  nikkei: "/assets/icon-symbol/nikkei-icon.png",
-  hangseng: "/assets/icon-symbol/hangseng-icon.png",
-};
-
-function resolveCategoryIconSrc(categorySlug: string) {
-  return CATEGORY_ICON_BY_SLUG[categorySlug] ?? null;
-}
 
 export function ClientAreaMarketInsightCard({
   item,
@@ -44,19 +27,19 @@ export function ClientAreaMarketInsightCard({
     ? {
       card: "from-red-900/50 to-zinc-900/50",
       border: "border-red-500/10",
-      timeframe: "bg-red-700 text-red-300",
+      timeframe: "bg-red-700 text-red-200",
       imageBg: "bg-[#2a1111]",
-      button: "bg-red-700 hover:bg-red-600",
+      button: "bg-red-700 hover:bg-red-600 text-white",
     }
     : {
       card: "from-green-900/50 to-zinc-900/50",
       border: "border-green-500/10",
       timeframe: "bg-green-700 text-green-300",
       imageBg: "bg-[#0d241c]",
-      button: "bg-green-700 hover:bg-green-600",
+      button: "bg-green-700 hover:bg-green-600 text-white",
     };
 
-  const categoryIconSrc = resolveCategoryIconSrc(item.categorySlug);
+  const categoryIconSrc = resolveMarketSignalCategoryIconSrc(item.categorySlug);
   const updateLabel = formatMarketSignalUpdateTime(item.updatedAt, locale);
 
   return (
@@ -129,15 +112,15 @@ export function ClientAreaMarketInsightCard({
 
       <div className="flex items-end justify-between gap-3">
         <div className="flex-1 rounded-2xl bg-white/5 px-3.5 py-2.5">
-          <p className="text-xs text-zinc-400">Take Profit</p>
-          <p className="mt-1 text-sm font-bold text-white">
+          <p className="text-xxs text-zinc-400">Take Profit</p>
+          <p className="mt-1 font-bold text-white">
             {item.takingProfit || "-"}
           </p>
         </div>
 
         <div className="flex-1 rounded-2xl bg-white/5 px-3.5 py-2.5">
-          <p className="text-xs text-zinc-400">Stop Loss</p>
-          <p className="mt-1 text-sm font-bold text-white">
+          <p className="text-xxs text-zinc-400">Stop Loss</p>
+          <p className="mt-1 font-bold text-white">
             {item.stopLoss || "-"}
           </p>
         </div>
@@ -153,16 +136,12 @@ export function ClientAreaMarketInsightCard({
           <span />
         )}
 
-        {item.imageUrl ? (
-          <a
-            href={item.imageUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold text-black transition-colors ${theme.button}`}
-          >
-            Lihat Insight
-          </a>
-        ) : null}
+        <Link
+          href={`/${locale}/client-area/market-signal/${item.id}`}
+          className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold text-black transition-colors ${theme.button}`}
+        >
+          Lihat Insight
+        </Link>
       </div>
     </div>
   );

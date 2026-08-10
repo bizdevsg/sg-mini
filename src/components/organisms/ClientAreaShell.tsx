@@ -83,23 +83,13 @@ export function ClientAreaShell({
 
           <section>
             <div className="mb-4 lg:hidden">
-              <div className="space-y-4">
-                <div className="sticky top-[5.25rem] z-30 sm:top-24">
-                  <ClientAreaMobileSidebarNav
-                    activeTab={activeTab}
-                    clientArea={clientArea}
-                    locale={locale}
-                    onLogoutClick={() => setIsLogoutModalOpen(true)}
-                    sidebarIconMap={sidebarIconMap}
-                  />
-                </div>
-                <ClientAreaAdvertiseSlot
-                  key={`mobile-${pathname ?? "root"}`}
-                  locale={locale}
-                  pathname={pathname}
-                  visibility={advertiseVisibility}
-                />
-              </div>
+              <ClientAreaMobileSidebarNav
+                activeTab={activeTab}
+                clientArea={clientArea}
+                locale={locale}
+                onLogoutClick={() => setIsLogoutModalOpen(true)}
+                sidebarIconMap={sidebarIconMap}
+              />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-6">
@@ -115,6 +105,7 @@ export function ClientAreaShell({
                     />
                   </nav>
                 </div>
+
                 <div className="mt-4">
                   <ClientAreaAdvertiseSlot
                     key={`desktop-${pathname ?? "root"}`}

@@ -511,11 +511,8 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   tradingView: {
     disclaimerLabel: "Disclaimer:",
-    disclaimerBeforeProvider: "Grafik harga pada halaman ini disediakan oleh",
-    eurusdChartLabel: "chart EURUSD",
-    eurusdChartUrl: "https://www.tradingview.com/symbols/EURUSD/",
-    disclaimerAfterProvider:
-      "Informasi yang ditampilkan bersifat indikatif dan dapat mengalami keterlambatan atau perbedaan dibandingkan dengan harga pasar sebenarnya.",
+    disclaimerTradingView:
+      "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda.",
   },
   fundTransferModal: {
     closeLabel: "Tutup",

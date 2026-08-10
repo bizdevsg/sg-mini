@@ -23,7 +23,7 @@ export function ClientAreaMarketInsightBiasIndicator({
   const Icon = direction === "up" ? TrendingUp : TrendingDown;
 
   return (
-    <div className={`flex items-center gap-1 font-bold ${style.className}`}>
+    <div className={`flex items-center gap-2 font-bold ${style.className}`}>
       <Icon className="h-5 w-5" />
       <span>{label}</span>
     </div>

@@ -95,10 +95,19 @@ export default async function HistoricalDataPage({
         </div>
       </ScrollReveal>
 
-      <div className="mt-6">
+      <div className="mt-6 space-y-5">
         <ScrollReveal>
           <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6 overflow-hidden">
             <HistoricalDataBrowser locale={locales} records={records} />
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <div className="rounded-2xl border border-line bg-neutral-900/80 p-5 sm:p-6 overflow-hidden">
+            <h6 className="font-semibold text-yellow-500">Catatan Jam Perdagangan LGD Daily</h6>
+            <ul className="list-disc list-inside text-sm mt-2 text-yellow-500 animate-pulse">
+              <li>Senin - Jum'at (Summer : 06:00 - 03:30 WIB, Winter : 06:00 - 04:30 WIB)</li>
+            </ul>
           </div>
         </ScrollReveal>
       </div>

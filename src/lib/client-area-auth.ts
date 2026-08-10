@@ -1,14 +1,14 @@
+import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { CLIENT_AREA_SESSION_SECRET } from "@/lib/env";
 import type { AppLocale } from "@/locales";
 import {
-  CLIENT_AREA_IDENTIFIER_COOKIE,
   CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
   CLIENT_AREA_LAST_ACTIVITY_COOKIE,
   CLIENT_AREA_REMEMBER_ME_MAX_AGE,
   CLIENT_AREA_SESSION_COOKIE,
-  CLIENT_AREA_SESSION_VALUE,
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
   isClientAreaLastActivityActive,
@@ -24,6 +24,8 @@ const CLIENT_AREA_ALLOWED_IDENTIFIERS = new Set([
   "user.sgb@demo-trading.com",
 ]);
 const CLIENT_AREA_DEMO_PASSWORD = "demo12345";
+const CLIENT_AREA_SESSION_MAX_AGE_MS =
+  CLIENT_AREA_REMEMBER_ME_MAX_AGE * 1000;
 
 export type ClientAreaSessionProfile = {
   accountId: string;
@@ -45,12 +47,76 @@ export function isValidClientAreaCredentials(account: string, password: string) 
   );
 }
 
-export async function hasClientAreaSession() {
-  return (await getClientAreaSessionState()).isAuthenticated;
+function signClientAreaSessionPayload(payload: string) {
+  return createHmac("sha256", CLIENT_AREA_SESSION_SECRET)
+    .update(payload)
+    .digest("hex");
 }
 
-function resolveClientAreaSessionProfile(identifier?: string | null): ClientAreaSessionProfile {
-  const normalizedIdentifier = normalizeClientAreaIdentifier(identifier ?? "");
+// Signs `${identifier}.${issuedAt}` so the session cookie can't be forged
+// without CLIENT_AREA_SESSION_SECRET, unlike the old fixed-string cookie.
+function createClientAreaSessionToken(identifier: string) {
+  const payload = Buffer.from(
+    JSON.stringify({ id: identifier, iat: Date.now() }),
+    "utf8",
+  ).toString("base64url");
+
+  return `${payload}.${signClientAreaSessionPayload(payload)}`;
+}
+
+function verifyClientAreaSessionToken(token: string | undefined) {
+  if (!token || !CLIENT_AREA_SESSION_SECRET) {
+    return null;
+  }
+
+  const [payload, signature] = token.split(".");
+
+  if (!payload || !signature) {
+    return null;
+  }
+
+  const expectedSignatureBuffer = Buffer.from(
+    signClientAreaSessionPayload(payload),
+    "hex",
+  );
+  const signatureBuffer = Buffer.from(signature, "hex");
+
+  if (
+    signatureBuffer.length !== expectedSignatureBuffer.length ||
+    !timingSafeEqual(signatureBuffer, expectedSignatureBuffer)
+  ) {
+    return null;
+  }
+
+  try {
+    const decoded = JSON.parse(
+      Buffer.from(payload, "base64url").toString("utf8"),
+    ) as { id?: unknown; iat?: unknown };
+
+    if (
+      typeof decoded.id !== "string" ||
+      typeof decoded.iat !== "number" ||
+      Date.now() - decoded.iat > CLIENT_AREA_SESSION_MAX_AGE_MS
+    ) {
+      return null;
+    }
+
+    const normalizedIdentifier = normalizeClientAreaIdentifier(decoded.id);
+
+    if (!CLIENT_AREA_ALLOWED_IDENTIFIERS.has(normalizedIdentifier)) {
+      return null;
+    }
+
+    return normalizedIdentifier;
+  } catch {
+    return null;
+  }
+}
+
+function resolveClientAreaSessionProfile(
+  identifier: string,
+): ClientAreaSessionProfile {
+  const normalizedIdentifier = normalizeClientAreaIdentifier(identifier);
 
   if (normalizedIdentifier === "user.sgb@demo-trading.com") {
     return {
@@ -67,18 +133,22 @@ function resolveClientAreaSessionProfile(identifier?: string | null): ClientArea
   };
 }
 
+export async function hasClientAreaSession() {
+  return (await getClientAreaSessionState()).isAuthenticated;
+}
+
 export async function getClientAreaSessionProfile() {
   return (await getClientAreaSessionState()).profile;
 }
 
 export async function getClientAreaSessionState(): Promise<ClientAreaSessionState> {
   const cookieStore = await cookies();
-  const hasAuthenticatedCookie =
-    cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
-    CLIENT_AREA_SESSION_VALUE;
+  const identifier = verifyClientAreaSessionToken(
+    cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value,
+  );
 
   if (
-    !hasAuthenticatedCookie ||
+    !identifier ||
     !isClientAreaLastActivityActive(
       cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
     )
@@ -91,9 +161,7 @@ export async function getClientAreaSessionState(): Promise<ClientAreaSessionStat
 
   return {
     isAuthenticated: true,
-    profile: resolveClientAreaSessionProfile(
-      cookieStore.get(CLIENT_AREA_IDENTIFIER_COOKIE)?.value,
-    ),
+    profile: resolveClientAreaSessionProfile(identifier),
   };
 }
 
@@ -114,12 +182,7 @@ export async function createClientAreaSession(
 
   cookieStore.set({
     name: CLIENT_AREA_SESSION_COOKIE,
-    value: CLIENT_AREA_SESSION_VALUE,
-    ...cookieOptions,
-  });
-  cookieStore.set({
-    name: CLIENT_AREA_IDENTIFIER_COOKIE,
-    value: normalizedAccount,
+    value: createClientAreaSessionToken(normalizedAccount),
     ...cookieOptions,
   });
   cookieStore.set({
@@ -135,7 +198,6 @@ export async function createClientAreaSession(
 export async function clearClientAreaSession() {
   const cookieStore = await cookies();
   cookieStore.delete(CLIENT_AREA_SESSION_COOKIE);
-  cookieStore.delete(CLIENT_AREA_IDENTIFIER_COOKIE);
   cookieStore.delete(CLIENT_AREA_LAST_ACTIVITY_COOKIE);
 }
 

@@ -423,6 +423,9 @@ export type AppMessages = {
     categories: string;
     latestDate: string;
     empty: string;
+    download: string;
+    downloadCsv: string;
+    downloadPdf: string;
     date: string;
     category: string;
     open: string;
@@ -994,10 +997,7 @@ export type AppMessages = {
     };
     tradingView: {
       disclaimerLabel: string;
-      disclaimerBeforeProvider: string;
-      eurusdChartLabel: string;
-      eurusdChartUrl: string;
-      disclaimerAfterProvider: string;
+      disclaimerTradingView: string;
     };
     fundTransferModal: {
       closeLabel: string;

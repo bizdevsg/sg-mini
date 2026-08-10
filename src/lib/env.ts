@@ -71,6 +71,9 @@ function normalizeAppEnvMode(value: string | undefined): AppEnvMode {
 export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
 export const USE_DUMMY_API_DATA = APP_ENV === "dev-deploy";
 
+export const CLIENT_AREA_SESSION_SECRET =
+  process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
+
 export const LIVE_QUOTE_SOCKET_URL =
   process.env.LIVE_QUOTE_SOCKET_URL ?? DEFAULT_LIVE_QUOTE_SOCKET_URL;
 

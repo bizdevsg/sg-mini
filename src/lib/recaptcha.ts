@@ -5,7 +5,6 @@ type RecaptchaVerifyResponse = {
 };
 
 const LOCAL_RECAPTCHA_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
-const RECAPTCHA_DISABLED = true;
 
 function normalizeHostHeader(value: string | null | undefined) {
   const normalizedValue = value?.split(",")[0]?.trim().toLowerCase();
@@ -44,10 +43,6 @@ export function isRecaptchaUnsupportedHostname(hostname: string) {
 }
 
 export function isRecaptchaEnabled(hostname?: string | null) {
-  if (RECAPTCHA_DISABLED) {
-    return false;
-  }
-
   const normalizedHostname = normalizeHostHeader(hostname);
 
   if (

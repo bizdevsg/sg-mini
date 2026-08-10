@@ -295,6 +295,27 @@ export function formatMarketSignalUpdateTime(
   return `${formatter.format(parsedDate)} WIB`;
 }
 
+const MARKET_SIGNAL_CATEGORY_ICON_BY_SLUG: Record<string, string> = {
+  gold: "/assets/icon-symbol/gold-icon.png",
+  silver: "/assets/icon-symbol/silver-icon.png",
+  oil: "/assets/icon-symbol/oil-icon.png",
+  dxy: "/assets/icon-symbol/dxy-icon.png",
+  audusd: "/assets/icon-symbol/audusd-icon.png",
+  eurusd: "/assets/icon-symbol/eurousd-icon.png",
+  eurousd: "/assets/icon-symbol/eurousd-icon.png",
+  gbpusd: "/assets/icon-symbol/gbpusd-icon.png",
+  usdcad: "/assets/icon-symbol/usdcad-icon.png",
+  usdchf: "/assets/icon-symbol/usdchf-icon.png",
+  usdjpy: "/assets/icon-symbol/usdjpy-icon.png",
+  usdidr: "/assets/icon-symbol/usdidr-icon.png",
+  nikkei: "/assets/icon-symbol/nikkei-icon.png",
+  hangseng: "/assets/icon-symbol/hangseng-icon.png",
+};
+
+export function resolveMarketSignalCategoryIconSrc(categorySlug: string) {
+  return MARKET_SIGNAL_CATEGORY_ICON_BY_SLUG[categorySlug] ?? null;
+}
+
 function parsePublishedTimestamp(value: string) {
   const directTimestamp = new Date(value).getTime();
 

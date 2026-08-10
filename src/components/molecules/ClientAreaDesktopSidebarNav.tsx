@@ -41,7 +41,7 @@ export function ClientAreaDesktopSidebarNav({
         })}
       </div>
 
-      <div className="overflow-hidden rounded-2xl bg-red-500/5 backdrop-blur-2xl">
+      <div className="overflow-hidden mt-4 rounded-2xl bg-red-500/5 backdrop-blur-2xl">
         <button
           type="button"
           onClick={onLogoutClick}

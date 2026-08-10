@@ -237,3 +237,11 @@ export async function getMarketSignalFeedByCategory(): Promise<MarketSignalResul
     source: feed.source,
   };
 }
+
+export async function getMarketSignalById(
+  id: number,
+): Promise<MarketSignalRecord | null> {
+  const feed = await getMarketSignalFeed();
+
+  return feed.items.find((item) => item.id === id) ?? null;
+}

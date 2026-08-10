@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
 
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { HistoricalDataMetricCard } from "@/components/molecules/HistoricalDataMetricCard";
@@ -14,6 +15,7 @@ import {
   getMessages,
   type AppLocale,
 } from "@/locales";
+import Image from "next/image";
 
 type HistoricalDataBrowserProps = {
   locale: AppLocale;
@@ -94,6 +96,16 @@ function formatHistoricalDate(value: string, locale: AppLocale) {
   }).format(date);
 }
 
+const CATEGORY_MENU_SCROLL_AREA_CLASSNAME = [
+  "max-h-64 overflow-y-auto py-2",
+  "[scrollbar-color:rgba(234,179,8,0.55)_rgba(255,255,255,0.08)] [scrollbar-width:thin]",
+  "[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2",
+  "[&::-webkit-scrollbar-track]:bg-white/[0.08]",
+  "[&::-webkit-scrollbar-track]:rounded-full",
+  "[&::-webkit-scrollbar-thumb]:rounded-full",
+  "[&::-webkit-scrollbar-thumb]:bg-yellow-500/55",
+].join(" ");
+
 export function HistoricalDataBrowser({
   locale,
   records,
@@ -118,6 +130,30 @@ export function HistoricalDataBrowser({
       : (categories[0] ?? ""),
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const categoryMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!categoryMenuRef.current?.contains(event.target as Node)) {
+        setIsCategoryMenuOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsCategoryMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   useEffect(() => {
     if (categories.length === 0) {
@@ -167,6 +203,7 @@ export function HistoricalDataBrowser({
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setCurrentPage(1);
+    setIsCategoryMenuOpen(false);
   };
 
   return (
@@ -186,26 +223,95 @@ export function HistoricalDataBrowser({
         ))}
       </div>
 
-      <ScrollReveal effect="fade-up">
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category, index) => (
-            <ScrollReveal
-              key={category}
-              effect="fade-left"
-              delay={index * 100}
+      <ScrollReveal effect="fade-up" className="relative z-40">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="relative" ref={categoryMenuRef}>
+            <button
+              type="button"
+              onClick={() =>
+                setIsCategoryMenuOpen((currentValue) => !currentValue)
+              }
+              className="flex min-w-[180px] items-center justify-between gap-3 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+              aria-haspopup="listbox"
+              aria-expanded={isCategoryMenuOpen}
+              aria-label={labels.category}
             >
-              <button
-                type="button"
-                onClick={() => handleCategoryChange(category)}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${selectedCategory === category
-                  ? "border-yellow-500 bg-yellow-500 text-black"
-                  : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
-                  }`}
+              <span className="min-w-0 truncate">
+                {selectedCategory || labels.category}
+              </span>
+              <svg
+                width="12"
+                height="8"
+                viewBox="0 0 12 8"
+                fill="none"
+                className={
+                  isCategoryMenuOpen
+                    ? "shrink-0 rotate-180 transition-transform duration-200"
+                    : "shrink-0 transition-transform duration-200"
+                }
               >
-                {category}
-              </button>
-            </ScrollReveal>
-          ))}
+                <path
+                  d="M1.5 1.5L6 6L10.5 1.5"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            {isCategoryMenuOpen ? (
+              <div
+                className={`absolute left-0 top-[calc(100%+0.5rem)] z-30 w-56 rounded-xl border border-line bg-neutral-950 shadow-[0_18px_40px_rgba(0,0,0,0.38)] ${CATEGORY_MENU_SCROLL_AREA_CLASSNAME}`}
+                role="listbox"
+                aria-label={labels.category}
+              >
+                {categories.map((category) => {
+                  const isSelected = category === selectedCategory;
+
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => handleCategoryChange(category)}
+                      className={
+                        isSelected
+                          ? "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-yellow-400"
+                          : "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-foreground/82 transition hover:bg-white/5"
+                      }
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      <span className="min-w-0 truncate">{category}</span>
+                      {isSelected ? (
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-500/80" />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+
+          {selectedCategory ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={`/api/historical-data/export?category=${encodeURIComponent(selectedCategory)}&format=csv&locale=${locale}`}
+                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+              >
+                <FontAwesomeIcon icon={["fas", "file-csv"]} className="text-xs" />
+                {labels.downloadCsv}
+              </a>
+
+              <a
+                href={`/api/historical-data/export?category=${encodeURIComponent(selectedCategory)}&format=pdf&locale=${locale}`}
+                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+              >
+                <FontAwesomeIcon icon={["fas", "file-pdf"]} className="text-xs" />
+                {labels.downloadPdf}
+              </a>
+            </div>
+          ) : null}
         </div>
       </ScrollReveal>
 
@@ -231,77 +337,89 @@ export function HistoricalDataBrowser({
           </div>
 
           <ScrollReveal>
-            <div className="hidden overflow-hidden rounded-2xl border border-line md:block">
-              <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse">
-                  <thead>
-                    <tr className="bg-white/5">
-                      <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.date}
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.category}
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.open}
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.high}
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.low}
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
-                        {labels.close}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {visibleRecords.map((record) => (
-                      <tr
-                        key={record.id}
-                        className="border-t border-line align-middle odd:bg-white/0 even:bg-white/[0.03]"
-                      >
-                        <td className="px-4 py-3 text-sm text-foreground/78">
-                          {formatHistoricalDate(record.tanggal, locale)}
-                        </td>
-                        <td className="px-4 py-3 text-sm font-semibold text-yellow-500">
-                          {record.category}
-                        </td>
-                        {record.isBankHoliday ? (
-                          <td
-                            colSpan={4}
-                            className="px-4 py-3 text-center font-semibold text-foreground/62"
-                          >
-                            <div className="flex flex-col">
-                              <span className="text-sm">
-                                ~ {labels.bankHoliday} ~
-                              </span>
-                              <span className="text-xs">
-                                {record.description}
-                              </span>
-                            </div>
-                          </td>
-                        ) : (
-                          <>
-                            <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
-                              {formatLocaleNumber(record.open, locale)}
-                            </td>
-                            <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
-                              {formatLocaleNumber(record.high, locale)}
-                            </td>
-                            <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
-                              {formatLocaleNumber(record.low, locale)}
-                            </td>
-                            <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
-                              {formatLocaleNumber(record.close, locale)}
-                            </td>
-                          </>
-                        )}
+            <div className="relative">
+              <div className="absolute top-1/2 left-1/2 h-50 w-auto -translate-x-1/2 -translate-y-[130%]">
+                <Image
+                  src="/assets/Logo SG-WEB111.png"
+                  alt="Logo Solid Gold Berjangka"
+                  height={300}
+                  width={300}
+                  className="object-contain object-center opacity-20"
+                />
+              </div>
+
+              <div className="relative hidden overflow-hidden rounded-2xl border border-line md:block z-10">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border-collapse">
+                    <thead>
+                      <tr className="bg-white/5">
+                        <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.date}
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.category}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.open}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.high}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.low}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.close}
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {visibleRecords.map((record) => (
+                        <tr
+                          key={record.id}
+                          className="border-t border-line align-middle odd:bg-white/0 even:bg-white/[0.03]"
+                        >
+                          <td className="px-4 py-3 text-sm text-foreground/78">
+                            {formatHistoricalDate(record.tanggal, locale)}
+                          </td>
+                          <td className="px-4 py-3 text-sm font-semibold text-yellow-500">
+                            {record.category}
+                          </td>
+                          {record.isBankHoliday ? (
+                            <td
+                              colSpan={4}
+                              className="px-4 py-3 text-center font-semibold text-foreground/62"
+                            >
+                              <div className="flex flex-col">
+                                <span className="text-sm">
+                                  ~ {labels.bankHoliday} ~
+                                </span>
+                                <span className="text-xs">
+                                  {record.description}
+                                </span>
+                              </div>
+                            </td>
+                          ) : (
+                            <>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.open, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.high, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.low, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.close, locale)}
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </ScrollReveal>
@@ -335,8 +453,7 @@ export function HistoricalDataBrowser({
             }
           />
         </>
-      )
-      }
+      )}
     </div >
   );
 }
