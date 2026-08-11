@@ -12,17 +12,16 @@ import { getMessages, type AppLocale } from "@/locales";
 import {
   NEWS_API_TOKEN,
   NEWS_API_URL,
+  NEWS_API_URL_ID,
   getNewsAssetUrl,
 } from "@/lib/env";
 import {
-  NEWS_FILTER_CATEGORIES,
   type NewsArticleDetail,
   type NewsArticleDetailResult,
   type NewsFeedArticle,
   type NewsFeedResult,
 } from "@/lib/news.shared";
 
-export { NEWS_FILTER_CATEGORIES } from "@/lib/news.shared";
 export type {
   NewsArticleDetail,
   NewsArticleDetailResult,
@@ -34,13 +33,21 @@ export type PortalNewsApiArticle = {
   id: number;
   title: string;
   titles?: Record<string, string>;
-  slug: string;
-  content: string;
+  slug?: string;
+  link?: string;
+  content?: string;
+  summary?: string;
+  detail?: string;
+  category?: string;
   kategori?: {
     name?: string;
     slug?: string;
   };
+  image?: string;
   images?: string[];
+  published_at?: string;
+  createdAt?: string;
+  updatedAt?: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -60,28 +67,12 @@ type PortalNewsApiResponse = {
   data?: PortalNewsApiArticle[];
 };
 
-const NEWS_CATEGORY_MAP = new Map<string, (typeof NEWS_FILTER_CATEGORIES)[number]>(
-  [
-    ["japan shares", "Index"],
-    ["hong kong share", "Index"],
-    ["gold", "Commodity"],
-    ["silver", "Commodity"],
-    ["oil", "Commodity"],
-    ["aud/usd", "Currencies"],
-    ["eur/usd", "Currencies"],
-    ["gbp/usd", "Currencies"],
-    ["usd/chf", "Currencies"],
-    ["usd/jpy", "Currencies"],
-    ["us dollar", "Currencies"],
-    ["global economics", "Global & Ekonomi"],
-    ["fiscal & moneter", "Fiscal & Moneter"],
-    ["analisis market", "Analisis Market"],
-    ["index", "Index"],
-    ["commodity", "Commodity"],
-    ["currencies", "Currencies"],
-    ["global & ekonomi", "Global & Ekonomi"],
-  ],
-);
+function getRouteSlugKey(slug: string) {
+  const normalizedSlug = slug.trim().toLowerCase();
+  const externalIdMatch = normalizedSlug.match(/^(\d+)(?=-|$)/);
+
+  return externalIdMatch?.[1] ?? normalizedSlug;
+}
 
 const SUMMARY_MAX_LENGTH = 220;
 const NEWS_API_TIMEOUT_MS = 20000;
@@ -90,13 +81,21 @@ export const NEWS_REVALIDATE_SECONDS = NEWS_API_CACHE_TTL_MS / 1000;
 const NEWS_PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect width='1200' height='675' fill='%23111217'/%3E%3Crect x='30' y='30' width='1140' height='615' rx='28' fill='none' stroke='%23eab308' stroke-opacity='0.4' stroke-width='6'/%3E%3Ctext x='80' y='180' fill='%23eab308' font-family='Arial,sans-serif' font-size='56' font-weight='700'%3ELive Market News%3C/text%3E%3Ctext x='80' y='260' fill='%23f4f4f5' font-family='Arial,sans-serif' font-size='34'%3EPortal News feed placeholder%3C/text%3E%3C/svg%3E";
 
-let cachedPortalNewsArticles:
-  | {
-      articles: PortalNewsApiArticle[];
-      expiresAt: number;
-    }
-  | null = null;
-let inFlightPortalNewsRequest: Promise<PortalNewsApiArticle[]> | null = null;
+const cachedPortalNewsArticles = new Map<
+  AppLocale,
+  {
+    articles: PortalNewsApiArticle[];
+    expiresAt: number;
+  }
+>();
+const inFlightPortalNewsRequests = new Map<
+  AppLocale,
+  Promise<PortalNewsApiArticle[]>
+>();
+
+function resolveNewsApiUrl(locale: AppLocale) {
+  return locale === "id" ? NEWS_API_URL_ID : NEWS_API_URL;
+}
 
 function getRequestClient(protocol: string) {
   return protocol === "http:" ? requestHttp : requestHttps;
@@ -142,9 +141,73 @@ function truncateText(value: string, maxLength: number) {
   return `${value.slice(0, maxLength).trimEnd()}...`;
 }
 
+function getArticleContent(article: PortalNewsApiArticle) {
+  return article.detail ?? article.content ?? "";
+}
+
+function getArticleCategoryName(article: PortalNewsApiArticle) {
+  return article.kategori?.name ?? article.category ?? "";
+}
+
+function getArticleSlug(article: PortalNewsApiArticle) {
+  const normalizedSlug = article.slug?.trim();
+
+  if (normalizedSlug) {
+    return normalizedSlug;
+  }
+
+  const normalizedLink = article.link?.trim();
+
+  if (normalizedLink) {
+    try {
+      const parsedUrl = new URL(normalizedLink);
+      const segments = parsedUrl.pathname
+        .split("/")
+        .map((segment) => segment.trim())
+        .filter((segment) => segment.length > 0);
+      const lastSegment = segments[segments.length - 1];
+
+      if (lastSegment) {
+        return lastSegment;
+      }
+    } catch {
+      return normalizedLink;
+    }
+  }
+
+  return String(article.id);
+}
+
+export function findNewsFeedArticleByRouteSlug(
+  articles: NewsFeedArticle[],
+  slug: string,
+) {
+  const normalizedSlug = slug.trim();
+
+  const directMatch = articles.find((article) => article.slug === normalizedSlug);
+
+  if (directMatch) {
+    return directMatch;
+  }
+
+  const routeKey = getRouteSlugKey(normalizedSlug);
+
+  return (
+    articles.find((article) => getRouteSlugKey(article.slug) === routeKey) ?? null
+  );
+}
+
 function getArticleSummary(article: PortalNewsApiArticle) {
+  const directSummary = normalizeWhitespace(
+    decodeHtmlEntities(stripHtml(article.summary ?? "")),
+  );
+
+  if (directSummary) {
+    return truncateText(directSummary, SUMMARY_MAX_LENGTH);
+  }
+
   const normalizedContent = normalizeWhitespace(
-    decodeHtmlEntities(stripHtml(article.content)),
+    decodeHtmlEntities(stripHtml(getArticleContent(article))),
   );
 
   if (!normalizedContent) {
@@ -169,8 +232,19 @@ function sanitizeArticleHtml(content: string) {
 function getArticleBodyHtml(content: string) {
   const sanitizedContent = sanitizeArticleHtml(content).trim();
 
-  if (sanitizedContent) {
+  if (/<[a-z][\s\S]*>/i.test(sanitizedContent)) {
     return sanitizedContent;
+  }
+
+  const fallbackParagraphs = decodeHtmlEntities(content)
+    .split(/\n{2,}/)
+    .map((paragraph) => normalizeWhitespace(stripHtml(paragraph)))
+    .filter((paragraph) => paragraph.length > 0);
+
+  if (fallbackParagraphs.length > 0) {
+    return fallbackParagraphs
+      .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+      .join("");
   }
 
   const fallbackText = normalizeWhitespace(decodeHtmlEntities(stripHtml(content)));
@@ -194,8 +268,19 @@ function getTimestamp(value?: string) {
   return Number.isFinite(timestamp) ? timestamp : null;
 }
 
+function getArticlePublishedAt(article: PortalNewsApiArticle) {
+  return (
+    article.published_at ??
+    article.createdAt ??
+    article.updatedAt ??
+    article.created_at ??
+    article.updated_at ??
+    ""
+  );
+}
+
 function getArticlePublishedTimestamp(article: PortalNewsApiArticle) {
-  return getTimestamp(article.created_at ?? article.updated_at);
+  return getTimestamp(getArticlePublishedAt(article));
 }
 
 function compareArticleDates(a: PortalNewsApiArticle, b: PortalNewsApiArticle) {
@@ -240,10 +325,18 @@ function comparePublishedAtStrings(
 }
 
 function getPublishedAt(article: PortalNewsApiArticle) {
-  return article.created_at ?? article.updated_at ?? "";
+  return getArticlePublishedAt(article);
 }
 
 function getArticleImage(article: PortalNewsApiArticle) {
+  const directImage = article.image?.trim();
+
+  if (directImage) {
+    return /^https?:\/\//i.test(directImage)
+      ? directImage
+      : getNewsAssetUrl(directImage);
+  }
+
   const imagePath = article.images?.find((image) => image.trim().length > 0);
 
   if (!imagePath) {
@@ -251,15 +344,6 @@ function getArticleImage(article: PortalNewsApiArticle) {
   }
 
   return getNewsAssetUrl(imagePath);
-}
-
-function normalizeCategoryText(value: string) {
-  return value.trim().toLowerCase();
-}
-
-function getNormalizedNewsCategory(category?: string) {
-  const rawCategory = normalizeCategoryText(category ?? "");
-  return NEWS_CATEGORY_MAP.get(rawCategory) ?? "Global & Ekonomi";
 }
 
 function getDisplayNewsCategory(category: string | undefined, fallback: string) {
@@ -283,25 +367,24 @@ function getEstimatedReadTime(content: string, locale: AppLocale) {
 
 function toFeedArticle(article: PortalNewsApiArticle): NewsFeedArticle {
   const summary = getArticleSummary(article);
-  const normalizedCategory = getNormalizedNewsCategory(article.kategori?.name);
+  const categoryName = getArticleCategoryName(article);
+  const normalizedCategory = categoryName.trim() || "Uncategorized";
 
   return {
     id: String(article.id),
     title: getArticleTitle(article),
-    slug: article.slug,
+    slug: getArticleSlug(article),
     summary,
     category: normalizedCategory,
-    displayCategory: getDisplayNewsCategory(
-      article.kategori?.name,
-      normalizedCategory,
-    ),
+    displayCategory: getDisplayNewsCategory(categoryName, normalizedCategory),
     publishedAt: getPublishedAt(article),
     imageSrc: getArticleImage(article),
   };
 }
 
 function toFeedArticleFromEntry(article: PortalNewsFeedEntry): NewsFeedArticle {
-  const normalizedCategory = getNormalizedNewsCategory(article.categoryName);
+  const normalizedCategory = article.categoryName.trim() || "Uncategorized";
+  const normalizedImagePath = article.imagePath?.trim() ?? "";
 
   return {
     id: article.id,
@@ -314,7 +397,11 @@ function toFeedArticleFromEntry(article: PortalNewsFeedEntry): NewsFeedArticle {
       normalizedCategory,
     ),
     publishedAt: article.publishedAt,
-    imageSrc: article.imagePath ? getNewsAssetUrl(article.imagePath) : NEWS_PLACEHOLDER_IMAGE,
+    imageSrc: normalizedImagePath
+      ? /^https?:\/\//i.test(normalizedImagePath)
+        ? normalizedImagePath
+        : getNewsAssetUrl(normalizedImagePath)
+      : NEWS_PLACEHOLDER_IMAGE,
   };
 }
 
@@ -322,12 +409,14 @@ function toPortalNewsFeedEntry(article: PortalNewsApiArticle): PortalNewsFeedEnt
   return {
     id: String(article.id),
     title: getArticleTitle(article),
-    slug: article.slug,
+    slug: getArticleSlug(article),
     summary: getArticleSummary(article),
-    categoryName: article.kategori?.name?.trim() || "",
+    categoryName: getArticleCategoryName(article).trim(),
     publishedAt: getPublishedAt(article),
     imagePath:
-      article.images?.find((image) => image.trim().length > 0) ?? null,
+      article.image?.trim() ||
+      article.images?.find((image) => image.trim().length > 0) ||
+      null,
   };
 }
 
@@ -336,12 +425,13 @@ function toDetailArticle(
   locale: AppLocale,
 ): NewsArticleDetail {
   const feedArticle = toFeedArticle(article);
-  const bodyHtml = getArticleBodyHtml(article.content);
+  const content = getArticleContent(article);
+  const bodyHtml = getArticleBodyHtml(content);
 
   return {
     ...feedArticle,
     bodyHtml: bodyHtml || `<p>${escapeHtml(feedArticle.summary)}</p>`,
-    readTime: getEstimatedReadTime(article.content, locale),
+    readTime: getEstimatedReadTime(content || feedArticle.summary, locale),
     tags: [],
   };
 }
@@ -349,7 +439,7 @@ function toDetailArticle(
 function toFallbackDetailArticle(
   article: NewsArticle,
 ): NewsArticleDetail {
-  const normalizedCategory = getNormalizedNewsCategory(article.category);
+  const normalizedCategory = article.category.trim() || "Uncategorized";
 
   return {
     id: article.slug,
@@ -393,7 +483,7 @@ function getFallbackArticles(
     )
     .slice(0, limit)
     .map((article) => {
-      const normalizedCategory = getNormalizedNewsCategory(article.category);
+      const normalizedCategory = article.category.trim() || "Uncategorized";
 
       return {
         id: article.slug,
@@ -441,13 +531,15 @@ export function getStaticNewsArticleBySlug(
   };
 }
 
-async function requestPortalNewsArticles(): Promise<PortalNewsApiArticle[]> {
+async function requestPortalNewsArticles(
+  locale: AppLocale,
+): Promise<PortalNewsApiArticle[]> {
   if (!NEWS_API_TOKEN) {
     return [];
   }
 
   return new Promise<PortalNewsApiArticle[]>((resolve) => {
-    const requestUrl = new URL(NEWS_API_URL);
+    const requestUrl = new URL(resolveNewsApiUrl(locale));
     const requestClient = getRequestClient(requestUrl.protocol);
     const httpRequest = requestClient(
       requestUrl,
@@ -501,38 +593,47 @@ async function requestPortalNewsArticles(): Promise<PortalNewsApiArticle[]> {
   });
 }
 
-async function requestPortalNewsArticlesCached(): Promise<PortalNewsApiArticle[]> {
+async function requestPortalNewsArticlesCached(
+  locale: AppLocale,
+): Promise<PortalNewsApiArticle[]> {
   const now = Date.now();
+  const cachedArticles = cachedPortalNewsArticles.get(locale);
 
-  if (cachedPortalNewsArticles && cachedPortalNewsArticles.expiresAt > now) {
-    return cachedPortalNewsArticles.articles;
+  if (cachedArticles && cachedArticles.expiresAt > now) {
+    return cachedArticles.articles;
   }
 
-  if (inFlightPortalNewsRequest) {
-    return inFlightPortalNewsRequest;
+  const inFlightRequest = inFlightPortalNewsRequests.get(locale);
+
+  if (inFlightRequest) {
+    return inFlightRequest;
   }
 
-  inFlightPortalNewsRequest = requestPortalNewsArticles()
+  const nextRequest = requestPortalNewsArticles(locale)
     .then((articles) => {
-      cachedPortalNewsArticles = {
+      cachedPortalNewsArticles.set(locale, {
         articles,
         expiresAt: Date.now() + NEWS_API_CACHE_TTL_MS,
-      };
+      });
       return articles;
     })
     .finally(() => {
-      inFlightPortalNewsRequest = null;
+      inFlightPortalNewsRequests.delete(locale);
     });
 
-  return inFlightPortalNewsRequest;
+  inFlightPortalNewsRequests.set(locale, nextRequest);
+
+  return nextRequest;
 }
 
-async function fetchPortalNewsFeedEntries(): Promise<PortalNewsFeedEntry[]> {
+async function fetchPortalNewsFeedEntries(
+  locale: AppLocale,
+): Promise<PortalNewsFeedEntry[]> {
   if (!NEWS_API_TOKEN) {
     return [];
   }
 
-  const articles = await requestPortalNewsArticlesCached();
+  const articles = await requestPortalNewsArticlesCached(locale);
   return articles.map(toPortalNewsFeedEntry);
 }
 
@@ -551,7 +652,7 @@ export async function getNewsFeed(
   }
 
   try {
-    const rawArticles = await fetchPortalNewsFeedEntries();
+    const rawArticles = await fetchPortalNewsFeedEntries(locale);
     const articles = rawArticles
       .map(toFeedArticleFromEntry)
       .slice(0, typeof limit === "number" ? limit : rawArticles.length);
@@ -589,8 +690,9 @@ export async function getNewsArticleBySlug(
   }
 
   try {
-    const articles = await requestPortalNewsArticlesCached();
-    const rawArticle = articles.find((article) => article.slug === slug) ?? null;
+    const articles = await requestPortalNewsArticlesCached(locale);
+    const rawArticle =
+      articles.find((article) => getArticleSlug(article) === slug) ?? null;
 
     if (rawArticle) {
       return {

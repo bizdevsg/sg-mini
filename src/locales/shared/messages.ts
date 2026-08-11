@@ -499,6 +499,56 @@ export type AppMessages = {
       copied: string;
     };
   };
+  marketAcademyPage: {
+    meta: {
+      title: string;
+      description: string;
+    };
+    listTitle: string;
+    allCategories: string;
+    filter: string;
+    searchPlaceholder: string;
+    emptyTitle: string;
+    emptyBody: string;
+    pagination: {
+      previous: string;
+      next: string;
+      summary: string;
+    };
+  };
+  marketAcademyBrowser: {
+    categories: Record<string, string>;
+    filterModal: {
+      title: string;
+      subtitle: string;
+      sortBy: string;
+      newest: string;
+      oldest: string;
+      period: string;
+      all: string;
+      today: string;
+      week: string;
+      month: string;
+      apply: string;
+      reset: string;
+      close: string;
+    };
+    summary: {
+      category: string;
+      available: string;
+      fallback: string;
+      articlesInCategory: string;
+    };
+    pagination: {
+      template: string;
+    };
+    emptyFiltered: string;
+    readArticle: string;
+  };
+  marketAcademyDetailPage: {
+    marketAcademy: string;
+    relatedTitle: string;
+  };
   bannerSlideshow: {
     regionLabel: string;
     slideButtonLabel: string;
@@ -737,6 +787,7 @@ export type AppMessages = {
       errorUnavailable: string;
       errorRequired: string;
       errorInvalidCredentials: string;
+      errorSessionConfiguration: string;
       errorCaptchaRequired: string;
       errorCaptchaFailed: string;
       highlightsTitle: string;

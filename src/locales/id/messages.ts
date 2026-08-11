@@ -27,6 +27,9 @@ import { idHistoricalDataBrowser } from "./content/historicalDataBrowser";
 import { idNewsPage } from "./content/newsPage";
 import { idNewsBrowser } from "./content/newsBrowser";
 import { idNewsDetailPage } from "./content/newsDetailPage";
+import { idMarketAcademyPage } from "./content/marketAcademyPage";
+import { idMarketAcademyBrowser } from "./content/marketAcademyBrowser";
+import { idMarketAcademyDetailPage } from "./content/marketAcademyDetailPage";
 import { idBannerSlideshow } from "./content/bannerSlideshow";
 import { idBannerDetailPage } from "./content/bannerDetailPage";
 import { idPromoDetailPage } from "./content/promoDetailPage";
@@ -70,6 +73,9 @@ export const idMessages: AppMessages = {
   newsPage: idNewsPage,
   newsBrowser: idNewsBrowser,
   newsDetailPage: idNewsDetailPage,
+  marketAcademyPage: idMarketAcademyPage,
+  marketAcademyBrowser: idMarketAcademyBrowser,
+  marketAcademyDetailPage: idMarketAcademyDetailPage,
   bannerSlideshow: idBannerSlideshow,
   bannerDetailPage: idBannerDetailPage,
   promoDetailPage: idPromoDetailPage,

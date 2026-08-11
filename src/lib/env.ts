@@ -1,6 +1,9 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
-const DEFAULT_NEWS_API_URL = "http://portalnews.newsmaker.test/api/v1/berita";
+const DEFAULT_NEWS_API_URL = "https://endpoapi-production-3202.up.railway.app/api/news";
+const DEFAULT_NEWS_API_URL_ID =
+  "https://endpoapi-production-3202.up.railway.app/api/news-id";
+const LEGACY_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
 const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
@@ -41,6 +44,8 @@ const DEFAULT_MARKET_SIGNAL_API_URL =
   `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/signal`;
 const DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL =
   `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/signal`;
+const DEFAULT_MARKET_ACADEMY_API_URL =
+  "https://endpoapi-production-3202.up.railway.app/api/market-academy";
 const DEFAULT_FRANKFURTER_API_URL = "https://api.frankfurter.dev/v1/latest";
 const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
 const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
@@ -100,7 +105,28 @@ export const PUBLIC_FRAMER_IMAGE_BASE_URL =
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
   DEFAULT_FRAMER_IMAGE_BASE_URL;
 
-export const NEWS_API_URL = process.env.NEWS_API_URL ?? DEFAULT_NEWS_API_URL;
+function normalizeNewsApiUrl(
+  value: string | undefined,
+  fallbackUrl: string,
+) {
+  const normalizedValue = value?.trim();
+
+  if (!normalizedValue || normalizedValue === LEGACY_NEWS_API_URL) {
+    return fallbackUrl;
+  }
+
+  return normalizedValue;
+}
+
+export const NEWS_API_URL = normalizeNewsApiUrl(
+  process.env.NEWS_API_URL,
+  DEFAULT_NEWS_API_URL,
+);
+
+export const NEWS_API_URL_ID = normalizeNewsApiUrl(
+  process.env.NEWS_API_URL_ID,
+  DEFAULT_NEWS_API_URL_ID,
+);
 
 export const NEWS_API_TOKEN = process.env.NEWS_API_TOKEN ?? "";
 
@@ -188,6 +214,9 @@ export const MARKET_SIGNAL_API_URL =
 export const MARKET_SIGNAL_IMAGE_BASE_URL =
   process.env.MARKET_SIGNAL_IMAGE_BASE_URL ??
   DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL;
+
+export const MARKET_ACADEMY_API_URL =
+  process.env.MARKET_ACADEMY_API_URL ?? DEFAULT_MARKET_ACADEMY_API_URL;
 
 export const FRANKFURTER_API_URL =
   process.env.FRANKFURTER_API_URL ?? DEFAULT_FRANKFURTER_API_URL;

@@ -27,6 +27,10 @@ const CLIENT_AREA_DEMO_PASSWORD = "demo12345";
 const CLIENT_AREA_SESSION_MAX_AGE_MS =
   CLIENT_AREA_REMEMBER_ME_MAX_AGE * 1000;
 
+export function isClientAreaSessionConfigured() {
+  return Boolean(CLIENT_AREA_SESSION_SECRET);
+}
+
 export type ClientAreaSessionProfile = {
   accountId: string;
   displayName: string;
@@ -169,6 +173,10 @@ export async function createClientAreaSession(
   account: string,
   rememberMe: boolean,
 ) {
+  if (!isClientAreaSessionConfigured()) {
+    throw new Error("CLIENT_AREA_SESSION_SECRET is not configured.");
+  }
+
   const cookieStore = await cookies();
   const normalizedAccount = normalizeClientAreaIdentifier(account);
   const now = Date.now().toString();

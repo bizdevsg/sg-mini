@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { ClientAreaNewsDetailView } from "@/components/organisms/ClientAreaNewsDetailView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
@@ -7,6 +7,7 @@ import { getClientAreaBreakingNews } from "@/lib/client-area-news";
 import { buildPrivateMetadata } from "@/lib/metadata";
 import {
   createNewsDetailFromFeedArticle,
+  findNewsFeedArticleByRouteSlug,
   getNewsArticleBySlug,
   getNewsFeed,
 } from "@/lib/news";
@@ -29,11 +30,20 @@ function resolveDetailArticle(
   feedArticles: Awaited<ReturnType<typeof getNewsFeed>>["articles"],
 ) {
   if (detailedArticle) {
-    return detailedArticle;
+    return {
+      article: detailedArticle,
+      matchedFeedArticle: findNewsFeedArticleByRouteSlug(feedArticles, slug),
+    };
   }
 
-  const feedArticle = feedArticles.find((candidate) => candidate.slug === slug);
-  return feedArticle ? createNewsDetailFromFeedArticle(feedArticle, locale) : null;
+  const feedArticle = findNewsFeedArticleByRouteSlug(feedArticles, slug);
+
+  return feedArticle
+    ? {
+      article: createNewsDetailFromFeedArticle(feedArticle, locale),
+      matchedFeedArticle: feedArticle,
+    }
+    : null;
 }
 
 export async function generateMetadata({
@@ -53,15 +63,15 @@ export async function generateMetadata({
     feedArticles,
   );
 
-  if (!resolvedArticle) {
+  if (!resolvedArticle?.article) {
     notFound();
   }
 
   return buildPrivateMetadata({
-    title: `${resolvedArticle.title} | Client Area News`,
-    description: resolvedArticle.summary,
+    title: `${resolvedArticle.article.title} | Client Area News`,
+    description: resolvedArticle.article.summary,
     locale: locales,
-    path: `/${locales}/client-area/news/${resolvedArticle.slug}`,
+    path: `/${locales}/client-area/news/${resolvedArticle.article.slug}`,
   });
 }
 
@@ -79,18 +89,22 @@ export default async function Page({
   ]);
   const article = resolveDetailArticle(locales, slug, detailedArticle, feedArticles);
 
-  if (!article) {
+  if (!article?.article) {
     notFound();
   }
 
+  if (article.matchedFeedArticle && article.matchedFeedArticle.slug !== slug) {
+    redirect(`/${locales}/client-area/news/${article.matchedFeedArticle.slug}`);
+  }
+
   const nonCurrentArticles = feedArticles.filter(
-    (candidate) => candidate.slug !== article.slug,
+    (candidate) => candidate.slug !== article.article.slug,
   );
 
   const relatedCandidates = nonCurrentArticles.filter(
     (candidate) =>
-      candidate.displayCategory === article.displayCategory ||
-      candidate.category === article.category,
+      candidate.displayCategory === article.article.displayCategory ||
+      candidate.category === article.article.category,
   );
 
   const relatedArticles = (
@@ -101,7 +115,7 @@ export default async function Page({
 
   return (
     <ClientAreaNewsDetailView
-      article={article}
+      article={article.article}
       breakingNews={breakingNews}
       latestArticles={latestArticles}
       locale={locales}

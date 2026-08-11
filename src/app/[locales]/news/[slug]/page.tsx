@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
@@ -9,6 +9,7 @@ import { NewsDetailHeader } from "@/components/organisms/NewsDetailHeader";
 import { NewsDetailSidebar } from "@/components/organisms/NewsDetailSidebar";
 import {
   createNewsDetailFromFeedArticle,
+  findNewsFeedArticleByRouteSlug,
   getNewsArticleBySlug,
   getNewsFeed,
 } from "@/lib/news";
@@ -41,11 +42,20 @@ function resolveDetailArticle(
   feedArticles: Awaited<ReturnType<typeof getNewsFeed>>["articles"],
 ) {
   if (detailedArticle) {
-    return detailedArticle;
+    return {
+      article: detailedArticle,
+      matchedFeedArticle: findNewsFeedArticleByRouteSlug(feedArticles, slug),
+    };
   }
 
-  const feedArticle = feedArticles.find((candidate) => candidate.slug === slug);
-  return feedArticle ? createNewsDetailFromFeedArticle(feedArticle, locale) : null;
+  const feedArticle = findNewsFeedArticleByRouteSlug(feedArticles, slug);
+
+  return feedArticle
+    ? {
+      article: createNewsDetailFromFeedArticle(feedArticle, locale),
+      matchedFeedArticle: feedArticle,
+    }
+    : null;
 }
 
 export function generateStaticParams() {
@@ -72,19 +82,19 @@ export async function generateMetadata({
     feedArticles,
   );
 
-  if (!article) {
+  if (!article?.article) {
     notFound();
   }
 
   return {
-    title: article.title,
-    description: article.summary,
+    title: article.article.title,
+    description: article.article.summary,
     alternates: {
-      canonical: `/${locales}/news/${article.slug}`,
+      canonical: `/${locales}/news/${article.article.slug}`,
       languages: Object.fromEntries(
         SUPPORTED_LOCALES.map((locale) => [
           getLocaleConfig(locale).lang,
-          `/${locale}/news/${article.slug}`,
+          `/${locale}/news/${article.article.slug}`,
         ]),
       ),
     },
@@ -106,18 +116,22 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   );
   const feedArticles = feedResult.articles;
 
-  if (!article) {
+  if (!article?.article) {
     notFound();
   }
 
+  if (article.matchedFeedArticle && article.matchedFeedArticle.slug !== slug) {
+    redirect(`/${locales}/news/${article.matchedFeedArticle.slug}`);
+  }
+
   const nonCurrentArticles = feedArticles.filter(
-    (candidate) => candidate.slug !== article.slug,
+    (candidate) => candidate.slug !== article.article.slug,
   );
 
   const relatedCandidates = nonCurrentArticles.filter(
     (candidate) =>
-      candidate.displayCategory === article.displayCategory ||
-      candidate.category === article.category,
+      candidate.displayCategory === article.article.displayCategory ||
+      candidate.category === article.article.category,
   );
 
   const relatedArticles = (
@@ -135,22 +149,22 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         <NewsDetailBreadcrumb
           locale={locales}
           newsLabel={labels.news}
-          title={article.title}
+          title={article.article.title}
         />
       </ScrollReveal>
 
       <NewsDetailHeader
-        categoryLabel={article.displayCategory}
+        categoryLabel={article.article.displayCategory}
         locale={locales}
-        publishedAt={article.publishedAt}
-        slug={article.slug}
-        title={article.title}
+        publishedAt={article.article.publishedAt}
+        slug={article.article.slug}
+        title={article.article.title}
       />
 
       <ScrollReveal className="mt-8 overflow-hidden rounded-2xl border border-yellow-500/20 bg-zinc-950/40">
         <img
-          src={article.imageSrc}
-          alt={article.title}
+          src={article.article.imageSrc}
+          alt={article.article.title}
           width={1280}
           height={720}
           decoding="async"
@@ -159,7 +173,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </ScrollReveal>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <NewsDetailArticleBody bodyHtml={article.bodyHtml} />
+        <NewsDetailArticleBody bodyHtml={article.article.bodyHtml} />
 
         <NewsDetailSidebar
           relatedArticles={relatedArticles}

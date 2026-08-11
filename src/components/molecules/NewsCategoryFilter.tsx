@@ -1,9 +1,7 @@
-import { NEWS_FILTER_CATEGORIES } from "@/lib/news.shared";
-
 type NewsCategoryFilterProps = {
   title: string;
   allCategoriesLabel: string;
-  categories: typeof NEWS_FILTER_CATEGORIES;
+  categories: string[];
   selectedCategory: string | null;
   categoryLabels: Record<string, string>;
   summaryText: string;
@@ -12,7 +10,7 @@ type NewsCategoryFilterProps = {
 };
 
 function getCategoryLabel(
-  category: (typeof NEWS_FILTER_CATEGORIES)[number],
+  category: string,
   categoryLabels: Record<string, string>,
 ) {
   return categoryLabels[category] ?? category;

@@ -27,6 +27,9 @@ import { enHistoricalDataBrowser } from "./content/historicalDataBrowser";
 import { enNewsPage } from "./content/newsPage";
 import { enNewsBrowser } from "./content/newsBrowser";
 import { enNewsDetailPage } from "./content/newsDetailPage";
+import { enMarketAcademyPage } from "./content/marketAcademyPage";
+import { enMarketAcademyBrowser } from "./content/marketAcademyBrowser";
+import { enMarketAcademyDetailPage } from "./content/marketAcademyDetailPage";
 import { enBannerSlideshow } from "./content/bannerSlideshow";
 import { enBannerDetailPage } from "./content/bannerDetailPage";
 import { enPromoDetailPage } from "./content/promoDetailPage";
@@ -70,6 +73,9 @@ export const enMessages: AppMessages = {
   newsPage: enNewsPage,
   newsBrowser: enNewsBrowser,
   newsDetailPage: enNewsDetailPage,
+  marketAcademyPage: enMarketAcademyPage,
+  marketAcademyBrowser: enMarketAcademyBrowser,
+  marketAcademyDetailPage: enMarketAcademyDetailPage,
   bannerSlideshow: enBannerSlideshow,
   bannerDetailPage: enBannerDetailPage,
   promoDetailPage: enPromoDetailPage,

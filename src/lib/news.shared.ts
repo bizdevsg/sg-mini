@@ -24,12 +24,3 @@ export type NewsArticleDetailResult = {
   article: NewsArticleDetail | null;
   source: "api" | "fallback";
 };
-
-export const NEWS_FILTER_CATEGORIES = [
-  "Index",
-  "Commodity",
-  "Currencies",
-  "Global & Ekonomi",
-  "Fiscal & Moneter",
-  "Analisis Market",
-] as const;

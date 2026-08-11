@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import {
   createClientAreaSession,
   getClientAreaDashboardHref,
+  isClientAreaSessionConfigured,
   isValidClientAreaCredentials,
 } from "@/lib/client-area-auth";
 import { isClientAreaEnabled } from "@/lib/client-area-config";
@@ -74,6 +75,13 @@ export async function submitClientAreaLogin(
     return {
       status: "error",
       message: login.errorInvalidCredentials,
+    };
+  }
+
+  if (!isClientAreaSessionConfigured()) {
+    return {
+      status: "error",
+      message: login.errorSessionConfiguration,
     };
   }
 

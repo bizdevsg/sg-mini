@@ -32,6 +32,8 @@ export const enClientArea: AppMessages["clientArea"] = {
       "Enter your account number or email together with your password.",
     errorInvalidCredentials:
       "The account number, email, or password you entered is incorrect. Please review your details and try again.",
+    errorSessionConfiguration:
+      "Sign-in cannot continue because the server session configuration is incomplete. Set CLIENT_AREA_SESSION_SECRET first.",
     errorCaptchaRequired: "Complete the reCAPTCHA verification first.",
     errorCaptchaFailed:
       "reCAPTCHA verification failed. Please retry the security check.",

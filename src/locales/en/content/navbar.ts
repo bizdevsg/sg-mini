@@ -35,6 +35,7 @@ export const enNavbar: AppMessages["navbar"] = {
       items: [
         { label: "Getting Started", href: "/education/cara-memulai" },
         { label: "Ebook", href: "/education/ebook" },
+        { label: "Market Academy", href: "/education/market-academy" },
         {
           label: "Online Trading Terms",
           href: "/education/istilah-dalam-transaksi-online",

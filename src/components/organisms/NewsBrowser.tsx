@@ -7,17 +7,16 @@ import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
 import { NewsCategoryFilter } from "@/components/molecules/NewsCategoryFilter";
 import { NewsFeedArticleCard } from "@/components/molecules/NewsFeedArticleCard";
 import { NewsFilterModal } from "@/components/molecules/NewsFilterModal";
-import {
-  NEWS_FILTER_CATEGORIES,
-  type NewsFeedArticle,
-} from "@/lib/news.shared";
-import { getMessages, type AppLocale } from "@/locales";
+import { type NewsFeedArticle } from "@/lib/news.shared";
+import { getMessages, type AppLocale, type AppMessages } from "@/locales";
 import { ScrollReveal } from "../molecules/ScrollReveal";
 
 type NewsBrowserProps = {
   articles: NewsFeedArticle[];
   locale: AppLocale;
   source: "api" | "fallback";
+  hrefBasePath?: string;
+  browserLabels?: AppMessages["newsBrowser"];
   labels: {
     listTitle: string;
     allCategories: string;
@@ -43,7 +42,7 @@ type SortOption = "newest" | "oldest";
 type PeriodOption = "all" | "today" | "week" | "month";
 
 function getCategoryLabel(
-  category: (typeof NEWS_FILTER_CATEGORIES)[number],
+  category: string,
   categoryLabels: Record<string, string>,
 ) {
   return categoryLabels[category] ?? category;
@@ -57,10 +56,7 @@ function getSummaryText(
   categoryLabels: Record<string, string>,
 ) {
   const selectedCategoryLabel = selectedCategory
-    ? getCategoryLabel(
-      selectedCategory as (typeof NEWS_FILTER_CATEGORIES)[number],
-      categoryLabels,
-    )
+    ? getCategoryLabel(selectedCategory, categoryLabels)
     : null;
 
   if (selectedCategoryLabel) {
@@ -158,11 +154,19 @@ export function NewsBrowser({
   articles,
   locale,
   source,
+  hrefBasePath = "/news",
+  browserLabels: browserLabelsProp,
   labels,
 }: NewsBrowserProps) {
-  const browserLabels = getMessages(locale).newsBrowser;
+  const browserLabels = browserLabelsProp ?? getMessages(locale).newsBrowser;
   const categoryLabels = browserLabels.categories;
-  const categories = NEWS_FILTER_CATEGORIES;
+  const categories = Array.from(
+    new Set(
+      articles
+        .map((article) => article.displayCategory.trim())
+        .filter((category) => category.length > 0),
+    ),
+  ).sort((left, right) => left.localeCompare(right));
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
@@ -188,7 +192,7 @@ export function NewsBrowser({
   ];
 
   const filteredArticles = articles.filter((article) => {
-    if (selectedCategory && article.category !== selectedCategory) {
+    if (selectedCategory && article.displayCategory !== selectedCategory) {
       return false;
     }
 
@@ -371,6 +375,7 @@ export function NewsBrowser({
                 >
                   <NewsFeedArticleCard
                     article={article}
+                    hrefBasePath={hrefBasePath}
                     locale={locale}
                     readMoreLabel={browserLabels.readArticle}
                     prioritizeImage={shouldPrioritizeImage}
