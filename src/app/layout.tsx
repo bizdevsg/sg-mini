@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   metadataBase: SITE_METADATA_BASE,
   title: {
     default: DEFAULT_SITE_TITLE,
-    template: "%s • Solid Gold Berjangka",
+    template: "%s - Solid Gold Berjangka",
   },
   description: DEFAULT_SITE_DESCRIPTION,
   openGraph: {

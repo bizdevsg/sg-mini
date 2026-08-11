@@ -316,6 +316,27 @@ export function resolveMarketSignalCategoryIconSrc(categorySlug: string) {
   return MARKET_SIGNAL_CATEGORY_ICON_BY_SLUG[categorySlug] ?? null;
 }
 
+const MARKET_SIGNAL_LIVE_QUOTE_SYMBOL_BY_SLUG: Record<string, string> = {
+  gold: "XUL10",
+  silver: "XAGUSD",
+  oil: "BCO10_BBJ",
+  dxy: "DX1010_BBJ",
+  audusd: "AU1010_BBJ",
+  eurusd: "EU1010_BBJ",
+  eurousd: "EU1010_BBJ",
+  gbpusd: "GU1010_BBJ",
+  usdcad: "UC1010_BBJ",
+  usdchf: "USDCHF",
+  usdjpy: "UJ1010_BBJ",
+  usdidr: "UI1010_BBJ",
+  nikkei: "JPK50_BBJ",
+  hangseng: "HKK50_BBJ",
+};
+
+export function resolveMarketSignalLiveQuoteSymbol(categorySlug: string) {
+  return MARKET_SIGNAL_LIVE_QUOTE_SYMBOL_BY_SLUG[categorySlug] ?? null;
+}
+
 function parsePublishedTimestamp(value: string) {
   const directTimestamp = new Date(value).getTime();
 

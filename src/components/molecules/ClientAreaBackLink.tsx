@@ -6,17 +6,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 type ClientAreaBackLinkProps = {
   href: string;
   label: string;
+  className?: string;
 };
 
 export function ClientAreaBackLink({
   href,
   label,
+  className,
 }: ClientAreaBackLinkProps) {
   return (
     <Link
       href={href}
       prefetch={false}
-      className="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-yellow-400"
+      className={`inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-yellow-400 ${className}`}
     >
       <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-500 text-black">
         <FontAwesomeIcon icon={["fas", "chevron-left"]} className="text-xs" />

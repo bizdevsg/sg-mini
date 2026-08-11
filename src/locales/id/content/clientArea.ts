@@ -509,6 +509,36 @@ export const idClientArea: AppMessages["clientArea"] = {
     emptyBody:
       "Permintaan deposit Anda akan muncul di halaman ini setelah tercatat di sistem.",
   },
+  marketSignalDetail: {
+    updatedLabel: "Update",
+    biasLabel: "Bias",
+    biasUpLabel: "Potensi Menguat",
+    biasDownLabel: "Potensi Melemah",
+    bidPriceLabel: "Bid Price",
+    askPriceLabel: "Ask Price",
+    todayMovementLabel: "Pergerakan Hari Ini",
+    latestSignalTitle: "Sinyal Terbaru",
+    entryLabel: "Entry",
+    takeProfitLabel: "Take Profit",
+    stopLossLabel: "Stop Loss",
+    sourceLabel: "Sumber",
+    timeframeLabel: "Timeframe Analisis Signal",
+    buyActionLabel: "Potensi Buy",
+    sellActionLabel: "Potensi Sell",
+    latestNewsTitle: "Berita Terbaru",
+    historyTitle: "Riwayat Signal",
+    transactionModal: {
+      buyBadgeLabel: "Sinyal Buy",
+      sellBadgeLabel: "Sinyal Sell",
+      buyTitle: "Transaksi Buy Tersedia di Aplikasi",
+      sellTitle: "Transaksi Sell Tersedia di Aplikasi",
+      buyDescription:
+        "Untuk membuka posisi Buy pada sinyal ini, silakan login melalui aplikasi Solid Gold Berjangka.",
+      sellDescription:
+        "Untuk membuka posisi Sell pada sinyal ini, silakan login melalui aplikasi Solid Gold Berjangka.",
+      closeLabel: "Tutup",
+    },
+  },
   tradingView: {
     disclaimerLabel: "Disclaimer:",
     disclaimerTradingView:

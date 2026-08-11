@@ -1,4 +1,8 @@
-import { PUBLIC_RECAPTCHA_SITE_KEY, RECAPTCHA_SECRET_KEY } from "@/lib/env";
+import {
+  APP_ENV,
+  PUBLIC_RECAPTCHA_SITE_KEY,
+  RECAPTCHA_SECRET_KEY,
+} from "@/lib/env";
 
 type RecaptchaVerifyResponse = {
   success?: boolean;
@@ -43,6 +47,10 @@ export function isRecaptchaUnsupportedHostname(hostname: string) {
 }
 
 export function isRecaptchaEnabled(hostname?: string | null) {
+  if (APP_ENV !== "prod") {
+    return false;
+  }
+
   const normalizedHostname = normalizeHostHeader(hostname);
 
   if (

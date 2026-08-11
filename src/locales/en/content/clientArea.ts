@@ -511,6 +511,36 @@ export const enClientArea: AppMessages["clientArea"] = {
     emptyBody:
       "Your deposit requests will appear here after they have been recorded by the system.",
   },
+  marketSignalDetail: {
+    updatedLabel: "Updated",
+    biasLabel: "Bias",
+    biasUpLabel: "Upside Potential",
+    biasDownLabel: "Downside Potential",
+    bidPriceLabel: "Bid Price",
+    askPriceLabel: "Ask Price",
+    todayMovementLabel: "Today's Movement",
+    latestSignalTitle: "Latest Signal",
+    entryLabel: "Entry",
+    takeProfitLabel: "Take Profit",
+    stopLossLabel: "Stop Loss",
+    sourceLabel: "Source",
+    timeframeLabel: "Signal Analysis Timeframe",
+    buyActionLabel: "Potential Buy",
+    sellActionLabel: "Potential Sell",
+    latestNewsTitle: "Latest News",
+    historyTitle: "Signal History",
+    transactionModal: {
+      buyBadgeLabel: "Buy Signal",
+      sellBadgeLabel: "Sell Signal",
+      buyTitle: "Buy Transactions Are Available in the App",
+      sellTitle: "Sell Transactions Are Available in the App",
+      buyDescription:
+        "To open a Buy position for this signal, please sign in through the Solid Gold Berjangka app.",
+      sellDescription:
+        "To open a Sell position for this signal, please sign in through the Solid Gold Berjangka app.",
+      closeLabel: "Close",
+    },
+  },
   tradingView: {
     disclaimerLabel: "Disclaimer:",
     disclaimerTradingView:

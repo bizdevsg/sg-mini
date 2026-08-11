@@ -137,7 +137,7 @@ export function ClientAreaMarketInsightCard({
         )}
 
         <Link
-          href={`/${locale}/client-area/market-signal/${item.id}`}
+          href={`/${locale}/client-area/market-signal/${encodeURIComponent(item.categorySlug)}`}
           className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold text-black transition-colors ${theme.button}`}
         >
           Lihat Insight

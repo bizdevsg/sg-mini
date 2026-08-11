@@ -62,24 +62,24 @@ export const idFooter: AppMessages["footer"] = {
   socials: [
     {
       name: "Instagram",
-      url: "https://www.instagram.com/solidgoldjakarta.official/",
+      url: "https://www.instagram.com/solidgoldberjangka.official/",
       icon: "instagram",
     },
-    {
-      name: "Facebook",
-      url: "https://facebook.com/example",
-      icon: "facebook-f",
-    },
+    // {
+    //   name: "Facebook",
+    //   url: "https://facebook.com/example",
+    //   icon: "facebook-f",
+    // },
     {
       name: "YouTube",
       url: "https://www.youtube.com/@Ptsolidgoldberjangka",
       icon: "youtube",
     },
-    {
-      name: "Twitter",
-      url: "https://youtube.com/example",
-      icon: "x-twitter",
-    },
+    // {
+    //   name: "Twitter",
+    //   url: "https://youtube.com/example",
+    //   icon: "x-twitter",
+    // },
     {
       name: "TikTok",
       url: "https://www.tiktok.com/@solid.prime",

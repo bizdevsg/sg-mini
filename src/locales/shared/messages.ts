@@ -995,6 +995,34 @@ export type AppMessages = {
       emptyTitle: string;
       emptyBody: string;
     };
+    marketSignalDetail: {
+      updatedLabel: string;
+      biasLabel: string;
+      biasUpLabel: string;
+      biasDownLabel: string;
+      bidPriceLabel: string;
+      askPriceLabel: string;
+      todayMovementLabel: string;
+      latestSignalTitle: string;
+      entryLabel: string;
+      takeProfitLabel: string;
+      stopLossLabel: string;
+      sourceLabel: string;
+      timeframeLabel: string;
+      buyActionLabel: string;
+      sellActionLabel: string;
+      latestNewsTitle: string;
+      historyTitle: string;
+      transactionModal: {
+        buyBadgeLabel: string;
+        sellBadgeLabel: string;
+        buyTitle: string;
+        sellTitle: string;
+        buyDescription: string;
+        sellDescription: string;
+        closeLabel: string;
+      };
+    };
     tradingView: {
       disclaimerLabel: string;
       disclaimerTradingView: string;
