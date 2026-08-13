@@ -7,10 +7,10 @@ type ClientAreaMarketInsightBiasIndicatorProps = {
 
 const directionStyles = {
   up: {
-    className: "border-green-500/20 bg-green-500/10 text-green-400",
+    className: "text-green-400",
   },
   down: {
-    className: "border-red-500/20 bg-red-500/10 text-red-400",
+    className: "text-red-400",
   },
 } as const;
 
@@ -24,7 +24,7 @@ export function ClientAreaMarketInsightBiasIndicator({
 
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-bold ${style.className}`}
+      className={`inline-flex items-center gap-2 rounded-full font-bold ${style.className}`}
     >
       <Icon className="h-4 w-4" />
       <span>{label}</span>

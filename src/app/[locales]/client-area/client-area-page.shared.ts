@@ -14,6 +14,7 @@ export type ClientAreaSubpageId =
   | "account"
   | "ebook"
   | "market"
+  | "market-signal"
   | "news"
   | "transaction";
 
@@ -50,6 +51,8 @@ function getClientAreaSubpageTitle(
       return getMessages(locale).ebookPage.title;
     case "market":
       return copy.marketWatchTitle;
+    case "market-signal":
+      return locale === "id" ? "Market Insight" : "Market Insight";
     case "news":
       return copy.newsTitle;
     case "transaction":

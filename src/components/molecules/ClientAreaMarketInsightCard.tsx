@@ -44,7 +44,7 @@ export function ClientAreaMarketInsightCard({
 
   return (
     <div
-      className={`w-80 space-y-4 rounded-3xl border bg-linear-to-br p-5 ${theme.card} ${theme.border}`}
+      className={`w-80 space-y-2 rounded-3xl border bg-linear-to-br p-5 ${theme.card} ${theme.border}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -87,7 +87,7 @@ export function ClientAreaMarketInsightCard({
       </div>
 
       <div>
-        <p className="text-zinc-400">Bias</p>
+        <p className="text-zinc-400 text-sm">Bias</p>
 
         <ClientAreaMarketInsightBiasIndicator
           direction={biasDirection}
@@ -128,7 +128,7 @@ export function ClientAreaMarketInsightCard({
 
       <div className="flex items-center justify-between gap-3">
         {item.source ? (
-          <div className="text-[11px] italic leading-snug text-zinc-500">
+          <div className="text-[11px] italic leading-snug text-zinc-400">
             <p className="font-semibold">Source:</p>
             <p>{item.source}</p>
           </div>
@@ -138,7 +138,7 @@ export function ClientAreaMarketInsightCard({
 
         <Link
           href={`/${locale}/client-area/market-signal/${encodeURIComponent(item.categorySlug)}`}
-          className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold text-black transition-colors ${theme.button}`}
+          className={`shrink-0 rounded-lg px-4 py-1.5 text-xs font-bold text-black transition-colors ${theme.button}`}
         >
           Lihat Insight
         </Link>

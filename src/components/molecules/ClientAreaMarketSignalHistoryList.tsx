@@ -134,14 +134,14 @@ export function ClientAreaMarketSignalHistoryList({
 
               <div className="mt-4 grid grid-cols-2 gap-2.5">
                 <div className="rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                  <p className="text-[11px] text-zinc-500">Take Profit</p>
+                  <p className="text-[11px] text-zinc-100">Take Profit</p>
                   <p className="mt-1 text-sm font-bold text-white">
                     {item.takingProfit || "-"}
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                  <p className="text-[11px] text-zinc-500">Stop Loss</p>
+                  <p className="text-[11px] text-zinc-100">Stop Loss</p>
                   <p className="mt-1 text-sm font-bold text-white">
                     {item.stopLoss || "-"}
                   </p>
@@ -149,7 +149,7 @@ export function ClientAreaMarketSignalHistoryList({
 
                 {item.source ? (
                   <div className="col-span-2 rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                    <p className="text-[11px] text-zinc-500">Sumber</p>
+                    <p className="text-[11px] text-zinc-100">Sumber</p>
                     <p className="mt-1 text-sm font-bold text-white">
                       {item.source}
                     </p>
@@ -203,23 +203,20 @@ export function ClientAreaMarketSignalHistoryList({
 
               <div className="relative flex-none">
                 <span
-                  className={`absolute left-1/2 top-1.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 bg-zinc-950 ${
-                    isExpired ? "border-zinc-600" : "border-yellow-500"
-                  }`}
+                  className={`absolute left-1/2 top-1.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 bg-zinc-950 ${isExpired ? "border-zinc-600" : "border-yellow-500"
+                    }`}
                 />
                 {!isLast ? (
                   <span
-                    className={`absolute left-1/2 top-1.5 bottom-[-1rem] w-px -translate-x-1/2 ${
-                      isExpired ? "bg-zinc-700/50" : "bg-yellow-500/50"
-                    }`}
+                    className={`absolute left-1/2 top-1.5 bottom-[-1rem] w-px -translate-x-1/2 ${isExpired ? "bg-zinc-700/50" : "bg-yellow-500/50"
+                      }`}
                   />
                 ) : null}
               </div>
 
               <div
-                className={`min-w-0 flex-1 overflow-hidden rounded-2xl border bg-white/[0.03] transition-colors ${theme.border} ${
-                  isExpired ? "opacity-70" : ""
-                }`}
+                className={`min-w-0 flex-1 overflow-hidden rounded-2xl border bg-white/[0.03] transition-colors ${theme.border} ${isExpired ? "opacity-70" : ""
+                  }`}
               >
                 <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
                   {item.imageUrl ? (
@@ -236,7 +233,7 @@ export function ClientAreaMarketSignalHistoryList({
                   ) : null}
 
                   <div className="w-full space-y-3">
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <div className="relative h-9 w-9 shrink-0">
                         {categoryIconSrc ? (
                           <Image

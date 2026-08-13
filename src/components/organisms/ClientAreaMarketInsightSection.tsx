@@ -60,7 +60,7 @@ export function ClientAreaMarketInsightSection({
     <div>
       <ClientAreaSectionHeader
         title="Market Insight"
-        actionHref={`/${locale}/economic-calendar`}
+        actionHref={`/${locale}/client-area/market-signal`}
         actionLabel={copy.viewMoreLabel}
       />
 
