@@ -74,6 +74,26 @@ type ClientAreaAccountModeData = {
   withdrawalHistory: WithdrawalHistoryItem[];
 };
 
+const EMPTY_ACCOUNT_SNAPSHOT: AccountSnapshot = {
+  typeLabel: "",
+  accountId: "",
+  accountOwner: "",
+  email: "",
+  status: "",
+  broker: "",
+  liquidationType: "",
+  balance: 0,
+  floatingPl: 0,
+  floatingDelta: "",
+  equity: 0,
+  equityDelta: "",
+  marginRequired: 0,
+  effectiveMargin: 0,
+  callMarginPlace: 0,
+  equityRatio: 0,
+  autoLiquidation: 0,
+};
+
 export const TABS: TabId[] = [
   "home",
   "market",
@@ -165,25 +185,15 @@ export function formatSignedUsd(value: number) {
 }
 
 export function getClientAreaAccountModeData(
-  copy: DashboardCopy,
-  accountMode: AccountMode,
+  _copy: DashboardCopy,
+  _accountMode: AccountMode,
 ): ClientAreaAccountModeData {
-  if (accountMode === "real") {
-    return {
-      currentAccount: copy.realAccount,
-      depositHistory: copy.realDepositHistory,
-      positions: copy.realPositions,
-      transactionHistory: copy.realTransactionHistory,
-      withdrawalHistory: copy.realWithdrawalHistory,
-    };
-  }
-
   return {
-    currentAccount: copy.demoAccount,
-    depositHistory: copy.demoDepositHistory,
-    positions: copy.demoPositions,
-    transactionHistory: copy.demoTransactionHistory,
-    withdrawalHistory: copy.demoWithdrawalHistory,
+    currentAccount: EMPTY_ACCOUNT_SNAPSHOT,
+    depositHistory: [],
+    positions: [],
+    transactionHistory: [],
+    withdrawalHistory: [],
   };
 }
 
@@ -1589,8 +1599,12 @@ const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
   ClientAreaMarketCategory
 > = {
   XUL10: "Commodity",
+  XUL10_BBJ: "Commodity",
+  "BCO-NC": "Commodity",
   BCO10_BBJ: "Commodity",
+  "HKK-NC": "Index",
   HKK50_BBJ: "Index",
+  "JPK-NC": "Index",
   JPK50_BBJ: "Index",
   DX1010_BBJ: "Index",
   AU1010_BBJ: "Forex",
@@ -1605,8 +1619,8 @@ const CLIENT_AREA_FEATURED_MARKET_SYMBOLS: Record<
   ClientAreaMarketCategory,
   string[]
 > = {
-  Commodity: ["XUL10", "BCO10_BBJ"],
-  Index: ["HKK50_BBJ", "JPK50_BBJ", "DX1010_BBJ"],
+  Commodity: ["XUL10", "XUL10_BBJ", "BCO-NC", "BCO10_BBJ"],
+  Index: ["HKK-NC", "HKK50_BBJ", "JPK-NC", "JPK50_BBJ", "DX1010_BBJ"],
   Forex: [
     "EU1010_BBJ",
     "UJ1010_BBJ",

@@ -1,0 +1,12 @@
+.git
+.gitignore
+.next
+.tmp
+.tmp-chrome-profile
+.vercel
+node_modules
+tmp
+npm-debug.log*
+.env
+.env.local
+.env.*.local

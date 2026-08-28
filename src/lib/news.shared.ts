@@ -17,10 +17,8 @@ export type NewsArticleDetail = NewsFeedArticle & {
 
 export type NewsFeedResult = {
   articles: NewsFeedArticle[];
-  source: "api" | "fallback";
 };
 
 export type NewsArticleDetailResult = {
   article: NewsArticleDetail | null;
-  source: "api" | "fallback";
 };

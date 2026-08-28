@@ -1,9 +1,9 @@
 import "server-only";
 
-import { COMPANY_PROFILE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { COMPANY_PROFILE_API_URL } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
-import { getMessages, type AppLocale } from "@/locales";
+import type { AppLocale } from "@/locales";
 
 export type CompanyProfile = {
   id: number;
@@ -46,14 +46,6 @@ type CompanyProfileApiResponse = {
   data?: CompanyProfileApiRecord | null;
 };
 
-const DEFAULT_ADDRESS =
-  "TCC Batavia, Tower One Lt. 10, Jl. K.H. Mas Mansyur Kav. 126, Jakarta Pusat 10220";
-const DEFAULT_MAPS_EMBED_URL =
-  "https://www.google.com/maps?q=TCC%20Batavia%20Tower%20One%20Lt.%2010%20Jl.%20K.H.%20Mas%20Mansyur%20Kav.%20126%20Jakarta%20Pusat%2010220&z=15&output=embed";
-const DEFAULT_PHONE = "021-29675088";
-const DEFAULT_EMAIL = "berjangka@solidgold.co.id";
-const DEFAULT_FAX = "021-29675089";
-const DEFAULT_COMPLAINT_LINK = "https://pengaduan.bappebti.go.id/";
 const COMPANY_PROFILE_REVALIDATE_SECONDS = 300;
 
 function normalizeText(value: unknown) {
@@ -104,27 +96,6 @@ function splitDescriptionParagraphs(description: string) {
       : [];
 }
 
-function getFallbackCompanyProfile(locale: AppLocale): CompanyProfile {
-  const { companyProfile, visiMisi } = getMessages(locale).aboutPage;
-
-  return {
-    id: 1,
-    companyName: companyProfile.title,
-    description: companyProfile.paragraphs.join("\n\n"),
-    descriptionParagraphs: companyProfile.paragraphs,
-    mission: visiMisi.missionItems,
-    vision: visiMisi.visionItems,
-    address: DEFAULT_ADDRESS,
-    mapsEmbedUrl: DEFAULT_MAPS_EMBED_URL,
-    phone: DEFAULT_PHONE,
-    email: DEFAULT_EMAIL,
-    fax: DEFAULT_FAX,
-    complaintLink: DEFAULT_COMPLAINT_LINK,
-    createdAt: null,
-    updatedAt: null,
-  };
-}
-
 function pickLocalizedValue(
   locale: AppLocale,
   defaultValue: unknown,
@@ -137,40 +108,32 @@ function normalizeCompanyProfile(
   record: CompanyProfileApiRecord | null | undefined,
   locale: AppLocale,
 ): CompanyProfile {
-  const fallbackProfile = getFallbackCompanyProfile(locale);
-  const companyName =
-    normalizeText(
-      pickLocalizedValue(locale, record?.company_name, record?.company_name_en),
-    ) || fallbackProfile.companyName;
-  const description =
-    normalizeText(
-      pickLocalizedValue(locale, record?.description, record?.description_en),
-    ) || fallbackProfile.description;
+  const companyName = normalizeText(
+    pickLocalizedValue(locale, record?.company_name, record?.company_name_en),
+  );
+  const description = normalizeText(
+    pickLocalizedValue(locale, record?.description, record?.description_en),
+  );
   const mission = normalizeTextList(
     pickLocalizedValue(locale, record?.mission, record?.mission_en),
   );
   const vision = normalizeTextList(
     pickLocalizedValue(locale, record?.vision, record?.vision_en),
   );
-  const address = normalizeText(record?.address) || fallbackProfile.address;
-  const mapsEmbedUrl =
-    normalizeText(record?.maps_embed_url) || fallbackProfile.mapsEmbedUrl;
-  const phone = normalizeText(record?.phone) || fallbackProfile.phone;
-  const email = normalizeText(record?.email) || fallbackProfile.email;
-  const fax = normalizeText(record?.fax) || fallbackProfile.fax;
-  const complaintLink =
-    normalizeText(record?.complaint_link) || fallbackProfile.complaintLink;
+  const address = normalizeText(record?.address);
+  const mapsEmbedUrl = normalizeText(record?.maps_embed_url);
+  const phone = normalizeText(record?.phone);
+  const email = normalizeText(record?.email);
+  const fax = normalizeText(record?.fax);
+  const complaintLink = normalizeText(record?.complaint_link);
 
   return {
-    id:
-      typeof record?.id === "number" && Number.isFinite(record.id)
-        ? record.id
-        : fallbackProfile.id,
+    id: typeof record?.id === "number" && Number.isFinite(record.id) ? record.id : 0,
     companyName,
     description,
     descriptionParagraphs: splitDescriptionParagraphs(description),
-    mission: mission.length > 0 ? mission : fallbackProfile.mission,
-    vision: vision.length > 0 ? vision : fallbackProfile.vision,
+    mission,
+    vision,
     address,
     mapsEmbedUrl,
     phone,
@@ -183,12 +146,6 @@ function normalizeCompanyProfile(
 }
 
 export async function getCompanyProfile(locale: AppLocale = "id") {
-  const fallbackProfile = getFallbackCompanyProfile(locale);
-
-  if (USE_DUMMY_API_DATA) {
-    return fallbackProfile;
-  }
-
   try {
     const response = await fetch(COMPANY_PROFILE_API_URL, {
       next: {
@@ -201,7 +158,7 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
       console.error(
         `Failed to fetch company profile: ${response.status} ${response.statusText}`,
       );
-      return fallbackProfile;
+      return normalizeCompanyProfile(null, locale);
     }
 
     const responseBody = await response.text();
@@ -209,6 +166,6 @@ export async function getCompanyProfile(locale: AppLocale = "id") {
     return normalizeCompanyProfile(payload.data, locale);
   } catch (error) {
     console.error("Failed to fetch company profile", error);
-    return fallbackProfile;
+    return normalizeCompanyProfile(null, locale);
   }
 }

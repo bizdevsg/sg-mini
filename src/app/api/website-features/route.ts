@@ -4,7 +4,7 @@ import {
   protectSameOriginBrowserApiRoute,
   withApiProtectionHeaders,
 } from "@/lib/api-protection";
-import { getBannerRecords } from "@/lib/banner";
+import { getWebsiteFeatureConfig } from "@/lib/client-area-config";
 
 export const runtime = "nodejs";
 
@@ -15,15 +15,10 @@ export async function GET(request: Request) {
     return blockedResponse;
   }
 
-  const data = await getBannerRecords();
+  const data = await getWebsiteFeatureConfig();
 
   return withApiProtectionHeaders(
-    NextResponse.json({
-      data,
-      meta: {
-        total: data.length,
-      },
-    }),
+    NextResponse.json({ data }),
     {
       cacheControl: "private, no-store, max-age=0",
     },

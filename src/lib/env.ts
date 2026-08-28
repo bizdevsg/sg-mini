@@ -1,9 +1,8 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
-const DEFAULT_NEWS_API_URL = "https://endpoapi-production-3202.up.railway.app/api/news";
+const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_API_URL_ID =
-  "https://endpoapi-production-3202.up.railway.app/api/news-id";
-const LEGACY_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
+  "https://portalnews.newsmaker.id/api/v1/berita";
 const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
 const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
 const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
@@ -37,7 +36,8 @@ const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
 const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
 const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
-  "https://endpoapi-production-3202.up.railway.app/api/calendar";
+  "https://portalnews.newsmaker.id/api/v1/newsmaker/kalender-ekonomi";
+const DEFAULT_ECONOMIC_CALENDAR_API_TOKEN = "NM23-8f0f24b4d56af1c3";
 const DEFAULT_TRADINGVIEW_SYMBOL_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/tradingview-symbol`;
 const DEFAULT_MARKET_SIGNAL_API_URL =
@@ -55,18 +55,16 @@ const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
 const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
 const DEFAULT_SITE_URL = "https://sg-berjangka.com";
+const DEFAULT_PUBLIC_CLIENT_AREA_ENABLED = false;
+const DEFAULT_PUBLIC_TAWK_CHAT_ENABLED = false;
 
-export type AppEnvMode = "dev" | "prod" | "dev-deploy";
+export type AppEnvMode = "dev" | "prod";
 const DEFAULT_APP_ENV: AppEnvMode = "dev";
 
 function normalizeAppEnvMode(value: string | undefined): AppEnvMode {
   const normalizedValue = value?.trim().toLowerCase();
 
-  if (
-    normalizedValue === "dev" ||
-    normalizedValue === "prod" ||
-    normalizedValue === "dev-deploy"
-  ) {
+  if (normalizedValue === "dev" || normalizedValue === "prod") {
     return normalizedValue;
   }
 
@@ -74,7 +72,6 @@ function normalizeAppEnvMode(value: string | undefined): AppEnvMode {
 }
 
 export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
-export const USE_DUMMY_API_DATA = APP_ENV === "dev-deploy";
 
 export const CLIENT_AREA_SESSION_SECRET =
   process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
@@ -105,25 +102,36 @@ export const PUBLIC_FRAMER_IMAGE_BASE_URL =
   process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
   DEFAULT_FRAMER_IMAGE_BASE_URL;
 
-function normalizeNewsApiUrl(
-  value: string | undefined,
-  fallbackUrl: string,
-) {
+function normalizeUrlEnv(value: string | undefined, fallbackUrl: string) {
   const normalizedValue = value?.trim();
 
-  if (!normalizedValue || normalizedValue === LEGACY_NEWS_API_URL) {
-    return fallbackUrl;
-  }
-
-  return normalizedValue;
+  return normalizedValue || fallbackUrl;
 }
 
-export const NEWS_API_URL = normalizeNewsApiUrl(
+function normalizeBooleanEnv(value: string | undefined, fallback: boolean) {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (!normalizedValue) {
+    return fallback;
+  }
+
+  if (["1", "true", "yes", "on", "enabled", "active"].includes(normalizedValue)) {
+    return true;
+  }
+
+  if (["0", "false", "no", "off", "disabled", "inactive"].includes(normalizedValue)) {
+    return false;
+  }
+
+  return fallback;
+}
+
+export const NEWS_API_URL = normalizeUrlEnv(
   process.env.NEWS_API_URL,
   DEFAULT_NEWS_API_URL,
 );
 
-export const NEWS_API_URL_ID = normalizeNewsApiUrl(
+export const NEWS_API_URL_ID = normalizeUrlEnv(
   process.env.NEWS_API_URL_ID,
   DEFAULT_NEWS_API_URL_ID,
 );
@@ -131,104 +139,171 @@ export const NEWS_API_URL_ID = normalizeNewsApiUrl(
 export const NEWS_API_TOKEN = process.env.NEWS_API_TOKEN ?? "";
 
 export const NEWS_PORTAL_BASE_URL =
-  process.env.NEWS_PORTAL_BASE_URL ?? DEFAULT_NEWS_PORTAL_BASE_URL;
+  normalizeUrlEnv(process.env.NEWS_PORTAL_BASE_URL, DEFAULT_NEWS_PORTAL_BASE_URL);
 
 export const NEWS_IMAGE_BASE_URL =
-  process.env.NEWS_IMAGE_BASE_URL ?? DEFAULT_NEWS_IMAGE_BASE_URL;
+  normalizeUrlEnv(process.env.NEWS_IMAGE_BASE_URL, DEFAULT_NEWS_IMAGE_BASE_URL);
 
 export const PRODUCT_API_URL =
-  process.env.PRODUCT_API_URL ?? DEFAULT_PRODUCT_API_URL;
+  normalizeUrlEnv(process.env.PRODUCT_API_URL, DEFAULT_PRODUCT_API_URL);
 
 export const EBOOK_CATEGORY_API_URL =
-  process.env.EBOOK_CATEGORY_API_URL ?? DEFAULT_EBOOK_CATEGORY_API_URL;
+  normalizeUrlEnv(
+    process.env.EBOOK_CATEGORY_API_URL,
+    DEFAULT_EBOOK_CATEGORY_API_URL,
+  );
 
 export const PRODUCT_PORTAL_BASE_URL =
-  process.env.PRODUCT_PORTAL_BASE_URL ?? DEFAULT_PRODUCT_PORTAL_BASE_URL;
+  normalizeUrlEnv(
+    process.env.PRODUCT_PORTAL_BASE_URL,
+    DEFAULT_PRODUCT_PORTAL_BASE_URL,
+  );
 
 export const CLIENT_AREA_CONFIG_API_URL =
-  process.env.CLIENT_AREA_CONFIG_API_URL ??
-  DEFAULT_CLIENT_AREA_CONFIG_API_URL;
+  normalizeUrlEnv(
+    process.env.CLIENT_AREA_CONFIG_API_URL,
+    DEFAULT_CLIENT_AREA_CONFIG_API_URL,
+  );
 
 export const CLIENT_AREA_CONFIG_API_TOKEN =
   process.env.CLIENT_AREA_CONFIG_API_TOKEN?.trim() ?? "";
 
 export const BANNER_API_URL =
-  process.env.BANNER_API_URL ?? DEFAULT_BANNER_API_URL;
+  normalizeUrlEnv(process.env.BANNER_API_URL, DEFAULT_BANNER_API_URL);
 
 export const BANNER_DETAIL_API_URL =
-  process.env.BANNER_DETAIL_API_URL ?? DEFAULT_BANNER_DETAIL_API_URL;
+  normalizeUrlEnv(
+    process.env.BANNER_DETAIL_API_URL,
+    DEFAULT_BANNER_DETAIL_API_URL,
+  );
 
 export const BANNER_IMAGE_BASE_URL =
-  process.env.BANNER_IMAGE_BASE_URL ?? DEFAULT_BANNER_IMAGE_BASE_URL;
+  normalizeUrlEnv(
+    process.env.BANNER_IMAGE_BASE_URL,
+    DEFAULT_BANNER_IMAGE_BASE_URL,
+  );
 
 export const PENGHARGAAN_API_URL =
-  process.env.PENGHARGAAN_API_URL ?? DEFAULT_PENGHARGAAN_API_URL;
+  normalizeUrlEnv(
+    process.env.PENGHARGAAN_API_URL,
+    DEFAULT_PENGHARGAAN_API_URL,
+  );
 
 export const PENGHARGAAN_IMAGE_BASE_URL =
-  process.env.PENGHARGAAN_IMAGE_BASE_URL ??
-  DEFAULT_PENGHARGAAN_IMAGE_BASE_URL;
+  normalizeUrlEnv(
+    process.env.PENGHARGAAN_IMAGE_BASE_URL,
+    DEFAULT_PENGHARGAAN_IMAGE_BASE_URL,
+  );
 
 export const PENGUMUMAN_API_URL =
-  process.env.PENGUMUMAN_API_URL ?? DEFAULT_PENGUMUMAN_API_URL;
+  normalizeUrlEnv(
+    process.env.PENGUMUMAN_API_URL,
+    DEFAULT_PENGUMUMAN_API_URL,
+  );
 
 export const CONTACT_MESSAGE_API_URL =
-  process.env.CONTACT_MESSAGE_API_URL ?? DEFAULT_CONTACT_MESSAGE_API_URL;
+  normalizeUrlEnv(
+    process.env.CONTACT_MESSAGE_API_URL,
+    DEFAULT_CONTACT_MESSAGE_API_URL,
+  );
 
 export const COMPANY_PROFILE_API_URL =
-  process.env.COMPANY_PROFILE_API_URL ?? DEFAULT_COMPANY_PROFILE_API_URL;
+  normalizeUrlEnv(
+    process.env.COMPANY_PROFILE_API_URL,
+    DEFAULT_COMPANY_PROFILE_API_URL,
+  );
 
 export const LEGALITAS_API_URL =
-  process.env.LEGALITAS_API_URL ?? DEFAULT_LEGALITAS_API_URL;
+  normalizeUrlEnv(process.env.LEGALITAS_API_URL, DEFAULT_LEGALITAS_API_URL);
 
 export const PRIVACY_POLICY_API_URL =
-  process.env.PRIVACY_POLICY_API_URL ??
-  (APP_ENV === "dev"
-    ? DEFAULT_PRIVACY_POLICY_API_URL
-    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/privacy-policy`);
+  normalizeUrlEnv(
+    process.env.PRIVACY_POLICY_API_URL,
+    APP_ENV === "dev"
+      ? DEFAULT_PRIVACY_POLICY_API_URL
+      : `${DEFAULT_SG_ADMIN_API_BASE_URL}/privacy-policy`,
+  );
 
 export const TERMS_CONDITIONS_API_URL =
-  process.env.TERMS_CONDITIONS_API_URL ??
-  (APP_ENV === "dev"
-    ? `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/terms-and-conditions`
-    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/terms-and-conditions`);
+  normalizeUrlEnv(
+    process.env.TERMS_CONDITIONS_API_URL,
+    APP_ENV === "dev"
+      ? `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/terms-and-conditions`
+      : `${DEFAULT_SG_ADMIN_API_BASE_URL}/terms-and-conditions`,
+  );
 
 export const HISTORICAL_DATA_API_URL =
-  process.env.HISTORICAL_DATA_API_URL ?? DEFAULT_HISTORICAL_DATA_API_URL;
+  normalizeUrlEnv(
+    process.env.HISTORICAL_DATA_API_URL,
+    DEFAULT_HISTORICAL_DATA_API_URL,
+  );
 
 export const HISTORICAL_DATA_API_TOKEN =
   process.env.HISTORICAL_DATA_API_TOKEN ?? DEFAULT_HISTORICAL_DATA_API_TOKEN;
 
 export const ECONOMIC_CALENDAR_API_BASE_URL =
-  process.env.ECONOMIC_CALENDAR_API_BASE_URL ??
-  DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL;
+  normalizeUrlEnv(
+    process.env.ECONOMIC_CALENDAR_API_BASE_URL,
+    DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL,
+  );
+
+export const ECONOMIC_CALENDAR_API_TOKEN =
+  process.env.ECONOMIC_CALENDAR_API_TOKEN ??
+  DEFAULT_ECONOMIC_CALENDAR_API_TOKEN;
 
 export const TRADINGVIEW_SYMBOL_API_URL =
-  process.env.TRADINGVIEW_SYMBOL_API_URL ?? DEFAULT_TRADINGVIEW_SYMBOL_API_URL;
+  normalizeUrlEnv(
+    process.env.TRADINGVIEW_SYMBOL_API_URL,
+    DEFAULT_TRADINGVIEW_SYMBOL_API_URL,
+  );
 
 export const MARKET_SIGNAL_API_URL =
-  process.env.MARKET_SIGNAL_API_URL ??
-  (APP_ENV === "dev"
-    ? DEFAULT_MARKET_SIGNAL_API_URL
-    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/signal`);
+  normalizeUrlEnv(
+    process.env.MARKET_SIGNAL_API_URL,
+    APP_ENV === "dev"
+      ? DEFAULT_MARKET_SIGNAL_API_URL
+      : `${DEFAULT_SG_ADMIN_API_BASE_URL}/signal`,
+  );
 
 export const MARKET_SIGNAL_IMAGE_BASE_URL =
-  process.env.MARKET_SIGNAL_IMAGE_BASE_URL ??
-  DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL;
+  normalizeUrlEnv(
+    process.env.MARKET_SIGNAL_IMAGE_BASE_URL,
+    DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL,
+  );
 
 export const MARKET_ACADEMY_API_URL =
-  process.env.MARKET_ACADEMY_API_URL ?? DEFAULT_MARKET_ACADEMY_API_URL;
+  normalizeUrlEnv(
+    process.env.MARKET_ACADEMY_API_URL,
+    DEFAULT_MARKET_ACADEMY_API_URL,
+  );
 
 export const FRANKFURTER_API_URL =
-  process.env.FRANKFURTER_API_URL ?? DEFAULT_FRANKFURTER_API_URL;
+  normalizeUrlEnv(
+    process.env.FRANKFURTER_API_URL,
+    DEFAULT_FRANKFURTER_API_URL,
+  );
 
 export const PUBLIC_PLACEHOLDER_BASE_URL =
-  process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL ?? DEFAULT_PLACEHOLDER_BASE_URL;
+  normalizeUrlEnv(
+    process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL,
+    DEFAULT_PLACEHOLDER_BASE_URL,
+  );
 
 export const PUBLIC_LOGIN_URL =
-  process.env.NEXT_PUBLIC_LOGIN_URL ?? DEFAULT_LOGIN_URL;
+  normalizeUrlEnv(process.env.NEXT_PUBLIC_LOGIN_URL, DEFAULT_LOGIN_URL);
 
 export const PUBLIC_REGISTER_URL =
-  process.env.NEXT_PUBLIC_REGISTER_URL ?? DEFAULT_REGISTER_URL;
+  normalizeUrlEnv(process.env.NEXT_PUBLIC_REGISTER_URL, DEFAULT_REGISTER_URL);
+
+export const PUBLIC_CLIENT_AREA_ENABLED = normalizeBooleanEnv(
+  process.env.NEXT_PUBLIC_ENABLE_CLIENT_AREA,
+  DEFAULT_PUBLIC_CLIENT_AREA_ENABLED,
+);
+
+export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
+  process.env.NEXT_PUBLIC_ENABLE_TAWK_CHAT,
+  DEFAULT_PUBLIC_TAWK_CHAT_ENABLED,
+);
 
 export const PUBLIC_RECAPTCHA_SITE_KEY =
   process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
@@ -237,10 +312,13 @@ export const RECAPTCHA_SECRET_KEY =
   process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
 
 export const PUBLIC_HERO_CTA_URL =
-  process.env.NEXT_PUBLIC_HERO_CTA_URL ?? DEFAULT_HERO_CTA_URL;
+  normalizeUrlEnv(process.env.NEXT_PUBLIC_HERO_CTA_URL, DEFAULT_HERO_CTA_URL);
 
 export const PUBLIC_SPREAD_CTA_URL =
-  process.env.NEXT_PUBLIC_SPREAD_CTA_URL ?? DEFAULT_SPREAD_CTA_URL;
+  normalizeUrlEnv(
+    process.env.NEXT_PUBLIC_SPREAD_CTA_URL,
+    DEFAULT_SPREAD_CTA_URL,
+  );
 
 function normalizePublicSiteUrl(value: string | undefined) {
   const normalizedValue = value?.trim();
@@ -261,12 +339,16 @@ export const PUBLIC_SITE_URL = normalizePublicSiteUrl(
 );
 
 export const PUBLIC_SOLID_GOLD_PLAY_STORE_URL =
-  process.env.NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL ??
-  DEFAULT_SOLID_GOLD_PLAY_STORE_URL;
+  normalizeUrlEnv(
+    process.env.NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL,
+    DEFAULT_SOLID_GOLD_PLAY_STORE_URL,
+  );
 
 export const PUBLIC_SOLID_GOLD_APP_STORE_URL =
-  process.env.NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL ??
-  DEFAULT_SOLID_GOLD_APP_STORE_URL;
+  normalizeUrlEnv(
+    process.env.NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL,
+    DEFAULT_SOLID_GOLD_APP_STORE_URL,
+  );
 
 function isAbsoluteHttpUrl(value: string) {
   return /^https?:\/\//i.test(value);

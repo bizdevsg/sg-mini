@@ -24,6 +24,7 @@ export type ExchangeRateSnapshot = {
 };
 
 export const DEFAULT_EXCHANGE_RATE_BASE: ExchangeRateCurrency = "USD";
+const EXCHANGE_RATE_TIMEOUT_MS = 5000;
 const CURRENCY_DISPLAY_NAMES = new Intl.DisplayNames(["en"], {
   type: "currency",
 });
@@ -128,6 +129,11 @@ function buildFrankfurterUrl(base: ExchangeRateCurrency) {
 export async function getExchangeRateSnapshot(
   base: ExchangeRateCurrency = DEFAULT_EXCHANGE_RATE_BASE,
 ) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, EXCHANGE_RATE_TIMEOUT_MS);
+
   try {
     const response = await fetch(buildFrankfurterUrl(base), {
       headers: {
@@ -136,6 +142,7 @@ export async function getExchangeRateSnapshot(
       next: {
         revalidate: 3600,
       },
+      signal: controller.signal,
     });
 
     if (!response.ok) {
@@ -162,7 +169,11 @@ export async function getExchangeRateSnapshot(
       currencies,
     } satisfies ExchangeRateSnapshot;
   } catch (error) {
-    console.error("Failed to fetch exchange rates", error);
+    if (!(error instanceof Error && error.name === "AbortError")) {
+      console.error("Failed to fetch exchange rates", error);
+    }
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

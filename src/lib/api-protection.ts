@@ -4,15 +4,7 @@ import { NextResponse } from "next/server";
 
 const INTERNAL_API_TOKEN = process.env.INTERNAL_API_TOKEN?.trim() ?? "";
 const APP_ENV = process.env.APP_ENV?.trim().toLowerCase() ?? "dev";
-const IS_API_PROTECTION_ENABLED = APP_ENV !== "dev";
-
-function isSameOriginUrl(value: string, expectedOrigin: string) {
-  try {
-    return new URL(value).origin === expectedOrigin;
-  } catch {
-    return false;
-  }
-}
+const IS_API_PROTECTION_ENABLED = APP_ENV === "prod";
 
 function hasValidInternalApiToken(request: Request) {
   if (!INTERNAL_API_TOKEN) {
@@ -23,25 +15,16 @@ function hasValidInternalApiToken(request: Request) {
 }
 
 function isTrustedSameOriginBrowserRequest(request: Request) {
-  const requestOrigin = new URL(request.url).origin;
   const secFetchSite = request.headers.get("sec-fetch-site")?.toLowerCase();
 
-  if (secFetchSite !== "same-origin") {
-    return false;
-  }
-
-  const originHeader = request.headers.get("origin");
-  const refererHeader = request.headers.get("referer");
-
-  if (originHeader && !isSameOriginUrl(originHeader, requestOrigin)) {
-    return false;
-  }
-
-  if (refererHeader && !isSameOriginUrl(refererHeader, requestOrigin)) {
-    return false;
-  }
-
-  return Boolean(originHeader || refererHeader);
+  // sec-fetch-site is a browser-computed, unspoofable signal of whether this
+  // request originated from a document on the same origin the browser
+  // navigated to. Comparing Origin/Referer against request.url's origin is
+  // unreliable behind reverse proxies and dev tunnels (Docker/standalone
+  // deploys, devtunnels.ms, ngrok, etc.), where the Node process only ever
+  // sees the internal host, never the public-facing one — so we rely on
+  // sec-fetch-site alone.
+  return secFetchSite === "same-origin";
 }
 
 function withHiddenRouteResponse(status: 403 | 404) {

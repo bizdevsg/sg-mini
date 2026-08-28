@@ -10,9 +10,13 @@ export function NewsDetailArticleBody({ bodyHtml }: NewsDetailArticleBodyProps) 
       <article
         className={[
           "text-sm leading-7 text-zinc-200 sm:text-base sm:leading-8",
+          "[&_*]:text-inherit",
           "[&_h1]:mb-5 [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:leading-tight [&_h1]:text-white sm:[&_h1]:text-3xl",
           "[&_h2]:mb-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:leading-tight [&_h2]:text-white sm:[&_h2]:text-2xl",
           "[&_h3]:mb-4 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:leading-tight [&_h3]:text-white sm:[&_h3]:text-xl",
+          "[&_h4]:mb-3 [&_h4]:text-base [&_h4]:font-semibold [&_h4]:leading-tight [&_h4]:text-white sm:[&_h4]:text-lg",
+          "[&_h5]:mb-3 [&_h5]:text-sm [&_h5]:font-semibold [&_h5]:leading-tight [&_h5]:text-white sm:[&_h5]:text-base",
+          "[&_h6]:mb-3 [&_h6]:text-sm [&_h6]:font-semibold [&_h6]:leading-tight [&_h6]:text-white",
           "[&_p]:mb-5 [&_p]:leading-7 [&_p]:text-zinc-200 sm:[&_p]:leading-8",
           "[&_ul]:mb-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6",
           "[&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6",
@@ -21,7 +25,7 @@ export function NewsDetailArticleBody({ bodyHtml }: NewsDetailArticleBodyProps) 
           "[&_a]:text-yellow-400 [&_a]:underline [&_a]:underline-offset-4",
           "[&_strong]:font-semibold [&_strong]:text-white",
           "[&_em]:italic",
-          "[&_div]:text-zinc-200 [&_span]:text-inherit",
+          "[&_div]:text-zinc-200 [&_span]:text-inherit [&_font]:text-inherit",
           "[&_img]:my-6 [&_img]:rounded-2xl",
           "[&_table]:mb-5 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:border-collapse sm:[&_table]:table",
           "[&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_td]:text-zinc-200",

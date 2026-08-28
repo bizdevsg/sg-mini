@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Poppins } from "next/font/google";
 import "aos/dist/aos.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "flag-icons/css/flag-icons.min.css";
 import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";
 import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
 import { LoadingProvider } from "@/components/providers/LoadingProvider";
-import { NEWS_IMAGE_BASE_URL } from "@/lib/env";
+import { APP_ENV, NEWS_IMAGE_BASE_URL } from "@/lib/env";
 import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_TITLE,
@@ -21,13 +20,6 @@ import {
   type AppLocale,
 } from "@/locales";
 import "./globals.css";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: SITE_METADATA_BASE,
@@ -85,7 +77,7 @@ export default async function RootLayout({
       data-locale={locale}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${poppins.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       <head>
         <link rel="dns-prefetch" href="//portalnews.newsmaker.id" />
@@ -100,7 +92,7 @@ export default async function RootLayout({
           <FirebaseBootstrap />
           <LoadingProvider locale={locale}>{children}</LoadingProvider>
         </FontAwesomeProvider>
-        <Analytics />
+        {APP_ENV === "prod" ? <Analytics /> : null}
       </body>
     </html>
   );

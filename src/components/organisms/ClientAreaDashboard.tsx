@@ -7,6 +7,8 @@ import { ClientAreaFundTransferUnavailableModal } from "@/components/molecules/C
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaHomePanel } from "@/components/organisms/ClientAreaHomePanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
+import { useBannerRecords } from "@/hooks/useBannerRecords";
+import type { BannerApiRecord } from "@/lib/banner";
 import {
   buildClientAreaHeroSlides,
   getClientAreaAccountModeData,
@@ -44,7 +46,16 @@ export function ClientAreaDashboard({
   const bannerDetailLabel = messages.promoDetailPage.breadcrumb;
   const copy = getDashboardCopy(locale);
   const quickActionIconMap = getQuickActionIconMap();
-  const heroSlides = buildClientAreaHeroSlides(copy, initialBanners, locale);
+  const resolvedBanners = useBannerRecords(
+    initialBanners.map<BannerApiRecord>((banner) => ({
+      ...banner,
+      slug: banner.slug ?? "",
+      title: "",
+      excerpt: "",
+      content: "",
+    })),
+  );
+  const heroSlides = buildClientAreaHeroSlides(copy, resolvedBanners, locale);
   const { accountMode, setAccountMode } = useClientAreaAccountMode();
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<ActionId | null>(null);

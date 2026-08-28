@@ -26,6 +26,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           priority
           sizes="28px"
           className="h-auto w-7 object-contain sm:hidden"
+          style={{ height: "auto" }}
         />
 
         {/* Desktop Logo */}
@@ -35,6 +36,7 @@ export function LogoMark({ locale }: LogoMarkProps) {
           priority
           sizes="(min-width: 1280px) 300px, (min-width: 1024px) 260px, (min-width: 640px) 220px, 0px"
           className="hidden h-12 w-auto object-contain sm:block lg:h-13 xl:h-14"
+          style={{ width: "auto" }}
         />
       </Link>
     </div>

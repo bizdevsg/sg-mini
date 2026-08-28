@@ -61,7 +61,7 @@ export default async function MarketAcademyPage({
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const { articles, source } = await getMarketAcademyFeed(locales);
+  const { articles } = await getMarketAcademyFeed(locales);
   const messages = getMessages(locales);
   const labels = messages.marketAcademyPage;
 
@@ -70,7 +70,6 @@ export default async function MarketAcademyPage({
       <NewsBrowser
         articles={articles}
         locale={locales}
-        source={source === "api" ? "api" : "fallback"}
         hrefBasePath={MARKET_ACADEMY_HREF_BASE_PATH}
         browserLabels={messages.marketAcademyBrowser}
         labels={labels}

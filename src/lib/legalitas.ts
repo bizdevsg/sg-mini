@@ -1,6 +1,6 @@
 import "server-only";
 
-import { LEGALITAS_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { LEGALITAS_API_URL } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import type { AppLocale } from "@/locales";
 
@@ -40,69 +40,6 @@ type LegalitasApiResponse = {
 
 const LEGALITAS_REVALIDATE_SECONDS = 300;
 
-const FALLBACK_LEGALITAS_BY_LOCALE: Record<AppLocale, LegalitasRecord[]> = {
-  id: [
-    {
-      id: 1,
-      title: "Akta Pendirian Perseroan Terbatas",
-      nomor: "52",
-      description:
-        "Tanggal 18 Januari 2002 oleh Notaris Soehendro Gautama, SH, PT. Solid Gold Berjangka",
-      slug: "akta-pendirian-perseroan-terbatas",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      id: 2,
-      title: "Pengesahan Departemen Kehakiman dan HAM",
-      nomor: "C-05612 HT.01.01.TH.2002",
-      description: "Pengesahan resmi dari Kementerian Hukum dan HAM",
-      slug: "pengesahan-departemen-kehakiman-dan-ham",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      id: 3,
-      title: "Surat Persetujuan Anggota Bursa (SPAB)",
-      nomor: "SPAB-047/BBJ/07/02",
-      description: "Persetujuan keanggotaan bursa berjangka",
-      slug: "surat-persetujuan-anggota-bursa-spab",
-      createdAt: null,
-      updatedAt: null,
-    },
-  ],
-  en: [
-    {
-      id: 1,
-      title: "Limited Liability Company Deed of Establishment",
-      nomor: "52",
-      description:
-        "Dated January 18, 2002 by Notary Soehendro Gautama, SH, PT. Solid Gold Berjangka",
-      slug: "limited-liability-company-deed-of-establishment",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      id: 2,
-      title: "Approval from the Ministry of Justice and Human Rights",
-      nomor: "C-05612 HT.01.01.TH.2002",
-      description: "Official approval from the Ministry of Law and Human Rights",
-      slug: "approval-ministry-of-justice-and-human-rights",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      id: 3,
-      title: "Exchange Membership Approval Letter (SPAB)",
-      nomor: "SPAB-047/BBJ/07/02",
-      description: "Approval for futures exchange membership",
-      slug: "exchange-membership-approval-letter-spab",
-      createdAt: null,
-      updatedAt: null,
-    },
-  ],
-};
-
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -139,11 +76,7 @@ function toLegalitasRecord(item: LegalitasApiRecord): LegalitasRecord | null {
   };
 }
 
-export async function getLegalitasRecords(locale: AppLocale = "id") {
-  if (USE_DUMMY_API_DATA) {
-    return FALLBACK_LEGALITAS_BY_LOCALE[locale];
-  }
-
+export async function getLegalitasRecords(_locale: AppLocale = "id") {
   try {
     const response = await fetch(LEGALITAS_API_URL, {
       next: {

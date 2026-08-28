@@ -8,24 +8,23 @@ export const enClientArea: AppMessages["clientArea"] = {
     badge: "Client Portal",
     title: "Sign in Client Area",
     description:
-      "Access your demo or live account to monitor balances, market watchlists, and transaction activity from one dashboard.",
+      "Account authentication is being prepared and is not yet available on the website.",
     accountLabel: "Account number or email",
     accountPlaceholder: "Enter your account number or email",
     passwordLabel: "Password",
     passwordPlaceholder: "Enter your password",
     rememberMe: "Remember me on this device",
     forgotPassword: "Forgot password?",
-    primaryCta: "Enter demo dashboard",
+    primaryCta: "Sign-in unavailable",
     secondaryCta: "Contact support",
     submitting: "Verifying access...",
-    helper:
-      "Use the demo credentials below to sign in to this preview client area.",
+    helper: "Use the official application or contact support for account access.",
     captchaTitle: "Security verification",
     captchaHelper:
       "Complete the reCAPTCHA challenge before entering the client area.",
-    demoCredentialsTitle: "Quick demo access",
-    demoCredentialsAccount: "Demo account: BBH10158",
-    demoCredentialsPassword: "Password: demo12345",
+    demoCredentialsTitle: "Account access",
+    demoCredentialsAccount: "Website sign-in is not available yet.",
+    demoCredentialsPassword: "",
     errorUnavailable:
       "The client area is currently disabled from the admin system. Please try again later.",
     errorRequired:

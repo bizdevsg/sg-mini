@@ -2,8 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 
-import { getDummyProductCatalog } from "@/lib/api-dummy-data";
-import { PRODUCT_API_URL, USE_DUMMY_API_DATA, getProductAssetUrl } from "@/lib/env";
+import { PRODUCT_API_URL, getProductAssetUrl } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export const PRODUCT_PAGE_CATEGORIES = ["multilateral", "bilateral"] as const;
@@ -55,10 +54,6 @@ type ProductDetailApiResponse = {
   http?: number;
   data?: ProductApiRecord | null;
 };
-
-function getDummyCatalogForCategory(category: ProductPageCategory) {
-  return getDummyProductCatalog(category);
-}
 
 function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
   const categoryDiff = left.kategori.localeCompare(right.kategori);
@@ -117,7 +112,7 @@ async function getProductApiRecords(category: ProductPageCategory) {
 
   if (!response.ok) {
     console.warn(
-      `Product API returned ${response.status} ${response.statusText}. Falling back to dummy product catalog.`,
+      `Product API returned ${response.status} ${response.statusText}.`,
     );
 
     return null;
@@ -168,16 +163,12 @@ export function isProductPageCategory(
 export const getProductCatalog = cache(async function getProductCatalog(
   category: ProductPageCategory,
 ) {
-  if (USE_DUMMY_API_DATA) {
-    return getDummyCatalogForCategory(category);
-  }
-
   try {
     const sourceCategory = PRODUCT_SOURCE_CATEGORY_MAP[category];
     const records = await getProductApiRecords(category);
 
     if (!records) {
-      return getDummyCatalogForCategory(category);
+      return [];
     }
 
     return records
@@ -185,10 +176,10 @@ export const getProductCatalog = cache(async function getProductCatalog(
       .map(mapProductApiRecord);
   } catch (error) {
     console.warn(
-      "Failed to fetch product catalog. Falling back to dummy data.",
+      "Failed to fetch product catalog.",
       error,
     );
-    return getDummyCatalogForCategory(category);
+    return [];
   }
 });
 
@@ -196,11 +187,6 @@ export const getProductBySlug = cache(async function getProductBySlug(
   category: ProductPageCategory,
   slug: string,
 ) {
-  if (USE_DUMMY_API_DATA) {
-    const catalog = await getProductCatalog(category);
-    return catalog.find((candidate) => candidate.slug === slug) ?? null;
-  }
-
   try {
     const record = await getProductApiRecordBySlug(category, slug);
 

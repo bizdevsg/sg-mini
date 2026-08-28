@@ -23,9 +23,13 @@ export type LiveQuoteDisplay = {
 
 const LIVE_QUOTE_ICON_BY_SYMBOL: Record<string, string> = {
   XUL10: "/assets/icon-symbol/gold-icon.png",
+  XUL10_BBJ: "/assets/icon-symbol/gold-icon.png",
   XAGUSD: "/assets/icon-symbol/silver-icon.png",
+  "BCO-NC": "/assets/icon-symbol/oil-icon.png",
   BCO10_BBJ: "/assets/icon-symbol/oil-icon.png",
+  "HKK-NC": "/assets/icon-symbol/hangseng-icon.png",
   HKK50_BBJ: "/assets/icon-symbol/hangseng-icon.png",
+  "JPK-NC": "/assets/icon-symbol/nikkei-icon.png",
   JPK50_BBJ: "/assets/icon-symbol/nikkei-icon.png",
   DX1010_BBJ: "/assets/icon-symbol/dxy-icon.png",
   AU1010_BBJ: "/assets/icon-symbol/audusd-icon.png",
@@ -60,10 +64,32 @@ export const QUOTE_ORDER = [
   "UI1010_BBJ",
 ] as const;
 
-export const LIVE_QUOTE_LABELS: Record<(typeof QUOTE_ORDER)[number], string> = {
+const LIVE_QUOTE_DISPLAY_ORDER = [
+  "XUL10",
+  "XUL10_BBJ",
+  "BCO-NC",
+  "BCO10_BBJ",
+  "HKK-NC",
+  "HKK50_BBJ",
+  "JPK-NC",
+  "JPK50_BBJ",
+  "DX1010_BBJ",
+  "AU1010_BBJ",
+  "EU1010_BBJ",
+  "GU1010_BBJ",
+  "UC1010_BBJ",
+  "UJ1010_BBJ",
+  "UI1010_BBJ",
+] as const;
+
+export const LIVE_QUOTE_LABELS: Record<string, string> = {
   XUL10: "Gold",
+  XUL10_BBJ: "Gold",
+  "BCO-NC": "Brent Crude",
   BCO10_BBJ: "Brent Crude",
+  "HKK-NC": "Hang Seng",
   HKK50_BBJ: "Hang Seng",
+  "JPK-NC": "Nikkei 225",
   JPK50_BBJ: "Nikkei 225",
   DX1010_BBJ: "DXY",
   AU1010_BBJ: "AUD/USD",
@@ -75,40 +101,45 @@ export const LIVE_QUOTE_LABELS: Record<(typeof QUOTE_ORDER)[number], string> = {
 };
 
 export function getLiveQuoteDisplay(symbol: string): LiveQuoteDisplay {
-  const label = LIVE_QUOTE_LABELS[symbol as keyof typeof LIVE_QUOTE_LABELS];
+  const normalizedSymbol = symbol.trim().toUpperCase();
+  const label = LIVE_QUOTE_LABELS[normalizedSymbol];
 
-  if (!label || label === symbol) {
+  if (!label || label === normalizedSymbol) {
     return {
-      label: symbol,
+      label: normalizedSymbol,
       symbol: null,
     };
   }
 
   return {
     label,
-    symbol,
+    symbol: normalizedSymbol,
   };
 }
 
 export function getLiveQuoteIconSrc(symbol: string) {
+  const normalizedSymbol = symbol.trim().toUpperCase();
   const appendVersion = (src: string) =>
     `${src}${src.includes("?") ? "&" : "?"}v=${LIVE_QUOTE_ICON_VERSION}`;
 
-  if (symbol in LIVE_QUOTE_ICON_BY_SYMBOL) {
-    return appendVersion(LIVE_QUOTE_ICON_BY_SYMBOL[symbol]);
+  if (normalizedSymbol in LIVE_QUOTE_ICON_BY_SYMBOL) {
+    return appendVersion(LIVE_QUOTE_ICON_BY_SYMBOL[normalizedSymbol]);
   }
 
-  const normalized = symbol.replace(/[^A-Z]/gi, "").toUpperCase();
+  const normalized = normalizedSymbol.replace(/[^A-Z]/gi, "").toUpperCase();
   return LIVE_QUOTE_ICON_BY_SYMBOL[normalized]
     ? appendVersion(LIVE_QUOTE_ICON_BY_SYMBOL[normalized])
     : null;
 }
 
 export function getSortedSymbols(quotes: LiveQuotePayload) {
-  const ordered = QUOTE_ORDER.filter((symbol) => symbol in quotes);
+  const ordered = LIVE_QUOTE_DISPLAY_ORDER.filter((symbol) => symbol in quotes);
   const remaining = Object.keys(quotes)
     .filter(
-      (symbol) => !QUOTE_ORDER.includes(symbol as (typeof QUOTE_ORDER)[number]),
+      (symbol) =>
+        !LIVE_QUOTE_DISPLAY_ORDER.includes(
+          symbol as (typeof LIVE_QUOTE_DISPLAY_ORDER)[number],
+        ),
     )
     .sort();
 

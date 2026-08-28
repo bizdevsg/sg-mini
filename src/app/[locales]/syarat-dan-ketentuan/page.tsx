@@ -15,6 +15,8 @@ type TermsConditionsRouteProps = {
   params: Promise<{ locales: string }>;
 };
 
+export const dynamic = "force-dynamic";
+
 function assertValidLocale(value: string): asserts value is AppLocale {
   if (!isSupportedLocale(value)) {
     notFound();

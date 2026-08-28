@@ -2,12 +2,10 @@ import "server-only";
 
 import { cache } from "react";
 
-import { getDummyBannerDetailBySlug, getDummyBannerRecords } from "@/lib/api-dummy-data";
 import {
   BANNER_API_URL,
   BANNER_DETAIL_API_URL,
   BANNER_IMAGE_BASE_URL,
-  USE_DUMMY_API_DATA,
   getBannerAssetUrl,
   normalizeSgAdminUrl,
 } from "@/lib/env";
@@ -56,6 +54,15 @@ type BannerDetailApiResponse = {
 };
 
 const BANNER_TIMEOUT_MS = 8000;
+
+function isAbortError(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const candidate = error as { name?: unknown; code?: unknown };
+  return candidate.name === "AbortError" || candidate.code === 20;
+}
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -267,7 +274,9 @@ async function fetchBannerList() {
       .slice()
       .sort(compareBanners);
   } catch (error) {
-    console.error("Failed to fetch banners", error);
+    if (!isAbortError(error)) {
+      console.error("Failed to fetch banners", error);
+    }
     return [];
   } finally {
     clearTimeout(timeout);
@@ -306,7 +315,9 @@ async function fetchBannerDetail(slug: string) {
     const mappedRecord = mapBannerRecord(rawRecord);
     return mappedRecord && mappedRecord.is_active ? mappedRecord : null;
   } catch (error) {
-    console.error(`Failed to fetch banner detail for slug "${slug}"`, error);
+    if (!isAbortError(error)) {
+      console.error(`Failed to fetch banner detail for slug "${slug}"`, error);
+    }
     return null;
   } finally {
     clearTimeout(timeout);
@@ -314,22 +325,10 @@ async function fetchBannerDetail(slug: string) {
 }
 
 export const getBannerRecords = cache(async function getBannerRecords() {
-  if (USE_DUMMY_API_DATA) {
-    return getDummyBannerRecords()
-      .map(mapBannerRecord)
-      .filter((item): item is BannerApiRecord => Boolean(item && item.is_active))
-      .slice()
-      .sort(compareBanners);
-  }
-
   return fetchBannerList();
 });
 
 export const getBannerBySlug = cache(async function getBannerBySlug(slug: string) {
-  if (USE_DUMMY_API_DATA) {
-    return getDummyBannerDetailBySlug(slug);
-  }
-
   const normalizedSlug = normalizeText(slug);
 
   if (!normalizedSlug) {

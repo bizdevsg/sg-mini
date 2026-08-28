@@ -1,7 +1,6 @@
 "use server";
 
-import { createDummyContactMessageState } from "@/lib/api-dummy-data";
-import { CONTACT_MESSAGE_API_URL, USE_DUMMY_API_DATA } from "@/lib/env";
+import { CONTACT_MESSAGE_API_URL } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 export type ContactMessageState = {
@@ -34,10 +33,6 @@ export async function submitContactMessage(
       status: "error",
       message: "Please complete all required fields.",
     };
-  }
-
-  if (USE_DUMMY_API_DATA) {
-    return createDummyContactMessageState(nama, subjek);
   }
 
   try {

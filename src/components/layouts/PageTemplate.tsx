@@ -3,11 +3,8 @@ import type { ReactNode } from "react";
 import { getLocaleConfig, type AppLocale } from "@/locales";
 import { FooterSection } from "@/components/organisms/FooterSection";
 import { Navbar } from "@/components/organisms/Navbar";
-import { ScrollToTopButton } from "@/components/molecules/ScrollToTopButton";
-import {
-  getClientAreaSessionState,
-} from "@/lib/client-area-auth";
-import { isClientAreaEnabled } from "@/lib/client-area-config";
+import { getClientAreaSessionState } from "@/lib/client-area-auth";
+import { PUBLIC_CLIENT_AREA_ENABLED } from "@/lib/env";
 
 type PageTemplateProps = {
   children: ReactNode;
@@ -16,9 +13,7 @@ type PageTemplateProps = {
 };
 
 async function getNavbarState(locale: AppLocale) {
-  const clientAreaEnabled = await isClientAreaEnabled();
-
-  if (!clientAreaEnabled) {
+  if (!PUBLIC_CLIENT_AREA_ENABLED) {
     return {
       clientAreaProfile: null,
       isClientAreaEnabled: false,
@@ -31,7 +26,7 @@ async function getNavbarState(locale: AppLocale) {
 
   return {
     clientAreaProfile: profile,
-    isClientAreaEnabled: true,
+    isClientAreaEnabled: PUBLIC_CLIENT_AREA_ENABLED,
     isClientAreaAuthenticated: isAuthenticated,
     locale,
   };
@@ -52,7 +47,7 @@ export async function PageTemplate({
     >
       <Navbar {...navbarState} />
       <main className={bodyClassName}>{children}</main>
-      <ScrollToTopButton locale={locale} />
+      {/* <ScrollToTopButton locale={locale} /> */}
       <FooterSection locale={locale} />
     </div>
   );

@@ -2,7 +2,6 @@ import "server-only";
 
 import {
   PRIVACY_POLICY_API_URL,
-  USE_DUMMY_API_DATA,
   normalizeSgAdminUrl,
 } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
@@ -131,25 +130,10 @@ function sanitizePrivacyPolicyHtml(content: string) {
   return hasVisibleHtmlContent(sanitizedContent) ? sanitizedContent : "";
 }
 
-function getFallbackPrivacyPolicyRecord(locale: AppLocale): PrivacyPolicyRecord {
-  const content =
-    locale === "id"
-      ? "<p>Kebijakan privasi belum tersedia saat ini.</p><p>Silakan coba lagi beberapa saat.</p>"
-      : "<p>The privacy policy is not available right now.</p><p>Please try again later.</p>";
-
-  return {
-    id: 0,
-    content,
-    createdAt: null,
-    updatedAt: null,
-  };
-}
-
 function normalizePrivacyPolicyRecord(
   record: PrivacyPolicyApiRecord | null | undefined,
   locale: AppLocale,
 ) {
-  const fallbackRecord = getFallbackPrivacyPolicyRecord(locale);
   const content = sanitizePrivacyPolicyHtml(
     normalizeText(
       pickLocalizedValue(locale, record?.content, record?.content_en),
@@ -157,23 +141,14 @@ function normalizePrivacyPolicyRecord(
   );
 
   return {
-    id:
-      typeof record?.id === "number" && Number.isFinite(record.id)
-        ? record.id
-        : fallbackRecord.id,
-    content: content || fallbackRecord.content,
+    id: typeof record?.id === "number" && Number.isFinite(record.id) ? record.id : 0,
+    content,
     createdAt: normalizeText(record?.created_at) || null,
     updatedAt: normalizeText(record?.updated_at) || null,
   };
 }
 
 export async function getPrivacyPolicyRecord(locale: AppLocale = "id") {
-  const fallbackRecord = getFallbackPrivacyPolicyRecord(locale);
-
-  if (USE_DUMMY_API_DATA) {
-    return fallbackRecord;
-  }
-
   try {
     const response = await fetch(PRIVACY_POLICY_API_URL, {
       cache: "no-store",
@@ -184,7 +159,7 @@ export async function getPrivacyPolicyRecord(locale: AppLocale = "id") {
       console.error(
         `Failed to fetch privacy policy: ${response.status} ${response.statusText}`,
       );
-      return fallbackRecord;
+      return normalizePrivacyPolicyRecord(null, locale);
     }
 
     const responseBody = await response.text();
@@ -192,6 +167,6 @@ export async function getPrivacyPolicyRecord(locale: AppLocale = "id") {
     return normalizePrivacyPolicyRecord(payload.data, locale);
   } catch (error) {
     console.error("Failed to fetch privacy policy", error);
-    return fallbackRecord;
+    return normalizePrivacyPolicyRecord(null, locale);
   }
 }

@@ -33,24 +33,31 @@ type EconomicCalendarBrowserProps = {
   overview: EconomicCalendarOverview;
 };
 
-const PAGE_SIZE = 20;
 const ECONOMIC_CALENDAR_CLIENT_STALE_MS = 30_000;
 const ECONOMIC_CALENDAR_REFRESH_INTERVAL_MS = 30_000;
+
 type PaginationItem = number | "...";
 
 async function fetchEconomicCalendarRange(
   rangeKey: EconomicCalendarRangeKey,
+  page: number,
 ): Promise<EconomicCalendarRangeData> {
-  const response = await fetch(`/api/economic-calendar/${rangeKey}`, {
-    cache: "no-store",
-    headers: {
-      Accept: "application/json",
-    },
+  const searchParams = new URLSearchParams({
+    page: String(page),
   });
+  const response = await fetch(
+    `/api/economic-calendar/${rangeKey}?${searchParams.toString()}`,
+    {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    },
+  );
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch economic calendar ${rangeKey}: ${response.status}`,
+      `Failed to fetch economic calendar ${rangeKey} page ${page}: ${response.status}`,
     );
   }
 
@@ -97,6 +104,13 @@ function isRangeDataReady(rangeData: EconomicCalendarRangeData) {
 
 function isStoreEntryFresh(fetchedAt: number) {
   return Date.now() - fetchedAt < ECONOMIC_CALENDAR_CLIENT_STALE_MS;
+}
+
+function isSameRequestedPage(
+  rangeData: EconomicCalendarRangeData,
+  page: number,
+) {
+  return rangeData.pagination.currentPage === page;
 }
 
 function getCountryFlagCode(currency: string) {
@@ -153,6 +167,7 @@ export function EconomicCalendarBrowser({
   const browserRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
   const activeRangeRef = useRef<EconomicCalendarRangeKey>("today");
+  const currentPageRef = useRef(1);
 
   const [activeRange, setActiveRange] =
     useState<EconomicCalendarRangeKey>("today");
@@ -163,6 +178,10 @@ export function EconomicCalendarBrowser({
   useEffect(() => {
     activeRangeRef.current = activeRange;
   }, [activeRange]);
+
+  useEffect(() => {
+    currentPageRef.current = currentPage;
+  }, [currentPage]);
 
   useEffect(() => {
     return () => {
@@ -179,11 +198,14 @@ export function EconomicCalendarBrowser({
 
       for (const rangeKey of ECONOMIC_CALENDAR_RANGE_KEYS) {
         const currentRange = currentOverview[rangeKey];
-        const storedEntry = readEconomicCalendarStoreEntry(rangeKey);
+        const storedEntry = readEconomicCalendarStoreEntry(rangeKey, 1);
 
         if (!storedEntry) {
-          if (isRangeDataReady(currentRange)) {
-            writeEconomicCalendarStoreEntry(rangeKey, currentRange);
+          if (
+            isRangeDataReady(currentRange) &&
+            currentRange.pagination.currentPage === 1
+          ) {
+            writeEconomicCalendarStoreEntry(rangeKey, 1, currentRange);
           }
 
           continue;
@@ -191,7 +213,9 @@ export function EconomicCalendarBrowser({
 
         if (
           currentRange.status !== "success" ||
-          currentRange.updatedAt !== storedEntry.data.updatedAt
+          currentRange.updatedAt !== storedEntry.data.updatedAt ||
+          currentRange.pagination.currentPage !==
+            storedEntry.data.pagination.currentPage
         ) {
           nextOverview[rangeKey] = storedEntry.data;
           hasChanged = true;
@@ -206,45 +230,77 @@ export function EconomicCalendarBrowser({
     for (const rangeKey of ECONOMIC_CALENDAR_RANGE_KEYS) {
       const rangeData = overview[rangeKey];
 
-      if (isRangeDataReady(rangeData)) {
-        writeEconomicCalendarStoreEntry(rangeKey, rangeData);
+      if (
+        isRangeDataReady(rangeData) &&
+        rangeData.pagination.currentPage === 1
+      ) {
+        writeEconomicCalendarStoreEntry(rangeKey, 1, rangeData);
       }
     }
   }, [overview]);
 
-  const activeRangeStatus = rangeOverview[activeRange].status;
-
   useEffect(() => {
     const currentRangeData = rangeOverview[activeRange];
-    const storedEntry = readEconomicCalendarStoreEntry(activeRange);
+    const storedEntry = readEconomicCalendarStoreEntry(activeRange, currentPage);
     const hasFreshStoredData =
       storedEntry !== null && isStoreEntryFresh(storedEntry.fetchedAt);
-    const shouldShowLoadingState =
-      currentRangeData.status === "idle" && !hasFreshStoredData;
-    const shouldSkipFetch =
+    const hasRequestedPageData =
       isRangeDataReady(currentRangeData) &&
-      storedEntry !== null &&
-      storedEntry.data.updatedAt === currentRangeData.updatedAt &&
-      isStoreEntryFresh(storedEntry.fetchedAt);
+      isSameRequestedPage(currentRangeData, currentPage);
+    const isLoadingRequestedPage =
+      currentRangeData.status === "loading" &&
+      isSameRequestedPage(currentRangeData, currentPage);
+    const isErrorRequestedPage =
+      currentRangeData.status === "error" &&
+      isSameRequestedPage(currentRangeData, currentPage);
 
-    if (shouldSkipFetch) {
+    if (hasFreshStoredData) {
+      if (
+        !hasRequestedPageData ||
+        currentRangeData.updatedAt !== storedEntry.data.updatedAt
+      ) {
+        setRangeOverview((currentOverview) => ({
+          ...currentOverview,
+          [activeRange]: storedEntry.data,
+        }));
+      }
+
       return;
     }
 
-    if (shouldShowLoadingState) {
-      setRangeOverview((currentOverview) => ({
-        ...currentOverview,
-        [activeRange]: createEmptyEconomicCalendarRange(activeRange, "loading"),
-      }));
+    if (hasRequestedPageData) {
+      return;
     }
 
-    void fetchEconomicCalendarRange(activeRange)
+    if (isLoadingRequestedPage || isErrorRequestedPage) {
+      return;
+    }
+
+    setRangeOverview((currentOverview) => ({
+      ...currentOverview,
+      [activeRange]: createEmptyEconomicCalendarRange(
+        activeRange,
+        "loading",
+        currentPage,
+      ),
+    }));
+
+    void fetchEconomicCalendarRange(activeRange, currentPage)
       .then((data) => {
         if (!isMountedRef.current) {
           return;
         }
 
-        writeEconomicCalendarStoreEntry(activeRange, data);
+        writeEconomicCalendarStoreEntry(
+          activeRange,
+          data.pagination.currentPage,
+          data,
+        );
+
+        if (data.pagination.currentPage !== currentPage) {
+          setCurrentPage(data.pagination.currentPage);
+        }
+
         setRangeOverview((currentOverview) => ({
           ...currentOverview,
           [activeRange]: data,
@@ -257,13 +313,14 @@ export function EconomicCalendarBrowser({
 
         setRangeOverview((currentOverview) => ({
           ...currentOverview,
-          [activeRange]:
-            currentOverview[activeRange].status === "success"
-              ? currentOverview[activeRange]
-              : createEmptyEconomicCalendarRange(activeRange),
+          [activeRange]: createEmptyEconomicCalendarRange(
+            activeRange,
+            "error",
+            currentPage,
+          ),
         }));
       });
-  }, [activeRange, activeRangeStatus, rangeOverview]);
+  }, [activeRange, currentPage, rangeOverview]);
 
   useEffect(() => {
     function refreshActiveRange() {
@@ -272,14 +329,27 @@ export function EconomicCalendarBrowser({
       }
 
       const rangeKey = activeRangeRef.current;
+      const page = currentPageRef.current;
 
-      void fetchEconomicCalendarRange(rangeKey)
+      void fetchEconomicCalendarRange(rangeKey, page)
         .then((data) => {
           if (!isMountedRef.current) {
             return;
           }
 
-          writeEconomicCalendarStoreEntry(rangeKey, data);
+          writeEconomicCalendarStoreEntry(
+            rangeKey,
+            data.pagination.currentPage,
+            data,
+          );
+
+          if (
+            rangeKey === activeRangeRef.current &&
+            data.pagination.currentPage !== currentPageRef.current
+          ) {
+            setCurrentPage(data.pagination.currentPage);
+          }
+
           setRangeOverview((currentOverview) => ({
             ...currentOverview,
             [rangeKey]: data,
@@ -313,10 +383,12 @@ export function EconomicCalendarBrowser({
 
   const activeData = rangeOverview[activeRange];
   const activeEvents = activeData.events;
-  const totalPages = Math.max(1, Math.ceil(activeEvents.length / PAGE_SIZE));
+  const totalPages = Math.max(
+    1,
+    activeData.pagination.lastPage ||
+      Math.ceil(activeData.total / Math.max(activeData.pagination.perPage, 1)),
+  );
   const safeCurrentPage = Math.min(currentPage, totalPages);
-  const startIndex = (safeCurrentPage - 1) * PAGE_SIZE;
-  const visibleEvents = activeEvents.slice(startIndex, startIndex + PAGE_SIZE);
   const paginationItems = getVisiblePaginationItems(safeCurrentPage, totalPages);
 
   function scrollToBrowserTop() {
@@ -351,10 +423,11 @@ export function EconomicCalendarBrowser({
                   setSelectedEventId(null);
                   setCurrentPage(1);
                 }}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${isActive
-                  ? "border-yellow-500 bg-yellow-500 text-black"
-                  : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
-                  }`}
+                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                  isActive
+                    ? "border-yellow-500 bg-yellow-500 text-black"
+                    : "border-line bg-white/5 text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
+                }`}
               >
                 {labels.tabs[rangeKey]}
               </button>
@@ -372,9 +445,9 @@ export function EconomicCalendarBrowser({
       ) : (
         <>
           <div className="grid gap-4 md:hidden">
-            {visibleEvents.map((event, index) => {
+            {activeEvents.map((event, index) => {
               const isSelected = selectedEventId === event.id;
-              const previousEvent = visibleEvents[index - 1];
+              const previousEvent = activeEvents[index - 1];
               const hasDateGroupChanged =
                 index === 0 || previousEvent?.date !== event.date;
 
@@ -394,10 +467,11 @@ export function EconomicCalendarBrowser({
                   ) : null}
 
                   <article
-                    className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
-                      ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_16px_36px_rgba(0,0,0,0.2)]"
-                      : "border-line bg-white/[0.03]"
-                      }`}
+                    className={`overflow-hidden rounded-2xl border transition-colors ${
+                      isSelected
+                        ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_16px_36px_rgba(0,0,0,0.2)]"
+                        : "border-line bg-white/[0.03]"
+                    }`}
                   >
                     <button
                       type="button"
@@ -489,9 +563,9 @@ export function EconomicCalendarBrowser({
             </ScrollReveal>
 
             <div className="space-y-3">
-              {visibleEvents.map((event, index) => {
+              {activeEvents.map((event, index) => {
                 const isSelected = selectedEventId === event.id;
-                const previousEvent = visibleEvents[index - 1];
+                const previousEvent = activeEvents[index - 1];
                 const hasDateGroupChanged =
                   index === 0 || previousEvent?.date !== event.date;
 
@@ -515,10 +589,11 @@ export function EconomicCalendarBrowser({
 
                     <ScrollReveal>
                       <article
-                        className={`overflow-hidden rounded-2xl border transition-colors ${isSelected
-                          ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
-                          : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
-                          }`}
+                        className={`overflow-hidden rounded-2xl border transition-colors ${
+                          isSelected
+                            ? "border-yellow-500/50 bg-white/[0.06] shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+                            : "border-line bg-white/[0.03] hover:border-yellow-500/25 hover:bg-white/[0.05]"
+                        }`}
                       >
                         <button
                           type="button"
@@ -527,7 +602,7 @@ export function EconomicCalendarBrowser({
                               currentEventId === event.id ? null : event.id,
                             )
                           }
-                          className="grid w-full grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left cursor-pointer"
+                          className="grid w-full cursor-pointer grid-cols-[120px_150px_110px_minmax(0,1fr)_110px] items-center gap-3 px-4 py-4 text-left"
                         >
                           <div className="font-mono text-base font-semibold text-foreground/88">
                             {event.displayTime}
@@ -587,7 +662,7 @@ export function EconomicCalendarBrowser({
             </div>
           </div>
 
-          {activeEvents.length > PAGE_SIZE ? (
+          {totalPages > 1 ? (
             <PaginationControls
               centerControls
               previousLabel={labels.previousPage}
@@ -630,11 +705,14 @@ export function EconomicCalendarBrowser({
                           setSelectedEventId(null);
                           scrollToBrowserTop();
                         }}
-                        aria-current={item === safeCurrentPage ? "page" : undefined}
-                        className={`flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm transition-colors ${item === safeCurrentPage
-                          ? "border-yellow-500 bg-yellow-500 text-black"
-                          : "border-line text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
-                          }`}
+                        aria-current={
+                          item === safeCurrentPage ? "page" : undefined
+                        }
+                        className={`flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm transition-colors ${
+                          item === safeCurrentPage
+                            ? "border-yellow-500 bg-yellow-500 text-black"
+                            : "border-line text-foreground/78 hover:border-yellow-500/60 hover:text-yellow-400"
+                        }`}
                       >
                         {item}
                       </button>

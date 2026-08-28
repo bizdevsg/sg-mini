@@ -13,11 +13,12 @@ export const idNavbar: AppMessages["navbar"] = {
       label: "Produk",
       items: [
         {
-          label: "Produk Multilateral",
+          label: "Multilateral",
           href: "/produk/multilateral",
         },
-        { label: "Produk Bilateral", href: "/produk/bilateral" },
-        { label: "Produk Reguler", href: "/produk/reguler" },
+        { label: "Bilateral", href: "/produk/bilateral" },
+        { label: "Akun Reguler", href: "/produk/reguler" },
+        { label: "Akun Prime", href: "/produk/prime" },
         { label: "Aplikasi Solid Gold", href: "/aplikasi-solid-gold" },
         { label: "Live Quote", href: "/live-quote" },
       ],

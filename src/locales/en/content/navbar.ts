@@ -13,11 +13,12 @@ export const enNavbar: AppMessages["navbar"] = {
       label: "Products",
       items: [
         {
-          label: "Multilateral Products",
+          label: "Multilateral",
           href: "/produk/multilateral",
         },
-        { label: "Bilateral Products", href: "/produk/bilateral" },
-        { label: "Regular Products", href: "/produk/reguler" },
+        { label: "Bilateral", href: "/produk/bilateral" },
+        { label: "Regular Account", href: "/produk/reguler" },
+        { label: "Prime Account", href: "/produk/prime" },
         { label: "Solid Gold App", href: "/aplikasi-solid-gold" },
         { label: "Live Quote", href: "/live-quote" },
       ],

@@ -6,6 +6,12 @@ function getProtocol(url: URL) {
   return url.protocol.replace(":", "") as "http" | "https";
 }
 
+function parseUrlEnv(value: string | undefined, fallback: string) {
+  const normalizedValue = value?.trim();
+
+  return new URL(normalizedValue || fallback);
+}
+
 function parseAllowedOrigins(value: string | undefined) {
   return (value ?? "")
     .split(",")
@@ -13,34 +19,38 @@ function parseAllowedOrigins(value: string | undefined) {
     .filter(Boolean);
 }
 
-const framerImageBaseUrl = new URL(
-  process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
-    "https://framerusercontent.com/images",
+const framerImageBaseUrl = parseUrlEnv(
+  process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL,
+  "https://framerusercontent.com/images",
 );
-const newsPortalBaseUrl = new URL(
-  process.env.NEWS_PORTAL_BASE_URL ?? "http://portalnews.newsmaker.test",
+const newsPortalBaseUrl = parseUrlEnv(
+  process.env.NEWS_PORTAL_BASE_URL,
+  "http://portalnews.newsmaker.test",
 );
-const newsImageBaseUrl = new URL(
-  process.env.NEWS_IMAGE_BASE_URL ?? "https://portalnews.newsmaker.id",
+const newsImageBaseUrl = parseUrlEnv(
+  process.env.NEWS_IMAGE_BASE_URL,
+  "https://portalnews.newsmaker.id",
 );
-const bannerImageBaseUrl = new URL(
-  process.env.BANNER_IMAGE_BASE_URL ??
-    `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/banner`,
+const bannerImageBaseUrl = parseUrlEnv(
+  process.env.BANNER_IMAGE_BASE_URL,
+  `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/banner`,
 );
-const productPortalBaseUrl = new URL(
-  process.env.PRODUCT_PORTAL_BASE_URL ?? `${DEFAULT_SG_ADMIN_ORIGIN}/`,
+const productPortalBaseUrl = parseUrlEnv(
+  process.env.PRODUCT_PORTAL_BASE_URL,
+  `${DEFAULT_SG_ADMIN_ORIGIN}/`,
 );
-const penghargaanImageBaseUrl = new URL(
-  process.env.PENGHARGAAN_IMAGE_BASE_URL ??
-    `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/penghargaan-images`,
+const penghargaanImageBaseUrl = parseUrlEnv(
+  process.env.PENGHARGAAN_IMAGE_BASE_URL,
+  `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/penghargaan-images`,
 );
 const picsumBaseUrl = new URL("https://picsum.photos");
-const imgPlaceholder = new URL(
-  process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL ?? "https://placehold.co/600x400",
+const imgPlaceholder = parseUrlEnv(
+  process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL,
+  "https://placehold.co/600x400",
 );
-const solidGoldImageBaseUrl = new URL(
-  process.env.NEXT_PUBLIC_SOLID_GOLD_IMAGE_BASE_URL ??
-    "https://sg-berjangka.com/_next/image",
+const solidGoldImageBaseUrl = parseUrlEnv(
+  process.env.NEXT_PUBLIC_SOLID_GOLD_IMAGE_BASE_URL,
+  "https://sg-berjangka.com/_next/image",
 );
 const allowedLocalOrigins = Array.from(
   new Set([
@@ -72,8 +82,11 @@ const allowedActionOrigins = Array.from(
   ]),
 );
 const DEFAULT_LOCALE = "id";
+const deploymentId = process.env.DEPLOYMENT_VERSION?.trim() || undefined;
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  deploymentId,
   async redirects() {
     return [
       {

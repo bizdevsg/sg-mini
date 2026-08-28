@@ -13,7 +13,6 @@ import {
   getNewsArticleBySlug,
   getNewsFeed,
 } from "@/lib/news";
-import { getNewsPageContent } from "@/locales/news-page-content";
 import {
   getLocaleConfig,
   getMessages,
@@ -56,15 +55,6 @@ function resolveDetailArticle(
       matchedFeedArticle: feedArticle,
     }
     : null;
-}
-
-export function generateStaticParams() {
-  return SUPPORTED_LOCALES.flatMap((locale) =>
-    getNewsPageContent(locale).latest.articles.map((article) => ({
-      locales: locale,
-      slug: article.slug,
-    })),
-  );
 }
 
 export async function generateMetadata({

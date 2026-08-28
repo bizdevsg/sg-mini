@@ -3,12 +3,11 @@ import {
   protectSameOriginBrowserApiRoute,
   withApiProtectionHeaders,
 } from "@/lib/api-protection";
-import { LIVE_QUOTE_SOCKET_URL } from "@/lib/env";
+import { subscribeToLiveQuotes } from "@/lib/live-quotes-broker";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const RECONNECT_DELAY_MS = 3000;
 const HEARTBEAT_INTERVAL_MS = 15000;
 
 function formatSse(event: string, data: string) {
@@ -26,34 +25,31 @@ export async function GET(request: Request) {
 
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {
-      let socket: WebSocket | null = null;
-      let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
       let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
       let isClosed = false;
-
+      let unsubscribe: (() => void) | null = null;
       const send = (event: string, data: unknown) => {
         if (isClosed) {
           return;
         }
 
-        controller.enqueue(
-          encoder.encode(formatSse(event, JSON.stringify(data))),
-        );
+        try {
+          controller.enqueue(
+            encoder.encode(formatSse(event, JSON.stringify(data))),
+          );
+        } catch {
+          closeStream();
+        }
       };
 
       const cleanup = () => {
-        if (reconnectTimer) {
-          clearTimeout(reconnectTimer);
-          reconnectTimer = null;
-        }
-
         if (heartbeatTimer) {
           clearInterval(heartbeatTimer);
           heartbeatTimer = null;
         }
 
-        socket?.close();
-        socket = null;
+        unsubscribe?.();
+        unsubscribe = null;
       };
 
       const closeStream = () => {
@@ -63,87 +59,33 @@ export async function GET(request: Request) {
 
         isClosed = true;
         cleanup();
-        controller.close();
+
+        try {
+          controller.close();
+        } catch {}
       };
 
-      const scheduleReconnect = () => {
-        if (isClosed) {
-          return;
+      heartbeatTimer = setInterval(() => {
+        send("heartbeat", { at: Date.now() });
+      }, HEARTBEAT_INTERVAL_MS);
+
+      unsubscribe = subscribeToLiveQuotes((event, data) => {
+        if (event === "quote") {
+          const payload = data as LiveQuotePayload;
+
+          if (
+            !payload ||
+            typeof payload !== "object" ||
+            Array.isArray(payload)
+          ) {
+            return;
+          }
         }
 
-        send("status", { status: "reconnecting" });
-        reconnectTimer = setTimeout(() => {
-          connect();
-        }, RECONNECT_DELAY_MS);
-      };
+        send(event, data);
+      });
 
-      const connect = () => {
-        if (isClosed) {
-          return;
-        }
-
-        cleanup();
-        send("status", { status: "connecting" });
-
-        socket = new WebSocket(LIVE_QUOTE_SOCKET_URL);
-        const currentSocket = socket;
-
-        heartbeatTimer = setInterval(() => {
-          if (!isClosed) {
-            controller.enqueue(encoder.encode(": ping\n\n"));
-          }
-        }, HEARTBEAT_INTERVAL_MS);
-
-        currentSocket.onopen = () => {
-          if (isClosed || socket !== currentSocket) {
-            currentSocket.close();
-            return;
-          }
-
-          send("status", { status: "live" });
-        };
-
-        currentSocket.onmessage = (event) => {
-          if (isClosed || socket !== currentSocket) {
-            return;
-          }
-
-          try {
-            const payload = JSON.parse(event.data as string) as LiveQuotePayload;
-
-            if (
-              !payload ||
-              typeof payload !== "object" ||
-              Array.isArray(payload)
-            ) {
-              return;
-            }
-
-            send("quote", payload);
-          } catch {
-            send("status", { status: "error" });
-          }
-        };
-
-        currentSocket.onerror = () => {
-          if (isClosed || socket !== currentSocket) {
-            return;
-          }
-
-          send("status", { status: "error" });
-        };
-
-        currentSocket.onclose = () => {
-          if (isClosed || socket !== currentSocket) {
-            return;
-          }
-
-          scheduleReconnect();
-        };
-      };
-
-      request.signal.addEventListener("abort", closeStream);
-      connect();
+      request.signal.addEventListener("abort", closeStream, { once: true });
     },
   });
 

@@ -1,9 +1,7 @@
 import "server-only";
 
-import { getDummyPengumuman } from "@/lib/api-dummy-data";
 import {
   PENGUMUMAN_API_URL,
-  USE_DUMMY_API_DATA,
   getPengumumanAssetUrl,
   isSgAdminUrl,
   normalizeSgAdminUrl,
@@ -133,10 +131,6 @@ function mapPengumumanRecord(item: RawPengumumanRecord): PengumumanRecord {
 }
 
 export async function getPengumuman(page = 1): Promise<PengumumanResult> {
-  if (USE_DUMMY_API_DATA) {
-    return getDummyPengumuman(page);
-  }
-
   const controller = new AbortController();
   const timeout = setTimeout(
     () => controller.abort(),

@@ -42,11 +42,24 @@ export type EconomicCalendarEvent = {
   details: EconomicCalendarEventDetails;
 };
 
+export type EconomicCalendarPagination = {
+  currentPage: number;
+  perPage: number;
+  total: number;
+  lastPage: number;
+  from: number | null;
+  to: number | null;
+  hasMorePages: boolean;
+  prevPageUrl: string | null;
+  nextPageUrl: string | null;
+};
+
 export type EconomicCalendarRangeData = {
   key: EconomicCalendarRangeKey;
   status: string;
   updatedAt: string | null;
   total: number;
+  pagination: EconomicCalendarPagination;
   events: EconomicCalendarEvent[];
 };
 
@@ -58,12 +71,24 @@ export type EconomicCalendarOverview = Record<
 export function createEmptyEconomicCalendarRange(
   key: EconomicCalendarRangeKey,
   status = "error",
+  page = 1,
 ): EconomicCalendarRangeData {
   return {
     key,
     status,
     updatedAt: null,
     total: 0,
+    pagination: {
+      currentPage: page,
+      perPage: 0,
+      total: 0,
+      lastPage: 1,
+      from: null,
+      to: null,
+      hasMorePages: false,
+      prevPageUrl: null,
+      nextPageUrl: null,
+    },
     events: [],
   };
 }

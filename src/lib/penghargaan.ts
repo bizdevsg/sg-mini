@@ -2,7 +2,6 @@ import "server-only";
 
 import {
   PENGHARGAAN_API_URL,
-  USE_DUMMY_API_DATA,
   getPenghargaanAssetUrl,
 } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
@@ -95,10 +94,6 @@ function mapPenghargaanRecord(
 }
 
 export async function getPenghargaanRecords() {
-  if (USE_DUMMY_API_DATA) {
-    return [];
-  }
-
   try {
     const response = await fetch(PENGHARGAAN_API_URL, {
       next: {

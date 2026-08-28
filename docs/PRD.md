@@ -103,7 +103,7 @@ Tidak ada item roadmap terkonfirmasi setelah penyelesaian pekerjaan `no-client-a
 ## 9. Batasan & Ketergantungan Teknis
 
 - **Next.js 16 breaking changes** — wajib rujuk `node_modules/next/dist/docs/` sebelum implementasi apa pun turunan PRD ini (AGENTS.md).
-- `APP_ENV`: `dev`/`prod` pakai API asli; `dev-deploy` pakai dummy data server-side; websocket live quote tidak terpengaruh switch ini.
+- `APP_ENV`: `dev`/`prod` memakai API asli; websocket live quote tidak terpengaruh oleh environment ini.
 - Command seperti `npm`, `next`, `pnpm`, `yarn` perlu konfirmasi user saat dijalankan lewat agent (catatan repo di `README.md`).
 - Locale: `id` (default), `en` — konfigurasi di `src/locales/config.ts`.
 

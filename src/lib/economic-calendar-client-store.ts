@@ -8,10 +8,12 @@ type EconomicCalendarStoreEntry = {
   fetchedAt: number;
 };
 
+type EconomicCalendarStoreKey = `${EconomicCalendarRangeKey}:${number}`;
+
 const ECONOMIC_CALENDAR_STORAGE_KEY = "sgb-economic-calendar-store";
 
 const economicCalendarStore = new Map<
-  EconomicCalendarRangeKey,
+  EconomicCalendarStoreKey,
   EconomicCalendarStoreEntry
 >();
 
@@ -28,7 +30,7 @@ function parseStoredState(value: string | null) {
 
   try {
     const parsedValue = JSON.parse(value) as Partial<
-      Record<EconomicCalendarRangeKey, EconomicCalendarStoreEntry>
+      Record<string, EconomicCalendarStoreEntry>
     >;
 
     return parsedValue;
@@ -56,8 +58,6 @@ export function hydrateEconomicCalendarStoreFromSessionStorage() {
       continue;
     }
 
-    const typedRangeKey = rangeKey as EconomicCalendarRangeKey;
-
     if (
       !("data" in entry) ||
       !entry.data ||
@@ -66,7 +66,7 @@ export function hydrateEconomicCalendarStoreFromSessionStorage() {
       continue;
     }
 
-    economicCalendarStore.set(typedRangeKey, {
+    economicCalendarStore.set(rangeKey as EconomicCalendarStoreKey, {
       data: entry.data,
       fetchedAt: entry.fetchedAt,
     });
@@ -90,15 +90,17 @@ function persistEconomicCalendarStoreToSessionStorage() {
 
 export function readEconomicCalendarStoreEntry(
   rangeKey: EconomicCalendarRangeKey,
+  page: number,
 ) {
-  return economicCalendarStore.get(rangeKey) ?? null;
+  return economicCalendarStore.get(`${rangeKey}:${page}`) ?? null;
 }
 
 export function writeEconomicCalendarStoreEntry(
   rangeKey: EconomicCalendarRangeKey,
+  page: number,
   data: EconomicCalendarRangeData,
 ) {
-  economicCalendarStore.set(rangeKey, {
+  economicCalendarStore.set(`${rangeKey}:${page}`, {
     data,
     fetchedAt: Date.now(),
   });

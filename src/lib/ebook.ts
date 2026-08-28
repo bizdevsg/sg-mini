@@ -9,7 +9,6 @@ import {
 import {
   EBOOK_CATEGORY_API_URL,
   PRODUCT_PORTAL_BASE_URL,
-  USE_DUMMY_API_DATA,
   normalizeSgAdminUrl,
 } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
@@ -50,6 +49,8 @@ type EbookCategoryDetailApiResponse = {
   data?: EbookResourceApiRecord[];
   category?: EbookCategoryApiRecord;
 };
+
+const EBOOK_TIMEOUT_MS = 8000;
 
 function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -172,15 +173,15 @@ function getEbookCategoryApiDetailUrl(slug: string) {
 }
 
 export async function getEbookCategories() {
-  if (USE_DUMMY_API_DATA) {
-    return [];
-  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), EBOOK_TIMEOUT_MS);
 
   try {
     const response = await fetch(EBOOK_CATEGORY_API_URL, {
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
+      signal: controller.signal,
       headers: await getSgAdminApiHeaders(),
     });
 
@@ -204,21 +205,23 @@ export async function getEbookCategories() {
   } catch (error) {
     console.warn("Failed to fetch ebook categories.", error);
     return [];
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export async function getEbookCategoryDetail(
   slug: string,
 ): Promise<EbookCategoryDetail | null> {
-  if (USE_DUMMY_API_DATA) {
-    return null;
-  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), EBOOK_TIMEOUT_MS);
 
   try {
     const response = await fetch(getEbookCategoryApiDetailUrl(slug), {
       next: {
         revalidate: EBOOK_REVALIDATE_SECONDS,
       },
+      signal: controller.signal,
       headers: await getSgAdminApiHeaders(),
     });
 
@@ -265,5 +268,7 @@ export async function getEbookCategoryDetail(
   } catch (error) {
     console.warn("Failed to fetch ebook category detail.", error);
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
 }

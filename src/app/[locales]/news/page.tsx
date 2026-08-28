@@ -58,7 +58,7 @@ export default async function LocalizedNews({ params }: LocalizedPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const { articles, source } = await getNewsFeed(locales);
+  const { articles } = await getNewsFeed(locales);
   const labels = getMessages(locales).newsPage;
 
   return (
@@ -66,7 +66,6 @@ export default async function LocalizedNews({ params }: LocalizedPageProps) {
       <NewsBrowser
         articles={articles}
         locale={locales}
-        source={source}
         labels={labels}
       />
     </SectionContainer>

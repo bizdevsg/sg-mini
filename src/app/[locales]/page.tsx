@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { AppPromoSection } from "@/components/organisms/AppPromoSection";
 import { BannerSlideshowSection } from "@/components/organisms/BannerSlideshowSection";
@@ -20,6 +21,8 @@ import { buildPublicMetadata } from "@/lib/metadata";
 type LocalizedPageProps = {
   params: Promise<{ locales: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 function assertValidLocale(value: string): asserts value is AppLocale {
   if (!isSupportedLocale(value)) {
@@ -62,7 +65,9 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
     <>
       <HeroSection locale={locales} />
       <RegulatorMarqueeSection locale={locales} />
-      <BannerSlideshowSection locale={locales} />
+      <Suspense fallback={null}>
+        <BannerSlideshowSection locale={locales} />
+      </Suspense>
       <LiveQuoteSection locale={locales} />
       <BenefitSection locale={locales} />
       <SpreadSection locale={locales} />

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { TERMS_CONDITIONS_API_URL, USE_DUMMY_API_DATA, normalizeSgAdminUrl } from "@/lib/env";
+import { TERMS_CONDITIONS_API_URL, normalizeSgAdminUrl } from "@/lib/env";
 import { parseJsonResponse } from "@/lib/parse-json-response";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import type { AppLocale } from "@/locales";
@@ -92,30 +92,10 @@ function pickLocalizedValue(
   return locale === "en" ? englishValue ?? defaultValue : defaultValue;
 }
 
-function getFallbackTermsConditionsRecord(locale: AppLocale): TermsConditionsRecord {
-  const page = locale === "id"
-    ? [
-        "<p>Syarat dan ketentuan belum tersedia saat ini.</p>",
-        "<p>Silakan coba lagi beberapa saat.</p>",
-      ]
-    : [
-        "<p>Terms and conditions are not available right now.</p>",
-        "<p>Please try again later.</p>",
-      ];
-
-  return {
-    id: 0,
-    content: page.join(""),
-    createdAt: null,
-    updatedAt: null,
-  };
-}
-
 function normalizeTermsConditionsRecord(
   record: TermsConditionsApiRecord | null | undefined,
   locale: AppLocale,
 ) {
-  const fallbackRecord = getFallbackTermsConditionsRecord(locale);
   const content = sanitizeTermsConditionsHtml(
     normalizeText(
       pickLocalizedValue(locale, record?.content, record?.content_en),
@@ -123,23 +103,14 @@ function normalizeTermsConditionsRecord(
   );
 
   return {
-    id:
-      typeof record?.id === "number" && Number.isFinite(record.id)
-        ? record.id
-        : fallbackRecord.id,
-    content: content || fallbackRecord.content,
+    id: typeof record?.id === "number" && Number.isFinite(record.id) ? record.id : 0,
+    content,
     createdAt: normalizeText(record?.created_at) || null,
     updatedAt: normalizeText(record?.updated_at) || null,
   };
 }
 
 export async function getTermsConditionsRecord(locale: AppLocale = "id") {
-  const fallbackRecord = getFallbackTermsConditionsRecord(locale);
-
-  if (USE_DUMMY_API_DATA) {
-    return fallbackRecord;
-  }
-
   try {
     const response = await fetch(TERMS_CONDITIONS_API_URL, {
       cache: "no-store",
@@ -150,7 +121,7 @@ export async function getTermsConditionsRecord(locale: AppLocale = "id") {
       console.error(
         `Failed to fetch terms and conditions: ${response.status} ${response.statusText}`,
       );
-      return fallbackRecord;
+      return normalizeTermsConditionsRecord(null, locale);
     }
 
     const responseBody = await response.text();
@@ -159,6 +130,6 @@ export async function getTermsConditionsRecord(locale: AppLocale = "id") {
     return normalizeTermsConditionsRecord(payload.data, locale);
   } catch (error) {
     console.error("Failed to fetch terms and conditions", error);
-    return fallbackRecord;
+    return normalizeTermsConditionsRecord(null, locale);
   }
 }

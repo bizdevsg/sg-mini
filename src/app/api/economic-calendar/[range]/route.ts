@@ -12,10 +12,26 @@ import {
 
 export const runtime = "nodejs";
 
-function isEconomicCalendarRange(value: string): value is (typeof ECONOMIC_CALENDAR_RANGE_KEYS)[number] {
+function isEconomicCalendarRange(
+  value: string,
+): value is (typeof ECONOMIC_CALENDAR_RANGE_KEYS)[number] {
   return ECONOMIC_CALENDAR_RANGE_KEYS.includes(
     value as (typeof ECONOMIC_CALENDAR_RANGE_KEYS)[number],
   );
+}
+
+function parsePageParam(value: string | null) {
+  if (!value) {
+    return 1;
+  }
+
+  const parsedValue = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 1) {
+    return 1;
+  }
+
+  return parsedValue;
 }
 
 export async function GET(
@@ -29,6 +45,7 @@ export async function GET(
   }
 
   const { range } = await context.params;
+  const page = parsePageParam(new URL(request.url).searchParams.get("page"));
 
   if (!isEconomicCalendarRange(range)) {
     return withApiProtectionHeaders(
@@ -42,7 +59,7 @@ export async function GET(
     );
   }
 
-  const data = await getEconomicCalendarRange(range);
+  const data = await getEconomicCalendarRange(range, page);
   return withApiProtectionHeaders(
     NextResponse.json(data, {
       headers: {

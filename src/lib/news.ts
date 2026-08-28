@@ -3,10 +3,6 @@ import "server-only";
 import { request as requestHttp } from "node:http";
 import { request as requestHttps } from "node:https";
 
-import {
-  getNewsPageContent,
-  type NewsArticle,
-} from "@/locales/news-page-content";
 import { getMessages, type AppLocale } from "@/locales";
 
 import {
@@ -67,6 +63,11 @@ type PortalNewsApiResponse = {
   data?: PortalNewsApiArticle[];
 };
 
+type PortalNewsApiDetailResponse = {
+  status: string;
+  data?: PortalNewsApiArticle | null;
+};
+
 function getRouteSlugKey(slug: string) {
   const normalizedSlug = slug.trim().toLowerCase();
   const externalIdMatch = normalizedSlug.match(/^(\d+)(?=-|$)/);
@@ -92,9 +93,29 @@ const inFlightPortalNewsRequests = new Map<
   AppLocale,
   Promise<PortalNewsApiArticle[]>
 >();
+const cachedPortalNewsArticleDetails = new Map<
+  string,
+  {
+    article: PortalNewsApiArticle | null;
+    expiresAt: number;
+  }
+>();
+const inFlightPortalNewsDetailRequests = new Map<
+  string,
+  Promise<PortalNewsApiArticle | null>
+>();
 
 function resolveNewsApiUrl(locale: AppLocale) {
   return locale === "id" ? NEWS_API_URL_ID : NEWS_API_URL;
+}
+
+function buildNewsArticleDetailUrl(locale: AppLocale, slug: string) {
+  const normalizedBaseUrl = resolveNewsApiUrl(locale).replace(/\/+$/, "");
+  return new URL(`${normalizedBaseUrl}/${encodeURIComponent(slug.trim())}`);
+}
+
+function getNewsArticleDetailCacheKey(locale: AppLocale, slug: string) {
+  return `${locale}:${slug.trim().toLowerCase()}`;
 }
 
 function getRequestClient(protocol: string) {
@@ -222,11 +243,15 @@ function sanitizeArticleHtml(content: string) {
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
     .replace(/<(iframe|object|embed|form|input|button|textarea|select)[^>]*>[\s\S]*?<\/\1>/gi, "")
-    .replace(/\s+on[a-z]+\s*=\s*(['"]).*?\1/gi, "")
-    .replace(/\s+(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, "")
-    .replace(/\s+style\s*=\s*(['"]).*?\1/gi, "")
-    .replace(/\s+class\s*=\s*(['"]).*?\1/gi, "")
-    .replace(/\s+color\s*=\s*(['"]).*?\1/gi, "");
+    .replace(/\s+on[a-z]+\s*=\s*(?:"[\s\S]*?"|'[\s\S]*?'|[^\s>]+)/gi, "")
+    .replace(
+      /\s+(href|src)\s*=\s*(?:"\s*javascript:[\s\S]*?"|'\s*javascript:[\s\S]*?'|javascript:[^\s>]+)/gi,
+      "",
+    )
+    .replace(/\s+style\s*=\s*(?:"[\s\S]*?"|'[\s\S]*?'|[^\s>]+)/gi, "")
+    .replace(/\s+class\s*=\s*(?:"[\s\S]*?"|'[\s\S]*?'|[^\s>]+)/gi, "")
+    .replace(/\s+color\s*=\s*(?:"[\s\S]*?"|'[\s\S]*?'|[^\s>]+)/gi, "")
+    .replace(/<\/?font\b[^>]*>/gi, "");
 }
 
 function getArticleBodyHtml(content: string) {
@@ -249,14 +274,6 @@ function getArticleBodyHtml(content: string) {
 
   const fallbackText = normalizeWhitespace(decodeHtmlEntities(stripHtml(content)));
   return fallbackText ? `<p>${escapeHtml(fallbackText)}</p>` : "";
-}
-
-function getFallbackBodyHtml(paragraphs: string[]) {
-  return paragraphs
-    .map((paragraph) => normalizeWhitespace(paragraph))
-    .filter((paragraph) => paragraph.length > 0)
-    .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
-    .join("");
 }
 
 function getArticleTitle(article: PortalNewsApiArticle) {
@@ -436,26 +453,6 @@ function toDetailArticle(
   };
 }
 
-function toFallbackDetailArticle(
-  article: NewsArticle,
-): NewsArticleDetail {
-  const normalizedCategory = article.category.trim() || "Uncategorized";
-
-  return {
-    id: article.slug,
-    title: article.title,
-    slug: article.slug,
-    summary: article.summary,
-    category: normalizedCategory,
-    displayCategory: getDisplayNewsCategory(article.category, normalizedCategory),
-    publishedAt: article.publishedAt,
-    imageSrc: NEWS_PLACEHOLDER_IMAGE,
-    bodyHtml: getFallbackBodyHtml(article.body),
-    readTime: article.readTime,
-    tags: article.tags,
-  };
-}
-
 export function createNewsDetailFromFeedArticle(
   article: NewsFeedArticle,
   locale: AppLocale,
@@ -465,69 +462,6 @@ export function createNewsDetailFromFeedArticle(
     bodyHtml: `<p>${escapeHtml(article.summary || article.title)}</p>`,
     readTime: getEstimatedReadTime(article.summary || article.title, locale),
     tags: [],
-  };
-}
-
-function getFallbackArticles(
-  locale: AppLocale,
-  limit: number,
-): NewsFeedArticle[] {
-  return getNewsPageContent(locale)
-    .latest.articles
-    .slice()
-    .sort((firstArticle, secondArticle) =>
-      comparePublishedAtStrings(
-        firstArticle.publishedAt,
-        secondArticle.publishedAt,
-      ),
-    )
-    .slice(0, limit)
-    .map((article) => {
-      const normalizedCategory = article.category.trim() || "Uncategorized";
-
-      return {
-        id: article.slug,
-        title: article.title,
-        slug: article.slug,
-        summary: article.summary,
-        category: normalizedCategory,
-        displayCategory: getDisplayNewsCategory(
-          article.category,
-          normalizedCategory,
-        ),
-        publishedAt: article.publishedAt,
-        imageSrc: NEWS_PLACEHOLDER_IMAGE,
-      };
-    });
-}
-
-function getFallbackArticleBySlug(locale: AppLocale, slug: string) {
-  const article = getNewsPageContent(locale).latest.articles.find(
-    (item) => item.slug === slug,
-  );
-
-  return article ? toFallbackDetailArticle(article) : null;
-}
-
-export function getStaticNewsFeed(
-  locale: AppLocale,
-  limit?: number,
-): NewsFeedResult {
-  const fallbackLimit = limit ?? Number.MAX_SAFE_INTEGER;
-
-  return {
-    articles: getFallbackArticles(locale, fallbackLimit),
-    source: "fallback",
-  };
-}
-
-export function getStaticNewsArticleBySlug(
-  locale: AppLocale,
-  slug: string,
-): NewsArticleDetailResult {
-  return {
-    article: getFallbackArticleBySlug(locale, slug),
-    source: "fallback",
   };
 }
 
@@ -593,6 +527,75 @@ async function requestPortalNewsArticles(
   });
 }
 
+async function requestPortalNewsArticleBySlug(
+  locale: AppLocale,
+  slug: string,
+): Promise<PortalNewsApiArticle | null> {
+  const normalizedSlug = slug.trim();
+
+  if (!NEWS_API_TOKEN || !normalizedSlug) {
+    return null;
+  }
+
+  return new Promise<PortalNewsApiArticle | null>((resolve) => {
+    const requestUrl = buildNewsArticleDetailUrl(locale, normalizedSlug);
+    const requestClient = getRequestClient(requestUrl.protocol);
+    const httpRequest = requestClient(
+      requestUrl,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${NEWS_API_TOKEN}`,
+        },
+      },
+      (response) => {
+        const statusCode = response.statusCode ?? 500;
+        let responseBody = "";
+
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          responseBody += chunk;
+        });
+
+        response.on("end", () => {
+          if (statusCode < 200 || statusCode >= 300) {
+            resolve(null);
+            return;
+          }
+
+          try {
+            const payload = JSON.parse(
+              responseBody,
+            ) as PortalNewsApiDetailResponse;
+
+            resolve(
+              payload.status === "success" &&
+                payload.data &&
+                !Array.isArray(payload.data)
+                ? payload.data
+                : null,
+            );
+          } catch {
+            resolve(null);
+          }
+        });
+      },
+    );
+
+    httpRequest.on("error", () => {
+      resolve(null);
+    });
+
+    httpRequest.setTimeout(NEWS_API_TIMEOUT_MS, () => {
+      httpRequest.destroy();
+      resolve(null);
+    });
+
+    httpRequest.end();
+  });
+}
+
 async function requestPortalNewsArticlesCached(
   locale: AppLocale,
 ): Promise<PortalNewsApiArticle[]> {
@@ -626,6 +629,41 @@ async function requestPortalNewsArticlesCached(
   return nextRequest;
 }
 
+async function requestPortalNewsArticleBySlugCached(
+  locale: AppLocale,
+  slug: string,
+): Promise<PortalNewsApiArticle | null> {
+  const cacheKey = getNewsArticleDetailCacheKey(locale, slug);
+  const now = Date.now();
+  const cachedArticle = cachedPortalNewsArticleDetails.get(cacheKey);
+
+  if (cachedArticle && cachedArticle.expiresAt > now) {
+    return cachedArticle.article;
+  }
+
+  const inFlightRequest = inFlightPortalNewsDetailRequests.get(cacheKey);
+
+  if (inFlightRequest) {
+    return inFlightRequest;
+  }
+
+  const nextRequest = requestPortalNewsArticleBySlug(locale, slug)
+    .then((article) => {
+      cachedPortalNewsArticleDetails.set(cacheKey, {
+        article,
+        expiresAt: Date.now() + NEWS_API_CACHE_TTL_MS,
+      });
+      return article;
+    })
+    .finally(() => {
+      inFlightPortalNewsDetailRequests.delete(cacheKey);
+    });
+
+  inFlightPortalNewsDetailRequests.set(cacheKey, nextRequest);
+
+  return nextRequest;
+}
+
 async function fetchPortalNewsFeedEntries(
   locale: AppLocale,
 ): Promise<PortalNewsFeedEntry[]> {
@@ -641,13 +679,9 @@ export async function getNewsFeed(
   locale: AppLocale,
   limit?: number,
 ): Promise<NewsFeedResult> {
-  const fallbackLimit = limit ?? Number.MAX_SAFE_INTEGER;
-  const fallbackArticles = getFallbackArticles(locale, fallbackLimit);
-
   if (!NEWS_API_TOKEN) {
     return {
-      articles: fallbackArticles,
-      source: "fallback",
+      articles: [],
     };
   }
 
@@ -659,19 +693,16 @@ export async function getNewsFeed(
 
     if (!articles.length) {
       return {
-        articles: fallbackArticles,
-        source: "fallback",
+        articles: [],
       };
     }
 
     return {
       articles,
-      source: "api",
     };
   } catch {
     return {
-      articles: fallbackArticles,
-      source: "fallback",
+      articles: [],
     };
   }
 }
@@ -680,35 +711,47 @@ export async function getNewsArticleBySlug(
   locale: AppLocale,
   slug: string,
 ): Promise<NewsArticleDetailResult> {
-  const fallbackArticle = getFallbackArticleBySlug(locale, slug);
+  const normalizedSlug = slug.trim();
 
-  if (!NEWS_API_TOKEN) {
+  if (!NEWS_API_TOKEN || !normalizedSlug) {
     return {
-      article: fallbackArticle,
-      source: "fallback",
+      article: null,
     };
   }
 
   try {
+    const detailedArticle = await requestPortalNewsArticleBySlugCached(
+      locale,
+      normalizedSlug,
+    );
+
+    if (detailedArticle) {
+      return {
+        article: toDetailArticle(detailedArticle, locale),
+      };
+    }
+
     const articles = await requestPortalNewsArticlesCached(locale);
     const rawArticle =
-      articles.find((article) => getArticleSlug(article) === slug) ?? null;
+      articles.find(
+        (article) =>
+          getArticleSlug(article) === normalizedSlug ||
+          getRouteSlugKey(getArticleSlug(article)) ===
+            getRouteSlugKey(normalizedSlug),
+      ) ?? null;
 
     if (rawArticle) {
       return {
         article: toDetailArticle(rawArticle, locale),
-        source: "api",
       };
     }
 
     return {
-      article: fallbackArticle,
-      source: "fallback",
+      article: null,
     };
   } catch {
     return {
-      article: fallbackArticle,
-      source: "fallback",
+      article: null,
     };
   }
 }

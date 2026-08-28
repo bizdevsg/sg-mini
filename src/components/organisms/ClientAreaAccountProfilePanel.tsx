@@ -93,81 +93,81 @@ export function ClientAreaAccountProfilePanel({
         <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
           <div className="grid gap-4">
             <ClientAreaAccountField
-              defaultValue="Franky Reagan Law"
+              defaultValue=""
               label={accountPage.fields.fullName}
             />
             <ClientAreaAccountField
-              defaultValue="frankyreaganlaw@gmail.com"
+              defaultValue=""
               label={accountPage.fields.email}
             />
             <ClientAreaAccountField
-              defaultValue="Makassar"
+              defaultValue=""
               label={accountPage.fields.birthPlace}
             />
             <ClientAreaAccountDateField
-              defaultValue="12/03, 1987"
+              defaultValue=""
               label={accountPage.fields.birthDate}
             />
             <ClientAreaAccountField
-              defaultValue="frankyreaganlaw@gmail.com"
+              defaultValue=""
               label={accountPage.fields.identityNumber}
               required
             />
             <ClientAreaAccountField
-              defaultValue="1234567890111213"
+              defaultValue=""
               label={accountPage.fields.taxNumber}
               required
             />
-            <ClientAreaAccountField defaultValue="Pria" label={accountPage.fields.gender} />
+            <ClientAreaAccountField defaultValue="" label={accountPage.fields.gender} />
             <ClientAreaAccountField
-              defaultValue="Kawin"
+              defaultValue=""
               label={accountPage.fields.maritalStatus}
             />
             <ClientAreaAccountField
-              defaultValue="Istri"
+              defaultValue=""
               label={accountPage.fields.spouseName}
             />
             <ClientAreaAccountField
-              defaultValue="Jl. Sudirman Raya"
+              defaultValue=""
               label={accountPage.fields.homeAddress}
               required
             />
 
             <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
               <ClientAreaAccountField
-                defaultValue="01"
+                defaultValue=""
                 label={accountPage.fields.rt}
                 required
               />
               <ClientAreaAccountField
-                defaultValue="03"
+                defaultValue=""
                 label={accountPage.fields.rw}
                 required
               />
               <ClientAreaAccountField
-                defaultValue="DKI Jakarta"
+                defaultValue=""
                 label={accountPage.fields.province}
                 required
               />
             </div>
 
             <ClientAreaAccountField
-              defaultValue="Jakarta Selatan"
+              defaultValue=""
               label={accountPage.fields.city}
               required
             />
             <ClientAreaAccountField
-              defaultValue="Kebayoran Lama"
+              defaultValue=""
               label={accountPage.fields.subdistrict}
               required
             />
             <ClientAreaAccountField
-              defaultValue="12240"
+              defaultValue=""
               label={accountPage.fields.postalCode}
               required
             />
             <ClientAreaAccountField
-              defaultValue="081234567890"
+              defaultValue=""
               label={accountPage.fields.phone}
               required
             />

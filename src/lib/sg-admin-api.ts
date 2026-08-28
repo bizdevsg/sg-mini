@@ -1,25 +1,13 @@
 import "server-only";
 
-import { headers } from "next/headers";
-
 import { PUBLIC_SITE_URL } from "@/lib/env";
 
 const SG_ADMIN_API_KEY = process.env.SG_ADMIN_API_KEY?.trim() ?? "";
+const SG_ADMIN_REQUEST_ORIGIN = process.env.SG_ADMIN_REQUEST_ORIGIN?.trim() ?? "";
 
 async function resolveWebsiteOrigin() {
-  try {
-    const requestHeaders = await headers();
-    const forwardedProto = requestHeaders.get("x-forwarded-proto")?.trim();
-    const forwardedHost = requestHeaders.get("x-forwarded-host")?.trim();
-    const host = requestHeaders.get("host")?.trim();
-    const resolvedHost = forwardedHost || host;
-    const resolvedProto = forwardedProto || (resolvedHost?.includes("localhost") ? "http" : "https");
-
-    if (resolvedHost) {
-      return `${resolvedProto}://${resolvedHost}`;
-    }
-  } catch {
-    // Fall back to configured public site URL when request headers are unavailable.
+  if (SG_ADMIN_REQUEST_ORIGIN) {
+    return SG_ADMIN_REQUEST_ORIGIN;
   }
 
   return PUBLIC_SITE_URL;
@@ -37,6 +25,7 @@ export async function getSgAdminApiHeaders(headersInit?: HeadersInit) {
 
     if (websiteOrigin) {
       resolvedHeaders.set("Origin", websiteOrigin);
+      resolvedHeaders.set("Referer", `${websiteOrigin.replace(/\/+$/, "")}/`);
     }
   }
 

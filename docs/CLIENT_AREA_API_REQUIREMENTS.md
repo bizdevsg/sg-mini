@@ -4,7 +4,7 @@
 - **Terkait**: [`PRD.md`](./PRD.md) §5 Status & Roadmap Client Area
 - **Scope**: `src/app/[locales]/client-area/**`
 
-Dokumen ini mendaftar bagian Client Area yang **saat ini masih pakai data hardcode/statis/dummy** (bukan API sungguhan), berdasarkan audit langsung ke kode — bukan asumsi.
+Dokumen ini mendaftar kemampuan Client Area yang belum terintegrasi ke API akun. Akses website untuk fitur akun dinonaktifkan hingga endpoint resmi tersedia.
 
 ## Sudah pakai API real (di luar scope dokumen ini)
 
@@ -22,23 +22,23 @@ Semua endpoint yang butuh data milik akun tertentu memakai `[account-id]` di pat
 
 | # | Fitur | Lokasi | Kondisi Sekarang | API yang Dibutuhkan |
 |---|---|---|---|---|
-| 1 | **Login / Auth** | `src/lib/client-area-auth.ts`, `src/app/actions/clientAreaLogin.ts` | Kredensial di-hardcode (`bbh10158`, `user.sgb@demo-trading.com` + password `demo12345`) di source code | `POST /auth/login` (account + password → token/session **+ account-id**), `POST /auth/logout` (ganti cookie-clear manual saat ini) |
-| 2 | **Account Snapshot** (saldo, jenis akun, account ID) | `src/components/organisms/client-area.shared.ts` → `getClientAreaAccountModeData` | Diambil dari `copy.demoAccount` / `copy.realAccount` — teks statis di file locale | `GET /account/summary/[account-id]` (balance, equity, margin, account type) — validasi `account-id` == pemilik token |
-| 3 | **Profile** | `src/components/organisms/ClientAreaAccountProfilePanel.tsx` | Semua field `defaultValue` hardcoded (nama "Franky Reagan Law", email, alamat, dst); form `onSubmit` cuma `preventDefault()`, tidak mengirim apa pun | `GET /account/profile/[account-id]` (personal, purpose/experience, emergency contact, job, wealth — 5 section sesuai accordion), `PUT/PATCH /account/profile/[account-id]` per section — validasi kepemilikan |
+| 1 | **Login / Auth** | `src/lib/client-area-auth.ts`, `src/app/actions/clientAreaLogin.ts` | Login website dinonaktifkan sampai API autentikasi tersedia | `POST /auth/login` (account + password → token/session **+ account-id**), `POST /auth/logout` |
+| 2 | **Account Snapshot** (saldo, jenis akun, account ID) | `src/components/organisms/client-area.shared.ts` → `getClientAreaAccountModeData` | Mengembalikan data kosong; tidak ada informasi akun yang ditampilkan | `GET /account/summary/[account-id]` (balance, equity, margin, account type) — validasi `account-id` == pemilik token |
+| 3 | **Profile** | `src/components/organisms/ClientAreaAccountProfilePanel.tsx` | Field awal kosong dan form belum mengirim data | `GET /account/profile/[account-id]` (personal, purpose/experience, emergency contact, job, wealth — 5 section sesuai accordion), `PUT/PATCH /account/profile/[account-id]` per section — validasi kepemilikan |
 | 4 | **Referral** | `src/components/organisms/ClientAreaAccountReferralPanel.tsx` | Konten hero/steps/CTA statis, tidak ada kode referral atau statistik nyata | `GET /account/referral/[account-id]` (kode referral milik user, jumlah downline, reward/komisi) — validasi kepemilikan |
-| 5 | **Open Position & Trade History** | `client-area.shared.ts` → `getClientAreaAccountModeData` | `positions` & `transactionHistory` diambil dari `copy.demoPositions/realPositions` — array statis di locale file | `GET /account/positions/[account-id]`, `GET /account/trade-history/[account-id]` — validasi kepemilikan |
+| 5 | **Open Position & Trade History** | `client-area.shared.ts` → `getClientAreaAccountModeData` | Mengembalikan daftar kosong sampai data akun tersedia | `GET /account/positions/[account-id]`, `GET /account/trade-history/[account-id]` — validasi kepemilikan |
 | 6 | **Deposit / Withdrawal** | `ClientAreaAccountDepositHistoryView`, `ClientAreaAccountWithdrawalHistoryView` | Sengaja ditampilkan sebagai modal **"Unavailable"** (`ClientAreaFundTransferUnavailableModal`) | **Tidak perlu API** — deposit/withdrawal memang **permanen tidak bisa dilakukan lewat website** (bukan menunggu integrasi payment gateway). UI "Unavailable" saat ini sudah sesuai dan final, out of scope selamanya. |
 | 7 | **Document Approval** & **Daily Statement** | Menu item di `ClientAreaAccountPanel.tsx` | Item menu ada label-nya saja — **tanpa** `href` maupun `onClick` (belum ada halaman, apalagi API) | Perlu halaman dulu + `GET /account/documents/pending/[account-id]`, `GET /account/statement/daily/[account-id]` — validasi kepemilikan |
 
 ### Aturan validasi kepemilikan (wajib di semua endpoint bertanda "validasi kepemilikan")
 
-- Token/session dari `POST /auth/login` harus membawa `account-id` yang sah (bukan sekadar cookie flag seperti implementasi demo saat ini di `client-area-session.ts`).
+- Token/session dari `POST /auth/login` harus membawa `account-id` yang sah.
 - Setiap request ke endpoint ber-`[account-id]` wajib dicek di server: `account-id` pada path **harus sama** dengan `account-id` yang terikat ke token — kalau tidak cocok, return `403 Forbidden`, bukan data akun lain.
 - Jangan andalkan validasi di sisi client (Next.js route/page) saja — validasi utama harus di layer API/backend.
 
 ## Catatan Risiko
 
-Item #1–5 dan #7 memakai data statis/dummy secara diam-diam — dari sisi UI terlihat "berfungsi", padahal setiap user yang login akan melihat data yang sama persis. Ini jadi prioritas yang perlu dituntaskan sebelum `isClientAreaEnabled()` (lihat `src/lib/client-area-config.ts`) dinyalakan untuk publik.
+Item #1–5 dan #7 tidak boleh diaktifkan untuk publik sebelum endpoint API akun dan validasi kepemilikannya selesai tersedia.
 
 ## Open Questions
 

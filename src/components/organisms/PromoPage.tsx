@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
+import { useBannerRecords } from "@/hooks/useBannerRecords";
 import type { BannerApiRecord } from "@/lib/banner";
 import {
   formatLocaleDateTime,
@@ -22,6 +25,7 @@ export function PromoPage({
   locale,
   messages,
 }: PromoPageProps) {
+  const resolvedBanners = useBannerRecords(banners);
   const page = messages.promoPage;
 
   return (
@@ -43,9 +47,9 @@ export function PromoPage({
       <section id="promo-list" className="relative">
         <div className="absolute h-50 w-full bg-linear-to-b from-black to-transparent" />
         <SectionContainer className="py-16 sm:py-20">
-          {banners.length > 0 ? (
+          {resolvedBanners.length > 0 ? (
             <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {banners.map((banner, index) => {
+              {resolvedBanners.map((banner, index) => {
                 const title = banner.title || page.list.untitledFallback;
                 const href = banner.slug
                   ? `/${locale}/promo/${encodeURIComponent(banner.slug)}`

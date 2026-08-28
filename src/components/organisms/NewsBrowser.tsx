@@ -14,7 +14,6 @@ import { ScrollReveal } from "../molecules/ScrollReveal";
 type NewsBrowserProps = {
   articles: NewsFeedArticle[];
   locale: AppLocale;
-  source: "api" | "fallback";
   hrefBasePath?: string;
   browserLabels?: AppMessages["newsBrowser"];
   labels: {
@@ -50,7 +49,6 @@ function getCategoryLabel(
 
 function getSummaryText(
   browserLabels: ReturnType<typeof getMessages>["newsBrowser"],
-  source: "api" | "fallback",
   selectedCategory: string | null,
   totalItems: number,
   categoryLabels: Record<string, string>,
@@ -63,9 +61,7 @@ function getSummaryText(
     return `${totalItems} ${browserLabels.summary.articlesInCategory} ${selectedCategoryLabel}`;
   }
 
-  return source === "api"
-    ? `${totalItems} ${browserLabels.summary.available}`
-    : browserLabels.summary.fallback;
+  return `${totalItems} ${browserLabels.summary.available}`;
 }
 
 function getPaginationSummary(
@@ -153,7 +149,6 @@ function compareArticlesByDate(
 export function NewsBrowser({
   articles,
   locale,
-  source,
   hrefBasePath = "/news",
   browserLabels: browserLabelsProp,
   labels,
@@ -227,7 +222,6 @@ export function NewsBrowser({
   );
   const summaryText = getSummaryText(
     browserLabels,
-    source,
     selectedCategory,
     sortedArticles.length,
     categoryLabels,

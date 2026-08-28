@@ -196,7 +196,7 @@ function resolveFeatureEnabledValue(
   return null;
 }
 
-const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureConfig() {
+export const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureConfig() {
   if (!CLIENT_AREA_CONFIG_API_URL) {
     return {
       clientAreaEnabled: false,

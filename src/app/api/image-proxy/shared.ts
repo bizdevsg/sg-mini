@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { withApiProtectionHeaders } from "@/lib/api-protection";
-import { isAllowedImageProxySource, normalizeSgAdminUrl } from "@/lib/env";
+import {
+  isAllowedImageProxySource,
+  isSgAdminUrl,
+  normalizeSgAdminUrl,
+} from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
 const IMAGE_CONTENT_TYPES_BY_EXTENSION: Record<string, string> = {
   ".avif": "image/avif",
@@ -96,11 +101,13 @@ export async function proxyImageSource(sourceUrl: string) {
   let upstreamResponse: Response;
 
   try {
+    const headers = isSgAdminUrl(normalizedSourceUrl)
+      ? await getSgAdminApiHeaders({ Accept: "image/*,*/*;q=0.8" })
+      : { Accept: "image/*,*/*;q=0.8" };
+
     upstreamResponse = await fetch(normalizedSourceUrl, {
       cache: "no-store",
-      headers: {
-        Accept: "image/*,*/*;q=0.8",
-      },
+      headers,
     });
   } catch {
     return buildErrorResponse(502, "Failed to fetch upstream image.");

@@ -70,12 +70,17 @@ export function ScrollReveal<T extends ElementType = "div">({
   ...props
 }: ScrollRevealProps<T>) {
   const Component = (as ?? "div") as ElementType;
+  const [isHydrated, setIsHydrated] = useState(false);
   const [resolvedDelay, setResolvedDelay] = useState(delay);
   const aosAnchorPlacement = resolveAosAnchorPlacement(rootMargin);
   const aosOffset = Math.max(0, Math.round(threshold * 120));
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !isHydrated) {
       return;
     }
 
@@ -95,7 +100,7 @@ export function ScrollReveal<T extends ElementType = "div">({
     return () => {
       mediaQuery.removeEventListener("change", syncDelay);
     };
-  }, [delay, desktopDelay]);
+  }, [delay, desktopDelay, isHydrated]);
 
   const refreshKey = [
     effect,
@@ -111,7 +116,7 @@ export function ScrollReveal<T extends ElementType = "div">({
   } as CSSProperties;
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || !isHydrated) {
       return;
     }
 
@@ -134,19 +139,21 @@ export function ScrollReveal<T extends ElementType = "div">({
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [refreshKey]);
+  }, [isHydrated, refreshKey]);
 
   return (
     <Component
       className={className}
       style={mergedStyle}
-      data-aos={effect}
-      data-aos-delay={resolvedDelay}
-      data-aos-duration={duration}
-      data-aos-once={toAosBoolean(once)}
-      data-aos-offset={aosOffset}
-      data-aos-easing="cubic-bezier(0.22, 1, 0.36, 1)"
-      data-aos-anchor-placement={aosAnchorPlacement}
+      data-aos={isHydrated ? effect : undefined}
+      data-aos-delay={isHydrated ? resolvedDelay : undefined}
+      data-aos-duration={isHydrated ? duration : undefined}
+      data-aos-once={isHydrated ? toAosBoolean(once) : undefined}
+      data-aos-offset={isHydrated ? aosOffset : undefined}
+      data-aos-easing={
+        isHydrated ? "cubic-bezier(0.22, 1, 0.36, 1)" : undefined
+      }
+      data-aos-anchor-placement={isHydrated ? aosAnchorPlacement : undefined}
       {...props}
     >
       {children}

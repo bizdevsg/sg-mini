@@ -9,6 +9,8 @@
   --accent: #cda13a;
   --accent-strong: #f2cf78;
   --line: rgba(205, 161, 58, 0.24);
+  --font-poppins:
+    "Segoe UI", "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif;
 }
 
 @theme inline {

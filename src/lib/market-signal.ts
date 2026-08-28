@@ -1,9 +1,7 @@
 import "server-only";
 
-import { getDummyMarketSignalFeed } from "@/lib/api-dummy-data";
 import {
   MARKET_SIGNAL_API_URL,
-  USE_DUMMY_API_DATA,
   getMarketSignalAssetUrl,
 } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
@@ -233,10 +231,6 @@ function sortMarketSignalResultByRecency(
 }
 
 export async function getMarketSignalFeed(): Promise<MarketSignalResult> {
-  if (USE_DUMMY_API_DATA) {
-    return sortMarketSignalResultByRecency(getDummyMarketSignalFeed());
-  }
-
   const controller = new AbortController();
   const timeout = setTimeout(
     () => controller.abort(),

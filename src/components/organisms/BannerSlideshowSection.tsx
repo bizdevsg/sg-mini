@@ -1,5 +1,4 @@
-import { BannerSlideshow } from "@/components/molecules/BannerSlideshow";
-import { ScrollReveal } from "@/components/molecules/ScrollReveal";
+import { BannerSlideshowSectionClient } from "@/components/organisms/BannerSlideshowSectionClient";
 import { getBannerRecords } from "@/lib/banner";
 import type { AppLocale } from "@/locales";
 
@@ -10,19 +9,12 @@ type BannerSlideshowSectionProps = {
 export async function BannerSlideshowSection({
   locale,
 }: BannerSlideshowSectionProps) {
-  const banners = await getBannerRecords();
-
-  if (!banners.length) {
-    return null;
-  }
+  const initialBanners = await getBannerRecords();
 
   return (
-    <ScrollReveal
-      as="section"
-      className="bg-transparent mb-10 sm:mb-16 md:mb-20"
-      effect="fade-up"
-    >
-      <BannerSlideshow banners={banners} locale={locale} />
-    </ScrollReveal>
+    <BannerSlideshowSectionClient
+      initialBanners={initialBanners}
+      locale={locale}
+    />
   );
 }
