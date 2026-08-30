@@ -7,6 +7,8 @@ import {
   type ElementType,
   type ReactNode,
   useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -55,6 +57,21 @@ function toAosBoolean(value: boolean) {
   return value ? "true" : "false";
 }
 
+function isElementInViewport(element: Element) {
+  const rect = element.getBoundingClientRect();
+  const viewportHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+  const viewportWidth =
+    window.innerWidth || document.documentElement.clientWidth;
+
+  return (
+    rect.bottom > 0 &&
+    rect.right > 0 &&
+    rect.top < viewportHeight &&
+    rect.left < viewportWidth
+  );
+}
+
 export function ScrollReveal<T extends ElementType = "div">({
   as,
   children,
@@ -70,12 +87,18 @@ export function ScrollReveal<T extends ElementType = "div">({
   ...props
 }: ScrollRevealProps<T>) {
   const Component = (as ?? "div") as ElementType;
+  const elementRef = useRef<Element | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isInitiallyVisible, setIsInitiallyVisible] = useState(false);
   const [resolvedDelay, setResolvedDelay] = useState(delay);
   const aosAnchorPlacement = resolveAosAnchorPlacement(rootMargin);
   const aosOffset = Math.max(0, Math.round(threshold * 120));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined" && elementRef.current) {
+      setIsInitiallyVisible(isElementInViewport(elementRef.current));
+    }
+
     setIsHydrated(true);
   }, []);
 
@@ -114,6 +137,12 @@ export function ScrollReveal<T extends ElementType = "div">({
     ...style,
     "--scroll-reveal-delay": `${resolvedDelay}ms`,
   } as CSSProperties;
+  const mergedClassName = [
+    className,
+    isHydrated && isInitiallyVisible ? "aos-animate" : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   useEffect(() => {
     if (typeof window === "undefined" || !isHydrated) {
@@ -143,7 +172,8 @@ export function ScrollReveal<T extends ElementType = "div">({
 
   return (
     <Component
-      className={className}
+      ref={elementRef as never}
+      className={mergedClassName || undefined}
       style={mergedStyle}
       data-aos={isHydrated ? effect : undefined}
       data-aos-delay={isHydrated ? resolvedDelay : undefined}
