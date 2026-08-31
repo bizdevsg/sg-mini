@@ -185,15 +185,25 @@ export function formatSignedUsd(value: number) {
 }
 
 export function getClientAreaAccountModeData(
-  _copy: DashboardCopy,
-  _accountMode: AccountMode,
+  copy: DashboardCopy,
+  accountMode: AccountMode,
 ): ClientAreaAccountModeData {
+  if (accountMode === "real") {
+    return {
+      currentAccount: copy.realAccount,
+      depositHistory: copy.realDepositHistory,
+      positions: copy.realPositions,
+      transactionHistory: copy.realTransactionHistory,
+      withdrawalHistory: copy.realWithdrawalHistory,
+    };
+  }
+
   return {
-    currentAccount: EMPTY_ACCOUNT_SNAPSHOT,
-    depositHistory: [],
-    positions: [],
-    transactionHistory: [],
-    withdrawalHistory: [],
+    currentAccount: copy.demoAccount,
+    depositHistory: copy.demoDepositHistory,
+    positions: copy.demoPositions,
+    transactionHistory: copy.demoTransactionHistory,
+    withdrawalHistory: copy.demoWithdrawalHistory,
   };
 }
 
