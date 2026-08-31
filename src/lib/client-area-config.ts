@@ -6,6 +6,8 @@ import {
   APP_ENV,
   CLIENT_AREA_CONFIG_API_TOKEN,
   CLIENT_AREA_CONFIG_API_URL,
+  PUBLIC_CLIENT_AREA_ENABLED,
+  PUBLIC_TAWK_CHAT_ENABLED,
 } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 
@@ -51,6 +53,13 @@ const TAWK_CHAT_FEATURE_KEYS = [
   "tawkActive",
   "tawk_active",
 ] as const;
+
+function resolveFallbackWebsiteFeatureConfig() {
+  return {
+    clientAreaEnabled: PUBLIC_CLIENT_AREA_ENABLED,
+    tawkChatEnabled: PUBLIC_TAWK_CHAT_ENABLED,
+  };
+}
 
 function resolveClientAreaEnvironmentKey() {
   return APP_ENV === "prod" ? "prod" : "dev";
@@ -198,10 +207,7 @@ function resolveFeatureEnabledValue(
 
 export const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureConfig() {
   if (!CLIENT_AREA_CONFIG_API_URL) {
-    return {
-      clientAreaEnabled: false,
-      tawkChatEnabled: false,
-    };
+    return resolveFallbackWebsiteFeatureConfig();
   }
 
   const headers = await getSgAdminApiHeaders();
@@ -228,24 +234,33 @@ export const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureCon
     });
 
     if (!response.ok) {
-      return {
-        clientAreaEnabled: false,
-        tawkChatEnabled: false,
-      };
+      console.error("Failed to fetch website feature config", {
+        appEnv: APP_ENV,
+        status: response.status,
+        statusText: response.statusText,
+        url: CLIENT_AREA_CONFIG_API_URL,
+      });
+
+      return resolveFallbackWebsiteFeatureConfig();
     }
 
     const payload = (await response.json()) as unknown;
     return {
       clientAreaEnabled:
-        resolveFeatureEnabledValue(payload, CLIENT_AREA_FEATURE_KEYS) ?? false,
+        resolveFeatureEnabledValue(payload, CLIENT_AREA_FEATURE_KEYS) ??
+        PUBLIC_CLIENT_AREA_ENABLED,
       tawkChatEnabled:
-        resolveFeatureEnabledValue(payload, TAWK_CHAT_FEATURE_KEYS) ?? false,
+        resolveFeatureEnabledValue(payload, TAWK_CHAT_FEATURE_KEYS) ??
+        PUBLIC_TAWK_CHAT_ENABLED,
     };
-  } catch {
-    return {
-      clientAreaEnabled: false,
-      tawkChatEnabled: false,
-    };
+  } catch (error) {
+    console.error("Failed to fetch website feature config", {
+      appEnv: APP_ENV,
+      error,
+      url: CLIENT_AREA_CONFIG_API_URL,
+    });
+
+    return resolveFallbackWebsiteFeatureConfig();
   }
 });
 

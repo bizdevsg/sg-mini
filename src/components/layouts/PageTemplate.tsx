@@ -4,7 +4,7 @@ import { getLocaleConfig, type AppLocale } from "@/locales";
 import { FooterSection } from "@/components/organisms/FooterSection";
 import { Navbar } from "@/components/organisms/Navbar";
 import { getClientAreaSessionState } from "@/lib/client-area-auth";
-import { PUBLIC_CLIENT_AREA_ENABLED } from "@/lib/env";
+import { getWebsiteFeatureConfig } from "@/lib/client-area-config";
 
 type PageTemplateProps = {
   children: ReactNode;
@@ -13,7 +13,9 @@ type PageTemplateProps = {
 };
 
 async function getNavbarState(locale: AppLocale) {
-  if (!PUBLIC_CLIENT_AREA_ENABLED) {
+  const { clientAreaEnabled } = await getWebsiteFeatureConfig();
+
+  if (!clientAreaEnabled) {
     return {
       clientAreaProfile: null,
       isClientAreaEnabled: false,
@@ -26,7 +28,7 @@ async function getNavbarState(locale: AppLocale) {
 
   return {
     clientAreaProfile: profile,
-    isClientAreaEnabled: PUBLIC_CLIENT_AREA_ENABLED,
+    isClientAreaEnabled: clientAreaEnabled,
     isClientAreaAuthenticated: isAuthenticated,
     locale,
   };
