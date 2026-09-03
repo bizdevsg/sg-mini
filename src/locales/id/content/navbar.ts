@@ -37,6 +37,7 @@ export const idNavbar: AppMessages["navbar"] = {
         { label: "Cara Memulai", href: "/education/cara-memulai" },
         { label: "Ebook", href: "/education/ebook" },
         { label: "Market Academy", href: "/education/market-academy" },
+        { label: "Trading Rules", href: "/education/trading-rules" },
         {
           label: "Istilah Transaksi Online",
           href: "/education/istilah-dalam-transaksi-online",

@@ -33,6 +33,7 @@ export {
   getGettingStartedPageContent,
   type GettingStartedPageContent,
 } from "./getting-started-page";
+export { getTradingRulesPageContent, type TradingRulesPageContent } from "./trading-rules-page";
 
 import { DEFAULT_LOCALE, type AppLocale } from "./config";
 import { messages } from "./messages";
