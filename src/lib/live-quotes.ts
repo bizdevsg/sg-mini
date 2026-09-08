@@ -25,11 +25,8 @@ const LIVE_QUOTE_ICON_BY_SYMBOL: Record<string, string> = {
   XUL10: "/assets/icon-symbol/gold-icon.png",
   XUL10_BBJ: "/assets/icon-symbol/gold-icon.png",
   XAGUSD: "/assets/icon-symbol/silver-icon.png",
-  "BCO-NC": "/assets/icon-symbol/oil-icon.png",
   BCO10_BBJ: "/assets/icon-symbol/oil-icon.png",
-  "HKK-NC": "/assets/icon-symbol/hangseng-icon.png",
   HKK50_BBJ: "/assets/icon-symbol/hangseng-icon.png",
-  "JPK-NC": "/assets/icon-symbol/nikkei-icon.png",
   JPK50_BBJ: "/assets/icon-symbol/nikkei-icon.png",
   DX1010_BBJ: "/assets/icon-symbol/dxy-icon.png",
   AU1010_BBJ: "/assets/icon-symbol/audusd-icon.png",
@@ -50,6 +47,14 @@ const LIVE_QUOTE_ICON_VERSION = "20260626-1";
 
 export const LIVE_QUOTE_SOCKET_URL = PUBLIC_LIVE_QUOTE_SOCKET_URL;
 
+// Simbol yang tetap dikirim feed websocket tetapi tidak boleh tampil di list
+// mana pun (duplikat "-NC" dari instrumen yang sudah diwakili kontrak BBJ-nya).
+const LIVE_QUOTE_EXCLUDED_SYMBOLS = new Set(["BCO-NC", "HKK-NC", "JPK-NC"]);
+
+export function isExcludedLiveQuoteSymbol(symbol: string) {
+  return LIVE_QUOTE_EXCLUDED_SYMBOLS.has(symbol.trim().toUpperCase());
+}
+
 export const QUOTE_ORDER = [
   "XUL10",
   "BCO10_BBJ",
@@ -67,11 +72,8 @@ export const QUOTE_ORDER = [
 const LIVE_QUOTE_DISPLAY_ORDER = [
   "XUL10",
   "XUL10_BBJ",
-  "BCO-NC",
   "BCO10_BBJ",
-  "HKK-NC",
   "HKK50_BBJ",
-  "JPK-NC",
   "JPK50_BBJ",
   "DX1010_BBJ",
   "AU1010_BBJ",
@@ -85,11 +87,8 @@ const LIVE_QUOTE_DISPLAY_ORDER = [
 export const LIVE_QUOTE_LABELS: Record<string, string> = {
   XUL10: "Gold",
   XUL10_BBJ: "Gold",
-  "BCO-NC": "Brent Crude",
   BCO10_BBJ: "Brent Crude",
-  "HKK-NC": "Hang Seng",
   HKK50_BBJ: "Hang Seng",
-  "JPK-NC": "Nikkei 225",
   JPK50_BBJ: "Nikkei 225",
   DX1010_BBJ: "DXY",
   AU1010_BBJ: "AUD/USD",
@@ -133,10 +132,13 @@ export function getLiveQuoteIconSrc(symbol: string) {
 }
 
 export function getSortedSymbols(quotes: LiveQuotePayload) {
-  const ordered = LIVE_QUOTE_DISPLAY_ORDER.filter((symbol) => symbol in quotes);
+  const ordered = LIVE_QUOTE_DISPLAY_ORDER.filter(
+    (symbol) => symbol in quotes && !isExcludedLiveQuoteSymbol(symbol),
+  );
   const remaining = Object.keys(quotes)
     .filter(
       (symbol) =>
+        !isExcludedLiveQuoteSymbol(symbol) &&
         !LIVE_QUOTE_DISPLAY_ORDER.includes(
           symbol as (typeof LIVE_QUOTE_DISPLAY_ORDER)[number],
         ),

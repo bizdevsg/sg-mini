@@ -1610,11 +1610,8 @@ const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
 > = {
   XUL10: "Commodity",
   XUL10_BBJ: "Commodity",
-  "BCO-NC": "Commodity",
   BCO10_BBJ: "Commodity",
-  "HKK-NC": "Index",
   HKK50_BBJ: "Index",
-  "JPK-NC": "Index",
   JPK50_BBJ: "Index",
   DX1010_BBJ: "Index",
   AU1010_BBJ: "Forex",
@@ -1629,8 +1626,8 @@ const CLIENT_AREA_FEATURED_MARKET_SYMBOLS: Record<
   ClientAreaMarketCategory,
   string[]
 > = {
-  Commodity: ["XUL10", "XUL10_BBJ", "BCO-NC", "BCO10_BBJ"],
-  Index: ["HKK-NC", "HKK50_BBJ", "JPK-NC", "JPK50_BBJ", "DX1010_BBJ"],
+  Commodity: ["XUL10", "XUL10_BBJ", "BCO10_BBJ"],
+  Index: ["HKK50_BBJ", "JPK50_BBJ", "DX1010_BBJ"],
   Forex: [
     "EU1010_BBJ",
     "UJ1010_BBJ",
