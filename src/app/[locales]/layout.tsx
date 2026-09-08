@@ -4,6 +4,7 @@ import { PageTemplate } from "@/components/layouts/PageTemplate";
 import { LocalizedLayoutEnhancements } from "@/components/providers/LocalizedLayoutEnhancements";
 import { isSupportedLocale, type AppLocale } from "@/locales";
 import { hasAcceptedCookieConsent } from "@/lib/cookie-consent";
+import { PUBLIC_TAWK_CHAT_ENABLED } from "@/lib/env";
 
 type LocalizedLayoutProps = {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ export default async function LocalizedLayout({
       <LocalizedLayoutEnhancements
         locale={locales}
         shouldShowCookieConsent={shouldShowCookieConsent}
-        tawkChatEnabled={false}
+        tawkChatEnabled={PUBLIC_TAWK_CHAT_ENABLED}
       />
     </PageTemplate>
   );
