@@ -228,7 +228,7 @@ Alur pakainya:
 6. build dan jalankan container dengan:
 
 ```bash
-docker compose --env-file .env.prod up --build -d
+docker compose up --build -d
 ```
 
 Port host untuk development lokal mengikuti `.env` dan default ke `3000`.
@@ -237,7 +237,7 @@ Port host untuk Docker production mengikuti `.env.prod` dan default ke `2809`.
 Catatan production:
 
 - image build memakai output `standalone`, jadi container runtime hanya membawa artefak Next yang dibutuhkan
-- secret runtime tetap dibaca dari `env_file`, dan tidak lagi disimpan sebagai `ENV` permanen di stage build
+- `.env.prod` dipakai secara eksplisit saat build dan sebagai `env_file` runtime; nilai `NEXT_PUBLIC_*` yang dihasilkan browser selalu berasal dari file ini
 - cache Next disimpan di volume `next_cache` agar cache runtime tidak hilang saat container restart biasa
 - untuk environment publik internet, taruh container ini di belakang reverse proxy seperti `nginx` atau `caddy`
 
