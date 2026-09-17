@@ -8,10 +8,10 @@ import { resolveFallbackLocaleFromPathname } from "@/lib/route-fallback";
 
 export default function ClientAreaError({
   error,
-  unstable_retry,
+  retry,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  retry: () => void;
 }) {
   const pathname = usePathname();
   const locale = resolveFallbackLocaleFromPathname(pathname);
@@ -25,7 +25,7 @@ export default function ClientAreaError({
       errorDigest={error.digest}
       locale={locale}
       mode="error"
-      onRetry={() => unstable_retry()}
+      onRetry={retry}
     />
   );
 }
