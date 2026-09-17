@@ -70,7 +70,6 @@ const allowedTunnelOrigins = [
   "*.ngrok-free.app",
   "*.ngrok.io",
   "*.loca.lt",
-  "*.trycloudflare.com",
   "*.devtunnels.ms",
   "**.devtunnels.ms",
 ];
