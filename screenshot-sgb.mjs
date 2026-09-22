@@ -85,10 +85,33 @@ async function autoScroll(page) {
 const CLEAN_CSS = `
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto !important; }
+  #solidchat-widget-host, iframe[src*="solidchat"] { display: none !important; }
 `;
+
+// Website mengunci scroll & menutup full page dengan overlay gelap selagi
+// banner cookie consent tampil (lihat HomeCookieConsentBanner.tsx). Server
+// hanya menampilkan banner itu kalau cookie `sgb_cookie_consent` belum ada,
+// jadi kita "terima" cookie-nya duluan sebelum navigasi supaya banner tidak
+// pernah dirender sama sekali.
+async function acceptCookieConsent(context) {
+  const { hostname, protocol } = new URL(BASE_URL);
+
+  await context.addCookies([
+    {
+      name: "sgb_cookie_consent",
+      value: "accepted",
+      domain: hostname,
+      path: "/",
+      secure: protocol === "https:",
+      httpOnly: true,
+      sameSite: "Lax",
+    },
+  ]);
+}
 
 async function capture(browser, mode, name, url, report) {
   const context = await browser.newContext({ ...VIEWPORTS[mode], locale: "id-ID" });
+  await acceptCookieConsent(context);
   const page = await context.newPage();
   const file = path.join(OUT_DIR, mode, `${name}.png`);
   let text = null;
