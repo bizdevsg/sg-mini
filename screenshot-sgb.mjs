@@ -59,7 +59,12 @@ const PAGES = [
 
 const VIEWPORTS = {
   desktop: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 },
-  mobile: { ...devices["iPhone 13"] },
+  // deviceScaleFactor dipaksa 1 (bukan default iPhone 13 yang 3x): untuk
+  // halaman setinggi ini, tinggi CSS x 3 bisa melebihi batas ukuran capture
+  // fullPage Chromium, membuat sebagian besar konten blank di screenshot
+  // walau kontennya sendiri render normal (sudah diverifikasi langsung).
+  // Layout tetap sesuai breakpoint mobile karena width CSS-nya tidak berubah.
+  mobile: { ...devices["iPhone 13"], deviceScaleFactor: 1 },
 };
 
 // Scroll pelan sampai bawah supaya gambar lazy-load & animasi on-scroll (AOS,
@@ -98,6 +103,84 @@ const CLEAN_CSS = `
   nav.fixed { position: absolute !important; }
 `;
 
+// page.screenshot({ fullPage: true }) TIDAK dipakai untuk halaman setinggi
+// ini: Chromium me-render fullPage dengan memperlebar "viewport" ke seluruh
+// tinggi dokumen dan menangkapnya sekali jalan, tapi untuk halaman yang jauh
+// lebih tinggi dari viewport aslinya, ini terbukti tidak reliabel — kadang
+// hanya bagian yang pernah benar-benar di-render (awal & akhir scroll) yang
+// ke-capture, bagian tengah blank, walau kontennya sendiri render normal
+// (diverifikasi langsung: screenshot viewport biasa di posisi yang sama
+// selalu lengkap). Solusinya: screenshot per-layar SAAT benar-benar discroll
+// ke posisi itu (bukan minta Chromium membayangkan satu viewport raksasa),
+// lalu digabung manual lewat <canvas> di halaman kosong milik Chromium
+// sendiri — tanpa nambah dependency gambar baru.
+async function captureFullPageStitched(browser, page, filePath) {
+  const viewportSize = page.viewportSize();
+
+  if (!viewportSize) {
+    await page.screenshot({ path: filePath, fullPage: true });
+    return;
+  }
+
+  const { width, height: viewportHeight } = viewportSize;
+  const totalHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+
+  if (totalHeight <= viewportHeight) {
+    await page.screenshot({ path: filePath });
+    return;
+  }
+
+  const slices = [];
+  let y = 0;
+
+  while (true) {
+    const scrollY = Math.min(y, totalHeight - viewportHeight);
+    await page.evaluate((sy) => window.scrollTo(0, sy), scrollY);
+    // beri waktu compositor benar-benar mengecat frame di posisi ini
+    await page.waitForTimeout(120);
+    const buffer = await page.screenshot();
+    slices.push({ base64: buffer.toString("base64"), top: scrollY });
+
+    if (scrollY + viewportHeight >= totalHeight) {
+      break;
+    }
+
+    y += viewportHeight;
+  }
+
+  const stitchPage = await browser.newPage();
+
+  try {
+    await stitchPage.goto("about:blank");
+    const dataUrl = await stitchPage.evaluate(
+      async ({ slices, width, height }) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+
+        for (const slice of slices) {
+          const image = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = `data:image/png;base64,${slice.base64}`;
+          });
+          ctx.drawImage(image, 0, slice.top);
+        }
+
+        return canvas.toDataURL("image/png");
+      },
+      { slices, width, height: totalHeight },
+    );
+
+    const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
+    await fs.writeFile(filePath, Buffer.from(base64Data, "base64"));
+  } finally {
+    await stitchPage.close();
+  }
+}
+
 // Website mengunci scroll & menutup full page dengan overlay gelap selagi
 // banner cookie consent tampil (lihat HomeCookieConsentBanner.tsx). Server
 // hanya menampilkan banner itu kalau cookie `sgb_cookie_consent` belum ada,
@@ -131,14 +214,21 @@ async function capture(browser, mode, name, url, report) {
     // (/api/live-quotes) yang sengaja tidak pernah ditutup, jadi kondisi
     // "tidak ada koneksi aktif" nyaris tidak pernah tercapai dan goto() bisa
     // macet sampai timeout 60 detik (screenshot gagal total untuk halaman itu).
-    const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
+    // "load" JUGA TIDAK dipakai: khusus di emulasi mobile, Firebase SDK
+    // memuat script pihak ketiga (apis.google.com/js/api.js) yang di
+    // environment ini kadang macet tak kunjung selesai/gagal — "load"
+    // menunggu SEMUA resource beres jadi ikut macet 60 detik. Kita pakai
+    // "domcontentloaded" (jauh lebih cepat & tidak tergantung resource
+    // pihak ketiga) lalu andalkan waitForTimeout di bawah untuk kasih
+    // waktu hidrasi/gambar/AOS settle sebelum discroll & discreenshot.
+    const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
     await page.addStyleTag({ content: CLEAN_CSS });
     // Kasih waktu hidrasi/data awal & AOS init settle sebelum mulai scroll
     await page.waitForTimeout(2000);
     await autoScroll(page);
     // Kasih waktu websocket live quote / data market masuk
     await page.waitForTimeout(4000);
-    await page.screenshot({ path: file, fullPage: true });
+    await captureFullPageStitched(browser, page, file);
 
     if (mode === "desktop") {
       text = await page.evaluate(() => {
