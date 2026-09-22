@@ -62,7 +62,12 @@ const VIEWPORTS = {
   mobile: { ...devices["iPhone 13"] },
 };
 
-// Scroll pelan sampai bawah supaya gambar lazy-load & animasi on-scroll ikut muncul
+// Scroll pelan sampai bawah supaya gambar lazy-load & animasi on-scroll (AOS,
+// lihat ScrollReveal.tsx) ikut ke-trigger. PENTING: jangan scrollTo(0,0) di
+// akhir — komponen ScrollReveal defaultnya `once=false`, jadi AOS akan
+// menyembunyikan lagi (opacity:0) section yang discroll keluar viewport.
+// Screenshot fullPage tidak butuh posisi scroll di atas; Chromium menangkap
+// seluruh tinggi dokumen apa pun posisi scroll saat ini.
 async function autoScroll(page) {
   await page.evaluate(async () => {
     await new Promise((resolve) => {
@@ -73,7 +78,6 @@ async function autoScroll(page) {
         total += step;
         if (total >= document.body.scrollHeight) {
           clearInterval(timer);
-          window.scrollTo(0, 0);
           resolve();
         }
       }, 150);
@@ -117,8 +121,14 @@ async function capture(browser, mode, name, url, report) {
   let text = null;
 
   try {
-    const res = await page.goto(url, { waitUntil: "networkidle", timeout: 60_000 });
+    // "networkidle" TIDAK dipakai: live quote membuka koneksi EventSource
+    // (/api/live-quotes) yang sengaja tidak pernah ditutup, jadi kondisi
+    // "tidak ada koneksi aktif" nyaris tidak pernah tercapai dan goto() bisa
+    // macet sampai timeout 60 detik (screenshot gagal total untuk halaman itu).
+    const res = await page.goto(url, { waitUntil: "load", timeout: 60_000 });
     await page.addStyleTag({ content: CLEAN_CSS });
+    // Kasih waktu hidrasi/data awal & AOS init settle sebelum mulai scroll
+    await page.waitForTimeout(2000);
     await autoScroll(page);
     // Kasih waktu websocket live quote / data market masuk
     await page.waitForTimeout(4000);
