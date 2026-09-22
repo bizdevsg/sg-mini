@@ -90,6 +90,12 @@ const CLEAN_CSS = `
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto !important; }
   #solidchat-widget-host, iframe[src*="solidchat"] { display: none !important; }
+  /* Navbar aslinya position:fixed (Navbar.tsx). Untuk halaman setinggi ini
+     Chromium men-tile proses capture fullPage-nya, dan elemen fixed ikut
+     dirender ulang di tiap batas tile — jadi navbar "nempel" lagi di
+     tengah halaman. Dipaksa absolute supaya cuma dirender sekali di posisi
+     aslinya (tetap di atas karena dia elemen pertama di body). */
+  nav.fixed { position: absolute !important; }
 `;
 
 // Website mengunci scroll & menutup full page dengan overlay gelap selagi
