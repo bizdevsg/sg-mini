@@ -28,10 +28,14 @@ export type {
 export type PortalNewsApiArticle = {
   id: number | string;
   title: string;
+  title_id?: string;
+  title_en?: string;
   titles?: Record<string, string>;
   slug?: string;
   link?: string;
   content?: string;
+  content_id?: string;
+  content_en?: string;
   summary?: string;
   detail?: string;
   description?: string;
@@ -165,8 +169,31 @@ function truncateText(value: string, maxLength: number) {
   return `${value.slice(0, maxLength).trimEnd()}...`;
 }
 
-function getArticleContent(article: PortalNewsApiArticle) {
-  return article.detail ?? article.content ?? article.body ?? article.description ?? "";
+function getLocalizedArticleField(
+  locale: AppLocale,
+  localizedValues: { id?: string; en?: string },
+) {
+  const localizedValue =
+    locale === "en" ? localizedValues.en : localizedValues.id;
+  const trimmedValue = localizedValue?.trim();
+
+  return trimmedValue || null;
+}
+
+function getArticleContent(article: PortalNewsApiArticle, locale: AppLocale) {
+  const localizedContent = getLocalizedArticleField(locale, {
+    id: article.content_id,
+    en: article.content_en,
+  });
+
+  return (
+    localizedContent ??
+    article.detail ??
+    article.content ??
+    article.body ??
+    article.description ??
+    ""
+  );
 }
 
 function getArticleCategoryName(article: PortalNewsApiArticle) {
@@ -230,7 +257,7 @@ export function findNewsFeedArticleByRouteSlug(
   );
 }
 
-function getArticleSummary(article: PortalNewsApiArticle) {
+function getArticleSummary(article: PortalNewsApiArticle, locale: AppLocale) {
   const directSummary = normalizeWhitespace(
     decodeHtmlEntities(stripHtml(article.summary ?? article.excerpt ?? "")),
   );
@@ -240,11 +267,11 @@ function getArticleSummary(article: PortalNewsApiArticle) {
   }
 
   const normalizedContent = normalizeWhitespace(
-    decodeHtmlEntities(stripHtml(getArticleContent(article))),
+    decodeHtmlEntities(stripHtml(getArticleContent(article, locale))),
   );
 
   if (!normalizedContent) {
-    return article.title;
+    return getArticleTitle(article, locale);
   }
 
   return truncateText(normalizedContent, SUMMARY_MAX_LENGTH);
@@ -288,8 +315,18 @@ function getArticleBodyHtml(content: string) {
   return fallbackText ? `<p>${escapeHtml(fallbackText)}</p>` : "";
 }
 
-function getArticleTitle(article: PortalNewsApiArticle) {
-  return article.titles?.sg ?? article.titles?.default ?? article.title;
+function getArticleTitle(article: PortalNewsApiArticle, locale: AppLocale) {
+  const localizedTitle = getLocalizedArticleField(locale, {
+    id: article.title_id,
+    en: article.title_en,
+  });
+
+  return (
+    localizedTitle ??
+    article.titles?.sg ??
+    article.titles?.default ??
+    article.title
+  );
 }
 
 function getTimestamp(value?: string) {
@@ -398,14 +435,17 @@ function getEstimatedReadTime(content: string, locale: AppLocale) {
   return getReadTimeLabel(estimatedMinutes, locale);
 }
 
-function toFeedArticle(article: PortalNewsApiArticle): NewsFeedArticle {
-  const summary = getArticleSummary(article);
+function toFeedArticle(
+  article: PortalNewsApiArticle,
+  locale: AppLocale,
+): NewsFeedArticle {
+  const summary = getArticleSummary(article, locale);
   const categoryName = getArticleCategoryName(article);
   const normalizedCategory = categoryName.trim() || "Uncategorized";
 
   return {
     id: String(article.id),
-    title: getArticleTitle(article),
+    title: getArticleTitle(article, locale),
     slug: getArticleSlug(article),
     summary,
     category: normalizedCategory,
@@ -436,12 +476,15 @@ function toFeedArticleFromEntry(article: PortalNewsFeedEntry): NewsFeedArticle {
   };
 }
 
-function toPortalNewsFeedEntry(article: PortalNewsApiArticle): PortalNewsFeedEntry {
+function toPortalNewsFeedEntry(
+  article: PortalNewsApiArticle,
+  locale: AppLocale,
+): PortalNewsFeedEntry {
   return {
     id: String(article.id),
-    title: getArticleTitle(article),
+    title: getArticleTitle(article, locale),
     slug: getArticleSlug(article),
-    summary: getArticleSummary(article),
+    summary: getArticleSummary(article, locale),
     categoryName: getArticleCategoryName(article).trim(),
     publishedAt: getPublishedAt(article),
     imagePath:
@@ -456,8 +499,8 @@ function toDetailArticle(
   article: PortalNewsApiArticle,
   locale: AppLocale,
 ): NewsArticleDetail {
-  const feedArticle = toFeedArticle(article);
-  const content = getArticleContent(article);
+  const feedArticle = toFeedArticle(article, locale);
+  const content = getArticleContent(article, locale);
   const bodyHtml = getArticleBodyHtml(content);
 
   return {
@@ -708,7 +751,7 @@ async function fetchPortalNewsFeedEntries(
   locale: AppLocale,
 ): Promise<PortalNewsFeedEntry[]> {
   const articles = await requestPortalNewsArticlesCached(locale);
-  return articles.map(toPortalNewsFeedEntry);
+  return articles.map((article) => toPortalNewsFeedEntry(article, locale));
 }
 
 export async function getNewsFeed(
