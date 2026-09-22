@@ -51,3 +51,5 @@ next-env.d.ts
 .env*
 .claude/
 tmp
+/proposal-assets
+/proposal-assets-sgb.zip
