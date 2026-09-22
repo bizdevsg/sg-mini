@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { Eye, EyeClosed } from "lucide-react";
 
-import { PUBLIC_RECAPTCHA_SITE_KEY } from "@/lib/env";
 import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaLoginFormPanelProps = {
   locale: AppLocale;
   login: AppMessages["clientArea"]["login"];
   supportHref: string;
-  isRecaptchaEnabled: boolean;
   pending: boolean;
   showPassword: boolean;
   formAction: (formData: FormData) => void | Promise<void>;
@@ -23,7 +21,6 @@ export function ClientAreaLoginFormPanel({
   locale,
   login,
   supportHref,
-  isRecaptchaEnabled,
   pending,
   showPassword,
   formAction,
@@ -102,18 +99,6 @@ export function ClientAreaLoginFormPanel({
               {login.forgotPassword}
             </Link>
           </div>
-
-          {isRecaptchaEnabled ? (
-            <div className="rounded-[0.6rem] border border-zinc-700/70 bg-black/30 p-3">
-              <div className="overflow-x-auto pb-1">
-                <div
-                  className="g-recaptcha mx-auto min-w-[304px] w-fit"
-                  data-sitekey={PUBLIC_RECAPTCHA_SITE_KEY}
-                  data-theme="dark"
-                />
-              </div>
-            </div>
-          ) : null}
 
           <button
             type="submit"

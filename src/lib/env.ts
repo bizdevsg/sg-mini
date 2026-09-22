@@ -309,6 +309,20 @@ export const PUBLIC_RECAPTCHA_SITE_KEY =
 export const RECAPTCHA_SECRET_KEY =
   process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
 
+function normalizeRecaptchaMinScore(value: string | undefined) {
+  const parsedValue = Number(value);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 0 || parsedValue > 1) {
+    return 0.65;
+  }
+
+  return parsedValue;
+}
+
+export const RECAPTCHA_MIN_SCORE = normalizeRecaptchaMinScore(
+  process.env.RECAPTCHA_MIN_SCORE,
+);
+
 export const PUBLIC_HERO_CTA_URL =
   normalizeUrlEnv(process.env.NEXT_PUBLIC_HERO_CTA_URL, DEFAULT_HERO_CTA_URL);
 

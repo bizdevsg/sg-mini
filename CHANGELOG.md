@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 ### Changed
+- Login Client Area kini menggunakan reCAPTCHA v3 tak terlihat dengan action khusus `client_area_login`; verifikasi server juga memeriksa skor (default minimum `0.65`), action, dan hostname agar token tidak dapat digunakan lintas konteks.
 - Fetching berita di `src/lib/news.ts` kini menggunakan API SG Admin (`/api/v1/berita`) beserta header `X-API-Key` dari `SG_ADMIN_API_KEY`, menggantikan API Newsmaker dan bearer token. Adapter berita juga mendukung respons list yang dipaginasi serta variasi field konten, kategori, dan gambar dari API baru.
 - Halaman publik `/education/ebook` kini memakai layout library editorial dengan CTA yang menggulir ke koleksi kategori. Seluruh CTA login Client Area dan download aplikasi dihapus agar materi ebook dapat dijelajahi langsung.
 

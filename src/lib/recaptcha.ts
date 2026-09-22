@@ -1,11 +1,20 @@
 import {
   APP_ENV,
   PUBLIC_RECAPTCHA_SITE_KEY,
+  RECAPTCHA_MIN_SCORE,
   RECAPTCHA_SECRET_KEY,
 } from "@/lib/env";
 
 type RecaptchaVerifyResponse = {
+  action?: string;
+  hostname?: string;
+  score?: number;
   success?: boolean;
+};
+
+type VerifyRecaptchaTokenOptions = {
+  expectedAction: string;
+  expectedHostname?: string | null;
 };
 
 const LOCAL_RECAPTCHA_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
@@ -63,7 +72,10 @@ export function isRecaptchaEnabled(hostname?: string | null) {
   return Boolean(PUBLIC_RECAPTCHA_SITE_KEY && RECAPTCHA_SECRET_KEY);
 }
 
-export async function verifyRecaptchaToken(token: string) {
+export async function verifyRecaptchaToken(
+  token: string,
+  { expectedAction, expectedHostname }: VerifyRecaptchaTokenOptions,
+) {
   if (!isRecaptchaEnabled()) {
     return true;
   }
@@ -93,7 +105,17 @@ export async function verifyRecaptchaToken(token: string) {
     }
 
     const payload = (await response.json()) as RecaptchaVerifyResponse;
-    return payload.success === true;
+    const normalizedExpectedHostname = normalizeHostHeader(expectedHostname);
+    const normalizedVerifiedHostname = normalizeHostHeader(payload.hostname);
+
+    return (
+      payload.success === true &&
+      typeof payload.score === "number" &&
+      payload.score >= RECAPTCHA_MIN_SCORE &&
+      payload.action === expectedAction &&
+      (!normalizedExpectedHostname ||
+        normalizedVerifiedHostname === normalizedExpectedHostname)
+    );
   } catch {
     return false;
   }

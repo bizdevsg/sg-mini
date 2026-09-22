@@ -13,6 +13,7 @@ import {
   resolveRequestHostname,
   verifyRecaptchaToken,
 } from "@/lib/recaptcha";
+import { CLIENT_AREA_LOGIN_RECAPTCHA_ACTION } from "@/lib/recaptcha.shared";
 import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 export type ClientAreaLoginState = {
@@ -52,7 +53,10 @@ export async function submitClientAreaLogin(
       };
     }
 
-    const recaptchaResult = await verifyRecaptchaToken(recaptchaToken);
+    const recaptchaResult = await verifyRecaptchaToken(recaptchaToken, {
+      expectedAction: CLIENT_AREA_LOGIN_RECAPTCHA_ACTION,
+      expectedHostname: requestHostname,
+    });
 
     if (!recaptchaResult) {
       return {

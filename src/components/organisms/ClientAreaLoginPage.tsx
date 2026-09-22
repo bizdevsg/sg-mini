@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 
 import {
   submitClientAreaLogin,
@@ -18,12 +18,17 @@ import {
   type AppLocale,
 } from "@/locales";
 import { getAppDownloadModalCopy } from "@/lib/app-download-modal-copy";
+import { CLIENT_AREA_LOGIN_RECAPTCHA_ACTION } from "@/lib/recaptcha.shared";
 import { getClientAreaAppStoreLinks } from "@/lib/solidGoldAppLinks";
 
 declare global {
   interface Window {
     grecaptcha?: {
-      reset: () => void;
+      execute: (
+        siteKey: string,
+        options: { action: string },
+      ) => Promise<string>;
+      ready: (callback: () => void) => void;
     };
   }
 }
@@ -31,6 +36,7 @@ declare global {
 type ClientAreaLoginPageProps = {
   isRecaptchaEnabled: boolean;
   locale: AppLocale;
+  recaptchaSiteKey: string;
 };
 
 const INITIAL_STATE: ClientAreaLoginState = {
@@ -41,14 +47,51 @@ const INITIAL_STATE: ClientAreaLoginState = {
 export function ClientAreaLoginPage({
   isRecaptchaEnabled,
   locale,
+  recaptchaSiteKey,
 }: ClientAreaLoginPageProps) {
   const { appPromoSection: appPromoMessages, clientArea } = getMessages(locale);
   const login = clientArea.login;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
   const downloadModalCopy = getAppDownloadModalCopy(locale);
   const supportHref = resolveLocalizedHref(locale, "/contact-us");
+  const loginAction = useCallback(
+    async (prevState: ClientAreaLoginState, formData: FormData) => {
+      if (!isRecaptchaEnabled) {
+        return submitClientAreaLogin(prevState, formData);
+      }
+
+      const recaptcha = window.grecaptcha;
+
+      if (!recaptcha) {
+        return {
+          status: "error" as const,
+          message: login.errorCaptchaFailed,
+        };
+      }
+
+      try {
+        await new Promise<void>((resolve) => recaptcha.ready(resolve));
+        const token = await recaptcha.execute(recaptchaSiteKey, {
+          action: CLIENT_AREA_LOGIN_RECAPTCHA_ACTION,
+        });
+
+        if (!token) {
+          throw new Error("reCAPTCHA returned an empty token.");
+        }
+
+        formData.set("g-recaptcha-response", token);
+        return submitClientAreaLogin(prevState, formData);
+      } catch {
+        return {
+          status: "error" as const,
+          message: login.errorCaptchaFailed,
+        };
+      }
+    },
+    [isRecaptchaEnabled, login.errorCaptchaFailed, recaptchaSiteKey],
+  );
   const [state, formAction, pending] = useActionState(
-    submitClientAreaLogin,
+    loginAction,
     INITIAL_STATE,
   );
   const [showPassword, setShowPassword] = useState(false);
@@ -64,14 +107,6 @@ export function ClientAreaLoginPage({
         title: "Login Failed",
         closeLabel: "TRY AGAIN",
       };
-
-  useEffect(() => {
-    if (!isRecaptchaEnabled || state.status !== "error") {
-      return;
-    }
-
-    window.grecaptcha?.reset();
-  }, [isRecaptchaEnabled, state]);
 
   useEffect(() => {
     if (state.status !== "error") {
@@ -90,7 +125,7 @@ export function ClientAreaLoginPage({
     >
       {isRecaptchaEnabled ? (
         <Script
-          src="https://www.google.com/recaptcha/api.js"
+          src={`https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`}
           strategy="afterInteractive"
         />
       ) : null}
@@ -101,7 +136,6 @@ export function ClientAreaLoginPage({
             locale={locale}
             login={login}
             supportHref={supportHref}
-            isRecaptchaEnabled={isRecaptchaEnabled}
             pending={pending}
             showPassword={showPassword}
             formAction={formAction}
