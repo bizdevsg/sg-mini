@@ -1,10 +1,10 @@
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
-const DEFAULT_NEWS_API_URL = "https://portalnews.newsmaker.id/api/v1/berita";
+const DEFAULT_NEWS_API_URL = "https://sg-admin.sg-berjangka.com/api/v1/berita";
 const DEFAULT_NEWS_API_URL_ID =
-  "https://portalnews.newsmaker.id/api/v1/berita";
-const DEFAULT_NEWS_PORTAL_BASE_URL = "http://portalnews.newsmaker.test";
-const DEFAULT_NEWS_IMAGE_BASE_URL = "https://portalnews.newsmaker.id";
+  "https://sg-admin.sg-berjangka.com/api/v1/berita";
+const DEFAULT_NEWS_PORTAL_BASE_URL = "https://sg-admin.sg-berjangka.com";
+const DEFAULT_NEWS_IMAGE_BASE_URL = "https://sg-admin.sg-berjangka.com";
 const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
 const DEFAULT_SG_ADMIN_LEGACY_ORIGIN = "http://sg-admin.test";
 const DEFAULT_SG_ADMIN_API_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/api/v1`;
@@ -135,8 +135,6 @@ export const NEWS_API_URL_ID = normalizeUrlEnv(
   process.env.NEWS_API_URL_ID,
   DEFAULT_NEWS_API_URL_ID,
 );
-
-export const NEWS_API_TOKEN = process.env.NEWS_API_TOKEN ?? "";
 
 export const NEWS_PORTAL_BASE_URL =
   normalizeUrlEnv(process.env.NEWS_PORTAL_BASE_URL, DEFAULT_NEWS_PORTAL_BASE_URL);
@@ -498,7 +496,12 @@ export function getFramerImageUrl(assetPath: string) {
 }
 
 export function getNewsAssetUrl(assetPath: string) {
-  return getImageProxyUrl(resolveAssetUrl(NEWS_IMAGE_BASE_URL, assetPath));
+  const normalizedAssetPath = assetPath.trim();
+  const storageAssetPath = normalizedAssetPath.startsWith("uploads/")
+    ? `/storage/${normalizedAssetPath}`
+    : normalizedAssetPath;
+
+  return getImageProxyUrl(resolveAssetUrl(NEWS_IMAGE_BASE_URL, storageAssetPath));
 }
 
 export function getProductAssetUrl(assetPath: string) {

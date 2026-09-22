@@ -6,11 +6,11 @@ import { request as requestHttps } from "node:https";
 import { getMessages, type AppLocale } from "@/locales";
 
 import {
-  NEWS_API_TOKEN,
   NEWS_API_URL,
   NEWS_API_URL_ID,
   getNewsAssetUrl,
 } from "@/lib/env";
+import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import {
   type NewsArticleDetail,
   type NewsArticleDetailResult,
@@ -26,7 +26,7 @@ export type {
 } from "@/lib/news.shared";
 
 export type PortalNewsApiArticle = {
-  id: number;
+  id: number | string;
   title: string;
   titles?: Record<string, string>;
   slug?: string;
@@ -34,12 +34,17 @@ export type PortalNewsApiArticle = {
   content?: string;
   summary?: string;
   detail?: string;
-  category?: string;
-  kategori?: {
-    name?: string;
-    slug?: string;
-  };
+  description?: string;
+  excerpt?: string;
+  body?: string;
+  category?: string | { name?: string; title?: string; slug?: string };
+  category_name?: string;
+  kategori?: string | { name?: string; title?: string; slug?: string };
   image?: string;
+  image_url?: string;
+  thumbnail?: string;
+  thumbnail_url?: string;
+  featured_image?: string;
   images?: string[];
   published_at?: string;
   createdAt?: string;
@@ -58,15 +63,7 @@ export type PortalNewsFeedEntry = {
   imagePath: string | null;
 };
 
-type PortalNewsApiResponse = {
-  status: string;
-  data?: PortalNewsApiArticle[];
-};
-
-type PortalNewsApiDetailResponse = {
-  status: string;
-  data?: PortalNewsApiArticle | null;
-};
+type PortalNewsApiResponse = Record<string, unknown>;
 
 function getRouteSlugKey(slug: string) {
   const normalizedSlug = slug.trim().toLowerCase();
@@ -112,6 +109,12 @@ function resolveNewsApiUrl(locale: AppLocale) {
 function buildNewsArticleDetailUrl(locale: AppLocale, slug: string) {
   const normalizedBaseUrl = resolveNewsApiUrl(locale).replace(/\/+$/, "");
   return new URL(`${normalizedBaseUrl}/${encodeURIComponent(slug.trim())}`);
+}
+
+function buildNewsFeedUrl(locale: AppLocale) {
+  const url = new URL(resolveNewsApiUrl(locale));
+  url.searchParams.set("per_page", "100");
+  return url;
 }
 
 function getNewsArticleDetailCacheKey(locale: AppLocale, slug: string) {
@@ -163,11 +166,20 @@ function truncateText(value: string, maxLength: number) {
 }
 
 function getArticleContent(article: PortalNewsApiArticle) {
-  return article.detail ?? article.content ?? "";
+  return article.detail ?? article.content ?? article.body ?? article.description ?? "";
 }
 
 function getArticleCategoryName(article: PortalNewsApiArticle) {
-  return article.kategori?.name ?? article.category ?? "";
+  const kategori = article.kategori;
+  const kategoriName =
+    typeof kategori === "string" ? kategori : kategori?.name ?? kategori?.title;
+  const category = article.category;
+  const categoryName =
+    typeof category === "string"
+      ? category
+      : category?.name ?? category?.title ?? "";
+
+  return kategoriName ?? article.category_name ?? categoryName;
 }
 
 function getArticleSlug(article: PortalNewsApiArticle) {
@@ -220,7 +232,7 @@ export function findNewsFeedArticleByRouteSlug(
 
 function getArticleSummary(article: PortalNewsApiArticle) {
   const directSummary = normalizeWhitespace(
-    decodeHtmlEntities(stripHtml(article.summary ?? "")),
+    decodeHtmlEntities(stripHtml(article.summary ?? article.excerpt ?? "")),
   );
 
   if (directSummary) {
@@ -346,12 +358,16 @@ function getPublishedAt(article: PortalNewsApiArticle) {
 }
 
 function getArticleImage(article: PortalNewsApiArticle) {
-  const directImage = article.image?.trim();
+  const directImage = (
+    article.image_url ??
+    article.image ??
+    article.thumbnail ??
+    article.thumbnail_url ??
+    article.featured_image
+  )?.trim();
 
   if (directImage) {
-    return /^https?:\/\//i.test(directImage)
-      ? directImage
-      : getNewsAssetUrl(directImage);
+    return getNewsAssetUrl(directImage);
   }
 
   const imagePath = article.images?.find((image) => image.trim().length > 0);
@@ -415,9 +431,7 @@ function toFeedArticleFromEntry(article: PortalNewsFeedEntry): NewsFeedArticle {
     ),
     publishedAt: article.publishedAt,
     imageSrc: normalizedImagePath
-      ? /^https?:\/\//i.test(normalizedImagePath)
-        ? normalizedImagePath
-        : getNewsAssetUrl(normalizedImagePath)
+      ? getNewsAssetUrl(normalizedImagePath)
       : NEWS_PLACEHOLDER_IMAGE,
   };
 }
@@ -431,6 +445,7 @@ function toPortalNewsFeedEntry(article: PortalNewsApiArticle): PortalNewsFeedEnt
     categoryName: getArticleCategoryName(article).trim(),
     publishedAt: getPublishedAt(article),
     imagePath:
+      article.image_url?.trim() ||
       article.image?.trim() ||
       article.images?.find((image) => image.trim().length > 0) ||
       null,
@@ -453,6 +468,51 @@ function toDetailArticle(
   };
 }
 
+function isNewsArticle(value: unknown): value is PortalNewsApiArticle {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("id" in value || "slug" in value) &&
+    ("title" in value || "titles" in value)
+  );
+}
+
+function getResponseData(payload: PortalNewsApiResponse) {
+  return payload.data ?? payload.result ?? payload.results ?? payload.berita ?? null;
+}
+
+function extractNewsArticles(payload: PortalNewsApiResponse): PortalNewsApiArticle[] {
+  const data = getResponseData(payload);
+
+  if (Array.isArray(data)) {
+    return data.filter(isNewsArticle);
+  }
+
+  if (typeof data !== "object" || data === null) {
+    return [];
+  }
+
+  const collection = data as Record<string, unknown>;
+  const entries = collection.data ?? collection.items ?? collection.articles ?? collection.berita;
+  return Array.isArray(entries) ? entries.filter(isNewsArticle) : [];
+}
+
+function extractNewsArticle(payload: PortalNewsApiResponse): PortalNewsApiArticle | null {
+  const data = getResponseData(payload);
+
+  if (isNewsArticle(data)) {
+    return data;
+  }
+
+  if (typeof data !== "object" || data === null) {
+    return null;
+  }
+
+  const record = data as Record<string, unknown>;
+  const article = record.article ?? record.berita;
+  return isNewsArticle(article) ? article : null;
+}
+
 export function createNewsDetailFromFeedArticle(
   article: NewsFeedArticle,
   locale: AppLocale,
@@ -468,22 +528,16 @@ export function createNewsDetailFromFeedArticle(
 async function requestPortalNewsArticles(
   locale: AppLocale,
 ): Promise<PortalNewsApiArticle[]> {
-  if (!NEWS_API_TOKEN) {
-    return [];
-  }
-
   return new Promise<PortalNewsApiArticle[]>((resolve) => {
-    const requestUrl = new URL(resolveNewsApiUrl(locale));
+    const requestUrl = buildNewsFeedUrl(locale);
     const requestClient = getRequestClient(requestUrl.protocol);
-    const httpRequest = requestClient(
-      requestUrl,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${NEWS_API_TOKEN}`,
+    void getSgAdminApiHeaders().then((headers) => {
+      const httpRequest = requestClient(
+        requestUrl,
+        {
+          method: "GET",
+          headers: Object.fromEntries(headers.entries()),
         },
-      },
       (response) => {
         const statusCode = response.statusCode ?? 500;
         let responseBody = "";
@@ -501,29 +555,25 @@ async function requestPortalNewsArticles(
 
           try {
             const payload = JSON.parse(responseBody) as PortalNewsApiResponse;
-
-            resolve(
-              payload.status === "success" && Array.isArray(payload.data)
-                ? payload.data.slice().sort(compareArticleDates)
-                : [],
-            );
+            resolve(extractNewsArticles(payload).slice().sort(compareArticleDates));
           } catch {
             resolve([]);
           }
         });
       },
-    );
+      );
 
-    httpRequest.on("error", () => {
-      resolve([]);
+      httpRequest.on("error", () => {
+        resolve([]);
+      });
+
+      httpRequest.setTimeout(NEWS_API_TIMEOUT_MS, () => {
+        httpRequest.destroy();
+        resolve([]);
+      });
+
+      httpRequest.end();
     });
-
-    httpRequest.setTimeout(NEWS_API_TIMEOUT_MS, () => {
-      httpRequest.destroy();
-      resolve([]);
-    });
-
-    httpRequest.end();
   });
 }
 
@@ -533,22 +583,20 @@ async function requestPortalNewsArticleBySlug(
 ): Promise<PortalNewsApiArticle | null> {
   const normalizedSlug = slug.trim();
 
-  if (!NEWS_API_TOKEN || !normalizedSlug) {
+  if (!normalizedSlug) {
     return null;
   }
 
   return new Promise<PortalNewsApiArticle | null>((resolve) => {
     const requestUrl = buildNewsArticleDetailUrl(locale, normalizedSlug);
     const requestClient = getRequestClient(requestUrl.protocol);
-    const httpRequest = requestClient(
-      requestUrl,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${NEWS_API_TOKEN}`,
+    void getSgAdminApiHeaders().then((headers) => {
+      const httpRequest = requestClient(
+        requestUrl,
+        {
+          method: "GET",
+          headers: Object.fromEntries(headers.entries()),
         },
-      },
       (response) => {
         const statusCode = response.statusCode ?? 500;
         let responseBody = "";
@@ -565,34 +613,26 @@ async function requestPortalNewsArticleBySlug(
           }
 
           try {
-            const payload = JSON.parse(
-              responseBody,
-            ) as PortalNewsApiDetailResponse;
-
-            resolve(
-              payload.status === "success" &&
-                payload.data &&
-                !Array.isArray(payload.data)
-                ? payload.data
-                : null,
-            );
+            const payload = JSON.parse(responseBody) as PortalNewsApiResponse;
+            resolve(extractNewsArticle(payload));
           } catch {
             resolve(null);
           }
         });
       },
-    );
+      );
 
-    httpRequest.on("error", () => {
-      resolve(null);
+      httpRequest.on("error", () => {
+        resolve(null);
+      });
+
+      httpRequest.setTimeout(NEWS_API_TIMEOUT_MS, () => {
+        httpRequest.destroy();
+        resolve(null);
+      });
+
+      httpRequest.end();
     });
-
-    httpRequest.setTimeout(NEWS_API_TIMEOUT_MS, () => {
-      httpRequest.destroy();
-      resolve(null);
-    });
-
-    httpRequest.end();
   });
 }
 
@@ -667,10 +707,6 @@ async function requestPortalNewsArticleBySlugCached(
 async function fetchPortalNewsFeedEntries(
   locale: AppLocale,
 ): Promise<PortalNewsFeedEntry[]> {
-  if (!NEWS_API_TOKEN) {
-    return [];
-  }
-
   const articles = await requestPortalNewsArticlesCached(locale);
   return articles.map(toPortalNewsFeedEntry);
 }
@@ -679,12 +715,6 @@ export async function getNewsFeed(
   locale: AppLocale,
   limit?: number,
 ): Promise<NewsFeedResult> {
-  if (!NEWS_API_TOKEN) {
-    return {
-      articles: [],
-    };
-  }
-
   try {
     const rawArticles = await fetchPortalNewsFeedEntries(locale);
     const articles = rawArticles
@@ -713,7 +743,7 @@ export async function getNewsArticleBySlug(
 ): Promise<NewsArticleDetailResult> {
   const normalizedSlug = slug.trim();
 
-  if (!NEWS_API_TOKEN || !normalizedSlug) {
+  if (!normalizedSlug) {
     return {
       article: null,
     };

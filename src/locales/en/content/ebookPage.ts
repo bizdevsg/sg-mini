@@ -12,12 +12,12 @@ export const enEbookPage: AppMessages["ebookPage"] = {
   backToCategoriesCta: "Back to categories",
   closeCta: "Close",
   hero: {
-    eyebrow: "Learning Library",
-    title: "Concise trading ebooks that stay practical and easy to revisit.",
+    eyebrow: "",
+    title: "Learn Trading, Start with the Fundamentals.",
     description:
       "This page brings together reading materials for both beginners and active traders who want a more structured understanding of the market.",
-    primaryCta: "Open Account",
-    secondaryCta: "Client Login",
+    primaryCta: "Explore Ebooks",
+    secondaryCta: "",
   },
   libraryTitle: "Ebook Categories",
   librarySubtitle:
