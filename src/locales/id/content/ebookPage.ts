@@ -12,13 +12,12 @@ export const idEbookPage: AppMessages["ebookPage"] = {
   backToCategoriesCta: "Kembali ke kategori",
   closeCta: "Tutup",
   hero: {
-    eyebrow: "Pusat Materi",
-    title:
-      "Ebook trading yang ringkas, relevan, dan siap dipelajari kapan saja.",
+    eyebrow: "",
+    title: "Belajar Trading, Mulai dari Dasarnya.",
     description:
       "Halaman ini merangkum materi baca yang cocok untuk pemula maupun trader aktif yang ingin memperkuat pemahaman market secara lebih terstruktur.",
-    primaryCta: "Buka Akun",
-    secondaryCta: "Masuk Area Klien",
+    primaryCta: "Jelajahi Ebook",
+    secondaryCta: "",
   },
   libraryTitle: "Kategori Ebook",
   librarySubtitle:

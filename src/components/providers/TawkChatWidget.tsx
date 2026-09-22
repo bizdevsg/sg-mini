@@ -20,7 +20,6 @@ type TawkChatWidgetProps = {
 };
 
 const TAWK_SCRIPT_ID = "tawk-chat-script";
-const TAWK_COMPACT_STYLE_ID = "sgb-tawk-compact-bubble";
 const TAWK_WIDGET_HOST_ID = "solidchat-widget-host";
 const TAWK_WIDGET_IFRAME_SELECTOR =
   'iframe[src*="localhost:3001"], iframe[src*="solidchat"]';
@@ -34,23 +33,6 @@ function removeTawkWidget() {
   });
 
   window.__sgbTawkBooted = false;
-}
-
-function applyCompactBubbleStyle() {
-  const shadowRoot = document.getElementById(TAWK_WIDGET_HOST_ID)?.shadowRoot;
-
-  if (!shadowRoot || shadowRoot.getElementById(TAWK_COMPACT_STYLE_ID)) {
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.id = TAWK_COMPACT_STYLE_ID;
-  style.textContent = `
-    .bubble { width: 76px; height: 76px; }
-    .badge { bottom: 54px; }
-    .panel { bottom: 84px; }
-  `;
-  shadowRoot.appendChild(style);
 }
 
 export function TawkChatWidget({
@@ -90,14 +72,12 @@ export function TawkChatWidget({
     }
 
     if (window.__sgbTawkBooted) {
-      applyCompactBubbleStyle();
       return;
     }
 
     const existingScript = document.getElementById(TAWK_SCRIPT_ID);
     if (existingScript) {
       window.__sgbTawkBooted = true;
-      applyCompactBubbleStyle();
       return;
     }
 
@@ -111,7 +91,6 @@ export function TawkChatWidget({
 
     const handleLoad = () => {
       window.__sgbTawkBooted = true;
-      applyCompactBubbleStyle();
     };
     const handleError = () => {
       window.__sgbTawkBooted = false;
