@@ -1,10 +1,17 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  useTransition,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
+import { revealClientAreaSensitiveProfile } from "@/app/actions/clientAreaSensitiveProfile";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import { getClientAreaProfileDemoData } from "@/components/organisms/client-area-account-profile.data";
 import type { AccountSnapshot } from "@/components/organisms/client-area.types";
@@ -37,15 +44,239 @@ type ProfileSectionId =
   | "employment"
   | "wealth";
 
+type SensitiveProfileData = {
+  identityNumber: string;
+  taxNumber: string;
+};
+
+type SensitiveProfileField = keyof SensitiveProfileData;
+
+type SensitiveProfileDetailProps = {
+  isRevealed: boolean;
+  label: string;
+  locale: AppLocale;
+  maskedValue: string;
+  onHide: () => void;
+  onRequestReveal: () => void;
+  revealedValue?: string;
+};
+
+type SensitiveProfilePasswordModalProps = {
+  field: SensitiveProfileField;
+  isOpen: boolean;
+  locale: AppLocale;
+  onClose: () => void;
+  onSuccess: (data: { field: SensitiveProfileField; value: string }) => void;
+};
+
+const SENSITIVE_DATA_REVEAL_DURATION_MS = 2 * 60 * 1000;
+
 function ProfileDetail({ full = false, label, value }: ProfileDetailProps) {
   return (
-    <div className={full ? "sm:col-span-2" : undefined}>
+    <div
+      className={`rounded-xl border border-white/[0.08] bg-black/20 px-4 py-3.5 shadow-sm shadow-black/10 ${full ? "sm:col-span-2" : ""}`}
+    >
       <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
         {label}
       </dt>
       <dd className="mt-2 break-words text-[15px] font-medium leading-6 text-white">
         {value}
       </dd>
+    </div>
+  );
+}
+
+function SensitiveProfileDetail({
+  isRevealed,
+  label,
+  locale,
+  maskedValue,
+  onHide,
+  onRequestReveal,
+  revealedValue,
+}: SensitiveProfileDetailProps) {
+  return (
+    <div className="rounded-xl border border-white/[0.08] bg-black/20 px-4 py-3.5 shadow-sm shadow-black/10">
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+        {label}
+      </dt>
+      <dd className="mt-2 flex min-w-0 items-center justify-between gap-3">
+        <span className="min-w-0 break-words text-[15px] font-medium leading-6 text-white">
+          {isRevealed ? revealedValue : maskedValue}
+        </span>
+        <button
+          type="button"
+          onClick={isRevealed ? onHide : onRequestReveal}
+          className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-yellow-500/25 bg-yellow-500/10 px-2.5 py-1.5 text-xs font-semibold text-yellow-400 transition hover:border-yellow-500/45 hover:bg-yellow-500/15"
+        >
+          <FontAwesomeIcon
+            icon={["fas", isRevealed ? "eye-slash" : "eye"]}
+            className="text-[11px]"
+          />
+        </button>
+      </dd>
+    </div>
+  );
+}
+
+function SensitiveProfilePasswordModal({
+  field,
+  isOpen,
+  locale,
+  onClose,
+  onSuccess,
+}: SensitiveProfilePasswordModalProps) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const copy = locale === "id"
+    ? {
+      title: "Konfirmasi password",
+      description: "Masukkan password akun untuk melihat data sensitif.",
+      passwordLabel: "Password akun",
+      passwordPlaceholder: "Masukkan password",
+      cancel: "Batal",
+      confirm: "Konfirmasi",
+      invalid: "Password tidak sesuai. Silakan coba lagi.",
+      unauthorized: "Sesi Anda telah berakhir. Silakan masuk kembali.",
+      showPassword: "Tampilkan password",
+      hidePassword: "Sembunyikan password",
+    }
+    : {
+      title: "Confirm password",
+      description: "Enter your account password to view sensitive data.",
+      passwordLabel: "Account password",
+      passwordPlaceholder: "Enter password",
+      cancel: "Cancel",
+      confirm: "Confirm",
+      invalid: "The password is incorrect. Please try again.",
+      unauthorized: "Your session has expired. Please sign in again.",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
+    };
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isPending) {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, isPending, onClose]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+
+    startTransition(async () => {
+      const result = await revealClientAreaSensitiveProfile(field, password);
+
+      if (result.status === "success") {
+        onSuccess(result.data);
+        onClose();
+        return;
+      }
+
+      setError(
+        result.status === "unauthorized" ? copy.unauthorized : copy.invalid,
+      );
+    });
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
+      role="presentation"
+      onClick={isPending ? undefined : onClose}
+    >
+      <form
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sensitive-profile-modal-title"
+        className="w-full max-w-md rounded-2xl border border-white/10 bg-[#151515] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+        onSubmit={handleSubmit}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="mx-auto grid size-14 place-items-center rounded-full border border-yellow-500/25 bg-yellow-500/10 text-xl text-yellow-400">
+          <FontAwesomeIcon icon={["fas", "lock"]} />
+        </div>
+        <h2
+          id="sensitive-profile-modal-title"
+          className="mt-4 text-center text-xl font-bold text-white"
+        >
+          {copy.title}
+        </h2>
+        <p className="mt-2 text-center text-sm leading-6 text-zinc-400">
+          {copy.description}
+        </p>
+
+        <label className="mt-6 block text-xs font-semibold uppercase tracking-[0.12em] text-zinc-400">
+          {copy.passwordLabel}
+          <span className="relative mt-2 block">
+            <input
+              autoFocus
+              required
+              autoComplete="current-password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder={copy.passwordPlaceholder}
+              className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 pr-12 text-sm font-normal normal-case tracking-normal text-white outline-none transition placeholder:text-zinc-600 focus:border-yellow-500/50"
+            />
+            <button
+              type="button"
+              aria-label={showPassword ? copy.hidePassword : copy.showPassword}
+              onClick={() => setShowPassword((current) => !current)}
+              className="absolute inset-y-0 right-0 grid w-12 cursor-pointer place-items-center text-zinc-500 transition hover:text-yellow-400"
+            >
+              <FontAwesomeIcon
+                icon={["fas", showPassword ? "eye-slash" : "eye"]}
+              />
+            </button>
+          </span>
+        </label>
+
+        {error ? (
+          <p role="alert" className="mt-3 text-sm text-red-400">
+            {error}
+          </p>
+        ) : null}
+
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={onClose}
+            className="h-11 cursor-pointer rounded-xl border border-white/10 text-sm font-semibold text-zinc-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {copy.cancel}
+          </button>
+          <button
+            type="submit"
+            disabled={isPending || !password}
+            className="h-11 cursor-pointer rounded-xl bg-yellow-500 text-sm font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPending ? "..." : copy.confirm}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -64,7 +295,7 @@ function ProfileSection({
         type="button"
         aria-expanded={isOpen}
         onClick={onToggle}
-        className="flex w-full items-center gap-3 bg-gradient-to-r from-white/[0.045] to-transparent px-5 py-4 text-left transition hover:bg-white/[0.025]"
+        className="flex w-full items-center gap-3 bg-gradient-to-r from-white/[0.045] to-transparent px-5 py-4 text-left transition hover:bg-white/[0.025] cursor-pointer"
       >
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">
           <FontAwesomeIcon icon={icon} className="text-base" />
@@ -86,7 +317,7 @@ function ProfileSection({
       </button>
 
       {isOpen ? (
-        <dl className="grid grid-cols-1 gap-x-8 gap-y-6 border-t border-white/5 px-5 py-6 sm:grid-cols-2">
+        <dl className="grid grid-cols-1 gap-3 border-t border-white/5 px-5 py-6 sm:grid-cols-2">
           {children}
         </dl>
       ) : null}
@@ -104,9 +335,34 @@ export function ClientAreaAccountProfilePanel({
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
   const [openSection, setOpenSection] =
     useState<ProfileSectionId | null>("personal");
+  const [pendingSensitiveField, setPendingSensitiveField] =
+    useState<SensitiveProfileField | null>(null);
+  const [sensitiveData, setSensitiveData] =
+    useState<Partial<SensitiveProfileData>>({});
+
+  useEffect(() => {
+    if (Object.keys(sensitiveData).length === 0) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(
+      () => setSensitiveData({}),
+      SENSITIVE_DATA_REVEAL_DURATION_MS,
+    );
+
+    return () => window.clearTimeout(timeoutId);
+  }, [sensitiveData]);
 
   const toggleSection = (section: ProfileSectionId) => {
     setOpenSection((current) => (current === section ? null : section));
+  };
+
+  const hideSensitiveField = (field: SensitiveProfileField) => {
+    setSensitiveData((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
   };
 
   return (
@@ -143,13 +399,23 @@ export function ClientAreaAccountProfilePanel({
             label={accountPage.fields.birthDate}
             value={profile.personal.birthDate}
           />
-          <ProfileDetail
+          <SensitiveProfileDetail
+            isRevealed={Boolean(sensitiveData.identityNumber)}
             label={accountPage.fields.identityNumber}
-            value={profile.personal.identityNumber}
+            locale={locale}
+            maskedValue={profile.personal.identityNumber}
+            onHide={() => hideSensitiveField("identityNumber")}
+            onRequestReveal={() => setPendingSensitiveField("identityNumber")}
+            revealedValue={sensitiveData.identityNumber}
           />
-          <ProfileDetail
+          <SensitiveProfileDetail
+            isRevealed={Boolean(sensitiveData.taxNumber)}
             label={accountPage.fields.taxNumber}
-            value={profile.personal.taxNumber}
+            locale={locale}
+            maskedValue={profile.personal.taxNumber}
+            onHide={() => hideSensitiveField("taxNumber")}
+            onRequestReveal={() => setPendingSensitiveField("taxNumber")}
+            revealedValue={sensitiveData.taxNumber}
           />
           <ProfileDetail
             label={accountPage.fields.gender}
@@ -362,6 +628,21 @@ export function ClientAreaAccountProfilePanel({
         </ProfileSection>
 
       </div>
+
+      {pendingSensitiveField ? (
+        <SensitiveProfilePasswordModal
+          field={pendingSensitiveField}
+          isOpen
+          locale={locale}
+          onClose={() => setPendingSensitiveField(null)}
+          onSuccess={(data) => {
+            setSensitiveData((current) => ({
+              ...current,
+              [data.field]: data.value,
+            }));
+          }}
+        />
+      ) : null}
     </section>
   );
 }

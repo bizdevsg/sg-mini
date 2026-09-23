@@ -86,7 +86,7 @@ const idProfileDemoData: ClientAreaProfileDemoData = {
   emergency: {
     name: "Joko Susilo",
     relationship: "Saudara Kandung",
-    phone: "0813-••••-9087",
+    phone: "0813-5656-9087",
     address: "Jl. Dharmahusada Indah Timur No. 18",
     province: "Jawa Timur",
     city: "Surabaya",

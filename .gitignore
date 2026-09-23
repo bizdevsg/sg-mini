@@ -53,3 +53,5 @@ next-env.d.ts
 tmp
 /proposal-assets
 /proposal-assets-sgb.zip
+/nginx
+.screenshot-sgb.mjs

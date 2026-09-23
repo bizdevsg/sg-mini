@@ -1,9 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
-import {
-  getLiveQuoteDisplay,
-  getSortedSymbols,
-} from "@/lib/live-quotes";
+import { getLiveQuoteDisplay, getSortedSymbols } from "@/lib/live-quotes";
 import {
   getClientAreaTradingViewPresetById as getTradingViewPresetById,
   getClientAreaTradingViewPresetByMarketCode as getTradingViewPresetByMarketCode,
@@ -526,7 +523,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         accountId: "BBH10158",
         accountOwner: "Demo User BBH10158",
         email: "user.sgb@demo-trading.com",
-        status: "KYC Verified",
+        status: "Verified",
         broker: "PT Solid Gold Berjangka",
         liquidationType: "Auto-Stop Out at 3407.50",
         balance: 50000,
@@ -1106,7 +1103,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       accountId: "BBH10158",
       accountOwner: "Demo User BBH10158",
       email: "user.sgb@demo-trading.com",
-      status: "KYC Verified",
+      status: "Verified",
       broker: "PT Solid Gold Berjangka",
       liquidationType: "Auto-Stop Out at 3407.50",
       balance: 50000,
