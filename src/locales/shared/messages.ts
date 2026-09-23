@@ -914,6 +914,16 @@ export type AppMessages = {
       backLabel: string;
       pendingSectionNote: string;
       saveLabel: string;
+      viewOnly: {
+        badge: string;
+        personalTitle: string;
+        accountTitle: string;
+        photoLabel: string;
+        accountIdLabel: string;
+        accountTypeLabel: string;
+        accountStatusLabel: string;
+        brokerLabel: string;
+      };
       sections: {
         personal: string;
         purpose: string;

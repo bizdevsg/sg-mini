@@ -31,7 +31,7 @@ export function ClientAreaAccountPanel({
   const items: AccountMenuItem[] = [
     {
       href: resolveLocalizedHref(locale, "/client-area/account/profile"),
-      icon: ["fas", "user-pen"],
+      icon: ["fas", "user"],
       label: accountPage.menuItems.profile,
     },
     {

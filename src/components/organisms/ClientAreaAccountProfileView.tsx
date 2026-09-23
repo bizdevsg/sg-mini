@@ -26,7 +26,6 @@ export function ClientAreaAccountProfileView({
   return (
     <ClientAreaShell activeTab="account" breakingNews={breakingNews} locale={locale}>
       <ClientAreaAccountProfilePanel
-        copy={copy}
         currentAccount={currentAccount}
         locale={locale}
       />

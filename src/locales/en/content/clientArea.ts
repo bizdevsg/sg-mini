@@ -277,6 +277,16 @@ export const enClientArea: AppMessages["clientArea"] = {
     pendingSectionNote:
       "The details for this section will be added next. For now only Personal Data has been finalized.",
     saveLabel: "Save",
+    viewOnly: {
+      badge: "View only",
+      personalTitle: "Personal information",
+      accountTitle: "Account information",
+      photoLabel: "Profile photo",
+      accountIdLabel: "Account number",
+      accountTypeLabel: "Account type",
+      accountStatusLabel: "Account status",
+      brokerLabel: "Broker",
+    },
     sections: {
       personal: "Personal Data",
       purpose: "Account Opening Purpose",

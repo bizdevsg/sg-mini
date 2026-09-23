@@ -1,447 +1,167 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { ClientAreaAccountDateField } from "@/components/atoms/ClientAreaAccountDateField";
-import { ClientAreaAccountField } from "@/components/atoms/ClientAreaAccountField";
-import { ClientAreaAccordionItem } from "@/components/molecules/ClientAreaAccordionItem";
-import { ClientAreaInlineRadioGroup } from "@/components/molecules/ClientAreaInlineRadioGroup";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
-import type {
-  AccountSnapshot,
-  DashboardCopy,
-} from "@/components/organisms/client-area.types";
-import { type ClientAreaRadioOption } from "@/components/organisms/client-area-account-profile.shared";
+import type { AccountSnapshot } from "@/components/organisms/client-area.types";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountProfilePanelProps = {
-  copy: DashboardCopy;
   currentAccount: AccountSnapshot;
   locale: AppLocale;
 };
 
-type AccordionSectionId =
-  | "personal"
-  | "purpose"
-  | "emergency"
-  | "job"
-  | "wealth";
+type ProfileDetailProps = {
+  label: string;
+  value: string;
+};
+
+function ProfileDetail({ label, value }: ProfileDetailProps) {
+  return (
+    <div className="grid gap-1 border-b border-white/8 py-4 last:border-b-0 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-center sm:gap-6">
+      <dt className="text-sm text-zinc-500">{label}</dt>
+      <dd className="break-words text-sm font-semibold text-zinc-100 sm:text-right">
+        {value}
+      </dd>
+    </div>
+  );
+}
+
+function getInitials(name: string) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+
+  return initials || "SG";
+}
 
 export function ClientAreaAccountProfilePanel({
-  copy,
   currentAccount,
   locale,
 }: ClientAreaAccountProfilePanelProps) {
-  const accountPage = useMemo(
-    () => getMessages(locale).clientArea.accountPage,
-    [locale],
-  );
-
-  const [openSection, setOpenSection] =
-    useState<AccordionSectionId | null>("personal");
-  const [openingPurpose, setOpeningPurpose] = useState("hedging");
-  const [investmentExperience, setInvestmentExperience] = useState("no");
-  const [futuresExperience, setFuturesExperience] = useState("yes");
-  const [familyAffiliation, setFamilyAffiliation] = useState("no");
-  const [bankruptStatus, setBankruptStatus] = useState("yes");
-  const [occupation, setOccupation] = useState("private");
-  const [annualIncome, setAnnualIncome] = useState("100to250");
-
+  const accountPage = getMessages(locale).clientArea.accountPage;
+  const viewOnly = accountPage.viewOnly;
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
 
   return (
-    <div className="space-y-4 rounded-[34px] border border-zinc-800 bg-black/45 p-4 backdrop-blur-xl sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <Link
-          href={accountHref}
-          className="inline-flex items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/70 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-yellow-500/40 hover:text-yellow-400"
-        >
-          <FontAwesomeIcon icon={["fas", "chevron-left"]} className="text-xs" />
-          <span>{accountPage.backLabel}</span>
-        </Link>
+    <section
+      aria-labelledby="account-profile-title"
+      className="overflow-hidden rounded-[30px] border border-white/10 bg-[#151619] shadow-[0_24px_80px_rgba(0,0,0,0.28)]"
+    >
+      <header className="flex flex-col gap-5 border-b border-white/8 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <div className="flex min-w-0 items-center gap-4">
+          <Link
+            href={accountHref}
+            aria-label={accountPage.backLabel}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-zinc-300 transition hover:border-yellow-500/45 hover:text-yellow-400"
+          >
+            <FontAwesomeIcon
+              icon={["fas", "chevron-left"]}
+              className="text-xs"
+            />
+          </Link>
+          <div className="min-w-0">
+            <h1
+              id="account-profile-title"
+              className="text-xl font-bold tracking-tight text-white sm:text-2xl"
+            >
+              {accountPage.menuItems.profile}
+            </h1>
+            <p className="mt-1 truncate text-sm text-zinc-500">
+              {currentAccount.accountId}
+            </p>
+          </div>
+        </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 py-3 text-left sm:text-right">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-zinc-500">
-            {accountPage.activeAccount}
+        <div className="inline-flex w-fit items-center gap-2 text-xs font-semibold text-zinc-400">
+          <FontAwesomeIcon
+            icon={["fas", "lock"]}
+            className="text-yellow-500"
+            aria-hidden="true"
+          />
+          <span>{viewOnly.badge}</span>
+        </div>
+      </header>
+
+      <div className="grid lg:grid-cols-[250px_minmax(0,1fr)]">
+        <aside className="border-b border-white/8 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:border-white/8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+            {viewOnly.photoLabel}
           </p>
-          <p className="mt-1 text-base font-bold text-white">
-            {currentAccount.accountId}
-          </p>
+
+          <div className="mt-5 flex items-center gap-5 lg:flex-col lg:items-start">
+            <div
+              aria-label={`${viewOnly.photoLabel}: ${currentAccount.accountOwner}`}
+              className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 text-2xl font-black text-zinc-950 ring-4 ring-white/[0.04] sm:h-28 sm:w-28 sm:text-3xl"
+              role="img"
+            >
+              {getInitials(currentAccount.accountOwner)}
+            </div>
+
+            <div className="min-w-0">
+              <p className="break-words text-lg font-bold leading-snug text-white">
+                {currentAccount.accountOwner}
+              </p>
+              <p className="mt-1 break-all text-sm leading-5 text-zinc-500">
+                {currentAccount.email}
+              </p>
+            </div>
+          </div>
+        </aside>
+
+        <div className="p-5 sm:p-8">
+          <section aria-labelledby="personal-information-title">
+            <h2
+              id="personal-information-title"
+              className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-300"
+            >
+              {viewOnly.personalTitle}
+            </h2>
+            <dl className="mt-3">
+              <ProfileDetail
+                label={accountPage.fields.fullName}
+                value={currentAccount.accountOwner}
+              />
+              <ProfileDetail
+                label={accountPage.fields.email}
+                value={currentAccount.email}
+              />
+            </dl>
+          </section>
+
+          <section
+            aria-labelledby="account-information-title"
+            className="mt-8 border-t border-white/8 pt-8"
+          >
+            <h2
+              id="account-information-title"
+              className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-300"
+            >
+              {viewOnly.accountTitle}
+            </h2>
+            <dl className="mt-3">
+              <ProfileDetail
+                label={viewOnly.accountIdLabel}
+                value={currentAccount.accountId}
+              />
+              <ProfileDetail
+                label={viewOnly.accountTypeLabel}
+                value={currentAccount.typeLabel}
+              />
+              <ProfileDetail
+                label={viewOnly.accountStatusLabel}
+                value={currentAccount.status}
+              />
+              <ProfileDetail
+                label={viewOnly.brokerLabel}
+                value={currentAccount.broker}
+              />
+            </dl>
+          </section>
         </div>
       </div>
-
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-yellow-500/90">
-          {currentAccount.typeLabel}
-        </p>
-        <h2 className="mt-2 text-2xl font-black text-white sm:text-3xl">
-          {copy.accountTitle}
-        </h2>
-      </div>
-
-      <ClientAreaAccordionItem
-        isOpen={openSection === "personal"}
-        onToggle={() =>
-          setOpenSection((current) =>
-            current === "personal" ? null : "personal",
-          )
-        }
-        title={accountPage.sections.personal}
-      >
-        <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <div className="grid gap-4">
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.fullName}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.email}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.birthPlace}
-            />
-            <ClientAreaAccountDateField
-              defaultValue=""
-              label={accountPage.fields.birthDate}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.identityNumber}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.taxNumber}
-              required
-            />
-            <ClientAreaAccountField defaultValue="" label={accountPage.fields.gender} />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.maritalStatus}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.spouseName}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.homeAddress}
-              required
-            />
-
-            <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.rt}
-                required
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.rw}
-                required
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.province}
-                required
-              />
-            </div>
-
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.city}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.subdistrict}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.postalCode}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.phone}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-400 text-sm font-bold text-black transition hover:brightness-105"
-          >
-            {accountPage.saveLabel}
-          </button>
-        </form>
-      </ClientAreaAccordionItem>
-
-      <ClientAreaAccordionItem
-        isOpen={openSection === "purpose"}
-        onToggle={() =>
-          setOpenSection((current) =>
-            current === "purpose" ? null : "purpose",
-          )
-        }
-        title={accountPage.sections.purpose}
-      >
-        <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.openingPurpose}
-            name="openingPurpose"
-            onChange={setOpeningPurpose}
-            options={accountPage.options.purpose}
-            required
-            selectedValue={openingPurpose}
-            trailingInputForValue="other"
-          />
-
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.investmentExperience}
-            name="investmentExperience"
-            onChange={setInvestmentExperience}
-            options={accountPage.options.investmentExperience}
-            required
-            selectedValue={investmentExperience}
-            trailingInputForValue="yes"
-          />
-
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.futuresExperience}
-            name="futuresExperience"
-            onChange={setFuturesExperience}
-            options={accountPage.options.binary as ClientAreaRadioOption[]}
-            required
-            selectedValue={futuresExperience}
-          />
-
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.familyAffiliation}
-            name="familyAffiliation"
-            onChange={setFamilyAffiliation}
-            options={accountPage.options.binary as ClientAreaRadioOption[]}
-            required
-            selectedValue={familyAffiliation}
-            trailingInputForValue="yes"
-          />
-
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.bankruptStatus}
-            name="bankruptStatus"
-            onChange={setBankruptStatus}
-            options={accountPage.options.binary as ClientAreaRadioOption[]}
-            selectedValue={bankruptStatus}
-          />
-
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-400 text-sm font-bold text-black transition hover:brightness-105"
-          >
-            {accountPage.saveLabel}
-          </button>
-        </form>
-      </ClientAreaAccordionItem>
-
-      <ClientAreaAccordionItem
-        isOpen={openSection === "emergency"}
-        onToggle={() =>
-          setOpenSection((current) =>
-            current === "emergency" ? null : "emergency",
-          )
-        }
-        title={accountPage.sections.emergency}
-      >
-        <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <div className="grid gap-4">
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencyName}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencyAddress}
-              required
-            />
-
-            <div className="grid gap-3 min-[560px]:grid-cols-[80px_80px_minmax(0,1fr)]">
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.rt}
-                required
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.rw}
-                required
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.emergencyProvince}
-                required
-              />
-            </div>
-
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencyCity}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencySubdistrict}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencyPostalCode}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.emergencyPhone}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-400 text-sm font-bold text-black transition hover:brightness-105"
-          >
-            {accountPage.saveLabel}
-          </button>
-        </form>
-      </ClientAreaAccordionItem>
-
-      <ClientAreaAccordionItem
-        isOpen={openSection === "job"}
-        onToggle={() =>
-          setOpenSection((current) => (current === "job" ? null : "job"))
-        }
-        title={accountPage.sections.job}
-      >
-        <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.occupation}
-            name="occupation"
-            onChange={setOccupation}
-            options={accountPage.options.occupation}
-            required
-            selectedValue={occupation}
-            trailingInputForValue="other"
-          />
-
-          <div className="grid gap-4">
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.companyName}
-              required
-            />
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.businessSector}
-                required
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.position}
-                required
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.yearsWorking}
-              />
-              <ClientAreaAccountField
-                defaultValue=""
-                label={accountPage.fields.previousOffice}
-              />
-            </div>
-
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.officeAddress}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.officePostalCode}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.officePhone}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-400 text-sm font-bold text-black transition hover:brightness-105"
-          >
-            {accountPage.saveLabel}
-          </button>
-        </form>
-      </ClientAreaAccordionItem>
-
-      <ClientAreaAccordionItem
-        isOpen={openSection === "wealth"}
-        onToggle={() =>
-          setOpenSection((current) => (current === "wealth" ? null : "wealth"))
-        }
-        title={accountPage.sections.wealth}
-      >
-        <form className="space-y-4" onSubmit={(event) => event.preventDefault()}>
-          <ClientAreaInlineRadioGroup
-            label={accountPage.fields.annualIncome}
-            name="annualIncome"
-            onChange={setAnnualIncome}
-            options={accountPage.options.annualIncome}
-            required
-            selectedValue={annualIncome}
-          />
-
-          <div className="grid gap-4">
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.houseLocation}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.njop}
-              required
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.bankDeposit}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.amount}
-            />
-            <ClientAreaAccountField
-              defaultValue=""
-              label={accountPage.fields.otherAssets}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-400 text-sm font-bold text-black transition hover:brightness-105"
-          >
-            {accountPage.saveLabel}
-          </button>
-        </form>
-      </ClientAreaAccordionItem>
-    </div>
+    </section>
   );
 }

@@ -275,6 +275,16 @@ export const idClientArea: AppMessages["clientArea"] = {
     pendingSectionNote:
       "Detail untuk section ini menyusul. Untuk sekarang fokusnya baru di Data Pribadi.",
     saveLabel: "Simpan",
+    viewOnly: {
+      badge: "Hanya dapat dilihat",
+      personalTitle: "Informasi pribadi",
+      accountTitle: "Informasi akun",
+      photoLabel: "Foto profil",
+      accountIdLabel: "Nomor akun",
+      accountTypeLabel: "Jenis akun",
+      accountStatusLabel: "Status akun",
+      brokerLabel: "Pialang",
+    },
     sections: {
       personal: "Data Pribadi",
       purpose: "Tujuan Pembukaan Rekening",

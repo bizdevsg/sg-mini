@@ -452,7 +452,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       transactionTitle: "Transaksi",
       transactionHistoryTitle: "Transaction History",
       newsTitle: "Market News & Insights",
-      accountTitle: "Profil & Pengaturan Akun",
+      accountTitle: "Profil Akun",
       marketTableHeaders: {
         symbol: "Symbol",
         name: "Nama",
@@ -1032,7 +1032,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
     transactionTitle: "Transaction",
     transactionHistoryTitle: "Transaction History",
     newsTitle: "Market News & Insights",
-    accountTitle: "Account Profile & Settings",
+    accountTitle: "Account Profile",
     marketTableHeaders: {
       symbol: "Symbol",
       name: "Name",
