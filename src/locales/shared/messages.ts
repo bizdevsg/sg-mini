@@ -793,6 +793,10 @@ export type AppMessages = {
   clientArea: {
     pageTitle: string;
     pageDescription: string;
+    viewOnlyDisclaimer: {
+      label: string;
+      body: string;
+    };
     login: {
       badge: string;
       title: string;

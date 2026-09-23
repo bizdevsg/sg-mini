@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 ### Added
+- Disclaimer dwibahasa ditambahkan di bagian bawah seluruh halaman Client Area untuk menegaskan bahwa semua informasi, data, grafik, dan fitur bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.
 - Konfigurasi root `vercel.json` ditambahkan dengan schema resmi Vercel dan framework preset Next.js agar konfigurasi deployment dapat divalidasi dan dikenali secara eksplisit.
 
 ### Changed

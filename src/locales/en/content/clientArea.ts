@@ -4,6 +4,10 @@ export const enClientArea: AppMessages["clientArea"] = {
   pageTitle: "Client Area",
   pageDescription:
     "A post-login home view with account summary, quick actions, and product signals.",
+  viewOnlyDisclaimer: {
+    label: "Disclaimer:",
+    body: "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
+  },
   login: {
     badge: "Client Portal",
     title: "Sign in Client Area",

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessionTimeout";
 import {
@@ -10,7 +11,7 @@ import {
 } from "@/lib/client-area-account-mode";
 import { hasClientAreaSession } from "@/lib/client-area-auth";
 import { isClientAreaEnabled } from "@/lib/client-area-config";
-import { isSupportedLocale, type AppLocale } from "@/locales";
+import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaLayoutProps = {
   children: ReactNode;
@@ -42,11 +43,25 @@ export default async function ClientAreaLayout({
   }
 
   const locale: AppLocale = locales;
+  const { viewOnlyDisclaimer } = getMessages(locale).clientArea;
 
   return (
     <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
       {hasSession ? <ClientAreaSessionTimeout locale={locale} /> : null}
       {children}
+      <aside
+        aria-label={viewOnlyDisclaimer.label}
+        className="border-t border-amber-500/20 bg-zinc-950 py-5 text-white/60"
+      >
+        <SectionContainer>
+          <p className="text-center text-xs leading-relaxed sm:text-sm">
+            <span className="font-semibold text-amber-500">
+              {viewOnlyDisclaimer.label}
+            </span>{" "}
+            {viewOnlyDisclaimer.body}
+          </p>
+        </SectionContainer>
+      </aside>
     </ClientAreaAccountModeProvider>
   );
 }

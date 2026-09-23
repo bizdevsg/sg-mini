@@ -4,6 +4,10 @@ export const idClientArea: AppMessages["clientArea"] = {
   pageTitle: "Beranda",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
+  viewOnlyDisclaimer: {
+    label: "Disclaimer:",
+    body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
+  },
   login: {
     badge: "Portal Nasabah",
     title: "Masuk Client Area",
