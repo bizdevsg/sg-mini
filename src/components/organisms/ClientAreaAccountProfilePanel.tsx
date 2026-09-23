@@ -1,7 +1,12 @@
+"use client";
+
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
+import { getClientAreaProfileDemoData } from "@/components/organisms/client-area-account-profile.data";
 import type { AccountSnapshot } from "@/components/organisms/client-area.types";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -11,30 +16,82 @@ type ClientAreaAccountProfilePanelProps = {
 };
 
 type ProfileDetailProps = {
+  full?: boolean;
   label: string;
-  value: string;
+  value: ReactNode;
 };
 
-function ProfileDetail({ label, value }: ProfileDetailProps) {
+type ProfileSectionProps = {
+  children: ReactNode;
+  description: string;
+  icon: IconProp;
+  isOpen: boolean;
+  onToggle: () => void;
+  title: string;
+};
+
+type ProfileSectionId =
+  | "personal"
+  | "purpose"
+  | "emergency"
+  | "employment"
+  | "wealth";
+
+function ProfileDetail({ full = false, label, value }: ProfileDetailProps) {
   return (
-    <div className="grid gap-1 border-b border-white/8 py-4 last:border-b-0 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-center sm:gap-6">
-      <dt className="text-sm text-zinc-500">{label}</dt>
-      <dd className="break-words text-sm font-semibold text-zinc-100 sm:text-right">
+    <div className={full ? "sm:col-span-2" : undefined}>
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+        {label}
+      </dt>
+      <dd className="mt-2 break-words text-[15px] font-medium leading-6 text-white">
         {value}
       </dd>
     </div>
   );
 }
 
-function getInitials(name: string) {
-  const initials = name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join("");
+function ProfileSection({
+  children,
+  description,
+  icon,
+  isOpen,
+  onToggle,
+  title,
+}: ProfileSectionProps) {
+  return (
+    <section className="overflow-hidden rounded-2xl border border-white/10 bg-[#1a1a1a]/80 shadow-lg shadow-black/25">
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={onToggle}
+        className="flex w-full items-center gap-3 bg-gradient-to-r from-white/[0.045] to-transparent px-5 py-4 text-left transition hover:bg-white/[0.025]"
+      >
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">
+          <FontAwesomeIcon icon={icon} className="text-base" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-base font-semibold text-white">
+            {title}
+          </span>
+          <span className="mt-0.5 block text-xs text-zinc-500">
+            {description}
+          </span>
+        </span>
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-zinc-400">
+          <FontAwesomeIcon
+            icon={["fas", "chevron-down"]}
+            className={`text-sm transition-transform ${isOpen ? "rotate-180" : ""}`}
+          />
+        </span>
+      </button>
 
-  return initials || "SG";
+      {isOpen ? (
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-6 border-t border-white/5 px-5 py-6 sm:grid-cols-2">
+          {children}
+        </dl>
+      ) : null}
+    </section>
+  );
 }
 
 export function ClientAreaAccountProfilePanel({
@@ -43,124 +100,267 @@ export function ClientAreaAccountProfilePanel({
 }: ClientAreaAccountProfilePanelProps) {
   const accountPage = getMessages(locale).clientArea.accountPage;
   const viewOnly = accountPage.viewOnly;
+  const profile = getClientAreaProfileDemoData(locale);
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
+  const [openSection, setOpenSection] =
+    useState<ProfileSectionId | null>("personal");
+
+  const toggleSection = (section: ProfileSectionId) => {
+    setOpenSection((current) => (current === section ? null : section));
+  };
 
   return (
-    <section
-      aria-labelledby="account-profile-title"
-      className="overflow-hidden rounded-[30px] border border-white/10 bg-[#151619] shadow-[0_24px_80px_rgba(0,0,0,0.28)]"
-    >
-      <header className="flex flex-col gap-5 border-b border-white/8 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <div className="flex min-w-0 items-center gap-4">
-          <Link
-            href={accountHref}
-            aria-label={accountPage.backLabel}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-zinc-300 transition hover:border-yellow-500/45 hover:text-yellow-400"
-          >
-            <FontAwesomeIcon
-              icon={["fas", "chevron-left"]}
-              className="text-xs"
-            />
-          </Link>
-          <div className="min-w-0">
-            <h1
-              id="account-profile-title"
-              className="text-xl font-bold tracking-tight text-white sm:text-2xl"
-            >
-              {accountPage.menuItems.profile}
-            </h1>
-            <p className="mt-1 truncate text-sm text-zinc-500">
-              {currentAccount.accountId}
-            </p>
-          </div>
-        </div>
+    <section aria-label={accountPage.menuItems.profile} className="space-y-6">
+      <Link
+        href={accountHref}
+        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-4 py-2.5 text-sm font-semibold text-zinc-300 transition hover:border-yellow-500/40 hover:text-yellow-400"
+      >
+        <FontAwesomeIcon icon={["fas", "chevron-left"]} className="text-xs" />
+        <span>{accountPage.backLabel}</span>
+      </Link>
 
-        <div className="inline-flex w-fit items-center gap-2 text-xs font-semibold text-zinc-400">
-          <FontAwesomeIcon
-            icon={["fas", "lock"]}
-            className="text-yellow-500"
-            aria-hidden="true"
+      <div className="space-y-4">
+        <ProfileSection
+          description={viewOnly.personalDescription}
+          icon={["fas", "user"]}
+          isOpen={openSection === "personal"}
+          onToggle={() => toggleSection("personal")}
+          title={accountPage.sections.personal}
+        >
+          <ProfileDetail
+            label={accountPage.fields.fullName}
+            value={currentAccount.accountOwner}
           />
-          <span>{viewOnly.badge}</span>
-        </div>
-      </header>
+          <ProfileDetail
+            label={accountPage.fields.email}
+            value={currentAccount.email}
+          />
+          <ProfileDetail
+            label={accountPage.fields.birthPlace}
+            value={profile.personal.birthPlace}
+          />
+          <ProfileDetail
+            label={accountPage.fields.birthDate}
+            value={profile.personal.birthDate}
+          />
+          <ProfileDetail
+            label={accountPage.fields.identityNumber}
+            value={profile.personal.identityNumber}
+          />
+          <ProfileDetail
+            label={accountPage.fields.taxNumber}
+            value={profile.personal.taxNumber}
+          />
+          <ProfileDetail
+            label={accountPage.fields.gender}
+            value={profile.personal.gender}
+          />
+          <ProfileDetail
+            label={accountPage.fields.maritalStatus}
+            value={profile.personal.maritalStatus}
+          />
+          <ProfileDetail
+            label={accountPage.fields.spouseName}
+            value={profile.personal.spouseName}
+          />
+          <ProfileDetail
+            label={accountPage.fields.phone}
+            value={profile.personal.phone}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.homeAddress}
+            value={profile.personal.homeAddress}
+          />
+          <ProfileDetail
+            label={accountPage.fields.province}
+            value={profile.personal.province}
+          />
+          <ProfileDetail
+            label={accountPage.fields.city}
+            value={profile.personal.city}
+          />
+          <ProfileDetail
+            label={accountPage.fields.subdistrict}
+            value={profile.personal.subdistrict}
+          />
+          <ProfileDetail
+            label={accountPage.fields.postalCode}
+            value={profile.personal.postalCode}
+          />
+        </ProfileSection>
 
-      <div className="grid lg:grid-cols-[250px_minmax(0,1fr)]">
-        <aside className="border-b border-white/8 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:border-white/8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            {viewOnly.photoLabel}
-          </p>
+        <ProfileSection
+          description={viewOnly.purposeDescription}
+          icon={["fas", "bullseye"]}
+          isOpen={openSection === "purpose"}
+          onToggle={() => toggleSection("purpose")}
+          title={accountPage.sections.purpose}
+        >
+          <ProfileDetail
+            label={accountPage.fields.openingPurpose}
+            value={profile.purpose.openingPurpose}
+          />
+          <ProfileDetail
+            label={accountPage.fields.sourceFunds}
+            value={profile.purpose.sourceFunds}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.estimatedTransaction}
+            value={profile.purpose.estimatedTransaction}
+          />
+          <ProfileDetail
+            label={accountPage.fields.investmentExperience}
+            value={profile.purpose.investmentExperience}
+          />
+          <ProfileDetail
+            label={accountPage.fields.futuresExperience}
+            value={profile.purpose.futuresExperience}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.familyAffiliation}
+            value={profile.purpose.familyAffiliation}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.bankruptStatus}
+            value={profile.purpose.bankruptStatus}
+          />
+        </ProfileSection>
 
-          <div className="mt-5 flex items-center gap-5 lg:flex-col lg:items-start">
-            <div
-              aria-label={`${viewOnly.photoLabel}: ${currentAccount.accountOwner}`}
-              className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 text-2xl font-black text-zinc-950 ring-4 ring-white/[0.04] sm:h-28 sm:w-28 sm:text-3xl"
-              role="img"
-            >
-              {getInitials(currentAccount.accountOwner)}
-            </div>
+        <ProfileSection
+          description={viewOnly.emergencyDescription}
+          icon={["fas", "life-ring"]}
+          isOpen={openSection === "emergency"}
+          onToggle={() => toggleSection("emergency")}
+          title={accountPage.sections.emergency}
+        >
+          <ProfileDetail
+            label={accountPage.fields.emergencyName}
+            value={profile.emergency.name}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencyRelationship}
+            value={profile.emergency.relationship}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencyPhone}
+            value={profile.emergency.phone}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.emergencyAddress}
+            value={profile.emergency.address}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencyProvince}
+            value={profile.emergency.province}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencyCity}
+            value={profile.emergency.city}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencySubdistrict}
+            value={profile.emergency.subdistrict}
+          />
+          <ProfileDetail
+            label={accountPage.fields.emergencyPostalCode}
+            value={profile.emergency.postalCode}
+          />
+        </ProfileSection>
 
-            <div className="min-w-0">
-              <p className="break-words text-lg font-bold leading-snug text-white">
-                {currentAccount.accountOwner}
-              </p>
-              <p className="mt-1 break-all text-sm leading-5 text-zinc-500">
-                {currentAccount.email}
-              </p>
-            </div>
-          </div>
-        </aside>
+        <ProfileSection
+          description={viewOnly.employmentDescription}
+          icon={["fas", "briefcase"]}
+          isOpen={openSection === "employment"}
+          onToggle={() => toggleSection("employment")}
+          title={accountPage.sections.job}
+        >
+          <ProfileDetail
+            label={accountPage.fields.occupation}
+            value={profile.employment.occupation}
+          />
+          <ProfileDetail
+            label={accountPage.fields.position}
+            value={profile.employment.position}
+          />
+          <ProfileDetail
+            label={accountPage.fields.companyName}
+            value={profile.employment.companyName}
+          />
+          <ProfileDetail
+            label={accountPage.fields.businessSector}
+            value={profile.employment.businessSector}
+          />
+          <ProfileDetail
+            label={accountPage.fields.yearsWorking}
+            value={profile.employment.yearsWorking}
+          />
+          <ProfileDetail
+            label={accountPage.fields.previousOffice}
+            value={profile.employment.previousOffice}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.officeAddress}
+            value={profile.employment.officeAddress}
+          />
+          <ProfileDetail
+            label={accountPage.fields.officePostalCode}
+            value={profile.employment.officePostalCode}
+          />
+          <ProfileDetail
+            label={accountPage.fields.officePhone}
+            value={profile.employment.officePhone}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.monthlyIncome}
+            value={profile.employment.monthlyIncome}
+          />
+        </ProfileSection>
 
-        <div className="p-5 sm:p-8">
-          <section aria-labelledby="personal-information-title">
-            <h2
-              id="personal-information-title"
-              className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-300"
-            >
-              {viewOnly.personalTitle}
-            </h2>
-            <dl className="mt-3">
-              <ProfileDetail
-                label={accountPage.fields.fullName}
-                value={currentAccount.accountOwner}
-              />
-              <ProfileDetail
-                label={accountPage.fields.email}
-                value={currentAccount.email}
-              />
-            </dl>
-          </section>
+        <ProfileSection
+          description={viewOnly.wealthDescription}
+          icon={["fas", "wallet"]}
+          isOpen={openSection === "wealth"}
+          onToggle={() => toggleSection("wealth")}
+          title={accountPage.sections.wealth}
+        >
+          <ProfileDetail
+            label={accountPage.fields.totalAssets}
+            value={profile.wealth.totalAssets}
+          />
+          <ProfileDetail
+            label={accountPage.fields.annualIncome}
+            value={profile.wealth.annualIncome}
+          />
+          <ProfileDetail
+            label={accountPage.fields.propertyOwnership}
+            value={profile.wealth.propertyOwnership}
+          />
+          <ProfileDetail
+            label={accountPage.fields.vehicleOwnership}
+            value={profile.wealth.vehicleOwnership}
+          />
+          <ProfileDetail
+            label={accountPage.fields.bankDeposit}
+            value={profile.wealth.bankDeposit}
+          />
+          <ProfileDetail
+            label={accountPage.fields.otherInvestments}
+            value={profile.wealth.otherInvestments}
+          />
+          <ProfileDetail
+            full
+            label={accountPage.fields.bankAccount}
+            value={profile.wealth.bankAccount}
+          />
+        </ProfileSection>
 
-          <section
-            aria-labelledby="account-information-title"
-            className="mt-8 border-t border-white/8 pt-8"
-          >
-            <h2
-              id="account-information-title"
-              className="text-sm font-bold uppercase tracking-[0.16em] text-zinc-300"
-            >
-              {viewOnly.accountTitle}
-            </h2>
-            <dl className="mt-3">
-              <ProfileDetail
-                label={viewOnly.accountIdLabel}
-                value={currentAccount.accountId}
-              />
-              <ProfileDetail
-                label={viewOnly.accountTypeLabel}
-                value={currentAccount.typeLabel}
-              />
-              <ProfileDetail
-                label={viewOnly.accountStatusLabel}
-                value={currentAccount.status}
-              />
-              <ProfileDetail
-                label={viewOnly.brokerLabel}
-                value={currentAccount.broker}
-              />
-            </dl>
-          </section>
-        </div>
       </div>
     </section>
   );

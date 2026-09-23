@@ -31,6 +31,7 @@ export function isClientAreaSessionConfigured() {
 
 export type ClientAreaSessionProfile = {
   accountId: string;
+  avatarSrc: string;
   displayName: string;
   email: string;
 };
@@ -76,6 +77,7 @@ function resolveClientAreaSessionProfile(
   if (normalizedIdentifier === "user.sgb@demo-trading.com") {
     return {
       accountId: "BBH10158",
+      avatarSrc: "/assets/client-area-profile-avatar.png",
       displayName: "Demo User",
       email: "user.sgb@demo-trading.com",
     };
@@ -83,6 +85,7 @@ function resolveClientAreaSessionProfile(
 
   return {
     accountId: "BBH10158",
+    avatarSrc: "/assets/client-area-profile-avatar.png",
     displayName: "Demo User",
     email: "user.sgb@demo-trading.com",
   };

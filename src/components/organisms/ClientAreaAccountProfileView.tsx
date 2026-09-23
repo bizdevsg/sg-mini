@@ -1,6 +1,7 @@
 "use client";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
+import { ClientAreaAccountHeader } from "@/components/organisms/ClientAreaAccountHeader";
 import { ClientAreaAccountProfilePanel } from "@/components/organisms/ClientAreaAccountProfilePanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import {
@@ -25,10 +26,13 @@ export function ClientAreaAccountProfileView({
 
   return (
     <ClientAreaShell activeTab="account" breakingNews={breakingNews} locale={locale}>
-      <ClientAreaAccountProfilePanel
-        currentAccount={currentAccount}
-        locale={locale}
-      />
+      <div className="space-y-6">
+        <ClientAreaAccountHeader locale={locale} />
+        <ClientAreaAccountProfilePanel
+          currentAccount={currentAccount}
+          locale={locale}
+        />
+      </div>
     </ClientAreaShell>
   );
 }

@@ -916,13 +916,14 @@ export type AppMessages = {
       saveLabel: string;
       viewOnly: {
         badge: string;
-        personalTitle: string;
-        accountTitle: string;
+        profileLabel: string;
+        personalDescription: string;
+        purposeDescription: string;
+        emergencyDescription: string;
+        employmentDescription: string;
+        wealthDescription: string;
         photoLabel: string;
         accountIdLabel: string;
-        accountTypeLabel: string;
-        accountStatusLabel: string;
-        brokerLabel: string;
       };
       sections: {
         personal: string;
@@ -932,6 +933,19 @@ export type AppMessages = {
         wealth: string;
       };
       menuItems: {
+        profile: string;
+        referral: string;
+        documentApproval: string;
+        dailyStatement: string;
+        withdrawal: string;
+        deposit: string;
+      };
+      accountCenter: {
+        statusLabel: string;
+        servicesTitle: string;
+        servicesDescription: string;
+      };
+      menuDescriptions: {
         profile: string;
         referral: string;
         documentApproval: string;
@@ -958,6 +972,8 @@ export type AppMessages = {
         postalCode: string;
         phone: string;
         openingPurpose: string;
+        sourceFunds: string;
+        estimatedTransaction: string;
         investmentExperience: string;
         investmentField: string;
         futuresExperience: string;
@@ -965,6 +981,7 @@ export type AppMessages = {
         familyAffiliationDetail: string;
         bankruptStatus: string;
         emergencyName: string;
+        emergencyRelationship: string;
         emergencyAddress: string;
         emergencyNeighborhood: string;
         emergencyProvince: string;
@@ -981,12 +998,18 @@ export type AppMessages = {
         officeAddress: string;
         officePostalCode: string;
         officePhone: string;
+        monthlyIncome: string;
         annualIncome: string;
+        totalAssets: string;
+        propertyOwnership: string;
+        vehicleOwnership: string;
         houseLocation: string;
         njop: string;
         bankDeposit: string;
         amount: string;
         otherAssets: string;
+        otherInvestments: string;
+        bankAccount: string;
         occupationOther: string;
       };
       options: {
@@ -1011,6 +1034,51 @@ export type AppMessages = {
           label: string;
         }>;
       };
+    };
+    approvalDocumentPage: {
+      title: string;
+      description: string;
+      downloadLabel: string;
+      preparingLabel: string;
+      accountHolderLabel: string;
+      accountNumberLabel: string;
+      generatedAtLabel: string;
+      pdfNotice: string;
+      documents: Array<{
+        id: string;
+        code: string;
+        title: string;
+      }>;
+    };
+    dailyStatementPage: {
+      title: string;
+      description: string;
+      downloadLabel: string;
+      preparingLabel: string;
+      tabs: {
+        account: string;
+        open: string;
+        settled: string;
+      };
+      labels: Record<string, string>;
+      openPositions: Array<{
+        id: string;
+        symbol: string;
+        side: string;
+        volume: string;
+        openPrice: string;
+        marketPrice: string;
+        floatingPl: string;
+      }>;
+      settledPositions: Array<{
+        id: string;
+        symbol: string;
+        side: string;
+        volume: string;
+        openPrice: string;
+        closePrice: string;
+        profitLoss: string;
+      }>;
     };
     referralPage: {
       title: string;

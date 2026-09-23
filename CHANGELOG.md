@@ -1,11 +1,16 @@
 ## [Unreleased]
 
 ### Added
+- Halaman Daily Statement ditambahkan ke Account Client Area dengan tab Account Statement, Open Position, dan Settled Statement yang memiliki state aktif maupun nonaktif yang tegas, ringkasan finansial serta posisi demo yang responsif, dan aksi unduh PDF berdasarkan tab aktif.
+- Halaman Dokumen Persetujuan ditambahkan ke Account Client Area dengan daftar formulir PBK/CDDS bergaya kartu gelap dan tipografi ringkas sesuai design system, aksi unduh PDF per dokumen, metadata rekening aktif, serta salinan konten Indonesia dan Inggris.
 - Disclaimer dwibahasa ditambahkan di bagian bawah seluruh halaman Client Area untuk menegaskan bahwa semua informasi, data, grafik, dan fitur bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.
 - Konfigurasi root `vercel.json` ditambahkan dengan schema resmi Vercel dan framework preset Next.js agar konfigurasi deployment dapat divalidasi dan dikenali secara eksplisit.
 
 ### Changed
-- Halaman Profil di Client Area kini memakai tampilan profil produksi yang ringkas dan sepenuhnya view-only, hanya menampilkan data akun yang tersedia tanpa input, tombol simpan, placeholder, atau pesan prototipe, serta dilengkapi identitas foto profil berbasis inisial.
+- Tombol Client Area di navbar kini menampilkan foto profil nasabah dengan ring beraksen emas ketika sesi login aktif; ikon akun tetap digantikan secara aman hanya pada kondisi terautentikasi.
+- Halaman Account Client Area didesain ulang dengan kartu identitas nasabah sebagai header utama bersama di seluruh route Account. Header menampilkan foto, nama, email, status verifikasi, keamanan, dan nomor akun; konten layanan, Profile, atau Referral berubah di bawahnya tanpa menduplikasi kartu identitas.
+- Tampilan Profil Client Area diselaraskan dengan referensi `client-dashboard-ui-design`: kartu identitas beraksen emas kini memakai foto profil, status akun, dan nomor rekening, sedangkan Data Pribadi, Tujuan Pembukaan Rekening, Data Darurat, Data Pekerjaan, dan Data Kekayaan ditata dalam accordion view-only eksklusif berisi dataset demo lengkap, sehingga membuka satu bagian otomatis menutup bagian lainnya. Mode akun Demo/Real tidak ditampilkan karena bukan bagian dari identitas profil nasabah.
+- Halaman Profil di Client Area kini sepenuhnya view-only dan hanya menampilkan data akun yang tersedia tanpa input, tombol simpan, placeholder, atau pesan prototipe.
 - Live quote kini membuka WebSocket upstream langsung dari browser melalui `NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL`, menggantikan relay SSE `/api/live-quotes`; broker WebSocket server dihapus agar koneksi realtime tidak mempertahankan Vercel Function dan mengonsumsi Provisioned Memory selama stream aktif.
 - Folder `proposal-assets/` dan arsip `proposal-assets-sgb.zip` kini diabaikan oleh Git agar materi proposal lokal tidak ikut masuk repository.
 - Login Client Area kini menggunakan reCAPTCHA v3 tak terlihat dengan action khusus `client_area_login`; verifikasi server juga memeriksa skor (default minimum `0.65`), action, dan hostname agar token tidak dapat digunakan lintas konteks.

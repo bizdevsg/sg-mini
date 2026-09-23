@@ -1,25 +1,25 @@
 "use client";
 
-import { ClientAreaAccountPanel } from "@/components/organisms/ClientAreaAccountPanel";
 import { ClientAreaAccountHeader } from "@/components/organisms/ClientAreaAccountHeader";
+import { ClientAreaApprovalDocumentsPanel } from "@/components/organisms/ClientAreaApprovalDocumentsPanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
-type ClientAreaAccountViewProps = {
+type ClientAreaApprovalDocumentsViewProps = {
   breakingNews?: BreakingNewsItem[];
   locale: AppLocale;
 };
 
-export function ClientAreaAccountView({
+export function ClientAreaApprovalDocumentsView({
   breakingNews,
   locale,
-}: ClientAreaAccountViewProps) {
+}: ClientAreaApprovalDocumentsViewProps) {
   return (
     <ClientAreaShell activeTab="account" breakingNews={breakingNews} locale={locale}>
       <div className="space-y-6">
         <ClientAreaAccountHeader locale={locale} />
-        <ClientAreaAccountPanel locale={locale} />
+        <ClientAreaApprovalDocumentsPanel locale={locale} />
       </div>
     </ClientAreaShell>
   );

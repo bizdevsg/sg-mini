@@ -3,7 +3,7 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ClientAreaAccountMenuCardProps = {
-  helperText?: string;
+  helperText: string;
   href?: string;
   icon: IconProp;
   label: string;
@@ -17,22 +17,44 @@ export function ClientAreaAccountMenuCard({
   label,
   onClick,
 }: ClientAreaAccountMenuCardProps) {
-  const className =
-    "group flex min-h-[118px] w-full flex-col items-center justify-center rounded-[18px] border border-zinc-700 bg-zinc-900/85 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/60 hover:bg-zinc-800/90";
+  const isInteractive = Boolean(href || onClick);
+  const className = `group flex min-h-40 w-full flex-col rounded-2xl border p-5 text-left transition-all duration-300 ${
+    isInteractive
+      ? "border-white/10 bg-[#1a1a1a]/85 hover:-translate-y-1 hover:border-yellow-500/45 hover:bg-[#202020] hover:shadow-xl hover:shadow-black/25"
+      : "cursor-default border-white/[0.06] bg-[#171717]/65"
+  }`;
 
   const content = (
     <>
-      <div className="flex h-12 w-12 items-center justify-center text-yellow-400 transition-transform duration-300 group-hover:scale-110">
-        <FontAwesomeIcon icon={icon} className="text-4xl" />
+      <div className="flex items-start justify-between gap-4">
+        <span
+          className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border text-yellow-400 ${
+            isInteractive
+              ? "border-yellow-500/30 bg-yellow-500/10"
+              : "border-white/10 bg-white/[0.035] text-zinc-500"
+          }`}
+        >
+          <FontAwesomeIcon icon={icon} className="text-lg" />
+        </span>
+        {isInteractive ? (
+          <FontAwesomeIcon
+            icon={["fas", "arrow-right"]}
+            className="mt-2 text-xs text-zinc-600 transition group-hover:translate-x-1 group-hover:text-yellow-400"
+          />
+        ) : (
+          <FontAwesomeIcon
+            icon={["fas", "lock"]}
+            className="mt-2 text-xs text-zinc-700"
+          />
+        )}
       </div>
-      <span className="mt-4 text-base font-semibold leading-tight text-white">
+
+      <span className={`mt-5 text-base font-semibold ${isInteractive ? "text-white" : "text-zinc-400"}`}>
         {label}
       </span>
-      {helperText ? (
-        <span className="mt-2 text-xs font-medium text-zinc-500">
-          {helperText}
-        </span>
-      ) : null}
+      <span className="mt-2 text-sm leading-5 text-zinc-500">
+        {helperText}
+      </span>
     </>
   );
 
