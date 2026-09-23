@@ -92,7 +92,6 @@ APP_ENV=dev
 INTERNAL_API_TOKEN=
 CLIENT_AREA_SESSION_SECRET=
 
-LIVE_QUOTE_SOCKET_URL=
 NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL=
 
 NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL=
@@ -175,13 +174,13 @@ Konfigurasi Firebase client ada di:
 Nilai `APP_ENV` yang dipakai project:
 
 - `dev` atau `prod`
-- websocket `LIVE_QUOTE_SOCKET_URL` tetap tidak diubah oleh environment ini
+- live quote membuka WebSocket langsung dari browser melalui `NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL`; nilainya tertanam saat build dan harus memakai URL `ws://` atau `wss://` yang menerima origin website
 
 Proteksi route `src/app/api`:
 
 - saat `APP_ENV=dev`, proteksi API dilonggarkan untuk memudahkan local debugging
 - saat `APP_ENV` bukan `dev`, endpoint internal hanya bisa diakses dengan header `x-internal-api-token` yang cocok dengan `INTERNAL_API_TOKEN`
-- endpoint browser seperti SSE, economic calendar, dan image proxy hanya menerima request browser same-origin
+- endpoint browser seperti economic calendar dan image proxy hanya menerima request browser same-origin
 
 ## Development
 

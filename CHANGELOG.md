@@ -1,6 +1,10 @@
 ## [Unreleased]
 
+### Added
+- Konfigurasi root `vercel.json` ditambahkan dengan schema resmi Vercel dan framework preset Next.js agar konfigurasi deployment dapat divalidasi dan dikenali secara eksplisit.
+
 ### Changed
+- Live quote kini membuka WebSocket upstream langsung dari browser melalui `NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL`, menggantikan relay SSE `/api/live-quotes`; broker WebSocket server dihapus agar koneksi realtime tidak mempertahankan Vercel Function dan mengonsumsi Provisioned Memory selama stream aktif.
 - Folder `proposal-assets/` dan arsip `proposal-assets-sgb.zip` kini diabaikan oleh Git agar materi proposal lokal tidak ikut masuk repository.
 - Login Client Area kini menggunakan reCAPTCHA v3 tak terlihat dengan action khusus `client_area_login`; verifikasi server juga memeriksa skor (default minimum `0.65`), action, dan hostname agar token tidak dapat digunakan lintas konteks.
 - Fetching berita di `src/lib/news.ts` kini menggunakan API SG Admin (`/api/v1/berita`) beserta header `X-API-Key` dari `SG_ADMIN_API_KEY`, menggantikan API Newsmaker dan bearer token. Adapter berita juga mendukung respons list yang dipaginasi serta variasi field konten, kategori, dan gambar dari API baru.

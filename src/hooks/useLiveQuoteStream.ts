@@ -2,17 +2,16 @@
 
 import { useSyncExternalStore } from "react";
 
-import type { LiveQuotePayload } from "@/components/molecules/live-quote.shared";
+import {
+  LIVE_QUOTE_SOCKET_URL,
+  type LiveQuotePayload,
+} from "@/lib/live-quotes";
 
 export type LiveQuoteConnectionStatus =
   | "connecting"
   | "live"
   | "reconnecting"
   | "error";
-
-type LiveQuoteStatusEvent = {
-  status?: LiveQuoteConnectionStatus;
-};
 
 type UseLiveQuoteStreamResult = {
   quotes: LiveQuotePayload;
@@ -23,7 +22,6 @@ type UseLiveQuoteStreamResult = {
 type LiveQuoteStreamSnapshot = UseLiveQuoteStreamResult;
 type LiveQuoteListener = () => void;
 
-const LIVE_QUOTES_STREAM_URL = "/api/live-quotes";
 const BASE_RECONNECT_DELAY_MS = 1000;
 const MAX_RECONNECT_DELAY_MS = 10000;
 const STALE_CONNECTION_TIMEOUT_MS = 45000;
@@ -36,7 +34,7 @@ let snapshot: LiveQuoteStreamSnapshot = {
   status: "connecting",
   lastUpdated: null,
 };
-let eventSource: EventSource | null = null;
+let socket: WebSocket | null = null;
 let reconnectTimer: number | null = null;
 let staleTimer: number | null = null;
 let reconnectAttempts = 0;
@@ -103,13 +101,13 @@ function clearStaleTimer() {
   }
 }
 
-function closeEventSource() {
+function closeSocket() {
   clearStaleTimer();
 
-  if (eventSource) {
-    const sourceToClose = eventSource;
-    eventSource = null;
-    sourceToClose.close();
+  if (socket) {
+    const socketToClose = socket;
+    socket = null;
+    socketToClose.close();
   }
 }
 
@@ -127,12 +125,12 @@ function scheduleReconnect({
   immediate?: boolean;
 } = {}) {
   if (!listeners.size) {
-    closeEventSource();
+    closeSocket();
     clearReconnectTimer();
     return;
   }
 
-  closeEventSource();
+  closeSocket();
 
   if (!immediate && reconnectTimer) {
     return;
@@ -159,11 +157,11 @@ function scheduleReconnect({
   }, delay);
 }
 
-function startStaleTimer(currentSource: EventSource) {
+function startStaleTimer(currentSocket: WebSocket) {
   clearStaleTimer();
 
   staleTimer = window.setInterval(() => {
-    if (eventSource !== currentSource) {
+    if (socket !== currentSocket) {
       clearStaleTimer();
       return;
     }
@@ -189,7 +187,7 @@ function handleVisibilityRefresh() {
     return;
   }
 
-  if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+  if (!socket || socket.readyState === WebSocket.CLOSED) {
     scheduleReconnect({ immediate: true });
     return;
   }
@@ -225,31 +223,40 @@ function unbindBrowserEvents() {
 
 function connect() {
   if (!listeners.size) {
-    closeEventSource();
+    closeSocket();
     clearReconnectTimer();
     return;
   }
 
   if (
-    eventSource &&
-    (eventSource.readyState === EventSource.OPEN ||
-      eventSource.readyState === EventSource.CONNECTING)
+    socket &&
+    (socket.readyState === WebSocket.OPEN ||
+      socket.readyState === WebSocket.CONNECTING)
   ) {
     return;
   }
 
   clearReconnectTimer();
-  closeEventSource();
+  closeSocket();
   updateLastActivity();
   setStatus(hasCachedQuotes() ? "reconnecting" : "connecting");
 
-  const source = new EventSource(LIVE_QUOTES_STREAM_URL);
-  eventSource = source;
-  startStaleTimer(source);
+  let currentSocket: WebSocket;
 
-  source.onopen = () => {
-    if (eventSource !== source) {
-      source.close();
+  try {
+    currentSocket = new WebSocket(LIVE_QUOTE_SOCKET_URL);
+  } catch {
+    setStatus("error");
+    scheduleReconnect();
+    return;
+  }
+
+  socket = currentSocket;
+  startStaleTimer(currentSocket);
+
+  currentSocket.onopen = () => {
+    if (socket !== currentSocket) {
+      currentSocket.close();
       return;
     }
 
@@ -261,46 +268,18 @@ function connect() {
     }
   };
 
-  const handleStatusEvent = (event: MessageEvent<string>) => {
-    if (eventSource !== source) {
+  currentSocket.onmessage = (event: MessageEvent<unknown>) => {
+    if (socket !== currentSocket) {
       return;
     }
 
     updateLastActivity();
 
     try {
-      const payload = JSON.parse(event.data) as LiveQuoteStatusEvent;
-      const nextStatus = payload.status;
-
-      if (
-        nextStatus === "connecting" ||
-        nextStatus === "live" ||
-        nextStatus === "reconnecting" ||
-        nextStatus === "error"
-      ) {
-        setStatus(nextStatus);
+      if (typeof event.data !== "string") {
+        return;
       }
-    } catch {
-      setStatus("error");
-    }
-  };
 
-  const handleHeartbeatEvent = () => {
-    if (eventSource !== source) {
-      return;
-    }
-
-    updateLastActivity();
-  };
-
-  const handleQuoteEvent = (event: MessageEvent<string>) => {
-    if (eventSource !== source) {
-      return;
-    }
-
-    updateLastActivity();
-
-    try {
       const payload = JSON.parse(event.data) as LiveQuotePayload;
 
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
@@ -324,16 +303,21 @@ function connect() {
     }
   };
 
-  source.addEventListener("status", handleStatusEvent as EventListener);
-  source.addEventListener("heartbeat", handleHeartbeatEvent);
-  source.addEventListener("quote", handleQuoteEvent as EventListener);
-
-  source.onerror = () => {
-    if (eventSource !== source) {
+  currentSocket.onerror = () => {
+    if (socket !== currentSocket) {
       return;
     }
 
     setStatus(hasCachedQuotes() ? "reconnecting" : "error");
+  };
+
+  currentSocket.onclose = () => {
+    if (socket !== currentSocket) {
+      return;
+    }
+
+    socket = null;
+    clearStaleTimer();
     scheduleReconnect();
   };
 }
@@ -344,7 +328,7 @@ function subscribe(listener: LiveQuoteListener) {
   if (listeners.size === 1) {
     bindBrowserEvents();
     connect();
-  } else if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+  } else if (!socket || socket.readyState === WebSocket.CLOSED) {
     scheduleReconnect({ immediate: true });
   }
 
@@ -357,7 +341,7 @@ function subscribe(listener: LiveQuoteListener) {
 
     unbindBrowserEvents();
     clearReconnectTimer();
-    closeEventSource();
+    closeSocket();
     reconnectAttempts = 0;
     snapshot = {
       ...snapshot,

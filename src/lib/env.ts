@@ -76,9 +76,6 @@ export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
 export const CLIENT_AREA_SESSION_SECRET =
   process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
 
-export const LIVE_QUOTE_SOCKET_URL =
-  process.env.LIVE_QUOTE_SOCKET_URL ?? DEFAULT_LIVE_QUOTE_SOCKET_URL;
-
 function normalizePublicLiveQuoteSocketUrl(value: string | undefined) {
   const normalizedValue = value?.trim();
 
@@ -87,7 +84,7 @@ function normalizePublicLiveQuoteSocketUrl(value: string | undefined) {
     normalizedValue === "$LIVE_QUOTE_SOCKET_URL" ||
     normalizedValue === "${LIVE_QUOTE_SOCKET_URL}"
   ) {
-    return LIVE_QUOTE_SOCKET_URL;
+    return DEFAULT_LIVE_QUOTE_SOCKET_URL;
   }
 
   return normalizedValue;
