@@ -1,0 +1,97 @@
+import type { Metadata, Viewport } from "next";
+import "aos/dist/aos.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import "flag-icons/css/flag-icons.min.css";
+import { FirebaseBootstrap } from "@/components/providers/FirebaseBootstrap";
+import { FontAwesomeProvider } from "@/components/providers/FontAwesomeProvider";
+import { LoadingProvider } from "@/components/providers/LoadingProvider";
+import { NEWS_IMAGE_BASE_URL } from "@/lib/env";
+import {
+  DEFAULT_SITE_DESCRIPTION,
+  DEFAULT_SITE_TITLE,
+  SITE_METADATA_BASE,
+} from "@/lib/metadata";
+import "@/lib/fontawesome";
+import {
+  DEFAULT_LOCALE,
+  getLocaleConfig,
+  isSupportedLocale,
+  type AppLocale,
+} from "@/locales";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  metadataBase: SITE_METADATA_BASE,
+  title: {
+    default: `Client Area - ${DEFAULT_SITE_TITLE}`,
+    template: "%s - Client Area Solid Gold Berjangka",
+  },
+  description: DEFAULT_SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Client Area Solid Gold Berjangka",
+    title: `Client Area - ${DEFAULT_SITE_TITLE}`,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/assets/BANNER-UTAMA-SOLID.png",
+        alt: "Solid Gold Berjangka",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Client Area - ${DEFAULT_SITE_TITLE}`,
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: ["/assets/BANNER-UTAMA-SOLID.png"],
+  },
+  icons: {
+    icon: "/assets/Logo SG-WEB111.png",
+    shortcut: "/assets/Logo SG-WEB111.png",
+    apple: "/assets/Logo SG-WEB111.png",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-visual",
+};
+
+export default async function RootLayout({
+  children,
+  params,
+}: Readonly<{
+  children: React.ReactNode;
+  params?: Promise<{ locales?: string }>;
+}>) {
+  const { locales } = params ? await params : {};
+  const locale: AppLocale =
+    locales && isSupportedLocale(locales) ? locales : DEFAULT_LOCALE;
+
+  return (
+    <html
+      lang={getLocaleConfig(locale).lang}
+      data-locale={locale}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className="h-full antialiased"
+    >
+      <head>
+        <link rel="dns-prefetch" href="//portalnews.newsmaker.id" />
+        <link
+          rel="preconnect"
+          href={NEWS_IMAGE_BASE_URL}
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body suppressHydrationWarning className="min-h-full flex flex-col">
+        <FontAwesomeProvider>
+          <FirebaseBootstrap />
+          <LoadingProvider locale={locale}>{children}</LoadingProvider>
+        </FontAwesomeProvider>
+      </body>
+    </html>
+  );
+}

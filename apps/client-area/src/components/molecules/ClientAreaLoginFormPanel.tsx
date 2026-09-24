@@ -1,0 +1,134 @@
+import Link from "next/link";
+import { ArrowLeft, Eye, EyeClosed } from "lucide-react";
+
+import { PUBLIC_WEBSITE_URL } from "@/lib/env";
+import type { AppLocale, AppMessages } from "@/locales";
+
+type ClientAreaLoginFormPanelProps = {
+  locale: AppLocale;
+  login: AppMessages["clientArea"]["login"];
+  supportHref: string;
+  pending: boolean;
+  showPassword: boolean;
+  formAction: (formData: FormData) => void | Promise<void>;
+  onTogglePassword: () => void;
+  onOpenDownloadModal: () => void;
+};
+
+const inputClassName =
+  "h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
+
+export function ClientAreaLoginFormPanel({
+  locale,
+  login,
+  supportHref,
+  pending,
+  showPassword,
+  formAction,
+  onTogglePassword,
+  onOpenDownloadModal,
+}: ClientAreaLoginFormPanelProps) {
+  const passwordToggleLabel =
+    locale === "id"
+      ? showPassword
+        ? "Sembunyikan password"
+        : "Tampilkan password"
+      : showPassword
+        ? "Hide password"
+        : "Show password";
+  const submitLabel = "LOGIN";
+  const registerLabel = locale === "id" ? "REGISTRASI" : "REGISTER";
+
+  return (
+    <div className="mx-auto flex flex-1 items-center justify-center py-4 sm:py-6 xl:mx-0 xl:basis-[27.5rem] xl:grow-0 xl:shrink-0 xl:py-8">
+      <div className="w-full max-w-[27.5rem] rounded-[1.25rem] border border-white/[0.12] bg-zinc-900/35 px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl sm:px-8 sm:py-9">
+        <a href={`${PUBLIC_WEBSITE_URL}/${locale}`} className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-600 bg-zinc-500/20 hover:bg-zinc-500/10 rounded py-1 px-2 w-fit mb-4">
+          <ArrowLeft className="w-5" /> <span>Back to Dashboard</span>
+        </a>
+
+        <h1 className="mb-5 text-[1.75rem] font-extrabold tracking-[-0.02em] text-white">
+          {login.title}
+        </h1>
+
+        <form action={formAction} className="flex flex-col gap-[0.9rem]">
+          <input type="hidden" name="locale" value={locale} />
+
+          <div className="relative">
+            <input
+              id="client-area-account"
+              name="account"
+              type="text"
+              required
+              disabled={pending}
+              placeholder={login.accountPlaceholder}
+              className={inputClassName}
+            />
+          </div>
+
+          <div className="relative flex items-center">
+            <input
+              id="client-area-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+              disabled={pending}
+              placeholder={login.passwordPlaceholder}
+              className={`${inputClassName} pr-12`}
+            />
+            <button
+              type="button"
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-[0.9rem] leading-none text-gray-500 transition-colors hover:text-gray-300"
+              onClick={onTogglePassword}
+              aria-label={passwordToggleLabel}
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeClosed /> : <Eye />}
+              {/* <FontAwesomeIcon icon={["fas", showPassword ? "eye-slash" : "eye"]} /> */}
+            </button>
+          </div>
+
+          <div className="mb-3 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex cursor-pointer select-none items-center gap-2 text-[0.82rem] text-gray-400">
+              <input
+                name="rememberMe"
+                type="checkbox"
+                disabled={pending}
+                className="size-[0.9rem] cursor-pointer accent-amber-500"
+              />
+              <span>{login.rememberMe}</span>
+            </label>
+            <Link
+              href={supportHref}
+              className="text-[0.82rem] text-gray-400 transition-colors hover:text-amber-500"
+            >
+              {login.forgotPassword}
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            disabled={pending}
+            className="mt-1 flex h-[3.125rem] w-full items-center justify-center gap-2 cursor-pointer rounded-[0.6rem] bg-gradient-to-r from-amber-500 to-amber-600 text-[0.92rem] font-black tracking-[0.12em] text-black shadow-[0_4px_24px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[opacity,box-shadow,transform] enabled:hover:-translate-y-px enabled:hover:opacity-95 enabled:hover:shadow-[0_6px_32px_rgba(245,158,11,0.55)] disabled:cursor-not-allowed disabled:opacity-[0.55]"
+          >
+            {pending ? (
+              <>
+                <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-black/25 border-t-black" />
+                {login.submitting}
+              </>
+            ) : (
+              submitLabel
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="flex h-[3.125rem] w-full items-center justify-center rounded-[0.6rem] cursor-pointer border border-amber-500/30 bg-transparent text-[0.92rem] font-black tracking-[0.12em] text-amber-500 transition-[background-color,border-color,box-shadow,transform] hover:-translate-y-px hover:border-amber-500/[0.55] hover:bg-amber-500/[0.08] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+            onClick={onOpenDownloadModal}
+          >
+            {registerLabel}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

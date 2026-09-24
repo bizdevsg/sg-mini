@@ -1,0 +1,680 @@
+"use client";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
+import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { HistoricalDataMetricCard } from "@/components/molecules/HistoricalDataMetricCard";
+import { HistoricalDataRecordCard } from "@/components/molecules/HistoricalDataRecordCard";
+import { PaginationControls } from "@/components/molecules/PaginationControls";
+import { ScrollReveal } from "@/components/molecules/ScrollReveal";
+import { type HistoricalDataRecord } from "@/lib/historical-data";
+import {
+  isWithinHistoricalDateRange,
+  toHistoricalDateKey,
+} from "@/lib/historical-data.shared";
+import {
+  formatLocaleNumber,
+  getLocaleConfig,
+  getMessages,
+  type AppLocale,
+} from "@/locales";
+import Image from "next/image";
+
+type HistoricalDataBrowserProps = {
+  locale: AppLocale;
+  records: HistoricalDataRecord[];
+};
+
+type HistoricalDataMetricCardItem = {
+  label: string;
+  value: string;
+  valueClassName?: string;
+};
+
+const PAGE_SIZE = 25;
+const PRIORITY_CATEGORY = "LGD Daily";
+
+function getCategorySortPriority(category: string) {
+  if (category === PRIORITY_CATEGORY) {
+    return 0;
+  }
+
+  const normalizedCategory = category.toLowerCase();
+
+  if (normalizedCategory.includes("daily")) {
+    return 1;
+  }
+
+  const commodityKeywords = [
+    "commodity",
+    "commodit",
+    "gold",
+    "silver",
+    "oil",
+    "crude",
+    "brent",
+    "metal",
+    "bullion",
+    "lgd",
+  ];
+  const currencyKeywords = [
+    "currenc",
+    "forex",
+    "fx",
+    "aud",
+    "eur",
+    "gbp",
+    "usd",
+    "jpy",
+    "cad",
+    "chf",
+    "nzd",
+  ];
+
+  if (
+    commodityKeywords.some((keyword) => normalizedCategory.includes(keyword))
+  ) {
+    return 2;
+  }
+
+  if (
+    currencyKeywords.some((keyword) => normalizedCategory.includes(keyword))
+  ) {
+    return 3;
+  }
+
+  return 4;
+}
+
+function formatHistoricalDate(value: string, locale: AppLocale) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
+    dateStyle: "medium",
+    timeZone: getLocaleConfig(locale).timeZone,
+  }).format(date);
+}
+
+const CATEGORY_MENU_SCROLL_AREA_CLASSNAME = [
+  "max-h-64 overflow-y-auto py-2",
+  "[scrollbar-color:rgba(234,179,8,0.55)_rgba(255,255,255,0.08)] [scrollbar-width:thin]",
+  "[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2",
+  "[&::-webkit-scrollbar-track]:bg-white/[0.08]",
+  "[&::-webkit-scrollbar-track]:rounded-full",
+  "[&::-webkit-scrollbar-thumb]:rounded-full",
+  "[&::-webkit-scrollbar-thumb]:bg-yellow-500/55",
+].join(" ");
+
+export function HistoricalDataBrowser({
+  locale,
+  records,
+}: HistoricalDataBrowserProps) {
+  const labels = getMessages(locale).historicalDataBrowser;
+
+  const categories = Array.from(
+    new Set(records.map((record) => record.category)),
+  ).sort((left, right) => {
+    const priorityDiff =
+      getCategorySortPriority(left) - getCategorySortPriority(right);
+
+    if (priorityDiff !== 0) {
+      return priorityDiff;
+    }
+
+    return left.localeCompare(right);
+  });
+  const [selectedCategory, setSelectedCategory] = useState(
+    categories.includes(PRIORITY_CATEGORY)
+      ? PRIORITY_CATEGORY
+      : (categories[0] ?? ""),
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rangeFrom, setRangeFrom] = useState("");
+  const [rangeTo, setRangeTo] = useState("");
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const [isMobileFilterModalOpen, setIsMobileFilterModalOpen] = useState(false);
+  const categoryMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!categoryMenuRef.current?.contains(event.target as Node)) {
+        setIsCategoryMenuOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsCategoryMenuOpen(false);
+        setIsMobileFilterModalOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      if (selectedCategory !== "") {
+        setSelectedCategory("");
+      }
+      return;
+    }
+
+    if (!categories.includes(selectedCategory)) {
+      setSelectedCategory(
+        categories.includes(PRIORITY_CATEGORY)
+          ? PRIORITY_CATEGORY
+          : categories[0],
+      );
+      setCurrentPage(1);
+    }
+  }, [categories, selectedCategory]);
+
+  const dateBounds = records.reduce(
+    (bounds, record) => {
+      const dateKey = toHistoricalDateKey(record.tanggal);
+
+      if (!dateKey) {
+        return bounds;
+      }
+
+      return {
+        min: !bounds.min || dateKey < bounds.min ? dateKey : bounds.min,
+        max: !bounds.max || dateKey > bounds.max ? dateKey : bounds.max,
+      };
+    },
+    { min: "", max: "" },
+  );
+
+  const filteredRecords = records.filter(
+    (record) =>
+      record.category === selectedCategory &&
+      isWithinHistoricalDateRange(record.tanggal, rangeFrom, rangeTo),
+  );
+  const totalPages = Math.max(1, Math.ceil(filteredRecords.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * PAGE_SIZE;
+  const visibleRecords = filteredRecords.slice(
+    startIndex,
+    startIndex + PAGE_SIZE,
+  );
+  const latestDate = filteredRecords[0]?.tanggal;
+  const isRangeActive = Boolean(rangeFrom || rangeTo);
+  const metricCards: HistoricalDataMetricCardItem[] = [
+    {
+      label: labels.records,
+      value: String(filteredRecords.length),
+    },
+    {
+      label: labels.categories,
+      value: String(categories.length),
+    },
+    {
+      label: labels.latestDate,
+      value: latestDate ? formatHistoricalDate(latestDate, locale) : "-",
+      valueClassName: "text-lg font-bold text-yellow-500",
+    },
+  ];
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    setIsCategoryMenuOpen(false);
+  };
+
+  const handleRangeFromChange = (value: string) => {
+    setRangeFrom(value);
+    setCurrentPage(1);
+  };
+
+  const handleRangeToChange = (value: string) => {
+    setRangeTo(value);
+    setCurrentPage(1);
+  };
+
+  const handleRangeReset = () => {
+    setRangeFrom("");
+    setRangeTo("");
+    setCurrentPage(1);
+  };
+
+  const buildExportHref = (format: "csv" | "pdf") => {
+    const exportParams = new URLSearchParams({
+      category: selectedCategory,
+      format,
+      locale,
+    });
+
+    if (rangeFrom) {
+      exportParams.set("from", rangeFrom);
+    }
+
+    if (rangeTo) {
+      exportParams.set("to", rangeTo);
+    }
+
+    return `/api/historical-data/export?${exportParams.toString()}`;
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-3 sm:grid-cols-3">
+        {metricCards.map((metricCard) => (
+          <ScrollReveal
+            key={metricCard.label}
+            effect="fade-up"
+          >
+            <HistoricalDataMetricCard
+              label={metricCard.label}
+              value={metricCard.value}
+              valueClassName={metricCard.valueClassName}
+            />
+          </ScrollReveal>
+        ))}
+      </div>
+
+      <ScrollReveal effect="fade-up" className="relative z-40">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => setIsMobileFilterModalOpen(true)}
+            className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-500 transition hover:bg-yellow-500/20 md:hidden"
+            aria-haspopup="dialog"
+            aria-expanded={isMobileFilterModalOpen}
+          >
+            <FontAwesomeIcon icon={["fas", "sliders"]} className="text-xs" />
+            {labels.category}
+            {isRangeActive ? (
+              <span className="h-1.5 w-1.5 rounded-full bg-yellow-400" />
+            ) : null}
+          </button>
+
+          <div className="hidden items-center gap-4 md:flex">
+            <div className="relative" ref={categoryMenuRef}>
+              <button
+                type="button"
+                onClick={() =>
+                  setIsCategoryMenuOpen((currentValue) => !currentValue)
+                }
+                className="flex min-w-[180px] items-center justify-between gap-3 rounded-full bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+                aria-haspopup="listbox"
+                aria-expanded={isCategoryMenuOpen}
+                aria-label={labels.category}
+              >
+                <span className="min-w-0 truncate">
+                  {selectedCategory || labels.category}
+                </span>
+                <svg
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  className={
+                    isCategoryMenuOpen
+                      ? "shrink-0 rotate-180 transition-transform duration-200"
+                      : "shrink-0 transition-transform duration-200"
+                  }
+                >
+                  <path
+                    d="M1.5 1.5L6 6L10.5 1.5"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+
+              {isCategoryMenuOpen ? (
+                <div
+                  className={`absolute left-0 top-[calc(100%+0.5rem)] z-30 w-56 rounded-xl bg-neutral-950 shadow-[0_18px_40px_rgba(0,0,0,0.38)] ${CATEGORY_MENU_SCROLL_AREA_CLASSNAME}`}
+                  role="listbox"
+                  aria-label={labels.category}
+                >
+                  {categories.map((category) => {
+                    const isSelected = category === selectedCategory;
+
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        onClick={() => handleCategoryChange(category)}
+                        className={
+                          isSelected
+                            ? "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-yellow-400"
+                            : "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-foreground/82 transition hover:bg-white/5"
+                        }
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span className="min-w-0 truncate">{category}</span>
+                        {isSelected ? (
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-500/80" />
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
+
+            {records.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <input
+                  type="date"
+                  value={rangeFrom}
+                  min={dateBounds.min || undefined}
+                  max={rangeTo || dateBounds.max || undefined}
+                  onChange={(event) => handleRangeFromChange(event.target.value)}
+                  aria-label={`${labels.rangeLabel} — ${labels.rangeFrom}`}
+                  className="rounded-full border border-line bg-white/5 px-4 py-2 text-sm text-foreground/88 outline-none transition scheme-dark focus:border-yellow-500/60"
+                />
+
+                <span className="text-yellow-500/50">to</span>
+
+                <input
+                  type="date"
+                  value={rangeTo}
+                  min={rangeFrom || dateBounds.min || undefined}
+                  max={dateBounds.max || undefined}
+                  onChange={(event) => handleRangeToChange(event.target.value)}
+                  aria-label={`${labels.rangeLabel} — ${labels.rangeTo}`}
+                  className="rounded-full border border-line bg-white/5 px-4 py-2 text-sm text-foreground/88 outline-none transition scheme-dark focus:border-yellow-500/60"
+                />
+
+                {isRangeActive ? (
+                  <button
+                    type="button"
+                    onClick={handleRangeReset}
+                    className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs font-medium text-foreground/72 transition hover:border-yellow-500/60 hover:text-yellow-400"
+                  >
+                    <FontAwesomeIcon icon={["fas", "xmark"]} className="text-xs" />
+                    {labels.rangeReset}
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+
+          {selectedCategory ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={buildExportHref("csv")}
+                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+              >
+                <FontAwesomeIcon icon={["fas", "file-csv"]} className="text-xs" />
+                {labels.downloadCsv}
+              </a>
+
+              <a
+                href={buildExportHref("pdf")}
+                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
+              >
+                <FontAwesomeIcon icon={["fas", "file-pdf"]} className="text-xs" />
+                {labels.downloadPdf}
+              </a>
+            </div>
+          ) : null}
+        </div>
+      </ScrollReveal>
+
+      {isMobileFilterModalOpen && typeof document !== "undefined"
+        ? createPortal(
+          <div
+            className="fixed inset-0 z-[150] flex items-center bg-black/60 p-4 backdrop-blur-md md:hidden"
+            onClick={() => setIsMobileFilterModalOpen(false)}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="historical-data-filter-title"
+              className="max-h-[85vh] w-full overflow-y-auto rounded-3xl border border-white/10 bg-[#090909]/95 p-5 shadow-[0_30px_80px_rgba(0,0,0,0.7)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <h3 id="historical-data-filter-title" className="text-lg font-semibold text-white">
+                  {labels.category}
+                </h3>
+                <button
+                  type="button"
+                  aria-label={labels.close}
+                  onClick={() => setIsMobileFilterModalOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl text-zinc-400 transition hover:bg-white/5 hover:text-white"
+                >
+                  <FontAwesomeIcon icon={["fas", "xmark"]} />
+                </button>
+              </div>
+
+              <div className="mt-5">
+                <p className="text-sm font-medium text-foreground/80">{labels.category}</p>
+                <div className={`mt-3 rounded-xl bg-white/[0.03] ${CATEGORY_MENU_SCROLL_AREA_CLASSNAME}`} role="listbox" aria-label={labels.category}>
+                  {categories.map((category) => {
+                    const isSelected = category === selectedCategory;
+
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        onClick={() => handleCategoryChange(category)}
+                        className={
+                          isSelected
+                            ? "flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm text-yellow-400"
+                            : "flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm text-foreground/82 transition hover:bg-white/5"
+                        }
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span className="min-w-0 truncate">{category}</span>
+                        {isSelected ? <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-500/80" /> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {records.length > 0 ? (
+                <div className="mt-6 border-t border-white/10 pt-5">
+                  <p className="text-sm font-medium text-foreground/80">{labels.rangeLabel}</p>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <label className="space-y-2 text-sm text-foreground/72">
+                      <span>{labels.rangeFrom}</span>
+                      <input
+                        type="date"
+                        value={rangeFrom}
+                        min={dateBounds.min || undefined}
+                        max={rangeTo || dateBounds.max || undefined}
+                        onChange={(event) => handleRangeFromChange(event.target.value)}
+                        className="w-full rounded-xl border border-line bg-white/5 px-4 py-3 text-sm text-foreground/88 outline-none transition scheme-dark focus:border-yellow-500/60"
+                      />
+                    </label>
+                    <label className="space-y-2 text-sm text-foreground/72">
+                      <span>{labels.rangeTo}</span>
+                      <input
+                        type="date"
+                        value={rangeTo}
+                        min={rangeFrom || dateBounds.min || undefined}
+                        max={dateBounds.max || undefined}
+                        onChange={(event) => handleRangeToChange(event.target.value)}
+                        className="w-full rounded-xl border border-line bg-white/5 px-4 py-3 text-sm text-foreground/88 outline-none transition scheme-dark focus:border-yellow-500/60"
+                      />
+                    </label>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="mt-6 grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
+                <button
+                  type="button"
+                  onClick={handleRangeReset}
+                  className="rounded-xl border border-white/10 py-3 text-sm font-medium text-foreground/80 transition hover:bg-white/5"
+                >
+                  {labels.rangeReset}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileFilterModalOpen(false)}
+                  className="rounded-xl bg-yellow-500 py-3 text-sm font-semibold text-black transition hover:bg-yellow-400"
+                >
+                  {labels.close}
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )
+        : null}
+
+      {visibleRecords.length === 0 ? (
+        <EmptyStatePanel body={labels.empty} />
+      ) : (
+        <>
+          <div className="grid gap-4 md:hidden">
+            {visibleRecords.map((record, index) => (
+              <ScrollReveal
+                key={record.id}
+                effect="fade-up"
+                delay={index * 150}
+              >
+                <HistoricalDataRecordCard
+                  locale={locale}
+                  record={record}
+                  labels={labels}
+                  formatDate={formatHistoricalDate}
+                />
+              </ScrollReveal>
+            ))}
+          </div>
+
+          <ScrollReveal>
+            <div className="relative">
+              <div className="absolute top-1/2 left-1/2 h-50 w-auto -translate-x-1/2 -translate-y-[130%]">
+                <Image
+                  src="/assets/Logo SG-WEB111.png"
+                  alt="Logo Solid Gold Berjangka"
+                  height={300}
+                  width={300}
+                  className="object-contain object-center opacity-10"
+                />
+              </div>
+
+              <div className="relative hidden overflow-hidden rounded-2xl border border-line md:block z-10">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border-collapse">
+                    <thead>
+                      <tr className="bg-white/5">
+                        <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.date}
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.category}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.open}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.high}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.low}
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs uppercase tracking-[0.14em] text-foreground/55">
+                          {labels.close}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visibleRecords.map((record) => (
+                        <tr
+                          key={record.id}
+                          className="border-t border-line align-middle odd:bg-white/0 even:bg-white/[0.03]"
+                        >
+                          <td className="px-4 py-3 text-sm text-foreground/78">
+                            {formatHistoricalDate(record.tanggal, locale)}
+                          </td>
+                          <td className="px-4 py-3 text-sm font-semibold text-yellow-500">
+                            {record.category}
+                          </td>
+                          {record.isBankHoliday ? (
+                            <td
+                              colSpan={4}
+                              className="px-4 py-3 text-center font-semibold text-foreground/62"
+                            >
+                              <div className="flex flex-col">
+                                <span className="text-sm">
+                                  ~ {labels.bankHoliday} ~
+                                </span>
+                                <span className="text-xs">
+                                  {record.description}
+                                </span>
+                              </div>
+                            </td>
+                          ) : (
+                            <>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.open, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.high, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.low, locale)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-sm text-foreground/78">
+                                {formatLocaleNumber(record.close, locale)}
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <PaginationControls
+            previousLabel={labels.previous}
+            nextLabel={labels.next}
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            onPrevious={() =>
+              setCurrentPage((currentPageValue) =>
+                Math.max(1, currentPageValue - 1),
+              )
+            }
+            onNext={() =>
+              setCurrentPage((currentPageValue) =>
+                Math.min(totalPages, currentPageValue + 1),
+              )
+            }
+            summary={
+              <>
+                {labels.showing} {startIndex + 1} {labels.to}{" "}
+                {startIndex + visibleRecords.length} {labels.ofRecords}{" "}
+                {filteredRecords.length}
+              </>
+            }
+            centerContent={
+              <div className="rounded-full border border-line px-4 py-2 text-sm text-foreground/72">
+                {labels.page} {safeCurrentPage} {labels.of} {totalPages}
+              </div>
+            }
+          />
+        </>
+      )}
+    </div >
+  );
+}

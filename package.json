@@ -1,39 +1,19 @@
 {
-  "name": "get-sgb",
+  "name": "sgb-platform",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "next dev --webpack",
-    "dev:turbo": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.2.0",
-    "@fortawesome/free-brands-svg-icons": "^7.2.0",
-    "@fortawesome/free-regular-svg-icons": "^7.2.0",
-    "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "@fortawesome/react-fontawesome": "^3.3.1",
-    "aos": "^2.3.4",
-    "firebase": "^12.16.0",
-    "flag-icons": "^7.5.0",
-    "jspdf": "^4.2.1",
-    "jspdf-autotable": "^5.0.8",
-    "lucide-react": "^1.23.0",
-    "next": "16.3.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "dev": "concurrently -n website,client-area -c blue,magenta \"npm:dev:website\" \"npm:dev:client-area\"",
+    "dev:website": "npm run dev --workspace=@sgb/website",
+    "dev:client-area": "npm run dev --workspace=@sgb/client-area",
+    "build:website": "npm run build --workspace=@sgb/website",
+    "build:client-area": "npm run build --workspace=@sgb/client-area",
+    "lint": "npm run lint --workspaces --if-present"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.7",
-    "playwright": "^1.63.0",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "concurrently": "^10.0.5"
   }
 }

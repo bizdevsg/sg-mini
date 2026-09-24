@@ -1,0 +1,69 @@
+import type { AppMessages } from "../../shared/messages";
+
+export const idNavbar: AppMessages["navbar"] = {
+  login: "Masuk",
+  openAccount: "Daftar",
+  switchLocaleLabel: "Pilih Bahasa",
+  switchLocaleIconAlt: "Ikon bendera Amerika Serikat",
+  openMenuLabel: "Buka menu navigasi",
+  closeMenuLabel: "Tutup menu navigasi",
+  scrollToTopLabel: "Kembali ke atas",
+  menuGroups: [
+    {
+      label: "Produk",
+      items: [
+        {
+          label: "Multilateral",
+          href: "/produk/multilateral",
+        },
+        { label: "Bilateral", href: "/produk/bilateral" },
+        { label: "Akun Reguler", href: "/produk/reguler" },
+        { label: "Akun Prime", href: "/produk/prime" },
+        { label: "Aplikasi Solid Gold", href: "/aplikasi-solid-gold" },
+        { label: "Live Quote", href: "/live-quote" },
+      ],
+    },
+    {
+      label: "Berita",
+      items: [
+        { label: "Berita Terkini", href: "/news" },
+        { label: "Kalender Ekonomi", href: "/economic-calendar" },
+        { label: "Historical Data", href: "/historical-data" },
+      ],
+    },
+    {
+      label: "Edukasi",
+      items: [
+        { label: "Cara Memulai", href: "/education/cara-memulai" },
+        { label: "Ebook", href: "/education/ebook" },
+        { label: "Market Academy", href: "/education/market-academy" },
+        { label: "Trading Rules", href: "/education/trading-rules" },
+        {
+          label: "Istilah Transaksi Online",
+          href: "/education/istilah-dalam-transaksi-online",
+        },
+        {
+          label: "Loco London Gold",
+          href: "/education/loco-london-gold",
+        },
+        {
+          label: "Simbol Index",
+          href: "/education/simbol-index",
+        },
+      ],
+    },
+    {
+      label: "Tentang",
+      items: [
+        { label: "Tentang Kami", href: "/about" },
+        { label: "Informasi", href: "/about/informasi" },
+        { label: "Legalitas Bisnis", href: "/about/legalitas-bisnis" },
+        { label: "Hubungi Kami", href: "/contact-us" },
+      ],
+    },
+    {
+      label: "Trade Pilot ",
+      href: "https://tradepilot.id/",
+    },
+  ],
+};

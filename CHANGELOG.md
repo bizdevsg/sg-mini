@@ -1,6 +1,8 @@
 ## [Unreleased]
 
 ### Added
+- Client Area kini memiliki page template admin tersendiri untuk sesi terautentikasi, lengkap dengan sidebar persisten, top bar responsif, drawer navigasi mobile, ringkasan profil, pemilih bahasa, notifikasi, iklan sidebar, dan aksi logout global tanpa memakai template website publik.
+- Repository diubah menjadi monorepo npm workspaces dengan aplikasi `apps/website` dan `apps/client-area` yang memiliki source, asset, konfigurasi Next.js, perintah development, dan target deployment independen.
 - Data sensitif berupa nomor identitas dan NPWP pada Profil Client Area kini memiliki aksi lihat dan konfirmasi password masing-masing melalui Server Action; server hanya mengirim field yang diminta, memeriksa sesi aktif, dan otomatis menyamarkan kembali data setelah dua menit.
 - Halaman Daily Statement ditambahkan ke Account Client Area dengan tab Account Statement, Open Position, dan Settled Statement yang memiliki state aktif maupun nonaktif yang tegas, ringkasan finansial serta posisi demo yang responsif, dan aksi unduh PDF berdasarkan tab aktif.
 - Halaman Dokumen Persetujuan ditambahkan ke Account Client Area dengan daftar formulir PBK/CDDS bergaya kartu gelap dan tipografi ringkas sesuai design system, aksi unduh PDF per dokumen, metadata rekening aktif, serta salinan konten Indonesia dan Inggris.
@@ -8,6 +10,10 @@
 - Konfigurasi root `vercel.json` ditambahkan dengan schema resmi Vercel dan framework preset Next.js agar konfigurasi deployment dapat divalidasi dan dikenali secara eksplisit.
 
 ### Changed
+- Halaman login Client Area kini memakai layout full-screen berbasis tinggi viewport; panel login dan visual mengisi seluruh ruang yang tersedia sementara disclaimer tetap berada di bagian bawah tanpa menyisakan area kosong pada layar desktop besar.
+- Shell admin Client Area kini memakai sidebar dashboard konvensional yang lebih ringkas dengan navigasi flat serta profil dan logout di bagian bawah; banner iklan dikeluarkan dari sidebar, sementara top bar dibuat fixed dan konten diberi offset agar tidak tertutup saat halaman digulir.
+- Website publik tidak lagi membaca sesi Client Area; tombol Client Area sekarang menuju deployment eksternal melalui `NEXT_PUBLIC_CLIENT_AREA_URL`, sementara route lama dialihkan untuk menjaga kompatibilitas tautan.
+- Aplikasi Client Area hanya mengekspos route Client Area dan mengarahkan root langsung ke halaman login bahasa Indonesia.
 - Setiap informasi pada accordion Profil Client Area kini ditampilkan sebagai kartu terpisah dengan border dan latar gelap, tetap responsif dalam satu kolom di mobile dan dua kolom di layar lebih besar.
 - Status akun demo pada Client Area kini menggunakan label ringkas `Verified`, dan nomor telepon kontak darurat demo ditampilkan lengkap.
 - Tombol Client Area di navbar kini menampilkan foto profil nasabah dengan ring beraksen emas ketika sesi login aktif; ikon akun tetap digantikan secara aman hanya pada kondisi terautentikasi.
@@ -22,6 +28,10 @@
 - Halaman publik `/education/ebook` kini memakai layout library editorial dengan CTA yang menggulir ke koleksi kategori. Seluruh CTA login Client Area dan download aplikasi dihapus agar materi ebook dapat dijelajahi langsung.
 
 ### Fixed
+- Wrapper form login Client Area kembali memakai lebar penuh hingga `27.5rem`, sehingga penambahan tautan kembali tidak membuat card dan field form menyusut mengikuti lebar konten.
+- Tautan kembali pada form login Client Area kini mengarah ke route dashboard Client Area sesuai locale dan tidak lagi memakai `href` kosong.
+- Komposisi halaman login Client Area kini berada di dalam container desktop terpusat dengan gutter kanan-kiri yang seimbang, jarak antarpanel yang lebih rapi, serta lebar form dan area visual yang lebih proporsional; visual utama dibuat sedikit lebih dominan sambil mempertahankan rasio aslinya agar ponsel dan ilustrasi tidak terpotong.
+- Docker build monorepo kini menyalin manifest package setiap workspace sebelum `npm ci`, sehingga dependency terpasang di tahap `deps` dan `/app/node_modules` tersedia untuk tahap builder. Build context juga mengecualikan output Next.js, cache dependency, dan aset proposal lokal agar transfer context lebih kecil.
 - Bubble Live Chat tidak lagi dipaksa menjadi `76x76px` oleh `TawkChatWidget`; ukuran bubble, badge, dan posisi panel kini sepenuhnya mengikuti konfigurasi responsif dari `widget.js`.
 - Gambar pada card berita dari SG Admin kini mengutamakan `image_url` dan selalu dimuat melalui proxy internal. Path lama `uploads/...` juga dinormalisasi menjadi URL storage yang benar, sehingga gambar tidak gagal saat diakses langsung oleh browser.
 - Tombol pemulihan pada error boundary global, locale, dan Client Area kini memakai callback `retry` dari Next.js 16.3, sehingga tidak lagi memanggil prop `unstable_retry` yang tidak tersedia di production bundle.

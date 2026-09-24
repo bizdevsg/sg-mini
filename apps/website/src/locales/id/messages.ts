@@ -1,0 +1,94 @@
+import type { AppMessages } from "../shared/messages";
+import { idApp } from "./content/app";
+import { idNavbar } from "./content/navbar";
+import { idHero } from "./content/hero";
+import { idRegulator } from "./content/regulator";
+import { idTrustStats } from "./content/trustStats";
+import { idSecurity } from "./content/security";
+import { idAppPromoSection } from "./content/appPromoSection";
+import { idHomeEbookPromo } from "./content/homeEbookPromo";
+import { idSpread } from "./content/spread";
+import { idBenefitSection } from "./content/benefitSection";
+import { idHomeWhyChoose } from "./content/homeWhyChoose";
+import { idFinalCta } from "./content/finalCta";
+import { idLiveQuoteSection } from "./content/liveQuoteSection";
+import { idLiveQuotePage } from "./content/liveQuotePage";
+import { idEbookPage } from "./content/ebookPage";
+import { idLiveQuoteTable } from "./content/liveQuoteTable";
+import { idAboutPage } from "./content/aboutPage";
+import { idAboutInformationPage } from "./content/aboutInformationPage";
+import { idAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
+import { idProductPage } from "./content/productPage";
+import { idProdukRegulerPage } from "./content/produkRegulerPage";
+import { idProdukPrimePage } from "./content/produkPrimePage";
+import { idEconomicCalendarPage } from "./content/economicCalendarPage";
+import { idEconomicCalendarBrowser } from "./content/economicCalendarBrowser";
+import { idHistoricalDataPage } from "./content/historicalDataPage";
+import { idHistoricalDataBrowser } from "./content/historicalDataBrowser";
+import { idNewsPage } from "./content/newsPage";
+import { idNewsBrowser } from "./content/newsBrowser";
+import { idNewsDetailPage } from "./content/newsDetailPage";
+import { idMarketAcademyPage } from "./content/marketAcademyPage";
+import { idMarketAcademyBrowser } from "./content/marketAcademyBrowser";
+import { idMarketAcademyDetailPage } from "./content/marketAcademyDetailPage";
+import { idBannerSlideshow } from "./content/bannerSlideshow";
+import { idBannerDetailPage } from "./content/bannerDetailPage";
+import { idPromoDetailPage } from "./content/promoDetailPage";
+import { idTermsConditionsPage } from "./content/termsConditionsPage";
+import { idPromoPage } from "./content/promoPage";
+import { idPrivacyPolicyPage } from "./content/privacyPolicyPage";
+import { idFraudAlertPage } from "./content/fraudAlertPage";
+import { idContactPage } from "./content/contactPage";
+import { idFaqPage } from "./content/faqPage";
+import { idClientArea } from "./content/clientArea";
+import { idCookieConsent } from "./content/cookieConsent";
+import { idFooter } from "./content/footer";
+import { idLoadingOverlay } from "./content/loadingOverlay";
+
+export const idMessages: AppMessages = {
+  app: idApp,
+  navbar: idNavbar,
+  hero: idHero,
+  regulator: idRegulator,
+  trustStats: idTrustStats,
+  security: idSecurity,
+  appPromoSection: idAppPromoSection,
+  homeEbookPromo: idHomeEbookPromo,
+  spread: idSpread,
+  benefitSection: idBenefitSection,
+  homeWhyChoose: idHomeWhyChoose,
+  finalCta: idFinalCta,
+  liveQuoteSection: idLiveQuoteSection,
+  liveQuotePage: idLiveQuotePage,
+  ebookPage: idEbookPage,
+  liveQuoteTable: idLiveQuoteTable,
+  aboutPage: idAboutPage,
+  aboutInformationPage: idAboutInformationPage,
+  aboutBusinessLegalityPage: idAboutBusinessLegalityPage,
+  productPage: idProductPage,
+  produkRegulerPage: idProdukRegulerPage,
+  produkPrimePage: idProdukPrimePage,
+  economicCalendarPage: idEconomicCalendarPage,
+  economicCalendarBrowser: idEconomicCalendarBrowser,
+  historicalDataPage: idHistoricalDataPage,
+  historicalDataBrowser: idHistoricalDataBrowser,
+  newsPage: idNewsPage,
+  newsBrowser: idNewsBrowser,
+  newsDetailPage: idNewsDetailPage,
+  marketAcademyPage: idMarketAcademyPage,
+  marketAcademyBrowser: idMarketAcademyBrowser,
+  marketAcademyDetailPage: idMarketAcademyDetailPage,
+  bannerSlideshow: idBannerSlideshow,
+  bannerDetailPage: idBannerDetailPage,
+  promoDetailPage: idPromoDetailPage,
+  termsConditionsPage: idTermsConditionsPage,
+  promoPage: idPromoPage,
+  privacyPolicyPage: idPrivacyPolicyPage,
+  fraudAlertPage: idFraudAlertPage,
+  contactPage: idContactPage,
+  faqPage: idFaqPage,
+  clientArea: idClientArea,
+  cookieConsent: idCookieConsent,
+  footer: idFooter,
+  loadingOverlay: idLoadingOverlay,
+};

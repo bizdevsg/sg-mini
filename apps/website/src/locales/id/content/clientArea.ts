@@ -1,0 +1,664 @@
+import type { AppMessages } from "../../shared/messages";
+
+export const idClientArea: AppMessages["clientArea"] = {
+  pageTitle: "Beranda",
+  pageDescription:
+    "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
+  viewOnlyDisclaimer: {
+    label: "Disclaimer:",
+    body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
+  },
+  login: {
+    badge: "Portal Nasabah",
+    title: "Masuk Client Area",
+    description:
+      "Autentikasi akun sedang disiapkan dan belum tersedia melalui website.",
+    accountLabel: "Nomor akun atau email",
+    accountPlaceholder: "Masukkan nomor akun atau email",
+    passwordLabel: "Password",
+    passwordPlaceholder: "Masukkan password Anda",
+    rememberMe: "Ingat saya di perangkat ini",
+    forgotPassword: "Lupa password?",
+    primaryCta: "Masuk belum tersedia",
+    secondaryCta: "Hubungi support",
+    submitting: "Memverifikasi akun...",
+    helper:
+      "Silakan gunakan aplikasi resmi atau hubungi support untuk akses akun.",
+    captchaTitle: "Verifikasi keamanan",
+    captchaHelper: "Selesaikan reCAPTCHA sebelum masuk ke client area.",
+    demoCredentialsTitle: "Akses akun",
+    demoCredentialsAccount: "Akses melalui website belum tersedia.",
+    demoCredentialsPassword: "",
+    errorUnavailable:
+      "Client area sedang dinonaktifkan dari sistem admin. Coba lagi beberapa saat lagi.",
+    errorRequired: "Masukkan nomor akun atau email beserta password Anda.",
+    errorInvalidCredentials:
+      "Nomor akun, email, atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
+    errorSessionConfiguration:
+      "Login belum bisa diproses karena konfigurasi session server belum lengkap. Isi CLIENT_AREA_SESSION_SECRET terlebih dahulu.",
+    errorCaptchaRequired:
+      "Verifikasi keamanan belum berhasil. Silakan coba lagi.",
+    errorCaptchaFailed:
+      "Verifikasi reCAPTCHA gagal. Coba ulangi pemeriksaan keamanan.",
+    highlightsTitle: "Yang bisa Anda pantau",
+    highlights: [
+      "Ringkasan balance, equity, dan floating P/L real-time.",
+      "Akses cepat ke deposit, withdraw, edukasi, dan produk.",
+      "Market watch, berita, dan riwayat transaksi dalam area terpisah.",
+    ],
+    securityTitle: "Keamanan akun",
+    securityBody:
+      "Pastikan Anda hanya login melalui domain resmi dan jangan pernah membagikan OTP atau password kepada pihak lain.",
+  },
+  user: {
+    name: "Anita",
+    role: "Akun Demo Saya",
+    accountId: "1003713406",
+    status: "Demo",
+  },
+  sidebar: {
+    label: "Navigasi client",
+    backToWebsite: "Kembali ke website utama",
+    tradeCta: "Trade",
+    navItems: [
+      {
+        id: "home",
+        label: "Beranda",
+        href: "#overview",
+      },
+      {
+        id: "market",
+        label: "Pasar",
+        href: "#market",
+      },
+      {
+        id: "transaction",
+        label: "Transaksi",
+        href: "#actions",
+      },
+      {
+        id: "news",
+        label: "Berita",
+        href: "/news",
+      },
+      {
+        id: "ebook",
+        label: "Ebook",
+        href: "/ebook",
+      },
+      {
+        id: "account",
+        label: "Akun",
+        href: "#account",
+      },
+    ],
+  },
+  topbar: {
+    supportLabel: "Download Aplikasi MIFX",
+    supportPhone: "021-50996650",
+    logoutLabel: "Log Out",
+    logoutModal: {
+      title: "Keluar dari Client Area?",
+      description:
+        "Sesi Anda saat ini akan diakhiri dan Anda akan diarahkan kembali ke halaman login.",
+      cancelLabel: "Batal",
+      confirmLabel: "Ya, keluar",
+      submittingLabel: "Sedang keluar...",
+    },
+    primaryCta: "Buka Akun Live",
+    accountMode: "Demo",
+    notificationCount: "1",
+    breadcrumb: "1003713406",
+    navItems: [
+      {
+        label: "PRODUK",
+        href: "/produk/multilateral",
+      },
+      {
+        label: "EDUKASI",
+        href: "/education/cara-memulai",
+      },
+      {
+        label: "BERITA",
+        href: "/news",
+      },
+      {
+        label: "TENTANG",
+        href: "/about",
+      },
+    ],
+  },
+  accountPanel: {
+    eyebrow: "Akun Demo Saya",
+    title: "1003713406",
+    primaryCta: "Ubah Demo Balance",
+    items: [
+      {
+        id: "balance",
+        label: "Balance",
+        value: "$78.23",
+      },
+      {
+        id: "equity",
+        label: "Equity",
+        value: "$78.23",
+      },
+    ],
+  },
+  promoPanel: {
+    eyebrow: "MIFX Priority",
+    title: "Benefit eksklusif dan akses prioritas untuk client aktif.",
+    description:
+      "Siapkan area promo utama untuk campaign, loyalty, atau edukasi yang ingin ditonjolkan setelah user login.",
+    cta: "Pelajari sekarang",
+  },
+  quickActions: {
+    items: [
+      {
+        id: "education",
+        label: "Ebook",
+      },
+      {
+        id: "products",
+        label: "Produk",
+      },
+      {
+        id: "withdraw",
+        label: "Withdraw",
+      },
+      {
+        id: "deposit",
+        label: "Deposit",
+      },
+      {
+        id: "temporary",
+        label: "Transaksi",
+      },
+    ],
+  },
+  shortcutPanel: {
+    items: [
+      {
+        id: "signal",
+        label: "Trading Signal",
+      },
+      {
+        id: "mover",
+        label: "Top Mover",
+      },
+      {
+        id: "trending",
+        label: "Trending",
+      },
+      {
+        id: "products",
+        label: "Produk",
+      },
+      {
+        id: "education",
+        label: "Edukasi",
+      },
+      {
+        id: "rewards",
+        label: "Rewards",
+      },
+      {
+        id: "deposit",
+        label: "Deposit",
+      },
+      {
+        id: "more",
+        label: "Lainnya",
+      },
+    ],
+  },
+  signalsPanel: {
+    title: "Rekomendasi",
+    cta: "Lihat semua",
+    items: [
+      {
+        symbol: "XAUUSD",
+        title: "Gold",
+        time: "15:56 WIB",
+        bias: "sell",
+      },
+      {
+        symbol: "EURUSD",
+        title: "EURUSD",
+        time: "16:01 WIB",
+        bias: "buy",
+      },
+      {
+        symbol: "USDJPY",
+        title: "USDJPY",
+        time: "16:05 WIB",
+        bias: "buy",
+      },
+      {
+        symbol: "GBPUSD",
+        title: "GBPUSD",
+        time: "16:04 WIB",
+        bias: "buy",
+      },
+      {
+        symbol: "OIL",
+        title: "Oil",
+        time: "16:07 WIB",
+        bias: "sell",
+      },
+    ],
+  },
+  servicePanel: {
+    title: "Layanan Nasabah",
+    items: [
+      {
+        label: "Live Quote",
+        description:
+          "Pantau harga real-time untuk keputusan entry yang lebih cepat.",
+        cta: "Buka market feed",
+      },
+      {
+        label: "Kalender Ekonomi",
+        description:
+          "Lihat agenda high impact yang bisa memengaruhi volatilitas harian.",
+        cta: "Lihat jadwal",
+      },
+      {
+        label: "Bantuan Client Service",
+        description:
+          "Hubungi support untuk kendala login, transaksi, atau verifikasi data.",
+        cta: "Hubungi support",
+      },
+    ],
+  },
+  accountPage: {
+    activeAccount: "Akun aktif",
+    backLabel: "Back",
+    pendingSectionNote:
+      "Detail untuk section ini menyusul. Untuk sekarang fokusnya baru di Data Pribadi.",
+    saveLabel: "Simpan",
+    viewOnly: {
+      badge: "Secure",
+      profileLabel: "Profil Nasabah",
+      personalDescription: "Identitas dan informasi kontak utama",
+      purposeDescription: "Profil investasi dan tujuan transaksi",
+      emergencyDescription: "Kontak darurat yang dapat dihubungi",
+      employmentDescription: "Informasi pekerjaan dan penghasilan",
+      wealthDescription: "Aset dan portofolio kepemilikan",
+      photoLabel: "Foto profil",
+      accountIdLabel: "Nomor akun",
+    },
+    sections: {
+      personal: "Data Pribadi",
+      purpose: "Tujuan Pembukaan Rekening",
+      emergency: "Data Darurat Yang Bisa Dihubungi",
+      job: "Data Pekerjaan",
+      wealth: "Data Kekayaan",
+    },
+    menuItems: {
+      profile: "Profil",
+      referral: "Referral SG Solid",
+      documentApproval: "Dokumen Persetujuan",
+      dailyStatement: "Daily Statement",
+      withdrawal: "Withdrawal",
+      deposit: "Deposit",
+    },
+    accountCenter: {
+      statusLabel: "Status akun",
+      servicesTitle: "Layanan akun",
+      servicesDescription:
+        "Pilih layanan yang ingin Anda lihat atau kelola.",
+    },
+    menuDescriptions: {
+      profile: "Lihat identitas, kontak, pekerjaan, dan profil keuangan.",
+      referral: "Akses kode referral dan informasi program SG Solid.",
+      documentApproval: "Tinjau dokumen persetujuan yang terkait dengan akun.",
+      dailyStatement: "Lihat ringkasan aktivitas dan laporan harian akun.",
+      withdrawal: "Buka layanan pengajuan penarikan dana.",
+      deposit: "Buka layanan informasi dan penyetoran dana.",
+    },
+    fields: {
+      fullName: "Nama Lengkap",
+      email: "Email",
+      birthPlace: "Tempat Lahir",
+      birthDate: "Tanggal Lahir",
+      identityNumber: "No. Identitas (KTP / Paspor)",
+      taxNumber: "No. NPWP",
+      gender: "Jenis Kelamin",
+      maritalStatus: "Status Perkawinan",
+      spouseName: "Nama Istri / Suami",
+      homeAddress: "Alamat Rumah",
+      rt: "RT",
+      rw: "RW",
+      province: "Provinsi",
+      city: "Kabupaten / Kota",
+      subdistrict: "Kelurahan",
+      postalCode: "Kode Pos",
+      phone: "No. Handphone",
+      openingPurpose: "Tujuan Pembukaan Rekening",
+      sourceFunds: "Sumber Dana",
+      estimatedTransaction: "Estimasi Nilai Transaksi",
+      investmentExperience: "Pengalaman Investasi",
+      investmentField: "Bidang Investasi",
+      futuresExperience: "Pengalaman Transaksi Perdagangan Berjangka",
+      familyAffiliation:
+        "Memiliki keluarga yang bekerja di BAPPEBTI / Bursa Berjangka / Lembaga Kliring Berjangka",
+      familyAffiliationDetail: "Keterangan",
+      bankruptStatus: "Apakah Anda telah dinyatakan pailit oleh Pengadilan",
+      emergencyName: "Nama",
+      emergencyRelationship: "Hubungan",
+      emergencyAddress: "Alamat Rumah",
+      emergencyNeighborhood: "RT / RW",
+      emergencyProvince: "Provinsi",
+      emergencyCity: "Kabupaten / Kota",
+      emergencySubdistrict: "Kelurahan",
+      emergencyPostalCode: "Kode Pos",
+      emergencyPhone: "No. Telepon",
+      occupation: "Pekerjaan",
+      companyName: "Nama Perusahaan",
+      businessSector: "Bidang Usaha",
+      position: "Jabatan",
+      yearsWorking: "Lama Bekerja",
+      previousOffice: "Kantor Sebelumnya",
+      officeAddress: "Alamat Kantor",
+      officePostalCode: "Kode Pos",
+      officePhone: "No. Telepon Kantor",
+      monthlyIncome: "Penghasilan Bulanan",
+      annualIncome: "Penghasilan Pertahun",
+      totalAssets: "Total Aset",
+      propertyOwnership: "Kepemilikan Properti",
+      vehicleOwnership: "Kepemilikan Kendaraan",
+      houseLocation: "Rumah, Lokasi",
+      njop: "Nilai Jual Objek Pajak (NJOP)",
+      bankDeposit: "Deposit Bank",
+      amount: "Jumlah",
+      otherAssets: "Lainnya",
+      otherInvestments: "Investasi Lainnya",
+      bankAccount: "Rekening Bank",
+      occupationOther: "Lainnya, sebutkan",
+    },
+    options: {
+      binary: [
+        {
+          value: "yes",
+          label: "Ya",
+        },
+        {
+          value: "no",
+          label: "Tidak",
+        },
+      ],
+      purpose: [
+        {
+          value: "hedging",
+          label: "Lindung Nilai",
+        },
+        {
+          value: "speculation",
+          label: "Spekulasi",
+        },
+        {
+          value: "other",
+          label: "Lainnya,",
+        },
+      ],
+      investmentExperience: [
+        {
+          value: "yes",
+          label: "Ya, Bidang:",
+        },
+        {
+          value: "no",
+          label: "Tidak",
+        },
+      ],
+      occupation: [
+        {
+          value: "private",
+          label: "Swasta",
+        },
+        {
+          value: "entrepreneur",
+          label: "Wiraswasta",
+        },
+        {
+          value: "homemaker",
+          label: "Ibu RT",
+        },
+        {
+          value: "professional",
+          label: "Professional",
+        },
+        {
+          value: "government",
+          label: "Peg. Negeri",
+        },
+        {
+          value: "stateOwned",
+          label: "Peg. BUMN",
+        },
+        {
+          value: "student",
+          label: "Mahasiswa",
+        },
+        {
+          value: "other",
+          label: "Lainnya, sebutkan",
+        },
+      ],
+      annualIncome: [
+        {
+          value: "100to250",
+          label: "Antara Rp 100 - 250 Juta",
+        },
+        {
+          value: "250to500",
+          label: "Antara Rp 250 - 500 Juta",
+        },
+        {
+          value: "gt500",
+          label: "Diatas Rp 500 Juta",
+        },
+      ],
+    },
+  },
+  approvalDocumentPage: {
+    title: "Dokumen Persetujuan",
+    description:
+      "Tinjau dan unduh salinan formulir persetujuan yang terkait dengan rekening Anda.",
+    downloadLabel: "Unduh",
+    preparingLabel: "Menyiapkan",
+    accountHolderLabel: "Nama nasabah",
+    accountNumberLabel: "Nomor rekening",
+    generatedAtLabel: "Diunduh pada",
+    pdfNotice:
+      "Dokumen ini merupakan salinan digital untuk rekening yang sedang aktif di Client Area.",
+    documents: [
+      { id: "cdds-01", code: "Formulir PBK. CDDS. 01", title: "Profil Perusahaan Pialang Berjangka" },
+      { id: "cdds-02-1", code: "Formulir PBK. CDDS. 02.1", title: "Pernyataan Telah Melakukan Simulasi Perdagangan Berjangka" },
+      { id: "cdds-02-2", code: "Formulir PBK. CDDS. 02.2", title: "Pernyataan Telah Berpengalaman Dalam Melaksanakan Transaksi Perdagangan Berjangka" },
+      { id: "cdds-03-1", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
+      { id: "cdds-04", code: "Formulir PBK. CDDS. 04", title: "Aplikasi Pembukaan Rekening Transaksi" },
+      { id: "cdds-03-2", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
+      { id: "cdds-05", code: "Formulir PBK. CDDS. 05", title: "Dokumen Pemberitahuan Adanya Risiko" },
+      { id: "cdds-03-3", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
+      { id: "cdds-06", code: "Formulir PBK. CDDS. 06", title: "Perjanjian Pemberian Amanat" },
+      { id: "cdds-07", code: "Formulir PBK. CDDS. 07", title: "Daftar Kontrak Berjangka, Kontrak Derivatif Dan Kontrak Derivatif Lainnya Beserta Peraturan Perdagangan (Trading Rules)" },
+      { id: "cdds-08", code: "Formulir PBK. CDDS. 08", title: "Pernyataan Bertanggung Jawab Atas Kode Akses Transaksi Nasabah (Personal Access Password)" },
+    ],
+  },
+  dailyStatementPage: {
+    title: "Daily Statement",
+    description: "Ringkasan posisi dan mutasi harian rekening perdagangan Anda.",
+    downloadLabel: "Unduh Daily Statement",
+    preparingLabel: "Menyiapkan PDF",
+    tabs: {
+      account: "Account Statement",
+      open: "Open Position",
+      settled: "Settled Statement",
+    },
+    labels: {
+      accountNumber: "Account No.",
+      aeCode: "AE Code",
+      date: "Date",
+      previousBalance: "Previous Balance",
+      marginMovement: "Margin In/Out",
+      storageRollover: "Storage/Rollover",
+      profitLoss: "Profit/Loss",
+      facilityFee: "Facility Fee",
+      vat: "VAT",
+      premiumDiscount: "Premium/Discount",
+      interest: "Interest",
+      adjustment: "Adjustment",
+      newBalance: "New Balance",
+      floatingPl: "Floating P/L",
+      equity: "Equity",
+      marginRequired: "Margin Required",
+      effectiveMargin: "Effective Margin",
+      equityRate: "Equity Rate",
+      openPrice: "Open Price",
+      marketPrice: "Market Price",
+      closePrice: "Close Price",
+    },
+    openPositions: [
+      { id: "open-xul10", symbol: "XUL10", side: "BUY", volume: "1.00 lot", openPrice: "$ 2,615.40", marketPrice: "$ 2,619.90", floatingPl: "+$ 450.00" },
+      { id: "open-eu1010", symbol: "EU1010", side: "BUY", volume: "0.50 lot", openPrice: "$ 1.08320", marketPrice: "$ 1.08410", floatingPl: "+$ 45.00" },
+    ],
+    settledPositions: [
+      { id: "settled-xul10", symbol: "XUL10", side: "BUY", volume: "2.00 lot", openPrice: "$ 2,594.20", closePrice: "$ 2,613.75", profitLoss: "+$ 3,910.00" },
+      { id: "settled-hkk50", symbol: "HKK50_BBJ", side: "SELL", volume: "1.00 lot", openPrice: "$ 19,844.00", closePrice: "$ 19,812.00", profitLoss: "+$ 320.00" },
+    ],
+  },
+  referralPage: {
+    title: "Kode Referal",
+    description:
+      "Ajak teman untuk bergabung dan nikmati reward dari aktivitas trading mereka.",
+    hero: {
+      eyebrow: "Program Referral SG Solid",
+      title: "Ajak Teman,\nDapatkan Reward",
+      description:
+        "Bagikan peluang ke jaringan kamu dan nikmati komisi dari teman yang aktif.",
+      cta: "Daftar Sekarang",
+      brandAlt: "PT Solid Gold Berjangka",
+      visualAlt: "Visual program referral SG Solid",
+    },
+    stepsTitle: "Cara Kerja Program Referral SG Solid",
+    steps: [
+      "Dapatkan link atau kode referal dari akun SG Solid Anda.",
+      "Bagikan kepada calon pengguna.",
+      "Pengguna mendaftar akun trading melalui referral Anda.",
+      "Anda memperoleh komisi dari aktivitas trading sesuai ketentuan yang berlaku.",
+    ],
+    closing:
+      "Segera bergabung dengan Program Referral dan mulai bagikan link Anda untuk mendapatkan keuntungan. Daftarkan diri Anda sekarang dan maksimalkan peluang melalui Program Referral SG Solid.",
+  },
+  withdrawalHistoryPage: {
+    title: "Riwayat Withdrawal",
+    description:
+      "Pantau status penarikan dana, rekening tujuan, dan referensi transaksi withdraw terbaru Anda.",
+    summary: {
+      totalCompleted: "Total Withdraw Selesai",
+      activeRequests: "Permintaan Aktif",
+      lastProcessed: "Terakhir Diproses",
+      destinationBank: "Bank Tujuan Utama",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Tanggal Request",
+      processedDate: "Diproses",
+      destination: "Tujuan Dana",
+      amount: "Nominal",
+      fee: "Biaya",
+      netAmount: "Dana Bersih",
+      reference: "Referensi",
+      accountHolder: "Nama Pemilik Rekening",
+      note: "Catatan",
+    },
+    status: {
+      completed: "Berhasil",
+      pending: "Menunggu",
+      processing: "Diproses",
+      rejected: "Ditolak",
+    },
+    emptyTitle: "Belum ada riwayat withdrawal.",
+    emptyBody:
+      "Permintaan withdrawal yang Anda buat akan tampil di halaman ini setelah tercatat di sistem.",
+  },
+  depositHistoryPage: {
+    title: "Riwayat Deposit",
+    description:
+      "Lihat histori setoran dana, rekening pengirim, dan status kredit saldo ke akun trading Anda.",
+    summary: {
+      totalCompleted: "Total Deposit Berhasil",
+      activeRequests: "Permintaan Aktif",
+      lastProcessed: "Terakhir Diproses",
+      sourceBank: "Bank Pengirim Utama",
+    },
+    list: {
+      requestId: "Request ID",
+      requestDate: "Tanggal Request",
+      processedDate: "Diproses",
+      source: "Sumber Dana",
+      amount: "Nominal Transfer",
+      fee: "Biaya",
+      creditedAmount: "Dana Terkredit",
+      reference: "Referensi",
+      senderName: "Nama Pengirim",
+      tradingAccount: "Akun Trading",
+      note: "Catatan",
+    },
+    status: {
+      completed: "Berhasil",
+      pending: "Menunggu",
+      processing: "Diproses",
+      rejected: "Ditolak",
+    },
+    emptyTitle: "Belum ada riwayat deposit.",
+    emptyBody:
+      "Permintaan deposit Anda akan muncul di halaman ini setelah tercatat di sistem.",
+  },
+  marketSignalDetail: {
+    updatedLabel: "Update",
+    biasLabel: "Bias",
+    biasUpLabel: "Potensi Menguat",
+    biasDownLabel: "Potensi Melemah",
+    bidPriceLabel: "Bid Price",
+    askPriceLabel: "Ask Price",
+    todayMovementLabel: "Pergerakan Hari Ini",
+    latestSignalTitle: "Sinyal Terbaru",
+    entryLabel: "Entry",
+    takeProfitLabel: "Take Profit",
+    stopLossLabel: "Stop Loss",
+    sourceLabel: "Sumber",
+    timeframeLabel: "Timeframe Analisis Signal",
+    buyActionLabel: "Potensi Buy",
+    sellActionLabel: "Potensi Sell",
+    latestNewsTitle: "Berita Terbaru",
+    historyTitle: "Riwayat Signal",
+    transactionModal: {
+      buyBadgeLabel: "Sinyal Buy",
+      sellBadgeLabel: "Sinyal Sell",
+      buyTitle: "Transaksi Buy Tersedia di Aplikasi",
+      sellTitle: "Transaksi Sell Tersedia di Aplikasi",
+      buyDescription:
+        "Untuk membuka posisi Buy pada sinyal ini, silakan login melalui aplikasi Solid Gold Berjangka.",
+      sellDescription:
+        "Untuk membuka posisi Sell pada sinyal ini, silakan login melalui aplikasi Solid Gold Berjangka.",
+      closeLabel: "Tutup",
+    },
+  },
+  tradingView: {
+    disclaimerLabel: "Disclaimer:",
+    disclaimerTradingView:
+      "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda.",
+  },
+  fundTransferModal: {
+    closeLabel: "Tutup",
+    depositTitle: "Oops! Deposit Belum Bisa Dilakukan di Website",
+    withdrawalTitle: "Oops! Withdrawal Belum Bisa Dilakukan di Website",
+    depositDescription:
+      "Jangan khawatir, Anda tetap dapat melakukan deposit dengan mudah melalui aplikasi.",
+    withdrawalDescription:
+      "Jangan khawatir, Anda tetap dapat melakukan withdrawal dengan mudah melalui aplikasi.",
+  },
+};

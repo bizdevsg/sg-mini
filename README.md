@@ -1,253 +1,104 @@
-# SGB Website
+# SGB Platform Monorepo
 
-Website marketing dan resource portal untuk `PT Solid Gold Berjangka`, dibangun dengan `Next.js 16`, `React 19`, `TypeScript`, dan `Tailwind CSS v4`.
+Website publik dan Client Area PT Solid Gold Berjangka berada dalam dua aplikasi Next.js yang dapat dijalankan dan di-deploy secara independen.
 
-Project ini sudah mendukung:
+## Struktur
 
-- landing page bilingual: Indonesia (`id`) dan English (`en`)
-- live quote dengan websocket feed
-- halaman berita dan detail berita
-- economic calendar
-- historical data
-- halaman about
-- halaman ebook
-
-## Tech Stack
-
-- `next@16.2.7`
-- `react@19.2.4`
-- `typescript`
-- `tailwindcss@4`
-- `@fortawesome/react-fontawesome`
-
-## Locale
-
-Locale aktif:
-
-- `id`
-- `en`
-
-Default locale:
-
-- `id`
-
-Konfigurasi locale ada di [src/locales/config.ts](src/locales/config.ts).
-
-Struktur message locale:
-
-- [src/locales/id/messages.ts](src/locales/id/messages.ts)
-- [src/locales/en/messages.ts](src/locales/en/messages.ts)
-- [src/locales/shared/messages.ts](src/locales/shared/messages.ts)
-
-## Routes
-
-Route utama yang tersedia:
-
-- `/{locale}`: homepage
-- `/{locale}/about`
-- `/{locale}/ebook`
-- `/{locale}/live-quote`
-- `/{locale}/economic-calendar`
-- `/{locale}/historical-data`
-- `/{locale}/news`
-- `/{locale}/news/[slug]`
-
-Contoh:
-
-- `/id`
-- `/en/about`
-- `/id/news/rupiah-open-mixed`
-
-## Struktur Folder
-
-Folder inti project:
-
-- `src/app`
-  berisi app router dan semua route
-- `src/components`
-  berisi atoms, molecules, organisms, layouts, providers, dan content
-- `src/lib`
-  berisi helper env, fetcher API, formatter data, dan integrasi websocket
-- `src/locales`
-  berisi config locale, formatter locale, dan message per bahasa
-
-## Integrasi Data
-
-Project ini memakai beberapa sumber data:
-
-- Live quote websocket
-- Portal news API
-- Historical data API
-- Economic calendar API
-
-Helper env dan URL default ada di [src/lib/env.ts](src/lib/env.ts).
-
-## Environment Variables
-
-Variabel yang dipakai project ini untuk development lokal ada di `.env`:
-
-```env
-ENV_FILE=.env
-APP_ENV=dev
-INTERNAL_API_TOKEN=
-CLIENT_AREA_SESSION_SECRET=
-
-NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL=
-
-NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL=
-
-NEWS_API_URL=
-NEWS_API_URL_ID=
-NEWS_PORTAL_BASE_URL=
-NEWS_IMAGE_BASE_URL=
-EBOOK_CATEGORY_API_URL=
-PRODUCT_API_URL=
-PRODUCT_PORTAL_BASE_URL=
-# X-API-Key untuk API SG Admin, termasuk berita
-SG_ADMIN_API_KEY=
-SG_ADMIN_REQUEST_ORIGIN=
-CLIENT_AREA_CONFIG_API_URL=
-CLIENT_AREA_CONFIG_API_TOKEN=
-BANNER_API_URL=
-BANNER_DETAIL_API_URL=
-BANNER_IMAGE_BASE_URL=
-PENGHARGAAN_API_URL=
-PENGHARGAAN_IMAGE_BASE_URL=
-PENGUMUMAN_API_URL=
-CONTACT_MESSAGE_API_URL=
-COMPANY_PROFILE_API_URL=
-LEGALITAS_API_URL=
-PRIVACY_POLICY_API_URL=
-TERMS_CONDITIONS_API_URL=
-
-HISTORICAL_DATA_API_URL=
-HISTORICAL_DATA_API_TOKEN=
-
-ECONOMIC_CALENDAR_API_BASE_URL=
-ECONOMIC_CALENDAR_API_TOKEN=
-TRADINGVIEW_SYMBOL_API_URL=
-MARKET_SIGNAL_API_URL=
-MARKET_SIGNAL_IMAGE_BASE_URL=
-MARKET_ACADEMY_API_URL=
-FRANKFURTER_API_URL=
-
-NEXT_PUBLIC_PLACEHODER_BASE_URL=
-NEXT_PUBLIC_LOGIN_URL=
-NEXT_PUBLIC_REGISTER_URL=
-NEXT_PUBLIC_ENABLE_CLIENT_AREA=false
-NEXT_PUBLIC_ENABLE_TAWK_CHAT=false
-NEXT_PUBLIC_HERO_CTA_URL=
-NEXT_PUBLIC_SPREAD_CTA_URL=
-NEXT_PUBLIC_SITE_URL=
-NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL=
-NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL=
-NEXT_PUBLIC_SOLID_GOLD_IMAGE_BASE_URL=
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
-RECAPTCHA_SECRET_KEY=
-RECAPTCHA_MIN_SCORE=0.65
-
-NEXT_ALLOWED_ORIGINS=
-NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=
-DEPLOYMENT_VERSION=
-
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
-
-APP_PORT=3000
+```text
+apps/
+├── website/       # Website publik, port lokal 3000
+└── client-area/   # Login dan dashboard nasabah, port lokal 3009
 ```
 
-Template production Docker ada di `.env.prod.example` dan file aktifnya disarankan bernama `.env.prod`.
-
-Kalau tidak diisi, project akan memakai default value yang sudah didefinisikan di [src/lib/env.ts](src/lib/env.ts).
-
-Konfigurasi Firebase client ada di:
-
-- [src/lib/firebase/config.ts](src/lib/firebase/config.ts)
-- [src/lib/firebase/client.ts](src/lib/firebase/client.ts)
-- [src/components/providers/FirebaseBootstrap.tsx](src/components/providers/FirebaseBootstrap.tsx)
-
-Nilai `APP_ENV` yang dipakai project:
-
-- `dev` atau `prod`
-- live quote membuka WebSocket langsung dari browser melalui `NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL`; nilainya tertanam saat build dan harus memakai URL `ws://` atau `wss://` yang menerima origin website
-
-Proteksi route `src/app/api`:
-
-- saat `APP_ENV=dev`, proteksi API dilonggarkan untuk memudahkan local debugging
-- saat `APP_ENV` bukan `dev`, endpoint internal hanya bisa diakses dengan header `x-internal-api-token` yang cocok dengan `INTERNAL_API_TOKEN`
-- endpoint browser seperti economic calendar dan image proxy hanya menerima request browser same-origin
+- `website` menangani landing page, produk, edukasi, berita, legalitas, dan contact.
+- `client-area` menangani login, akun, transaksi, market, berita nasabah, ebook, dan dokumen.
+- URL lama `/{locale}/client-area/*` pada website dialihkan ke deployment Client Area.
+- Cookie dan proses autentikasi Client Area tidak dibaca oleh website publik.
 
 ## Development
 
-Install dependency:
+Install dependency workspace dari root:
 
 ```bash
 npm install
 ```
 
-Jalankan development server:
+Jalankan salah satu aplikasi:
 
 ```bash
-npm run dev
+npm run dev:website
+npm run dev:client-area
 ```
 
-Build production:
+Build dan lint:
 
 ```bash
-npm run build
-```
-
-Jalankan production server:
-
-```bash
-npm run start
-```
-
-Lint:
-
-```bash
+npm run build:website
+npm run build:client-area
 npm run lint
 ```
 
-## Docker Production
+## Environment variables
 
-Repo ini sudah disiapkan untuk build image production `Next.js standalone` lewat [Dockerfile](Dockerfile) dan [compose.yml](compose.yml).
+Template lengkap tersedia di `.env.example`. Karena setiap aplikasi adalah root Next.js sendiri, buat file lokal berikut sesuai kebutuhan:
 
-Alur pakainya:
-
-1. isi `.env` dari [.env.example](.env.example) untuk development lokal
-2. isi `.env.prod` dari [.env.prod.example](.env.prod.example) untuk Docker production
-3. pastikan file `.env.prod` memakai `APP_ENV=prod`
-4. isi `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` dengan key base64 yang stabil untuk semua instance production
-5. ganti `DEPLOYMENT_VERSION` setiap release agar proteksi version skew Next.js aktif
-6. build dan jalankan container dengan:
-
-```bash
-docker compose up --build -d
+```text
+apps/website/.env.local
+apps/client-area/.env.local
 ```
 
-Port host untuk development lokal mengikuti `.env` dan default ke `3000`.
-Port host untuk Docker production mengikuti `.env.prod` dan default ke `2809`.
+Website membutuhkan alamat deployment Client Area:
 
-Catatan production:
+```env
+NEXT_PUBLIC_CLIENT_SITE_URL=http://localhost:3009
+```
 
-- image build memakai output `standalone`, jadi container runtime hanya membawa artefak Next yang dibutuhkan
-- `.env.prod` dipakai secara eksplisit saat build dan sebagai `env_file` runtime; nilai `NEXT_PUBLIC_*` yang dihasilkan browser selalu berasal dari file ini
-- cache Next disimpan di volume `next_cache` agar cache runtime tidak hilang saat container restart biasa
-- untuk environment publik internet, taruh container ini di belakang reverse proxy seperti `nginx` atau `caddy`
+Secret berikut hanya boleh dipasang pada aplikasi Client Area:
 
-## Catatan Implementasi
+```env
+CLIENT_AREA_SESSION_SECRET=
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+RECAPTCHA_MIN_SCORE=0.65
+```
 
-- remote image domain dikonfigurasi di [next.config.ts](next.config.ts)
-- route loading overlay ada di [src/components/molecules/RouteLoadingBar.tsx](src/components/molecules/RouteLoadingBar.tsx)
-- halaman news detail memakai fallback konten statis lokal untuk slug yang diprerender
-- data news API besar ditangani di level helper agar tidak membebani data cache Next.js
+Konfigurasi API konten yang digunakan kedua aplikasi perlu ditambahkan pada masing-masing environment deployment sesuai kebutuhannya.
 
-## Catatan Repo
+## Deployment Vercel
 
-Di repo ini ada aturan internal bahwa command seperti `npm`, `next`, `pnpm`, `yarn`, dan command serupa sebaiknya dijalankan setelah ada konfirmasi user saat bekerja lewat agent.
+Buat dua project Vercel dari repository dan branch yang sama:
+
+| Project | Root Directory | Domain contoh |
+| --- | --- | --- |
+| Website | `apps/website` | `sg-berjangka.com` |
+| Client Area | `apps/client-area` | `client.sg-berjangka.com` |
+
+Konfigurasi Website:
+
+```env
+NEXT_PUBLIC_CLIENT_SITE_URL=https://client.sg-berjangka.com
+NEXT_PUBLIC_SITE_URL=https://sg-berjangka.com
+```
+
+Konfigurasi Client Area:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://client.sg-berjangka.com
+NEXT_PUBLIC_ENABLE_CLIENT_AREA=true
+```
+
+Tambahkan hostname deployment yang diperlukan ke `NEXT_ALLOWED_ORIGINS` bila Server Action diakses melalui proxy atau domain tambahan.
+
+## Docker
+
+Satu `Dockerfile` menerima build argument `APP_NAME` (`website` atau `client-area`). `compose.yml` membangun kedua service secara terpisah dan secara default mengekspos website pada port `6969` (`APP_SITE_PORT`) serta Client Area pada port `6970` (`APP_CLIENT_SITE_PORT`).
+
+## Kompatibilitas route
+
+Client Area sementara mempertahankan route `/{locale}/client-area/*` agar bookmark, redirect login, dan link internal lama tetap bekerja. Prefix tersebut dapat disederhanakan setelah deployment baru stabil.
+
+## Pemisahan keamanan
+
+- Website publik hanya mengetahui URL Client Area dan feature flag untuk menampilkan tombol.
+- Password, session cookie, reCAPTCHA secret, dan Server Action autentikasi hanya berada di aplikasi Client Area.
+- Setiap aplikasi memiliki `src`, `public`, konfigurasi Next.js, TypeScript, ESLint, dan Vercel sendiri.
