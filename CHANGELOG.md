@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.1.0] - 2026-09-25
 
 ### Added
 - Client Area kini memiliki page template admin tersendiri untuk sesi terautentikasi, lengkap dengan sidebar persisten, top bar responsif, drawer navigasi mobile, ringkasan profil, pemilih bahasa, notifikasi, iklan sidebar, dan aksi logout global tanpa memakai template website publik.
