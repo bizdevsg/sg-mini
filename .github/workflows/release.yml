@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract release notes from CHANGELOG.md
+        id: notes
+        run: |
+          # Grabs the body of the first "## " section in CHANGELOG.md,
+          # whatever it's currently headed (e.g. "[Unreleased]" or a
+          # version number) — that's expected to be this release's notes.
+          awk '
+            /^## / { if (seen) exit; seen = 1; next }
+            seen { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if [ ! -s release-notes.md ]; then
+            echo "No content found under the first ## section of CHANGELOG.md" >&2
+            exit 1
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
