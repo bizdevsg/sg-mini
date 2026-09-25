@@ -14,22 +14,78 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need full history + tags to diff against the previous release
 
-      - name: Extract release notes from CHANGELOG.md
+      - name: Generate release notes from commit messages
         id: notes
         run: |
-          # Grabs the body of the first "## " section in CHANGELOG.md,
-          # whatever it's currently headed (e.g. "[Unreleased]" or a
-          # version number) — that's expected to be this release's notes.
-          awk '
-            /^## / { if (seen) exit; seen = 1; next }
-            seen { print }
-          ' CHANGELOG.md > release-notes.md
+          CURRENT_TAG="${GITHUB_REF_NAME}"
+          PREV_TAG=$(git tag --sort=-creatordate | grep -vFx "$CURRENT_TAG" | head -n 1)
 
-          if [ ! -s release-notes.md ]; then
-            echo "No content found under the first ## section of CHANGELOG.md" >&2
-            exit 1
+          if [ -n "$PREV_TAG" ]; then
+            RANGE="${PREV_TAG}..${CURRENT_TAG}"
+          else
+            RANGE="$CURRENT_TAG"
           fi
+
+          git log "$RANGE" --no-merges --pretty=format:"%s" > commits.txt
+
+          python3 - "$CURRENT_TAG" <<'PYEOF'
+          import re
+          import sys
+
+          tag = sys.argv[1]
+
+          # Conventional Commits prefix -> Keep a Changelog section.
+          PREFIX_MAP = {
+              "feat": "Added",
+              "fix": "Fixed",
+              "remove": "Removed",
+              "revert": "Removed",
+              "refactor": "Changed",
+              "perf": "Changed",
+              "style": "Changed",
+              "docs": "Changed",
+              "chore": "Changed",
+              "ci": "Changed",
+              "build": "Changed",
+              "test": "Changed",
+          }
+          SECTION_ORDER = ["Added", "Changed", "Fixed", "Removed"]
+          PATTERN = re.compile(r"^(\w+)(\([^)]*\))?!?:\s*(.+)$")
+
+          categories = {name: [] for name in SECTION_ORDER}
+
+          with open("commits.txt", encoding="utf-8") as handle:
+              for line in handle:
+                  subject = line.strip()
+                  if not subject:
+                      continue
+                  match = PATTERN.match(subject)
+                  if match:
+                      kind, _, description = match.groups()
+                      section = PREFIX_MAP.get(kind.lower(), "Changed")
+                  else:
+                      description = subject
+                      section = "Changed"
+                  categories[section].append(description)
+
+          lines = []
+          for name in SECTION_ORDER:
+              items = categories[name]
+              if not items:
+                  continue
+              lines.append(f"### {name}")
+              lines.extend(f"- {item}" for item in items)
+              lines.append("")
+
+          if not lines:
+              lines = ["_No commits with a recognized prefix since the last release._"]
+
+          with open("release-notes.md", "w", encoding="utf-8") as handle:
+              handle.write("\n".join(lines).strip() + "\n")
+          PYEOF
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
