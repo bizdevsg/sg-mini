@@ -175,6 +175,40 @@ export default async function ProdukPrimePage({
 
       <SectionContainer className="pb-16 md:pb-20">
         <ScrollReveal effect="fade-up">
+          <div className="mt-5 overflow-x-auto rounded-2xl border border-white/10">
+            <table className="min-w-full text-left text-sm">
+              <thead className="bg-white/5 text-zinc-200">
+                <tr>
+                  <th className="px-4 py-3">{page.tradingTable.headers.specification}</th>
+                  <th className="px-4 py-3 font-mono text-yellow-400">
+                    {page.tradingTable.headers.xul10}
+                  </th>
+                  <th className="px-4 py-3 font-mono text-yellow-400">
+                    {page.tradingTable.headers.bco10}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {page.tradingTable.rows.map((row) => (
+                  <tr
+                    key={row.label}
+                    className="border-t border-white/10 text-zinc-300"
+                  >
+                    <td className="px-4 py-3 font-medium text-white">
+                      {row.label}
+                    </td>
+                    <td className="px-4 py-3">{row.xul10}</td>
+                    <td className="px-4 py-3">{row.bco10}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </ScrollReveal>
+      </SectionContainer>
+
+      <SectionContainer className="pb-16 md:pb-20">
+        <ScrollReveal effect="fade-up">
           <div className="mx-auto rounded-[2rem] border border-line bg-[linear-gradient(160deg,rgba(205,161,58,0.18),rgba(10,10,10,0.92)_42%,rgba(10,10,10,0.98))] p-8 text-center sm:p-12">
             <SectionIntro
               align="center"

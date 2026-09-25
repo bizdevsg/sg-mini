@@ -395,6 +395,20 @@ export type AppMessages = {
       label: string;
       href: string;
     };
+    tradingTable: {
+      title: string;
+      description: string;
+      headers: {
+        specification: string;
+        xul10: string;
+        bco10: string;
+      };
+      rows: Array<{
+        label: string;
+        xul10: string;
+        bco10: string;
+      }>;
+    };
     cta: {
       title: string;
       description: string;

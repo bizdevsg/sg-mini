@@ -12,7 +12,11 @@ export const idProdukPrimePage: AppMessages["produkPrimePage"] = {
       "Akun Prime dirancang untuk nasabah yang ingin berdiskusi lebih mendalam mengenai kebutuhan transaksi berjangka bersama tim Solid Gold Berjangka.",
     primaryCta: "Buka Akun Sekarang",
     secondaryCta: "Hubungi Kami",
-    badges: ["Setara Mini Account", "Minimum 0,1 Lot", "Pendampingan Lebih Personal"],
+    badges: [
+      "Setara Mini Account",
+      "Minimum 0,1 Lot",
+      "Pendampingan Lebih Personal",
+    ],
   },
   benefitsTitle: "Mengenal Akun Prime",
   benefitsDescription:
@@ -37,6 +41,97 @@ export const idProdukPrimePage: AppMessages["produkPrimePage"] = {
   specsLink: {
     label: "Lihat Trading Rules Mini Account",
     href: "/education/trading-rules",
+  },
+  tradingTable: {
+    title: "Trading Table Akun Prime",
+    description:
+      "Spesifikasi kontrak yang tersedia untuk nasabah Akun Prime (Mini Account CDD Sederhana 0,1 Lot). Spesifikasi dapat berubah sesuai Trade Table resmi yang berlaku.",
+    headers: {
+      specification: "Spesifikasi",
+      xul10: "XUL10 (Fixed Rate)",
+      bco10: "BCO10_BBJ (Fixed Rate)",
+    },
+    rows: [
+      { label: "Ukuran Kontrak", xul10: "10 Troy Ounce", bco10: "100 Barrel" },
+      { label: "Hari Perdagangan", xul10: "Senin–Jumat", bco10: "Senin–Jumat" },
+      {
+        label: "Jam Perdagangan (Summer)",
+        xul10: "06.00–03.30 WIB",
+        bco10: "07.00–03.45 WIB",
+      },
+      {
+        label: "Jam Perdagangan (Winter)",
+        xul10: "06.00–04.30 WIB",
+        bco10: "08.00–03.45 WIB",
+      },
+      {
+        label: "Initial Margin (Day Trade)",
+        xul10: "USD 100/lot",
+        bco10: "USD 100/lot",
+      },
+      {
+        label: "Facility Fee",
+        xul10: "USD 1,5/lot/side",
+        bco10: "USD 1,5/lot/side",
+      },
+      {
+        label: "V.A.T (Facility Fee)",
+        xul10: "11% dari Facility Fee",
+        bco10: "11% dari Facility Fee",
+      },
+      {
+        label: "Rollover Facility – Sell",
+        xul10: "USD 0,5/lot/night",
+        bco10: "USD 0,5/lot/night",
+      },
+      {
+        label: "Rollover Facility – Buy",
+        xul10: "USD 0,5/lot/night",
+        bco10: "USD 0,5/lot/night",
+      },
+      {
+        label: "V.A.T (Rollover Facility)",
+        xul10: "11% dari Rollover Facility",
+        bco10: "11% dari Rollover Facility",
+      },
+      { label: "Price Source", xul10: "Telequote", bco10: "Telequote" },
+      { label: "Price Guidance", xul10: "Last Trade", bco10: "Last Trade" },
+      {
+        label: "Minimum Price Spread Quote",
+        xul10: "USD 0,40/Troy Ounce/Side",
+        bco10: "USD 0,10/pips/barrel/side",
+      },
+      {
+        label: "Maximum Price Spread Quote",
+        xul10: "USD 1,00/Troy Ounce/Side",
+        bco10: "USD 0,30/pips/barrel/side",
+      },
+      {
+        label: "Hectic Price Spread Quote",
+        xul10: "Base On Market",
+        bco10: "Base On Market",
+      },
+      {
+        label: "Minimum Price Movement",
+        xul10: "USD 0,01/Troy Ounce",
+        bco10: "USD 0,01/barrel",
+      },
+      {
+        label: "Range untuk Limit & Stop Order",
+        xul10: "USD 6 – USD 20",
+        bco10: "USD 1 – USD 20",
+      },
+      {
+        label: "Hectic Range Price untuk Limit & Stop Order",
+        xul10: "Base On Market",
+        bco10: "Base On Market",
+      },
+      {
+        label: "Delivery By",
+        xul10: "Cash Settlement",
+        bco10: "Cash Settlement",
+      },
+    ],
   },
   cta: {
     title: "Tertarik dengan Akun Prime?",
