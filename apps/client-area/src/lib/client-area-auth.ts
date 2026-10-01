@@ -8,26 +8,21 @@ import {
   CLIENT_AREA_LAST_ACTIVITY_COOKIE,
   CLIENT_AREA_REMEMBER_ME_MAX_AGE,
   CLIENT_AREA_SESSION_COOKIE,
-  CLIENT_AREA_SESSION_VALUE,
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
   isClientAreaLastActivityActive,
   normalizeClientAreaIdentifier,
 } from "@/lib/client-area-session";
+import {
+  decryptSgbSession,
+  encryptSgbSession,
+  type SgbClientAreaSessionPayload,
+} from "@/lib/sgb-session";
+import { primaryAccountId } from "@/types/account-summary";
 export {
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
 } from "@/lib/client-area-session";
-
-const CLIENT_AREA_ALLOWED_IDENTIFIERS = new Set([
-  "bbh10158",
-  "user.sgb@demo-trading.com",
-]);
-const CLIENT_AREA_DEMO_PASSWORD = "demo12345";
-
-export function isClientAreaSessionConfigured() {
-  return true;
-}
 
 export type ClientAreaSessionProfile = {
   accountId: string;
@@ -41,22 +36,54 @@ export type ClientAreaSessionState = {
   profile: ClientAreaSessionProfile | null;
 };
 
-export function isValidClientAreaCredentials(account: string, password: string) {
-  return (
-    CLIENT_AREA_ALLOWED_IDENTIFIERS.has(
-      normalizeClientAreaIdentifier(account),
-    ) &&
-    password === CLIENT_AREA_DEMO_PASSWORD
-  );
+/**
+ * Best-effort display name until the real profile (getcustomerfullinfo) is
+ * wired in — "budi.santoso" → "Budi Santoso". Never fabricates data beyond
+ * what's derivable from the email itself.
+ */
+function deriveDisplayNameFromEmail(email: string): string {
+  const localPart = email.split("@")[0] ?? email;
+  const words = localPart.split(/[._-]+/).filter(Boolean);
+
+  if (words.length === 0) {
+    return email;
+  }
+
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function buildProfileFromSession(
+  session: SgbClientAreaSessionPayload,
+): ClientAreaSessionProfile {
+  return {
+    // First account in list-account (shape verified against a UAT sample). The
+    // person has one number here — it is not split per Demo/Real. "—" when the
+    // list is missing, per the rule for fields we can't map.
+    accountId: primaryAccountId(session.accounts) ?? "—",
+    avatarSrc: "/assets/client-area-profile-avatar.png",
+    displayName: deriveDisplayNameFromEmail(session.email),
+    email: session.email,
+  };
+}
+
+async function readSgbSessionCookie(): Promise<SgbClientAreaSessionPayload | null> {
+  const cookieStore = await cookies();
+  const raw = cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value;
+
+  if (!raw) {
+    return null;
+  }
+
+  return decryptSgbSession(raw);
 }
 
 export async function hasClientAreaSession() {
   const cookieStore = await cookies();
-  const hasAuthenticatedCookie =
-    cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
-    CLIENT_AREA_SESSION_VALUE;
+  const session = await readSgbSessionCookie();
 
-  if (!hasAuthenticatedCookie) {
+  if (!session) {
     return false;
   }
 
@@ -69,36 +96,12 @@ export async function getClientAreaSessionProfile() {
   return (await getClientAreaSessionState()).profile;
 }
 
-function resolveClientAreaSessionProfile(
-  identifier?: string | null,
-): ClientAreaSessionProfile {
-  const normalizedIdentifier = normalizeClientAreaIdentifier(identifier ?? "");
-
-  if (normalizedIdentifier === "user.sgb@demo-trading.com") {
-    return {
-      accountId: "BBH10158",
-      avatarSrc: "/assets/client-area-profile-avatar.png",
-      displayName: "Demo User",
-      email: "user.sgb@demo-trading.com",
-    };
-  }
-
-  return {
-    accountId: "BBH10158",
-    avatarSrc: "/assets/client-area-profile-avatar.png",
-    displayName: "Demo User",
-    email: "user.sgb@demo-trading.com",
-  };
-}
-
 export async function getClientAreaSessionState(): Promise<ClientAreaSessionState> {
   const cookieStore = await cookies();
-  const hasAuthenticatedCookie =
-    cookieStore.get(CLIENT_AREA_SESSION_COOKIE)?.value ===
-    CLIENT_AREA_SESSION_VALUE;
+  const session = await readSgbSessionCookie();
 
   if (
-    !hasAuthenticatedCookie ||
+    !session ||
     !isClientAreaLastActivityActive(
       cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
     )
@@ -111,18 +114,20 @@ export async function getClientAreaSessionState(): Promise<ClientAreaSessionStat
 
   return {
     isAuthenticated: true,
-    profile: resolveClientAreaSessionProfile(
-      cookieStore.get(CLIENT_AREA_IDENTIFIER_COOKIE)?.value,
-    ),
+    profile: buildProfileFromSession(session),
   };
 }
 
 export async function createClientAreaSession(
-  account: string,
+  payload: Omit<SgbClientAreaSessionPayload, "issuedAtMs">,
   rememberMe: boolean,
 ) {
   const cookieStore = await cookies();
-  const normalizedAccount = normalizeClientAreaIdentifier(account);
+  const encryptedSession = await encryptSgbSession({
+    ...payload,
+    issuedAtMs: Date.now(),
+    rememberMe,
+  });
   const now = Date.now().toString();
   const cookieOptions = {
     httpOnly: true,
@@ -134,12 +139,12 @@ export async function createClientAreaSession(
 
   cookieStore.set({
     name: CLIENT_AREA_SESSION_COOKIE,
-    value: CLIENT_AREA_SESSION_VALUE,
+    value: encryptedSession,
     ...cookieOptions,
   });
   cookieStore.set({
     name: CLIENT_AREA_IDENTIFIER_COOKIE,
-    value: normalizedAccount,
+    value: normalizeClientAreaIdentifier(payload.email),
     ...cookieOptions,
   });
   cookieStore.set({
@@ -149,6 +154,55 @@ export async function createClientAreaSession(
     secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
+  });
+}
+
+/**
+ * The decrypted SGB session (bearer token included) if it exists and is still
+ * within the inactivity window — server-side only, never send it to the browser.
+ */
+export async function getActiveSgbSession(): Promise<SgbClientAreaSessionPayload | null> {
+  const cookieStore = await cookies();
+  const session = await readSgbSessionCookie();
+
+  if (
+    !session ||
+    !isClientAreaLastActivityActive(
+      cookieStore.get(CLIENT_AREA_LAST_ACTIVITY_COOKIE)?.value,
+    )
+  ) {
+    return null;
+  }
+
+  return session;
+}
+
+/**
+ * Persists a token the server rotated via the `csrf` response header. Keeps the
+ * same cookie lifetime the customer chose at login ("remember me").
+ */
+export async function refreshClientAreaSessionToken(
+  session: SgbClientAreaSessionPayload,
+  newToken: string,
+) {
+  if (!newToken || newToken === session.token) {
+    return;
+  }
+
+  const cookieStore = await cookies();
+  const encryptedSession = await encryptSgbSession({
+    ...session,
+    token: newToken,
+  });
+
+  cookieStore.set({
+    name: CLIENT_AREA_SESSION_COOKIE,
+    value: encryptedSession,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    ...(session.rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
   });
 }
 

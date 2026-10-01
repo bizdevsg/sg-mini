@@ -45,10 +45,12 @@ export function ClientAreaTransactionRow({
           priceLabel: isBuy ? "Buy Price" : "Sell Price",
         };
   const accentClassName = isBuy ? "text-emerald-400" : "text-yellow-400";
-  const orderNumber = item.orderNumber ?? item.id.replace(/\D/g, "").padEnd(10, "0");
-  const storageFee = item.storageFee ?? "$ 0.00";
-  const facilityFee = item.facilityFee ?? "$ -15.00*";
-  const vat = item.vat ?? "$ -1.65";
+  // Missing values show "—" — the old fallbacks ("$ -15.00*", "$ -1.65", an order
+  // number built from the id) were invented figures.
+  const orderNumber = item.orderNumber ?? "—";
+  const storageFee = item.storageFee ?? "—";
+  const facilityFee = item.facilityFee ?? "—";
+  const vat = item.vat ?? "—";
 
   return (
     <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.06),transparent_30%),linear-gradient(180deg,rgba(34,35,40,0.96),rgba(26,27,31,0.98))] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.28)] sm:p-6">
@@ -63,8 +65,10 @@ export function ClientAreaTransactionRow({
           <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
             <div className="min-w-0">
               <h4 className="break-words text-base font-black uppercase tracking-tight text-white sm:text-xl">
-                {item.instrument}{" "}
-                <span className="text-zinc-200">({item.symbol})</span>
+                {item.instrument}
+                {item.instrument !== item.symbol ? (
+                  <span className="text-zinc-200"> ({item.symbol})</span>
+                ) : null}
               </h4>
               <p className={`mt-1.5 text-base font-medium tracking-tight sm:text-xl ${accentClassName}`}>
                 {isBuy ? labels.buy : labels.sell} $ {item.openPrice}

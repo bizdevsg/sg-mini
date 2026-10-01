@@ -11,9 +11,9 @@ const heroFloatingCards = [
   {
     src: "/assets/Floating Info Card 1.png",
     alt: "Floating trading insight card",
-    width: 848,
-    height: 464,
-    desktopClassName: "right-[1.5rem] top-[17.5rem] w-[8.5rem]",
+    width: 648,
+    height: 264,
+    desktopClassName: "left-[50%] top-[22%] w-[19%]",
     animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
   },
   {
@@ -21,7 +21,7 @@ const heroFloatingCards = [
     alt: "Floating market card",
     width: 648,
     height: 264,
-    desktopClassName: "right-[19.5rem] top-[24rem] w-[8.5rem]",
+    desktopClassName: "left-[47%] top-[72%] w-[20%]",
     animationClass: "animate-[hero-float-alt_7.2s_ease-in-out_infinite]",
   },
   {
@@ -29,7 +29,7 @@ const heroFloatingCards = [
     alt: "Floating growth card",
     width: 684,
     height: 264,
-    desktopClassName: "right-[2rem] bottom-[27.5rem] w-[8.5rem]",
+    desktopClassName: "left-[4%] top-[22%] w-[19%]",
     animationClass: "animate-[hero-float_7.6s_ease-in-out_infinite]",
   },
   {
@@ -37,7 +37,7 @@ const heroFloatingCards = [
     alt: "Floating metrics card",
     width: 768,
     height: 264,
-    desktopClassName: "right-[21rem] bottom-[20rem] w-[9.5rem]",
+    desktopClassName: "left-[6%] top-[68%] w-[21%]",
     animationClass: "animate-[hero-float-alt_6.8s_ease-in-out_infinite]",
   },
 ] as const;
@@ -50,9 +50,10 @@ export function ClientAreaLoginVisualPanel({
 }: ClientAreaLoginVisualPanelProps) {
   return (
     <div
-      className="relative h-full min-h-[46rem] w-full overflow-visible"
+      className="relative flex h-full w-full items-center justify-center"
       aria-hidden="true"
     >
+      <div className="relative aspect-[3125/2383] w-full max-w-[60rem]">
       {/* MAIN VISUAL */}
       <div className="absolute inset-0">
         <Image
@@ -82,6 +83,7 @@ export function ClientAreaLoginVisualPanel({
             />
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

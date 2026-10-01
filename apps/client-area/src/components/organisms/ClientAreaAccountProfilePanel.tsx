@@ -13,14 +13,32 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 import { revealClientAreaSensitiveProfile } from "@/app/actions/clientAreaSensitiveProfile";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
-import { getClientAreaProfileDemoData } from "@/components/organisms/client-area-account-profile.data";
-import type { AccountSnapshot } from "@/components/organisms/client-area.types";
+import {
+  EMPTY_CLIENT_AREA_PROFILE,
+  EMPTY_PROFILE_VALUE,
+} from "@/components/organisms/client-area-account-profile.data";
+import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
+import { useCustomerProfile } from "@/hooks/useCustomerProfile";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountProfilePanelProps = {
-  currentAccount: AccountSnapshot;
   locale: AppLocale;
 };
+
+const PROFILE_NOTICE_COPY = {
+  id: {
+    error: "Data profil belum bisa dimuat.",
+    retry: "Coba lagi",
+    unavailable:
+      "Data profil belum tersedia. Registrasi akun ini belum diselesaikan di sistem, jadi belum ada data yang bisa ditampilkan.",
+  },
+  en: {
+    error: "Profile data could not be loaded.",
+    retry: "Try again",
+    unavailable:
+      "Profile data is not available yet. Registration for this account has not been completed in the system, so there is nothing to show.",
+  },
+} as const;
 
 type ProfileDetailProps = {
   full?: boolean;
@@ -140,6 +158,7 @@ function SensitiveProfilePasswordModal({
       confirm: "Konfirmasi",
       invalid: "Password tidak sesuai. Silakan coba lagi.",
       unauthorized: "Sesi Anda telah berakhir. Silakan masuk kembali.",
+      unavailable: "Data ini belum tersedia untuk ditampilkan.",
       showPassword: "Tampilkan password",
       hidePassword: "Sembunyikan password",
     }
@@ -152,6 +171,7 @@ function SensitiveProfilePasswordModal({
       confirm: "Confirm",
       invalid: "The password is incorrect. Please try again.",
       unauthorized: "Your session has expired. Please sign in again.",
+      unavailable: "This data is not available to display yet.",
       showPassword: "Show password",
       hidePassword: "Hide password",
     };
@@ -195,7 +215,11 @@ function SensitiveProfilePasswordModal({
       }
 
       setError(
-        result.status === "unauthorized" ? copy.unauthorized : copy.invalid,
+        result.status === "unauthorized"
+          ? copy.unauthorized
+          : result.status === "unavailable"
+            ? copy.unavailable
+            : copy.invalid,
       );
     });
   };
@@ -326,12 +350,16 @@ function ProfileSection({
 }
 
 export function ClientAreaAccountProfilePanel({
-  currentAccount,
   locale,
 }: ClientAreaAccountProfilePanelProps) {
   const accountPage = getMessages(locale).clientArea.accountPage;
   const viewOnly = accountPage.viewOnly;
-  const profile = getClientAreaProfileDemoData(locale);
+  // Only the email comes from real data (the session). Everything else stays "—"
+  // until getcustomerfullinfo is mapped — see client-area-account-profile.data.ts.
+  const account = useClientAreaProfile();
+  const { state: profileState, retry: retryProfile } = useCustomerProfile();
+  const noticeCopy = PROFILE_NOTICE_COPY[locale];
+  const profile = EMPTY_CLIENT_AREA_PROFILE;
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
   const [openSection, setOpenSection] =
     useState<ProfileSectionId | null>("personal");
@@ -375,6 +403,31 @@ export function ClientAreaAccountProfilePanel({
         <span>{accountPage.backLabel}</span>
       </Link>
 
+      {profileState.status === "unavailable" ? (
+        <p
+          role="status"
+          className="rounded-xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-sm leading-6 text-yellow-200"
+        >
+          {noticeCopy.unavailable}
+        </p>
+      ) : null}
+
+      {profileState.status === "error" ? (
+        <p
+          role="alert"
+          className="flex items-center justify-between gap-3 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+        >
+          <span>{noticeCopy.error}</span>
+          <button
+            type="button"
+            onClick={retryProfile}
+            className="cursor-pointer rounded-lg border border-red-400/40 px-3 py-1 text-xs font-semibold text-red-200 transition hover:bg-red-500/15"
+          >
+            {noticeCopy.retry}
+          </button>
+        </p>
+      ) : null}
+
       <div className="space-y-4">
         <ProfileSection
           description={viewOnly.personalDescription}
@@ -385,11 +438,11 @@ export function ClientAreaAccountProfilePanel({
         >
           <ProfileDetail
             label={accountPage.fields.fullName}
-            value={currentAccount.accountOwner}
+            value={EMPTY_PROFILE_VALUE}
           />
           <ProfileDetail
             label={accountPage.fields.email}
-            value={currentAccount.email}
+            value={account.email}
           />
           <ProfileDetail
             label={accountPage.fields.birthPlace}

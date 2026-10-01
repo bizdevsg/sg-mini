@@ -13,14 +13,38 @@ import type {
   AccountSnapshot,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
+import type { AccountSummaryState } from "@/hooks/useAccountSummary";
+import type { AppLocale } from "@/locales";
+import type { AccountSummaryCard } from "@/types/account-summary";
 
 type ClientAreaAccountOverviewProps = {
   accountMode: AccountMode;
   copy: DashboardCopy;
   currentAccount: AccountSnapshot;
   isAccountMenuOpen: boolean;
+  locale: AppLocale;
+  onRetry: () => void;
   onSelectAccountMode: (mode: AccountMode) => void;
   onToggleAccountMode: () => void;
+  summaryState: AccountSummaryState;
+};
+
+const EMPTY_VALUE = "—";
+
+const SUMMARY_MESSAGES: Record<
+  AppLocale,
+  { error: string; retry: string; unavailable: string }
+> = {
+  id: {
+    error: "Data akun belum bisa dimuat.",
+    retry: "Coba lagi",
+    unavailable: "Akun untuk mode ini tidak tersedia.",
+  },
+  en: {
+    error: "Account data could not be loaded.",
+    retry: "Try again",
+    unavailable: "No account is available for this mode.",
+  },
 };
 
 const ACCOUNT_METRICS: Array<{
@@ -55,17 +79,23 @@ const ACCOUNT_METRICS: Array<{
   ];
 
 function resolveMetricValue(
-  account: AccountSnapshot,
+  summary: AccountSummaryCard | null,
   metricKey: (typeof ACCOUNT_METRICS)[number]["key"],
 ) {
+  const value = summary?.[metricKey];
+
+  if (value === null || value === undefined) {
+    return EMPTY_VALUE;
+  }
+
   if (metricKey === "equityRatio") {
-    return `${account.equityRatio.toLocaleString("en-US", {
+    return `${value.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}%`;
   }
 
-  return formatUsd(account[metricKey]);
+  return formatUsd(value);
 }
 
 export function ClientAreaAccountOverview({
@@ -73,9 +103,16 @@ export function ClientAreaAccountOverview({
   copy,
   currentAccount,
   isAccountMenuOpen,
+  locale,
+  onRetry,
   onSelectAccountMode,
   onToggleAccountMode,
+  summaryState,
 }: ClientAreaAccountOverviewProps) {
+  const summary = summaryState.status === "ready" ? summaryState.account : null;
+  const messages = SUMMARY_MESSAGES[locale];
+  const floatingPl = summary?.floatingPl ?? null;
+
   return (
     <div className="space-y-3">
       <div
@@ -121,7 +158,7 @@ export function ClientAreaAccountOverview({
             </div>
 
             <span className="break-all pr-2 text-sm font-extrabold tracking-tight text-neutral-900 sm:text-base">
-              {currentAccount.accountId}
+              {summary?.accountId ?? EMPTY_VALUE}
             </span>
           </div>
 
@@ -137,23 +174,44 @@ export function ClientAreaAccountOverview({
           <ClientAreaAccountValueCard
             label="New Balance"
             surfaceClassName="bg-orange-500/70"
-            value={formatUsd(currentAccount.balance)}
+            value={summary?.balance == null ? EMPTY_VALUE : formatUsd(summary.balance)}
             valueClassName="text-neutral-950"
           />
           <ClientAreaAccountValueCard
             label="Floating P/L"
             surfaceClassName="bg-white/50"
-            value={formatSignedUsd(currentAccount.floatingPl)}
+            value={floatingPl === null ? EMPTY_VALUE : formatSignedUsd(floatingPl)}
             valueClassName={
-              currentAccount.floatingPl >= 0 ? "text-emerald-600" : "text-red-600"
+              floatingPl === null
+                ? "text-neutral-950"
+                : floatingPl >= 0
+                  ? "text-emerald-600"
+                  : "text-red-600"
             }
           />
           <ClientAreaAccountValueCard
             label="Equity"
             surfaceClassName="bg-orange-500/70"
-            value={formatUsd(currentAccount.equity)}
+            value={summary?.equity == null ? EMPTY_VALUE : formatUsd(summary.equity)}
             valueClassName="text-neutral-950"
           />
+          {summaryState.status === "error" ? (
+            <p className="flex items-center justify-between gap-3 rounded-xl bg-white/60 px-3 py-2 text-xs font-semibold text-red-700">
+              <span>{messages.error}</span>
+              <button
+                type="button"
+                onClick={onRetry}
+                className="cursor-pointer rounded-full bg-black px-3 py-1 text-[11px] font-bold text-yellow-400 transition hover:bg-zinc-800"
+              >
+                {messages.retry}
+              </button>
+            </p>
+          ) : null}
+          {summaryState.status === "unavailable" ? (
+            <p className="rounded-xl bg-white/60 px-3 py-2 text-xs font-semibold text-neutral-800">
+              {messages.unavailable}
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -166,7 +224,7 @@ export function ClientAreaAccountOverview({
             <ClientAreaAccountMetricRow
               key={metric.label}
               label={metric.label}
-              value={resolveMetricValue(currentAccount, metric.key)}
+              value={resolveMetricValue(summary, metric.key)}
               withDivider={index !== ACCOUNT_METRICS.length - 1}
             />
           ))}

@@ -16,6 +16,7 @@ import type {
   ClientAreaHeroSlide,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
+import { useAccountSummary } from "@/hooks/useAccountSummary";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -57,6 +58,10 @@ export function ClientAreaHomePanel({
   setCurrentSlide,
   setIsAccountMenuOpen,
 }: ClientAreaHomePanelProps) {
+  // One fetch feeds both card instances (mobile and desktop layouts).
+  const { state: summaryState, retry: retrySummary } =
+    useAccountSummary(accountMode);
+
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(200px,0.8fr)]">
       <div className="flex min-w-0 flex-col gap-6">
@@ -66,6 +71,9 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
+            locale={locale}
+            onRetry={retrySummary}
+            summaryState={summaryState}
             onSelectAccountMode={onSelectAccountMode}
             onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
           />
@@ -107,6 +115,9 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
+            locale={locale}
+            onRetry={retrySummary}
+            summaryState={summaryState}
             onSelectAccountMode={onSelectAccountMode}
             onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
           />

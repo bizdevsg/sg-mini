@@ -13,8 +13,8 @@ export const idClientArea: AppMessages["clientArea"] = {
     title: "Masuk Client Area",
     description:
       "Autentikasi akun sedang disiapkan dan belum tersedia melalui website.",
-    accountLabel: "Nomor akun atau email",
-    accountPlaceholder: "Masukkan nomor akun atau email",
+    accountLabel: "Email",
+    accountPlaceholder: "Masukkan email Anda",
     passwordLabel: "Password",
     passwordPlaceholder: "Masukkan password Anda",
     rememberMe: "Ingat saya di perangkat ini",
@@ -31,9 +31,9 @@ export const idClientArea: AppMessages["clientArea"] = {
     demoCredentialsPassword: "",
     errorUnavailable:
       "Client area sedang dinonaktifkan dari sistem admin. Coba lagi beberapa saat lagi.",
-    errorRequired: "Masukkan nomor akun atau email beserta password Anda.",
+    errorRequired: "Masukkan email dan password Anda.",
     errorInvalidCredentials:
-      "Nomor akun, email, atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
+      "Email atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
     errorSessionConfiguration:
       "Login belum bisa diproses karena konfigurasi session server belum lengkap. Isi CLIENT_AREA_SESSION_SECRET terlebih dahulu.",
     errorCaptchaRequired:
@@ -49,6 +49,24 @@ export const idClientArea: AppMessages["clientArea"] = {
     securityTitle: "Keamanan akun",
     securityBody:
       "Pastikan Anda hanya login melalui domain resmi dan jangan pernah membagikan OTP atau password kepada pihak lain.",
+  },
+  otp: {
+    title: "Verifikasi OTP",
+    description:
+      "Akun Anda memerlukan verifikasi tambahan. Kami telah mengirim kode OTP ke nomor/perangkat terdaftar Anda.",
+    codeLabel: "Kode OTP",
+    codePlaceholder: "Masukkan 6 digit kode OTP",
+    submitLabel: "VERIFIKASI",
+    submitting: "Memverifikasi kode...",
+    resendLabel: "Kirim ulang kode",
+    resending: "Mengirim ulang...",
+    resendSuccess: "Kode OTP baru telah dikirim.",
+    backToLogin: "Kembali ke login",
+    errorRequired: "Masukkan kode OTP Anda.",
+    errorInvalidCode:
+      "Kode OTP tidak sesuai atau sudah kedaluwarsa. Silakan coba lagi.",
+    errorSessionExpired:
+      "Sesi verifikasi telah berakhir. Silakan login ulang.",
   },
   user: {
     name: "Anita",
@@ -297,8 +315,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     },
     menuItems: {
       profile: "Profil",
-      referral: "Referral SG Solid",
-      documentApproval: "Dokumen Persetujuan",
+      referral: "Referral Code",
       dailyStatement: "Daily Statement",
       withdrawal: "Withdrawal",
       deposit: "Deposit",
@@ -311,8 +328,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     },
     menuDescriptions: {
       profile: "Lihat identitas, kontak, pekerjaan, dan profil keuangan.",
-      referral: "Akses kode referral dan informasi program SG Solid.",
-      documentApproval: "Tinjau dokumen persetujuan yang terkait dengan akun.",
+      referral: "Fitur Referral Code sedang dinonaktifkan sementara.",
       dailyStatement: "Lihat ringkasan aktivitas dan laporan harian akun.",
       withdrawal: "Buka layanan pengajuan penarikan dana.",
       deposit: "Buka layanan informasi dan penyetoran dana.",
@@ -462,31 +478,6 @@ export const idClientArea: AppMessages["clientArea"] = {
       ],
     },
   },
-  approvalDocumentPage: {
-    title: "Dokumen Persetujuan",
-    description:
-      "Tinjau dan unduh salinan formulir persetujuan yang terkait dengan rekening Anda.",
-    downloadLabel: "Unduh",
-    preparingLabel: "Menyiapkan",
-    accountHolderLabel: "Nama nasabah",
-    accountNumberLabel: "Nomor rekening",
-    generatedAtLabel: "Diunduh pada",
-    pdfNotice:
-      "Dokumen ini merupakan salinan digital untuk rekening yang sedang aktif di Client Area.",
-    documents: [
-      { id: "cdds-01", code: "Formulir PBK. CDDS. 01", title: "Profil Perusahaan Pialang Berjangka" },
-      { id: "cdds-02-1", code: "Formulir PBK. CDDS. 02.1", title: "Pernyataan Telah Melakukan Simulasi Perdagangan Berjangka" },
-      { id: "cdds-02-2", code: "Formulir PBK. CDDS. 02.2", title: "Pernyataan Telah Berpengalaman Dalam Melaksanakan Transaksi Perdagangan Berjangka" },
-      { id: "cdds-03-1", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-04", code: "Formulir PBK. CDDS. 04", title: "Aplikasi Pembukaan Rekening Transaksi" },
-      { id: "cdds-03-2", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-05", code: "Formulir PBK. CDDS. 05", title: "Dokumen Pemberitahuan Adanya Risiko" },
-      { id: "cdds-03-3", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-06", code: "Formulir PBK. CDDS. 06", title: "Perjanjian Pemberian Amanat" },
-      { id: "cdds-07", code: "Formulir PBK. CDDS. 07", title: "Daftar Kontrak Berjangka, Kontrak Derivatif Dan Kontrak Derivatif Lainnya Beserta Peraturan Perdagangan (Trading Rules)" },
-      { id: "cdds-08", code: "Formulir PBK. CDDS. 08", title: "Pernyataan Bertanggung Jawab Atas Kode Akses Transaksi Nasabah (Personal Access Password)" },
-    ],
-  },
   dailyStatementPage: {
     title: "Daily Statement",
     description: "Ringkasan posisi dan mutasi harian rekening perdagangan Anda.",
@@ -530,19 +521,23 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   referralPage: {
-    title: "Kode Referal",
+    title: "Referral Code",
     description:
       "Ajak teman untuk bergabung dan nikmati reward dari aktivitas trading mereka.",
     hero: {
-      eyebrow: "Program Referral SG Solid",
+      eyebrow: "Referral Code",
       title: "Ajak Teman,\nDapatkan Reward",
       description:
         "Bagikan peluang ke jaringan kamu dan nikmati komisi dari teman yang aktif.",
       cta: "Daftar Sekarang",
-      brandAlt: "PT Solid Gold Berjangka",
-      visualAlt: "Visual program referral SG Solid",
     },
-    stepsTitle: "Cara Kerja Program Referral SG Solid",
+    accessTitle: "Kode dan link referral Anda",
+    codeLabel: "Referral Code",
+    linkLabel: "Link referral",
+    copyLabel: "Salin kode",
+    copyLinkLabel: "Salin link",
+    copiedLabel: "Tersalin",
+    stepsTitle: "Cara Kerja Referral Code",
     steps: [
       "Dapatkan link atau kode referal dari akun SG Solid Anda.",
       "Bagikan kepada calon pengguna.",
@@ -550,7 +545,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       "Anda memperoleh komisi dari aktivitas trading sesuai ketentuan yang berlaku.",
     ],
     closing:
-      "Segera bergabung dengan Program Referral dan mulai bagikan link Anda untuk mendapatkan keuntungan. Daftarkan diri Anda sekarang dan maksimalkan peluang melalui Program Referral SG Solid.",
+      "Segera bergabung dan mulai bagikan link Anda untuk mendapatkan keuntungan. Daftarkan diri Anda sekarang dan maksimalkan peluang melalui Referral Code.",
   },
   withdrawalHistoryPage: {
     title: "Riwayat Withdrawal",

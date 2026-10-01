@@ -12,6 +12,7 @@ import { ClientAreaAppDownloadModal } from "@/components/molecules/ClientAreaApp
 import { ClientAreaLoginErrorModal } from "@/components/molecules/ClientAreaLoginErrorModal";
 import { ClientAreaLoginFormPanel } from "@/components/molecules/ClientAreaLoginFormPanel";
 import { ClientAreaLoginVisualPanel } from "@/components/molecules/ClientAreaLoginVisualPanel";
+import { ClientAreaOtpFormPanel } from "@/components/molecules/ClientAreaOtpFormPanel";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import {
   getMessages,
@@ -51,6 +52,7 @@ export function ClientAreaLoginPage({
 }: ClientAreaLoginPageProps) {
   const { appPromoSection: appPromoMessages, clientArea } = getMessages(locale);
   const login = clientArea.login;
+  const otpMessages = clientArea.otp;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
   const downloadModalCopy = getAppDownloadModalCopy(locale);
   const supportHref = resolveLocalizedHref(locale, "/contact-us");
@@ -108,13 +110,33 @@ export function ClientAreaLoginPage({
         closeLabel: "TRY AGAIN",
       };
 
+  // ── OTP state ──────────────────────────────────────────────────────
+
+  const [otpMode, setOtpMode] = useState(false);
+  const [otpLoginToken, setOtpLoginToken] = useState("");
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpRememberMe, setOtpRememberMe] = useState(false);
+
   useEffect(() => {
-    if (state.status !== "error") {
+    if (state.status === "otp_required") {
+      setOtpMode(true);
+      setOtpLoginToken(state.loginToken ?? "");
+      setOtpEmail(state.email ?? "");
+      setOtpRememberMe(state.rememberMe ?? false);
       return;
     }
 
-    setIsErrorModalOpen(true);
+    if (state.status === "error") {
+      setIsErrorModalOpen(true);
+    }
   }, [state]);
+
+  function handleBackToLogin() {
+    setOtpMode(false);
+    setOtpLoginToken("");
+    setOtpEmail("");
+    setOtpRememberMe(false);
+  }
 
   return (
     <div
@@ -130,9 +152,9 @@ export function ClientAreaLoginPage({
         />
       ) : null}
 
-      <SectionContainer className="relative flex w-full max-w-8xl flex-1 items-center overflow-visible py-6 sm:py-8 lg:px-12 xl:py-10 2xl:px-14">
+      <SectionContainer className="relative flex w-full max-w-8xl flex-1 items-center overflow-visible py-6 sm:py-8 lg:!pl-8 lg:!pr-12 xl:py-10 xl:!pl-6 xl:!pr-20 2xl:!pl-8 2xl:!pr-24">
         {/* VISUAL — BELAKANG */}
-        <div className="absolute inset-y-[-5rem] left-[15rem] right-[-8rem] z-10 hidden overflow-visible xl:block">
+        <div className="absolute inset-y-0 left-[26rem] right-12 z-10 hidden xl:block 2xl:left-[28rem] 2xl:right-16">
           <ClientAreaLoginVisualPanel
             googlePlayLink={googlePlayLink}
             googlePlayAlt={appPromoMessages.googlePlayAlt}
@@ -143,20 +165,31 @@ export function ClientAreaLoginPage({
 
         {/* FORM — DEPAN */}
         <div className="relative z-20 flex w-full items-center justify-start">
-          <ClientAreaLoginFormPanel
-            locale={locale}
-            login={login}
-            supportHref={supportHref}
-            pending={pending}
-            showPassword={showPassword}
-            formAction={formAction}
-            onTogglePassword={() =>
-              setShowPassword((value) => !value)
-            }
-            onOpenDownloadModal={() =>
-              setIsDownloadModalOpen(true)
-            }
-          />
+          {otpMode ? (
+            <ClientAreaOtpFormPanel
+              locale={locale}
+              otp={otpMessages}
+              loginToken={otpLoginToken}
+              email={otpEmail}
+              rememberMe={otpRememberMe}
+              onBackToLogin={handleBackToLogin}
+            />
+          ) : (
+            <ClientAreaLoginFormPanel
+              locale={locale}
+              login={login}
+              supportHref={supportHref}
+              pending={pending}
+              showPassword={showPassword}
+              formAction={formAction}
+              onTogglePassword={() =>
+                setShowPassword((value) => !value)
+              }
+              onOpenDownloadModal={() =>
+                setIsDownloadModalOpen(true)
+              }
+            />
+          )}
         </div>
       </SectionContainer>
 

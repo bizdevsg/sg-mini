@@ -827,6 +827,21 @@ export type AppMessages = {
       securityTitle: string;
       securityBody: string;
     };
+    otp: {
+      title: string;
+      description: string;
+      codeLabel: string;
+      codePlaceholder: string;
+      submitLabel: string;
+      submitting: string;
+      resendLabel: string;
+      resending: string;
+      resendSuccess: string;
+      backToLogin: string;
+      errorRequired: string;
+      errorInvalidCode: string;
+      errorSessionExpired: string;
+    };
     user: {
       name: string;
       role: string;
@@ -935,7 +950,6 @@ export type AppMessages = {
       menuItems: {
         profile: string;
         referral: string;
-        documentApproval: string;
         dailyStatement: string;
         withdrawal: string;
         deposit: string;
@@ -948,7 +962,6 @@ export type AppMessages = {
       menuDescriptions: {
         profile: string;
         referral: string;
-        documentApproval: string;
         dailyStatement: string;
         withdrawal: string;
         deposit: string;
@@ -1035,21 +1048,6 @@ export type AppMessages = {
         }>;
       };
     };
-    approvalDocumentPage: {
-      title: string;
-      description: string;
-      downloadLabel: string;
-      preparingLabel: string;
-      accountHolderLabel: string;
-      accountNumberLabel: string;
-      generatedAtLabel: string;
-      pdfNotice: string;
-      documents: Array<{
-        id: string;
-        code: string;
-        title: string;
-      }>;
-    };
     dailyStatementPage: {
       title: string;
       description: string;
@@ -1088,9 +1086,13 @@ export type AppMessages = {
         title: string;
         description: string;
         cta: string;
-        brandAlt: string;
-        visualAlt: string;
       };
+      accessTitle: string;
+      codeLabel: string;
+      linkLabel: string;
+      copyLabel: string;
+      copyLinkLabel: string;
+      copiedLabel: string;
       stepsTitle: string;
       steps: string[];
       closing: string;

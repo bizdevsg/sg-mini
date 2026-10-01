@@ -55,9 +55,9 @@ export function ClientAreaLoginFormPanel({
 
           <div className="relative">
             <input
-              id="client-area-account"
-              name="account"
-              type="text"
+              id="client-area-email"
+              name="email"
+              type="email"
               required
               disabled={pending}
               placeholder={login.accountPlaceholder}

@@ -1,13 +1,8 @@
 "use client";
 
-import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaAccountHeader } from "@/components/organisms/ClientAreaAccountHeader";
 import { ClientAreaAccountProfilePanel } from "@/components/organisms/ClientAreaAccountProfilePanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
-import {
-  getClientAreaAccountModeData,
-  getDashboardCopy,
-} from "@/components/organisms/client-area.shared";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
@@ -20,18 +15,11 @@ export function ClientAreaAccountProfileView({
   breakingNews,
   locale,
 }: ClientAreaAccountProfileViewProps) {
-  const copy = getDashboardCopy(locale);
-  const { accountMode } = useClientAreaAccountMode();
-  const { currentAccount } = getClientAreaAccountModeData(copy, accountMode);
-
   return (
     <ClientAreaShell activeTab="account" breakingNews={breakingNews} locale={locale}>
       <div className="space-y-6">
         <ClientAreaAccountHeader locale={locale} />
-        <ClientAreaAccountProfilePanel
-          currentAccount={currentAccount}
-          locale={locale}
-        />
+        <ClientAreaAccountProfilePanel locale={locale} />
       </div>
     </ClientAreaShell>
   );

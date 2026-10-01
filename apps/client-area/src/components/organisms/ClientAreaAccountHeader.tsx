@@ -3,11 +3,7 @@
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
-import {
-  getClientAreaAccountModeData,
-  getDashboardCopy,
-} from "@/components/organisms/client-area.shared";
+import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountHeaderProps = {
@@ -18,9 +14,9 @@ export function ClientAreaAccountHeader({
   locale,
 }: ClientAreaAccountHeaderProps) {
   const accountPage = getMessages(locale).clientArea.accountPage;
-  const copy = getDashboardCopy(locale);
-  const { accountMode } = useClientAreaAccountMode();
-  const { currentAccount } = getClientAreaAccountModeData(copy, accountMode);
+  // Name, email and account number come from the session (list-account) — one
+  // set for the person, not split per Demo/Real.
+  const profile = useClientAreaProfile();
 
   return (
     <header className="overflow-hidden rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-[#1a1a1a] to-[#111111] shadow-xl shadow-black/35">
@@ -32,7 +28,7 @@ export function ClientAreaAccountHeader({
             <div className="h-20 w-20 overflow-hidden rounded-2xl border-2 border-yellow-500/40 ring-4 ring-yellow-500/10 sm:h-24 sm:w-24">
               <Image
                 src="/assets/client-area-profile-avatar.png"
-                alt={`${accountPage.viewOnly.photoLabel} ${currentAccount.accountOwner}`}
+                alt={`${accountPage.viewOnly.photoLabel} ${profile.displayName}`}
                 width={96}
                 height={96}
                 className="h-full w-full object-cover"
@@ -46,16 +42,12 @@ export function ClientAreaAccountHeader({
 
           <div className="min-w-0">
             <h1 className="break-words text-2xl font-bold text-white sm:text-3xl">
-              {currentAccount.accountOwner}
+              {profile.displayName}
             </h1>
             <p className="mt-1 break-all text-sm text-zinc-400">
-              {currentAccount.email}
+              {profile.email}
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                {currentAccount.status}
-              </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-yellow-500/25 bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-400">
                 <FontAwesomeIcon icon={["fas", "lock"]} className="text-[10px]" />
                 {accountPage.viewOnly.badge}
@@ -69,7 +61,7 @@ export function ClientAreaAccountHeader({
             {accountPage.viewOnly.accountIdLabel}
           </span>
           <span className="mt-1 block text-lg font-bold tracking-wider text-white">
-            {currentAccount.accountId}
+            {profile.accountId}
           </span>
         </div>
       </div>

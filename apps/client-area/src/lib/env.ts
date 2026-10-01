@@ -54,8 +54,8 @@ const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
 const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
-const DEFAULT_SITE_URL = "https://sg-berjangka.com";
-const DEFAULT_WEBSITE_URL = "https://sg-berjangka.com";
+const DEFAULT_SITE_URL = "https://client-mini.sg-berjangka.com";
+const DEFAULT_WEBSITE_URL = "https://mini.sg-berjangka.com";
 const DEFAULT_PUBLIC_CLIENT_AREA_ENABLED = false;
 const DEFAULT_PUBLIC_TAWK_CHAT_ENABLED = false;
 
@@ -76,6 +76,80 @@ export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
 
 export const CLIENT_AREA_SESSION_SECRET =
   process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
+
+export type SgbFlavor = "dev" | "uat" | "prod";
+const DEFAULT_SGB_FLAVOR: SgbFlavor = "uat";
+
+function normalizeSgbFlavor(value: string | undefined): SgbFlavor {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (
+    normalizedValue === "dev" ||
+    normalizedValue === "uat" ||
+    normalizedValue === "prod"
+  ) {
+    return normalizedValue;
+  }
+
+  return DEFAULT_SGB_FLAVOR;
+}
+
+// Flavor server pihak ketiga (SSO/Trading/Registrasi) — lihat docs/api/. Jangan
+// pernah menjalankan request ke flavor "prod" tanpa izin eksplisit di chat.
+export const SGB_FLAVOR = normalizeSgbFlavor(process.env.SGB_FLAVOR);
+
+// Passphrase enkripsi password login; nilainya dari tim integrasi SGB dan hanya diisi lewat env
+// server/lokal (jangan di-commit).
+// Sengaja tidak diberi default — kosong berarti konfigurasi belum lengkap.
+// Bypass OTP khusus development: hanya aktif kalau APP_ENV=dev, bukan build
+// production, dan SGB_FLAVOR bukan prod. Session yang dibuat memakai token
+// dummy, jadi call SGB yang butuh token asli (mis. logout remote) akan gagal
+// secara non-fatal.
+export const CLIENT_AREA_SKIP_OTP =
+  process.env.CLIENT_AREA_SKIP_OTP?.trim().toLowerCase() === "true" &&
+  APP_ENV === "dev" &&
+  process.env.NODE_ENV !== "production" &&
+  SGB_FLAVOR !== "prod";
+
+export const SGB_PASSWORD_PASSPHRASE =
+  process.env.SGB_PASSWORD_PASSPHRASE?.trim() ?? "";
+
+export const SGB_DEVICE_OS =
+  process.env.SGB_DEVICE_OS?.trim() || "Client Area";
+
+export const SGB_DEVICE_BRAND_MODEL =
+  process.env.SGB_DEVICE_BRAND_MODEL?.trim() || "Client Area";
+
+export const SGB_DEVICE_MANUFACTURER =
+  process.env.SGB_DEVICE_MANUFACTURER?.trim() || "Solid Gold Berjangka";
+
+export const SGB_APP_VERSION =
+  process.env.SGB_APP_VERSION?.trim() || "1.28.2";
+
+export const SGB_DEFAULT_LATITUDE =
+  process.env.SGB_DEFAULT_LATITUDE?.trim() || "-6.175392";
+
+export const SGB_DEFAULT_LONGITUDE =
+  process.env.SGB_DEFAULT_LONGITUDE?.trim() || "106.827153";
+
+function normalizeSgbRequestTimeoutMs(value: string | undefined) {
+  const parsedValue = Number(value);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return 20000;
+  }
+
+  return parsedValue;
+}
+
+export const SGB_REQUEST_TIMEOUT_MS = normalizeSgbRequestTimeoutMs(
+  process.env.SGB_REQUEST_TIMEOUT_MS,
+);
+
+// Akun uji untuk scripts/sgb-discovery.ts — hanya diisi lewat .env.local, tidak
+// pernah di-commit, dan tidak pernah dipakai kalau SGB_FLAVOR=prod.
+export const SGB_TEST_EMAIL = process.env.SGB_TEST_EMAIL?.trim() ?? "";
+export const SGB_TEST_PASSWORD = process.env.SGB_TEST_PASSWORD ?? "";
 
 function normalizePublicLiveQuoteSocketUrl(value: string | undefined) {
   const normalizedValue = value?.trim();

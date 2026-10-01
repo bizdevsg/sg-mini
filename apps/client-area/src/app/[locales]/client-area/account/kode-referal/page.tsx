@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { ClientAreaAccountReferralView } from "@/components/organisms/ClientAreaAccountReferralView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
 import { getClientAreaBreakingNews } from "@/lib/client-area-news";
+import { CLIENT_AREA_REFERRAL_ENABLED } from "@/lib/client-area-features";
 import { buildPrivateMetadata } from "@/lib/metadata";
 import { getMessages } from "@/locales";
 import {
@@ -42,6 +44,11 @@ export default async function ClientAreaAccountReferralPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
+
+  if (!CLIENT_AREA_REFERRAL_ENABLED) {
+    redirect(`/${locales}/client-area/account`);
+  }
+
   const breakingNews = await getClientAreaBreakingNews(locales);
 
   return (

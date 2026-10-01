@@ -3,6 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 const DEFAULT_LOCALE = "id";
 const SUPPORTED_LOCALES = new Set(["id", "en"]);
 const RESERVED_SEGMENTS = new Set(["api"]);
+const CLIENT_AREA_SEGMENT = "client-area";
+const websiteBaseUrl = (
+  process.env.NEXT_PUBLIC_WEBSITE_URL?.trim() ||
+  "https://mini.sg-berjangka.com"
+).replace(/\/+$/, "");
 
 function hasFileExtension(pathname: string) {
   return /\.[^/]+$/.test(pathname);
@@ -25,8 +30,19 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (SUPPORTED_LOCALES.has(firstSegment)) {
+    const isLocaleRoot = segments.length === 1;
+    const isClientAreaRoute = segments[1] === CLIENT_AREA_SEGMENT;
+
+    if (isLocaleRoot || isClientAreaRoute) {
+      return NextResponse.next();
+    }
+
+    const websiteUrl = new URL(`${pathname}${request.nextUrl.search}`, websiteBaseUrl);
+    return NextResponse.redirect(websiteUrl);
+  }
+
   if (
-    SUPPORTED_LOCALES.has(firstSegment) ||
     RESERVED_SEGMENTS.has(firstSegment) ||
     pathname.startsWith("/_next/") ||
     hasFileExtension(pathname)

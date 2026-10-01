@@ -81,7 +81,8 @@ export type PositionItem = {
 
 export type TransactionHistoryItem = {
   id: string;
-  type: "credit" | "debit";
+  /** Not shown anywhere in the UI; the API gives no such field, so it is optional. */
+  type?: "credit" | "debit";
   instrument: string;
   symbol: string;
   statusLabel: string;

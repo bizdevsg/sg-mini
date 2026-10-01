@@ -13,8 +13,8 @@ export const enClientArea: AppMessages["clientArea"] = {
     title: "Sign in Client Area",
     description:
       "Account authentication is being prepared and is not yet available on the website.",
-    accountLabel: "Account number or email",
-    accountPlaceholder: "Enter your account number or email",
+    accountLabel: "Email",
+    accountPlaceholder: "Enter your email",
     passwordLabel: "Password",
     passwordPlaceholder: "Enter your password",
     rememberMe: "Remember me on this device",
@@ -32,10 +32,9 @@ export const enClientArea: AppMessages["clientArea"] = {
     demoCredentialsPassword: "",
     errorUnavailable:
       "The client area is currently disabled from the admin system. Please try again later.",
-    errorRequired:
-      "Enter your account number or email together with your password.",
+    errorRequired: "Enter your email and password.",
     errorInvalidCredentials:
-      "The account number, email, or password you entered is incorrect. Please review your details and try again.",
+      "The email or password you entered is incorrect. Please review your details and try again.",
     errorSessionConfiguration:
       "Sign-in cannot continue because the server session configuration is incomplete. Set CLIENT_AREA_SESSION_SECRET first.",
     errorCaptchaRequired:
@@ -51,6 +50,23 @@ export const enClientArea: AppMessages["clientArea"] = {
     securityTitle: "Account security",
     securityBody:
       "Only sign in through official domains and never share your OTP or password with anyone.",
+  },
+  otp: {
+    title: "OTP Verification",
+    description:
+      "Your account needs additional verification. We've sent an OTP code to your registered number/device.",
+    codeLabel: "OTP code",
+    codePlaceholder: "Enter the 6-digit OTP code",
+    submitLabel: "VERIFY",
+    submitting: "Verifying code...",
+    resendLabel: "Resend code",
+    resending: "Resending...",
+    resendSuccess: "A new OTP code has been sent.",
+    backToLogin: "Back to login",
+    errorRequired: "Enter your OTP code.",
+    errorInvalidCode:
+      "The OTP code is incorrect or has expired. Please try again.",
+    errorSessionExpired: "The verification session has expired. Please sign in again.",
   },
   user: {
     name: "Anita",
@@ -299,8 +315,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     },
     menuItems: {
       profile: "Profile",
-      referral: "SG Solid Referral",
-      documentApproval: "Approval Document",
+      referral: "Referral Code",
       dailyStatement: "Daily Statement",
       withdrawal: "Withdrawal",
       deposit: "Deposit",
@@ -312,8 +327,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     },
     menuDescriptions: {
       profile: "View your identity, contact, employment, and financial profile.",
-      referral: "Access your referral code and SG Solid program information.",
-      documentApproval: "Review approval documents associated with your account.",
+      referral: "The Referral Code feature is temporarily disabled.",
       dailyStatement: "View account activity summaries and daily statements.",
       withdrawal: "Open the fund withdrawal request service.",
       deposit: "Open deposit information and funding services.",
@@ -463,31 +477,6 @@ export const enClientArea: AppMessages["clientArea"] = {
       ],
     },
   },
-  approvalDocumentPage: {
-    title: "Approval Documents",
-    description:
-      "Review and download copies of approval forms associated with your account.",
-    downloadLabel: "Download",
-    preparingLabel: "Preparing",
-    accountHolderLabel: "Client name",
-    accountNumberLabel: "Account number",
-    generatedAtLabel: "Downloaded at",
-    pdfNotice:
-      "This document is a digital copy for the account currently active in the Client Area.",
-    documents: [
-      { id: "cdds-01", code: "Form PBK. CDDS. 01", title: "Futures Brokerage Company Profile" },
-      { id: "cdds-02-1", code: "Form PBK. CDDS. 02.1", title: "Statement of Completion of Futures Trading Simulation" },
-      { id: "cdds-02-2", code: "Form PBK. CDDS. 02.2", title: "Statement of Experience in Conducting Futures Trading Transactions" },
-      { id: "cdds-03-1", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
-      { id: "cdds-04", code: "Form PBK. CDDS. 04", title: "Transaction Account Opening Application" },
-      { id: "cdds-03-2", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
-      { id: "cdds-05", code: "Form PBK. CDDS. 05", title: "Risk Disclosure Document" },
-      { id: "cdds-03-3", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
-      { id: "cdds-06", code: "Form PBK. CDDS. 06", title: "Mandate Agreement" },
-      { id: "cdds-07", code: "Form PBK. CDDS. 07", title: "List of Futures Contracts, Derivative Contracts, Other Derivative Contracts, and Trading Rules" },
-      { id: "cdds-08", code: "Form PBK. CDDS. 08", title: "Statement of Responsibility for the Client Transaction Access Code (Personal Access Password)" },
-    ],
-  },
   dailyStatementPage: {
     title: "Daily Statement",
     description: "A daily summary of your trading account positions and balance movements.",
@@ -535,15 +524,19 @@ export const enClientArea: AppMessages["clientArea"] = {
     description:
       "Invite friends to join and earn rewards from their trading activity.",
     hero: {
-      eyebrow: "SG Solid Referral Program",
+      eyebrow: "Referral Code",
       title: "Invite Friends,\nEarn Rewards",
       description:
         "Share the opportunity with your network and enjoy commissions from active referrals.",
       cta: "Register Now",
-      brandAlt: "PT Solid Gold Berjangka",
-      visualAlt: "SG Solid referral program visual",
     },
-    stepsTitle: "How The SG Solid Referral Program Works",
+    accessTitle: "Your referral code and link",
+    codeLabel: "Referral Code",
+    linkLabel: "Referral link",
+    copyLabel: "Copy code",
+    copyLinkLabel: "Copy link",
+    copiedLabel: "Copied",
+    stepsTitle: "How Referral Code Works",
     steps: [
       "Get your referral link or code from your SG Solid account.",
       "Share it with potential users.",
@@ -551,7 +544,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       "You receive commissions from their trading activity based on the applicable terms.",
     ],
     closing:
-      "Join the Referral Program and start sharing your link to unlock more opportunities. Register now and maximize your earning potential with the SG Solid Referral Program.",
+      "Join and start sharing your link to unlock more opportunities. Register now and maximize your earning potential with Referral Code.",
   },
   withdrawalHistoryPage: {
     title: "Withdrawal History",

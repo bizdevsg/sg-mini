@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { PageTemplate } from "@/components/layouts/PageTemplate";
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
+import { ClientAreaProfileProvider } from "@/components/providers/ClientAreaProfileProvider";
 import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessionTimeout";
 import {
   CLIENT_AREA_ACCOUNT_MODE_COOKIE,
@@ -77,11 +78,13 @@ export default async function ClientAreaLayout({
 
   return (
     <PageTemplate locale={locale} profile={session.profile}>
-      <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
-        <ClientAreaSessionTimeout locale={locale} />
-        {children}
-        {disclaimer}
-      </ClientAreaAccountModeProvider>
+      <ClientAreaProfileProvider profile={session.profile}>
+        <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
+          <ClientAreaSessionTimeout locale={locale} />
+          {children}
+          {disclaimer}
+        </ClientAreaAccountModeProvider>
+      </ClientAreaProfileProvider>
     </PageTemplate>
   );
 }

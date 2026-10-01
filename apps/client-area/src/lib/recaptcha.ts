@@ -107,16 +107,30 @@ export async function verifyRecaptchaToken(
     const payload = (await response.json()) as RecaptchaVerifyResponse;
     const normalizedExpectedHostname = normalizeHostHeader(expectedHostname);
     const normalizedVerifiedHostname = normalizeHostHeader(payload.hostname);
+    const hostnameMatches =
+      !normalizedExpectedHostname ||
+      normalizedVerifiedHostname === normalizedExpectedHostname;
+    const scoreOk =
+      typeof payload.score === "number" && payload.score >= RECAPTCHA_MIN_SCORE;
+    const actionOk = payload.action === expectedAction;
+    const isValid =
+      payload.success === true && scoreOk && actionOk && hostnameMatches;
 
-    return (
-      payload.success === true &&
-      typeof payload.score === "number" &&
-      payload.score >= RECAPTCHA_MIN_SCORE &&
-      payload.action === expectedAction &&
-      (!normalizedExpectedHostname ||
-        normalizedVerifiedHostname === normalizedExpectedHostname)
-    );
-  } catch {
+    if (!isValid) {
+      console.error("[recaptcha] verification failed", {
+        success: payload.success,
+        score: payload.score,
+        minScore: RECAPTCHA_MIN_SCORE,
+        action: payload.action,
+        expectedAction,
+        verifiedHostname: normalizedVerifiedHostname,
+        expectedHostname: normalizedExpectedHostname,
+      });
+    }
+
+    return isValid;
+  } catch (error) {
+    console.error("[recaptcha] verification request threw", error);
     return false;
   }
 }
