@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft, Eye, EyeClosed } from "lucide-react";
 
@@ -5,6 +6,8 @@ import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaLoginFormPanelProps = {
+  /** Optional captcha widget, rendered inside the form above the submit button. */
+  captcha?: ReactNode;
   locale: AppLocale;
   login: AppMessages["clientArea"]["login"];
   supportHref: string;
@@ -19,6 +22,7 @@ const inputClassName =
   "h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ClientAreaLoginFormPanel({
+  captcha,
   locale,
   login,
   supportHref,
@@ -104,6 +108,8 @@ export function ClientAreaLoginFormPanel({
               {login.forgotPassword}
             </Link>
           </div>
+
+          {captcha}
 
           <button
             type="submit"

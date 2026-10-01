@@ -1,5 +1,7 @@
 import {
   APP_ENV,
+  CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL,
+  CLIENT_AREA_RECAPTCHA_ENABLED,
   PUBLIC_RECAPTCHA_SITE_KEY,
   RECAPTCHA_MIN_SCORE,
   RECAPTCHA_SECRET_KEY,
@@ -56,27 +58,37 @@ export function isRecaptchaUnsupportedHostname(hostname: string) {
 }
 
 export function isRecaptchaEnabled(hostname?: string | null) {
-  if (APP_ENV !== "prod") {
+  if (!CLIENT_AREA_RECAPTCHA_ENABLED) {
     return false;
   }
 
-  const normalizedHostname = normalizeHostHeader(hostname);
+  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL) {
+    if (APP_ENV !== "prod") {
+      return false;
+    }
 
-  if (
-    normalizedHostname &&
-    isRecaptchaUnsupportedHostname(normalizedHostname)
-  ) {
-    return false;
+    const normalizedHostname = normalizeHostHeader(hostname);
+
+    if (
+      normalizedHostname &&
+      isRecaptchaUnsupportedHostname(normalizedHostname)
+    ) {
+      return false;
+    }
   }
 
-  return Boolean(PUBLIC_RECAPTCHA_SITE_KEY && RECAPTCHA_SECRET_KEY);
+  // Only the site key is needed: the widget runs in the browser and SGB verifies
+  // the token itself (it is forwarded as `token_captcha`), so no secret key here.
+  return Boolean(PUBLIC_RECAPTCHA_SITE_KEY);
 }
 
 export async function verifyRecaptchaToken(
   token: string,
   { expectedAction, expectedHostname }: VerifyRecaptchaTokenOptions,
 ) {
-  if (!isRecaptchaEnabled()) {
+  // Local verification needs the secret key; without it (SGB verifies instead)
+  // there is nothing to check here.
+  if (!isRecaptchaEnabled() || !RECAPTCHA_SECRET_KEY) {
     return true;
   }
 

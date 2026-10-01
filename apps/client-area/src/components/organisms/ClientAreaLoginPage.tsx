@@ -1,6 +1,5 @@
 "use client";
 
-import Script from "next/script";
 import { useActionState, useCallback, useEffect, useState } from "react";
 
 import {
@@ -13,26 +12,14 @@ import { ClientAreaLoginErrorModal } from "@/components/molecules/ClientAreaLogi
 import { ClientAreaLoginFormPanel } from "@/components/molecules/ClientAreaLoginFormPanel";
 import { ClientAreaLoginVisualPanel } from "@/components/molecules/ClientAreaLoginVisualPanel";
 import { ClientAreaOtpFormPanel } from "@/components/molecules/ClientAreaOtpFormPanel";
+import { ClientAreaRecaptchaV2 } from "@/components/molecules/ClientAreaRecaptchaV2";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import {
   getMessages,
   type AppLocale,
 } from "@/locales";
 import { getAppDownloadModalCopy } from "@/lib/app-download-modal-copy";
-import { CLIENT_AREA_LOGIN_RECAPTCHA_ACTION } from "@/lib/recaptcha.shared";
 import { getClientAreaAppStoreLinks } from "@/lib/solidGoldAppLinks";
-
-declare global {
-  interface Window {
-    grecaptcha?: {
-      execute: (
-        siteKey: string,
-        options: { action: string },
-      ) => Promise<string>;
-      ready: (callback: () => void) => void;
-    };
-  }
-}
 
 type ClientAreaLoginPageProps = {
   isRecaptchaEnabled: boolean;
@@ -56,41 +43,32 @@ export function ClientAreaLoginPage({
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
   const downloadModalCopy = getAppDownloadModalCopy(locale);
   const supportHref = resolveLocalizedHref(locale, "/contact-us");
+  // Bumped after every attempt: a reCAPTCHA token works only once, so the widget
+  // is remounted to give the next attempt a fresh checkbox.
+  const [captchaResetKey, setCaptchaResetKey] = useState(0);
   const loginAction = useCallback(
     async (prevState: ClientAreaLoginState, formData: FormData) => {
       if (!isRecaptchaEnabled) {
         return submitClientAreaLogin(prevState, formData);
       }
 
-      const recaptcha = window.grecaptcha;
+      // The v2 checkbox sits inside the form and puts its token in this field.
+      const token = String(formData.get("g-recaptcha-response") ?? "").trim();
 
-      if (!recaptcha) {
+      if (!token) {
         return {
           status: "error" as const,
-          message: login.errorCaptchaFailed,
+          message: login.errorCaptchaRequired,
         };
       }
 
       try {
-        await new Promise<void>((resolve) => recaptcha.ready(resolve));
-        const token = await recaptcha.execute(recaptchaSiteKey, {
-          action: CLIENT_AREA_LOGIN_RECAPTCHA_ACTION,
-        });
-
-        if (!token) {
-          throw new Error("reCAPTCHA returned an empty token.");
-        }
-
-        formData.set("g-recaptcha-response", token);
-        return submitClientAreaLogin(prevState, formData);
-      } catch {
-        return {
-          status: "error" as const,
-          message: login.errorCaptchaFailed,
-        };
+        return await submitClientAreaLogin(prevState, formData);
+      } finally {
+        setCaptchaResetKey((key) => key + 1);
       }
     },
-    [isRecaptchaEnabled, login.errorCaptchaFailed, recaptchaSiteKey],
+    [isRecaptchaEnabled, login.errorCaptchaRequired],
   );
   const [state, formAction, pending] = useActionState(
     loginAction,
@@ -132,6 +110,8 @@ export function ClientAreaLoginPage({
   }, [state]);
 
   function handleBackToLogin() {
+    // The earlier token was spent on the login that led to the OTP step.
+    setCaptchaResetKey((key) => key + 1);
     setOtpMode(false);
     setOtpLoginToken("");
     setOtpEmail("");
@@ -145,13 +125,6 @@ export function ClientAreaLoginPage({
         backgroundImage: "url('/assets/BCG.png')",
       }}
     >
-      {isRecaptchaEnabled ? (
-        <Script
-          src={`https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`}
-          strategy="afterInteractive"
-        />
-      ) : null}
-
       <SectionContainer className="relative flex w-full max-w-8xl flex-1 items-center overflow-visible py-6 sm:py-8 lg:!pl-8 lg:!pr-12 xl:py-10 xl:!pl-6 xl:!pr-20 2xl:!pl-8 2xl:!pr-24">
         {/* VISUAL — BELAKANG */}
         <div className="absolute inset-y-0 left-[26rem] right-12 z-10 hidden xl:block 2xl:left-[28rem] 2xl:right-16">
@@ -176,6 +149,14 @@ export function ClientAreaLoginPage({
             />
           ) : (
             <ClientAreaLoginFormPanel
+              captcha={
+                isRecaptchaEnabled ? (
+                  <ClientAreaRecaptchaV2
+                    key={captchaResetKey}
+                    siteKey={recaptchaSiteKey}
+                  />
+                ) : null
+              }
               locale={locale}
               login={login}
               supportHref={supportHref}

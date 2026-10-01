@@ -380,11 +380,27 @@ export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
   DEFAULT_PUBLIC_TAWK_CHAT_ENABLED,
 );
 
+// Site key khusus Client Area (reCAPTCHA v2 dari SGB, tokennya diteruskan ke SGB
+// sebagai token_captcha). `.env.prod` dipakai bersama oleh website dan client
+// area, sedangkan NEXT_PUBLIC_RECAPTCHA_SITE_KEY adalah key website — jadi key
+// client area punya variabel sendiri. Kalau kosong, jatuh ke variabel lama.
 export const PUBLIC_RECAPTCHA_SITE_KEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+  process.env.NEXT_PUBLIC_CLIENT_AREA_RECAPTCHA_SITE_KEY?.trim() ||
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ||
+  "";
 
 export const RECAPTCHA_SECRET_KEY =
   process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
+
+// Saklar runtime (bukan NEXT_PUBLIC, tidak ditanam saat build) khusus Client Area.
+// Isi "false" untuk mematikan reCAPTCHA di login Client Area tanpa menyentuh website.
+export const CLIENT_AREA_RECAPTCHA_ENABLED =
+  process.env.CLIENT_AREA_RECAPTCHA_ENABLED?.trim().toLowerCase() !== "false";
+
+// Khusus pengembangan lokal: paksa reCAPTCHA aktif walau APP_ENV bukan prod dan
+// hostname-nya localhost, supaya token captcha sungguhan bisa dikirim ke SGB.
+export const CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL =
+  process.env.CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL?.trim().toLowerCase() === "true";
 
 function normalizeRecaptchaMinScore(value: string | undefined) {
   const parsedValue = Number(value);

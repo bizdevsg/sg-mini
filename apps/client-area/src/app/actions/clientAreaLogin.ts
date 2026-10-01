@@ -8,12 +8,7 @@ import {
   getClientAreaDashboardHref,
 } from "@/lib/client-area-auth";
 import { CLIENT_AREA_SKIP_OTP, SGB_FLAVOR } from "@/lib/env";
-import {
-  isRecaptchaEnabled,
-  resolveRequestHostname,
-  verifyRecaptchaToken,
-} from "@/lib/recaptcha";
-import { CLIENT_AREA_LOGIN_RECAPTCHA_ACTION } from "@/lib/recaptcha.shared";
+import { isRecaptchaEnabled, resolveRequestHostname } from "@/lib/recaptcha";
 import { callSgbApi, SgbApiError } from "@/lib/sgb-api/client";
 import { encryptSgbPassword } from "@/lib/sgb-api/crypto";
 import {
@@ -72,25 +67,14 @@ export async function submitClientAreaLogin(
     };
   }
 
-  if (isRecaptchaEnabled(requestHostname)) {
-    if (!recaptchaToken) {
-      return {
-        status: "error",
-        message: login.errorCaptchaRequired,
-      };
-    }
-
-    const recaptchaResult = await verifyRecaptchaToken(recaptchaToken, {
-      expectedAction: CLIENT_AREA_LOGIN_RECAPTCHA_ACTION,
-      expectedHostname: requestHostname,
-    });
-
-    if (!recaptchaResult) {
-      return {
-        status: "error",
-        message: login.errorCaptchaFailed,
-      };
-    }
+  // A reCAPTCHA token can only be verified once. The SGB SSO API verifies
+  // `token_captcha` itself, so the token is forwarded untouched instead of being
+  // verified here first (a second verification fails as a duplicate).
+  if (isRecaptchaEnabled(requestHostname) && !recaptchaToken) {
+    return {
+      status: "error",
+      message: login.errorCaptchaRequired,
+    };
   }
 
   const deviceUuid = await getOrCreateSgbDeviceUuid();
@@ -135,6 +119,13 @@ export async function submitClientAreaLogin(
     );
   } catch (error) {
     console.error("[client-area-login] SGB login call failed", error);
+
+    if (error instanceof SgbApiError && /captcha/i.test(error.message)) {
+      return {
+        status: "error",
+        message: login.errorCaptchaFailed,
+      };
+    }
 
     return {
       status: "error",
