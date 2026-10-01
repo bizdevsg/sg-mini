@@ -1,3 +1,26 @@
+## [Unreleased]
+
+### Changed
+- Fallback autentikasi dummy pada login dan verifikasi OTP Client Area dinonaktifkan; sesi kini hanya dibuat setelah server UAT mengembalikan token yang valid, sedangkan kegagalan API ditampilkan sebagai error pada form.
+- Login dan integrasi API Client Area kini menggunakan flavor server UAT secara default, sehingga endpoint SSO tidak lagi mengarah ke server development yang tidak terjangkau.
+- Fitur Referral Code dinonaktifkan sementara melalui feature flag internal; item menu Account tetap terlihat dalam keadaan terkunci dan akses URL langsung diarahkan kembali ke halaman Account, sementara implementasi desainnya tetap dipertahankan untuk aktivasi berikutnya.
+- Tombol kembali pada halaman Referral Code kini mengikuti gaya tombol kembali subhalaman Account lainnya, termasuk border, latar gelap, jarak, dan warna hover.
+- Halaman Referral Code didesain ulang menjadi halaman utilitas akun yang menampilkan kode dan link referral aktif dengan aksi salin, alur penggunaan berbentuk timeline, dan CTA registrasi; banner serta susunan card promosi lama dihapus.
+- Label layanan referral pada menu Account kini menggunakan nama `Referral Code` dalam Bahasa Indonesia dan Inggris, menggantikan `Referral SG Solid`/`SG Solid Referral`.
+- Menu layanan Account pada Client Area kini menggunakan daftar baris ringkas dengan pemisah, menggantikan tampilan grid kartu agar navigasi lebih sederhana.
+- Panduan penggunaan Client Area kini menyertakan tautan langsung ke halaman login Client Area bahasa Indonesia agar pengguna dapat mengaksesnya dari langkah login.
+- Routing deployment dipisahkan secara eksplisit: halaman publik memakai `mini.sg-berjangka.com`, sedangkan login dan seluruh halaman Client Area memakai `client-mini.sg-berjangka.com`.
+- Docker build dan runtime kini meneruskan `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLIENT_SITE_URL`, dan `NEXT_PUBLIC_WEBSITE_URL` secara konsisten ke masing-masing aplikasi.
+
+### Fixed
+- Pengiriman OTP otomatis saat form verifikasi dibuka kini menjalankan Server Action di dalam React transition, sehingga tidak lagi memunculkan error `useActionState` dan status pending tetap diperbarui dengan benar.
+- Login Client Area kini mengenali respons sukses UAT dengan pesan `need OTP Authorization` sebagai sesi sementara untuk verifikasi OTP, sehingga token pra-OTP tidak dapat langsung membuat sesi dan melewati halaman OTP.
+- Route locale dasar pada deployment Client Area, seperti `/id` dan `/en`, kini diarahkan ke halaman login Client Area dan tidak lagi menghasilkan halaman 404.
+- Tautan kembali dari Client Area kini memakai origin website publik yang dikonfigurasi, sementara route Client Area lama pada website diarahkan ke deployment Client Area.
+- Route halaman publik yang tidak sengaja dibuka melalui domain Client Area kini dialihkan kembali ke domain website publik dengan path locale dan query string tetap dipertahankan.
+- Override `SG_ADMIN_REQUEST_ORIGIN` berbasis localhost dihapus dari environment produksi agar request website dan Client Area mengirim origin deployment masing-masing ke SG Admin.
+- Konfigurasi nginx kini mengenali hostname mini untuk website publik dan Client Area.
+
 ## [0.1.0] - 2026-09-25
 
 ### Added
@@ -41,5 +64,6 @@
 - Output standalone Next.js kini hanya digunakan di luar Vercel, sehingga deployment Vercel tidak gagal saat proses packaging pada Next.js 16.3.
 
 ### Removed
+- Menu, halaman, route, salinan konten, dan dokumentasi pengguna untuk fitur Dokumen Persetujuan di Client Area telah dihapus.
 - Seluruh integrasi deployment Cloudflare/OpenNext dihapus, termasuk konfigurasi Worker dan R2, skrip `cf:*`, dependensi terkait, dan origin tunnel `trycloudflare.com`; deployment Cloudflare tidak lagi didukung oleh repository ini.
 - Integrasi Vercel Web Analytics di root layout dihapus; aplikasi tetap memakai Firebase Analytics melalui `FirebaseBootstrap`.

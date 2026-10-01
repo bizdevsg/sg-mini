@@ -70,20 +70,21 @@ Buat dua project Vercel dari repository dan branch yang sama:
 
 | Project | Root Directory | Domain contoh |
 | --- | --- | --- |
-| Website | `apps/website` | `sg-berjangka.com` |
-| Client Area | `apps/client-area` | `client.sg-berjangka.com` |
+| Website | `apps/website` | `mini.sg-berjangka.com` |
+| Client Area | `apps/client-area` | `client-mini.sg-berjangka.com` |
 
 Konfigurasi Website:
 
 ```env
-NEXT_PUBLIC_CLIENT_SITE_URL=https://client.sg-berjangka.com
-NEXT_PUBLIC_SITE_URL=https://sg-berjangka.com
+NEXT_PUBLIC_CLIENT_SITE_URL=https://client-mini.sg-berjangka.com
+NEXT_PUBLIC_SITE_URL=https://mini.sg-berjangka.com
 ```
 
 Konfigurasi Client Area:
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://client.sg-berjangka.com
+NEXT_PUBLIC_SITE_URL=https://client-mini.sg-berjangka.com
+NEXT_PUBLIC_WEBSITE_URL=https://mini.sg-berjangka.com
 NEXT_PUBLIC_ENABLE_CLIENT_AREA=true
 ```
 
