@@ -6,8 +6,9 @@ services:
       dockerfile: Dockerfile
       args:
         APP_NAME: website
-        NEXT_PUBLIC_CLIENT_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-http://localhost:6970}
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_WEBSITE_URL:-http://localhost:6969}
+        NEXT_PUBLIC_CLIENT_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-https://client-mini.sg-berjangka.com}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://mini.sg-berjangka.com}
+        NEXT_PUBLIC_WEBSITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://mini.sg-berjangka.com}
         NEXT_PUBLIC_ENABLE_CLIENT_AREA: ${NEXT_PUBLIC_ENABLE_CLIENT_AREA:-true}
     env_file:
       - .env.prod
@@ -15,7 +16,8 @@ services:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 6969
-      NEXT_PUBLIC_CLIENT_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-http://localhost:6970}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://mini.sg-berjangka.com}
+      NEXT_PUBLIC_CLIENT_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-https://client-mini.sg-berjangka.com}
     init: true
     ports:
       - "${APP_SITE_PORT:-6969}:6969"
@@ -38,7 +40,8 @@ services:
       dockerfile: Dockerfile
       args:
         APP_NAME: client-area
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-http://localhost:6970}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-https://client-mini.sg-berjangka.com}
+        NEXT_PUBLIC_WEBSITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://mini.sg-berjangka.com}
         NEXT_PUBLIC_ENABLE_CLIENT_AREA: "true"
     env_file:
       - .env.prod
@@ -47,7 +50,8 @@ services:
       HOSTNAME: 0.0.0.0
       PORT: 6969
       NEXT_PUBLIC_ENABLE_CLIENT_AREA: "true"
-      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-http://localhost:6970}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_CLIENT_SITE_URL:-https://client-mini.sg-berjangka.com}
+      NEXT_PUBLIC_WEBSITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://mini.sg-berjangka.com}
     init: true
     ports:
       - "${APP_CLIENT_SITE_PORT:-6970}:6969"

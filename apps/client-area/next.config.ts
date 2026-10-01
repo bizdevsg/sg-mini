@@ -1,4 +1,18 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+
 import type { NextConfig } from "next";
+
+// Shared env lives in the repo-root .env (one file instead of one per app).
+// Next.js only auto-loads env files from this app's own folder, so pull the root
+// file in here. `loadEnvFile` never overrides a variable that is already set, so
+// apps/<app>/.env.local (loaded by Next first) still wins, and in Docker/CI the
+// root .env does not exist (see .dockerignore) — the guard makes that a no-op.
+const sharedEnvPath = path.resolve(process.cwd(), "..", "..", ".env");
+
+if (existsSync(sharedEnvPath)) {
+  process.loadEnvFile(sharedEnvPath);
+}
 
 const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
 
@@ -97,6 +111,11 @@ const nextConfig: NextConfig = {
       {
         source: "/",
         destination: `/${DEFAULT_LOCALE}/client-area/login`,
+        permanent: false,
+      },
+      {
+        source: "/:locales(id|en)",
+        destination: "/:locales/client-area/login",
         permanent: false,
       },
     ];

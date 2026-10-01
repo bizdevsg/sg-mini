@@ -58,4 +58,12 @@ tmp
 /proposal-assets
 /proposal-assets-sgb.zip
 /nginx
+
+# sgb-discovery.ts output — PII-masking is best-effort, never auto-commit this.
+# Dokumentasi/koleksi API pihak ketiga berisi detail integrasi internal — hanya lokal, repo ini publik.
+docs/api/
+docs/api/samples/*.json
+docs/api/samples/*.bin
+docs/api/samples/.device-uuid
+!docs/api/samples/.gitkeep
 .screenshot-sgb.mjs

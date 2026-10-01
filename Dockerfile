@@ -8,16 +8,18 @@ FROM base AS deps
 COPY package.json package-lock.json ./
 COPY apps/website/package.json ./apps/website/package.json
 COPY apps/client-area/package.json ./apps/client-area/package.json
-RUN npm ci
+RUN npm ci --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000
 
 FROM base AS builder
 
 ARG APP_NAME=website
-ARG NEXT_PUBLIC_CLIENT_SITE_URL=https://client.sg-berjangka.com
-ARG NEXT_PUBLIC_SITE_URL=https://sg-berjangka.com
+ARG NEXT_PUBLIC_CLIENT_SITE_URL=https://client-mini.sg-berjangka.com
+ARG NEXT_PUBLIC_SITE_URL=https://mini.sg-berjangka.com
+ARG NEXT_PUBLIC_WEBSITE_URL=https://mini.sg-berjangka.com
 ARG NEXT_PUBLIC_ENABLE_CLIENT_AREA=false
 ENV NEXT_PUBLIC_CLIENT_SITE_URL=${NEXT_PUBLIC_CLIENT_SITE_URL} \
     NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL} \
+    NEXT_PUBLIC_WEBSITE_URL=${NEXT_PUBLIC_WEBSITE_URL} \
     NEXT_PUBLIC_ENABLE_CLIENT_AREA=${NEXT_PUBLIC_ENABLE_CLIENT_AREA}
 
 COPY --from=deps /app/node_modules ./node_modules

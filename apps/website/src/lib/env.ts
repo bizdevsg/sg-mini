@@ -54,8 +54,8 @@ const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
 const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
-const DEFAULT_SITE_URL = "https://sg-berjangka.com";
-const DEFAULT_CLIENT_SITE_URL = "https://client.sg-berjangka.com";
+const DEFAULT_SITE_URL = "https://mini.sg-berjangka.com";
+const DEFAULT_CLIENT_SITE_URL = "https://client-mini.sg-berjangka.com";
 const DEFAULT_PUBLIC_CLIENT_AREA_ENABLED = false;
 const DEFAULT_PUBLIC_TAWK_CHAT_ENABLED = false;
 
