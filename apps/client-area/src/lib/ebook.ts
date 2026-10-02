@@ -5,6 +5,7 @@ import {
   type EbookCategory,
   type EbookCategoryDetail,
   type EbookResource,
+  htmlToPlainText,
 } from "@/lib/ebook.shared";
 import {
   EBOOK_CATEGORY_API_URL,
@@ -56,8 +57,10 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+// Strip markup before truncating, otherwise the cut can land inside a tag and
+// leave a dangling `<p style="...` in the teaser.
 function summarizeDescription(value: unknown) {
-  const normalizedValue = normalizeText(value);
+  const normalizedValue = htmlToPlainText(normalizeText(value));
 
   if (!normalizedValue) {
     return "";

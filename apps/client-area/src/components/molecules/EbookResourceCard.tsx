@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { ResilientImage } from "@/components/atoms/ResilientImage";
+import { htmlToPlainText } from "@/lib/ebook.shared";
 
 type EbookResourceCardProps = {
   categoryLabel: string;
@@ -68,55 +68,56 @@ export function EbookResourceCard({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col justify-between p-5">
         <p className="line-clamp-3 text-sm leading-7 text-zinc-300/88">
-          {description}
+          {htmlToPlainText(description).replace(/\s+/g, " ")}
         </p>
+        <div className="flex flex-col">
+          <div className="mt-5 flex items-center gap-3 text-xs text-yellow-500/60">
+            <span className="flex items-center gap-1.5">
+              <FontAwesomeIcon
+                icon={["fas", "book-open-reader"]}
+                className="text-[10px]"
+              />
+              {previewLabel}
+            </span>
+            <span className="h-px flex-1 bg-yellow-500/10" />
+            <span className="flex items-center gap-1.5">
+              <FontAwesomeIcon
+                icon={["fas", "download"]}
+                className="text-[10px]"
+              />
+              {fileUrl ? ctaLabel : "Unavailable"}
+            </span>
+          </div>
 
-        <div className="mt-5 flex items-center gap-3 text-xs text-yellow-500/60">
-          <span className="flex items-center gap-1.5">
-            <FontAwesomeIcon
-              icon={["fas", "book-open-reader"]}
-              className="text-[10px]"
-            />
-            {previewLabel}
-          </span>
-          <span className="h-px flex-1 bg-yellow-500/10" />
-          <span className="flex items-center gap-1.5">
-            <FontAwesomeIcon
-              icon={["fas", "download"]}
-              className="text-[10px]"
-            />
-            {fileUrl ? ctaLabel : "Unavailable"}
-          </span>
-        </div>
-
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={onPreviewClick}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm font-semibold text-zinc-200 transition hover:border-yellow-500/30 hover:bg-yellow-500/10 hover:text-yellow-200"
-          >
-            <FontAwesomeIcon icon={["fas", "circle-info"]} />
-            {previewLabel}
-          </button>
-
-          {fileUrl ? (
-            <Link
-              href={fileUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-yellow-500 px-4 text-sm font-semibold text-black transition hover:bg-yellow-400"
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={onPreviewClick}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm font-semibold text-zinc-200 transition hover:border-yellow-500/30 hover:bg-yellow-500/10 hover:text-yellow-200"
             >
-              <FontAwesomeIcon icon={["fas", "arrow-up-right-from-square"]} />
-              {ctaLabel}
-            </Link>
-          ) : (
-            <div className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/8 bg-white/[0.02] px-4 text-sm font-semibold text-zinc-500">
-              <FontAwesomeIcon icon={["fas", "ban"]} />
-              {ctaLabel}
-            </div>
-          )}
+              <FontAwesomeIcon icon={["fas", "circle-info"]} />
+              {previewLabel}
+            </button>
+
+            {fileUrl ? (
+              <Link
+                href={fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-yellow-500 px-4 text-sm font-semibold text-black transition hover:bg-yellow-400"
+              >
+                <FontAwesomeIcon icon={["fas", "arrow-up-right-from-square"]} />
+                {ctaLabel}
+              </Link>
+            ) : (
+              <div className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/8 bg-white/[0.02] px-4 text-sm font-semibold text-zinc-500">
+                <FontAwesomeIcon icon={["fas", "ban"]} />
+                {ctaLabel}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </article>

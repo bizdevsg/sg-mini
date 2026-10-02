@@ -184,6 +184,10 @@ export function EconomicCalendarBrowser({
   }, [currentPage]);
 
   useEffect(() => {
+    // Reset on mount: React Strict Mode (dev) runs mount → cleanup → mount, and
+    // without this the ref stays false so every fetched tab result is dropped.
+    isMountedRef.current = true;
+
     return () => {
       isMountedRef.current = false;
     };

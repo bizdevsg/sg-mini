@@ -8,7 +8,30 @@ type Props = {
   page: TradingRulesPageContent;
 };
 
+type Section = TradingRulesPageContent["sections"][number];
+
+function RulesSection({ section }: { section: Section }) {
+  return (
+    <section className="border-b border-white/10 pb-10 last:border-none">
+      <h2 className="text-2xl font-bold text-white">{section.title}</h2>
+      <ul className="mt-5 space-y-3 text-sm leading-7 text-zinc-300 sm:text-base">
+        {section.items.map((item) => (
+          <li key={item} className="flex gap-3">
+            <span className="mt-3 size-1.5 shrink-0 rounded-full bg-yellow-400" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function TradingRulesPage({ homeLabel, locale, page }: Props) {
+  // Locale data titles are numbered I, III, IV, V–VI, VIII, IX–XI; the hours (II)
+  // and formula (VII) blocks are separate fields, so interleave them to keep I→IX order.
+  const [general, margin, orders, reporting, transactions, ...rest] =
+    page.sections;
+
   return (
     <main>
       <PageHeroBanner
@@ -62,6 +85,7 @@ export function TradingRulesPage({ homeLabel, locale, page }: Props) {
                 ))}
               </div>
             </section>
+            {general ? <RulesSection section={general} /> : null}
             <section>
               <h2 className="text-2xl font-bold text-white">{page.hoursTitle}</h2>
               <p className="mt-2 text-zinc-400">{page.hoursDescription}</p>
@@ -93,6 +117,9 @@ export function TradingRulesPage({ homeLabel, locale, page }: Props) {
                 </table>
               </div>
             </section>
+            {margin ? <RulesSection section={margin} /> : null}
+            {orders ? <RulesSection section={orders} /> : null}
+            {reporting ? <RulesSection section={reporting} /> : null}
             <section className="rounded-3xl border border-white/10 bg-neutral-900/70 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-white">
                 {page.formulaTitle}
@@ -104,21 +131,9 @@ export function TradingRulesPage({ homeLabel, locale, page }: Props) {
                 {page.formulaDescription}
               </p>
             </section>
-            {page.sections.map((section) => (
-              <section
-                key={section.title}
-                className="border-b border-white/10 pb-10 last:border-none"
-              >
-                <h2 className="text-2xl font-bold text-white">{section.title}</h2>
-                <ul className="mt-5 space-y-3 text-sm leading-7 text-zinc-300 sm:text-base">
-                  {section.items.map((item) => (
-                    <li key={item} className="flex gap-3">
-                      <span className="mt-3 size-1.5 shrink-0 rounded-full bg-yellow-400" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
+            {transactions ? <RulesSection section={transactions} /> : null}
+            {rest.map((section) => (
+              <RulesSection key={section.title} section={section} />
             ))}
             <p className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-sm leading-6 text-zinc-400">
               {page.source}
