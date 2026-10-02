@@ -9,7 +9,7 @@ import { toPositionItem } from "@/components/organisms/client-area-open-position
 import { toTradeHistoryItem } from "@/components/organisms/client-area-trade-history";
 import { ClientAreaTransactionsPanel } from "@/components/organisms/ClientAreaTransactionsPanel";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
-import { useAccountSummary } from "@/hooks/useAccountSummary";
+import { useLiveAccountSummary } from "@/hooks/useLiveAccountSummary";
 import { useTradeHistory } from "@/hooks/useTradeHistory";
 import type { AppLocale } from "@/locales";
 
@@ -25,7 +25,7 @@ export function ClientAreaTransactionsView({
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
   // Open positions ride on the account summary payload (same BFF call).
-  const { state, retry } = useAccountSummary(accountMode);
+  const { state, retry } = useLiveAccountSummary(accountMode);
   const positions = useMemo(
     () => (state.status === "ready" ? state.positions.map(toPositionItem) : []),
     [state],

@@ -5,6 +5,8 @@ import { getMessages, type AppLocale } from "@/locales";
 
 type BenefitSectionProps = {
   locale: AppLocale;
+  /** Narrow layout for placing inside a dashboard column (no page container). */
+  compact?: boolean;
 };
 
 const benefitCardStyles = [
@@ -25,16 +27,17 @@ const benefitCardAos = [
   "fade-left",
 ] as const;
 
-export function BenefitSection({ locale }: BenefitSectionProps) {
+export function BenefitSection({ locale, compact = false }: BenefitSectionProps) {
   const items = getMessages(locale).benefitSection.items;
 
-  return (
-    <SectionContainer className="py-10 md:py-20">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  const grid = (
+    <div
+      className={`grid grid-cols-1 gap-4 ${compact ? "sm:grid-cols-3" : "md:grid-cols-3"}`}
+    >
         {items.map((item, index) => (
           <ScrollReveal
             key={`${item.eyebrow}-${item.title}`}
-            className={`relative overflow-hidden rounded-2xl border-2 border-white/20 p-6 ${benefitCardStyles[index] ?? benefitCardStyles[0]}`}
+            className={`relative overflow-hidden rounded-2xl border-2 border-white/20 ${compact ? "p-4" : "p-6"} ${benefitCardStyles[index] ?? benefitCardStyles[0]}`}
             effect={benefitCardAos[index] ?? "fade-up"}
             delay={index * 80}
           >
@@ -43,11 +46,11 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
               style={{ backgroundImage: "url('/assets/Texture-Fabrik-Film-Grain_05_PR 1.png')" }}
             />
 
-            <div className="z-10 space-y-8">
+            <div className={`z-10 ${compact ? "space-y-4" : "space-y-8"}`}>
               <div className="space-y-1">
-                <h5 className="text-white font-normal text-2xl">{item.eyebrow}</h5>
-                <h2 className="text-white font-bold text-4xl">{item.title}</h2>
-                <p className="mt-2 text-sm text-white/50">{item.description}</p>
+                <h5 className={`text-white font-normal ${compact ? "text-base" : "text-2xl"}`}>{item.eyebrow}</h5>
+                <h2 className={`text-white font-bold ${compact ? "text-xl" : "text-4xl"}`}>{item.title}</h2>
+                <p className={`mt-2 text-white/50 ${compact ? "text-xs" : "text-sm"}`}>{item.description}</p>
               </div>
 
               <div>
@@ -62,7 +65,12 @@ export function BenefitSection({ locale }: BenefitSectionProps) {
             </div>
           </ScrollReveal>
         ))}
-      </div>
-    </SectionContainer>
+    </div>
   );
+
+  if (compact) {
+    return grid;
+  }
+
+  return <SectionContainer className="py-10 md:py-20">{grid}</SectionContainer>;
 }

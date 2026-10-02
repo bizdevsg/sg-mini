@@ -1,11 +1,12 @@
 "use client";
 
-import { TrendingUp, type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { ClientAreaHeroSlideshow } from "@/components/molecules/ClientAreaHeroSlideshow";
 import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQuickActionsGrid";
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
+import { BenefitSection } from "@/components/organisms/BenefitSection";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
 import { ClientAreaMarketInsightSection } from "@/components/organisms/ClientAreaMarketInsightSection";
 import { ClientAreaMarketWatchSection } from "@/components/organisms/ClientAreaMarketWatchSection";
@@ -16,7 +17,7 @@ import type {
   ClientAreaHeroSlide,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
-import { useAccountSummary } from "@/hooks/useAccountSummary";
+import { useLiveAccountSummary } from "@/hooks/useLiveAccountSummary";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
 import type { AppLocale, AppMessages } from "@/locales";
@@ -59,8 +60,12 @@ export function ClientAreaHomePanel({
   setIsAccountMenuOpen,
 }: ClientAreaHomePanelProps) {
   // One fetch feeds both card instances (mobile and desktop layouts).
-  const { state: summaryState, retry: retrySummary } =
-    useAccountSummary(accountMode);
+  const {
+    state: summaryState,
+    retry: retrySummary,
+    updatedAt: summaryUpdatedAt,
+    isStale: isSummaryStale,
+  } = useLiveAccountSummary(accountMode);
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(200px,0.8fr)]">
@@ -71,6 +76,8 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
+            isStale={isSummaryStale}
+            updatedAt={summaryUpdatedAt}
             locale={locale}
             onRetry={retrySummary}
             summaryState={summaryState}
@@ -115,6 +122,8 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
+            isStale={isSummaryStale}
+            updatedAt={summaryUpdatedAt}
             locale={locale}
             onRetry={retrySummary}
             summaryState={summaryState}
