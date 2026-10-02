@@ -10,61 +10,82 @@ import type {
   ArticleItem,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
+import type { NewsCategory } from "@/lib/news.shared";
 import { getMessages, type AppLocale } from "@/locales";
 
 const CLIENT_AREA_NEWS_PAGE_SIZE = 6;
-const CLIENT_AREA_NEWS_FILTERS = [
-  { id: "all", label: "Semua" },
-  { id: "commodity", label: "Commodity" },
-  { id: "index", label: "Index" },
-  { id: "forex", label: "Forex" },
-] as const;
-
-type ClientAreaNewsFilterId = (typeof CLIENT_AREA_NEWS_FILTERS)[number]["id"];
+const ALL_NEWS_FILTER_ID = "all";
 
 type ClientAreaNewsPanelProps = {
   articles?: ArticleItem[];
+  /** Categories from the portal (GET /api/v1/berita/categories). */
+  categories?: NewsCategory[];
   copy: DashboardCopy;
   locale: AppLocale;
 };
 
-function matchesArticleFilter(
-  article: ArticleItem,
-  filterId: ClientAreaNewsFilterId,
-) {
-  if (filterId === "all") {
-    return true;
+type NewsFilter = {
+  id: string;
+  label: string;
+  /** Category name an article's `category` is compared with (case-insensitive). */
+  name: string;
+};
+
+function normalizeCategory(value: string) {
+  return value.trim().toLowerCase();
+}
+
+// Filters come from the portal's category list. If that list could not be loaded,
+// fall back to the categories found on the articles themselves — never to
+// keyword guesses.
+function buildNewsFilters(
+  categories: NewsCategory[] | undefined,
+  articles: ArticleItem[],
+): NewsFilter[] {
+  if (categories && categories.length > 0) {
+    return categories.map((category) => ({
+      id: category.slug,
+      label: category.name,
+      name: category.name,
+    }));
   }
 
-  const haystack = `${article.category} ${article.title} ${article.excerpt}`.toLowerCase();
+  const seen = new Map<string, NewsFilter>();
 
-  if (filterId === "commodity") {
-    return ["commodity", "commodities", "gold", "silver", "oil", "crude"].some(
-      (keyword) => haystack.includes(keyword),
-    );
+  for (const article of articles) {
+    const key = normalizeCategory(article.category);
+
+    if (key && !seen.has(key)) {
+      seen.set(key, { id: key, label: article.category, name: article.category });
+    }
   }
 
-  if (filterId === "index") {
-    return ["index", "indices", "nikkei", "hang seng", "dow", "nasdaq", "s&p"].some(
-      (keyword) => haystack.includes(keyword),
-    );
-  }
-
-  return ["forex", "currencies", "currency", "fx", "usd", "eur", "jpy", "gbp"].some(
-    (keyword) => haystack.includes(keyword),
-  );
+  return [...seen.values()];
 }
 
 export function ClientAreaNewsPanel({
   articles,
+  categories,
   copy,
   locale,
 }: ClientAreaNewsPanelProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeFilter, setActiveFilter] = useState<ClientAreaNewsFilterId>("all");
+  const [activeFilter, setActiveFilter] = useState<string>(ALL_NEWS_FILTER_ID);
   const resolvedArticles = articles && articles.length > 0 ? articles : copy.articles;
-  const filteredArticles = resolvedArticles.filter((article) =>
-    matchesArticleFilter(article, activeFilter),
+  const newsFilters = [
+    {
+      id: ALL_NEWS_FILTER_ID,
+      label: locale === "id" ? "Semua" : "All",
+      name: "",
+    },
+    ...buildNewsFilters(categories, resolvedArticles),
+  ];
+  const activeFilterName =
+    newsFilters.find((filter) => filter.id === activeFilter)?.name ?? "";
+  const filteredArticles = resolvedArticles.filter(
+    (article) =>
+      activeFilter === ALL_NEWS_FILTER_ID ||
+      normalizeCategory(article.category) === normalizeCategory(activeFilterName),
   );
   const totalPages = Math.max(
     1,
@@ -90,7 +111,7 @@ export function ClientAreaNewsPanel({
       </h2>
 
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
-        {CLIENT_AREA_NEWS_FILTERS.map((filter) => {
+        {newsFilters.map((filter) => {
           const isActive = filter.id === activeFilter;
 
           return (

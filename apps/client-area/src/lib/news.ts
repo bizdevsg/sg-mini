@@ -8,12 +8,14 @@ import { getMessages, type AppLocale } from "@/locales";
 import {
   NEWS_API_URL,
   NEWS_API_URL_ID,
+  NEWS_CATEGORY_API_URL,
   getNewsAssetUrl,
 } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
 import {
   type NewsArticleDetail,
   type NewsArticleDetailResult,
+  type NewsCategory,
   type NewsFeedArticle,
   type NewsFeedResult,
 } from "@/lib/news.shared";
@@ -21,6 +23,7 @@ import {
 export type {
   NewsArticleDetail,
   NewsArticleDetailResult,
+  NewsCategory,
   NewsFeedArticle,
   NewsFeedResult,
 } from "@/lib/news.shared";
@@ -777,6 +780,71 @@ export async function getNewsFeed(
     return {
       articles: [],
     };
+  }
+}
+
+type NewsCategoryApiRecord = {
+  id?: number | null;
+  name?: string | null;
+  slug?: string | null;
+  beritas_count?: number | null;
+};
+
+const NEWS_CATEGORY_TIMEOUT_MS = 8000;
+
+/**
+ * News categories from the portal (GET /api/v1/berita/categories), sorted by
+ * name. Returns [] on any failure — callers fall back to the categories found on
+ * the articles themselves.
+ */
+export async function getNewsCategories(): Promise<NewsCategory[]> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), NEWS_CATEGORY_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(NEWS_CATEGORY_API_URL, {
+      next: { revalidate: NEWS_REVALIDATE_SECONDS },
+      signal: controller.signal,
+      headers: await getSgAdminApiHeaders(),
+    });
+
+    if (!response.ok) {
+      console.warn(
+        `News category API returned ${response.status} ${response.statusText}.`,
+      );
+      return [];
+    }
+
+    const payload = (await response.json()) as { data?: NewsCategoryApiRecord[] };
+
+    if (!Array.isArray(payload?.data)) {
+      return [];
+    }
+
+    return payload.data
+      .flatMap((record): NewsCategory[] => {
+        const name = record.name?.trim();
+        const slug = record.slug?.trim();
+
+        if (typeof record.id !== "number" || !name || !slug) {
+          return [];
+        }
+
+        return [
+          {
+            id: record.id,
+            name,
+            slug,
+            articleCount: Number(record.beritas_count) || 0,
+          },
+        ];
+      })
+      .sort((left, right) => left.name.localeCompare(right.name));
+  } catch (error) {
+    console.warn("News category API request failed.", error);
+    return [];
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

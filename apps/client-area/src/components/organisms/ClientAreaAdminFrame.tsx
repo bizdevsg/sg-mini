@@ -123,7 +123,19 @@ export function ClientAreaAdminFrame({
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 py-5">
+        <div className="p-3 border-b border-gray-600">
+          <a
+            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
+          >
+            <ArrowLeft className="h-[18px] w-[18px] hover:bg-amber-500/10 hover:text-amber-300" />
+            <span className="text-sm font-medium leading-tight">
+              {locale === "id" ? "Kembali ke Website" : "Back to Website"}
+            </span>
+          </a>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-3">
           <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
             Navigation
           </p>
@@ -131,15 +143,6 @@ export function ClientAreaAdminFrame({
         </div>
 
         <div className="space-y-2 border-t border-white/8 p-3">
-          <a
-            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
-          >
-            <ArrowLeft className="h-[18px] w-[18px] text-zinc-500" />
-            <span className="text-sm font-medium leading-tight">
-              {locale === "id" ? "Kembali ke Website" : "Back to Website"}
-            </span>
-          </a>
           <ClientAreaSidebarLogoutButton
             label={clientArea.topbar.logoutLabel}
             onClick={() => setIsLogoutModalOpen(true)}

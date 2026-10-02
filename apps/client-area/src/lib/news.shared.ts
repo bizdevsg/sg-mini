@@ -15,6 +15,15 @@ export type NewsArticleDetail = NewsFeedArticle & {
   tags: string[];
 };
 
+/** A news category from GET /api/v1/berita/categories. */
+export type NewsCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  /** `beritas_count` — how many articles the portal has in this category. */
+  articleCount: number;
+};
+
 export type NewsFeedResult = {
   articles: NewsFeedArticle[];
 };
