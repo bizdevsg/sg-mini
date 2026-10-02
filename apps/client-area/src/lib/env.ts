@@ -12,6 +12,8 @@ const DEFAULT_CLIENT_AREA_CONFIG_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/client-area`;
 const DEFAULT_EBOOK_CATEGORY_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
+const DEFAULT_NEWS_CATEGORY_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/berita/categories`;
 const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
 const DEFAULT_PRODUCT_PORTAL_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/`;
 const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
@@ -208,6 +210,11 @@ export const NEWS_API_URL_ID = normalizeUrlEnv(
   DEFAULT_NEWS_API_URL_ID,
 );
 
+export const NEWS_CATEGORY_API_URL = normalizeUrlEnv(
+  process.env.NEWS_CATEGORY_API_URL,
+  DEFAULT_NEWS_CATEGORY_API_URL,
+);
+
 export const NEWS_PORTAL_BASE_URL =
   normalizeUrlEnv(process.env.NEWS_PORTAL_BASE_URL, DEFAULT_NEWS_PORTAL_BASE_URL);
 
@@ -374,6 +381,10 @@ export const PUBLIC_CLIENT_AREA_ENABLED = normalizeBooleanEnv(
   process.env.NEXT_PUBLIC_ENABLE_CLIENT_AREA,
   DEFAULT_PUBLIC_CLIENT_AREA_ENABLED,
 );
+
+// Nomor WhatsApp cadangan: ditampilkan saat live chat mati / gagal dimuat.
+export const PUBLIC_WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || "081234567890";
 
 export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
   process.env.NEXT_PUBLIC_ENABLE_TAWK_CHAT,

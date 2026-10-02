@@ -67,6 +67,7 @@ export function LocalizedLayoutEnhancements({
       <TawkChatWidget
         canEnable={resolvedTawkChatEnabled}
         enabledInitially={resolvedTawkChatEnabled && !shouldShowCookieConsent}
+        locale={locale}
       />
       {shouldShowCookieConsent ? (
         <HomeCookieConsentBanner locale={locale} />

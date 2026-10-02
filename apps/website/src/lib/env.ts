@@ -302,6 +302,10 @@ export const PUBLIC_CLIENT_AREA_ENABLED = normalizeBooleanEnv(
   DEFAULT_PUBLIC_CLIENT_AREA_ENABLED,
 );
 
+// Nomor WhatsApp cadangan: ditampilkan saat live chat mati / gagal dimuat.
+export const PUBLIC_WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || "081234567890";
+
 export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
   process.env.NEXT_PUBLIC_ENABLE_TAWK_CHAT,
   DEFAULT_PUBLIC_TAWK_CHAT_ENABLED,

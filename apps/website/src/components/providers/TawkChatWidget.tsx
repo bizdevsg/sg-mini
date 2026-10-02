@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 
+import { WhatsAppWidget } from "@/components/molecules/WhatsAppWidget";
 import {
   TAWK_CHAT_ENABLE_EVENT,
   TAWK_CHAT_WIDGET_ATTRIBUTES,
   TAWK_CHAT_WIDGET_URL,
 } from "@/lib/tawk";
+import type { AppLocale } from "@/locales";
 
 declare global {
   interface Window {
@@ -17,6 +19,7 @@ declare global {
 type TawkChatWidgetProps = {
   canEnable: boolean;
   enabledInitially: boolean;
+  locale: AppLocale;
 };
 
 const TAWK_SCRIPT_ID = "tawk-chat-script";
@@ -38,8 +41,11 @@ function removeTawkWidget() {
 export function TawkChatWidget({
   canEnable,
   enabledInitially,
+  locale,
 }: TawkChatWidgetProps) {
   const [isEnabled, setIsEnabled] = useState(enabledInitially);
+  // The chat script could not be loaded (server down, blocked, ...).
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     if (!canEnable) {
@@ -91,10 +97,12 @@ export function TawkChatWidget({
 
     const handleLoad = () => {
       window.__sgbTawkBooted = true;
+      setLoadFailed(false);
     };
     const handleError = () => {
       window.__sgbTawkBooted = false;
       script.remove();
+      setLoadFailed(true);
     };
     script.addEventListener("load", handleLoad);
     script.addEventListener("error", handleError);
@@ -108,5 +116,11 @@ export function TawkChatWidget({
     };
   }, [canEnable, isEnabled]);
 
-  return null;
+  // Live chat is "dead" when it is switched off or its script failed to load.
+  // (While it merely waits for cookie consent it is not dead — no fallback yet.)
+  if (canEnable && !loadFailed) {
+    return null;
+  }
+
+  return <WhatsAppWidget locale={locale} />;
 }
