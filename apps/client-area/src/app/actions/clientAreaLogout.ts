@@ -1,5 +1,6 @@
 "use server";
 
+import { describeError } from "@/lib/safe-log";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -60,7 +61,7 @@ async function callSgbLogoutBestEffort() {
   } catch (error) {
     // Best-effort: the local session must be cleared regardless of whether
     // the remote logout call succeeds (e.g. token already expired server-side).
-    console.error("[client-area-logout] SGB logout call failed", error);
+    console.error("[client-area-logout] SGB logout call failed", describeError(error));
   }
 }
 

@@ -1,5 +1,6 @@
 "use server";
 
+import { describeError } from "@/lib/safe-log";
 import { redirect } from "next/navigation";
 
 import {
@@ -75,7 +76,7 @@ export async function submitSendOtp(
       message: otp.resendSuccess,
     };
   } catch (error) {
-    console.error("[client-area-otp] send-otp call failed", error);
+    console.error("[client-area-otp] send-otp call failed", describeError(error));
 
     if (isSgbSessionRestartError(error)) {
       return { status: "error", message: otp.errorSessionExpired };
@@ -127,7 +128,7 @@ async function getOtpRequestId(
 
     return typeof res.data?.idOtp === "string" ? res.data.idOtp : "";
   } catch (err) {
-    console.error("[client-area-otp] account-otp call failed", err);
+    console.error("[client-area-otp] account-otp call failed", describeError(err));
   }
   return "";
 }
@@ -193,7 +194,7 @@ export async function submitVerifyOtp(
     });
     finalToken = verifyResult.data?.token ?? verifyResult.newToken;
   } catch (error) {
-    console.error("[client-area-otp] verify-otp call failed", error);
+    console.error("[client-area-otp] verify-otp call failed", describeError(error));
 
     if (isSgbSessionRestartError(error)) {
       return { status: "error", message: otp.errorSessionExpired };
@@ -243,7 +244,7 @@ export async function submitVerifyOtp(
     });
     accounts = listAccountResult.data;
   } catch (error) {
-    console.error("[client-area-otp] list-account call failed", error);
+    console.error("[client-area-otp] list-account call failed", describeError(error));
   }
 
   await createClientAreaSession({ token: finalToken, email, accounts }, rememberMe);

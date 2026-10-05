@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { describeError } from "@/lib/safe-log";
 import {
   protectSameOriginBrowserApiRoute,
   withApiProtectionHeaders,
@@ -96,7 +97,7 @@ export async function GET(request: Request) {
       return json({ error: "session_expired" }, 401);
     }
 
-    console.error("[daily-statement] SGB call failed", mode, error);
+    console.error("[daily-statement] SGB call failed", mode, describeError(error));
 
     return json(
       {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { describeError } from "@/lib/safe-log";
 import {
   protectSameOriginBrowserApiRoute,
   withApiProtectionHeaders,
@@ -119,7 +120,7 @@ export async function GET(request: Request) {
       return json({ status: "registration_incomplete" }, 409);
     }
 
-    console.error("[profile] SGB call failed", error);
+    console.error("[profile] SGB call failed", describeError(error));
 
     return json(
       {

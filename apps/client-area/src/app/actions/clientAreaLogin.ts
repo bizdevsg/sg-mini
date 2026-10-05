@@ -1,5 +1,6 @@
 "use server";
 
+import { describeError } from "@/lib/safe-log";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -118,7 +119,7 @@ export async function submitClientAreaLogin(
         CLIENT_AREA_SKIP_OTP,
     );
   } catch (error) {
-    console.error("[client-area-login] SGB login call failed", error);
+    console.error("[client-area-login] SGB login call failed", describeError(error));
 
     if (error instanceof SgbApiError && /captcha/i.test(error.message)) {
       return {
@@ -182,7 +183,7 @@ export async function submitClientAreaLogin(
     accounts = listAccountResult.data;
   } catch (error) {
     // Non-fatal — the session is still created without account list data.
-    console.error("[client-area-login] list-account call failed", error);
+    console.error("[client-area-login] list-account call failed", describeError(error));
   }
 
   await createClientAreaSession({ token, email, accounts }, rememberMe);

@@ -2,6 +2,8 @@ import "server-only";
 
 import { cache } from "react";
 
+import { describeError } from "@/lib/safe-log";
+
 import {
   APP_ENV,
   CLIENT_AREA_CONFIG_API_TOKEN,
@@ -256,7 +258,7 @@ export const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureCon
   } catch (error) {
     console.error("Failed to fetch website feature config", {
       appEnv: APP_ENV,
-      error,
+      error: describeError(error),
       url: CLIENT_AREA_CONFIG_API_URL,
     });
 

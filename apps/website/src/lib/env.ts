@@ -34,10 +34,11 @@ const DEFAULT_PRIVACY_POLICY_API_URL =
   `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/privacy-policy`;
 const DEFAULT_HISTORICAL_DATA_API_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
-const DEFAULT_HISTORICAL_DATA_API_TOKEN = "NM23-8f0f24b4d56af1c3";
+// API tokens must come from env (never hardcode them: this module is also imported by client components).
+const DEFAULT_HISTORICAL_DATA_API_TOKEN = "";
 const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
   "https://portalnews.newsmaker.id/api/v1/newsmaker/kalender-ekonomi";
-const DEFAULT_ECONOMIC_CALENDAR_API_TOKEN = "NM23-8f0f24b4d56af1c3";
+const DEFAULT_ECONOMIC_CALENDAR_API_TOKEN = "";
 const DEFAULT_TRADINGVIEW_SYMBOL_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/tradingview-symbol`;
 const DEFAULT_MARKET_SIGNAL_API_URL =

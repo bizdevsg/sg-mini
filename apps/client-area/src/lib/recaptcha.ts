@@ -1,3 +1,4 @@
+import { describeError } from "@/lib/safe-log";
 import {
   APP_ENV,
   CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL,
@@ -142,7 +143,7 @@ export async function verifyRecaptchaToken(
 
     return isValid;
   } catch (error) {
-    console.error("[recaptcha] verification request threw", error);
+    console.error("[recaptcha] verification request threw", describeError(error));
     return false;
   }
 }

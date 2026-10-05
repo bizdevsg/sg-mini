@@ -25,7 +25,9 @@ export default function GlobalError({
   const referenceLabel = fallbackCopy.labels.reference;
 
   useEffect(() => {
-    console.error(error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(error);
+    }
   }, [error]);
 
   return (

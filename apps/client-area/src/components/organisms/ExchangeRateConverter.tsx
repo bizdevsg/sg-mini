@@ -141,7 +141,9 @@ export function ExchangeRateConverter({
           return;
         }
 
-        console.error("Failed to refresh exchange rates", error);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to refresh exchange rates", error);
+        }
         setHasError(true);
       } finally {
         if (!controller.signal.aborted) {

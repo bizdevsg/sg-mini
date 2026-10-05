@@ -1,6 +1,12 @@
 ## [Unreleased]
 
+### Added
+- Header keamanan HTTP (`nosniff`, frame policy, referrer policy, permissions policy, dan HSTS pada production) ditambahkan ke aplikasi website publik dan Client Area.
+- Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
+
 ### Changed
+- Logging error server Client Area kini memakai ringkasan yang dibatasi agar stack trace dan payload upstream yang berpotensi sensitif tidak tercetak; error browser nonkritis juga hanya dicatat pada development.
+- Token Historical Data dan Economic Calendar tidak lagi memiliki nilai default hardcoded dan sekarang wajib dipasok melalui environment deployment.
 - Tautan menu Akun Reguler pada navbar website publik dan Client Area bahasa Indonesia kini membuka situs khusus `reguler.sg-berjangka.com`, menggantikan halaman produk lokal.
 - Fallback autentikasi dummy pada login dan verifikasi OTP Client Area dinonaktifkan; sesi kini hanya dibuat setelah server UAT mengembalikan token yang valid, sedangkan kegagalan API ditampilkan sebagai error pada form.
 - Login dan integrasi API Client Area kini menggunakan flavor server UAT secara default, sehingga endpoint SSO tidak lagi mengarah ke server development yang tidak terjangkau.
