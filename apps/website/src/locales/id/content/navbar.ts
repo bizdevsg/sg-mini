@@ -17,7 +17,7 @@ export const idNavbar: AppMessages["navbar"] = {
           href: "/produk/multilateral",
         },
         { label: "Bilateral", href: "/produk/bilateral" },
-        { label: "Akun Reguler", href: "/produk/reguler" },
+        { label: "Akun Reguler", href: "https://reguler.sg-berjangka.com/" },
         { label: "Akun Prime", href: "/produk/prime" },
         { label: "Aplikasi Solid Gold", href: "/aplikasi-solid-gold" },
         { label: "Live Quote", href: "/live-quote" },

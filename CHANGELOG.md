@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 ### Changed
+- Tautan menu Akun Reguler pada navbar website publik dan Client Area bahasa Indonesia kini membuka situs khusus `reguler.sg-berjangka.com`, menggantikan halaman produk lokal.
 - Fallback autentikasi dummy pada login dan verifikasi OTP Client Area dinonaktifkan; sesi kini hanya dibuat setelah server UAT mengembalikan token yang valid, sedangkan kegagalan API ditampilkan sebagai error pada form.
 - Login dan integrasi API Client Area kini menggunakan flavor server UAT secara default, sehingga endpoint SSO tidak lagi mengarah ke server development yang tidak terjangkau.
 - Fitur Referral Code dinonaktifkan sementara melalui feature flag internal; item menu Account tetap terlihat dalam keadaan terkunci dan akses URL langsung diarahkan kembali ke halaman Account, sementara implementasi desainnya tetap dipertahankan untuk aktivasi berikutnya.
