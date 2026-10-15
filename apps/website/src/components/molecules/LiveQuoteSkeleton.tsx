@@ -159,8 +159,8 @@ export function LiveQuoteSkeleton({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, index) => (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {Array.from({ length: 4 }).map((_, index) => (
         <CompactCardSkeleton key={index} />
       ))}
     </div>

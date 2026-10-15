@@ -4,10 +4,7 @@ import { useMemo } from "react";
 
 import { ClientAreaMarketPanel } from "@/components/organisms/ClientAreaMarketPanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
-import {
-  getClientAreaAllMarketPrices,
-  getClientAreaMarketPrices,
-} from "@/components/organisms/client-area.shared";
+import { getClientAreaFeaturedMarketPrices } from "@/components/organisms/client-area.shared";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
 import { getMessages, type AppLocale } from "@/locales";
@@ -24,10 +21,7 @@ export function ClientAreaMarketView({
   const fieldLabels = getMessages(locale).liveQuoteTable.fields;
   const { quotes } = useLiveQuoteStream();
   const prices = useMemo(
-    () =>
-      Object.keys(quotes).length > 0
-        ? getClientAreaAllMarketPrices(quotes)
-        : getClientAreaMarketPrices(quotes),
+    () => getClientAreaFeaturedMarketPrices(quotes),
     [quotes],
   );
 

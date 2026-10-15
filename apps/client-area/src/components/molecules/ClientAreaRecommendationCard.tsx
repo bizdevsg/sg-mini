@@ -13,6 +13,7 @@ type ClientAreaRecommendationCardProps = {
   item: MarketPrice;
   badge: string;
   badgeClass: string;
+  displayCode?: string;
   icon: IconProp;
   iconClass: string;
 };
@@ -21,6 +22,7 @@ export function ClientAreaRecommendationCard({
   item,
   badge,
   badgeClass,
+  displayCode,
   icon,
   iconClass,
 }: ClientAreaRecommendationCardProps) {
@@ -43,7 +45,9 @@ export function ClientAreaRecommendationCard({
           )}
           <div>
             <h3 className="text-xs font-extrabold text-zinc-200">{item.symbol}</h3>
-            <span className="text-[10px] text-zinc-500">{symbolCode}</span>
+            <span className="text-[10px] text-zinc-500">
+              {displayCode ?? symbolCode}
+            </span>
           </div>
         </div>
 

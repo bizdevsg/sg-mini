@@ -116,7 +116,7 @@ export function HeaderActions({
           className="h-full w-full rounded-full object-cover"
         />
       ) : (
-        <span className="leading-none text-[#1b1307]">{clientAreaLabel}</span>
+        <span className="leading-none text-[#1b1307] text-xs">{clientAreaLabel}</span>
       )}
     </Link>
   ) : null;

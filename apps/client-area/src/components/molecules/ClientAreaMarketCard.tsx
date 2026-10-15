@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowDown, ArrowUp, Minus } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 import { ClientAreaMarketMetricItem } from "@/components/atoms/ClientAreaMarketMetricItem";
 import { ButtonLink } from "@/components/atoms/ButtonLink";
@@ -24,19 +24,14 @@ export function ClientAreaMarketCard({
   item,
   locale,
 }: ClientAreaMarketCardProps) {
-  const direction =
-    item.change > 0 ? "up" : item.change < 0 ? "down" : "-";
+  const direction = item.change >= 0 ? "up" : "down";
 
   const directionClassName = getDirectionClassName(direction);
 
-  const DirectionIcon =
-    direction === "up"
-      ? ArrowUp
-      : direction === "down"
-        ? ArrowDown
-        : Minus;
+  const DirectionIcon = direction === "up" ? ArrowUp : ArrowDown;
 
   const marketCode = item.code ?? item.name;
+  const displayMarketCode = marketCode.replace(/_BBJ$/, "");
 
   function formatMetricValue(
     value: string | undefined,
@@ -90,7 +85,7 @@ export function ClientAreaMarketCard({
 
             </h3>
             <p className="text-xs font-semibold text-zinc-500">
-              ({marketCode})
+              ({displayMarketCode})
             </p>
           </div>
         </div>
@@ -109,7 +104,7 @@ export function ClientAreaMarketCard({
             />
           </div>
 
-          <div className="grid gap-1">
+          <div className="grid gap-1 xl:border-l xl:border-white/10 xl:pl-6">
             <ClientAreaMarketMetricItem
               label={fieldLabels.open}
               value={marketMetrics.open}
@@ -126,7 +121,7 @@ export function ClientAreaMarketCard({
             />
           </div>
 
-          <div className="grid gap-1 sm:col-span-2 xl:col-span-1">
+          <div className="grid gap-1 sm:col-span-2 xl:col-span-1 xl:border-l xl:border-white/10 xl:pl-6">
             <ClientAreaMarketMetricItem
               valuePrefix={
                 <DirectionIcon className={directionClassName} size={14} />

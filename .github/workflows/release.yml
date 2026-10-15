@@ -2,36 +2,91 @@ name: Release
 
 on:
   push:
+    branches:
+      - prod
+      - split-client-area
     tags:
       - "v*.*.*"
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   release:
+    if: github.ref_type == 'tag' || (github.repository == 'bizdevsg/sg-mini' && github.ref_name == 'prod') || (github.repository == 'fptra28/sg-mini' && github.ref_name == 'split-client-area')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # need full history + tags to diff against the previous release
+          fetch-depth: 0
 
-      - name: Generate release notes from commit messages
-        id: notes
+      - name: Resolve release version
+        id: version
+        shell: bash
         run: |
-          CURRENT_TAG="${GITHUB_REF_NAME}"
-          PREV_TAG=$(git tag --sort=-creatordate | grep -vFx "$CURRENT_TAG" | head -n 1)
+          git fetch --force --tags
 
-          if [ -n "$PREV_TAG" ]; then
-            RANGE="${PREV_TAG}..${CURRENT_TAG}"
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            CURRENT_TAG="${GITHUB_REF_NAME}"
+            PREVIOUS_TAG=$(git tag --list "v*" --sort=-v:refname \
+              | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+              | grep -vFx "${CURRENT_TAG}" \
+              | head -n 1 || true)
+            CREATE_TAG="false"
           else
-            RANGE="$CURRENT_TAG"
+            HEAD_TAG=$(git tag --points-at HEAD --list "v*" --sort=-v:refname \
+              | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+              | head -n 1 || true)
+
+            if [[ -n "${HEAD_TAG}" ]]; then
+              CURRENT_TAG="${HEAD_TAG}"
+              PREVIOUS_TAG=$(git tag --list "v*" --sort=-v:refname \
+                | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+                | grep -vFx "${CURRENT_TAG}" \
+                | head -n 1 || true)
+              CREATE_TAG="false"
+            else
+              PREVIOUS_TAG=$(git tag --list "v*" --sort=-v:refname \
+                | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+                | head -n 1 || true)
+
+              if [[ -n "${PREVIOUS_TAG}" ]]; then
+                VERSION="${PREVIOUS_TAG#v}"
+                IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION}"
+                CURRENT_TAG="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+              else
+                CURRENT_TAG="v0.1.0"
+              fi
+
+              CREATE_TAG="true"
+            fi
           fi
 
-          git log "$RANGE" --no-merges --pretty=format:"%s" > commits.txt
+          {
+            echo "current_tag=${CURRENT_TAG}"
+            echo "previous_tag=${PREVIOUS_TAG}"
+            echo "create_tag=${CREATE_TAG}"
+          } >> "${GITHUB_OUTPUT}"
 
-          python3 - "$CURRENT_TAG" <<'PYEOF'
+      - name: Generate release notes from commit messages
+        env:
+          CURRENT_TAG: ${{ steps.version.outputs.current_tag }}
+          PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
+        run: |
+          if [[ -n "${PREVIOUS_TAG}" ]]; then
+            RANGE="${PREVIOUS_TAG}..HEAD"
+          else
+            RANGE="HEAD"
+          fi
+
+          git log "${RANGE}" --no-merges --pretty=format:"%s" > commits.txt
+
+          python3 - "${CURRENT_TAG}" <<'PYEOF'
           import re
           import sys
 
@@ -81,17 +136,27 @@ jobs:
               lines.append("")
 
           if not lines:
-              lines = ["_No commits with a recognized prefix since the last release._"]
+              lines = ["_No commits since the previous release._"]
 
           with open("release-notes.md", "w", encoding="utf-8") as handle:
               handle.write("\n".join(lines).strip() + "\n")
           PYEOF
 
+      - name: Create and push automatic tag
+        if: steps.version.outputs.create_tag == 'true'
+        env:
+          CURRENT_TAG: ${{ steps.version.outputs.current_tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag --annotate "${CURRENT_TAG}" --message "Release ${CURRENT_TAG}"
+          git push origin "${CURRENT_TAG}"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: ${{ steps.version.outputs.current_tag }}
+          name: ${{ steps.version.outputs.current_tag }}
           body_path: release-notes.md
           draft: false
           prerelease: false

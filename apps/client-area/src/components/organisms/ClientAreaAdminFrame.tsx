@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Bell, Menu, X } from "lucide-react";
+import { ArrowLeft, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { HeaderActions } from "@/components/molecules/HeaderActions";
@@ -12,19 +12,20 @@ import {
   ClientAreaSidebarLogoutButton,
 } from "@/components/molecules/ClientAreaDesktopSidebarNav";
 import { ClientAreaLogoutModal } from "@/components/molecules/ClientAreaLogoutModal";
+import { ClientAreaNotificationMenu } from "@/components/molecules/ClientAreaNotificationMenu";
+import { ClientAreaProfileMenu } from "@/components/molecules/ClientAreaProfileMenu";
+import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
 import {
   getSidebarIconMap,
   resolveClientAreaTabHref,
 } from "@/components/organisms/client-area.shared";
 import type { TabId } from "@/components/organisms/client-area.types";
-import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
 import { getMessages, type AppLocale } from "@/locales";
 import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 
 type ClientAreaAdminFrameProps = {
   children: ReactNode;
   locale: AppLocale;
-  profile: ClientAreaSessionProfile;
 };
 
 function resolveActiveTab(pathname: string): TabId {
@@ -61,8 +62,8 @@ function resolveActiveTab(pathname: string): TabId {
 export function ClientAreaAdminFrame({
   children,
   locale,
-  profile,
 }: ClientAreaAdminFrameProps) {
+  const profile = useClientAreaProfile();
   const pathname = usePathname();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -146,12 +147,12 @@ export function ClientAreaAdminFrame({
           {navigation}
         </div>
 
-        <div className="space-y-2 border-t border-white/8 p-3">
+        {/* <div className="space-y-2 border-t border-white/8 p-3">
           <ClientAreaSidebarLogoutButton
             label={clientArea.topbar.logoutLabel}
             onClick={() => setIsLogoutModalOpen(true)}
           />
-        </div>
+        </div> */}
       </aside>
 
       <div className="min-h-screen lg:pl-64">
@@ -175,14 +176,10 @@ export function ClientAreaAdminFrame({
           </div>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="relative hidden h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/[0.03] text-zinc-400 transition hover:border-amber-500/30 hover:text-amber-400 sm:inline-flex"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-amber-500 ring-2 ring-zinc-950" />
-            </button>
+            <ClientAreaNotificationMenu
+              copy={clientArea.topbar.notifications}
+              locale={locale}
+            />
 
             <HeaderActions
               clientAreaProfile={profile}
@@ -194,24 +191,14 @@ export function ClientAreaAdminFrame({
 
             <div className="hidden h-9 w-px bg-white/8 sm:block" />
 
-            <Link
-              href={resolveClientAreaTabHref(locale, "account")}
-              className="flex items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] p-1.5 pr-2.5 transition hover:border-amber-500/30 hover:bg-white/[0.06]"
-            >
-              <Image
-                src={profile.avatarSrc}
-                alt={profile.displayName}
-                width={34}
-                height={34}
-                className="h-8 w-8 rounded-lg object-cover"
-              />
-              <div className="hidden min-w-0 text-left md:block">
-                <p className="max-w-32 truncate text-xs font-semibold text-white">
-                  {profile.displayName}
-                </p>
-                <p className="text-[10px] text-zinc-500">{profile.accountId}</p>
-              </div>
-            </Link>
+            <ClientAreaProfileMenu
+              accountModeLabel={clientArea.topbar.accountModeLabel}
+              demoModeLabel={clientArea.topbar.demoModeLabel}
+              logoutLabel={clientArea.topbar.logoutLabel}
+              onLogout={() => setIsLogoutModalOpen(true)}
+              profile={profile}
+              realModeLabel={clientArea.topbar.realModeLabel}
+            />
           </div>
         </header>
 

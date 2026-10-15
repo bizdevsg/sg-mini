@@ -2,7 +2,13 @@
 
 import { useEffect, useId, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ChevronDown, type LucideIcon } from "lucide-react";
+import {
+  BookOpenText,
+  ChartNoAxesCombined,
+  ChevronDown,
+  History,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -44,14 +50,17 @@ export function ClientAreaDesktopSidebarNav({
   const tradePilotRoutes = [
     {
       href: `/${locale}/client-area/trade-pilot/analisis`,
+      icon: ChartNoAxesCombined,
       label: clientArea.tradePilotPage.navigation.items.analysis,
     },
     {
       href: `/${locale}/client-area/trade-pilot/riwayat-performa`,
+      icon: History,
       label: clientArea.tradePilotPage.navigation.items.performanceHistory,
     },
     {
       href: `/${locale}/client-area/trade-pilot/panduan`,
+      icon: BookOpenText,
       label: clientArea.tradePilotPage.navigation.items.guide,
     },
   ];
@@ -74,31 +83,27 @@ export function ClientAreaDesktopSidebarNav({
                 onClick={() => setIsTradePilotOpen((isOpen) => !isOpen)}
                 aria-expanded={isTradePilotOpen}
                 aria-controls={tradePilotSubmenuId}
-                className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors duration-200 ${
-                  isActive
-                    ? "bg-amber-500/12 text-amber-400"
-                    : "text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-100"
-                }`}
+                className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors duration-200 ${isActive
+                  ? "bg-amber-500/12 text-amber-400"
+                  : "text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-100"
+                  }`}
               >
                 <span
-                  className={`absolute inset-y-2 left-0 w-0.5 rounded-full bg-amber-400 transition-opacity ${
-                    isActive ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute inset-y-2 left-0 w-0.5 rounded-full bg-amber-400 transition-opacity ${isActive ? "opacity-100" : "opacity-0"
+                    }`}
                 />
                 <Icon
-                  className={`h-[18px] w-[18px] shrink-0 transition-colors ${
-                    isActive
-                      ? "text-amber-400"
-                      : "text-zinc-500 group-hover:text-zinc-300"
-                  }`}
+                  className={`h-[18px] w-[18px] shrink-0 transition-colors ${isActive
+                    ? "text-amber-400"
+                    : "text-zinc-500 group-hover:text-zinc-300"
+                    }`}
                 />
                 <span className="min-w-0 flex-1 text-sm font-medium leading-tight">
                   {tabLabel}
                 </span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                    isTradePilotOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isTradePilotOpen ? "rotate-180" : "rotate-0"
+                    }`}
                 />
               </button>
 
@@ -106,15 +111,15 @@ export function ClientAreaDesktopSidebarNav({
                 id={tradePilotSubmenuId}
                 role="group"
                 aria-label={clientArea.tradePilotPage.navigation.label}
-                className={`grid transition-[grid-template-rows,opacity] duration-200 ${
-                  isTradePilotOpen
-                    ? "grid-rows-[1fr] opacity-100"
-                    : "grid-rows-[0fr] opacity-0"
-                }`}
+                className={`grid transition-[grid-template-rows,opacity] duration-200 ${isTradePilotOpen
+                  ? "grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0"
+                  }`}
               >
                 <div className="overflow-hidden">
                   <div className="ml-5 space-y-1 border-l border-white/10 py-1 pl-3">
                     {tradePilotRoutes.map((route) => {
+                      const RouteIcon = route.icon;
                       const isRouteActive =
                         pathname === route.href ||
                         pathname.startsWith(`${route.href}/`);
@@ -124,13 +129,18 @@ export function ClientAreaDesktopSidebarNav({
                           key={route.href}
                           href={route.href}
                           aria-current={isRouteActive ? "page" : undefined}
-                          className={`block rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-                            isRouteActive
-                              ? "bg-trade-pilot/15 text-amber-400"
-                              : "text-zinc-500 hover:bg-white/[0.05] hover:text-zinc-200"
-                          }`}
+                          className={`block rounded-lg px-3 py-2 text-xs font-medium transition-colors ${isRouteActive
+                            ? "bg-trade-pilot/15 text-amber-400"
+                            : "text-zinc-500 hover:bg-white/[0.05] hover:text-zinc-200"
+                            }`}
                         >
-                          {route.label}
+                          <div className="flex items-center gap-2">
+                            <RouteIcon
+                              aria-hidden="true"
+                              className={`h-4 w-4 shrink-0 ${isRouteActive ? "text-amber-400" : "text-zinc-600"}`}
+                            />
+                            <span>{route.label}</span>
+                          </div>
                         </Link>
                       );
                     })}

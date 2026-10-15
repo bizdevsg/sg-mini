@@ -4,6 +4,8 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
+import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
+import { resolveClientAreaAccountId } from "@/lib/client-area-profile.shared";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaAccountHeaderProps = {
@@ -17,6 +19,8 @@ export function ClientAreaAccountHeader({
   // Name, email and account number come from the session (list-account) — one
   // set for the person, not split per Demo/Real.
   const profile = useClientAreaProfile();
+  const { accountMode } = useClientAreaAccountMode();
+  const activeAccountId = resolveClientAreaAccountId(profile, accountMode);
 
   return (
     <header className="overflow-hidden rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-[#1a1a1a] to-[#111111] shadow-xl shadow-black/35">
@@ -61,7 +65,7 @@ export function ClientAreaAccountHeader({
             {accountPage.viewOnly.accountIdLabel}
           </span>
           <span className="mt-1 block text-lg font-bold tracking-wider text-white">
-            {profile.accountId}
+            {activeAccountId}
           </span>
         </div>
       </div>

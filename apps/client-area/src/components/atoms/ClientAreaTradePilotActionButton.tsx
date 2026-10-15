@@ -2,7 +2,9 @@ import type { ReactNode } from "react";
 
 type ClientAreaTradePilotActionButtonProps = {
   children: ReactNode;
+  disabled?: boolean;
   icon: ReactNode;
+  onClick?: () => void;
   variant: "primary" | "outline";
 };
 
@@ -14,13 +16,17 @@ const VARIANT_CLASS_NAMES = {
 
 export function ClientAreaTradePilotActionButton({
   children,
+  disabled = false,
   icon,
+  onClick,
   variant,
 }: ClientAreaTradePilotActionButtonProps) {
   return (
     <button
       type="button"
-      className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 font-bold transition ${VARIANT_CLASS_NAMES[variant]}`}
+      disabled={disabled}
+      onClick={onClick}
+      className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 font-bold transition disabled:cursor-not-allowed disabled:opacity-50 ${VARIANT_CLASS_NAMES[variant]}`}
     >
       {icon}
       {children}

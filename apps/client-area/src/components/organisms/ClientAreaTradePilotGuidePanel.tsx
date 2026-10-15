@@ -86,7 +86,7 @@ export function ClientAreaTradePilotGuidePanel({
   if (selectedArticle) {
     return (
       <div className="min-w-0 space-y-3 text-sm">
-        <article className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#101113]">
+        <article className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#101113]/10">
           <div className="border-b border-zinc-800 p-5 sm:p-6">
             <button
               type="button"
@@ -162,7 +162,7 @@ export function ClientAreaTradePilotGuidePanel({
 
         <label className="block min-w-0">
           <span className="sr-only">{copy.searchLabel}</span>
-          <span className="flex h-11 items-center gap-3 rounded-xl border border-zinc-800 bg-[#101113] px-4 transition focus-within:border-yellow-500/70">
+          <span className="flex h-11 items-center gap-3 rounded-xl border border-zinc-800 px-4 transition focus-within:border-yellow-500/70">
             <Search className="h-4 w-4 shrink-0 text-zinc-500" aria-hidden="true" />
             <input
               type="search"
@@ -186,7 +186,7 @@ export function ClientAreaTradePilotGuidePanel({
       </section>
 
       {!query && activeCategory === "all" ? (
-        <section className="rounded-2xl border border-zinc-800 bg-[#101113] p-4 sm:p-5">
+        <section className="rounded-2xl border border-zinc-800 bg-[#101113]/50 p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <span className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-2 text-yellow-400">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
@@ -252,7 +252,7 @@ export function ClientAreaTradePilotGuidePanel({
             return (
               <section
                 key={category.id}
-                className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#101113]"
+                className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#101113]/50"
               >
                 <div className="flex items-start gap-3 border-b border-zinc-800 px-4 py-4 sm:px-5">
                   <span className="rounded-lg border border-zinc-800 bg-zinc-900 p-2 text-yellow-400">
@@ -297,7 +297,7 @@ export function ClientAreaTradePilotGuidePanel({
         </div>
       )}
 
-      <section className="grid gap-3 rounded-2xl border border-zinc-800 bg-[#101113] p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:p-5">
+      <section className="grid gap-3 rounded-2xl border border-zinc-800 bg-[#101113]/50 p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:p-5">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">
           <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
         </span>

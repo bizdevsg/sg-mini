@@ -1625,21 +1625,12 @@ const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
   UI1010_BBJ: "Forex",
 };
 
-const CLIENT_AREA_FEATURED_MARKET_SYMBOLS: Record<
-  ClientAreaMarketCategory,
-  string[]
-> = {
-  Commodity: ["XUL10", "XUL10_BBJ", "BCO10_BBJ"],
-  Index: ["HKK50_BBJ", "JPK50_BBJ", "DX1010_BBJ"],
-  Forex: [
-    "EU1010_BBJ",
-    "UJ1010_BBJ",
-    "GU1010_BBJ",
-    "AU1010_BBJ",
-    "UC1010_BBJ",
-    "UI1010_BBJ",
-  ],
-};
+const CLIENT_AREA_HOME_MARKET_SYMBOLS = [
+  "XUL10",
+  "BCO10_BBJ",
+  "HKK50_BBJ",
+  "JPK50_BBJ",
+] as const;
 
 const CLIENT_AREA_MARKET_FEEDS: ClientAreaMarketFeed[] = [
   {
@@ -1792,36 +1783,19 @@ export function getClientAreaFeaturedMarketPrices(
 ): MarketPrice[] {
   const availablePrices = getClientAreaAllMarketPrices(quotes);
 
-  if (availablePrices.length > 0) {
-    return (
-      Object.entries(CLIENT_AREA_FEATURED_MARKET_SYMBOLS) as Array<
-        [ClientAreaMarketCategory, string[]]
-      >
-    )
-      .map(([, symbols]) =>
-        symbols
-          .map((symbol) =>
-            availablePrices.find((item) => (item.code ?? item.name) === symbol),
-          )
-          .find(Boolean),
-      )
-      .filter((item): item is MarketPrice => Boolean(item));
-  }
+  return CLIENT_AREA_HOME_MARKET_SYMBOLS.map((symbol) => {
+    const livePrice = availablePrices.find(
+      (item) => (item.code ?? item.name) === symbol,
+    );
 
-  return (
-    Object.entries(CLIENT_AREA_FEATURED_MARKET_SYMBOLS) as Array<
-      [ClientAreaMarketCategory, string[]]
-    >
-  )
-    .map(([, symbols]) =>
-      symbols
-        .map((symbol) =>
-          CLIENT_AREA_MARKET_FEEDS.find((item) => item.liveSymbol === symbol),
-        )
-        .find(Boolean),
-    )
-    .filter((item): item is ClientAreaMarketFeed => Boolean(item))
-    .map((item) => buildClientAreaMarketPrice(item.liveSymbol, item));
+    if (livePrice) return livePrice;
+
+    const fallback = CLIENT_AREA_MARKET_FEEDS.find(
+      (item) => item.liveSymbol === symbol,
+    ) ?? { ask: 0, bid: 0, change: 0, liveSymbol: symbol };
+
+    return buildClientAreaMarketPrice(symbol, fallback);
+  });
 }
 
 export function getInitialPrices(): MarketPrice[] {

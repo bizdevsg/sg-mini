@@ -5,15 +5,11 @@ import {
   protectSameOriginBrowserApiRoute,
   withApiProtectionHeaders,
 } from "@/lib/api-protection";
-import {
-  clearClientAreaSession,
-  getActiveSgbSession,
-  refreshClientAreaSessionToken,
-} from "@/lib/client-area-auth";
-import { APP_ENV, SGB_FLAVOR } from "@/lib/env";
-import { callSgbApi, SgbApiError } from "@/lib/sgb-api/client";
+import { getActiveSgbSession } from "@/lib/client-area-auth";
+import { APP_ENV } from "@/lib/env";
+import { SgbApiError } from "@/lib/sgb-api/client";
 import { buildSgbDeviceHeaders } from "@/lib/sgb-api/device";
-import { toSgbApiMode } from "@/lib/sgb-api/hosts";
+import { mmFetch, SessionExpiredError } from "@/lib/sgb-api/mm-fetch";
 import {
   captureDevSample,
   maskSamplePii,
@@ -56,7 +52,7 @@ export async function GET(request: Request) {
   const session = await getActiveSgbSession();
 
   if (!session) {
-    return json({ error: "unauthenticated" }, 401);
+    return json({ error: "SESSION_EXPIRED" }, 401);
   }
 
   // Saved up front so the sample exists even when the summary call below fails.
@@ -69,28 +65,19 @@ export async function GET(request: Request) {
   const deviceUuid = await getOrCreateSgbDeviceUuid();
 
   try {
-    const result = await callSgbApi({
+    const data = await mmFetch<unknown>("/etrade/accountsummary", {
       method: "GET",
-      host: "trading",
-      path: "/etrade/accountsummary",
-      flavor: SGB_FLAVOR,
-      mode: toSgbApiMode(mode),
-      token: session.token,
-      deviceHeaders: buildSgbDeviceHeaders(deviceUuid),
+      mode,
+      headers: buildSgbDeviceHeaders(deviceUuid),
     });
 
-    if (result.newToken) {
-      console.info("[account-summary] token rotated by the server —", mode);
-      await refreshClientAreaSessionToken(session, result.newToken);
-    }
-
-    await captureDevSample(`accountsummary-${mode}.json`, result.data);
+    await captureDevSample(`accountsummary-${mode}.json`, data);
 
     if (wantsDevRaw(request)) {
-      return json({ mode, raw: maskSamplePii(result.data) });
+      return json({ mode, raw: maskSamplePii(data) });
     }
 
-    const account = parseAccountSummary(result.data);
+    const account = parseAccountSummary(data);
 
     if (!account) {
       console.error("[account-summary] response did not match the schema", mode);
@@ -102,13 +89,12 @@ export async function GET(request: Request) {
     return json({
       mode,
       account,
-      positions: parseOpenPositions(result.data) ?? [],
-      settled: parseSettledPositions(result.data) ?? [],
+      positions: parseOpenPositions(data) ?? [],
+      settled: parseSettledPositions(data) ?? [],
     });
   } catch (error) {
-    if (error instanceof SgbApiError && error.kind === "session_expired") {
-      await clearClientAreaSession();
-      return json({ error: "session_expired" }, 401);
+    if (error instanceof SessionExpiredError) {
+      return json({ error: "SESSION_EXPIRED" }, 401);
     }
 
     console.error("[account-summary] SGB call failed", mode, describeError(error));

@@ -20,9 +20,6 @@ import type { AppLocale, AppMessages } from "@/locales";
 type ClientAreaOtpFormPanelProps = {
   locale: AppLocale;
   otp: AppMessages["clientArea"]["otp"];
-  loginToken: string;
-  email: string;
-  rememberMe: boolean;
   onBackToLogin: () => void;
 };
 
@@ -43,9 +40,6 @@ const RESEND_COOLDOWN_SECONDS = 60;
 export function ClientAreaOtpFormPanel({
   locale,
   otp,
-  loginToken,
-  email,
-  rememberMe,
   onBackToLogin,
 }: ClientAreaOtpFormPanelProps) {
   const [otpDigits, setOtpDigits] = useState<string[]>(
@@ -59,12 +53,9 @@ export function ClientAreaOtpFormPanel({
 
   const verifyAction = useCallback(
     async (prevState: ClientAreaOtpState, formData: FormData) => {
-      formData.set("loginToken", loginToken);
-      formData.set("email", email);
-      formData.set("rememberMe", rememberMe ? "on" : "off");
       return submitVerifyOtp(prevState, formData);
     },
-    [loginToken, email, rememberMe],
+    [],
   );
 
   const [verifyState, verifyFormAction, verifyPending] = useActionState(
@@ -76,10 +67,9 @@ export function ClientAreaOtpFormPanel({
 
   const resendAction = useCallback(
     async (prevState: ClientAreaOtpState, formData: FormData) => {
-      formData.set("loginToken", loginToken);
       return submitSendOtp(prevState, formData);
     },
-    [loginToken],
+    [],
   );
 
   const [resendState, resendFormAction, resendPending] = useActionState(
@@ -98,16 +88,15 @@ export function ClientAreaOtpFormPanel({
 
   const autoSentRef = useRef(false);
   useEffect(() => {
-    if (!autoSentRef.current && loginToken) {
+    if (!autoSentRef.current) {
       autoSentRef.current = true;
       const formData = new FormData();
       formData.set("locale", locale);
-      formData.set("loginToken", loginToken);
       startTransition(() => {
         resendFormAction(formData);
       });
     }
-  }, [locale, loginToken, resendFormAction]);
+  }, [locale, resendFormAction]);
 
   // ── Resend cooldown timer ──────────────────────────────────────────
 

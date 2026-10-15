@@ -12,6 +12,7 @@ import {
   getEconomicCalendarRange,
 } from "@/lib/economic-calendar";
 import { getMessages } from "@/locales";
+import { getTradePilotBootstrap } from "@/lib/trade-pilot/trade-pilot";
 
 type ClientAreaTradePilotAnalysisPageProps = ClientAreaSubpageProps;
 
@@ -38,13 +39,16 @@ export default async function ClientAreaTradePilotAnalysisPage({
   const economicCalendarToday = await getEconomicCalendarRange("today").catch(
     () => createEmptyEconomicCalendarRange("today"),
   );
+  const bootstrap = await getTradePilotBootstrap();
 
   return (
     <ClientAreaTradePilotPanel
       copy={tradePilotPage.analysis}
+      bootstrap={bootstrap}
       economicCalendarEvents={economicCalendarToday.events}
       livePriceLabel={livePriceTicker.label}
       locale={locales}
+      mockDataLabel={tradePilotPage.access.mockDataLabel}
     />
   );
 }

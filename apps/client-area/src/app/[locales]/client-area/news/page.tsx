@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import { ClientAreaNewsView } from "@/components/organisms/ClientAreaNewsView";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
-import { getClientAreaNewsContent } from "@/lib/client-area-news";
-import { getNewsCategories } from "@/lib/news";
+import { getClientAreaBreakingNews } from "@/lib/client-area-news";
+import { getNewsFeed } from "@/lib/news";
 import {
   assertValidLocale,
   buildClientAreaSubpageMetadata,
@@ -32,16 +32,15 @@ export default async function ClientAreaNewsPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
-  const [{ articles, breakingNews }, categories] = await Promise.all([
-    getClientAreaNewsContent(locales),
-    getNewsCategories(),
+  const [{ articles }, breakingNews] = await Promise.all([
+    getNewsFeed(locales),
+    getClientAreaBreakingNews(locales),
   ]);
 
   return (
     <ClientAreaNewsView
       articles={articles}
       breakingNews={breakingNews}
-      categories={categories}
       locale={locales}
     />
   );

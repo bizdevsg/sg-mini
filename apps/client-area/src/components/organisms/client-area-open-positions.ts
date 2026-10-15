@@ -43,6 +43,7 @@ export function toPositionItem(card: OpenPositionCard): PositionItem {
     currentPrice: formatPrice(card.currentPrice),
     floatingPl:
       card.profitLoss === null ? EMPTY : formatSignedUsd(card.profitLoss),
+    floatingValue: card.profitLoss,
     storageFee: formatMoney(card.storage),
     facilityFee: formatMoney(card.commission),
     vat: formatMoney(card.vat),

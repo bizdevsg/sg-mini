@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
+
 type ClientAreaAccountMetricRowProps = {
   label: string;
-  value: string;
+  value: ReactNode;
   withDivider: boolean;
 };
 

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { AccountMode } from "@/components/organisms/client-area.types";
+import { clientAreaFetch } from "@/lib/client-area-fetch";
 import type { TradeHistoryCard } from "@/types/trade-history";
 
 export type TradeHistoryState =
@@ -33,7 +34,7 @@ export function useTradeHistory(mode: AccountMode, page: number) {
       let state: SettledState = { status: "error" };
 
       try {
-        const response = await fetch(
+        const response = await clientAreaFetch(
           `/api/client-area/trade-history?mode=${mode}&page=${page}`,
           {
             cache: "no-store",
@@ -41,12 +42,6 @@ export function useTradeHistory(mode: AccountMode, page: number) {
             signal: controller.signal,
           },
         );
-
-        if (response.status === 401) {
-          // Session gone — a reload lets the client-area layout redirect to login.
-          window.location.reload();
-          return;
-        }
 
         if (response.status === 404) {
           state = { status: "unavailable" };

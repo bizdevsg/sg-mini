@@ -226,6 +226,29 @@ const accountListSchema = z.array(
   z.object({ account: z.string(), type: z.string() }),
 );
 
+export function accountIdsByMode(accounts: unknown): {
+  demo: string | null;
+  real: string | null;
+} {
+  const parsed = accountListSchema.safeParse(accounts);
+
+  if (!parsed.success) {
+    return { demo: null, real: null };
+  }
+
+  const demo = parsed.data.find(
+    (entry) => entry.type.trim().toLowerCase() === "demo",
+  );
+  const real = parsed.data.find(
+    (entry) => entry.type.trim().toLowerCase() !== "demo",
+  );
+
+  return {
+    demo: demo?.account ?? null,
+    real: real?.account ?? null,
+  };
+}
+
 /**
  * First account number in the session's list-account data. Profile data belongs
  * to the person, not to a Demo/Real account, so any of their accounts works as

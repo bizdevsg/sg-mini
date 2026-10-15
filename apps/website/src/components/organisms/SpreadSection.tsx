@@ -21,7 +21,7 @@ export async function SpreadSection({ locale }: SpreadSectionProps) {
   const { articles } = await getNewsFeed(locale, LATEST_NEWS_LIMIT);
 
   return (
-    <section className="bg-transparent pb-20 text-white">
+    <section className="bg-transparent py-20 text-white">
       <SectionContainer>
         <ScrollReveal
           effect="fade-up"

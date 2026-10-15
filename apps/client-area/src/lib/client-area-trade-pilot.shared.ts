@@ -10,6 +10,21 @@ export type ClientAreaTradePilotPerformanceHistoryCopy =
 export type ClientAreaTradePilotAnalysisResultCopy =
   ClientAreaTradePilotCopy["analysisResult"];
 
+export type ClientAreaTradePilotTechnicalIndicatorsCopy =
+  ClientAreaTradePilotCopy["technicalIndicators"];
+
+export type ClientAreaTradePilotPriceAlertCopy =
+  ClientAreaTradePilotCopy["priceAlert"];
+
+export type ClientAreaTradePilotFooterCopy =
+  ClientAreaTradePilotCopy["footer"];
+
+export const CLIENT_AREA_TRADE_PILOT_APP_LINKS = {
+  googlePlay:
+    "https://play.google.com/store/apps/details?id=id.tradepilot.app&pcampaignid=web_share",
+  appStore: "https://apps.apple.com/id/app/tradepilot-id/id6807276937",
+} as const;
+
 export type ClientAreaTradePilotFundamentalContextCopy =
   ClientAreaTradePilotCopy["fundamentalContext"];
 

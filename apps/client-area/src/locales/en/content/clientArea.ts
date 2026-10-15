@@ -41,6 +41,14 @@ export const enClientArea: AppMessages["clientArea"] = {
       "Security verification was not completed. Please try again.",
     errorCaptchaFailed:
       "reCAPTCHA verification failed. Please retry the security check.",
+    errorNetwork:
+      "Unable to reach the login server. Check your internet connection and try again.",
+    errorTimeout:
+      "The login server took too long to respond. Please try again in a moment.",
+    errorSessionExpired:
+      "Your login session has expired. Reload the page and sign in again.",
+    errorServer:
+      "The login server is unavailable or returned a response that could not be processed. Please try again in a moment.",
     highlightsTitle: "What you can monitor",
     highlights: [
       "Real-time balance, equity, and floating P/L summary.",
@@ -121,6 +129,18 @@ export const enClientArea: AppMessages["clientArea"] = {
     label: "Live Prices",
   },
   tradePilotPage: {
+    access: {
+      deniedTitle: "Trade Pilot is not available yet",
+      deniedDescription:
+        "This signed-in user does not have a verified Demo or Real account. Trade Pilot does not use or store account numbers.",
+      missingDemoTitle: "Sorry, you do not have a Demo account yet",
+      missingDemoDescription:
+        "Select your verified Real account to use Trade Pilot in Real mode.",
+      missingRealTitle: "Sorry, you do not have a Real account yet",
+      missingRealDescription:
+        "Select your Demo account to keep using Trade Pilot, or open a Real account first.",
+      mockDataLabel: "Simulated data",
+    },
     navigation: {
       label: "Trade Pilot navigation",
       items: {
@@ -143,6 +163,16 @@ export const enClientArea: AppMessages["clientArea"] = {
       addFavoriteLabel: "Add favorite instrument",
       setAlertLabel: "Set Alert",
       analysisActionLabel: "Analyze",
+      analysisLoadingLabel: "Analyzing...",
+      insufficientCreditMessage:
+        "The analysis credit for this mode is depleted.",
+      analysisErrorMessage:
+        "The analysis could not be created. Please try again.",
+      noAnalysisTitle: "No analysis result yet",
+      noAnalysisDescription:
+        "Select an instrument and timeframe, then press Analyze. Results are currently deterministic simulations.",
+      demoModeLabel: "Demo",
+      realModeLabel: "Real",
       instrumentLabel: "Instrument:",
       currentPriceLabel: "Current price:",
       timeframeLabel: "Timeframe:",
@@ -222,6 +252,66 @@ export const enClientArea: AppMessages["clientArea"] = {
         copyLevelsLabel: "Copy levels",
         copiedLabel: "Levels copied",
       },
+      technicalIndicators: {
+        title: "Technical Indicators",
+        description:
+          "Live indicators • Saved analyses and plans do not update automatically",
+        dataLabel: "Data",
+        candleCountLabel: "13,744 candles",
+        priceLabel: "Price",
+        lastBarLabel: "Latest bar",
+        twentyBarsLabel: "20 bars",
+        signalSummaryLabel: "Signal summary",
+        oscillatorLabel: "Oscillator",
+        movingAverageLabel: "Moving Avg",
+        movingAveragesLabel: "Moving Averages",
+        leaningBullishLabel: "Leaning Bullish",
+        leaningBearishLabel: "Leaning Bearish",
+        bullishLabel: "Bullish",
+        bearishLabel: "Bearish",
+        neutralLabel: "Neutral",
+        buyLabel: "Buy",
+        sellLabel: "Sell",
+        waitLabel: "Wait",
+      },
+      priceAlert: {
+        title: "Price alerts",
+        description:
+          "Get a push notification when the live price reaches each AI level.",
+        toggleLabel: "Enable or disable price alerts",
+        statusLabel: "Alert",
+        activeLabel: "Active",
+        inactiveLabel: "Inactive",
+        entryLabel: "Entry",
+        stopLossLabel: "Stop Loss",
+        takeProfitOneLabel: "Take Profit 1",
+        takeProfitTwoLabel: "Take Profit 2",
+        triggeredLabel: "Triggered",
+        cancelledLabel: "Cancelled",
+      },
+      footer: {
+        eyebrow: "Get TradePilot on",
+        title: "Available on iOS and Android",
+        description:
+          "Monitor the market, view recommendations, and manage your watchlist anytime.",
+        googlePlayAlt: "Get TradePilot on Google Play",
+        appStoreAlt: "Get TradePilot on the App Store",
+        logoAlt: "TradePilot logo",
+        supportTitle:
+          "TradePilot is a decision-support tool, not financial advice or a trading service.",
+        supportDescription:
+          "Decisions and risks remain yours. Past performance does not guarantee future results.",
+        disclaimerLabel: "Disclaimer:",
+        disclaimerDescription:
+          "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
+        legalNavigationLabel: "TradePilot legal links",
+        privacyLabel: "Privacy Policy",
+        termsLabel: "Terms of Service",
+        helpLabel: "Help",
+        deleteAccountLabel: "Delete Account",
+        tiktokLabel: "Visit TradePilot.id on TikTok",
+        copyright: "Solid Gold Berjangka. TradePilot. All rights reserved.",
+      },
       fundamentalContext: {
         title: "Fundamental Context",
         description: "News and events related to this analysis.",
@@ -279,10 +369,14 @@ export const enClientArea: AppMessages["clientArea"] = {
         title: "Adaptive Trading Plan",
         description:
           "Entry, lot size, and risk simulation based on this analysis.",
+        lotUnitLabel: "lot",
         accountTypeLabel: "Account Type",
         microAccountLabel: "Micro",
+        microAccountDesc: "Minimum 0,01 lot · margin $10",
         miniAccountLabel: "Mini",
+        miniAccountDesc: "Minimum 0,10 lot · margin $100",
         regularAccountLabel: "Regular",
+        regularAccountDesc: "Minimum 1,00 lot · margin $1.000",
         tradingCapitalLabel: "Trading capital",
         lossLimitLabel: "Loss limit",
         riskStyleLabel: "Risk Style",
@@ -294,6 +388,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         snapshotLabel: "Analysis candle snapshot captured",
         snapshotValue: "2/10/2026, 09:10:15",
         createRecommendationLabel: "Create Recommendation",
+        selectDirectionLabel: "Choose One Direction",
         waitStatusLabel: "Wait",
         limitedOptionsLabel: "Limited options only",
         waitDescription:
@@ -305,9 +400,103 @@ export const enClientArea: AppMessages["clientArea"] = {
         warningDescription:
           "Neither side currently has an approved safe plan. Review the status and minimum lot figures for each side below; diagnostic figures are not a valid entry plan. Only adjust financial inputs when independently affordable and acceptable, or wait and skip the setup.",
         buyScenarioLabel: "Upside Scenario (Buy)",
+        buyScenarioDescription:
+          "The upside (Buy) scenario is adjusted for risk and available funds. Confirm the latest chart before entry.",
+        buyScenarioGuidance:
+          "Monitor entry around {entry}. Enter only after the setup is confirmed; do not move the stop.",
         sellScenarioLabel: "Downside Scenario (Sell)",
+        sellScenarioDescription:
+          "The downside (Sell) scenario is adjusted for risk and available funds. Confirm the latest chart before entry.",
+        sellScenarioGuidance:
+          "Monitor entry around {entry}. Enter only after the setup is confirmed; do not move the stop.",
+        brokerFundsUntilStopLabel: "Broker Funds Until Stop",
         understandDetailsLabel: "Understand the details",
-        cancellationConditionsLabel: "2 cancellation conditions",
+        understandDetailsDescription:
+          "Review the complete explanation, calculations for each position, and the logic behind this recommendation.",
+        cancellationConditionsLabel: "3 cancellation conditions",
+        savePlanLabel: "Save Plan",
+        shareLabel: "Share",
+        entryPositionLabel: "Entry (1 position)",
+        initialEntryDescription: "Initial entry price",
+        stopLossLabel: "Stop Loss",
+        finalStopLossDescription: "One final SL",
+        riskBudgetLabel: "Risk budget",
+        riskBudgetDescription: "{percentage}% of the {limit} limit",
+        targetProfitLabel: "Profit Target",
+        takeProfitOneShortLabel: "TP1",
+        takeProfitTwoShortLabel: "TP2",
+        riskStyleDescriptions: {
+          conservative: "Lower risk",
+          moderate: "Balanced risk",
+          aggressive: "Higher risk",
+        },
+        planSummaryLabel: "Plan Summary",
+        planDetailsLabel: "Plan Details",
+        unusedCandidatesLabel: "Unused layer candidates",
+        recommendationUsageLabel: "How to use this recommendation",
+        entryAndLotTitle: "Entry price & lot per position",
+        allEntriesFilledDescription:
+          "When all entries are filled: 1 position · {lot} lot",
+        initialEntryLabel: "Position 1: Initial entry",
+        riskSectionTitle: "Risk",
+        finalStopLossLabel: "One final Stop Loss",
+        maximumLossEstimateLabel: "Estimated maximum loss",
+        targetProfitSectionTitle: "Profit target",
+        takeProfitOneLabel: "Take Profit 1",
+        takeProfitTwoLabel: "Take Profit 2",
+        estimatedProfitLabel: "Estimated profit",
+        riskContextTitle: "Risk context",
+        usableRiskBudgetLabel: "Usable risk budget",
+        guardrailDescription: "{percentage}% of the loss limit after guardrail",
+        proposedLossLimitLabel: "Reserved loss limit",
+        initialEntryOnlyNote:
+          "This scenario is for the initial entry only; no additional layer is recommended.",
+        otherCalculationDetailsLabel: "Other calculation details",
+        weightedAverageEntryLabel: "Weighted average entry",
+        usedMarginLabel: "Margin used",
+        marginAndStopLossLabel: "Day margin + loss at SL",
+        initialPositionTitle: "Position 1 · Initial entry",
+        entryFromPlanDescription: "Entry from the {account} Plan",
+        positionMarginLabel: "Position margin",
+        positionRiskAtStopLabel: "Position risk at SL",
+        fundsNeededAtFinalStopLabel: "Funds required at final SL",
+        remainingFundsLabel: "Remaining funds",
+        ifEntryFilledTitle: "When the entry is filled",
+        firstEntryOnlyDescription: "Initial entry only · {lot} lot",
+        filledEntrySummary:
+          "1 position · {lot} lot · {margin} margin · {risk} loss at SL ({riskPercentage}% of free funds), TP2 gross profit {profit} ({profitPercentage}% of free funds).",
+        whyNotAllLossLimitTitle: "Why isn't the entire loss limit used?",
+        marginAndRiskExplanationLabel: "Margin and risk-limit explanation",
+        whyNotAllLossLimitDescription:
+          "Funds must be sufficient to cover margin and the potential Stop Loss. Increasing the lot size may push the total funding requirement beyond the plan limit.",
+        estimateNotesTitle: "Estimate notes",
+        estimateMayChangeLabel: "Calculation results may change",
+        estimateNotesDescription:
+          "Calculations are based only on filled positions and the listed prices. Actual results may differ due to spread, transaction fees, slippage, or earlier position closure.",
+        unusedPositionLabel: "Position {position} · {entry}",
+        notUsedLabel: "Not used",
+        exceedsAccumulatedRiskLabel: "Exceeds the hard accumulated-loss limit",
+        conditionalFinancialPlanLabel: "Conditional financial plan",
+        conditionalFinancialPlanDescription:
+          "This candidate is blocked only by the entered funds or loss limit. It is not yet part of the active plan.",
+        marginUsedUntilHereLabel: "Margin used up to this point",
+        totalRiskAtFinalStopLabel: "Total risk at final SL",
+        totalFundsAtFinalStopLabel: "Total funds required at final SL",
+        additionalLossLimitLabel: "Additional loss limit required",
+        manualOrderWarning:
+          "Manual only: price moving against the position is not a trigger by itself.",
+        chooseScenarioUsageTitle: "Choose one scenario",
+        chooseScenarioUsageDescription:
+          "Choose either the upside or downside scenario based on your decision.",
+        checkEntryUsageTitle: "Check the entry level",
+        checkEntryUsageDescription:
+          "Enter at the level listed in the trade plan.",
+        confirmEntryUsageTitle: "Confirm before entry",
+        confirmEntryUsageDescription:
+          "Ensure price has reached the level, the setup remains valid, no invalidation has occurred, and no new fundamental risk is present.",
+        followStopTargetUsageTitle: "Follow the Stop Loss and targets",
+        followStopTargetUsageDescription:
+          "Cut the loss if price reaches the Cut Loss / SL. Do not move this limit to hold a losing position.",
       },
     },
     performanceHistory: {
@@ -366,7 +555,44 @@ export const enClientArea: AppMessages["clientArea"] = {
     },
     primaryCta: "Open Live Account",
     accountMode: "Demo",
+    accountModeLabel: "Account Mode",
+    demoModeLabel: "Demo",
+    realModeLabel: "Real",
     notificationCount: "1",
+    notifications: {
+      buttonLabel: "Open TradePilot notifications",
+      title: "TradePilot Notifications",
+      unreadLabel: "{count} unread notifications",
+      allReadLabel: "All notifications have been read",
+      markAllReadLabel: "Mark all read",
+      unreadItemLabel: "Unread",
+      items: [
+        {
+          id: "analysis-ready",
+          title: "Your latest analysis is ready",
+          description:
+            "View the latest market direction and scenario levels from TradePilot.",
+          timeLabel: "Just now",
+          href: "/client-area/trade-pilot/analisis",
+        },
+        {
+          id: "plan-reminder",
+          title: "Trading Plan awaiting confirmation",
+          description:
+            "Review the entry, Stop Loss, and target levels before using the plan.",
+          timeLabel: "10 minutes ago",
+          href: "/client-area/trade-pilot/analisis",
+        },
+        {
+          id: "performance-update",
+          title: "Performance history updated",
+          description:
+            "The latest TradePilot timeframe performance summary is now available.",
+          timeLabel: "Today",
+          href: "/client-area/trade-pilot/riwayat-performa",
+        },
+      ],
+    },
     breadcrumb: "1003713406",
     navItems: [
       {

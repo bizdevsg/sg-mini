@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 type ClientAreaAccountValueCardProps = {
   label: string;
   surfaceClassName: string;
-  value: string;
+  value: ReactNode;
   valueClassName: string;
 };
 

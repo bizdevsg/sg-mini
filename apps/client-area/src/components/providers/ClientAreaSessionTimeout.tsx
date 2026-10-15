@@ -55,6 +55,17 @@ function readSharedLastActivity() {
   }
 }
 
+function readLastActivityCookie() {
+  const cookiePrefix = `${CLIENT_AREA_LAST_ACTIVITY_COOKIE}=`;
+  const rawValue = document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(cookiePrefix))
+    ?.slice(cookiePrefix.length);
+
+  return parseClientAreaLastActivity(rawValue);
+}
+
 function persistSharedLastActivity(value: number) {
   try {
     window.localStorage.setItem(
@@ -126,12 +137,40 @@ export function ClientAreaSessionTimeout({
 
   useEffect(() => {
     const sharedLastActivity = readSharedLastActivity();
-    const initialTimestamp = Math.max(sharedLastActivity ?? 0, Date.now());
+    const cookieLastActivity = readLastActivityCookie();
+    const initialTimestamp = Math.max(
+      sharedLastActivity ?? 0,
+      cookieLastActivity ?? 0,
+    );
+    const mountedAt = Date.now();
 
-    syncActivity(initialTimestamp, { persist: true });
+    // A background tab may have had its timer suspended by the browser. Never
+    // treat mounting/restoring the tab as fresh activity until the previous
+    // timestamp has passed the same inactivity check used by the server.
+    if (
+      initialTimestamp === 0 ||
+      mountedAt - initialTimestamp >= CLIENT_AREA_INACTIVITY_TIMEOUT_MS
+    ) {
+      expireSession();
+      return;
+    }
+
+    syncActivity(mountedAt, { persist: true });
 
     const handleActivity = () => {
       const timestamp = Date.now();
+
+      // Browser timers are throttled (and can be fully suspended) while a tab
+      // is hidden. Check elapsed wall-clock time on every real activity event
+      // before allowing that event to renew the session.
+      if (
+        lastActivityRef.current === 0 ||
+        timestamp - lastActivityRef.current >=
+          CLIENT_AREA_INACTIVITY_TIMEOUT_MS
+      ) {
+        expireSession();
+        return;
+      }
 
       if (
         timestamp - lastActivityRef.current <

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { AccountMode } from "@/components/organisms/client-area.types";
+import { clientAreaFetch } from "@/lib/client-area-fetch";
 import type {
   AccountSummaryCard,
   OpenPositionCard,
@@ -27,10 +28,14 @@ type SettledState = Exclude<AccountSummaryState, { status: "loading" }>;
  * (see useLiveAccountSummary); this slower poll only catches changes that no tick
  * announces (deposit, a position closed elsewhere, margin changes).
  */
-export const ACCOUNT_SUMMARY_FALLBACK_REFRESH_MS = 15000;
+export const ACCOUNT_SUMMARY_FALLBACK_REFRESH_MS = 30000;
 
-/** Triggered refreshes never start closer together than this. */
-const MIN_TRIGGERED_GAP_MS = 1000;
+/**
+ * Triggered refreshes never start closer together than this. Every request
+ * rotates the session token, so ticks (which arrive many times a second) must
+ * not translate into a request per second.
+ */
+const MIN_TRIGGERED_GAP_MS = 10000;
 
 type UseAccountSummaryOptions = {
   /** Poll every N ms while the tab is visible. 0 (default) = fetch once. */
@@ -119,7 +124,7 @@ export function useAccountSummary(
       let next: SettledState = { status: "error" };
 
       try {
-        const response = await fetch(
+        const response = await clientAreaFetch(
           `/api/client-area/account-summary?mode=${mode}`,
           {
             cache: "no-store",
@@ -127,12 +132,6 @@ export function useAccountSummary(
             signal,
           },
         );
-
-        if (response.status === 401) {
-          // Session gone — a reload lets the client-area layout redirect to login.
-          window.location.reload();
-          return true;
-        }
 
         if (response.status === 404) {
           next = { status: "unavailable" };

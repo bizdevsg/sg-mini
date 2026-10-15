@@ -117,7 +117,7 @@ export function HeaderActions({
     "h-10 w-10 min-h-10 min-w-10 overflow-hidden p-0 rounded-full shadow-none";
   const clientAreaButtonClass = `inline-flex items-center justify-center gap-2 text-center font-semibold tracking-[-0.01em] border border-[#f4cf73]/70 bg-linear-to-b from-[#FF9600] to-[#FFDE00] text-[#1b1307] shadow-[0_18px_40px_rgba(205,161,58,0.28)] ring-1 ring-[rgba(255,240,196,0.18)] transition-all duration-300 hover:border-[#ffe39d] hover:shadow-[0_22px_48px_rgba(205,161,58,0.38)] hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${clientAreaSession.authenticated
     ? authenticatedActionButtonClass
-    : `min-h-10 rounded-full px-8 text-sm ${mobilePanel ? mobileActionButtonClass : ""}`
+    : `rounded-full px-6 py-2 text-xs ${mobilePanel ? mobileActionButtonClass : ""}`
     }`;
   const clientAreaHref = clientAreaSession.authenticated
     ? `${PUBLIC_CLIENT_SITE_URL}/${locale}/client-area`
@@ -142,7 +142,7 @@ export function HeaderActions({
           className="h-full w-full rounded-full object-cover"
         />
       ) : (
-        <span className="leading-none text-[#1b1307]">Client Area</span>
+        <span className="text-[#1b1307] font-bold">SIGN IN</span>
       )}
     </Link>
   ) : null;

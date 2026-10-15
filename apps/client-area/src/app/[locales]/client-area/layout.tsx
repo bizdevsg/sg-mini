@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
-import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { PageTemplate } from "@/components/layouts/PageTemplate";
+import { ClientAreaViewOnlyDisclaimer } from "@/components/organisms/ClientAreaViewOnlyDisclaimer";
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaProfileProvider } from "@/components/providers/ClientAreaProfileProvider";
+import { ClientAreaSessionEndedNotice } from "@/components/providers/ClientAreaSessionEndedNotice";
 import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessionTimeout";
+import { ClientAreaTokenRefresh } from "@/components/providers/ClientAreaTokenRefresh";
 import {
   CLIENT_AREA_ACCOUNT_MODE_COOKIE,
   resolveClientAreaAccountMode,
@@ -33,10 +35,13 @@ export default async function ClientAreaLayout({
   const { locales } = await params;
 
   const cookieStore = await cookies();
-  const initialAccountMode = resolveClientAreaAccountMode(
-    cookieStore.get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value,
-  );
+  const savedAccountMode = cookieStore.get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value;
   const session = await getClientAreaSessionState();
+  // First visit (no saved choice): open the Real account when the customer has
+  // one, like the mobile app; otherwise fall back to Demo.
+  const initialAccountMode = resolveClientAreaAccountMode(
+    savedAccountMode ?? (session.profile?.accountIds.real ? "real" : "demo"),
+  );
 
   if (!isSupportedLocale(locales)) {
     return (
@@ -50,19 +55,11 @@ export default async function ClientAreaLayout({
   const { viewOnlyDisclaimer } = getMessages(locale).clientArea;
 
   const disclaimer = (
-    <aside
-      aria-label={viewOnlyDisclaimer.label}
-      className="shrink-0 border-t border-amber-500/20 bg-zinc-950 py-5 text-white/60"
-    >
-      <SectionContainer>
-        <p className="text-center text-xs leading-relaxed sm:text-sm">
-          <span className="font-semibold text-amber-500">
-            {viewOnlyDisclaimer.label}
-          </span>{" "}
-          {viewOnlyDisclaimer.body}
-        </p>
-      </SectionContainer>
-    </aside>
+    <ClientAreaViewOnlyDisclaimer
+      body={viewOnlyDisclaimer.body}
+      hideOnTradePilot
+      label={viewOnlyDisclaimer.label}
+    />
   );
 
   if (!session.isAuthenticated || !session.profile) {
@@ -77,14 +74,16 @@ export default async function ClientAreaLayout({
   }
 
   return (
-    <PageTemplate locale={locale} profile={session.profile}>
+    <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
       <ClientAreaProfileProvider profile={session.profile}>
-        <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
+        <PageTemplate locale={locale}>
           <ClientAreaSessionTimeout locale={locale} />
+          <ClientAreaTokenRefresh />
+          <ClientAreaSessionEndedNotice locale={locale} />
           {children}
           {disclaimer}
-        </ClientAreaAccountModeProvider>
+        </PageTemplate>
       </ClientAreaProfileProvider>
-    </PageTemplate>
+    </ClientAreaAccountModeProvider>
   );
 }

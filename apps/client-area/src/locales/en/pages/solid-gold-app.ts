@@ -40,7 +40,7 @@ export const enSolidGoldAppPageContent: SolidGoldAppPageContent = {
         stores: [
           {
             label: "Open Play Store",
-            href: "https://play.google.com/store/apps/details?id=com.solidgoldberjangka.minimicro&hl=id",
+            href: "https://play.google.com/store/apps/details?id=com.solidgoldberjangka.minimicro&pcampaignid=web_share",
             icon: "google-play",
           },
           {

@@ -5,6 +5,7 @@ import type { SgbFlavor } from "../env";
 import { assertAllowedSgbRequest, type SgbMethod } from "./allowlist";
 import { parseSgbEnvelope } from "./envelope";
 import { resolveSgbHost, type SgbApiMode, type SgbHostKind } from "./hosts";
+import { extractRotatedSgbToken } from "./token-rotation";
 
 export type SgbApiErrorKind =
   | "network"
@@ -87,28 +88,6 @@ function buildUrl(
   return url;
 }
 
-/**
- * Mirrors the collection's token auto-refresh test script: a `csrf` response
- * header (case-insensitive) that looks like a JWT becomes the new token.
- */
-function extractRotatedToken(headers: Headers): string | undefined {
-  let csrf: string | undefined;
-
-  headers.forEach((value, key) => {
-    if (key.toLowerCase() === "csrf") {
-      csrf = value;
-    }
-  });
-
-  const trimmed = csrf?.trim();
-
-  if (!trimmed || trimmed.split(".").length !== 3) {
-    return undefined;
-  }
-
-  return trimmed;
-}
-
 async function sendSgbRequest(options: SgbApiCallOptions): Promise<Response> {
   assertAllowedSgbRequest(options.method, options.host, options.path);
 
@@ -153,7 +132,7 @@ export async function callSgbApi<T = unknown>(
   options: SgbApiCallOptions,
 ): Promise<SgbApiCallResult<T>> {
   const response = await sendSgbRequest(options);
-  const newToken = extractRotatedToken(response.headers);
+  const newToken = extractRotatedSgbToken(response.headers);
   const rawBody = await response.text();
 
   let payload: unknown = null;
@@ -209,7 +188,7 @@ export async function callSgbApiRaw(
   options: SgbApiCallOptions,
 ): Promise<SgbApiRawResult> {
   const response = await sendSgbRequest(options);
-  const newToken = extractRotatedToken(response.headers);
+  const newToken = extractRotatedSgbToken(response.headers);
   const contentType = response.headers.get("content-type") ?? "application/octet-stream";
 
   if (!response.ok) {

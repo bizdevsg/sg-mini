@@ -54,6 +54,7 @@ function createTradingViewConfig(
     interval: TradingViewInterval,
     hideSideToolbar: boolean,
     hideTopToolbar: boolean,
+    locale: AppLocale,
 ) {
     return {
         allow_symbol_change: !hideTopToolbar,
@@ -69,15 +70,16 @@ function createTradingViewConfig(
         hide_volume: false,
         hotlist: false,
         interval,
-        locale: "en",
+        locale,
         save_image: true,
         style: "1",
         studies: [],
         symbol,
+        support_host: "https://www.tradingview.com",
         theme: "dark",
-        timezone: "Etc/UTC",
+        timezone: "exchange",
         watchlist: [],
-        withdateranges: false,
+        withdateranges: true,
     } as const;
 }
 
@@ -91,6 +93,7 @@ function TradingView({
     headerAction,
     hideSideToolbar = false,
     hideTopToolbar = false,
+    locale,
     marketDetails,
     presets = DEFAULT_PRESETS,
 }: TradingViewProps) {
@@ -109,31 +112,41 @@ function TradingView({
         const container = containerRef.current;
 
         if (!container) return;
+        let cancelled = false;
 
-        const widget = document.createElement("div");
-        widget.className =
-            "tradingview-widget-container__widget h-full w-full";
-        container.replaceChildren(widget);
+        // React Strict Mode mounts effects twice in development. Deferring the
+        // external script prevents an already-cleaned instance from finishing
+        // after the active widget and interrupting its live connection.
+        queueMicrotask(() => {
+            if (cancelled || containerRef.current !== container) return;
 
-        const script = document.createElement("script");
-        script.src = TRADING_VIEW_SCRIPT_URL;
-        script.type = "text/javascript";
-        script.async = true;
-        script.textContent = JSON.stringify(
-            createTradingViewConfig(
-                activePreset.symbol,
-                defaultInterval,
-                hideSideToolbar,
-                hideTopToolbar,
-            ),
-        );
+            const widget = document.createElement("div");
+            widget.className =
+                "tradingview-widget-container__widget h-full w-full";
+            container.replaceChildren(widget);
 
-        container.appendChild(script);
+            const script = document.createElement("script");
+            script.src = TRADING_VIEW_SCRIPT_URL;
+            script.type = "text/javascript";
+            script.async = true;
+            script.textContent = JSON.stringify(
+                createTradingViewConfig(
+                    activePreset.symbol,
+                    defaultInterval,
+                    hideSideToolbar,
+                    hideTopToolbar,
+                    locale,
+                ),
+            );
+
+            container.appendChild(script);
+        });
 
         return () => {
+            cancelled = true;
             container.replaceChildren();
         };
-    }, [activePreset.symbol, defaultInterval, hideSideToolbar, hideTopToolbar]);
+    }, [activePreset.symbol, defaultInterval, hideSideToolbar, hideTopToolbar, locale]);
 
     return (
         <div className="space-y-5">

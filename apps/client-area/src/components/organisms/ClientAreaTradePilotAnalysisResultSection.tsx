@@ -9,23 +9,26 @@ import { ClientAreaTradePilotPricePreview } from "@/components/organisms/ClientA
 import { ClientAreaTradePilotScenarioCard } from "@/components/molecules/ClientAreaTradePilotScenarioCard";
 import {
   CLIENT_AREA_TRADE_PILOT_TIMEFRAMES,
-  STATIC_CLIENT_AREA_TRADE_PILOT_ANALYSIS,
   type ClientAreaTradePilotCopy,
 } from "@/lib/client-area-trade-pilot.shared";
+import type { TradePilotAnalysisResult } from "@/lib/trade-pilot/trade-pilot.types";
 import type { AppLocale } from "@/locales";
 
 type ClientAreaTradePilotAnalysisResultSectionProps = {
   copy: ClientAreaTradePilotCopy;
   locale: AppLocale;
+  analysis: TradePilotAnalysisResult;
+  mockDataLabel: string;
 };
 
 export function ClientAreaTradePilotAnalysisResultSection({
   copy,
   locale,
+  analysis,
+  mockDataLabel,
 }: ClientAreaTradePilotAnalysisResultSectionProps) {
   const resultCopy = copy.analysisResult;
   const scenarioRef = useRef<HTMLElement>(null);
-  const analysis = STATIC_CLIENT_AREA_TRADE_PILOT_ANALYSIS;
   const directionLabel =
     analysis.direction === "bullish"
       ? resultCopy.bullishLabel
@@ -46,6 +49,9 @@ export function ClientAreaTradePilotAnalysisResultSection({
             </span>
             <span className="rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-black">
               {directionLabel}
+            </span>
+            <span className="rounded-full border border-amber-500/40 px-3 py-1 text-xs font-semibold text-amber-400">
+              {mockDataLabel}
             </span>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">

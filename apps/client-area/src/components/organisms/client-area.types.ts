@@ -74,6 +74,8 @@ export type PositionItem = {
   openPrice: string;
   currentPrice: string;
   floatingPl: string;
+  /** Raw floating P/L behind `floatingPl`, for totals and colouring. */
+  floatingValue?: number | null;
   storageFee?: string;
   facilityFee?: string;
   vat?: string;

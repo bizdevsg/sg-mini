@@ -1,36 +1,35 @@
 "use client";
 
-import { ClientAreaNewsPanel } from "@/components/organisms/ClientAreaNewsPanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
-import { getDashboardCopy } from "@/components/organisms/client-area.shared";
-import type {
-  ArticleItem,
-  BreakingNewsItem,
-} from "@/components/organisms/client-area.types";
-import type { NewsCategory } from "@/lib/news.shared";
-import type { AppLocale } from "@/locales";
+import { NewsBrowser } from "@/components/organisms/NewsBrowser";
+import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
+import type { NewsFeedArticle } from "@/lib/news.shared";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaNewsViewProps = {
-  articles?: ArticleItem[];
+  articles: NewsFeedArticle[];
   breakingNews?: BreakingNewsItem[];
-  categories?: NewsCategory[];
   locale: AppLocale;
 };
 
+/**
+ * Same news list as the public website (NewsBrowser: category sidebar, search,
+ * sort/period filter, featured first card), rendered inside the client-area
+ * shell. Article links stay inside the client area.
+ */
 export function ClientAreaNewsView({
   articles,
   breakingNews,
-  categories,
   locale,
 }: ClientAreaNewsViewProps) {
-  const copy = getDashboardCopy(locale);
+  const labels = getMessages(locale).newsPage;
 
   return (
     <ClientAreaShell activeTab="news" breakingNews={breakingNews} locale={locale}>
-      <ClientAreaNewsPanel
+      <NewsBrowser
         articles={articles}
-        categories={categories}
-        copy={copy}
+        hrefBasePath="/client-area/news"
+        labels={labels}
         locale={locale}
       />
     </ClientAreaShell>

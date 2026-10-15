@@ -1,17 +1,19 @@
-import {
-  STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE,
-  type ClientAreaTradePilotPerformanceHistoryCopy,
+import type {
+  ClientAreaTradePilotPerformanceHistoryCopy,
+  ClientAreaTradePilotTimeframePerformance,
 } from "@/lib/client-area-trade-pilot.shared";
 
 type ClientAreaTradePilotTimeframePerformanceTableProps = {
   copy: ClientAreaTradePilotPerformanceHistoryCopy;
+  rows: ClientAreaTradePilotTimeframePerformance[];
 };
 
 export function ClientAreaTradePilotTimeframePerformanceTable({
   copy,
+  rows,
 }: ClientAreaTradePilotTimeframePerformanceTableProps) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#0b0c0e]">
+    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#0b0c0e]/50">
       <div className="border-b border-zinc-800 px-4 py-4 sm:px-5">
         <h2 className="text-sm font-bold text-white">
           {copy.timeframePerformanceTitle} · XAU/USD
@@ -39,7 +41,7 @@ export function ClientAreaTradePilotTimeframePerformanceTable({
             </tr>
           </thead>
           <tbody>
-            {STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE.map((row) => (
+            {rows.map((row) => (
               <tr key={row.timeframe} className="border-t border-zinc-800/90 text-zinc-200">
                 <th className="sticky left-0 z-10 bg-[#0b0c0e] px-4 py-4 text-sm font-bold text-white sm:px-5">
                   {row.timeframe}

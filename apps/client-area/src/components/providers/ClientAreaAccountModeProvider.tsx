@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   createContext,
   useContext,
   useEffect,
@@ -43,6 +44,10 @@ export function ClientAreaAccountModeProvider({
 }: ClientAreaAccountModeProviderProps) {
   const [accountMode, setAccountMode] =
     useState<AccountMode>(initialAccountMode);
+  const selectAccountMode = useCallback((mode: AccountMode) => {
+    persistClientAreaAccountMode(mode);
+    setAccountMode(mode);
+  }, []);
 
   useEffect(() => {
     persistClientAreaAccountMode(accountMode);
@@ -50,7 +55,7 @@ export function ClientAreaAccountModeProvider({
 
   return (
     <ClientAreaAccountModeContext.Provider
-      value={{ accountMode, setAccountMode }}
+      value={{ accountMode, setAccountMode: selectAccountMode }}
     >
       {children}
     </ClientAreaAccountModeContext.Provider>

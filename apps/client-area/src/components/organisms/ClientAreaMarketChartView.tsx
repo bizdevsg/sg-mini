@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
-import TradingView from "@/components/organisms/TradingView";
+import { MiniChart } from "@/components/organisms/MiniChart";
 import {
   getClientAreaTradingViewPresetById,
   resolveLocalizedHref,
@@ -67,18 +67,14 @@ export function ClientAreaMarketChartView({
         </div>
 
         {hasMarketData && selectedPreset ? (
-          <TradingView
-            defaultPresetId={selectedPreset.id}
-            locale={locale}
-            presets={presets}
-          />
+          <MiniChart symbol={selectedPreset.marketCode} />
         ) : (
           <EmptyStatePanel
             title={locale === "id" ? "Data Tidak Ada" : "Data Unavailable"}
             body={
               locale === "id"
-                ? "Kode market ini belum tersedia di data TradingView dari API."
-                : "This market code is not available in the TradingView API data yet."
+                ? "Kode market ini belum tersedia untuk MiniMicro WebView."
+                : "This market code is not available for the MiniMicro WebView yet."
             }
             variant="warning"
             className="py-10"

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { AccountMode } from "@/components/organisms/client-area.types";
+import { clientAreaFetch } from "@/lib/client-area-fetch";
 import type { DailyStatementReport } from "@/types/daily-statement";
 
 export type DailyStatementState =
@@ -32,7 +33,7 @@ export function useDailyStatement(mode: AccountMode) {
       let state: SettledState = { status: "error" };
 
       try {
-        const response = await fetch(
+        const response = await clientAreaFetch(
           `/api/client-area/daily-statement?mode=${mode}`,
           {
             cache: "no-store",
@@ -40,12 +41,6 @@ export function useDailyStatement(mode: AccountMode) {
             signal: controller.signal,
           },
         );
-
-        if (response.status === 401) {
-          // Session gone — a reload lets the client-area layout redirect to login.
-          window.location.reload();
-          return;
-        }
 
         if (response.status === 404) {
           state = { status: "unavailable" };

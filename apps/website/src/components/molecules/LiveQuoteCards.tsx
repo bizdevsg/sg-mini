@@ -20,7 +20,13 @@ export function LiveQuoteCards({
   fieldLabels,
 }: LiveQuoteCardsProps) {
   return (
-    <div className={mode === "full" ? "grid gap-4 md:hidden" : "grid gap-4 lg:grid-cols-3"}>
+    <div
+      className={
+        mode === "full"
+          ? "grid gap-4 md:hidden"
+          : "grid gap-4 sm:grid-cols-2"
+      }
+    >
       {symbols.map((symbol, index) => {
         const tick = quotes[symbol];
         return (

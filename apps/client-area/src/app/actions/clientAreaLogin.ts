@@ -16,18 +16,16 @@ import {
   buildSgbDeviceBodyFields,
   buildSgbDeviceHeaders,
 } from "@/lib/sgb-api/device";
-import { getOrCreateSgbDeviceUuid } from "@/lib/sgb-session";
+import {
+  clearPendingSgbOtpSession,
+  createPendingSgbOtpSession,
+  getOrCreateSgbDeviceUuid,
+} from "@/lib/sgb-session";
 import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 export type ClientAreaLoginState = {
   status: "idle" | "error" | "otp_required";
   message: string;
-  /** Temporary token from login, used during OTP verification. */
-  loginToken?: string;
-  /** Email used for login — forwarded to OTP verify so it can create the session. */
-  email?: string;
-  /** Carry rememberMe preference through to the OTP step. */
-  rememberMe?: boolean;
 };
 
 function resolveLocale(value: string): AppLocale {
@@ -46,6 +44,51 @@ function requiresOtpAuthorization(message: string | undefined) {
   return /\b(?:need|needs|require|requires|required)\s+otp(?:\s+authorization)?\b/i.test(
     message,
   );
+}
+
+type LoginMessages = ReturnType<typeof getMessages>["clientArea"]["login"];
+
+function resolveLoginErrorMessage(
+  error: unknown,
+  login: LoginMessages,
+): string {
+  if (!(error instanceof SgbApiError)) {
+    if (
+      error instanceof Error &&
+      /SGB_PASSWORD_PASSPHRASE|CLIENT_AREA_SESSION_SECRET/i.test(error.message)
+    ) {
+      return login.errorSessionConfiguration;
+    }
+
+    return login.errorServer;
+  }
+
+  if (/captcha/i.test(error.message)) {
+    return login.errorCaptchaFailed;
+  }
+
+  if (
+    /invalid\s+(?:account|email|password|credential)/i.test(error.message) ||
+    /(?:account|email|password|credential).*(?:invalid|incorrect|wrong)/i.test(
+      error.message,
+    )
+  ) {
+    return login.errorInvalidCredentials;
+  }
+
+  switch (error.kind) {
+    case "network":
+      return login.errorNetwork;
+    case "timeout":
+      return login.errorTimeout;
+    case "session_expired":
+      return login.errorSessionExpired;
+    case "invalid_response":
+    case "business":
+      return login.errorServer;
+  }
+
+  return login.errorServer;
 }
 
 export async function submitClientAreaLogin(
@@ -84,6 +127,7 @@ export async function submitClientAreaLogin(
 
   let token: string | undefined;
   let newToken: string | undefined;
+  let loginTokenMissing = true;
   let otpRequired = false;
   try {
     const loginResult = await callSgbApi<SgbLoginResponseData>({
@@ -100,8 +144,9 @@ export async function submitClientAreaLogin(
         ...deviceBodyFields,
       },
     });
-    token = loginResult.data?.token;
+    loginTokenMissing = !loginResult.data?.token;
     newToken = loginResult.newToken;
+    token = newToken ?? loginResult.data?.token;
     otpRequired = requiresOtpAuthorization(loginResult.message);
     const loginData = (loginResult.data ?? {}) as Record<string, unknown>;
     console.info(
@@ -121,23 +166,13 @@ export async function submitClientAreaLogin(
   } catch (error) {
     console.error("[client-area-login] SGB login call failed", describeError(error));
 
-    if (error instanceof SgbApiError && /captcha/i.test(error.message)) {
-      return {
-        status: "error",
-        message: login.errorCaptchaFailed,
-      };
-    }
-
     return {
       status: "error",
-      message:
-        error instanceof SgbApiError
-          ? error.safeMessage
-          : login.errorInvalidCredentials,
+      message: resolveLoginErrorMessage(error, login),
     };
   }
 
-  if ((otpRequired || !token) && CLIENT_AREA_SKIP_OTP) {
+  if ((otpRequired || loginTokenMissing) && CLIENT_AREA_SKIP_OTP) {
     console.warn(
       "[client-area-login] CLIENT_AREA_SKIP_OTP active — OTP skipped, " +
         "creating dev-only session with a placeholder token.",
@@ -146,27 +181,39 @@ export async function submitClientAreaLogin(
       { token: "dev-skip-otp", email, accounts: null },
       rememberMe,
     );
+    await clearPendingSgbOtpSession();
     redirect(getClientAreaDashboardHref(locale));
   }
 
-  if (otpRequired || !token) {
+  if (otpRequired || loginTokenMissing) {
     // UAT can return a temporary data.token together with a successful
     // "need OTP Authorization" message. That token must only authorize the
     // OTP endpoints and must never be promoted to an authenticated session.
-    const preliminaryToken = token ?? newToken ?? "";
+    const preliminaryToken = token ?? "";
     console.info(
       "[client-area-login] Login requires OTP verification — " +
         "routing to OTP verification flow. Preliminary token present: " +
         Boolean(preliminaryToken),
     );
 
+    if (!preliminaryToken) {
+      return { status: "error", message: login.errorSessionExpired };
+    }
+
+    await createPendingSgbOtpSession({
+      token: preliminaryToken,
+      email,
+      rememberMe,
+    });
+
     return {
       status: "otp_required",
       message: "",
-      loginToken: preliminaryToken,
-      email,
-      rememberMe,
     };
+  }
+
+  if (!token) {
+    return { status: "error", message: login.errorSessionExpired };
   }
 
   let accounts: unknown = null;
@@ -181,11 +228,18 @@ export async function submitClientAreaLogin(
       deviceHeaders,
     });
     accounts = listAccountResult.data;
+    token = listAccountResult.newToken ?? token;
   } catch (error) {
+    if (error instanceof SgbApiError && error.kind === "session_expired") {
+      await clearPendingSgbOtpSession();
+      return { status: "error", message: login.errorSessionExpired };
+    }
+
     // Non-fatal — the session is still created without account list data.
     console.error("[client-area-login] list-account call failed", describeError(error));
   }
 
   await createClientAreaSession({ token, email, accounts }, rememberMe);
+  await clearPendingSgbOtpSession();
   redirect(getClientAreaDashboardHref(locale));
 }

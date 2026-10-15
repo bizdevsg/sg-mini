@@ -4,13 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { ClientAreaSuperscriptDecimal } from "@/components/atoms/ClientAreaSuperscriptDecimal";
+import { ClientAreaDailyStatementSkeleton } from "@/components/molecules/ClientAreaDailyStatementSkeleton";
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import {
-  formatSignedUsd,
-  formatUsd,
   resolveLocalizedHref,
 } from "@/components/organisms/client-area.shared";
-import { formatPrice } from "@/components/organisms/client-area-open-positions";
 import { useDailyStatement } from "@/hooks/useDailyStatement";
 import { getMessages, type AppLocale } from "@/locales";
 import type { DailyStatementReport } from "@/types/daily-statement";
@@ -53,7 +52,23 @@ const MESSAGES = {
 } as const;
 
 function money(value: number | null) {
-  return value === null ? EMPTY : formatUsd(value);
+  return value === null ? EMPTY : `$ ${formatStatementNumber(value)}`;
+}
+
+function signedMoney(value: number | null) {
+  if (value === null) return EMPTY;
+
+  const sign = value >= 0 ? "+" : "-";
+  return `${sign}$${formatStatementNumber(Math.abs(value))}`;
+}
+
+function formatStatementNumber(value: number | null) {
+  return value === null
+    ? EMPTY
+    : value.toLocaleString("en-US", {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
 }
 
 // The statement rows, all from the API. Nothing is invented: a value the API
@@ -91,33 +106,115 @@ function buildBalanceRows(report: DailyStatementReport | null): StatementRow[] {
       ratio === null
         ? EMPTY
         : `${ratio.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4,
           })}%`,
     ],
   ];
 }
 
-function StatementRows({
+function StatementAccountOverview({
   labels,
-  rows,
+  identityRows,
+  featuredRows,
+  detailRows,
 }: {
   labels: Record<string, string>;
-  rows: ReadonlyArray<StatementRow>;
+  identityRows: ReadonlyArray<StatementRow>;
+  featuredRows: ReadonlyArray<StatementRow>;
+  detailRows: ReadonlyArray<StatementRow>;
 }) {
+  const [accountRow, ...metadataRows] = identityRows;
+  const [primaryRow, ...supportRows] = featuredRows;
+
   return (
-    <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-[minmax(0,1fr)_minmax(12rem,1fr)]">
-      {rows.map(([label, value]) => (
-        <div key={label} className="contents">
-          <dt className="text-sm font-semibold text-zinc-400 sm:text-base">
-            {labels[label]}
-          </dt>
-          <dd className="text-sm font-bold tabular-nums text-zinc-100 sm:text-base">
-            {value}
-          </dd>
+    <div className="space-y-3">
+      <div className="flex flex-col gap-5 rounded-2xl border border-white/10 bg-[#17181b]/95 px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.18)] sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        {accountRow ? (
+          <div className="flex min-w-0 items-center gap-4">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-yellow-400/25 bg-yellow-400/10 text-sm text-yellow-400">
+              <FontAwesomeIcon icon={["fas", "file-invoice-dollar"]} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                {labels[accountRow[0]]}
+              </p>
+              <p className="mt-1 truncate font-mono text-base font-bold tracking-wide text-white sm:text-lg">
+                {accountRow[1]}
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="grid grid-cols-2 gap-x-8 gap-y-3 border-t border-white/[0.07] pt-4 lg:border-t-0 lg:pt-0">
+          {metadataRows.map(([label, value]) => (
+            <div key={label} className="min-w-0">
+              <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-zinc-600">
+                {labels[label]}
+              </p>
+              <p className="mt-1 truncate text-sm font-semibold tabular-nums text-zinc-200">
+                {value}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
-    </dl>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_1fr] lg:grid-rows-2">
+        {primaryRow ? (
+          <div
+            className="relative overflow-hidden rounded-2xl border border-yellow-400/30 bg-[linear-gradient(145deg,rgba(250,204,21,0.16),rgba(24,24,27,0.96)_58%)] p-5 shadow-[0_18px_55px_rgba(0,0,0,0.24)] sm:col-span-2 sm:p-6 lg:col-span-1 lg:row-span-2"
+          >
+            <span className="absolute inset-y-5 left-0 w-1 rounded-r-full bg-yellow-400" />
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-yellow-200/70">
+              {labels[primaryRow[0]]}
+            </p>
+            <p className="mt-3 tabular-nums text-3xl font-black tracking-tight text-yellow-300 sm:text-4xl lg:mt-5">
+              <ClientAreaSuperscriptDecimal value={primaryRow[1]} />
+            </p>
+            <div className="mt-8 h-px bg-gradient-to-r from-yellow-400/35 to-transparent" />
+            <p className="mt-3 text-xs text-zinc-500">
+              {accountRow?.[1] ?? EMPTY}
+            </p>
+          </div>
+        ) : null}
+
+        {supportRows.map(([label, value], index) => (
+          <div
+            key={label}
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#191a1e] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.16)] sm:px-6"
+          >
+            <span
+              className={`absolute right-5 top-5 size-1.5 rounded-full ${
+                index === 1 ? "bg-emerald-400" : "bg-yellow-400/70"
+              }`}
+            />
+            <p className="pr-5 text-xs font-medium text-zinc-500">
+              {labels[label]}
+            </p>
+            <p className="mt-2 tabular-nums text-lg font-extrabold tracking-tight text-zinc-100 sm:text-xl">
+              <ClientAreaSuperscriptDecimal value={value} />
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {detailRows.map(([label, value]) => (
+          <div
+            key={label}
+            className="min-w-0 rounded-xl border border-white/[0.08] bg-[#151619]/90 px-4 py-3.5 shadow-[0_10px_28px_rgba(0,0,0,0.12)]"
+          >
+            <dt className="truncate text-xs font-medium text-zinc-500">
+              {labels[label]}
+            </dt>
+            <dd className="mt-2 tabular-nums text-sm font-extrabold text-zinc-200 sm:text-base">
+              <ClientAreaSuperscriptDecimal value={value} />
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }
 
@@ -130,7 +227,7 @@ function StatusBox({ children }: { children: React.ReactNode }) {
 }
 
 function formatLot(lot: number | null) {
-  return lot === null ? EMPTY : `${lot.toFixed(2)} Lot`;
+  return lot === null ? EMPTY : `${formatStatementNumber(lot)} Lot`;
 }
 
 export function ClientAreaDailyStatementPanel({
@@ -152,6 +249,18 @@ export function ClientAreaDailyStatementPanel({
   ];
   const summaryRows = buildSummaryRows(report);
   const balanceRows = buildBalanceRows(report);
+  const featuredRows: StatementRow[] = [
+    balanceRows[0],
+    summaryRows[0],
+    balanceRows[2],
+    balanceRows[4],
+    balanceRows[1],
+  ].filter((row): row is StatementRow => Boolean(row));
+  const detailRows: StatementRow[] = [
+    ...summaryRows.slice(1),
+    balanceRows[3],
+    balanceRows[5],
+  ].filter((row): row is StatementRow => Boolean(row));
 
   const tabs: Array<{ id: StatementTab; label: string }> = [
     { id: "account", label: copy.tabs.account },
@@ -198,8 +307,8 @@ export function ClientAreaDailyStatementPanel({
           : activeTab === "open"
             ? report.positions.map((item) => [
                 `${item.productName} / ${item.side.toUpperCase()} ${formatLot(item.lot)}`,
-                `${formatPrice(item.openPrice)} to ${formatPrice(item.closingPrice)} / ${
-                  item.floating === null ? EMPTY : formatSignedUsd(item.floating)
+                `${formatStatementNumber(item.openPrice)} to ${formatStatementNumber(item.closingPrice)} / ${
+                  signedMoney(item.floating)
                 }`,
               ])
             : [];
@@ -268,7 +377,7 @@ export function ClientAreaDailyStatementPanel({
 
       <div className="mt-5 space-y-4">
         {state.status === "loading" ? (
-          <StatusBox>{messages.loading}</StatusBox>
+          <ClientAreaDailyStatementSkeleton label={messages.loading} />
         ) : null}
 
         {state.status === "unavailable" ? (
@@ -289,17 +398,12 @@ export function ClientAreaDailyStatementPanel({
         ) : null}
 
         {report && activeTab === "account" ? (
-          <>
-            <div className="rounded-2xl border border-white/15 bg-[#202125] p-5 sm:p-6">
-              <StatementRows labels={copy.labels} rows={headerRows} />
-            </div>
-            <div className="rounded-2xl border border-white/15 bg-[#202125] p-5 sm:p-6">
-              <StatementRows labels={copy.labels} rows={summaryRows} />
-            </div>
-            <div className="rounded-2xl border border-white/15 bg-[#202125] p-5 sm:p-6">
-              <StatementRows labels={copy.labels} rows={balanceRows} />
-            </div>
-          </>
+          <StatementAccountOverview
+            labels={copy.labels}
+            identityRows={headerRows}
+            featuredRows={featuredRows}
+            detailRows={detailRows}
+          />
         ) : null}
 
         {report && activeTab === "open" ? (
@@ -331,7 +435,10 @@ export function ClientAreaDailyStatementPanel({
                           : "text-yellow-400"
                       }`}
                     >
-                      {position.side.toUpperCase()} / {formatLot(position.lot)}
+                      {position.side.toUpperCase()} /{" "}
+                      <ClientAreaSuperscriptDecimal
+                        value={formatLot(position.lot)}
+                      />
                     </p>
                   </div>
                   <div>
@@ -339,7 +446,9 @@ export function ClientAreaDailyStatementPanel({
                       {copy.labels.openPrice}
                     </p>
                     <p className="mt-1 text-sm font-semibold text-zinc-200">
-                      {formatPrice(position.openPrice)}
+                      <ClientAreaSuperscriptDecimal
+                        value={formatStatementNumber(position.openPrice)}
+                      />
                     </p>
                   </div>
                   <div>
@@ -347,7 +456,9 @@ export function ClientAreaDailyStatementPanel({
                       {copy.labels.marketPrice}
                     </p>
                     <p className="mt-1 text-sm font-semibold text-zinc-200">
-                      {formatPrice(position.closingPrice)}
+                      <ClientAreaSuperscriptDecimal
+                        value={formatStatementNumber(position.closingPrice)}
+                      />
                     </p>
                   </div>
                   <div>
@@ -365,7 +476,9 @@ export function ClientAreaDailyStatementPanel({
                     >
                       {position.floating === null
                         ? EMPTY
-                        : formatSignedUsd(position.floating)}
+                        : <ClientAreaSuperscriptDecimal
+                            value={signedMoney(position.floating)}
+                          />}
                     </p>
                   </div>
                 </article>

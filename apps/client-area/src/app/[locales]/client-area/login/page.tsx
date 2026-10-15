@@ -16,6 +16,7 @@ import type { AppLocale } from "@/locales";
 
 type ClientAreaLoginRouteProps = {
   params: Promise<{ locales: string }>;
+  searchParams: Promise<{ reason?: string }>;
 };
 
 function assertValidLocale(value: string): asserts value is AppLocale {
@@ -50,8 +51,10 @@ export async function generateMetadata({
 
 export default async function ClientAreaLoginRoute({
   params,
+  searchParams,
 }: ClientAreaLoginRouteProps) {
   const { locales } = await params;
+  const { reason } = await searchParams;
   assertValidLocale(locales);
   await redirectAuthenticatedClientAreaUser(locales);
   const requestHeaders = await headers();
@@ -62,6 +65,13 @@ export default async function ClientAreaLoginRoute({
       isRecaptchaEnabled={isRecaptchaEnabled(requestHostname)}
       locale={locales}
       recaptchaSiteKey={PUBLIC_RECAPTCHA_SITE_KEY}
+      sessionExpiredMessage={
+        reason === "expired"
+          ? locales === "id"
+            ? "Sesi Anda telah berakhir, silakan login kembali."
+            : "Your session has expired. Please sign in again."
+          : undefined
+      }
     />
   );
 }

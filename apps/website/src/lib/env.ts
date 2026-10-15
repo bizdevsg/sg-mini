@@ -52,8 +52,10 @@ const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
 const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
 const DEFAULT_HERO_CTA_URL = "https://sg-berjangka.com/";
 const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
-const DEFAULT_SOLID_GOLD_PLAY_STORE_URL = "https://play.google.com/store";
-const DEFAULT_SOLID_GOLD_APP_STORE_URL = "https://www.apple.com/app-store/";
+const DEFAULT_SOLID_GOLD_PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.solidgoldberjangka.minimicro&pcampaignid=web_share";
+const DEFAULT_SOLID_GOLD_APP_STORE_URL =
+  "https://apps.apple.com/id/app/solid/id6756168987?l=id";
 const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
 const DEFAULT_SITE_URL = "https://mini.sg-berjangka.com";
 const DEFAULT_CLIENT_SITE_URL = "https://client-mini.sg-berjangka.com";

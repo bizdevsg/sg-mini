@@ -1,6 +1,8 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ChevronDown } from "lucide-react";
+import { useId, useState } from "react";
 
 import { ClientAreaAccountValueCard } from "@/components/atoms/ClientAreaAccountValueCard";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
@@ -40,6 +42,10 @@ const SUMMARY_MESSAGES: Record<
   AppLocale,
   {
     error: string;
+    accountMetricsTitle: string;
+    collapseAccountMetrics: string;
+    expandAccountMetrics: string;
+    loading: string;
     openRealAccountCta: string;
     realAccountDisclaimerBody: string;
     realAccountDisclaimerTitle: string;
@@ -50,7 +56,11 @@ const SUMMARY_MESSAGES: Record<
   }
 > = {
   id: {
+    accountMetricsTitle: "Detail Margin Akun",
+    collapseAccountMetrics: "Tutup detail margin akun",
     error: "Data akun belum bisa dimuat.",
+    expandAccountMetrics: "Buka detail margin akun",
+    loading: "Memuat ringkasan akun...",
     openRealAccountCta: "Buka Akun Real di Aplikasi",
     realAccountDisclaimerBody:
       "Pembukaan akun Real dilakukan melalui aplikasi Solid Gold. Unduh aplikasinya, lalu ikuti proses pendaftaran akun Real.",
@@ -61,7 +71,11 @@ const SUMMARY_MESSAGES: Record<
     updated: "Diperbarui",
   },
   en: {
+    accountMetricsTitle: "Account Margin Details",
+    collapseAccountMetrics: "Close account margin details",
     error: "Account data could not be loaded.",
+    expandAccountMetrics: "Open account margin details",
+    loading: "Loading account summary...",
     openRealAccountCta: "Open a Real Account in the App",
     realAccountDisclaimerBody:
       "Real accounts are opened through the Solid Gold app. Download the app, then follow the Real account registration process.",
@@ -124,6 +138,19 @@ function resolveMetricValue(
   return formatUsd(value);
 }
 
+function AccountValueSkeleton({
+  className = "h-6 w-32",
+}: {
+  className?: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`mx-auto block animate-pulse rounded-full bg-black/15 motion-reduce:animate-none ${className}`}
+    />
+  );
+}
+
 export function ClientAreaAccountOverview({
   accountMode,
   copy,
@@ -137,22 +164,33 @@ export function ClientAreaAccountOverview({
   summaryState,
   updatedAt = null,
 }: ClientAreaAccountOverviewProps) {
+  const accountMetricsId = useId();
+  const [areAccountMetricsOpen, setAreAccountMetricsOpen] = useState(false);
   const summary = summaryState.status === "ready" ? summaryState.account : null;
+  const isLoading = summaryState.status === "loading";
   const messages = SUMMARY_MESSAGES[locale];
   const floatingPl = summary?.floatingPl ?? null;
   // No Real account: every figure would be an empty "—", so show only the disclaimer.
   const hasNoRealAccount =
     summaryState.status === "unavailable" && accountMode === "real";
+  const shouldShowAccountMetrics =
+    summaryState.status === "loading" || summaryState.status === "ready";
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" aria-busy={isLoading}>
+      {isLoading ? (
+        <span className="sr-only" role="status" aria-live="polite">
+          {messages.loading}
+        </span>
+      ) : null}
       <div
         className="relative h-fit overflow-hidden rounded-3xl border border-yellow-400/30 bg-cover bg-center bg-no-repeat p-5 text-black shadow-2xl"
-        style={{ backgroundImage: "url('/assets/bg-profile.svg')" }}
+        style={{ backgroundImage: "url('/assets/bg-profile.webp')" }}
       >
-        <div className="relative mb-4 flex items-start justify-between gap-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-1">
-            <div className="relative">
+        {hasNoRealAccount ? null : (
+          <div className="relative mb-4 flex items-center justify-between gap-4">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              {/* <div className="relative">
               <button
                 type="button"
                 onClick={onToggleAccountMode}
@@ -186,75 +224,101 @@ export function ClientAreaAccountOverview({
                   </button>
                 </div>
               ) : null}
+            </div> */}
+
+              {isLoading ? (
+                <span
+                  aria-hidden="true"
+                  className="mt-1 block h-4 w-28 animate-pulse rounded-full bg-black/15 motion-reduce:animate-none"
+                />
+              ) : (
+                <span className="break-all pr-2 text-lg font-extrabold tracking-tight text-neutral-900 sm:text-base">
+                  {summary?.accountId ?? EMPTY_VALUE}
+                </span>
+              )}
             </div>
 
-            {hasNoRealAccount ? null : (
-              <span className="break-all pr-2 text-sm font-extrabold tracking-tight text-neutral-900 sm:text-base">
-                {summary?.accountId ?? EMPTY_VALUE}
-              </span>
-            )}
-          </div>
-
-          {hasNoRealAccount ? null : (
             <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/20 bg-zinc-900 shadow sm:h-13 sm:w-13">
               <FontAwesomeIcon
                 icon={["fas", "user"]}
                 className="text-yellow-400"
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="relative grid gap-2 sm:gap-2.5">
           {hasNoRealAccount ? null : (
             <>
-            <ClientAreaAccountValueCard
-              label="New Balance"
-              surfaceClassName="bg-orange-500/70"
-              value={summary?.balance == null ? EMPTY_VALUE : formatUsd(summary.balance)}
-              valueClassName="text-neutral-950"
-            />
-            <ClientAreaAccountValueCard
-              label="Floating P/L"
-              surfaceClassName="bg-white/50"
-              value={floatingPl === null ? EMPTY_VALUE : formatSignedUsd(floatingPl)}
-              valueClassName={
-                floatingPl === null
-                  ? "text-neutral-950"
-                  : floatingPl >= 0
-                    ? "text-emerald-600"
-                    : "text-red-600"
-              }
-            />
-            <ClientAreaAccountValueCard
-              label="Equity"
-              surfaceClassName="bg-orange-500/70"
-              value={summary?.equity == null ? EMPTY_VALUE : formatUsd(summary.equity)}
-              valueClassName="text-neutral-950"
-            />
+              <ClientAreaAccountValueCard
+                label="New Balance"
+                surfaceClassName="bg-orange-500/70"
+                value={
+                  isLoading ? (
+                    <AccountValueSkeleton />
+                  ) : summary?.balance == null ? (
+                    EMPTY_VALUE
+                  ) : (
+                    formatUsd(summary.balance)
+                  )
+                }
+                valueClassName="text-neutral-950"
+              />
+              <ClientAreaAccountValueCard
+                label="Floating P/L"
+                surfaceClassName="bg-white/50"
+                value={
+                  isLoading ? (
+                    <AccountValueSkeleton className="h-6 w-28" />
+                  ) : floatingPl === null ? (
+                    EMPTY_VALUE
+                  ) : (
+                    formatSignedUsd(floatingPl)
+                  )
+                }
+                valueClassName={
+                  floatingPl === null || isLoading
+                    ? "text-neutral-950"
+                    : floatingPl >= 0
+                      ? "text-emerald-600"
+                      : "text-red-600"
+                }
+              />
+              <ClientAreaAccountValueCard
+                label="Equity"
+                surfaceClassName="bg-orange-500/70"
+                value={
+                  isLoading ? (
+                    <AccountValueSkeleton className="h-6 w-36" />
+                  ) : summary?.equity == null ? (
+                    EMPTY_VALUE
+                  ) : (
+                    formatUsd(summary.equity)
+                  )
+                }
+                valueClassName="text-neutral-950"
+              />
             </>
           )}
-          {summaryState.status === "ready" && updatedAt !== null ? (
+          {/* {summaryState.status === "ready" && updatedAt !== null ? (
             <p
-              className={`flex items-center justify-end gap-1.5 text-[11px] font-semibold ${
-                isStale ? "text-amber-800" : "text-neutral-800/80"
-              }`}
+              className={`flex items-center justify-end gap-1.5 text-[11px] font-semibold ${isStale ? "text-amber-800" : "text-neutral-800/80"
+                }`}
               aria-live="off"
             >
               <span
-                className={`size-1.5 rounded-full ${
-                  isStale ? "bg-amber-600" : "animate-pulse bg-emerald-600"
-                }`}
+                className={`size-1.5 rounded-full ${isStale ? "bg-amber-600" : "animate-pulse bg-emerald-600"
+                  }`}
               />
               {isStale
                 ? `${messages.stale} · ${new Date(updatedAt).toLocaleTimeString(
-                    locale === "id" ? "id-ID" : "en-US",
-                  )}`
+                  locale === "id" ? "id-ID" : "en-US",
+                )}`
                 : `${messages.updated} ${new Date(updatedAt).toLocaleTimeString(
-                    locale === "id" ? "id-ID" : "en-US",
-                  )}`}
+                  locale === "id" ? "id-ID" : "en-US",
+                )}`}
             </p>
-          ) : null}
+          ) : null} */}
           {summaryState.status === "error" ? (
             <p className="flex items-center justify-between gap-3 rounded-xl bg-white/60 px-3 py-2 text-xs font-semibold text-red-700">
               <span>{messages.error}</span>
@@ -270,7 +334,7 @@ export function ClientAreaAccountOverview({
           {hasNoRealAccount ? (
             <div
               role="note"
-              className="space-y-2 rounded-xl border border-amber-500/40 bg-white/70 px-3 py-3 text-neutral-900"
+              className="space-y-2 m-0 rounded-xl border border-amber-500/40 bg-white/70 px-3 py-3 text-neutral-900"
             >
               <p className="text-sm font-extrabold">
                 {messages.realAccountDisclaimerTitle}
@@ -295,23 +359,54 @@ export function ClientAreaAccountOverview({
         </div>
       </div>
 
-      {hasNoRealAccount ? null : (
+      {shouldShowAccountMetrics ? (
         <div
           className="relative overflow-hidden rounded-3xl border border-yellow-400/30 bg-cover bg-center bg-no-repeat p-5 text-black shadow-2xl"
-          style={{ backgroundImage: "url('/assets/bg-profile.svg')" }}
+          style={{ backgroundImage: "url('/assets/bg-profile.webp')" }}
         >
-          <div className="relative space-y-3 px-1 font-semibold text-neutral-900">
-            {ACCOUNT_METRICS.map((metric, index) => (
-              <ClientAreaAccountMetricRow
-                key={metric.label}
-                label={metric.label}
-                value={resolveMetricValue(summary, metric.key)}
-                withDivider={index !== ACCOUNT_METRICS.length - 1}
-              />
-            ))}
-          </div>
+          <button
+            aria-controls={accountMetricsId}
+            aria-expanded={areAccountMetricsOpen}
+            aria-label={
+              areAccountMetricsOpen
+                ? messages.collapseAccountMetrics
+                : messages.expandAccountMetrics
+            }
+            className="relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl px-1 py-1 text-left text-sm font-extrabold text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700"
+            onClick={() => setAreAccountMetricsOpen((open) => !open)}
+            type="button"
+          >
+            <span>{messages.accountMetricsTitle}</span>
+            <ChevronDown
+              aria-hidden="true"
+              className={`h-5 w-5 shrink-0 transition-transform duration-200 ${areAccountMetricsOpen ? "rotate-180" : "rotate-0"
+                }`}
+            />
+          </button>
+
+          {areAccountMetricsOpen ? (
+            <div
+              className="relative mt-3 space-y-3 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900"
+              id={accountMetricsId}
+            >
+              {ACCOUNT_METRICS.map((metric, index) => (
+                <ClientAreaAccountMetricRow
+                  key={metric.label}
+                  label={metric.label}
+                  value={
+                    isLoading ? (
+                      <AccountValueSkeleton className="h-5 w-24 sm:w-28" />
+                    ) : (
+                      resolveMetricValue(summary, metric.key)
+                    )
+                  }
+                  withDivider={index !== ACCOUNT_METRICS.length - 1}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

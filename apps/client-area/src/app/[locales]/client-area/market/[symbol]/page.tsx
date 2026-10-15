@@ -45,10 +45,10 @@ export async function generateMetadata({
         ? "Data Tidak Ada | Client Area"
         : "Data Unavailable | Client Area",
     description: preset
-      ? `Live chart for ${preset.marketCode}.`
+      ? `MiniMicro live chart for ${preset.marketCode}.`
       : locales === "id"
-        ? "Data TradingView untuk kode market ini belum tersedia."
-        : "TradingView data for this market code is not available yet.",
+        ? "MiniMicro WebView untuk kode market ini belum tersedia."
+        : "The MiniMicro WebView for this market code is not available yet.",
     locale: locales,
     path: `/${locales}/client-area/market/${symbol}`,
   });

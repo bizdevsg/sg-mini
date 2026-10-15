@@ -48,4 +48,28 @@ describe("parseSgbEnvelope", async () => {
     assert.equal(byHttp.ok === false && byHttp.sessionExpired, true);
     assert.equal(byMessage.ok === false && byMessage.sessionExpired, true);
   });
+
+  it("normalizes common expired-token responses as an expired session", () => {
+    const byForbiddenHttp = parseSgbEnvelope(403, null);
+    const byStringStatus = parseSgbEnvelope(200, {
+      headers: { statusCode: "403", message: "Forbidden" },
+    });
+    const byTokenMessage = parseSgbEnvelope(200, {
+      headers: { statusCode: 400, message: "Bearer token expired" },
+    });
+    const byInvalidTokenMessage = parseSgbEnvelope(200, {
+      headers: { statusCode: 400, message: "Invalid access token" },
+    });
+
+    assert.equal(
+      byForbiddenHttp.ok === false && byForbiddenHttp.sessionExpired,
+      true,
+    );
+    assert.equal(byStringStatus.ok === false && byStringStatus.sessionExpired, true);
+    assert.equal(byTokenMessage.ok === false && byTokenMessage.sessionExpired, true);
+    assert.equal(
+      byInvalidTokenMessage.ok === false && byInvalidTokenMessage.sessionExpired,
+      true,
+    );
+  });
 });

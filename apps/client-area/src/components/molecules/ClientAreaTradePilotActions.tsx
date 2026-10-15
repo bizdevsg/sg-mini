@@ -5,10 +5,16 @@ import type { ClientAreaTradePilotCopy } from "@/lib/client-area-trade-pilot.sha
 
 type ClientAreaTradePilotActionsProps = {
   copy: ClientAreaTradePilotCopy;
+  disabled?: boolean;
+  isAnalyzing: boolean;
+  onAnalyze: () => void;
 };
 
 export function ClientAreaTradePilotActions({
   copy,
+  disabled = false,
+  isAnalyzing,
+  onAnalyze,
 }: ClientAreaTradePilotActionsProps) {
   return (
     <section className="min-w-0 space-y-3 rounded-2xl border border-zinc-800 bg-zinc-500/10 p-4 sm:rounded-3xl sm:p-5">
@@ -19,10 +25,12 @@ export function ClientAreaTradePilotActions({
         {copy.setAlertLabel}
       </ClientAreaTradePilotActionButton>
       <ClientAreaTradePilotActionButton
+        disabled={disabled || isAnalyzing}
         icon={<ChartNoAxesCombined className="h-6 w-6" />}
+        onClick={onAnalyze}
         variant="primary"
       >
-        {copy.analysisActionLabel}
+        {isAnalyzing ? copy.analysisLoadingLabel : copy.analysisActionLabel}
       </ClientAreaTradePilotActionButton>
     </section>
   );

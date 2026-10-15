@@ -65,6 +65,12 @@ function resolveMarketIconClassName(label: string) {
   return "border border-emerald-500/20 bg-emerald-500/10 text-emerald-300";
 }
 
+function resolveHomeMarketDisplayCode(symbol?: string) {
+  if (!symbol) return "";
+
+  return symbol.replace(/_BBJ$/, "");
+}
+
 export function ClientAreaMarketWatchSection({
   copy,
   locale,
@@ -83,13 +89,14 @@ export function ClientAreaMarketWatchSection({
         actionLabel={copy.viewMoreLabel}
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
         {watchlistItems.map(({ badge, item }) => (
           <ClientAreaRecommendationCard
             key={item.code ?? item.name}
             item={item}
             badge={badge.label}
             badgeClass={badge.badgeClass}
+            displayCode={resolveHomeMarketDisplayCode(item.code)}
             icon={resolveMarketIcon(badge.label)}
             iconClass={resolveMarketIconClassName(badge.label)}
           />

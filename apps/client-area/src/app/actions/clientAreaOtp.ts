@@ -17,7 +17,12 @@ import {
   buildSgbDeviceBodyFields,
   buildSgbDeviceHeaders,
 } from "@/lib/sgb-api/device";
-import { getOrCreateSgbDeviceUuid } from "@/lib/sgb-session";
+import {
+  clearPendingSgbOtpSession,
+  getOrCreateSgbDeviceUuid,
+  getPendingSgbOtpSession,
+  rotatePendingSgbOtpToken,
+} from "@/lib/sgb-session";
 import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 // ---------------------------------------------------------------------------
@@ -47,9 +52,9 @@ export async function submitSendOtp(
 ): Promise<ClientAreaOtpState> {
   const locale = resolveLocale(String(formData.get("locale") ?? ""));
   const otp = getMessages(locale).clientArea.otp;
-  const loginToken = String(formData.get("loginToken") ?? "").trim();
+  const pendingSession = await getPendingSgbOtpSession();
 
-  if (!loginToken) {
+  if (!pendingSession) {
     return {
       status: "error",
       message: otp.errorSessionExpired,
@@ -60,16 +65,20 @@ export async function submitSendOtp(
   const deviceHeaders = buildSgbDeviceHeaders(deviceUuid);
 
   try {
-    await callSgbApi({
+    const result = await callSgbApi({
       method: "POST",
       host: "sso",
       path: "/client/send-otp",
       flavor: SGB_FLAVOR,
       mode: "normal",
-      token: loginToken,
+      token: pendingSession.token,
       deviceHeaders,
       jsonBody: {},
     });
+
+    if (result.newToken) {
+      await rotatePendingSgbOtpToken(result.newToken);
+    }
 
     return {
       status: "resend_success",
@@ -79,11 +88,13 @@ export async function submitSendOtp(
     console.error("[client-area-otp] send-otp call failed", describeError(error));
 
     if (isSgbSessionRestartError(error)) {
+      await clearPendingSgbOtpSession();
       return { status: "error", message: otp.errorSessionExpired };
     }
 
     if (error instanceof SgbApiError) {
       if (error.kind === "session_expired") {
+        await clearPendingSgbOtpSession();
         return { status: "error", message: otp.errorSessionExpired };
       }
       return { status: "error", message: error.safeMessage };
@@ -114,7 +125,7 @@ type SgbAccountOtpResponseData = {
 async function getOtpRequestId(
   loginToken: string,
   deviceHeaders: Record<string, string>,
-): Promise<string> {
+): Promise<{ id: string; token: string } | null> {
   try {
     const res = await callSgbApi<SgbAccountOtpResponseData>({
       method: "GET",
@@ -126,11 +137,25 @@ async function getOtpRequestId(
       deviceHeaders,
     });
 
-    return typeof res.data?.idOtp === "string" ? res.data.idOtp : "";
+    const id = typeof res.data?.idOtp === "string" ? res.data.idOtp : "";
+    const token = res.newToken ?? loginToken;
+
+    if (res.newToken) {
+      await rotatePendingSgbOtpToken(res.newToken);
+    }
+
+    return id ? { id, token } : null;
   } catch (err) {
     console.error("[client-area-otp] account-otp call failed", describeError(err));
+
+    if (
+      isSgbSessionRestartError(err) ||
+      (err instanceof SgbApiError && err.kind === "session_expired")
+    ) {
+      await clearPendingSgbOtpSession();
+    }
   }
-  return "";
+  return null;
 }
 
 type SgbVerifyOtpResponseData = {
@@ -143,12 +168,10 @@ export async function submitVerifyOtp(
 ): Promise<ClientAreaOtpState> {
   const locale = resolveLocale(String(formData.get("locale") ?? ""));
   const otp = getMessages(locale).clientArea.otp;
-  const loginToken = String(formData.get("loginToken") ?? "").trim();
+  const pendingSession = await getPendingSgbOtpSession();
   const otpCode = String(formData.get("otpCode") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const rememberMe = formData.get("rememberMe") === "on";
 
-  if (!loginToken) {
+  if (!pendingSession) {
     return {
       status: "error",
       message: otp.errorSessionExpired,
@@ -167,9 +190,12 @@ export async function submitVerifyOtp(
   const deviceBodyFields = buildSgbDeviceBodyFields(deviceUuid);
 
   // The unique id of the OTP request — sent as `otp_code` (see note above).
-  const otpRequestId = await getOtpRequestId(loginToken, deviceHeaders);
+  const otpRequest = await getOtpRequestId(
+    pendingSession.token,
+    deviceHeaders,
+  );
 
-  if (!otpRequestId) {
+  if (!otpRequest) {
     return {
       status: "error",
       message: otp.errorSessionExpired,
@@ -184,23 +210,28 @@ export async function submitVerifyOtp(
       path: "/client/verify-otp",
       flavor: SGB_FLAVOR,
       mode: "normal",
-      token: loginToken,
+      token: otpRequest.token,
       deviceHeaders,
       jsonBody: {
-        otp_code: otpRequestId,
+        otp_code: otpRequest.id,
         otp_number: otpCode,
         ...deviceBodyFields,
       },
     });
-    finalToken = verifyResult.data?.token ?? verifyResult.newToken;
+    finalToken = verifyResult.newToken ?? verifyResult.data?.token;
   } catch (error) {
     console.error("[client-area-otp] verify-otp call failed", describeError(error));
 
     if (isSgbSessionRestartError(error)) {
+      await clearPendingSgbOtpSession();
       return { status: "error", message: otp.errorSessionExpired };
     }
 
     if (error instanceof SgbApiError) {
+      if (error.kind === "session_expired") {
+        await clearPendingSgbOtpSession();
+      }
+
       return {
         status: "error",
         message:
@@ -243,10 +274,23 @@ export async function submitVerifyOtp(
       deviceHeaders,
     });
     accounts = listAccountResult.data;
+    finalToken = listAccountResult.newToken ?? finalToken;
   } catch (error) {
+    if (
+      isSgbSessionRestartError(error) ||
+      (error instanceof SgbApiError && error.kind === "session_expired")
+    ) {
+      await clearPendingSgbOtpSession();
+      return { status: "error", message: otp.errorSessionExpired };
+    }
+
     console.error("[client-area-otp] list-account call failed", describeError(error));
   }
 
-  await createClientAreaSession({ token: finalToken, email, accounts }, rememberMe);
+  await createClientAreaSession(
+    { token: finalToken, email: pendingSession.email, accounts },
+    pendingSession.rememberMe,
+  );
+  await clearPendingSgbOtpSession();
   redirect(getClientAreaDashboardHref(locale));
 }

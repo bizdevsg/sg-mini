@@ -11,19 +11,40 @@ import { ClientAreaTradePilotStatCard } from "@/components/atoms/ClientAreaTrade
 import { ClientAreaTradePilotPerformanceInsight } from "@/components/atoms/ClientAreaTradePilotPerformanceInsight";
 import { ClientAreaTradePilotInstrumentPerformance } from "@/components/molecules/ClientAreaTradePilotInstrumentPerformance";
 import { ClientAreaTradePilotTimeframePerformanceTable } from "@/components/molecules/ClientAreaTradePilotTimeframePerformanceTable";
-import type { ClientAreaTradePilotPerformanceHistoryCopy } from "@/lib/client-area-trade-pilot.shared";
+import type {
+  ClientAreaTradePilotPerformanceHistoryCopy,
+  ClientAreaTradePilotTimeframePerformance,
+} from "@/lib/client-area-trade-pilot.shared";
+import type { TradePilotHistoryItem } from "@/lib/trade-pilot/trade-pilot.types";
 
 type ClientAreaTradePilotPlaceholderPanelProps = {
   description: string;
   performanceCopy?: ClientAreaTradePilotPerformanceHistoryCopy;
   title: string;
+  histories?: TradePilotHistoryItem[];
+  timeframePerformance?: ClientAreaTradePilotTimeframePerformance[];
 };
 
 export function ClientAreaTradePilotPlaceholderPanel({
   description,
   performanceCopy,
   title,
+  histories = [],
+  timeframePerformance = [],
 }: ClientAreaTradePilotPlaceholderPanelProps) {
+  const countStatus = (status: TradePilotHistoryItem["status"]) =>
+    histories.filter((item) => item.status === status).length;
+  const stopLossCount = countStatus("stop_loss");
+  const takeProfitCount = countStatus("take_profit_1") + countStatus("take_profit_2");
+  const strongestWinRate = timeframePerformance
+    .filter((row) => row.winRate !== null)
+    .sort((left, right) => (right.winRate ?? 0) - (left.winRate ?? 0))[0];
+  const mostExpired = [...timeframePerformance].sort(
+    (left, right) => right.expired - left.expired,
+  )[0];
+  const mostStopLoss = [...timeframePerformance].sort(
+    (left, right) => right.stopLoss - left.stopLoss,
+  )[0];
   const statistics = performanceCopy
     ? [
       {
@@ -31,49 +52,49 @@ export function ClientAreaTradePilotPlaceholderPanel({
         icon: Target,
         label: performanceCopy.stats.totalAnalysis,
         tone: "amber" as const,
-        value: "58",
+        value: String(histories.length),
       },
       {
         featured: false,
         icon: Clock3,
         label: performanceCopy.stats.stillValid,
         tone: "sky" as const,
-        value: "1",
+        value: String(countStatus("still_valid")),
       },
       {
         featured: false,
         icon: ShieldX,
         label: performanceCopy.stats.expired,
         tone: "orange" as const,
-        value: "5",
+        value: String(countStatus("expired")),
       },
       {
         featured: false,
         icon: TrendingDown,
         label: performanceCopy.stats.stopLoss,
         tone: "rose" as const,
-        value: "11",
+        value: String(stopLossCount),
       },
       {
         featured: false,
         icon: ShieldCheck,
         label: performanceCopy.stats.takeProfitOne,
         tone: "emerald" as const,
-        value: "1",
+        value: String(countStatus("take_profit_1")),
       },
       {
         featured: false,
         icon: ShieldCheck,
         label: performanceCopy.stats.takeProfitTwo,
         tone: "teal" as const,
-        value: "4",
+        value: String(countStatus("take_profit_2")),
       },
       {
         featured: false,
         icon: TriangleAlert,
         label: performanceCopy.stats.invalid,
         tone: "orange" as const,
-        value: "0",
+        value: String(countStatus("invalid")),
       },
     ]
     : [];
@@ -85,7 +106,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
           {title}
         </h1>
         <p className="mt-1 text-sm text-zinc-400">
-          {performanceCopy?.totalSummary ?? description}
+          {description}
         </p>
       </div>
 
@@ -125,38 +146,44 @@ export function ClientAreaTradePilotPlaceholderPanel({
             )}
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#101113] p-1.5 sm:p-2">
-            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 xl:grid-cols-7">
-              {statistics.map((statistic) => (
-                <ClientAreaTradePilotStatCard
-                  key={statistic.label}
-                  featured={statistic.featured}
-                  icon={statistic.icon}
-                  label={statistic.label}
-                  tone={statistic.tone}
-                  value={statistic.value}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 xl:grid-cols-7">
+            {statistics.map((statistic) => (
+              <ClientAreaTradePilotStatCard
+                key={statistic.label}
+                featured={statistic.featured}
+                icon={statistic.icon}
+                label={statistic.label}
+                tone={statistic.tone}
+                value={statistic.value}
+              />
+            ))}
           </div>
 
           <div className="grid gap-2 sm:grid-cols-3">
             <ClientAreaTradePilotPerformanceInsight
               label={performanceCopy.consistentTimeframeLabel}
-              value="1h · 30%"
+              value={strongestWinRate ? `${strongestWinRate.timeframe} · ${strongestWinRate.winRate}%` : "—"}
             />
             <ClientAreaTradePilotPerformanceInsight
               label={performanceCopy.mostExpiredLabel}
-              value="1h · 0"
+              value={mostExpired ? `${mostExpired.timeframe} · ${mostExpired.expired}` : "—"}
             />
             <ClientAreaTradePilotPerformanceInsight
               label={performanceCopy.mostStopLossLabel}
-              value="1h · 7"
+              value={mostStopLoss ? `${mostStopLoss.timeframe} · ${mostStopLoss.stopLoss}` : "—"}
             />
           </div>
 
-          <ClientAreaTradePilotInstrumentPerformance copy={performanceCopy} />
-          <ClientAreaTradePilotTimeframePerformanceTable copy={performanceCopy} />
+          <ClientAreaTradePilotInstrumentPerformance
+            copy={performanceCopy}
+            sample={histories.length}
+            stopLoss={stopLossCount}
+            takeProfit={takeProfitCount}
+          />
+          <ClientAreaTradePilotTimeframePerformanceTable
+            copy={performanceCopy}
+            rows={timeframePerformance}
+          />
         </>
       ) : (
         <div className="rounded-2xl border border-zinc-800 bg-[#101113] p-5 text-sm leading-6 text-zinc-400 sm:p-7">

@@ -13,10 +13,7 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 import { revealClientAreaSensitiveProfile } from "@/app/actions/clientAreaSensitiveProfile";
 import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
-import {
-  EMPTY_CLIENT_AREA_PROFILE,
-  EMPTY_PROFILE_VALUE,
-} from "@/components/organisms/client-area-account-profile.data";
+import { EMPTY_CLIENT_AREA_PROFILE } from "@/components/organisms/client-area-account-profile.data";
 import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
 import { useCustomerProfile } from "@/hooks/useCustomerProfile";
 import { getMessages, type AppLocale } from "@/locales";
@@ -359,7 +356,10 @@ export function ClientAreaAccountProfilePanel({
   const account = useClientAreaProfile();
   const { state: profileState, retry: retryProfile } = useCustomerProfile();
   const noticeCopy = PROFILE_NOTICE_COPY[locale];
-  const profile = EMPTY_CLIENT_AREA_PROFILE;
+  const profile =
+    profileState.status === "ready"
+      ? profileState.profile.details
+      : EMPTY_CLIENT_AREA_PROFILE;
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
   const [openSection, setOpenSection] =
     useState<ProfileSectionId | null>("personal");
@@ -438,7 +438,7 @@ export function ClientAreaAccountProfilePanel({
         >
           <ProfileDetail
             label={accountPage.fields.fullName}
-            value={EMPTY_PROFILE_VALUE}
+            value={account.displayName}
           />
           <ProfileDetail
             label={accountPage.fields.email}

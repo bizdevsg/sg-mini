@@ -6,6 +6,7 @@ import {
   CLIENT_AREA_IDENTIFIER_COOKIE,
   CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
   CLIENT_AREA_LAST_ACTIVITY_COOKIE,
+  CLIENT_AREA_OTP_SESSION_COOKIE,
   CLIENT_AREA_REMEMBER_ME_MAX_AGE,
   CLIENT_AREA_SESSION_COOKIE,
   getClientAreaDashboardHref,
@@ -18,7 +19,15 @@ import {
   encryptSgbSession,
   type SgbClientAreaSessionPayload,
 } from "@/lib/sgb-session";
-import { primaryAccountId } from "@/types/account-summary";
+import type { ClientAreaAccountIds } from "@/lib/client-area-profile.shared";
+import {
+  CLIENT_AREA_ACCOUNT_MODE_COOKIE,
+  resolveClientAreaAccountMode,
+} from "@/lib/client-area-account-mode";
+import {
+  accountIdsByMode,
+  primaryAccountId,
+} from "@/types/account-summary";
 export {
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
@@ -26,6 +35,7 @@ export {
 
 export type ClientAreaSessionProfile = {
   accountId: string;
+  accountIds: ClientAreaAccountIds;
   avatarSrc: string;
   displayName: string;
   email: string;
@@ -34,6 +44,12 @@ export type ClientAreaSessionProfile = {
 export type ClientAreaSessionState = {
   isAuthenticated: boolean;
   profile: ClientAreaSessionProfile | null;
+};
+
+export type MiniMicroSession = {
+  token: string;
+  account: string;
+  isDemo: boolean;
 };
 
 /**
@@ -57,13 +73,19 @@ function deriveDisplayNameFromEmail(email: string): string {
 function buildProfileFromSession(
   session: SgbClientAreaSessionPayload,
 ): ClientAreaSessionProfile {
+  const accountIds = accountIdsByMode(session.accounts);
+  const primaryAccount = primaryAccountId(session.accounts);
+
   return {
     // First account in list-account (shape verified against a UAT sample). The
     // person has one number here — it is not split per Demo/Real. "—" when the
     // list is missing, per the rule for fields we can't map.
-    accountId: primaryAccountId(session.accounts) ?? "—",
+    accountId: primaryAccount ?? "—",
+    accountIds,
     avatarSrc: "/assets/client-area-profile-avatar.png",
-    displayName: deriveDisplayNameFromEmail(session.email),
+    // The real name only arrives with getcustomerfullinfo; until then show the
+    // account number rather than a name guessed from the email.
+    displayName: primaryAccount ?? deriveDisplayNameFromEmail(session.email),
     email: session.email,
   };
 }
@@ -122,19 +144,48 @@ export async function createClientAreaSession(
   payload: Omit<SgbClientAreaSessionPayload, "issuedAtMs">,
   rememberMe: boolean,
 ) {
+  const accountIds = accountIdsByMode(payload.accounts);
+  const isDemo = !accountIds.real && Boolean(accountIds.demo);
+  const account = (isDemo ? accountIds.demo : accountIds.real) ?? "";
+
+  await startSession(payload.token, account, isDemo, {
+    email: payload.email,
+    accounts: payload.accounts,
+    rememberMe,
+  });
+}
+
+type StartSessionMetadata = {
+  email?: string;
+  accounts?: unknown;
+  rememberMe?: boolean;
+};
+
+/** Starts the encrypted, httpOnly MiniMicro session. */
+export async function startSession(
+  token: string,
+  account: string,
+  isDemo: boolean,
+  metadata: StartSessionMetadata = {},
+) {
   const cookieStore = await cookies();
   const encryptedSession = await encryptSgbSession({
-    ...payload,
+    token,
+    account,
+    isDemo,
+    email: metadata.email ?? "",
+    accounts:
+      metadata.accounts ?? (account ? [{ account, type: isDemo ? "demo" : "real" }] : null),
     issuedAtMs: Date.now(),
-    rememberMe,
+    rememberMe: metadata.rememberMe,
   });
   const now = Date.now().toString();
   const cookieOptions = {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     path: "/",
-    ...(rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
+    ...(metadata.rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
   };
 
   cookieStore.set({
@@ -144,17 +195,40 @@ export async function createClientAreaSession(
   });
   cookieStore.set({
     name: CLIENT_AREA_IDENTIFIER_COOKIE,
-    value: normalizeClientAreaIdentifier(payload.email),
+    value: normalizeClientAreaIdentifier(metadata.email ?? ""),
     ...cookieOptions,
   });
   cookieStore.set({
     name: CLIENT_AREA_LAST_ACTIVITY_COOKIE,
     value: now,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     path: "/",
     maxAge: CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
   });
+}
+
+/** Returns only the MiniMicro fields needed by authenticated server calls. */
+export async function getSession(): Promise<MiniMicroSession | null> {
+  const cookieStore = await cookies();
+  const session = await getActiveSgbSession();
+
+  if (!session) {
+    return null;
+  }
+
+  const savedMode = resolveClientAreaAccountMode(
+    cookieStore.get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value ??
+      (session.isDemo ? "demo" : "real"),
+  );
+  const accounts = accountIdsByMode(session.accounts);
+  const hasMappedAccounts = Boolean(accounts.demo || accounts.real);
+  const account = hasMappedAccounts
+    ? (savedMode === "demo" ? accounts.demo : accounts.real) ?? ""
+    : session.account ?? "";
+  const isDemo = hasMappedAccounts ? savedMode === "demo" : session.isDemo === true;
+
+  return { token: session.token, account, isDemo };
 }
 
 /**
@@ -200,10 +274,19 @@ export async function refreshClientAreaSessionToken(
     value: encryptedSession,
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     path: "/",
     ...(session.rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
   });
+}
+
+/** Replaces the bearer token while preserving all other encrypted session data. */
+export async function rotateToken(token: string) {
+  const session = await getActiveSgbSession();
+
+  if (session) {
+    await refreshClientAreaSessionToken(session, token);
+  }
 }
 
 export async function clearClientAreaSession() {
@@ -211,6 +294,12 @@ export async function clearClientAreaSession() {
   cookieStore.delete(CLIENT_AREA_SESSION_COOKIE);
   cookieStore.delete(CLIENT_AREA_IDENTIFIER_COOKIE);
   cookieStore.delete(CLIENT_AREA_LAST_ACTIVITY_COOKIE);
+  cookieStore.delete(CLIENT_AREA_OTP_SESSION_COOKIE);
+}
+
+/** Ends the local MiniMicro session. */
+export async function endSession() {
+  await clearClientAreaSession();
 }
 
 export async function requireClientAreaSession(locale: AppLocale) {

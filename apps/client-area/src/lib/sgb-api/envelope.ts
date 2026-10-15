@@ -31,7 +31,19 @@ export type SgbEnvelopeFailure = {
 
 export type SgbEnvelopeResult = SgbEnvelopeSuccess | SgbEnvelopeFailure;
 
-const SESSION_EXPIRED_PATTERNS = [/session has been expired/i, /unauthorized/i];
+const SESSION_EXPIRED_PATTERNS = [
+  /\bsession\b.*\bexpir(?:ed|y)\b/i,
+  /\btoken\b.*\b(?:expired|invalid)\b/i,
+  /\b(?:expired|invalid)\b.*\btoken\b/i,
+  /\bjwt\b.*\bexpired\b/i,
+  /\bunauthori[sz]ed\b/i,
+];
+
+function isAuthenticationStatus(value: unknown): boolean {
+  const status = typeof value === "string" ? Number(value) : value;
+
+  return status === 401 || status === 403;
+}
 
 function looksLikeSessionExpired(message: string | undefined): boolean {
   if (!message) {
@@ -53,7 +65,7 @@ export function parseSgbEnvelope(
   httpStatus: number,
   payload: unknown,
 ): SgbEnvelopeResult {
-  if (httpStatus === 401) {
+  if (isAuthenticationStatus(httpStatus)) {
     return { ok: false, sessionExpired: true, customMessage: false };
   }
 
@@ -69,7 +81,9 @@ export function parseSgbEnvelope(
     if (!isSuccess) {
       return {
         ok: false,
-        sessionExpired: looksLikeSessionExpired(message),
+        sessionExpired:
+          isAuthenticationStatus(headersRecord.statusCode) ||
+          looksLikeSessionExpired(message),
         customMessage,
         message,
         errorType: headersRecord.errorType,

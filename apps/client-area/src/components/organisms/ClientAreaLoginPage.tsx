@@ -25,6 +25,7 @@ type ClientAreaLoginPageProps = {
   isRecaptchaEnabled: boolean;
   locale: AppLocale;
   recaptchaSiteKey: string;
+  sessionExpiredMessage?: string;
 };
 
 const INITIAL_STATE: ClientAreaLoginState = {
@@ -36,6 +37,7 @@ export function ClientAreaLoginPage({
   isRecaptchaEnabled,
   locale,
   recaptchaSiteKey,
+  sessionExpiredMessage,
 }: ClientAreaLoginPageProps) {
   const { appPromoSection: appPromoMessages, clientArea } = getMessages(locale);
   const login = clientArea.login;
@@ -76,7 +78,9 @@ export function ClientAreaLoginPage({
   );
   const [showPassword, setShowPassword] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(
+    Boolean(sessionExpiredMessage),
+  );
   const errorModalCopy =
     locale === "id"
       ? {
@@ -91,16 +95,10 @@ export function ClientAreaLoginPage({
   // ── OTP state ──────────────────────────────────────────────────────
 
   const [otpMode, setOtpMode] = useState(false);
-  const [otpLoginToken, setOtpLoginToken] = useState("");
-  const [otpEmail, setOtpEmail] = useState("");
-  const [otpRememberMe, setOtpRememberMe] = useState(false);
 
   useEffect(() => {
     if (state.status === "otp_required") {
       setOtpMode(true);
-      setOtpLoginToken(state.loginToken ?? "");
-      setOtpEmail(state.email ?? "");
-      setOtpRememberMe(state.rememberMe ?? false);
       return;
     }
 
@@ -113,9 +111,6 @@ export function ClientAreaLoginPage({
     // The earlier token was spent on the login that led to the OTP step.
     setCaptchaResetKey((key) => key + 1);
     setOtpMode(false);
-    setOtpLoginToken("");
-    setOtpEmail("");
-    setOtpRememberMe(false);
   }
 
   return (
@@ -142,9 +137,6 @@ export function ClientAreaLoginPage({
             <ClientAreaOtpFormPanel
               locale={locale}
               otp={otpMessages}
-              loginToken={otpLoginToken}
-              email={otpEmail}
-              rememberMe={otpRememberMe}
               onBackToLogin={handleBackToLogin}
             />
           ) : (
@@ -193,7 +185,7 @@ export function ClientAreaLoginPage({
       <ClientAreaLoginErrorModal
         isOpen={isErrorModalOpen}
         title={errorModalCopy.title}
-        message={state.message}
+        message={state.message || sessionExpiredMessage || ""}
         closeLabel={errorModalCopy.closeLabel}
         onClose={() => setIsErrorModalOpen(false)}
       />

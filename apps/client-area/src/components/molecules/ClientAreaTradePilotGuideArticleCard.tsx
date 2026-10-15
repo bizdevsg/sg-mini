@@ -25,19 +25,17 @@ export function ClientAreaTradePilotGuideArticleCard({
     <button
       type="button"
       onClick={onSelect}
-      className={`group flex h-full min-w-0 flex-col text-left transition ${
-        featured
-          ? "rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4 hover:border-yellow-500/60"
-          : "rounded-xl border border-zinc-800 bg-[#101113] p-4 hover:border-zinc-700 hover:bg-[#141517]"
-      }`}
+      className={`group flex h-full min-w-0 flex-col text-left transition ${featured
+        ? "rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4 hover:border-yellow-500/60"
+        : "rounded-xl border border-zinc-800 bg-[#101113]/50 p-4 hover:border-zinc-700 hover:bg-[#141517]/50"
+        }`}
     >
       <div className="flex w-full items-start justify-between gap-3">
         <span
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-            featured
-              ? "border border-yellow-500/30 bg-yellow-500/10 text-yellow-400"
-              : "border border-yellow-500/20 bg-yellow-500/10 text-yellow-400"
-          }`}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${featured
+            ? "border border-yellow-500/30 bg-yellow-500/10 text-yellow-400"
+            : "border border-yellow-500/20 bg-yellow-500/10 text-yellow-400"
+            }`}
         >
           {featured && typeof index === "number" ? (
             <span className="text-sm font-black">{index + 1}</span>
