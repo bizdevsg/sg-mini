@@ -87,6 +87,8 @@
 - Docker build dan runtime kini meneruskan `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLIENT_SITE_URL`, dan `NEXT_PUBLIC_WEBSITE_URL` secara konsisten ke masing-masing aplikasi.
 
 ### Fixed
+- Root workspace kini menyediakan script `npm run build` untuk membangun aplikasi website dan Client Area secara berurutan, sehingga command build standar tidak lagi gagal karena script tidak tersedia.
+- Build TypeScript Client Area diperbaiki dengan memisahkan opsi mode akun MiniMicro dari `RequestInit.mode` milik Fetch API serta menyederhanakan narrowing state loading pada komponen Mini Chart.
 - Ruang kosong berlebih di atas disclaimer akun Real pada Account Overview dihapus dengan tidak lagi merender wrapper header akun beserta margin bawahnya ketika akun Real tidak tersedia.
 - Kartu metrik Account Overview kini hanya ditampilkan ketika ringkasan akun sedang dimuat atau sudah tersedia; status error dan akun unavailable tidak lagi menampilkan deretan metrik kosong, sementara data stale terakhir tetap dipertahankan.
 - Knob toggle Alert Harga kini selalu berada di dalam track pada status aktif maupun nonaktif dengan posisi dan animasi horizontal yang konsisten.

@@ -9,6 +9,7 @@
     "dev": "concurrently -n website,client-area -c blue,magenta \"npm:dev:website\" \"npm:dev:client-area\"",
     "dev:website": "npm run dev --workspace=@sgb/website",
     "dev:client-area": "npm run dev --workspace=@sgb/client-area",
+    "build": "npm run build:website && npm run build:client-area",
     "build:website": "npm run build --workspace=@sgb/website",
     "build:client-area": "npm run build --workspace=@sgb/client-area",
     "lint": "npm run lint --workspaces --if-present"

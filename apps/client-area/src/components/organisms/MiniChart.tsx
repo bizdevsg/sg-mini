@@ -97,8 +97,7 @@ export function MiniChart({ className = "", symbol = "XUL10" }: MiniChartProps) 
         </button>
       </div>
 
-      {state.status === "loading" ||
-      (state.status !== "loading" && state.symbol !== symbol) ? (
+      {state.status === "loading" || state.symbol !== symbol ? (
         <div className="h-[28rem] animate-pulse bg-gradient-to-br from-zinc-900 via-zinc-800/70 to-zinc-950 sm:h-[34rem] lg:h-[40rem]" />
       ) : state.status === "error" ? (
         <div className="flex h-[28rem] flex-col items-center justify-center gap-4 px-6 text-center sm:h-[34rem] lg:h-[40rem]">

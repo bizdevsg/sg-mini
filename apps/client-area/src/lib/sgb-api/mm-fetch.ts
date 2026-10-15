@@ -16,7 +16,7 @@ export class SessionExpiredError extends Error {
   }
 }
 
-export type MmFetchInit = Omit<RequestInit, "cache"> & {
+export type MmFetchInit = Omit<RequestInit, "cache" | "mode"> & {
   host?: SgbHostKind;
   mode?: "real" | "demo";
   timeoutMs?: number;
@@ -67,11 +67,12 @@ export function createMmFetch(dependencies: MmFetchDependencies) {
     const headers = new Headers(init.headers);
     headers.set("Authorization", `Bearer ${session.token}`);
 
-    const requestInit: MmFetchInit = { ...init };
-    const timeoutMs = requestInit.timeoutMs;
-    delete requestInit.host;
-    delete requestInit.mode;
-    delete requestInit.timeoutMs;
+    const {
+      host: _host,
+      mode: _accountMode,
+      timeoutMs,
+      ...requestInit
+    } = init;
     let response: Response;
 
     try {
