@@ -32,23 +32,28 @@ import type {
 } from "@/lib/trade-pilot/trade-pilot.types";
 import type { AppLocale } from "@/locales";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
+import type { NewsFeedArticle } from "@/lib/news.shared";
 
 type ClientAreaTradePilotPanelProps = {
   copy: ClientAreaTradePilotCopy;
   economicCalendarEvents: EconomicCalendarEvent[];
+  latestNews: NewsFeedArticle[];
   livePriceLabel: string;
   locale: AppLocale;
   bootstrap: TradePilotBootstrap;
   mockDataLabel: string;
+  newsLabel: string;
 };
 
 export function ClientAreaTradePilotPanel({
   copy,
   economicCalendarEvents,
+  latestNews,
   livePriceLabel,
   locale,
   bootstrap,
   mockDataLabel,
+  newsLabel,
 }: ClientAreaTradePilotPanelProps) {
   const { accountMode, setAccountMode } = useClientAreaAccountMode();
   const { quotes } = useLiveQuoteStream();
@@ -113,7 +118,12 @@ export function ClientAreaTradePilotPanel({
 
   return (
     <div className="min-w-0 space-y-4 text-sm sm:space-y-5">
-      <ClientAreaLivePriceTicker label={livePriceLabel} />
+      <ClientAreaLivePriceTicker
+        label={livePriceLabel}
+        latestNews={latestNews}
+        locale={locale}
+        newsLabel={newsLabel}
+      />
       <ClientAreaTradePilotPageHeader
         availableModes={bootstrap.access.availableModes}
         copy={copy}

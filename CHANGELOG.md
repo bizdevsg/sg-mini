@@ -30,6 +30,7 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Ticker TradePilot kini hanya menampilkan produk XUL10, BCO10, HKK50, dan JPK50 tanpa fallback ke simbol lain, memuat maksimal lima headline berita terbaru yang dapat dibuka sesuai locale, dan bergerak lebih lambat agar informasi mudah dibaca.
 - Tombol Google Play dan App Store pada footer TradePilot kini memakai listing aplikasi TradePilot.id tersendiri, terpisah dari tautan aplikasi Solid.
 - Seluruh tautan download aplikasi Solid pada website dan Client Area, termasuk fallback konfigurasi dan contoh environment, kini diarahkan ke listing resmi Google Play dan App Store terbaru.
 - Kartu Detail Margin Akun pada Account Overview kini berupa accordion yang dapat dibuka atau ditutup melalui header, lengkap dengan chevron, state awal tertutup, serta atribut aksesibilitas keyboard dan screen reader.

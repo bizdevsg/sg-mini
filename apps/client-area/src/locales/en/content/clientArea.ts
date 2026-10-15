@@ -126,7 +126,8 @@ export const enClientArea: AppMessages["clientArea"] = {
     ],
   },
   livePriceTicker: {
-    label: "Live Prices",
+    label: "Live prices and latest news",
+    newsLabel: "News",
   },
   tradePilotPage: {
     access: {

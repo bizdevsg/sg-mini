@@ -124,7 +124,8 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   livePriceTicker: {
-    label: "Harga Live",
+    label: "Harga live dan berita terbaru",
+    newsLabel: "Berita",
   },
   tradePilotPage: {
     access: {

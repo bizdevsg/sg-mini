@@ -864,6 +864,7 @@ export type AppMessages = {
     };
     livePriceTicker: {
       label: string;
+      newsLabel: string;
     };
     tradePilotPage: {
       access: {
