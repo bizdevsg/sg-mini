@@ -18,6 +18,7 @@ import { enLiveQuoteTable } from "./content/liveQuoteTable";
 import { enAboutPage } from "./content/aboutPage";
 import { enAboutInformationPage } from "./content/aboutInformationPage";
 import { enAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
+import { enAboutFuturesBrokerRepresentativesPage } from "./content/aboutFuturesBrokerRepresentativesPage";
 import { enProductPage } from "./content/productPage";
 import { enProdukRegulerPage } from "./content/produkRegulerPage";
 import { enProdukPrimePage } from "./content/produkPrimePage";
@@ -65,6 +66,8 @@ export const enMessages: AppMessages = {
   aboutPage: enAboutPage,
   aboutInformationPage: enAboutInformationPage,
   aboutBusinessLegalityPage: enAboutBusinessLegalityPage,
+  aboutFuturesBrokerRepresentativesPage:
+    enAboutFuturesBrokerRepresentativesPage,
   productPage: enProductPage,
   produkRegulerPage: enProdukRegulerPage,
   produkPrimePage: enProdukPrimePage,

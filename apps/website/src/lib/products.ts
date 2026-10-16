@@ -35,6 +35,8 @@ type ProductApiRecord = {
   nama_produk: string;
   slug: string;
   deskripsi_produk: string | null;
+  deskripsi_produk_id?: string | null;
+  deskripsi_produk_en?: string | null;
   specs: string | null;
   image: string | null;
   image_url?: string | null;
@@ -53,6 +55,31 @@ type ProductDetailApiResponse = {
   status?: string;
   http?: number;
   data?: ProductApiRecord | null;
+};
+
+export type PrimeProductItem = {
+  id: number;
+  slug: string;
+  name: string;
+  description: string;
+  specsHtml: string;
+  imageSrc: string | null;
+  sourceCategory: string;
+};
+
+export type PrimeProductFallback = Omit<
+  PrimeProductItem,
+  "id" | "imageSrc" | "specsHtml"
+>;
+
+export type PrimeProductCatalogResult = {
+  data: PrimeProductItem[];
+  source: "api" | "fallback";
+};
+
+export type PrimeProductDetailResult = {
+  data: PrimeProductItem | null;
+  source: "api" | "fallback";
 };
 
 function compareProducts(left: ProductApiRecord, right: ProductApiRecord) {
@@ -90,17 +117,187 @@ function resolveProductImageSrc(item: ProductApiRecord) {
   return item.image ? getProductAssetUrl(item.image) : null;
 }
 
+function appendInlineStyle(tag: string, styles: string) {
+  const stylePattern = /\sstyle\s*=\s*(['"])([\s\S]*?)\1/i;
+
+  if (stylePattern.test(tag)) {
+    return tag.replace(stylePattern, (_match, quote: string, value: string) => {
+      const currentStyles = value.trim().replace(/;?$/, ";");
+      return ` style=${quote}${currentStyles} ${styles}${quote}`;
+    });
+  }
+
+  return tag.replace(/>$/, ` style="${styles}">`);
+}
+
+function compactEmptyProductSpecRows(content: string) {
+  return content.replace(
+    /<tr\b[^>]*>\s*(?:<td\b[^>]*>\s*(?:&nbsp;|\u00a0)?\s*<\/td>\s*)+<\/tr>/gi,
+    (row) =>
+      row
+        .replace(/<tr\b[^>]*>/i, (tag) =>
+          appendInlineStyle(tag, "height: 10px !important;"),
+        )
+        .replace(/<td\b[^>]*>/gi, (tag) =>
+          appendInlineStyle(
+            tag,
+            "height: 10px !important; padding: 0 !important; line-height: 0 !important;",
+          ),
+        ),
+  );
+}
+
+function sanitizeProductSpecsHtml(content: string | null) {
+  if (!content) {
+    return "";
+  }
+
+  const safeContent = content
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*(['"]).*?\1/gi, "")
+    .replace(/\s+(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, "")
+    .replace(/<table\b[^>]*>/gi, (tag) =>
+      tag.replace(/height\s*:\s*[^;"']+;?/gi, ""),
+    );
+
+  return compactEmptyProductSpecRows(safeContent);
+}
+
 function mapProductApiRecord(item: ProductApiRecord): ProductCatalogItem {
   return {
     id: item.id,
     slug: item.slug,
     name: item.nama_produk,
     description: item.deskripsi_produk?.trim() || item.nama_produk,
-    specsHtml: item.specs?.trim() || "",
+    specsHtml: sanitizeProductSpecsHtml(item.specs),
     imageSrc: resolveProductImageSrc(item),
     sourceCategory: item.kategori,
   };
 }
+
+function mapPrimeProductApiRecord(
+  item: ProductApiRecord,
+  locale: "id" | "en",
+): PrimeProductItem {
+  const localizedDescription =
+    locale === "en" ? item.deskripsi_produk_en : item.deskripsi_produk_id;
+
+  return {
+    id: item.id,
+    slug: item.slug,
+    name: item.nama_produk,
+    description:
+      localizedDescription?.trim() ||
+      item.deskripsi_produk?.trim() ||
+      item.nama_produk,
+    specsHtml: sanitizeProductSpecsHtml(item.specs),
+    imageSrc: resolveProductImageSrc(item),
+    sourceCategory: item.kategori,
+  };
+}
+
+function getPrimeProductApiUrl() {
+  return `${PRODUCT_API_URL.replace(/\/+$/, "")}/prime`;
+}
+
+function getPrimeProductDetailApiUrl(slug: string) {
+  return `${getPrimeProductApiUrl()}/${encodeURIComponent(slug)}`;
+}
+
+export async function getPrimeProductCatalog(
+  locale: "id" | "en",
+  fallback: PrimeProductFallback,
+): Promise<PrimeProductCatalogResult> {
+  const fallbackResult: PrimeProductCatalogResult = {
+    data: [{ id: 0, imageSrc: null, specsHtml: "", ...fallback }],
+    source: "fallback",
+  };
+
+  try {
+    const response = await fetch(getPrimeProductApiUrl(), {
+      next: {
+        revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
+      },
+      headers: await getSgAdminApiHeaders(),
+      signal: AbortSignal.timeout(8_000),
+    });
+
+    if (!response.ok) {
+      console.warn(
+        `Prime product API returned ${response.status} ${response.statusText}.`,
+      );
+      return fallbackResult;
+    }
+
+    const payload = (await response.json()) as ProductApiResponse;
+    const records = Array.isArray(payload?.data)
+      ? payload.data.filter((item) => item.kategori === "PRIME")
+      : [];
+
+    if (!records.length) {
+      return fallbackResult;
+    }
+
+    return {
+      data: records.map((item) => mapPrimeProductApiRecord(item, locale)),
+      source: "api",
+    };
+  } catch (error) {
+    console.warn("Failed to fetch Prime product catalog.", error);
+    return fallbackResult;
+  }
+}
+
+export const getPrimeProductBySlug = cache(async function getPrimeProductBySlug(
+  locale: "id" | "en",
+  slug: string,
+  fallback: PrimeProductFallback,
+): Promise<PrimeProductDetailResult> {
+  async function getFallbackResult(): Promise<PrimeProductDetailResult> {
+    const catalog = await getPrimeProductCatalog(locale, fallback);
+
+    return {
+      data: catalog.data.find((product) => product.slug === slug) ?? null,
+      source: "fallback",
+    };
+  }
+
+  try {
+    const response = await fetch(getPrimeProductDetailApiUrl(slug), {
+      next: {
+        revalidate: PRODUCT_CATALOG_REVALIDATE_SECONDS,
+      },
+      headers: await getSgAdminApiHeaders(),
+      signal: AbortSignal.timeout(8_000),
+    });
+
+    if (!response.ok) {
+      console.warn(
+        `Prime product detail API returned ${response.status} ${response.statusText}.`,
+      );
+      return getFallbackResult();
+    }
+
+    const payload = (await response.json()) as ProductDetailApiResponse;
+    const record = payload?.data;
+
+    if (!record || record.kategori !== "PRIME" || record.slug !== slug) {
+      return getFallbackResult();
+    }
+
+    return {
+      data: mapPrimeProductApiRecord(record, locale),
+      source: "api",
+    };
+  } catch (error) {
+    console.warn(
+      `Failed to fetch Prime product detail for slug "${slug}".`,
+      error,
+    );
+    return getFallbackResult();
+  }
+});
 
 async function getProductApiRecords(category: ProductPageCategory) {
   const response = await fetch(getProductCategoryApiUrl(category), {

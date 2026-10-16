@@ -12,11 +12,6 @@ export const idNavbar: AppMessages["navbar"] = {
     {
       label: "Produk",
       items: [
-        {
-          label: "Multilateral",
-          href: "/produk/multilateral",
-        },
-        { label: "Bilateral", href: "/produk/bilateral" },
         { label: "Akun Reguler", href: "https://reguler.sg-berjangka.com/" },
         { label: "Akun Prime", href: "/produk/prime" },
         { label: "Aplikasi Solid Gold", href: "/aplikasi-solid-gold" },
@@ -58,6 +53,10 @@ export const idNavbar: AppMessages["navbar"] = {
         { label: "Tentang Kami", href: "/about" },
         { label: "Informasi", href: "/about/informasi" },
         { label: "Legalitas Bisnis", href: "/about/legalitas-bisnis" },
+        {
+          label: "Wakil Pialang Berjangka",
+          href: "/about/wakil-pialang-berjangka",
+        },
         { label: "Hubungi Kami", href: "/contact-us" },
       ],
     },

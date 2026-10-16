@@ -12,8 +12,8 @@ const COPY = {
     title: "Solid Gold Berjangka",
     subtitle: "Customer Support",
     greeting:
-      "Halo! 👋 Live chat sedang tidak tersedia. Silakan hubungi kami lewat WhatsApp, tim kami siap membantu.",
-    operatingHours: "Jam operasional: Senin–Jumat, 09.00–17.00 WIB.",
+      "Halo! 👋 Butuh bantuan? Hubungi kami melalui WhatsApp, tim kami siap membantu.",
+    operatingHours: "Jam operasional: Senin - Jumat, 08.00 - 17.00 WIB.",
     cta: "Mulai Chat WhatsApp",
     open: "Buka widget WhatsApp",
     close: "Tutup widget WhatsApp",
@@ -24,8 +24,8 @@ const COPY = {
     title: "Solid Gold Berjangka",
     subtitle: "Customer Support",
     greeting:
-      "Hello! 👋 Live chat is currently unavailable. Please reach us on WhatsApp — our team is ready to help.",
-    operatingHours: "Operating hours: Monday–Friday, 09:00–17:00 WIB.",
+      "Hello! 👋 Need help? Contact us on WhatsApp—our team is here to help.",
+    operatingHours: "Operating hours: Monday - Friday, 09:00 - 17:00 WIB.",
     cta: "Start WhatsApp Chat",
     open: "Open the WhatsApp widget",
     close: "Close the WhatsApp widget",

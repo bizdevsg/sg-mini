@@ -18,6 +18,7 @@ import { idLiveQuoteTable } from "./content/liveQuoteTable";
 import { idAboutPage } from "./content/aboutPage";
 import { idAboutInformationPage } from "./content/aboutInformationPage";
 import { idAboutBusinessLegalityPage } from "./content/aboutBusinessLegalityPage";
+import { idAboutFuturesBrokerRepresentativesPage } from "./content/aboutFuturesBrokerRepresentativesPage";
 import { idProductPage } from "./content/productPage";
 import { idProdukRegulerPage } from "./content/produkRegulerPage";
 import { idProdukPrimePage } from "./content/produkPrimePage";
@@ -65,6 +66,8 @@ export const idMessages: AppMessages = {
   aboutPage: idAboutPage,
   aboutInformationPage: idAboutInformationPage,
   aboutBusinessLegalityPage: idAboutBusinessLegalityPage,
+  aboutFuturesBrokerRepresentativesPage:
+    idAboutFuturesBrokerRepresentativesPage,
   productPage: idProductPage,
   produkRegulerPage: idProdukRegulerPage,
   produkPrimePage: idProdukPrimePage,

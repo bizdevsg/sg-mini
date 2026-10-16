@@ -30,6 +30,8 @@ const DEFAULT_COMPANY_PROFILE_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/company-profile`;
 const DEFAULT_LEGALITAS_API_URL =
   `${DEFAULT_SG_ADMIN_API_BASE_URL}/legalitas`;
+const DEFAULT_FUTURES_BROKER_REPRESENTATIVES_API_URL =
+  `${DEFAULT_SG_ADMIN_API_BASE_URL}/wakil-pialang-berjangka`;
 const DEFAULT_PRIVACY_POLICY_API_URL =
   `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/privacy-policy`;
 const DEFAULT_HISTORICAL_DATA_API_URL =
@@ -215,6 +217,11 @@ export const COMPANY_PROFILE_API_URL =
 export const LEGALITAS_API_URL =
   normalizeUrlEnv(process.env.LEGALITAS_API_URL, DEFAULT_LEGALITAS_API_URL);
 
+export const FUTURES_BROKER_REPRESENTATIVES_API_URL = normalizeUrlEnv(
+  process.env.FUTURES_BROKER_REPRESENTATIVES_API_URL,
+  DEFAULT_FUTURES_BROKER_REPRESENTATIVES_API_URL,
+);
+
 export const PRIVACY_POLICY_API_URL =
   normalizeUrlEnv(
     process.env.PRIVACY_POLICY_API_URL,
@@ -307,7 +314,7 @@ export const PUBLIC_CLIENT_AREA_ENABLED = normalizeBooleanEnv(
 
 // Nomor WhatsApp cadangan: ditampilkan saat live chat mati / gagal dimuat.
 export const PUBLIC_WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || "+628212665636";
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || "+628211665636";
 
 export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
   process.env.NEXT_PUBLIC_ENABLE_TAWK_CHAT,

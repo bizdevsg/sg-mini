@@ -614,7 +614,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     navItems: [
       {
         label: "PRODUCTS",
-        href: "/produk/multilateral",
+        href: "/produk/prime",
       },
       {
         label: "EDUCATION",

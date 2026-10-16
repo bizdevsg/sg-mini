@@ -38,6 +38,22 @@ export const idProdukPrimePage: AppMessages["produkPrimePage"] = {
         "Tersedia kontrak XUL10 (Emas Loco London) dan BCO10_BBJ (Brent Crude Oil) dengan proses CDD Sederhana bagi nasabah perseorangan.",
     },
   ],
+  productShowcase: {
+    eyebrow: "Pilihan Produk Prime",
+    title: "Mulai dari ukuran transaksi yang lebih fleksibel",
+    description:
+      "Kenali produk yang tersedia untuk Akun Prime dan pilih ukuran transaksi yang selaras dengan strategi serta manajemen risiko Anda.",
+    categoryLabel: "Kategori akun",
+    sizeLabel: "Ukuran transaksi",
+    sizeValue: "Mulai 0,1 lot",
+    fallbackItem: {
+      slug: "xul10",
+      name: "XUL10",
+      description:
+        "XUL10 merupakan pilihan akun Mini dengan ukuran transaksi 0,1 lot untuk membantu nasabah mengelola posisi secara lebih fleksibel sesuai strategi dan manajemen risiko.",
+      sourceCategory: "PRIME",
+    },
+  },
   specsLink: {
     label: "Lihat Trading Rules Mini Account",
     href: "/education/trading-rules",

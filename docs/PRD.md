@@ -40,7 +40,7 @@ Berdasarkan `README.md` dan struktur `src/app/[locales]`:
 | Area | Route | Catatan |
 |---|---|---|
 | Landing/homepage | `/{locale}` | |
-| About | `/{locale}/about` | |
+| About | `/{locale}/about`, `/{locale}/about/informasi`, `/{locale}/about/legalitas-bisnis`, `/{locale}/about/wakil-pialang-berjangka` | Profil, informasi, legalitas, dan daftar Wakil Pialang Berjangka |
 | Ebook | `/{locale}/ebook` | |
 | Live quote | `/{locale}/live-quote` | data via websocket feed |
 | Economic calendar | `/{locale}/economic-calendar` | |

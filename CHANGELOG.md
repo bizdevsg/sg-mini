@@ -1,6 +1,8 @@
 ## [Unreleased]
 
 ### Added
+- Halaman bilingual Wakil Pialang Berjangka ditambahkan pada menu Tentang di website dan navbar Client Area; daftar perwakilan memakai card ringkas berisi inisial, nomor urut, nama, jabatan, status, nomor izin, dan perusahaan serta mengambil data dari API SG Admin `/api/v1/wakil-pialang-berjangka` dengan pagination dan fallback lokal, disertai pengingat keamanan serta tautan verifikasi ke profil resmi BAPPEBTI.
+- Body halaman produk Prime website kini memiliki grid responsif maksimal dua kolom berisi card katalog yang lebih ringkas untuk menampung banyak produk dari API SG Admin `/api/v1/produk/prime`; tinggi gambar dikunci terhadap frame agar tidak ditimpa aturan global dan fokus crop diarahkan ke objek produk, sementara setiap card membuka halaman detail yang mengambil nama, deskripsi terlokalisasi, gambar, kategori, serta ukuran transaksi langsung dari endpoint `/api/v1/produk/prime/{slug}` dengan fallback katalog dan konten lokal saat API tidak tersedia.
 - Tab Riwayat pada halaman Riwayat & Performa Analisis Trade Pilot kini menampilkan data analisis aktual per mode akun dalam kartu responsif dua kolom, lengkap dengan pencarian, filter status berbentuk chip, aksi Analisis Ulang, empty state, tanggal WIB, dan pagination lima item per halaman.
 - Topbar Client Area kini menampilkan tanggal dan jam real-time berformat locale Indonesia/Inggris dengan zona waktu Asia/Jakarta (WIB) dalam widget desktop yang ringkas sebelum tombol notifikasi.
 - Workflow release kini otomatis menaikkan versi patch, membuat tag Git, dan menerbitkan GitHub Release beserta catatan berbasis commit untuk push ke `origin/prod` maupun `fork/split-client-area`; tag diterbitkan pada repository GitHub yang memicu workflow dan pembuatan release dari tag semantic-version manual tetap didukung.
@@ -32,7 +34,10 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
-- Nomor tujuan fallback WhatsApp pada website dan Client Area kini menggunakan `+62 821-2665-636` (`628212665636` pada URL `wa.me`) baik pada konfigurasi production maupun nilai fallback aplikasi.
+- Konfigurasi environment development, production, dan template contoh disinkronkan dengan endpoint Wakil Pialang Berjangka SG Admin serta nomor WhatsApp fallback terbaru.
+- CTA penutup pada halaman produk Prime website kini membuka popup download aplikasi Solid berisi pilihan Play Store dan App Store, menggantikan navigasi langsung ke halaman registrasi; CTA registrasi pada hero tetap dipertahankan.
+- Halaman detail produk Prime menempatkan gambar, kategori, kode, ukuran transaksi, dan navigasi kembali langsung di dalam header tanpa container card, sedangkan body spesifikasi tetap memakai card gelap yang terstruktur; seluruh HTML `specs` API dipertahankan dengan baris separator kosong yang dipadatkan.
+- Nomor tujuan widget fallback WhatsApp pada website dan Client Area kini menggunakan `0821-1665-636` (`628211665636` pada URL `wa.me`) baik pada konfigurasi development, production, template environment, maupun nilai fallback aplikasi.
 - Pesan bawaan yang dikirim melalui tombol WhatsApp kini menggunakan sapaan customer support Solid Gold Berjangka yang netral, menggantikan teks lama yang selalu menyebut Client Area agar sesuai ketika dibuka dari website maupun Client Area.
 - Popup fallback Live Chat/WhatsApp pada website dan Client Area kini menampilkan jam operasional customer support Senin–Jumat pukul 09.00–17.00 WIB dalam baris terpisah yang mudah terlihat, lengkap dengan versi bahasa Inggris.
 - Grid card pada halaman News website kini menampilkan satu card berita utama selebar baris paling atas, dilanjutkan tiga card per baris di desktop, dua di tablet, dan satu di mobile tanpa mengubah grid Market Academy maupun Client Area.
@@ -179,6 +184,7 @@
 - Output standalone Next.js kini hanya digunakan di luar Vercel, sehingga deployment Vercel tidak gagal saat proses packaging pada Next.js 16.3.
 
 ### Removed
+- Halaman katalog dan detail produk Multilateral serta Bilateral dihapus dari website; kedua entri juga dihilangkan dari navbar website dan Client Area, sementara tautan produk internal kini diarahkan ke halaman Akun Prime agar tidak menyisakan link mati.
 - Menu, halaman, route, salinan konten, dan dokumentasi pengguna untuk fitur Dokumen Persetujuan di Client Area telah dihapus.
 - Seluruh integrasi deployment Cloudflare/OpenNext dihapus, termasuk konfigurasi Worker dan R2, skrip `cf:*`, dependensi terkait, dan origin tunnel `trycloudflare.com`; deployment Cloudflare tidak lagi didukung oleh repository ini.
 - Integrasi Vercel Web Analytics di root layout dihapus; aplikasi tetap memakai Firebase Analytics melalui `FirebaseBootstrap`.

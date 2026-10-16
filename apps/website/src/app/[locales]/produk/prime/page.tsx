@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { ResilientImage } from "@/components/atoms/ResilientImage";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
+import {
+  AppDownloadModalTriggerButton,
+} from "@/components/molecules/AppDownloadModalTriggerButton";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
-import { PUBLIC_REGISTER_URL } from "@/lib/env";
+import { getPrimeProductCatalog } from "@/lib/products";
 import {
   getLocaleConfig,
   getMessages,
@@ -63,6 +66,10 @@ export default async function ProdukPrimePage({
 
   const appMessages = getMessages(locales);
   const page = appMessages.produkPrimePage;
+  const primeProducts = await getPrimeProductCatalog(
+    locales,
+    page.productShowcase.fallbackItem,
+  );
   const productLabel =
     appMessages.navbar.menuGroups.find((group) =>
       group.items?.some((item) => item.href === "/produk/prime"),
@@ -89,18 +96,15 @@ export default async function ProdukPrimePage({
       >
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:gap-6">
           <ScrollReveal effect="fade-up" delay={80}>
-            <ButtonLink
-              href={PUBLIC_REGISTER_URL}
-              target="_blank"
-              rel="noreferrer"
+            <AppDownloadModalTriggerButton
+              locale={locales}
+              label={page.hero.primaryCta}
               size="lg"
-              className="w-full sm:min-w-[220px] sm:w-auto"
-            >
-              {page.hero.primaryCta}
-            </ButtonLink>
+              visualVariant="qr"
+            />
           </ScrollReveal>
 
-          <ScrollReveal effect="fade-up" delay={180}>
+          {/* <ScrollReveal effect="fade-up" delay={180}>
             <ButtonLink
               href={`/${locales}/contact-us`}
               variant="ghost"
@@ -109,7 +113,7 @@ export default async function ProdukPrimePage({
             >
               {page.hero.secondaryCta}
             </ButtonLink>
-          </ScrollReveal>
+          </ScrollReveal> */}
         </div>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3 lg:gap-4">
@@ -124,6 +128,101 @@ export default async function ProdukPrimePage({
           ))}
         </div>
       </PageHeroBanner>
+
+      <SectionContainer className="relative py-16 md:py-20">
+        <div className="pointer-events-none absolute top-0 left-1/2 h-48 w-screen -translate-x-1/2 bg-linear-to-b from-black to-transparent" />
+
+        <div className="relative z-10 mx-auto grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-end lg:gap-12">
+          <ScrollReveal effect="fade-right">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-400">
+              {page.productShowcase.eyebrow}
+            </p>
+            <h2 className="mt-4 max-w-xl text-3xl font-bold tracking-[-0.03em] text-white sm:text-4xl">
+              {page.productShowcase.title}
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
+              {page.productShowcase.description}
+            </p>
+          </ScrollReveal>
+        </div>
+
+        <div className="relative z-10 mx-auto mt-9 grid gap-4 md:grid-cols-2">
+          {primeProducts.data.map((product, index) => (
+            <ScrollReveal
+              key={`${product.id}-${product.slug}`}
+              className="h-full"
+              effect="fade-up"
+              delay={Math.min(index * 100, 300)}
+            >
+              <Link
+                href={`/${locales}/produk/prime/${product.slug}`}
+                className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+                aria-label={`${appMessages.productPage.viewDetailCta}: ${product.name}`}
+              >
+                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(160deg,rgba(24,24,24,0.96),rgba(8,8,8,0.98))] shadow-[0_14px_38px_rgba(0,0,0,0.22)] transition duration-300 group-hover:-translate-y-1 group-hover:border-amber-400/30 group-hover:shadow-[0_18px_42px_rgba(205,161,58,0.1)]">
+                  <div className="relative h-40 overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(245,194,66,0.2),transparent_45%),linear-gradient(145deg,#201b10,#0a0a0a_72%)] sm:h-44">
+                    {product.imageSrc ? (
+                      <ResilientImage
+                        src={product.imageSrc}
+                        alt={product.name}
+                        className="block w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                        style={{
+                          height: "100%",
+                          objectPosition: "center 58%",
+                        }}
+                        fallback={
+                          <div className="flex h-full items-center justify-center font-mono text-3xl font-black tracking-[-0.06em] text-amber-300/80 sm:text-4xl">
+                            {product.name}
+                          </div>
+                        }
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center font-mono text-3xl font-black tracking-[-0.06em] text-amber-300/80 sm:text-4xl">
+                        {product.name}
+                      </div>
+                    )}
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
+                    <span className="absolute top-3 left-3 rounded-full border border-amber-300/25 bg-black/65 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-amber-300 backdrop-blur-md">
+                      {product.sourceCategory}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-4 sm:p-5">
+                    <h3 className="text-xl font-bold tracking-[-0.02em] text-white transition-colors group-hover:text-amber-300">
+                      {product.name}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-400">
+                      {product.description}
+                    </p>
+
+                    <hr className="rounded-full my-4 border-zinc-800" />
+
+                    <div className="mt-auto flex items-end justify-between gap-4 border-white/10">
+                      <div>
+                        <p className="text-[10px] text-zinc-500">
+                          {page.productShowcase.sizeLabel}
+                        </p>
+                        <p className="mt-0.5 text-xs font-semibold text-amber-300">
+                          {page.productShowcase.sizeValue}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-semibold text-amber-400">
+                        <span>{appMessages.productPage.viewDetailCta}</span>
+                        <span
+                          aria-hidden="true"
+                          className="transition-transform group-hover:translate-x-1"
+                        >
+                          →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            </ScrollReveal>
+          ))}
+        </div>
+      </SectionContainer>
 
       <div className="relative">
         <div className="absolute h-100 w-full bg-linear-to-b from-black to-transparent" />
@@ -219,14 +318,12 @@ export default async function ProdukPrimePage({
             />
 
             <div className="mt-8 flex justify-center">
-              <ButtonLink
-                href={PUBLIC_REGISTER_URL}
-                target="_blank"
-                rel="noreferrer"
+              <AppDownloadModalTriggerButton
+                locale={locales}
+                label={page.cta.buttonLabel}
                 size="lg"
-              >
-                {page.cta.buttonLabel}
-              </ButtonLink>
+                visualVariant="qr"
+              />
             </div>
           </div>
         </ScrollReveal>

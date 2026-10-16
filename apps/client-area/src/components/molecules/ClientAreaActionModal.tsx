@@ -20,7 +20,7 @@ function renderActionModalContent(
   copy: DashboardCopy,
   locale: AppLocale,
 ) {
-  const productHref = resolveLocalizedHref(locale, "/produk/multilateral");
+  const productHref = resolveLocalizedHref(locale, "/produk/prime");
   const educationHref = resolveLocalizedHref(locale, "/education/cara-memulai");
   const contactHref = resolveLocalizedHref(locale, "/contact-us");
 

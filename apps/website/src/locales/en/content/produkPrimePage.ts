@@ -38,6 +38,22 @@ export const enProdukPrimePage: AppMessages["produkPrimePage"] = {
         "Available contracts include XUL10 (Loco London Gold) and BCO10_BBJ (Brent Crude Oil), with a Simplified CDD process for individual clients.",
     },
   ],
+  productShowcase: {
+    eyebrow: "Prime Product Options",
+    title: "Start with a more flexible transaction size",
+    description:
+      "Explore the products available for Prime Accounts and choose a transaction size aligned with your strategy and risk management approach.",
+    categoryLabel: "Account category",
+    sizeLabel: "Transaction size",
+    sizeValue: "Starting from 0.1 lot",
+    fallbackItem: {
+      slug: "xul10",
+      name: "XUL10",
+      description:
+        "XUL10 is a Mini account option with a 0.1 lot transaction size, helping traders manage positions more flexibly according to their strategy and risk management approach.",
+      sourceCategory: "PRIME",
+    },
+  },
   specsLink: {
     label: "View Mini Account Trading Rules",
     href: "/education/trading-rules",

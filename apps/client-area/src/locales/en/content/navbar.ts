@@ -12,11 +12,6 @@ export const enNavbar: AppMessages["navbar"] = {
     {
       label: "Products",
       items: [
-        {
-          label: "Multilateral",
-          href: "/produk/multilateral",
-        },
-        { label: "Bilateral", href: "/produk/bilateral" },
         { label: "Regular Account", href: "/produk/reguler" },
         { label: "Prime Account", href: "/produk/prime" },
         { label: "Solid Gold App", href: "/aplikasi-solid-gold" },
@@ -58,6 +53,10 @@ export const enNavbar: AppMessages["navbar"] = {
         { label: "About Us", href: "/about" },
         { label: "Information", href: "/about/informasi" },
         { label: "Business Legality", href: "/about/legalitas-bisnis" },
+        {
+          label: "Futures Broker Representatives",
+          href: "/about/wakil-pialang-berjangka",
+        },
         { label: "Contact Us", href: "/contact-us" },
       ],
     },

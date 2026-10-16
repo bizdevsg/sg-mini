@@ -322,6 +322,44 @@ export type AppMessages = {
       items: string[];
     };
   };
+  aboutFuturesBrokerRepresentativesPage: {
+    breadcrumb: string;
+    parentLabel: string;
+    hero: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    overview: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    representatives: {
+      title: string;
+      description: string;
+      roleLabel: string;
+      companyLabel: string;
+      licenseLabel: string;
+      officeLabel: string;
+      phoneLabel: string;
+      mapsLabel: string;
+      names: string[];
+    };
+    verification: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      sourceLabel: string;
+      sourceValue: string;
+      linkLabel: string;
+      href: string;
+    };
+    notice: {
+      title: string;
+      description: string;
+    };
+  };
   productPage: {
     breadcrumb: string;
     productsLabel: string;
@@ -391,6 +429,20 @@ export type AppMessages = {
       title: string;
       description: string;
     }>;
+    productShowcase: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      categoryLabel: string;
+      sizeLabel: string;
+      sizeValue: string;
+      fallbackItem: {
+        slug: string;
+        name: string;
+        description: string;
+        sourceCategory: string;
+      };
+    };
     specsLink: {
       label: string;
       href: string;
