@@ -31,7 +31,8 @@ type NewsBrowserProps = {
   };
 };
 
-const NEWS_PAGE_SIZE = 15;
+const PUBLIC_NEWS_PAGE_SIZE = 15;
+const CLIENT_AREA_NEWS_PAGE_SIZE = 12;
 const EAGER_IMAGE_COUNT = 2;
 const DEFAULT_SORT = "newest";
 const DEFAULT_PERIOD = "all";
@@ -39,6 +40,65 @@ const SEARCH_DEBOUNCE_MS = 350;
 
 type SortOption = "newest" | "oldest";
 type PeriodOption = "all" | "today" | "week" | "month";
+type PaginationItem = number | "ellipsis";
+
+function getPaginationItems(
+  currentPage: number,
+  totalPages: number,
+  compact = false,
+): PaginationItem[] {
+  if (compact) {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    if (currentPage <= 3) {
+      return [1, 2, 3, "ellipsis", totalPages];
+    }
+
+    if (currentPage >= totalPages - 2) {
+      return [
+        1,
+        "ellipsis",
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
+    }
+
+    return [1, "ellipsis", currentPage, "ellipsis", totalPages];
+  }
+
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  if (currentPage <= 4) {
+    return [1, 2, 3, 4, 5, "ellipsis", totalPages];
+  }
+
+  if (currentPage >= totalPages - 3) {
+    return [
+      1,
+      "ellipsis",
+      totalPages - 4,
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    ];
+  }
+
+  return [
+    1,
+    "ellipsis",
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+    "ellipsis",
+    totalPages,
+  ];
+}
 
 function getCategoryLabel(
   category: string,
@@ -153,6 +213,10 @@ export function NewsBrowser({
   browserLabels: browserLabelsProp,
   labels,
 }: NewsBrowserProps) {
+  const isClientArea = hrefBasePath.includes("/client-area/");
+  const pageSize = isClientArea
+    ? CLIENT_AREA_NEWS_PAGE_SIZE
+    : PUBLIC_NEWS_PAGE_SIZE;
   const browserLabels = browserLabelsProp ?? getMessages(locale).newsBrowser;
   const categoryLabels = browserLabels.categories;
   const categories = Array.from(
@@ -163,6 +227,7 @@ export function NewsBrowser({
     ),
   ).sort((left, right) => left.localeCompare(right));
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [draftCategory, setDraftCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -184,6 +249,13 @@ export function NewsBrowser({
     { value: "today", label: filterModalLabels.today },
     { value: "week", label: filterModalLabels.week },
     { value: "month", label: filterModalLabels.month },
+  ];
+  const categoryOptions = [
+    { value: "", label: labels.allCategories },
+    ...categories.map((category) => ({
+      value: category,
+      label: getCategoryLabel(category, categoryLabels),
+    })),
   ];
 
   const filteredArticles = articles.filter((article) => {
@@ -212,13 +284,18 @@ export function NewsBrowser({
   });
   const totalPages = Math.max(
     1,
-    Math.ceil(sortedArticles.length / NEWS_PAGE_SIZE),
+    Math.ceil(sortedArticles.length / pageSize),
   );
   const safeCurrentPage = Math.min(currentPage, totalPages);
-  const pageStartIndex = (safeCurrentPage - 1) * NEWS_PAGE_SIZE;
+  const pageStartIndex = (safeCurrentPage - 1) * pageSize;
   const visibleArticles = sortedArticles.slice(
     pageStartIndex,
-    pageStartIndex + NEWS_PAGE_SIZE,
+    pageStartIndex + pageSize,
+  );
+  const paginationItems = getPaginationItems(
+    safeCurrentPage,
+    totalPages,
+    isClientArea,
   );
   const summaryText = getSummaryText(
     browserLabels,
@@ -255,6 +332,7 @@ export function NewsBrowser({
   }
 
   function handleOpenFilterModal() {
+    setDraftCategory(selectedCategory);
     setDraftSort(appliedSort);
     setDraftPeriod(appliedPeriod);
     setIsFilterModalOpen(true);
@@ -265,6 +343,10 @@ export function NewsBrowser({
   }
 
   function handleApplyFilters() {
+    if (isClientArea) {
+      setSelectedCategory(draftCategory);
+    }
+
     setAppliedSort(draftSort);
     setAppliedPeriod(draftPeriod);
     setCurrentPage(1);
@@ -272,6 +354,11 @@ export function NewsBrowser({
   }
 
   function handleResetFilters() {
+    if (isClientArea) {
+      setDraftCategory(null);
+      setSelectedCategory(null);
+    }
+
     setDraftSort(DEFAULT_SORT);
     setDraftPeriod(DEFAULT_PERIOD);
     setAppliedSort(DEFAULT_SORT);
@@ -279,37 +366,51 @@ export function NewsBrowser({
     setCurrentPage(1);
   }
 
+  function handlePageChange(page: number) {
+    setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+
+    window.requestAnimationFrame(() => {
+      document.getElementById("news-browser")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  }
+
   function handlePreviousPage() {
-    setCurrentPage((page) => Math.max(1, page - 1));
+    handlePageChange(safeCurrentPage - 1);
   }
 
   function handleNextPage() {
-    setCurrentPage((page) => Math.min(totalPages, page + 1));
+    handlePageChange(safeCurrentPage + 1);
   }
 
   return (
     <div
       id="news-browser"
-      className="grid grid-cols-1 gap-6 xl:grid-cols-[300px_minmax(0,1fr)]"
+      className={`grid min-w-0 scroll-mt-24 grid-cols-1 gap-6 ${
+        isClientArea ? "" : "xl:grid-cols-[300px_minmax(0,1fr)]"
+      }`}
     >
-      <ScrollReveal
-        effect="fade-right"
-      >
-        <NewsCategoryFilter
-          title={labels.listTitle}
-          allCategoriesLabel={labels.allCategories}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          categoryLabels={categoryLabels}
-          summaryText={summaryText}
-          emptyBodyText={emptyBodyText}
-          onCategoryChange={handleCategoryChange}
-        />
-      </ScrollReveal>
+      {!isClientArea ? (
+        <ScrollReveal effect="fade-right" className="min-w-0">
+          <NewsCategoryFilter
+            title={labels.listTitle}
+            allCategoriesLabel={labels.allCategories}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            categoryLabels={categoryLabels}
+            summaryText={summaryText}
+            emptyBodyText={emptyBodyText}
+            onCategoryChange={handleCategoryChange}
+          />
+        </ScrollReveal>
+      ) : null}
 
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-6">
         <ScrollReveal
           effect="fade-down"
+          className="min-w-0"
         >
           <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-sm sm:p-5">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -353,18 +454,27 @@ export function NewsBrowser({
         </ScrollReveal>
 
         {visibleArticles.length ? (
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div
+            className={`grid min-w-0 gap-5 sm:grid-cols-2 ${isClientArea ? "xl:grid-cols-3" : ""
+              }`}
+          >
             {visibleArticles.map((article, index) => {
               const shouldPrioritizeImage = index < EAGER_IMAGE_COUNT;
               const isFeaturedArticle =
-                safeCurrentPage === 1 && index === 0 && visibleArticles.length > 1;
+                !isClientArea &&
+                safeCurrentPage === 1 &&
+                index === 0 &&
+                visibleArticles.length > 1;
 
               return (
                 <ScrollReveal
                   key={`${safeCurrentPage}-${article.id}`}
                   effect="fade-up"
-                  delay={Math.floor(index / 2) * 100}
-                  className={isFeaturedArticle ? "sm:col-span-2" : undefined}
+                  delay={
+                    Math.floor(index / (isClientArea ? 3 : 2)) * 100
+                  }
+                  className={`min-w-0 ${isFeaturedArticle ? "sm:col-span-2" : ""
+                    }`}
                   once
                 >
                   <NewsFeedArticleCard
@@ -388,39 +498,90 @@ export function NewsBrowser({
           />
         )}
 
-        {sortedArticles.length > NEWS_PAGE_SIZE ? (
+        {sortedArticles.length > pageSize ? (
           <ScrollReveal
             effect="fade-up"
             once
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-white/[0.03] px-4 py-4">
-              <p className="text-sm text-zinc-300">{paginationSummary}</p>
+            <div
+              className={`flex flex-col items-center gap-3 rounded-[24px] border border-white/10 bg-white/[0.03] px-4 py-4 ${isClientArea
+                  ? "justify-center text-center"
+                  : "sm:flex-row sm:justify-between"
+                }`}
+            >
+              {/* <p className="text-sm text-zinc-300">{paginationSummary}</p> */}
 
-              <div className="flex items-center gap-2">
+              <nav
+                aria-label={paginationSummary}
+                className="flex min-w-0 flex-wrap items-center justify-center gap-2"
+              >
                 <button
                   type="button"
                   onClick={handlePreviousPage}
                   disabled={safeCurrentPage === 1}
-                  className={`rounded-lg border px-3 py-2 text-sm transition ${safeCurrentPage === 1
-                    ? "pointer-events-none border-white/8 text-zinc-600"
-                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                  aria-label={labels.pagination.previous}
+                  className={`rounded-lg border text-sm transition ${isClientArea ? "h-9 w-9 p-0" : "px-3 py-2"
+                    } ${safeCurrentPage === 1
+                      ? "pointer-events-none border-white/8 text-zinc-600"
+                      : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                     }`}
                 >
-                  {labels.pagination.previous}
+                  {isClientArea ? (
+                    <>
+                      <span aria-hidden="true">&larr;</span>
+                      <span className="sr-only">{labels.pagination.previous}</span>
+                    </>
+                  ) : (
+                    labels.pagination.previous
+                  )}
                 </button>
+
+                {paginationItems.map((item, index) =>
+                  item === "ellipsis" ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="px-1 text-sm text-zinc-500"
+                      aria-hidden="true"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => handlePageChange(item)}
+                      aria-current={item === safeCurrentPage ? "page" : undefined}
+                      className={`h-9 min-w-9 rounded-lg border px-2 text-sm font-medium transition ${item === safeCurrentPage
+                          ? "border-yellow-500 bg-yellow-500 text-black"
+                          : "border-white/10 text-zinc-300 hover:border-yellow-500/40 hover:text-yellow-400"
+                        }`}
+                    >
+                      {item}
+                    </button>
+                  ),
+                )}
 
                 <button
                   type="button"
                   onClick={handleNextPage}
                   disabled={safeCurrentPage === totalPages}
-                  className={`rounded-lg border px-3 py-2 text-sm transition ${safeCurrentPage === totalPages
-                    ? "pointer-events-none border-white/8 text-zinc-600"
-                    : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                  aria-label={labels.pagination.next}
+                  className={`rounded-lg border text-sm transition ${isClientArea ? "h-9 w-9 p-0" : "px-3 py-2"
+                    } ${safeCurrentPage === totalPages
+                      ? "pointer-events-none border-white/8 text-zinc-600"
+                      : "border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
                     }`}
                 >
-                  {labels.pagination.next}
+                  {isClientArea ? (
+                    <>
+                      <span aria-hidden="true">&rarr;</span>
+                      <span className="sr-only">{labels.pagination.next}</span>
+                    </>
+                  ) : (
+                    labels.pagination.next
+                  )}
                 </button>
-              </div>
+              </nav>
             </div>
           </ScrollReveal>
         ) : null}
@@ -429,10 +590,18 @@ export function NewsBrowser({
       <NewsFilterModal
         isOpen={isFilterModalOpen}
         labels={filterModalLabels}
+        categoryTitle={isClientArea ? labels.listTitle : undefined}
+        categoryOptions={isClientArea ? categoryOptions : undefined}
         sortOptions={sortOptions}
         periodOptions={periodOptions}
+        draftCategory={isClientArea ? draftCategory ?? "" : undefined}
         draftSort={draftSort}
         draftPeriod={draftPeriod}
+        onDraftCategoryChange={
+          isClientArea
+            ? (value) => setDraftCategory(value || null)
+            : undefined
+        }
         onDraftSortChange={(value) => setDraftSort(value as SortOption)}
         onDraftPeriodChange={(value) => setDraftPeriod(value as PeriodOption)}
         onClose={handleCloseFilterModal}

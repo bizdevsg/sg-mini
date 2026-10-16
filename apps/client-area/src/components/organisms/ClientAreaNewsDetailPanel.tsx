@@ -38,7 +38,7 @@ export function ClientAreaNewsDetailPanel({
         title={article.title}
       />
 
-      <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-yellow-500/20 bg-zinc-950/40">
+      <div className="relative aspect-[21/9] overflow-hidden rounded-3xl border border-yellow-500/20 bg-zinc-950/40">
         <Image
           src={article.imageSrc}
           alt={article.title}

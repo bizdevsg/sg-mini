@@ -47,6 +47,8 @@ export default async function ClientAreaTradePilotPerformancePage({
 
   return (
     <ClientAreaTradePilotPlaceholderPanel
+      analysisHref={`/${locales}/client-area/trade-pilot/analisis`}
+      dateLocale={locales === "id" ? "id-ID" : "en-US"}
       description={copy.description}
       performanceCopy={copy}
       histories={bootstrap.histories[mode] ?? []}

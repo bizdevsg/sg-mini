@@ -415,6 +415,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         understandDetailsDescription:
           "Review the complete explanation, calculations for each position, and the logic behind this recommendation.",
         cancellationConditionsLabel: "3 cancellation conditions",
+        alternateScenarioPendingLabel:
+          "This scenario is not executable yet · wait until its conditions are met.",
         savePlanLabel: "Save Plan",
         shareLabel: "Share",
         entryPositionLabel: "Entry (1 position)",
@@ -446,7 +448,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         takeProfitOneLabel: "Take Profit 1",
         takeProfitTwoLabel: "Take Profit 2",
         estimatedProfitLabel: "Estimated profit",
-        riskContextTitle: "Risk context",
+        riskContextTitle: "Risk limit",
         usableRiskBudgetLabel: "Usable risk budget",
         guardrailDescription: "{percentage}% of the loss limit after guardrail",
         proposedLossLimitLabel: "Reserved loss limit",
@@ -501,13 +503,27 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
     },
     performanceHistory: {
-      title: "Performance History",
+      title: "Analysis History & Performance",
       description:
         "Review Trade Pilot analysis results and performance development over time.",
-      totalSummary: "58 total analyses",
+      totalSummary: "{count} total analyses",
       summaryTabLabel: "Summary",
       historyTabLabel: "History",
       allPeriodLabel: "All",
+      history: {
+        searchPlaceholder: "Search instrument, timeframe, or status...",
+        filterLabel: "Filter",
+        filterTitle: "Filter analysis status",
+        allStatusLabel: "All statuses",
+        reanalyzeLabel: "Analyze Again",
+        emptyTitle: "No history found",
+        emptyDescription:
+          "Try changing your search term or selected status filter.",
+        pageLabel: "Page {current} of {total}",
+        showingLabel: "Showing {start}–{end} of {total}",
+        previousLabel: "Previous",
+        nextLabel: "Next",
+      },
       stats: {
         totalAnalysis: "Total analyses",
         stillValid: "Still valid",

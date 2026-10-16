@@ -61,14 +61,14 @@ export const idClientArea: AppMessages["clientArea"] = {
   otp: {
     title: "Verifikasi OTP",
     description:
-      "Akun Anda memerlukan verifikasi tambahan. Kami telah mengirim kode OTP ke nomor/perangkat terdaftar Anda.",
+      "Akun Anda memerlukan verifikasi tambahan. Kami telah mengirim kode OTP ke email yang terdaftar Anda.",
     codeLabel: "Kode OTP",
     codePlaceholder: "Masukkan 6 digit kode OTP",
     submitLabel: "VERIFIKASI",
     submitting: "Memverifikasi kode...",
     resendLabel: "Kirim ulang kode",
     resending: "Mengirim ulang...",
-    resendSuccess: "Kode OTP baru telah dikirim.",
+    resendSuccess: "Kode OTP telah dikirim.",
     backToLogin: "Kembali ke login",
     errorRequired: "Masukkan kode OTP Anda.",
     errorInvalidCode:
@@ -412,7 +412,9 @@ export const idClientArea: AppMessages["clientArea"] = {
         understandDetailsLabel: "Pahami detailnya",
         understandDetailsDescription:
           "Lihat penjelasan lengkap, perhitungan setiap posisi, dan logika di balik rekomendasi ini.",
-        cancellationConditionsLabel: "3 kondisi batal",
+        cancellationConditionsLabel: "3 kondisi pembatalan",
+        alternateScenarioPendingLabel:
+          "Skenario belum bisa dijalankan · tunggu syarat terpenuhi.",
         savePlanLabel: "Simpan Plan",
         shareLabel: "Bagikan",
         entryPositionLabel: "Entry (1 posisi)",
@@ -444,7 +446,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         takeProfitOneLabel: "Take Profit 1",
         takeProfitTwoLabel: "Take Profit 2",
         estimatedProfitLabel: "Estimasi profit",
-        riskContextTitle: "Konteks risiko",
+        riskContextTitle: "Batas risiko",
         usableRiskBudgetLabel: "Risk budget yang boleh dipakai",
         guardrailDescription: "{percentage}% dari batas rugi setelah guardrail",
         proposedLossLimitLabel: "Batas rugi yang dicadangkan",
@@ -499,13 +501,27 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
     },
     performanceHistory: {
-      title: "Riwayat Performa",
+      title: "Riwayat & Performa Analisis",
       description:
         "Pantau rangkuman hasil dan perkembangan performa analisis Trade Pilot.",
-      totalSummary: "58 analisis total",
+      totalSummary: "{count} analisis total",
       summaryTabLabel: "Ringkasan",
       historyTabLabel: "Riwayat",
       allPeriodLabel: "Semua",
+      history: {
+        searchPlaceholder: "Cari instrumen, timeframe, atau status...",
+        filterLabel: "Filter",
+        filterTitle: "Filter status analisis",
+        allStatusLabel: "Semua status",
+        reanalyzeLabel: "Analisis Ulang",
+        emptyTitle: "Riwayat tidak ditemukan",
+        emptyDescription:
+          "Coba ubah kata pencarian atau filter status yang dipilih.",
+        pageLabel: "Halaman {current} dari {total}",
+        showingLabel: "Menampilkan {start}–{end} dari {total}",
+        previousLabel: "Sebelumnya",
+        nextLabel: "Selanjutnya",
+      },
       stats: {
         totalAnalysis: "Total analisis",
         stillValid: "Masih valid",

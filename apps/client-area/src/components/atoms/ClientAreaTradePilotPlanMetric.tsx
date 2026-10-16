@@ -1,5 +1,6 @@
 type ClientAreaTradePilotPlanMetricProps = {
   description?: string;
+  descriptionTone?: "default" | "success";
   label: string;
   tone?: "default" | "danger" | "success";
   value: string;
@@ -14,6 +15,7 @@ const VALUE_CLASS_NAMES = {
 
 export function ClientAreaTradePilotPlanMetric({
   description,
+  descriptionTone = "default",
   label,
   tone = "default",
   value,
@@ -35,7 +37,7 @@ export function ClientAreaTradePilotPlanMetric({
       </strong>
       {description ? (
         <p
-          className={`${variant === "compact" ? "mt-1" : "mt-2"} text-[11px] leading-4 text-zinc-500 sm:text-xs sm:leading-5`}
+          className={`${variant === "compact" ? "mt-1" : "mt-2"} text-[11px] leading-4 sm:text-xs sm:leading-5 ${descriptionTone === "success" ? "font-bold text-emerald-400" : "text-zinc-500"}`}
         >
           {description}
         </p>

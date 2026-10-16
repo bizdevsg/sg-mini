@@ -85,7 +85,7 @@ export function ClientAreaTradePilotInstrumentPicker({
               aria-pressed={active}
               onClick={() => onSelect(instrument.id)}
               className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${active
-                  ? "border-yellow-500/50 bg-yellow-500/10"
+                  ? "trade-pilot-instrument-active border-yellow-500/50 bg-yellow-500/10"
                   : "border-transparent hover:border-zinc-700 hover:bg-zinc-800/60"
                 }`}
             >
@@ -101,7 +101,7 @@ export function ClientAreaTradePilotInstrumentPicker({
                 </span>
               </span>
               <Star
-                className={`h-4 w-4 ${active ? "fill-yellow-400 text-yellow-400" : "text-zinc-600"}`}
+                className={`h-4 w-4 ${active ? "trade-pilot-instrument-star fill-yellow-400 text-yellow-400" : "text-zinc-600"}`}
               />
             </button>
           );

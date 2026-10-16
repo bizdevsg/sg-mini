@@ -1092,6 +1092,7 @@ export type AppMessages = {
           understandDetailsLabel: string;
           understandDetailsDescription: string;
           cancellationConditionsLabel: string;
+          alternateScenarioPendingLabel: string;
           savePlanLabel: string;
           shareLabel: string;
           entryPositionLabel: string;
@@ -1173,6 +1174,19 @@ export type AppMessages = {
         summaryTabLabel: string;
         historyTabLabel: string;
         allPeriodLabel: string;
+        history: {
+          searchPlaceholder: string;
+          filterLabel: string;
+          filterTitle: string;
+          allStatusLabel: string;
+          reanalyzeLabel: string;
+          emptyTitle: string;
+          emptyDescription: string;
+          pageLabel: string;
+          showingLabel: string;
+          previousLabel: string;
+          nextLabel: string;
+        };
         stats: {
           totalAnalysis: string;
           stillValid: string;

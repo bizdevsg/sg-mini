@@ -8,7 +8,7 @@
   --surface-muted: #261d0b;
   --accent: #cda13a;
   --accent-strong: #f2cf78;
-  --trade-pilot: #D57D01;
+  --trade-pilot: #ffc300;
   --line: rgba(205, 161, 58, 0.24);
   --font-poppins:
     "Segoe UI", "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif;
@@ -48,7 +48,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -56,7 +56,7 @@ html {
 body {
   width: 100%;
   min-width: 320px;
-  overflow-x: hidden;
+  overflow-x: clip;
   background-color: #131313;
   color: var(--foreground);
   font-family: var(--font-poppins), sans-serif;
@@ -69,6 +69,198 @@ body {
     radial-gradient(circle at 90% 90%, rgba(15, 15, 15, 0.9) 0%, transparent 50%);
   background-repeat: no-repeat;
   background-size: cover; */
+}
+
+/* TradePilot visual system: scoped so the wider Client Area keeps its own theme. */
+section[data-active-tab="trade-pilot"] {
+  background-color: #000000;
+  background-image: url("/assets/Latar Fintech Emas dengan Globe Digital 1.webp") !important;
+  background-position: center center;
+  background-size: cover;
+}
+
+section[data-active-tab="trade-pilot"] > .absolute.inset-0 {
+  background-color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 42%) 0%,
+    rgb(0 0 0 / 58%) 45%,
+    rgb(0 0 0 / 74%) 100%
+  );
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.trade-pilot-theme {
+  --tp-canvas: #000000;
+  --tp-content: #0b0b0b;
+  --tp-terminal: #0e0f12;
+  --tp-panel: #151822;
+  --tp-panel-alt: #141824;
+  --tp-control: #222222;
+  --tp-border: #252936;
+  --tp-divider: #1e293b;
+  --tp-line: #292929;
+  --tp-text: #ffffff;
+  --tp-body: #e2e8f0;
+  --tp-muted: #94a3b8;
+  --tp-meta: #64748b;
+  --tp-gold: #ffc300;
+  --tp-gold-selected: #fab405;
+  --tp-bull: #10b981;
+  --tp-bull-highlight: #34d399;
+  --tp-bear: #ef4444;
+  --tp-bear-highlight: #ff5d68;
+  --tp-warning: #f59e0b;
+  --tp-attention: #fbbf24;
+  --tp-chart-positive: #20e4c0;
+
+  /* Remap existing Tailwind utilities to the approved TradePilot palette. */
+  --color-black: var(--tp-canvas);
+  --color-white: var(--tp-text);
+  --color-zinc-100: var(--tp-body);
+  --color-zinc-200: var(--tp-body);
+  --color-zinc-300: #cbd5e1;
+  --color-zinc-400: var(--tp-muted);
+  --color-zinc-500: var(--tp-meta);
+  --color-zinc-600: #71717a;
+  --color-zinc-700: var(--tp-line);
+  --color-zinc-800: var(--tp-border);
+  --color-zinc-900: var(--tp-panel);
+  --color-yellow-400: var(--tp-gold);
+  --color-yellow-500: var(--tp-gold);
+  --color-amber-200: #ffd461;
+  --color-amber-300: var(--tp-attention);
+  --color-amber-400: var(--tp-attention);
+  --color-amber-500: var(--tp-warning);
+  --color-amber-600: var(--tp-gold-selected);
+  --color-amber-700: #836505;
+  --color-amber-950: #16130a;
+  --color-orange-300: var(--tp-attention);
+  --color-orange-400: var(--tp-warning);
+  --color-orange-500: var(--tp-warning);
+  --color-emerald-400: var(--tp-bull-highlight);
+  --color-emerald-500: var(--tp-bull);
+  --color-emerald-700: var(--tp-bull);
+  --color-emerald-950: #071a14;
+  --color-red-400: var(--tp-bear-highlight);
+  --color-red-500: var(--tp-bear);
+  --color-red-600: var(--tp-bear);
+  --color-red-800: var(--tp-bear);
+  --color-red-950: #1d090b;
+  --color-rose-300: #ff7a84;
+  --color-rose-400: #ff6b7a;
+  --color-rose-500: #f43f5e;
+  --color-blue-400: var(--tp-chart-positive);
+  --color-blue-500: var(--tp-chart-positive);
+  --color-blue-700: var(--tp-chart-positive);
+  --color-blue-900: #09201d;
+  --color-blue-950: #071714;
+  --color-sky-300: var(--tp-chart-positive);
+  --color-sky-400: var(--tp-chart-positive);
+  --color-sky-500: var(--tp-chart-positive);
+  --color-cyan-400: var(--tp-chart-positive);
+  --color-teal-400: var(--tp-chart-positive);
+  --color-teal-500: var(--tp-chart-positive);
+
+  color: var(--tp-body);
+  color-scheme: dark;
+  accent-color: var(--tp-gold);
+}
+
+.trade-pilot-theme [class~="bg-[#0b0c0e]"] {
+  background-color: color-mix(in srgb, var(--tp-content) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#0b0c0e]/50"] {
+  background-color: color-mix(in srgb, var(--tp-content) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#101113]"],
+.trade-pilot-theme [class~="bg-[#151820]"],
+.trade-pilot-theme [class~="bg-[#151821]"],
+.trade-pilot-theme [class~="bg-[#171a23]"] {
+  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#101113]/10"] {
+  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#101113]/50"] {
+  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#141823]"],
+.trade-pilot-theme [class~="bg-[#18191c]"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#141517]/50"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#171924]/20"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#171924]/70"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#171924]/90"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#171924]/95"] {
+  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-[#1a1d29]"] {
+  background-color: color-mix(in srgb, var(--tp-control) 70%, transparent);
+}
+
+.trade-pilot-theme [class~="bg-zinc-500/10"] {
+  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
+}
+
+.trade-pilot-theme :is(
+  [class~="bg-[#0b0c0e]"],
+  [class~="bg-[#0b0c0e]/50"],
+  [class~="bg-[#101113]"],
+  [class~="bg-[#101113]/10"],
+  [class~="bg-[#101113]/50"],
+  [class~="bg-[#141517]/50"],
+  [class~="bg-[#141823]"],
+  [class~="bg-[#151820]"],
+  [class~="bg-[#151821]"],
+  [class~="bg-[#171924]/20"],
+  [class~="bg-[#171924]/70"],
+  [class~="bg-[#171924]/90"],
+  [class~="bg-[#171924]/95"],
+  [class~="bg-[#171a23]"],
+  [class~="bg-[#18191c]"],
+  [class~="bg-[#1a1d29]"],
+  [class~="bg-zinc-500/10"]
+) {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.trade-pilot-theme .trade-pilot-glass-panel {
+  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.trade-pilot-theme .trade-pilot-instrument-active {
+  border-color: color-mix(in srgb, var(--tp-gold-selected) 50%, transparent);
+  background-color: color-mix(in srgb, var(--tp-gold-selected) 10%, transparent);
+}
+
+.trade-pilot-theme .trade-pilot-instrument-star {
+  color: var(--tp-gold-selected);
+  fill: var(--tp-gold-selected);
 }
 
 img {

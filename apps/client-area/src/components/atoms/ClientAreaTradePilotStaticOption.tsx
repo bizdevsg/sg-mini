@@ -25,8 +25,8 @@ export function ClientAreaTradePilotStaticOption({
       disabled={disabled}
       onClick={onClick}
       className={`w-full cursor-pointer rounded-xl border px-4 py-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm ${textAlignClassName} ${active
-        ? "border-amber-500 bg-amber-500/10 text-white"
-        : "border-blue-700/20 bg-blue-500/10 text-zinc-300 hover:border-amber-500/60 hover:bg-amber-500/5"
+        ? "border-yellow-500 bg-yellow-500/10 text-white"
+        : "border-zinc-700 bg-zinc-800/70 text-zinc-300 hover:border-yellow-500/60 hover:bg-zinc-700/70"
         }`}
     >
       <div className="flex flex-col">

@@ -1,6 +1,8 @@
 ## [Unreleased]
 
 ### Added
+- Tab Riwayat pada halaman Riwayat & Performa Analisis Trade Pilot kini menampilkan data analisis aktual per mode akun dalam kartu responsif dua kolom, lengkap dengan pencarian, filter status berbentuk chip, aksi Analisis Ulang, empty state, tanggal WIB, dan pagination lima item per halaman.
+- Topbar Client Area kini menampilkan tanggal dan jam real-time berformat locale Indonesia/Inggris dengan zona waktu Asia/Jakarta (WIB) dalam widget desktop yang ringkas sebelum tombol notifikasi.
 - Workflow release kini otomatis menaikkan versi patch, membuat tag Git, dan menerbitkan GitHub Release beserta catatan berbasis commit untuk push ke `origin/prod` maupun `fork/split-client-area`; tag diterbitkan pada repository GitHub yang memicu workflow dan pembuatan release dari tag semantic-version manual tetap didukung.
 - Tombol notifikasi pada topbar Client Area kini membuka dropdown notifikasi TradePilot sementara dengan badge belum dibaca, tautan menuju Analisis dan Riwayat Performa, aksi tandai semua dibaca, penutupan melalui klik luar/Escape, serta locale Indonesia/Inggris.
 - Footer khusus TradePilot ditambahkan pada bagian paling bawah halaman dengan CTA aplikasi iOS/Android, badge store, peringatan alat pendukung keputusan, disclaimer view-only, tautan legal, TikTok TradePilot.id, dan copyright responsif dalam locale Indonesia/Inggris.
@@ -30,6 +32,18 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Nomor tujuan fallback WhatsApp pada website dan Client Area kini menggunakan `+62 821-2665-636` (`628212665636` pada URL `wa.me`) baik pada konfigurasi production maupun nilai fallback aplikasi.
+- Pesan bawaan yang dikirim melalui tombol WhatsApp kini menggunakan sapaan customer support Solid Gold Berjangka yang netral, menggantikan teks lama yang selalu menyebut Client Area agar sesuai ketika dibuka dari website maupun Client Area.
+- Popup fallback Live Chat/WhatsApp pada website dan Client Area kini menampilkan jam operasional customer support Senin–Jumat pukul 09.00–17.00 WIB dalam baris terpisah yang mudah terlihat, lengkap dengan versi bahasa Inggris.
+- Grid card pada halaman News website kini menampilkan satu card berita utama selebar baris paling atas, dilanjutkan tiga card per baris di desktop, dua di tablet, dan satu di mobile tanpa mengubah grid Market Academy maupun Client Area.
+- Modal Filter pada halaman News website (`/id/news` dan `/en/news`) kini memakai kategori berbentuk chip responsif dua/tiga kolom, pilihan urutan dan periode dua kolom, serta header dan action bar tetap; sidebar kategori dipindahkan ke modal agar daftar berita memakai lebar penuh tanpa memengaruhi halaman Market Academy.
+- Modal Filter Berita Client Area kini memakai kategori berbentuk chip responsif dua/tiga kolom, pilihan urutan dan periode dua kolom, serta header dan action bar tetap agar daftar kategori lebih ringkas, mudah dipindai, dan tombol aksi selalu terjangkau.
+- Daftar card pada halaman Berita Client Area kini memakai grid tiga kolom di desktop, dua kolom di tablet, dan satu kolom di mobile; card berita utama tetap memenuhi satu baris penuh.
+- Aksi Simpan Plan dan Bagikan kini hanya aktif pada skenario utama sesuai arah analisis; skenario lawan tetap dapat dibuka untuk perbandingan, tetapi menampilkan status menunggu syarat dan kedua aksinya dinonaktifkan secara native, baik untuk kombinasi utama Buy maupun Sell.
+- Detail Skenario Turun (Sell) pada Trading Plan diselaraskan dengan referensi visual: badge status bersyarat ditambahkan di bawah judul, ringkasan target kini memprioritaskan level TP lalu estimasi profit, serta label batas risiko dan kondisi pembatalan diperjelas tanpa mengubah kalkulasi plan.
+- Background seluruh route TradePilot kini menggunakan aset visual fintech emas dengan globe digital, diposisikan fixed dan dilapisi gradasi gelap agar konten dashboard tetap terbaca.
+- Permukaan container dan kartu TradePilot, termasuk seluruh section Trading Plan Adaptif, kini memakai warna panel dengan opacity 70% dan backdrop blur 16px, sehingga artwork background tetap terlihat lembut tanpa mengurangi keterbacaan isi komponen.
+- Palet warna seluruh area TradePilot diselaraskan dengan panduan visual baru: kanvas hitam, panel abu-biru, hierarki teks slate, emas untuk brand/interaksi, hijau untuk bullish, merah untuk bearish, serta teal untuk aksen grafik; tokennya kini terpusat dan hanya berlaku pada route TradePilot.
 - Ticker TradePilot kini hanya menampilkan produk XUL10, BCO10, HKK50, dan JPK50 tanpa fallback ke simbol lain, memuat maksimal lima headline berita terbaru yang dapat dibuka sesuai locale, dan bergerak lebih lambat agar informasi mudah dibaca.
 - Tombol Google Play dan App Store pada footer TradePilot kini memakai listing aplikasi TradePilot.id tersendiri, terpisah dari tautan aplikasi Solid.
 - Seluruh tautan download aplikasi Solid pada website dan Client Area, termasuk fallback konfigurasi dan contoh environment, kini diarahkan ke listing resmi Google Play dan App Store terbaru.
@@ -87,6 +101,12 @@
 - Docker build dan runtime kini meneruskan `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLIENT_SITE_URL`, dan `NEXT_PUBLIC_WEBSITE_URL` secara konsisten ke masing-masing aplikasi.
 
 ### Fixed
+- Pagination halaman News website kini memakai 13 berita per halaman untuk membentuk satu card utama dan empat baris grid tiga kolom, menampilkan navigasi nomor halaman compact, serta mengembalikan viewport ke awal daftar setelah halaman berpindah tanpa mengubah pagination Market Academy.
+- Pagination Berita Client Area kini menggunakan susunan compact rata tengah dengan tombol panah dan maksimal lima item nomor/elipsis, sehingga tidak tertutup widget Live Chat tanpa menimbulkan ruang kosong atau alignment yang timpang.
+- Pagination Berita Client Area kini memakai 12 card per halaman agar grid desktop selalu membentuk empat baris penuh, menyediakan navigasi nomor halaman dengan elipsis, dan mengembalikan viewport ke awal daftar setelah halaman berpindah; card unggulan tidak lagi memecah susunan tiga kolom khusus Client Area.
+- Sidebar kategori pada halaman Berita Client Area dipindahkan ke dalam modal tombol Filter bersama pengaturan urutan dan periode; daftar artikel kini memakai lebar penuh sehingga tidak lagi melebar atau terpotong di sisi kanan viewport.
+- Double scrollbar vertikal pada halaman Client Area dihilangkan dengan mengganti clipping horizontal `html` dan `body` dari `overflow-x: hidden` menjadi `overflow-x: clip`, sehingga keduanya tidak lagi membentuk scroll container vertikal bertumpuk.
+- Tombol opsi dan field finansial pada Trading Plan Adaptif kini memakai surface abu-biru netral, sehingga state nonaktif tidak lagi terlihat hijau; warna emas dipertahankan khusus untuk pilihan aktif dan focus state.
 - Root workspace kini menyediakan script `npm run build` untuk membangun aplikasi website dan Client Area secara berurutan, sehingga command build standar tidak lagi gagal karena script tidak tersedia.
 - Build TypeScript Client Area diperbaiki dengan memisahkan opsi mode akun MiniMicro dari `RequestInit.mode` milik Fetch API serta menyederhanakan narrowing state loading pada komponen Mini Chart.
 - Ruang kosong berlebih di atas disclaimer akun Real pada Account Overview dihapus dengan tidak lagi merender wrapper header akun beserta margin bawahnya ketika akun Real tidak tersedia.

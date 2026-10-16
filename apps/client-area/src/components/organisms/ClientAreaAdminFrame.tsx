@@ -11,6 +11,7 @@ import {
   ClientAreaDesktopSidebarNav,
   ClientAreaSidebarLogoutButton,
 } from "@/components/molecules/ClientAreaDesktopSidebarNav";
+import { ClientAreaDateTime } from "@/components/molecules/ClientAreaDateTime";
 import { ClientAreaLogoutModal } from "@/components/molecules/ClientAreaLogoutModal";
 import { ClientAreaNotificationMenu } from "@/components/molecules/ClientAreaNotificationMenu";
 import { ClientAreaProfileMenu } from "@/components/molecules/ClientAreaProfileMenu";
@@ -176,6 +177,8 @@ export function ClientAreaAdminFrame({
           </div>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <ClientAreaDateTime locale={locale} />
+
             <ClientAreaNotificationMenu
               copy={clientArea.topbar.notifications}
               locale={locale}

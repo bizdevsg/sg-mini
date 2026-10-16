@@ -66,7 +66,7 @@ export function ClientAreaTradePilotTradingPlanSection({
   }
 
   return (
-    <section className="rounded-3xl border border-zinc-800 bg-blue-950/15 p-5 sm:p-7">
+    <section className="trade-pilot-glass-panel rounded-3xl border border-zinc-800 bg-blue-950/15 p-5 sm:p-7">
       <div className="flex items-center gap-2">
         <div className="p-3 bg-yellow-500/20 rounded-lg">
           <Image src={"/assets/carbon_content-navigator-sync-warning.webp"} alt="" width={300} height={300} className="w-7 h-7" />
@@ -286,6 +286,7 @@ export function ClientAreaTradePilotTradingPlanSection({
         <ClientAreaTradePilotPlanDetails
           accountType={accountType}
           copy={copy}
+          isPrimaryScenario={analysis.direction === "bullish"}
           levels={analysis.buyLevels}
           lossLimit={Number(lossLimit)}
           riskStyle={riskStyle}
@@ -298,6 +299,7 @@ export function ClientAreaTradePilotTradingPlanSection({
         <ClientAreaTradePilotPlanDetails
           accountType={accountType}
           copy={copy}
+          isPrimaryScenario={analysis.direction === "bearish"}
           levels={analysis.sellLevels}
           lossLimit={Number(lossLimit)}
           riskStyle={riskStyle}

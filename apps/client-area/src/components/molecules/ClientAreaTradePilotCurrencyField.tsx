@@ -16,8 +16,8 @@ export function ClientAreaTradePilotCurrencyField({
       <span className="mb-2 block text-xs font-semibold text-zinc-400 sm:text-sm">
         {label}
       </span>
-      <span className="flex items-center gap-4 overflow-hidden rounded-xl border border-zinc-700 bg-blue-900/10 text-zinc-200 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500">
-        <span className="bg-blue-50/10 px-4 py-3.5 text-zinc-400">
+      <span className="flex items-center gap-4 overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900/70 text-zinc-200 focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
+        <span className="bg-zinc-800/70 px-4 py-3.5 text-zinc-400">
           <DollarSign className="h-4 w-4" />
         </span>
         <input

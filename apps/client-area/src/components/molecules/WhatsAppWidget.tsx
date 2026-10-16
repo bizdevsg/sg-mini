@@ -13,20 +13,24 @@ const COPY = {
     subtitle: "Customer Support",
     greeting:
       "Halo! 👋 Live chat sedang tidak tersedia. Silakan hubungi kami lewat WhatsApp, tim kami siap membantu.",
+    operatingHours: "Jam operasional: Senin–Jumat, 09.00–17.00 WIB.",
     cta: "Mulai Chat WhatsApp",
     open: "Buka widget WhatsApp",
     close: "Tutup widget WhatsApp",
-    message: "Halo, saya butuh bantuan terkait Client Area.",
+    message:
+      "Halo Solid Gold Berjangka, saya ingin mendapatkan bantuan dari Customer Support.",
   },
   en: {
     title: "Solid Gold Berjangka",
     subtitle: "Customer Support",
     greeting:
       "Hello! 👋 Live chat is currently unavailable. Please reach us on WhatsApp — our team is ready to help.",
+    operatingHours: "Operating hours: Monday–Friday, 09:00–17:00 WIB.",
     cta: "Start WhatsApp Chat",
     open: "Open the WhatsApp widget",
     close: "Close the WhatsApp widget",
-    message: "Hello, I need help with the Client Area.",
+    message:
+      "Hello Solid Gold Berjangka, I would like assistance from Customer Support.",
   },
 } as const;
 
@@ -104,7 +108,10 @@ export function WhatsAppWidget({ locale }: WhatsAppWidgetProps) {
 
           <div className="space-y-4 px-4 py-5">
             <p className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white px-4 py-3 text-sm leading-6 text-zinc-800 shadow-sm">
-              {copy.greeting}
+              <span>{copy.greeting}</span>
+              <span className="mt-2 block border-t border-zinc-200 pt-2 font-semibold text-[#075e54]">
+                {copy.operatingHours}
+              </span>
             </p>
 
             <a

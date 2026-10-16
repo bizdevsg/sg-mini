@@ -86,7 +86,7 @@ export function ClientAreaTradePilotFooterSection({
           {copy.disclaimerDescription}
         </p> */}
 
-        <div className="border-t border-zinc-700 px-5 pt-4 sm:px-7">
+        {/* <div className="border-t border-zinc-700 px-5 pt-4 sm:px-7">
           <div className="flex flex-col items-center justify-between gap-6 xl:flex-row">
             <nav aria-label={copy.legalNavigationLabel}>
               <ul className="flex flex-wrap items-center justify-center gap-x-0 gap-y-3 text-xs font-semibold text-zinc-200 sm:text-sm">
@@ -127,7 +127,7 @@ export function ClientAreaTradePilotFooterSection({
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

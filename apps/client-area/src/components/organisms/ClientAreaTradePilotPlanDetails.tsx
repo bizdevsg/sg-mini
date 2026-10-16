@@ -31,6 +31,7 @@ import { ClientAreaTradePilotUnusedLayers } from "@/components/organisms/ClientA
 type ClientAreaTradePilotPlanDetailsProps = {
   accountType: "micro" | "mini" | "regular";
   copy: ClientAreaTradePilotTradingPlanCopy;
+  isPrimaryScenario: boolean;
   levels: ClientAreaTradePilotScenarioLevels;
   lossLimit: number;
   riskStyle: "conservative" | "moderate" | "aggressive";
@@ -57,6 +58,7 @@ function formatMoney(value: number) {
 export function ClientAreaTradePilotPlanDetails({
   accountType,
   copy,
+  isPrimaryScenario,
   levels,
   lossLimit,
   riskStyle,
@@ -117,11 +119,23 @@ export function ClientAreaTradePilotPlanDetails({
     >
       <div className="grid xl:grid-cols-[minmax(0,1fr)_330px]">
         <div id="trade-pilot-plan-details" className="min-w-0 p-5 sm:p-7">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h3 className="text-xl font-black text-white">{title}</h3>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h3 className="text-xl font-black text-white">{title}</h3>
+              {!isPrimaryScenario ? (
+                <p
+                  id="trade-pilot-alternate-scenario-status"
+                  className="mt-1.5 w-fit rounded-full border border-yellow-500 px-3 py-1 text-[10px] font-medium leading-none text-yellow-400 sm:text-xs"
+                >
+                  {copy.alternateScenarioPendingLabel}
+                </p>
+              ) : null}
+            </div>
             <div className="flex flex-wrap gap-2">
               <button
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-[#141823] px-4 py-2 text-xs font-bold text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 sm:text-sm"
+                aria-describedby={!isPrimaryScenario ? "trade-pilot-alternate-scenario-status" : undefined}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-[#141823] px-4 py-2 text-xs font-bold text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:border-zinc-800 disabled:text-zinc-600 disabled:opacity-70 disabled:hover:bg-[#141823] sm:text-sm"
+                disabled={!isPrimaryScenario}
                 onClick={handleSave}
                 type="button"
               >
@@ -129,7 +143,9 @@ export function ClientAreaTradePilotPlanDetails({
                 {copy.savePlanLabel}
               </button>
               <button
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-[#141823] px-4 py-2 text-xs font-bold text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 sm:text-sm"
+                aria-describedby={!isPrimaryScenario ? "trade-pilot-alternate-scenario-status" : undefined}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-[#141823] px-4 py-2 text-xs font-bold text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:border-zinc-800 disabled:text-zinc-600 disabled:opacity-70 disabled:hover:bg-[#141823] sm:text-sm"
+                disabled={!isPrimaryScenario}
                 onClick={() => void handleShare()}
                 type="button"
               >
@@ -160,10 +176,10 @@ export function ClientAreaTradePilotPlanDetails({
               value={formatMoney(riskBudget)}
             />
             <ClientAreaTradePilotPlanMetric
-              description={`${copy.takeProfitOneShortLabel} ${levels.takeProfitOne} · ${copy.takeProfitTwoShortLabel} ${levels.takeProfitTwo}`}
+              description={`+${formatMoney(firstProfit)} · +${formatMoney(secondProfit)}`}
+              descriptionTone="success"
               label={copy.targetProfitLabel}
-              tone="success"
-              value={`${formatMoney(firstProfit)} / ${formatMoney(secondProfit)}`}
+              value={`${copy.takeProfitOneShortLabel} ${levels.takeProfitOne} · ${copy.takeProfitTwoShortLabel} ${levels.takeProfitTwo}`}
             />
             <ClientAreaTradePilotPlanMetric
               description={copy.riskStyleDescriptions[riskStyle]}

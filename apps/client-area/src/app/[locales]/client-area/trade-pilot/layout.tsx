@@ -50,15 +50,17 @@ export default async function ClientAreaTradePilotLayout({
       locale={locales}
       showHeaderTicker={false}
     >
-      {access.allowed && requestedModeAvailable ? (
-        children
-      ) : (
-        <ClientAreaTradePilotAccessDenied
-          description={deniedDescription}
-          mockDataLabel={accessCopy.mockDataLabel}
-          title={deniedTitle}
-        />
-      )}
+      <div className="trade-pilot-theme">
+        {access.allowed && requestedModeAvailable ? (
+          children
+        ) : (
+          <ClientAreaTradePilotAccessDenied
+            description={deniedDescription}
+            mockDataLabel={accessCopy.mockDataLabel}
+            title={deniedTitle}
+          />
+        )}
+      </div>
     </ClientAreaShell>
   );
 }
