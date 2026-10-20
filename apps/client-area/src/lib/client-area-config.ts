@@ -55,11 +55,20 @@ const TAWK_CHAT_FEATURE_KEYS = [
   "tawkActive",
   "tawk_active",
 ] as const;
+const TRADE_PILOT_FEATURE_KEYS = [
+  "tradePilot",
+  "trade_pilot",
+  "tradePilotEnabled",
+  "trade_pilot_enabled",
+  "tradePilotActive",
+  "trade_pilot_active",
+] as const;
 
 function resolveFallbackWebsiteFeatureConfig() {
   return {
     clientAreaEnabled: PUBLIC_CLIENT_AREA_ENABLED,
     tawkChatEnabled: PUBLIC_TAWK_CHAT_ENABLED,
+    tradePilotEnabled: true,
   };
 }
 
@@ -254,6 +263,8 @@ export const getWebsiteFeatureConfig = cache(async function getWebsiteFeatureCon
       tawkChatEnabled:
         resolveFeatureEnabledValue(payload, TAWK_CHAT_FEATURE_KEYS) ??
         PUBLIC_TAWK_CHAT_ENABLED,
+      tradePilotEnabled:
+        resolveFeatureEnabledValue(payload, TRADE_PILOT_FEATURE_KEYS) ?? true,
     };
   } catch (error) {
     console.error("Failed to fetch website feature config", {
@@ -272,4 +283,8 @@ export async function isClientAreaEnabled() {
 
 export async function isTawkChatEnabled() {
   return (await getWebsiteFeatureConfig()).tawkChatEnabled;
+}
+
+export async function isTradePilotEnabled() {
+  return (await getWebsiteFeatureConfig()).tradePilotEnabled;
 }

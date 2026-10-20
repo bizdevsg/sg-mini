@@ -12,6 +12,7 @@ import {
   ClientAreaSidebarLogoutButton,
 } from "@/components/molecules/ClientAreaDesktopSidebarNav";
 import { ClientAreaDateTime } from "@/components/molecules/ClientAreaDateTime";
+import { ClientAreaLiveToast } from "@/components/molecules/ClientAreaLiveToast";
 import { ClientAreaLogoutModal } from "@/components/molecules/ClientAreaLogoutModal";
 import { ClientAreaNotificationMenu } from "@/components/molecules/ClientAreaNotificationMenu";
 import { ClientAreaProfileMenu } from "@/components/molecules/ClientAreaProfileMenu";
@@ -21,12 +22,14 @@ import {
   resolveClientAreaTabHref,
 } from "@/components/organisms/client-area.shared";
 import type { TabId } from "@/components/organisms/client-area.types";
+import { useClientAreaLiveSchedule } from "@/hooks/useClientAreaLiveSchedule";
 import { getMessages, type AppLocale } from "@/locales";
 import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 
 type ClientAreaAdminFrameProps = {
   children: ReactNode;
   locale: AppLocale;
+  tradePilotEnabled: boolean;
 };
 
 function resolveActiveTab(pathname: string): TabId {
@@ -63,11 +66,13 @@ function resolveActiveTab(pathname: string): TabId {
 export function ClientAreaAdminFrame({
   children,
   locale,
+  tradePilotEnabled,
 }: ClientAreaAdminFrameProps) {
   const profile = useClientAreaProfile();
   const pathname = usePathname();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const activeLiveSessions = useClientAreaLiveSchedule();
   const messages = getMessages(locale);
   const clientArea = messages.clientArea;
   const activeTab = resolveActiveTab(pathname);
@@ -99,46 +104,27 @@ export function ClientAreaAdminFrame({
       clientArea={clientArea}
       locale={locale}
       sidebarIconMap={sidebarIconMap}
+      tradePilotEnabled={tradePilotEnabled}
     />
   );
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100">
+    <div className="min-h-screen min-w-0 max-w-full overflow-x-clip bg-black text-zinc-100">
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-white/8 bg-[#09090b] lg:flex">
         <div className="flex h-20 items-center border-b border-white/8 px-5">
           <Link
             href={resolveClientAreaTabHref(locale, "home")}
-            className="flex min-w-0 items-center gap-3"
+            className="flex min-w-0 items-center gap-3 mx-auto"
           >
             <Image
-              src="/assets/Logo SG-WEB111.png"
+              src="/assets/logo-utama-new.png"
               alt={messages.app.brandName}
-              width={35}
+              width={150}
               height={35}
-              className="h-7 w-7 shrink-0 object-contain"
+              className="h-7 w-full shrink-0 object-contain"
               priority
             />
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold tracking-wide text-white">
-                {messages.app.brandName}
-              </p>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
-                Client Area
-              </p>
-            </div>
           </Link>
-        </div>
-
-        <div className="p-3 border-b border-gray-600">
-          <a
-            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
-          >
-            <ArrowLeft className="h-[18px] w-[18px] hover:bg-amber-500/10 hover:text-amber-300" />
-            <span className="text-sm font-medium leading-tight">
-              {locale === "id" ? "Website Utama" : "Main Website"}
-            </span>
-          </a>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3">
@@ -146,6 +132,18 @@ export function ClientAreaAdminFrame({
             Navigation
           </p>
           {navigation}
+        </div>
+
+        <div className="p-3 border-t border-gray-600">
+          <a
+            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
+          >
+            <ArrowLeft className="h-[18px] w-[18px] hover:bg-amber-500/10 hover:text-amber-300" />
+            <span className="text-sm font-medium leading-tight">
+              {clientArea.sidebar.backToWebsite}
+            </span>
+          </a>
         </div>
 
         {/* <div className="space-y-2 border-t border-white/8 p-3">
@@ -156,19 +154,19 @@ export function ClientAreaAdminFrame({
         </div> */}
       </aside>
 
-      <div className="min-h-screen lg:pl-64">
-        <header className="fixed inset-x-0 top-0 z-40 flex h-20 items-center justify-between gap-4 border-b border-white/8 bg-[#09090b]/95 px-4 shadow-[0_12px_36px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:px-6 lg:left-64 lg:px-8">
+      <div className="min-h-screen min-w-0 max-w-full lg:pl-64">
+        <header className="fixed inset-x-0 top-0 z-40 flex h-20 min-w-0 items-center justify-between gap-2 border-b border-white/8 bg-[#09090b]/95 px-3 shadow-[0_12px_36px_rgba(0,0,0,0.22)] backdrop-blur-xl min-[380px]:px-4 sm:gap-4 sm:px-6 lg:left-64 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
               onClick={() => setIsMobileSidebarOpen(true)}
               aria-label="Open dashboard menu"
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-500 transition hover:bg-white/10 lg:hidden"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-500 transition hover:bg-white/10 min-[380px]:h-11 min-[380px]:w-11 lg:hidden"
             >
               <Menu className="h-5 w-5" />
             </button>
 
-            <div className="min-w-0">
+            <div className="min-w-0 hidden lg:block">
               <p className="text-xs font-medium text-zinc-500">Client Area</p>
               <h1 className="truncate text-base font-bold text-white sm:text-lg">
                 {activeLabel}
@@ -176,10 +174,11 @@ export function ClientAreaAdminFrame({
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5 min-[380px]:gap-2 sm:gap-3">
             <ClientAreaDateTime locale={locale} />
 
             <ClientAreaNotificationMenu
+              activeLiveSessions={activeLiveSessions}
               copy={clientArea.topbar.notifications}
               locale={locale}
             />
@@ -205,7 +204,9 @@ export function ClientAreaAdminFrame({
           </div>
         </header>
 
-        <main className="min-w-0 pt-20">{children}</main>
+        <main className="w-full min-w-0 max-w-full overflow-x-clip pt-20">
+          {children}
+        </main>
       </div>
 
       <div
@@ -227,22 +228,18 @@ export function ClientAreaAdminFrame({
           <div className="flex h-20 items-center justify-between border-b border-white/8 px-5">
             <Link
               href={resolveClientAreaTabHref(locale, "home")}
-              className="flex items-center gap-3"
+              className="flex min-w-0 items-center gap-3"
             >
               <Image
-                src="/assets/Logo SG-WEB111.png"
+                src="/assets/logo-utama-new.png"
                 alt={messages.app.brandName}
-                width={40}
-                height={40}
-                className="h-10 w-10 object-contain"
+                width={150}
+                height={35}
+                className="h-7 w-full shrink-0 object-contain"
+                priority
               />
-              <div>
-                <p className="text-sm font-bold text-white">Client Area</p>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-amber-500">
-                  Dashboard
-                </p>
-              </div>
             </Link>
+
             <button
               type="button"
               onClick={() => setIsMobileSidebarOpen(false)}
@@ -291,6 +288,11 @@ export function ClientAreaAdminFrame({
         locale={locale}
         onClose={() => setIsLogoutModalOpen(false)}
         redirectPath={pathname}
+      />
+
+      <ClientAreaLiveToast
+        activeSessions={activeLiveSessions}
+        copy={clientArea.topbar.notifications.scheduledLive}
       />
     </div>
   );

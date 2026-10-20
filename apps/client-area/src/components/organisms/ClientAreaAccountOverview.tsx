@@ -1,12 +1,13 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { useId, useState } from "react";
 
 import { ClientAreaAccountValueCard } from "@/components/atoms/ClientAreaAccountValueCard";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { ClientAreaAccountMetricRow } from "@/components/molecules/ClientAreaAccountMetricRow";
+import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
 import {
   formatSignedUsd,
   formatUsd,
@@ -42,6 +43,7 @@ const SUMMARY_MESSAGES: Record<
   AppLocale,
   {
     error: string;
+    availableAccounts: string;
     accountMetricsTitle: string;
     collapseAccountMetrics: string;
     expandAccountMetrics: string;
@@ -52,10 +54,12 @@ const SUMMARY_MESSAGES: Record<
     retry: string;
     stale: string;
     unavailable: string;
+    unavailableAccount: string;
     updated: string;
   }
 > = {
   id: {
+    availableAccounts: "Akun tersedia",
     accountMetricsTitle: "Detail Margin Akun",
     collapseAccountMetrics: "Tutup detail margin akun",
     error: "Data akun belum bisa dimuat.",
@@ -68,9 +72,11 @@ const SUMMARY_MESSAGES: Record<
     retry: "Coba lagi",
     stale: "Gagal memperbarui, menampilkan data terakhir",
     unavailable: "Akun untuk mode ini tidak tersedia.",
+    unavailableAccount: "Tidak tersedia",
     updated: "Diperbarui",
   },
   en: {
+    availableAccounts: "Available accounts",
     accountMetricsTitle: "Account Margin Details",
     collapseAccountMetrics: "Close account margin details",
     error: "Account data could not be loaded.",
@@ -83,6 +89,7 @@ const SUMMARY_MESSAGES: Record<
     retry: "Try again",
     stale: "Could not refresh, showing the last data",
     unavailable: "No account is available for this mode.",
+    unavailableAccount: "Unavailable",
     updated: "Updated",
   },
 };
@@ -164,17 +171,37 @@ export function ClientAreaAccountOverview({
   summaryState,
   updatedAt = null,
 }: ClientAreaAccountOverviewProps) {
+  const profile = useClientAreaProfile();
   const accountMetricsId = useId();
   const [areAccountMetricsOpen, setAreAccountMetricsOpen] = useState(false);
   const summary = summaryState.status === "ready" ? summaryState.account : null;
   const isLoading = summaryState.status === "loading";
   const messages = SUMMARY_MESSAGES[locale];
   const floatingPl = summary?.floatingPl ?? null;
-  // No Real account: every figure would be an empty "—", so show only the disclaimer.
+  // Keep the mode selector available, but hide empty figures when no Real account exists.
   const hasNoRealAccount =
     summaryState.status === "unavailable" && accountMode === "real";
   const shouldShowAccountMetrics =
     summaryState.status === "loading" || summaryState.status === "ready";
+  const accountOptions = [
+    {
+      accountId:
+        profile.accountIds.demo ??
+        (accountMode === "demo" ? summary?.accountId : null),
+      label: copy.demoAccount.typeLabel,
+      mode: "demo" as const,
+    },
+    {
+      accountId:
+        profile.accountIds.real ??
+        (accountMode === "real" ? summary?.accountId : null),
+      label: copy.realAccount.typeLabel,
+      mode: "real" as const,
+    },
+  ];
+  const activeAccountId =
+    accountOptions.find((option) => option.mode === accountMode)?.accountId ??
+    null;
 
   return (
     <div className="space-y-3" aria-busy={isLoading}>
@@ -187,65 +214,102 @@ export function ClientAreaAccountOverview({
         className="relative h-fit overflow-hidden rounded-3xl border border-yellow-400/30 bg-cover bg-center bg-no-repeat p-5 text-black shadow-2xl"
         style={{ backgroundImage: "url('/assets/bg-profile.webp')" }}
       >
-        {hasNoRealAccount ? null : (
-          <div className="relative mb-4 flex items-center justify-between gap-4">
-            <div className="flex min-w-0 flex-1 flex-col gap-1">
-              {/* <div className="relative">
+        <div className="relative mb-4 flex items-center justify-between gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <div className="relative">
               <button
                 type="button"
+                aria-expanded={isAccountMenuOpen}
+                aria-haspopup="menu"
                 onClick={onToggleAccountMode}
-                className={`flex items-center gap-1 rounded-full border px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider shadow-md transition-colors ${accountMode === "demo"
-                  ? "border-red-600 bg-red-700/90 text-white hover:bg-red-800"
-                  : "border-yellow-400 bg-yellow-600 text-black hover:bg-yellow-500"
+                className={`flex min-w-44 items-center gap-2 rounded-xl border bg-zinc-950/50 px-2 py-2 text-left text-white shadow-lg transition-colors ${accountMode === "demo"
+                  ? "border-red-500/70 hover:border-red-400"
+                  : "border-yellow-400/70 hover:border-yellow-300"
                   }`}
               >
-                <span>{currentAccount.typeLabel}</span>
-                <FontAwesomeIcon
-                  icon={["fas", "chevron-down"]}
-                  className="text-[9px]"
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-black ${accountMode === "demo"
+                    ? "bg-green-500/50 text-green-100"
+                    : "bg-yellow-400/50 text-yellow-100"
+                    }`}
+                >
+                  {accountMode === "demo" ? "D" : "R"}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-300">
+                    {currentAccount.typeLabel}
+                  </span>
+                  <span className="block truncate text-xs font-semibold text-white">
+                    {activeAccountId ?? messages.unavailableAccount}
+                  </span>
+                </span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 text-zinc-300 transition-transform ${isAccountMenuOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
               {isAccountMenuOpen ? (
-                <div className="absolute left-0 top-8 z-10 w-40 max-w-[calc(100vw-5rem)] overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 text-xs text-white shadow-xl">
-                  <button
-                    type="button"
-                    onClick={() => onSelectAccountMode("demo")}
-                    className="w-full px-4 py-2 text-left font-bold text-red-400 transition hover:bg-zinc-900 hover:text-red-300"
-                  >
-                    {copy.demoAccount.typeLabel}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onSelectAccountMode("real")}
-                    className="w-full px-4 py-2 text-left font-bold text-yellow-400 transition hover:bg-zinc-900 hover:text-yellow-300"
-                  >
-                    {copy.realAccount.typeLabel}
-                  </button>
+                <div
+                  role="menu"
+                  className="absolute left-0 top-[calc(100%+0.5rem)] z-20 w-64 max-w-[calc(100vw-4rem)] rounded-2xl border border-white/10 bg-zinc-950 p-2 text-white shadow-2xl"
+                >
+                  <p className="px-2 pb-2 pt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                    {messages.availableAccounts}
+                  </p>
+                  <div className="space-y-1">
+                    {accountOptions.map((option) => {
+                      const isActive = accountMode === option.mode;
+                      const isAvailable = Boolean(option.accountId);
+
+                      return (
+                        <button
+                          key={option.mode}
+                          type="button"
+                          role="menuitemradio"
+                          aria-checked={isActive}
+                          disabled={!isAvailable}
+                          onClick={() => onSelectAccountMode(option.mode)}
+                          className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${isActive
+                            ? "border-yellow-400/50 bg-yellow-400/10"
+                            : "border-transparent hover:border-white/10 hover:bg-white/5"
+                            } disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-transparent disabled:hover:bg-transparent`}
+                        >
+                          <span
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-black ${option.mode === "demo"
+                              ? "bg-green-500/50 text-green-100"
+                              : "bg-yellow-400/15 text-yellow-100"
+                              }`}
+                          >
+                            {option.mode === "demo" ? "D" : "R"}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-xs font-bold text-white">
+                              {option.label}
+                            </span>
+                            <span className="block truncate text-[11px] text-zinc-400">
+                              {option.accountId ?? messages.unavailableAccount}
+                            </span>
+                          </span>
+                          {isActive ? (
+                            <Check className="h-4 w-4 shrink-0 text-yellow-400" />
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               ) : null}
-            </div> */}
-
-              {isLoading ? (
-                <span
-                  aria-hidden="true"
-                  className="mt-1 block h-4 w-28 animate-pulse rounded-full bg-black/15 motion-reduce:animate-none"
-                />
-              ) : (
-                <span className="break-all pr-2 text-lg font-extrabold tracking-tight text-neutral-900 sm:text-base">
-                  {summary?.accountId ?? EMPTY_VALUE}
-                </span>
-              )}
             </div>
 
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/20 bg-zinc-900 shadow sm:h-13 sm:w-13">
-              <FontAwesomeIcon
-                icon={["fas", "user"]}
-                className="text-yellow-400"
-              />
-            </div>
           </div>
-        )}
+
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-black/20 bg-zinc-900 shadow sm:h-13 sm:w-13">
+            <FontAwesomeIcon
+              icon={["fas", "user"]}
+              className="text-yellow-400"
+            />
+          </div>
+        </div>
 
         <div className="relative grid gap-2 sm:gap-2.5">
           {hasNoRealAccount ? null : (

@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 ### Added
+- Notifikasi live terjadwal ditambahkan ke header Client Area dan toast: Solid Prime setiap Senin–Jumat pukul 13.30 WIB serta Solid News pukul 08.30 dan 19.00 WIB, dengan jendela aktif 60 menit, tautan langsung ke TikTok, dan toast satu kali per sesi pada setiap tab browser.
 - Halaman bilingual Wakil Pialang Berjangka ditambahkan pada menu Tentang di website dan navbar Client Area; daftar perwakilan memakai card ringkas berisi inisial, nomor urut, nama, jabatan, status, nomor izin, dan perusahaan serta mengambil data dari API SG Admin `/api/v1/wakil-pialang-berjangka` dengan pagination dan fallback lokal, disertai pengingat keamanan serta tautan verifikasi ke profil resmi BAPPEBTI.
 - Body halaman produk Prime website kini memiliki grid responsif maksimal dua kolom berisi card katalog yang lebih ringkas untuk menampung banyak produk dari API SG Admin `/api/v1/produk/prime`; tinggi gambar dikunci terhadap frame agar tidak ditimpa aturan global dan fokus crop diarahkan ke objek produk, sementara setiap card membuka halaman detail yang mengambil nama, deskripsi terlokalisasi, gambar, kategori, serta ukuran transaksi langsung dari endpoint `/api/v1/produk/prime/{slug}` dengan fallback katalog dan konten lokal saat API tidak tersedia.
 - Tab Riwayat pada halaman Riwayat & Performa Analisis Trade Pilot kini menampilkan data analisis aktual per mode akun dalam kartu responsif dua kolom, lengkap dengan pencarian, filter status berbentuk chip, aksi Analisis Ulang, empty state, tanggal WIB, dan pagination lima item per halaman.
@@ -34,6 +35,12 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Urutan menu sidebar Client Area desktop dan mobile diubah menjadi Dashboard, Pasar, Transaksi, Berita, Trade Pilot, lalu Akun agar alur navigasi lebih konsisten.
+- Seluruh referensi branding lama yang tersisa pada copy Client Area website dan aplikasi Client Area diganti dengan branding aplikasi Solid/Solid Gold agar label unduhan dan panel prioritas konsisten dengan produk resmi.
+- Ketersediaan Trade Pilot di Client Area kini mengikuti flag `trade_pilot_dev` atau `trade_pilot_prod` dari API konfigurasi Client Area sesuai `APP_ENV`; ketika dimatikan, sidebar menampilkan satu tombol Trade Pilot tanpa dropdown dan seluruh route-nya menampilkan informasi Coming Soon, sedangkan ketika aktif dropdown tiga submenu kembali tersedia.
+- Slot hero slideshow pada Beranda Client Area kini menampilkan chart MiniMicro dari API internal melalui komponen pemilih `ClientAreaAdvancedChart` dan renderer `ClientAreaAdvancedMiniChart` yang terpisah, lengkap dengan desain mandiri, state loading/error, refresh, serta pilihan XUL10, BCO10, HKK50, dan JPK50; kegagalan request atau pemuatan iframe MiniMicro otomatis memakai simbol padanan TradingView sebagai fallback, sementara pemanggilan slideshow lama dipertahankan sebagai komentar agar mudah diaktifkan kembali.
+- Dropdown pemilih akun pada ringkasan Beranda Client Area kini menampilkan mode Demo/Real beserta nomor akun, status ketersediaan, dan penanda akun aktif; akun yang tidak tersedia tetap diinformasikan tetapi tidak dapat dipilih.
+- File lokal `.env.server` ditambahkan dari konfigurasi `.env.prod` dan dilengkapi seluruh key runtime terbaru yang digunakan Website serta Client Area; file tetap diabaikan Git agar seluruh secret dan value deployment tidak ikut ter-commit.
 - Konfigurasi environment development, production, dan template contoh disinkronkan dengan endpoint Wakil Pialang Berjangka SG Admin serta nomor WhatsApp fallback terbaru.
 - CTA penutup pada halaman produk Prime website kini membuka popup download aplikasi Solid berisi pilihan Play Store dan App Store, menggantikan navigasi langsung ke halaman registrasi; CTA registrasi pada hero tetap dipertahankan.
 - Halaman detail produk Prime menempatkan gambar, kategori, kode, ukuran transaksi, dan navigasi kembali langsung di dalam header tanpa container card, sedangkan body spesifikasi tetap memakai card gelap yang terstruktur; seluruh HTML `specs` API dipertahankan dengan baris separator kosong yang dipadatkan.
@@ -106,6 +113,13 @@
 - Docker build dan runtime kini meneruskan `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLIENT_SITE_URL`, dan `NEXT_PUBLIC_WEBSITE_URL` secara konsisten ke masing-masing aplikasi.
 
 ### Fixed
+- Responsivitas shell Client Area diperkuat untuk layar 320–400px dengan penguncian lebar dan overflow horizontal, spacing header yang adaptif, dropdown profil selebar viewport pada mobile, susunan item notifikasi yang tidak terjepit, serta panel Coming Soon yang mengikuti tinggi layar tanpa memengaruhi layout desktop.
+- Dropdown notifikasi Client Area pada layar mobile kini diposisikan dengan margin aman terhadap viewport dan konten item disejajarkan dari atas, sehingga panel, judul, deskripsi, serta waktu notifikasi tidak lagi terpotong di sisi kiri layar.
+- Notifikasi live Client Area kini ditambahkan sebagai item baru dan disimpan sebagai riwayat lintas navigasi maupun refresh; notifikasi lama tidak lagi ditimpa saat jadwal berikutnya aktif, sementara status baca tetap dikelola per item dan tersinkron antartab.
+- Dropdown notifikasi Client Area kini hanya menampilkan sesi live terjadwal yang benar-benar aktif tanpa data TradePilot dummy; aksi tandai satu atau semua notifikasi sebagai dibaca disimpan di browser dan tetap berlaku setelah navigasi atau refresh.
+- Chart HKK50 dan JPK50 pada Beranda Client Area kini langsung memakai preset TradingView ketika data MiniMicro tidak tersedia, sehingga iframe MiniMicro tidak lagi menampilkan chart default XUL10 untuk kedua indeks tersebut.
+- Pemilih mode akun pada ringkasan Beranda Client Area kini tetap tampil ketika akun Real tidak tersedia, sehingga pengguna dapat kembali memilih akun Demo tanpa kehilangan dropdown mode.
+- Label tautan kembali pada sidebar Client Area kini membaca copy locale dari `clientArea.sidebar`, sehingga komponen tidak lagi merujuk variabel `copy` yang tidak didefinisikan.
 - Pagination halaman News website kini memakai 13 berita per halaman untuk membentuk satu card utama dan empat baris grid tiga kolom, menampilkan navigasi nomor halaman compact, serta mengembalikan viewport ke awal daftar setelah halaman berpindah tanpa mengubah pagination Market Academy.
 - Pagination Berita Client Area kini menggunakan susunan compact rata tengah dengan tombol panah dan maksimal lima item nomor/elipsis, sehingga tidak tertutup widget Live Chat tanpa menimbulkan ruang kosong atau alignment yang timpang.
 - Pagination Berita Client Area kini memakai 12 card per halaman agar grid desktop selalu membentuk empat baris penuh, menyediakan navigasi nomor halaman dengan elipsis, dan mengembalikan viewport ke awal daftar setelah halaman berpindah; card unggulan tidak lagi memecah susunan tiga kolom khusus Client Area.
@@ -140,6 +154,9 @@
 - Route halaman publik yang tidak sengaja dibuka melalui domain Client Area kini dialihkan kembali ke domain website publik dengan path locale dan query string tetap dipertahankan.
 - Override `SG_ADMIN_REQUEST_ORIGIN` berbasis localhost dihapus dari environment produksi agar request website dan Client Area mengirim origin deployment masing-masing ke SG Admin.
 - Konfigurasi nginx kini mengenali hostname mini untuk website publik dan Client Area.
+
+### Removed
+- Tombol eksternal Trade Pilot beserta logo khususnya di navbar website dan Client Area dihapus dari tampilan desktop dan mobile tanpa mengubah modul Trade Pilot di dalam area pengguna.
 
 ## [0.1.0] - 2026-09-25
 

@@ -60,7 +60,7 @@ export const enClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Client navigation",
-    backToWebsite: "Back to main website",
+    backToWebsite: "Back to Home",
     tradeCta: "Trade",
     navItems: [
       {
@@ -96,7 +96,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     ],
   },
   topbar: {
-    supportLabel: "Download MIFX App",
+    supportLabel: "Download Solid App",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
     logoutModal: {
@@ -148,7 +148,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     ],
   },
   promoPanel: {
-    eyebrow: "MIFX Priority",
+    eyebrow: "Solid Gold Priority",
     title: "Exclusive benefits and priority access for active clients.",
     description:
       "Use this featured banner area for campaign content, loyalty offers, or post-login education highlights.",
@@ -311,9 +311,11 @@ export const enClientArea: AppMessages["clientArea"] = {
       servicesDescription: "Choose the service you want to view or manage.",
     },
     menuDescriptions: {
-      profile: "View your identity, contact, employment, and financial profile.",
+      profile:
+        "View your identity, contact, employment, and financial profile.",
       referral: "Access your referral code and SG Solid program information.",
-      documentApproval: "Review approval documents associated with your account.",
+      documentApproval:
+        "Review approval documents associated with your account.",
       dailyStatement: "View account activity summaries and daily statements.",
       withdrawal: "Open the fund withdrawal request service.",
       deposit: "Open deposit information and funding services.",
@@ -475,22 +477,66 @@ export const enClientArea: AppMessages["clientArea"] = {
     pdfNotice:
       "This document is a digital copy for the account currently active in the Client Area.",
     documents: [
-      { id: "cdds-01", code: "Form PBK. CDDS. 01", title: "Futures Brokerage Company Profile" },
-      { id: "cdds-02-1", code: "Form PBK. CDDS. 02.1", title: "Statement of Completion of Futures Trading Simulation" },
-      { id: "cdds-02-2", code: "Form PBK. CDDS. 02.2", title: "Statement of Experience in Conducting Futures Trading Transactions" },
-      { id: "cdds-03-1", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
-      { id: "cdds-04", code: "Form PBK. CDDS. 04", title: "Transaction Account Opening Application" },
-      { id: "cdds-03-2", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
-      { id: "cdds-05", code: "Form PBK. CDDS. 05", title: "Risk Disclosure Document" },
-      { id: "cdds-03-3", code: "Form PBK. CDDS. 03", title: "Disclosure Statement" },
+      {
+        id: "cdds-01",
+        code: "Form PBK. CDDS. 01",
+        title: "Futures Brokerage Company Profile",
+      },
+      {
+        id: "cdds-02-1",
+        code: "Form PBK. CDDS. 02.1",
+        title: "Statement of Completion of Futures Trading Simulation",
+      },
+      {
+        id: "cdds-02-2",
+        code: "Form PBK. CDDS. 02.2",
+        title:
+          "Statement of Experience in Conducting Futures Trading Transactions",
+      },
+      {
+        id: "cdds-03-1",
+        code: "Form PBK. CDDS. 03",
+        title: "Disclosure Statement",
+      },
+      {
+        id: "cdds-04",
+        code: "Form PBK. CDDS. 04",
+        title: "Transaction Account Opening Application",
+      },
+      {
+        id: "cdds-03-2",
+        code: "Form PBK. CDDS. 03",
+        title: "Disclosure Statement",
+      },
+      {
+        id: "cdds-05",
+        code: "Form PBK. CDDS. 05",
+        title: "Risk Disclosure Document",
+      },
+      {
+        id: "cdds-03-3",
+        code: "Form PBK. CDDS. 03",
+        title: "Disclosure Statement",
+      },
       { id: "cdds-06", code: "Form PBK. CDDS. 06", title: "Mandate Agreement" },
-      { id: "cdds-07", code: "Form PBK. CDDS. 07", title: "List of Futures Contracts, Derivative Contracts, Other Derivative Contracts, and Trading Rules" },
-      { id: "cdds-08", code: "Form PBK. CDDS. 08", title: "Statement of Responsibility for the Client Transaction Access Code (Personal Access Password)" },
+      {
+        id: "cdds-07",
+        code: "Form PBK. CDDS. 07",
+        title:
+          "List of Futures Contracts, Derivative Contracts, Other Derivative Contracts, and Trading Rules",
+      },
+      {
+        id: "cdds-08",
+        code: "Form PBK. CDDS. 08",
+        title:
+          "Statement of Responsibility for the Client Transaction Access Code (Personal Access Password)",
+      },
     ],
   },
   dailyStatementPage: {
     title: "Daily Statement",
-    description: "A daily summary of your trading account positions and balance movements.",
+    description:
+      "A daily summary of your trading account positions and balance movements.",
     downloadLabel: "Download Daily Statement",
     preparingLabel: "Preparing PDF",
     tabs: {
@@ -522,12 +568,44 @@ export const enClientArea: AppMessages["clientArea"] = {
       closePrice: "Close Price",
     },
     openPositions: [
-      { id: "open-xul10", symbol: "XUL10", side: "BUY", volume: "1.00 lot", openPrice: "$ 2,615.40", marketPrice: "$ 2,619.90", floatingPl: "+$ 450.00" },
-      { id: "open-eu1010", symbol: "EU1010", side: "BUY", volume: "0.50 lot", openPrice: "$ 1.08320", marketPrice: "$ 1.08410", floatingPl: "+$ 45.00" },
+      {
+        id: "open-xul10",
+        symbol: "XUL10",
+        side: "BUY",
+        volume: "1.00 lot",
+        openPrice: "$ 2,615.40",
+        marketPrice: "$ 2,619.90",
+        floatingPl: "+$ 450.00",
+      },
+      {
+        id: "open-eu1010",
+        symbol: "EU1010",
+        side: "BUY",
+        volume: "0.50 lot",
+        openPrice: "$ 1.08320",
+        marketPrice: "$ 1.08410",
+        floatingPl: "+$ 45.00",
+      },
     ],
     settledPositions: [
-      { id: "settled-xul10", symbol: "XUL10", side: "BUY", volume: "2.00 lot", openPrice: "$ 2,594.20", closePrice: "$ 2,613.75", profitLoss: "+$ 3,910.00" },
-      { id: "settled-hkk50", symbol: "HKK50_BBJ", side: "SELL", volume: "1.00 lot", openPrice: "$ 19,844.00", closePrice: "$ 19,812.00", profitLoss: "+$ 320.00" },
+      {
+        id: "settled-xul10",
+        symbol: "XUL10",
+        side: "BUY",
+        volume: "2.00 lot",
+        openPrice: "$ 2,594.20",
+        closePrice: "$ 2,613.75",
+        profitLoss: "+$ 3,910.00",
+      },
+      {
+        id: "settled-hkk50",
+        symbol: "HKK50_BBJ",
+        side: "SELL",
+        volume: "1.00 lot",
+        openPrice: "$ 19,844.00",
+        closePrice: "$ 19,812.00",
+        profitLoss: "+$ 320.00",
+      },
     ],
   },
   referralPage: {

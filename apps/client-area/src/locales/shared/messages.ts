@@ -793,6 +793,16 @@ export type AppMessages = {
   clientArea: {
     pageTitle: string;
     pageDescription: string;
+    homeChart: {
+      badge: string;
+      error: string;
+      fallbackNotice: string;
+      frameTitle: string;
+      liveLabel: string;
+      loading: string;
+      refreshLabel: string;
+      retryLabel: string;
+    };
     viewOnlyDisclaimer: {
       label: string;
       body: string;
@@ -867,6 +877,10 @@ export type AppMessages = {
       newsLabel: string;
     };
     tradePilotPage: {
+      comingSoon: {
+        title: string;
+        description: string;
+      };
       access: {
         deniedTitle: string;
         deniedDescription: string;
@@ -1234,21 +1248,22 @@ export type AppMessages = {
       accountModeLabel: string;
       demoModeLabel: string;
       realModeLabel: string;
-      notificationCount: string;
       notifications: {
         buttonLabel: string;
         title: string;
         unreadLabel: string;
         allReadLabel: string;
+        emptyLabel: string;
         markAllReadLabel: string;
-        unreadItemLabel: string;
-        items: Array<{
-          id: string;
-          title: string;
+        scheduledLive: {
           description: string;
+          dismissLabel: string;
+          historyDescription: string;
+          historyTitle: string;
           timeLabel: string;
-          href: string;
-        }>;
+          title: string;
+          watchLabel: string;
+        };
       };
       breadcrumb: string;
       navItems: Array<{

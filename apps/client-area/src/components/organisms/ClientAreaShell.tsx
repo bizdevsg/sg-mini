@@ -47,7 +47,7 @@ export function ClientAreaShell({
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
 
-      <SectionContainer className="relative">
+      <SectionContainer className="relative min-w-0 max-w-full">
         <section className="space-y-4 sm:space-y-5">
           {showHeaderTicker ? (
             <ClientAreaHeaderTicker

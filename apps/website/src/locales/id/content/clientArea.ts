@@ -58,7 +58,7 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Navigasi client",
-    backToWebsite: "Kembali ke website utama",
+    backToWebsite: "Kembali ke Home",
     tradeCta: "Trade",
     navItems: [
       {
@@ -94,7 +94,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   topbar: {
-    supportLabel: "Download Aplikasi MIFX",
+    supportLabel: "Download Aplikasi Solid",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
     logoutModal: {
@@ -146,7 +146,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   promoPanel: {
-    eyebrow: "MIFX Priority",
+    eyebrow: "Solid Gold Priority",
     title: "Benefit eksklusif dan akses prioritas untuk client aktif.",
     description:
       "Siapkan area promo utama untuk campaign, loyalty, atau edukasi yang ingin ditonjolkan setelah user login.",
@@ -306,8 +306,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     accountCenter: {
       statusLabel: "Status akun",
       servicesTitle: "Layanan akun",
-      servicesDescription:
-        "Pilih layanan yang ingin Anda lihat atau kelola.",
+      servicesDescription: "Pilih layanan yang ingin Anda lihat atau kelola.",
     },
     menuDescriptions: {
       profile: "Lihat identitas, kontak, pekerjaan, dan profil keuangan.",
@@ -474,22 +473,70 @@ export const idClientArea: AppMessages["clientArea"] = {
     pdfNotice:
       "Dokumen ini merupakan salinan digital untuk rekening yang sedang aktif di Client Area.",
     documents: [
-      { id: "cdds-01", code: "Formulir PBK. CDDS. 01", title: "Profil Perusahaan Pialang Berjangka" },
-      { id: "cdds-02-1", code: "Formulir PBK. CDDS. 02.1", title: "Pernyataan Telah Melakukan Simulasi Perdagangan Berjangka" },
-      { id: "cdds-02-2", code: "Formulir PBK. CDDS. 02.2", title: "Pernyataan Telah Berpengalaman Dalam Melaksanakan Transaksi Perdagangan Berjangka" },
-      { id: "cdds-03-1", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-04", code: "Formulir PBK. CDDS. 04", title: "Aplikasi Pembukaan Rekening Transaksi" },
-      { id: "cdds-03-2", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-05", code: "Formulir PBK. CDDS. 05", title: "Dokumen Pemberitahuan Adanya Risiko" },
-      { id: "cdds-03-3", code: "Formulir PBK. CDDS. 03", title: "Pernyataan Pengungkapan (Disclosure Statement)" },
-      { id: "cdds-06", code: "Formulir PBK. CDDS. 06", title: "Perjanjian Pemberian Amanat" },
-      { id: "cdds-07", code: "Formulir PBK. CDDS. 07", title: "Daftar Kontrak Berjangka, Kontrak Derivatif Dan Kontrak Derivatif Lainnya Beserta Peraturan Perdagangan (Trading Rules)" },
-      { id: "cdds-08", code: "Formulir PBK. CDDS. 08", title: "Pernyataan Bertanggung Jawab Atas Kode Akses Transaksi Nasabah (Personal Access Password)" },
+      {
+        id: "cdds-01",
+        code: "Formulir PBK. CDDS. 01",
+        title: "Profil Perusahaan Pialang Berjangka",
+      },
+      {
+        id: "cdds-02-1",
+        code: "Formulir PBK. CDDS. 02.1",
+        title: "Pernyataan Telah Melakukan Simulasi Perdagangan Berjangka",
+      },
+      {
+        id: "cdds-02-2",
+        code: "Formulir PBK. CDDS. 02.2",
+        title:
+          "Pernyataan Telah Berpengalaman Dalam Melaksanakan Transaksi Perdagangan Berjangka",
+      },
+      {
+        id: "cdds-03-1",
+        code: "Formulir PBK. CDDS. 03",
+        title: "Pernyataan Pengungkapan (Disclosure Statement)",
+      },
+      {
+        id: "cdds-04",
+        code: "Formulir PBK. CDDS. 04",
+        title: "Aplikasi Pembukaan Rekening Transaksi",
+      },
+      {
+        id: "cdds-03-2",
+        code: "Formulir PBK. CDDS. 03",
+        title: "Pernyataan Pengungkapan (Disclosure Statement)",
+      },
+      {
+        id: "cdds-05",
+        code: "Formulir PBK. CDDS. 05",
+        title: "Dokumen Pemberitahuan Adanya Risiko",
+      },
+      {
+        id: "cdds-03-3",
+        code: "Formulir PBK. CDDS. 03",
+        title: "Pernyataan Pengungkapan (Disclosure Statement)",
+      },
+      {
+        id: "cdds-06",
+        code: "Formulir PBK. CDDS. 06",
+        title: "Perjanjian Pemberian Amanat",
+      },
+      {
+        id: "cdds-07",
+        code: "Formulir PBK. CDDS. 07",
+        title:
+          "Daftar Kontrak Berjangka, Kontrak Derivatif Dan Kontrak Derivatif Lainnya Beserta Peraturan Perdagangan (Trading Rules)",
+      },
+      {
+        id: "cdds-08",
+        code: "Formulir PBK. CDDS. 08",
+        title:
+          "Pernyataan Bertanggung Jawab Atas Kode Akses Transaksi Nasabah (Personal Access Password)",
+      },
     ],
   },
   dailyStatementPage: {
     title: "Daily Statement",
-    description: "Ringkasan posisi dan mutasi harian rekening perdagangan Anda.",
+    description:
+      "Ringkasan posisi dan mutasi harian rekening perdagangan Anda.",
     downloadLabel: "Unduh Daily Statement",
     preparingLabel: "Menyiapkan PDF",
     tabs: {
@@ -521,12 +568,44 @@ export const idClientArea: AppMessages["clientArea"] = {
       closePrice: "Close Price",
     },
     openPositions: [
-      { id: "open-xul10", symbol: "XUL10", side: "BUY", volume: "1.00 lot", openPrice: "$ 2,615.40", marketPrice: "$ 2,619.90", floatingPl: "+$ 450.00" },
-      { id: "open-eu1010", symbol: "EU1010", side: "BUY", volume: "0.50 lot", openPrice: "$ 1.08320", marketPrice: "$ 1.08410", floatingPl: "+$ 45.00" },
+      {
+        id: "open-xul10",
+        symbol: "XUL10",
+        side: "BUY",
+        volume: "1.00 lot",
+        openPrice: "$ 2,615.40",
+        marketPrice: "$ 2,619.90",
+        floatingPl: "+$ 450.00",
+      },
+      {
+        id: "open-eu1010",
+        symbol: "EU1010",
+        side: "BUY",
+        volume: "0.50 lot",
+        openPrice: "$ 1.08320",
+        marketPrice: "$ 1.08410",
+        floatingPl: "+$ 45.00",
+      },
     ],
     settledPositions: [
-      { id: "settled-xul10", symbol: "XUL10", side: "BUY", volume: "2.00 lot", openPrice: "$ 2,594.20", closePrice: "$ 2,613.75", profitLoss: "+$ 3,910.00" },
-      { id: "settled-hkk50", symbol: "HKK50_BBJ", side: "SELL", volume: "1.00 lot", openPrice: "$ 19,844.00", closePrice: "$ 19,812.00", profitLoss: "+$ 320.00" },
+      {
+        id: "settled-xul10",
+        symbol: "XUL10",
+        side: "BUY",
+        volume: "2.00 lot",
+        openPrice: "$ 2,594.20",
+        closePrice: "$ 2,613.75",
+        profitLoss: "+$ 3,910.00",
+      },
+      {
+        id: "settled-hkk50",
+        symbol: "HKK50_BBJ",
+        side: "SELL",
+        volume: "1.00 lot",
+        openPrice: "$ 19,844.00",
+        closePrice: "$ 19,812.00",
+        profitLoss: "+$ 320.00",
+      },
     ],
   },
   referralPage: {

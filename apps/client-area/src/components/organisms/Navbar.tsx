@@ -6,7 +6,6 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
 
 import { getMessages, type AppLocale } from "@/locales";
 import { LogoMark } from "@/components/atoms/LogoMark";
@@ -45,36 +44,6 @@ function resolveLocalizedHref(locale: AppLocale, href = "/") {
   }
 
   return href;
-}
-
-function isTradePilotHref(href?: string) {
-  return href === "https://tradepilot.id/";
-}
-
-// Swaps the TradePilot text label with its brand mark in the nav.
-function renderMenuLabel(label: string, href?: string) {
-  if (!isTradePilotHref(href)) {
-    return <span>{label}</span>;
-  }
-
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <Image
-          src="/assets/logo-tp.png"
-          alt=""
-          width={16}
-          height={16}
-          className="h-7 w-7 rounded-[4px] object-cover"
-          aria-hidden="true"
-        />
-
-        <p className="block md:hidden">Trade Pilot</p>
-      </div>
-
-      <ExternalLink className="h-4 w-4 text-yellow-400 block md:hidden" aria-hidden="true" />
-    </div>
-  );
 }
 
 export function Navbar({
@@ -272,7 +241,7 @@ export function Navbar({
                       rel={isExternalHref(group.href) ? "noopener noreferrer" : undefined}
                       className="rounded-[22px] border border-[rgba(255,255,255,0.08)] bg-black/20 hover:bg-black/50 px-4 py-4 text-sm font-medium text-yellow-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-300 hover:text-yellow-200"
                     >
-                      {renderMenuLabel(group.label, group.href)}
+                      <span>{group.label}</span>
                     </Link>
                   );
                 }
@@ -422,7 +391,7 @@ export function Navbar({
                         rel={isExternalHref(group.href) ? "noopener noreferrer" : undefined}
                         className="rounded-full px-3 py-2 text-sm font-medium text-yellow-500 transition-colors duration-300 hover:bg-white/10 hover:text-yellow-200"
                       >
-                        {renderMenuLabel(group.label, group.href)}
+                        <span>{group.label}</span>
                       </Link>
                     );
                   }

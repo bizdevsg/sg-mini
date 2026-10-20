@@ -16,6 +16,7 @@ import {
   LocaleSwitcherDialog,
   type LocaleSwitcherOption,
 } from "@/components/organisms/LocaleSwitcherDialog";
+import { UserRound } from "lucide-react";
 
 type HeaderActionsProps = {
   isClientAreaEnabled: boolean;
@@ -133,18 +134,19 @@ export function HeaderActions({
       title={clientAreaTitle}
     >
       {clientAreaSession.authenticated && clientAreaSession.avatarSrc ? (
-        <Image
-          src={clientAreaSession.avatarSrc}
-          alt={clientAreaSession.displayName ?? messages.clientArea.pageTitle}
-          width={40}
-          height={40}
-          sizes="40px"
-          className="h-full w-full rounded-full object-cover"
-        />
+        // <Image
+        //   src={clientAreaSession.avatarSrc}
+        //   alt={clientAreaSession.displayName ?? messages.clientArea.pageTitle}
+        //   width={40}
+        //   height={40}
+        //   sizes="40px"
+        //   className="h-full w-full rounded-full object-cover"
+        // />
+        <UserRound className="h-4 w-4" />
       ) : (
-        <span className="text-[#1b1307] font-bold">SIGN IN</span>
+        <span className="text-[#1b1307] font-bold">Client Area</span>
       )}
-    </Link>
+    </Link >
   ) : null;
 
   const localeSwitcher = (

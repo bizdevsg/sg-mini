@@ -4,6 +4,17 @@ export const enClientArea: AppMessages["clientArea"] = {
   pageTitle: "Client Area",
   pageDescription:
     "A post-login home view with account summary, quick actions, and product signals.",
+  homeChart: {
+    badge: "MiniMicro Advanced Chart",
+    error: "The chart could not be loaded. Please try again.",
+    fallbackNotice:
+      "MiniMicro data is unavailable. Showing the TradingView fallback chart.",
+    frameTitle: "MiniMicro live chart",
+    liveLabel: "Live",
+    loading: "Loading live chart...",
+    refreshLabel: "Refresh",
+    retryLabel: "Try again",
+  },
   viewOnlyDisclaimer: {
     label: "Disclaimer:",
     body: "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
@@ -85,23 +96,18 @@ export const enClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Client navigation",
-    backToWebsite: "Back to main website",
+    backToWebsite: "Back to Home",
     tradeCta: "Trade",
     navItems: [
       {
         id: "home",
-        label: "Home",
+        label: "Dashboard",
         href: "#overview",
       },
       {
         id: "market",
         label: "Market",
         href: "#market",
-      },
-      {
-        id: "trade-pilot",
-        label: "Trade Pilot",
-        href: "/client-area/trade-pilot/analisis",
       },
       {
         id: "transaction",
@@ -119,6 +125,11 @@ export const enClientArea: AppMessages["clientArea"] = {
         href: "/ebook",
       },
       {
+        id: "trade-pilot",
+        label: "Trade Pilot",
+        href: "/client-area/trade-pilot/analisis",
+      },
+      {
         id: "account",
         label: "Account",
         href: "#account",
@@ -130,6 +141,11 @@ export const enClientArea: AppMessages["clientArea"] = {
     newsLabel: "News",
   },
   tradePilotPage: {
+    comingSoon: {
+      title: "Coming Soon",
+      description:
+        "We are preparing new features to provide a more complete experience.",
+    },
     access: {
       deniedTitle: "Trade Pilot is not available yet",
       deniedDescription:
@@ -559,7 +575,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     },
   },
   topbar: {
-    supportLabel: "Download MIFX App",
+    supportLabel: "Download Solid App",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
     logoutModal: {
@@ -575,40 +591,23 @@ export const enClientArea: AppMessages["clientArea"] = {
     accountModeLabel: "Account Mode",
     demoModeLabel: "Demo",
     realModeLabel: "Real",
-    notificationCount: "1",
     notifications: {
-      buttonLabel: "Open TradePilot notifications",
-      title: "TradePilot Notifications",
+      buttonLabel: "Open notifications",
+      title: "Notifications",
       unreadLabel: "{count} unread notifications",
       allReadLabel: "All notifications have been read",
+      emptyLabel: "There is no notification history yet.",
       markAllReadLabel: "Mark all read",
-      unreadItemLabel: "Unread",
-      items: [
-        {
-          id: "analysis-ready",
-          title: "Your latest analysis is ready",
-          description:
-            "View the latest market direction and scenario levels from TradePilot.",
-          timeLabel: "Just now",
-          href: "/client-area/trade-pilot/analisis",
-        },
-        {
-          id: "plan-reminder",
-          title: "Trading Plan awaiting confirmation",
-          description:
-            "Review the entry, Stop Loss, and target levels before using the plan.",
-          timeLabel: "10 minutes ago",
-          href: "/client-area/trade-pilot/analisis",
-        },
-        {
-          id: "performance-update",
-          title: "Performance history updated",
-          description:
-            "The latest TradePilot timeframe performance summary is now available.",
-          timeLabel: "Today",
-          href: "/client-area/trade-pilot/riwayat-performa",
-        },
-      ],
+      scheduledLive: {
+        description: "The TikTok live stream is on now. Watch it live.",
+        dismissLabel: "Dismiss live notification",
+        historyDescription:
+          "The TikTok live stream has ended. Open the channel for the latest content.",
+        historyTitle: "Live on {channel}",
+        timeLabel: "Live now",
+        title: "Live now on {channel}",
+        watchLabel: "Watch Now",
+      },
     },
     breadcrumb: "1003713406",
     navItems: [
@@ -648,7 +647,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     ],
   },
   promoPanel: {
-    eyebrow: "MIFX Priority",
+    eyebrow: "Solid Gold Priority",
     title: "Exclusive benefits and priority access for active clients.",
     description:
       "Use this featured banner area for campaign content, loyalty offers, or post-login education highlights.",

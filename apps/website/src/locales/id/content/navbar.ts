@@ -60,9 +60,5 @@ export const idNavbar: AppMessages["navbar"] = {
         { label: "Hubungi Kami", href: "/contact-us" },
       ],
     },
-    {
-      label: "Trade Pilot ",
-      href: "https://tradepilot.id/",
-    },
   ],
 };

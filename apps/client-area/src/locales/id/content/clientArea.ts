@@ -1,9 +1,20 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const idClientArea: AppMessages["clientArea"] = {
-  pageTitle: "Beranda",
+  pageTitle: "Dashboard",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
+  homeChart: {
+    badge: "MiniMicro Advanced Chart",
+    error: "Chart belum dapat dimuat. Silakan coba kembali.",
+    fallbackNotice:
+      "Data MiniMicro tidak tersedia. Menampilkan chart dari TradingView.",
+    frameTitle: "Chart live MiniMicro",
+    liveLabel: "Live",
+    loading: "Memuat chart live...",
+    refreshLabel: "Perbarui",
+    retryLabel: "Coba lagi",
+  },
   viewOnlyDisclaimer: {
     label: "Disclaimer:",
     body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
@@ -83,12 +94,12 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Navigasi client",
-    backToWebsite: "Kembali ke website utama",
+    backToWebsite: "Kembali ke Home",
     tradeCta: "Trade",
     navItems: [
       {
         id: "home",
-        label: "Beranda",
+        label: "Dashboard",
         href: "#overview",
       },
       {
@@ -128,6 +139,11 @@ export const idClientArea: AppMessages["clientArea"] = {
     newsLabel: "Berita",
   },
   tradePilotPage: {
+    comingSoon: {
+      title: "Coming Soon",
+      description:
+        "Fitur baru sedang kami persiapkan untuk memberikan pengalaman yang lebih lengkap.",
+    },
     access: {
       deniedTitle: "Trade Pilot belum tersedia",
       deniedDescription:
@@ -557,7 +573,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     },
   },
   topbar: {
-    supportLabel: "Download Aplikasi MIFX",
+    supportLabel: "Download Aplikasi Solid",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
     logoutModal: {
@@ -573,40 +589,23 @@ export const idClientArea: AppMessages["clientArea"] = {
     accountModeLabel: "Mode Akun",
     demoModeLabel: "Demo",
     realModeLabel: "Real",
-    notificationCount: "1",
     notifications: {
       buttonLabel: "Buka notifikasi",
       title: "Notifikasi",
       unreadLabel: "{count} notifikasi belum dibaca",
       allReadLabel: "Semua notifikasi sudah dibaca",
-      markAllReadLabel: "Tandai dibaca",
-      unreadItemLabel: "Belum dibaca",
-      items: [
-        {
-          id: "analysis-ready",
-          title: "Analisis terbaru sudah siap",
-          description:
-            "Lihat arah market dan level skenario terbaru dari TradePilot.",
-          timeLabel: "Baru saja",
-          href: "/client-area/trade-pilot/analisis",
-        },
-        {
-          id: "plan-reminder",
-          title: "Trading Plan menunggu konfirmasi",
-          description:
-            "Periksa kembali level entry, Stop Loss, dan target sebelum digunakan.",
-          timeLabel: "10 menit lalu",
-          href: "/client-area/trade-pilot/analisis",
-        },
-        {
-          id: "performance-update",
-          title: "Riwayat performa diperbarui",
-          description:
-            "Ringkasan performa timeframe TradePilot terbaru sudah tersedia.",
-          timeLabel: "Hari ini",
-          href: "/client-area/trade-pilot/riwayat-performa",
-        },
-      ],
+      emptyLabel: "Belum ada riwayat notifikasi.",
+      markAllReadLabel: "Tandai semua dibaca",
+      scheduledLive: {
+        description: "Siaran langsung TikTok sedang berlangsung. Tonton sekarang.",
+        dismissLabel: "Tutup notifikasi live",
+        historyDescription:
+          "Siaran langsung TikTok telah berlangsung. Buka channel untuk melihat konten terbaru.",
+        historyTitle: "Live di {channel}",
+        timeLabel: "Sedang live",
+        title: "Sedang live di {channel}",
+        watchLabel: "Tonton Sekarang",
+      },
     },
     breadcrumb: "1003713406",
     navItems: [
@@ -646,7 +645,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     ],
   },
   promoPanel: {
-    eyebrow: "MIFX Priority",
+    eyebrow: "Solid Gold Priority",
     title: "Benefit eksklusif dan akses prioritas untuk client aktif.",
     description:
       "Siapkan area promo utama untuk campaign, loyalty, atau edukasi yang ingin ditonjolkan setelah user login.",

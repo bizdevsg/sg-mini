@@ -7,7 +7,9 @@ import {
 } from "@/app/[locales]/client-area/client-area-page.shared";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import { ClientAreaTradePilotAccessDenied } from "@/components/organisms/ClientAreaTradePilotAccessDenied";
+import { ClientAreaTradePilotComingSoon } from "@/components/organisms/ClientAreaTradePilotComingSoon";
 import { requireClientAreaSession } from "@/lib/client-area-auth";
+import { isTradePilotEnabled } from "@/lib/client-area-config";
 import {
   CLIENT_AREA_ACCOUNT_MODE_COOKIE,
   resolveClientAreaAccountMode,
@@ -27,6 +29,27 @@ export default async function ClientAreaTradePilotLayout({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
+
+  if (!(await isTradePilotEnabled())) {
+    const comingSoonCopy =
+      getMessages(locales).clientArea.tradePilotPage.comingSoon;
+
+    return (
+      <ClientAreaShell
+        activeTab="trade-pilot"
+        locale={locales}
+        showHeaderTicker={false}
+      >
+        <div className="trade-pilot-theme">
+          <ClientAreaTradePilotComingSoon
+            description={comingSoonCopy.description}
+            title={comingSoonCopy.title}
+          />
+        </div>
+      </ClientAreaShell>
+    );
+  }
+
   const access = await getTradePilotAccessContext();
   const accessCopy = getMessages(locales).clientArea.tradePilotPage.access;
   const requestedMode = resolveClientAreaAccountMode(

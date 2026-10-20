@@ -63,9 +63,5 @@ export const enNavbar: AppMessages["navbar"] = {
         { label: "Contact Us", href: "/contact-us" },
       ],
     },
-    {
-      label: "Trade Pilot ",
-      href: "https://tradepilot.id/",
-    },
   ],
 };

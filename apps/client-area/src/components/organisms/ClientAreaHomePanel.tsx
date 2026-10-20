@@ -3,9 +3,9 @@
 import type { LucideIcon } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
-import { ClientAreaHeroSlideshow } from "@/components/molecules/ClientAreaHeroSlideshow";
 import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQuickActionsGrid";
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
+import { ClientAreaAdvancedChart } from "@/components/organisms/ClientAreaAdvancedChart";
 import { BenefitSection } from "@/components/organisms/BenefitSection";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
 import { ClientAreaMarketInsightSection } from "@/components/organisms/ClientAreaMarketInsightSection";
@@ -52,17 +52,13 @@ export function ClientAreaHomePanel({
   clientArea,
   copy,
   currentAccount,
-  currentSlide,
-  detailLabel,
   economicCalendarEvents,
-  heroSlides,
   isAccountMenuOpen,
   locale,
   marketSignals,
   onActionClick,
   onSelectAccountMode,
   quickActionIconMap,
-  setCurrentSlide,
   setIsAccountMenuOpen,
 }: ClientAreaHomePanelProps) {
   // One fetch feeds both card instances (mobile and desktop layouts).
@@ -94,12 +90,16 @@ export function ClientAreaHomePanel({
           />
         </div>
 
+        {/*
         <ClientAreaHeroSlideshow
           slides={heroSlides}
           currentSlide={currentSlide}
           detailLabel={detailLabel}
           setCurrentSlide={setCurrentSlide}
         />
+        */}
+
+        <ClientAreaAdvancedChart copy={clientArea.homeChart} locale={locale} />
 
         <ClientAreaQuickActionsGrid
           clientArea={clientArea}

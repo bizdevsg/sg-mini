@@ -15,6 +15,16 @@ export type ChartSession = Pick<
 
 const LIVE_CHART_URL = "https://minichart.sgberjangka.com/";
 const DEMO_CHART_URL = "https://demominichart.sgberjangka.com/";
+const MINI_CHART_SYMBOL_ALIASES: Record<string, string> = {
+  HKK50_BBJ: "HKK",
+  JPK50_BBJ: "JPK",
+};
+
+export function resolveMiniChartSymbol(symbol: string): string {
+  const normalizedSymbol = symbol.trim().toUpperCase();
+
+  return MINI_CHART_SYMBOL_ALIASES[normalizedSymbol] ?? normalizedSymbol;
+}
 
 export function buildChartUrl({
   account,
@@ -30,7 +40,7 @@ export function buildChartUrl({
   // Keep this insertion order aligned with the MiniMicro WebView contract.
   url.searchParams.set("account", account);
   url.searchParams.set("version_app", versionApp);
-  url.searchParams.set("symbol", symbol);
+  url.searchParams.set("symbol", resolveMiniChartSymbol(symbol));
   url.searchParams.set("type_device", typeDevice);
   url.searchParams.set("type", type);
   url.searchParams.set("token", token);

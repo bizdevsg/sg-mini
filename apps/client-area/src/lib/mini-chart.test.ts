@@ -2,13 +2,34 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { describe, it } from "node:test";
 
-import { buildChartUrl, buildChartUrlResponse } from "./mini-chart";
+import {
+  buildChartUrl,
+  buildChartUrlResponse,
+  resolveMiniChartSymbol,
+} from "./mini-chart";
 
 function makeToken() {
   return [randomUUID(), randomUUID(), randomUUID()].join(".");
 }
 
 describe("buildChartUrl", () => {
+  it("maps BBJ index quote symbols to MiniMicro chart symbols", () => {
+    assert.equal(resolveMiniChartSymbol("HKK50_BBJ"), "HKK");
+    assert.equal(resolveMiniChartSymbol("JPK50_BBJ"), "JPK");
+    assert.equal(resolveMiniChartSymbol("XUL10"), "XUL10");
+
+    const url = new URL(
+      buildChartUrl({
+        account: "A1",
+        isDemo: false,
+        symbol: "HKK50_BBJ",
+        token: makeToken(),
+      }),
+    );
+
+    assert.equal(url.searchParams.get("symbol"), "HKK");
+  });
+
   it("selects the live and demo domains", () => {
     const token = makeToken();
     assert.equal(

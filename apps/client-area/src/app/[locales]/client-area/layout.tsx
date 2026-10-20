@@ -14,7 +14,7 @@ import {
   resolveClientAreaAccountMode,
 } from "@/lib/client-area-account-mode";
 import { getClientAreaSessionState } from "@/lib/client-area-auth";
-import { isClientAreaEnabled } from "@/lib/client-area-config";
+import { getWebsiteFeatureConfig } from "@/lib/client-area-config";
 import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaLayoutProps = {
@@ -28,7 +28,9 @@ export default async function ClientAreaLayout({
   children,
   params,
 }: ClientAreaLayoutProps) {
-  if (!(await isClientAreaEnabled())) {
+  const featureConfig = await getWebsiteFeatureConfig();
+
+  if (!featureConfig.clientAreaEnabled) {
     notFound();
   }
 
@@ -76,7 +78,10 @@ export default async function ClientAreaLayout({
   return (
     <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
       <ClientAreaProfileProvider profile={session.profile}>
-        <PageTemplate locale={locale}>
+        <PageTemplate
+          locale={locale}
+          tradePilotEnabled={featureConfig.tradePilotEnabled}
+        >
           <ClientAreaSessionTimeout locale={locale} />
           <ClientAreaTokenRefresh />
           <ClientAreaSessionEndedNotice locale={locale} />

@@ -14,6 +14,7 @@ import { getLiveQuoteDisplay } from "@/lib/live-quotes";
 import type { AppLocale } from "@/locales";
 import Link from "next/link";
 import Image from "next/image";
+import { id } from "zod/locales";
 
 type ClientAreaMarketChartViewProps = {
   breakingNews?: BreakingNewsItem[];
@@ -80,6 +81,20 @@ export function ClientAreaMarketChartView({
             className="py-10"
           />
         )}
+      </div>
+
+      <div className="bg-red-500/10 border border-red-500/30 mt-7 p-5 rounded-3xl">
+        <div className="space-y-1">
+          <Image src={"/assets/TradingView.png"} alt="Logo TradingView" height={100} width={200} />
+          <div>
+            {
+              locale === "id" ?
+                "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda."
+                :
+                "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as EURUSD chart, XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more – simply everything a prepared trader may need."
+            }
+          </div>
+        </div>
       </div>
     </ClientAreaShell>
   );

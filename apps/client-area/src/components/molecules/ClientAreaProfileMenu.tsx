@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, LogOut, WalletCards } from "lucide-react";
+import { Check, ChevronDown, LogOut, UserRound, WalletCards } from "lucide-react";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import type { AccountMode } from "@/components/organisms/client-area.types";
@@ -58,21 +58,26 @@ export function ClientAreaProfileMenu({
   }
 
   return (
-    <div ref={menuRef} className="relative">
+    <div ref={menuRef} className="relative min-w-0">
       <button
         type="button"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         onClick={() => setIsOpen((current) => !current)}
-        className="flex items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] p-1.5 pr-2 transition hover:border-amber-500/30 hover:bg-white/[0.06]"
+        className="flex min-w-0 items-center gap-1 rounded-xl border border-white/8 bg-white/[0.03] p-1 pr-1.5 transition hover:border-amber-500/30 hover:bg-white/[0.06] min-[380px]:gap-2 min-[380px]:p-1.5 min-[380px]:pr-2"
       >
-        <Image
+        {/* <Image
           src={profile.avatarSrc}
           alt={profile.displayName}
           width={34}
           height={34}
           className="h-8 w-8 rounded-lg object-cover"
-        />
+        /> */}
+
+        <div className="h-8 w-8 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+          <UserRound className="h-4 w-4 text-yellow-500" />
+        </div>
+
         <div className="hidden min-w-0 text-left md:block">
           <p className="max-w-32 truncate text-xs font-semibold text-white">
             {profile.displayName}
@@ -82,14 +87,14 @@ export function ClientAreaProfileMenu({
           ) : null}
         </div>
         <ChevronDown
-          className={`h-3.5 w-3.5 text-zinc-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`hidden h-3.5 w-3.5 shrink-0 text-zinc-500 transition-transform min-[360px]:block ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {isOpen ? (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+0.65rem)] z-50 w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#111214] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.55)]"
+          className="fixed inset-x-4 top-[5.75rem] z-50 w-auto overflow-hidden rounded-2xl border border-white/10 bg-[#111214] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.55)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+0.65rem)] sm:w-56"
         >
           <div className="flex items-center gap-2 px-2 py-2 text-xs font-semibold text-zinc-400">
             <WalletCards className="h-4 w-4 text-amber-400" />

@@ -95,9 +95,9 @@ const EMPTY_ACCOUNT_SNAPSHOT: AccountSnapshot = {
 export const TABS: TabId[] = [
   "home",
   "market",
-  "trade-pilot",
   "transaction",
   "news",
+  "trade-pilot",
   "account",
 ];
 export const ACTION_IDS: ActionId[] = [
@@ -1625,7 +1625,7 @@ const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
   UI1010_BBJ: "Forex",
 };
 
-const CLIENT_AREA_HOME_MARKET_SYMBOLS = [
+export const CLIENT_AREA_HOME_MARKET_SYMBOLS = [
   "XUL10",
   "BCO10_BBJ",
   "HKK50_BBJ",

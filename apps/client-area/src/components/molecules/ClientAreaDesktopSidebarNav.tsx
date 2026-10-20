@@ -22,6 +22,7 @@ type ClientAreaDesktopSidebarNavProps = {
   clientArea: AppMessages["clientArea"];
   locale: AppLocale;
   sidebarIconMap: Record<TabId, LucideIcon>;
+  tradePilotEnabled: boolean;
 };
 
 type ClientAreaSidebarLogoutButtonProps = {
@@ -34,6 +35,7 @@ export function ClientAreaDesktopSidebarNav({
   clientArea,
   locale,
   sidebarIconMap,
+  tradePilotEnabled,
 }: ClientAreaDesktopSidebarNavProps) {
   const pathname = usePathname();
   const tradePilotSubmenuId = useId();
@@ -71,6 +73,18 @@ export function ClientAreaDesktopSidebarNav({
         const tabLabel =
           clientArea.sidebar.navItems.find((item) => item.id === tab)?.label ??
           tab;
+
+        if (tab === "trade-pilot" && !tradePilotEnabled) {
+          return (
+            <ClientAreaSidebarButton
+              key={tab}
+              href={resolveClientAreaTabHref(locale, tab)}
+              icon={sidebarIconMap[tab]}
+              label={tabLabel}
+              isActive={activeTab === tab}
+            />
+          );
+        }
 
         if (tab === "trade-pilot") {
           const Icon = sidebarIconMap[tab];
