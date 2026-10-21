@@ -123,21 +123,21 @@ export function HeroSection({ locale }: HeroSectionProps) {
               <div className="flex flex-col mx-auto xl:mx-0 sm:flex-row items-center gap-2 mt-2 sm:w-fit">
                 <AppDownloadModalTriggerButton
                   locale={locale}
-                  label="Open Demo Account"
+                  label="Open Account"
                   variant="primary"
                   size="md"
                   visualVariant="qr"
-                  className="w-full sm:w-fit rounded-xl px-5 cursor-pointer"
+                  className="w-full sm:w-fit min-w-75 rounded-xl px-5 cursor-pointer"
                 />
 
-                <AppDownloadModalTriggerButton
+                {/* <AppDownloadModalTriggerButton
                   locale={locale}
                   label={messages.hero.demoLoginCta}
                   variant="ghost"
                   size="md"
                   visualVariant="qr"
                   className="w-full sm:w-fit rounded-xl px-5 cursor-pointer"
-                />
+                /> */}
               </div>
 
               <p className="text-white/50 text-xs mt-3">

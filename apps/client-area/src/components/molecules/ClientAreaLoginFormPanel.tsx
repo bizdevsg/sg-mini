@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { ArrowLeft, Eye, EyeClosed } from "lucide-react";
 
 import { PUBLIC_WEBSITE_URL } from "@/lib/env";
@@ -10,7 +9,6 @@ type ClientAreaLoginFormPanelProps = {
   captcha?: ReactNode;
   locale: AppLocale;
   login: AppMessages["clientArea"]["login"];
-  supportHref: string;
   pending: boolean;
   showPassword: boolean;
   formAction: (formData: FormData) => void | Promise<void>;
@@ -25,7 +23,6 @@ export function ClientAreaLoginFormPanel({
   captcha,
   locale,
   login,
-  supportHref,
   pending,
   showPassword,
   formAction,
@@ -89,29 +86,12 @@ export function ClientAreaLoginFormPanel({
               tabIndex={-1}
             >
               {showPassword ? <EyeClosed /> : <Eye />}
-              {/* <FontAwesomeIcon icon={["fas", showPassword ? "eye-slash" : "eye"]} /> */}
             </button>
           </div>
 
-          <div className="mb-3 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex cursor-pointer select-none items-center gap-2 text-[0.82rem] text-gray-400">
-              <input
-                name="rememberMe"
-                type="checkbox"
-                disabled={pending}
-                className="size-[0.9rem] cursor-pointer accent-amber-500"
-              />
-              <span>{login.rememberMe}</span>
-            </label>
-            <Link
-              href={supportHref}
-              className="text-[0.82rem] text-gray-400 transition-colors hover:text-amber-500"
-            >
-              {login.forgotPassword}
-            </Link>
+          <div className="mx-auto">
+            {captcha}
           </div>
-
-          {captcha}
 
           <button
             type="submit"

@@ -35,6 +35,8 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- CTA utama hero Website kini berlabel `Open Account`, memiliki lebar minimum yang lebih konsisten, dan CTA demo login sekunder disembunyikan.
+- Form login Client Area kini menyembunyikan opsi Ingat Saya dan tautan Lupa Password yang belum aktif, serta memusatkan posisi reCAPTCHA.
 - Judul hero Website kini menempatkan teks putih pada baris tersendiri di bawah teks kuning agar hierarki headline lebih jelas dan konsisten di berbagai ukuran layar.
 - Urutan menu sidebar Client Area desktop dan mobile diubah menjadi Dashboard, Pasar, Transaksi, Berita, Trade Pilot, lalu Akun agar alur navigasi lebih konsisten.
 - Seluruh referensi branding lama yang tersisa pada copy Client Area website dan aplikasi Client Area diganti dengan branding aplikasi Solid/Solid Gold agar label unduhan dan panel prioritas konsisten dengan produk resmi.

@@ -13,7 +13,6 @@ import { ClientAreaLoginFormPanel } from "@/components/molecules/ClientAreaLogin
 import { ClientAreaLoginVisualPanel } from "@/components/molecules/ClientAreaLoginVisualPanel";
 import { ClientAreaOtpFormPanel } from "@/components/molecules/ClientAreaOtpFormPanel";
 import { ClientAreaRecaptchaV2 } from "@/components/molecules/ClientAreaRecaptchaV2";
-import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import {
   getMessages,
   type AppLocale,
@@ -44,7 +43,6 @@ export function ClientAreaLoginPage({
   const otpMessages = clientArea.otp;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
   const downloadModalCopy = getAppDownloadModalCopy(locale);
-  const supportHref = resolveLocalizedHref(locale, "/contact-us");
   // Bumped after every attempt: a reCAPTCHA token works only once, so the widget
   // is remounted to give the next attempt a fresh checkbox.
   const [captchaResetKey, setCaptchaResetKey] = useState(0);
@@ -146,7 +144,6 @@ export function ClientAreaLoginPage({
               }
               locale={locale}
               login={login}
-              supportHref={supportHref}
               pending={pending}
               showPassword={showPassword}
               formAction={formAction}
