@@ -16,6 +16,8 @@ type ClientAreaRecommendationCardProps = {
   displayCode?: string;
   icon: IconProp;
   iconClass: string;
+  isSelected?: boolean;
+  onClick?: () => void;
 };
 
 export function ClientAreaRecommendationCard({
@@ -25,13 +27,15 @@ export function ClientAreaRecommendationCard({
   displayCode,
   icon,
   iconClass,
+  isSelected = false,
+  onClick,
 }: ClientAreaRecommendationCardProps) {
   const signal = resolveSignalBadge(item.change);
   const SignalIcon = signal.icon;
   const symbolCode = item.code ?? item.name;
 
-  return (
-    <div className="group relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/80 p-4 transition-all hover:border-yellow-500/30">
+  const content = (
+    <>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           {symbolCode ? (
@@ -76,6 +80,24 @@ export function ClientAreaRecommendationCard({
           <span className="text-[9px] text-zinc-500">Live Tick</span>
         </div>
       </div>
-    </div>
+    </>
+  );
+
+  const className = `group relative w-full overflow-hidden rounded-2xl border bg-zinc-900/80 p-4 text-left transition-all ${isSelected
+    ? "border-yellow-400/70 shadow-[0_0_0_1px_rgba(250,204,21,0.18)]"
+    : "border-zinc-800/80 hover:border-yellow-500/30"
+    }`;
+
+  return onClick ? (
+    <button
+      type="button"
+      aria-pressed={isSelected}
+      className={`${className} cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black`}
+      onClick={onClick}
+    >
+      {content}
+    </button>
+  ) : (
+    <div className={className}>{content}</div>
   );
 }

@@ -411,7 +411,7 @@ export function ClientAreaAccountOverview({
                 ? messages.collapseAccountMetrics
                 : messages.expandAccountMetrics
             }
-            className="relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl px-1 py-1 text-left text-sm font-extrabold text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700"
+            className="relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl px-1 py-1 text-left text-sm font-extrabold text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 lg:hidden"
             onClick={() => setAreAccountMetricsOpen((open) => !open)}
             type="button"
           >
@@ -423,27 +423,29 @@ export function ClientAreaAccountOverview({
             />
           </button>
 
-          {areAccountMetricsOpen ? (
-            <div
-              className="relative mt-3 space-y-3 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900"
-              id={accountMetricsId}
-            >
-              {ACCOUNT_METRICS.map((metric, index) => (
-                <ClientAreaAccountMetricRow
-                  key={metric.label}
-                  label={metric.label}
-                  value={
-                    isLoading ? (
-                      <AccountValueSkeleton className="h-5 w-24 sm:w-28" />
-                    ) : (
-                      resolveMetricValue(summary, metric.key)
-                    )
-                  }
-                  withDivider={index !== ACCOUNT_METRICS.length - 1}
-                />
-              ))}
-            </div>
-          ) : null}
+          <p className="relative hidden px-1 py-1 text-sm font-extrabold text-neutral-900 lg:block">
+            {messages.accountMetricsTitle}
+          </p>
+
+          <div
+            className={`relative mt-3 space-y-3 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "block" : "hidden"} lg:block`}
+            id={accountMetricsId}
+          >
+            {ACCOUNT_METRICS.map((metric, index) => (
+              <ClientAreaAccountMetricRow
+                key={metric.label}
+                label={metric.label}
+                value={
+                  isLoading ? (
+                    <AccountValueSkeleton className="h-5 w-24 sm:w-28" />
+                  ) : (
+                    resolveMetricValue(summary, metric.key)
+                  )
+                }
+                withDivider={index !== ACCOUNT_METRICS.length - 1}
+              />
+            ))}
+          </div>
         </div>
       ) : null}
     </div>

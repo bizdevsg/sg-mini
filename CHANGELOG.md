@@ -38,6 +38,10 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Quick Actions pada Beranda Client Area kini tampil sebagai daftar vertikal ringkas dengan ikon, label, dan indikator navigasi, menggantikan grid card.
+- Card pemilih instrumen Market Watch pada Beranda Client Area kini dapat digeser horizontal di mobile dengan snap per card tanpa scrollbar visual, sementara tablet dan desktop tetap menggunakan grid.
+- Market Watchlist pada Beranda Client Area kini menyatu dengan chart: setiap card live quote berfungsi sebagai tombol pemilih instrumen chart aktif, sehingga pemilih instrumen duplikat di atas chart dihapus.
+- Detail Margin Akun pada Beranda Client Area kini selalu tampil penuh di desktop tanpa kontrol tutup, sedangkan pada mobile tetap dapat dibuka dan ditutup sebagai accordion.
 - Footer sidebar mobile Client Area kini memakai konten yang sama dengan sidebar desktop, termasuk tautan kembali ke Website; logout tetap tersedia melalui menu profil pada header.
 - CTA utama hero Website kini berlabel `Open Account`, memiliki lebar minimum yang lebih konsisten, dan CTA demo login sekunder disembunyikan.
 - Form login Client Area kini menyembunyikan opsi Ingat Saya dan tautan Lupa Password yang belum aktif, serta memusatkan posisi reCAPTCHA.

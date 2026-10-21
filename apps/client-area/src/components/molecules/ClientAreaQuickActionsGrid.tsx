@@ -22,7 +22,7 @@ export function ClientAreaQuickActionsGrid({
   quickActionIconMap,
 }: ClientAreaQuickActionsGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-3 min-[420px]:grid-cols-3 md:grid-cols-5 md:gap-4">
+    <div className="space-y-2.5">
       {ACTION_IDS.map((actionId, index) => {
         const action = clientArea.quickActions.items[index];
         const href =

@@ -8,7 +8,6 @@ import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAcco
 import { ClientAreaAdvancedChart } from "@/components/organisms/ClientAreaAdvancedChart";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
 import { ClientAreaMarketInsightSection } from "@/components/organisms/ClientAreaMarketInsightSection";
-import { ClientAreaMarketWatchSection } from "@/components/organisms/ClientAreaMarketWatchSection";
 import type {
   AccountMode,
   AccountSnapshot,
@@ -94,7 +93,11 @@ export function ClientAreaHomePanel({
         />
         */}
 
-        <ClientAreaAdvancedChart copy={clientArea.homeChart} locale={locale} />
+        <ClientAreaAdvancedChart
+          copy={clientArea.homeChart}
+          locale={locale}
+          marketWatchCopy={copy}
+        />
 
         <ClientAreaQuickActionsGrid
           clientArea={clientArea}
@@ -102,8 +105,6 @@ export function ClientAreaHomePanel({
           onActionClick={onActionClick}
           quickActionIconMap={quickActionIconMap}
         />
-
-        <ClientAreaMarketWatchSection copy={copy} locale={locale} />
 
         <ClientAreaEconomicCalendarSection
           copy={copy}

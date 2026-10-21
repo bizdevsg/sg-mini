@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import { ChevronRight, type LucideIcon } from "lucide-react";
 
 type ClientAreaQuickActionButtonProps = {
   href?: string;
@@ -16,15 +16,19 @@ export function ClientAreaQuickActionButton({
 }: ClientAreaQuickActionButtonProps) {
   const Icon = icon;
   const className =
-    "group flex min-h-24 flex-col items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/50 p-3 text-center transition-all duration-300 backdrop-blur-sm hover:border-yellow-500/40 hover:bg-zinc-800/60 sm:min-h-32";
+    "group flex min-h-16 w-full items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-left transition-all duration-300 backdrop-blur-sm hover:border-yellow-500/40 hover:bg-zinc-800/60";
   const content = (
     <>
-      <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10 text-yellow-500 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-yellow-500 transition-transform group-hover:scale-110">
         <Icon className="h-5 w-5" strokeWidth={2.2} />
       </div>
-      <span className="line-clamp-2 text-[11px] font-semibold leading-snug text-zinc-300 sm:text-xs">
+      <span className="min-w-0 flex-1 text-sm font-semibold text-zinc-200">
         {label}
       </span>
+      <ChevronRight
+        aria-hidden="true"
+        className="h-4 w-4 shrink-0 text-zinc-600 transition-transform group-hover:translate-x-0.5 group-hover:text-yellow-500"
+      />
     </>
   );
 

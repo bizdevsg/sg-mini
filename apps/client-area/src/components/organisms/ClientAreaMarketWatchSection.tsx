@@ -16,6 +16,8 @@ import type { AppLocale } from "@/locales";
 type ClientAreaMarketWatchSectionProps = {
   copy: DashboardCopy;
   locale: AppLocale;
+  onSelectSymbol?: (symbol: string) => void;
+  selectedSymbol?: string;
 };
 
 function resolveMarketBadge(symbol?: string) {
@@ -74,6 +76,8 @@ function resolveHomeMarketDisplayCode(symbol?: string) {
 export function ClientAreaMarketWatchSection({
   copy,
   locale,
+  onSelectSymbol,
+  selectedSymbol,
 }: ClientAreaMarketWatchSectionProps) {
   const { quotes } = useLiveQuoteStream();
   const watchlistItems = getClientAreaFeaturedMarketPrices(quotes).map((item) => ({
@@ -89,17 +93,27 @@ export function ClientAreaMarketWatchSection({
         actionLabel={copy.viewMoreLabel}
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 pr-1 touch-pan-x overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 sm:pr-0 2xl:grid-cols-4">
         {watchlistItems.map(({ badge, item }) => (
-          <ClientAreaRecommendationCard
+          <div
             key={item.code ?? item.name}
-            item={item}
-            badge={badge.label}
-            badgeClass={badge.badgeClass}
-            displayCode={resolveHomeMarketDisplayCode(item.code)}
-            icon={resolveMarketIcon(badge.label)}
-            iconClass={resolveMarketIconClassName(badge.label)}
-          />
+            className="w-[min(82vw,19rem)] shrink-0 snap-start sm:w-auto sm:shrink"
+          >
+            <ClientAreaRecommendationCard
+              item={item}
+              badge={badge.label}
+              badgeClass={badge.badgeClass}
+              displayCode={resolveHomeMarketDisplayCode(item.code)}
+              icon={resolveMarketIcon(badge.label)}
+              iconClass={resolveMarketIconClassName(badge.label)}
+              isSelected={item.code === selectedSymbol}
+              onClick={
+                item.code && onSelectSymbol
+                  ? () => onSelectSymbol(item.code as string)
+                  : undefined
+              }
+            />
+          </div>
         ))}
       </div>
     </div>
