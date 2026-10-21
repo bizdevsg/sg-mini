@@ -114,6 +114,7 @@
 - Docker build dan runtime kini meneruskan `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLIENT_SITE_URL`, dan `NEXT_PUBLIC_WEBSITE_URL` secara konsisten ke masing-masing aplikasi.
 
 ### Fixed
+- Input login Client Area kini mempertahankan latar gelap serta warna teks dan caret putih ketika email atau password diisi otomatis oleh browser.
 - Responsivitas shell Client Area diperkuat untuk layar 320–400px dengan penguncian lebar dan overflow horizontal, spacing header yang adaptif, dropdown profil selebar viewport pada mobile, susunan item notifikasi yang tidak terjepit, serta panel Coming Soon yang mengikuti tinggi layar tanpa memengaruhi layout desktop.
 - Dropdown notifikasi Client Area pada layar mobile kini diposisikan dengan margin aman terhadap viewport dan konten item disejajarkan dari atas, sehingga panel, judul, deskripsi, serta waktu notifikasi tidak lagi terpotong di sisi kiri layar.
 - Notifikasi live Client Area kini ditambahkan sebagai item baru dan disimpan sebagai riwayat lintas navigasi maupun refresh; notifikasi lama tidak lagi ditimpa saat jadwal berikutnya aktif, sementara status baca tetap dikelola per item dan tersinkron antartab.

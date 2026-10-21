@@ -19,7 +19,7 @@ type ClientAreaLoginFormPanelProps = {
 };
 
 const inputClassName =
-  "h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
+  "client-area-login-input h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ClientAreaLoginFormPanel({
   captcha,
@@ -62,6 +62,7 @@ export function ClientAreaLoginFormPanel({
               id="client-area-email"
               name="email"
               type="email"
+              autoComplete="email"
               required
               disabled={pending}
               placeholder={login.accountPlaceholder}
@@ -74,6 +75,7 @@ export function ClientAreaLoginFormPanel({
               id="client-area-password"
               name="password"
               type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
               required
               disabled={pending}
               placeholder={login.passwordPlaceholder}

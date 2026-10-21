@@ -71,6 +71,17 @@ body {
   background-size: cover; */
 }
 
+.client-area-login-input:-webkit-autofill,
+.client-area-login-input:-webkit-autofill:hover,
+.client-area-login-input:-webkit-autofill:focus,
+.client-area-login-input:-webkit-autofill:active,
+.client-area-login-input:autofill {
+  -webkit-text-fill-color: #ffffff;
+  caret-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px #111113 inset;
+  box-shadow: 0 0 0 1000px #111113 inset;
+}
+
 /* TradePilot visual system: scoped so the wider Client Area keeps its own theme. */
 section[data-active-tab="trade-pilot"] {
   background-color: #000000;
