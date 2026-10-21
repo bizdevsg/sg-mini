@@ -3,14 +3,10 @@ import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import type { LocoLondonGoldMarketCard } from "@/locales/loco-london-gold-page";
 
 type LocoLondonGoldMarketsSectionProps = {
-  title: string;
-  subtitle: string;
   items: LocoLondonGoldMarketCard[];
 };
 
 export function LocoLondonGoldMarketsSection({
-  title,
-  subtitle,
   items,
 }: LocoLondonGoldMarketsSectionProps) {
   return (

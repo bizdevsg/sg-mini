@@ -1,9 +1,6 @@
 import Image from "next/image";
 
-import {
-  formatMarketSignalUpdateTime,
-  resolveMarketSignalCategoryIconSrc,
-} from "@/components/organisms/client-area.shared";
+import { resolveMarketSignalCategoryIconSrc } from "@/components/organisms/client-area.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
 import type { AppLocale } from "@/locales";
 

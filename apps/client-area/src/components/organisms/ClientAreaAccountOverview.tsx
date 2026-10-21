@@ -26,15 +26,11 @@ type ClientAreaAccountOverviewProps = {
   copy: DashboardCopy;
   currentAccount: AccountSnapshot;
   isAccountMenuOpen: boolean;
-  /** True when the latest refresh failed and the figures shown are the last good ones. */
-  isStale?: boolean;
   locale: AppLocale;
   onRetry: () => void;
   onSelectAccountMode: (mode: AccountMode) => void;
   onToggleAccountMode: () => void;
   summaryState: AccountSummaryState;
-  /** When the figures were last fetched successfully (epoch ms). */
-  updatedAt?: number | null;
 };
 
 const EMPTY_VALUE = "—";
@@ -163,13 +159,11 @@ export function ClientAreaAccountOverview({
   copy,
   currentAccount,
   isAccountMenuOpen,
-  isStale = false,
   locale,
   onRetry,
   onSelectAccountMode,
   onToggleAccountMode,
   summaryState,
-  updatedAt = null,
 }: ClientAreaAccountOverviewProps) {
   const profile = useClientAreaProfile();
   const accountMetricsId = useId();
@@ -364,25 +358,6 @@ export function ClientAreaAccountOverview({
               />
             </>
           )}
-          {/* {summaryState.status === "ready" && updatedAt !== null ? (
-            <p
-              className={`flex items-center justify-end gap-1.5 text-[11px] font-semibold ${isStale ? "text-amber-800" : "text-neutral-800/80"
-                }`}
-              aria-live="off"
-            >
-              <span
-                className={`size-1.5 rounded-full ${isStale ? "bg-amber-600" : "animate-pulse bg-emerald-600"
-                  }`}
-              />
-              {isStale
-                ? `${messages.stale} · ${new Date(updatedAt).toLocaleTimeString(
-                  locale === "id" ? "id-ID" : "en-US",
-                )}`
-                : `${messages.updated} ${new Date(updatedAt).toLocaleTimeString(
-                  locale === "id" ? "id-ID" : "en-US",
-                )}`}
-            </p>
-          ) : null} */}
           {summaryState.status === "error" ? (
             <p className="flex items-center justify-between gap-3 rounded-xl bg-white/60 px-3 py-2 text-xs font-semibold text-red-700">
               <span>{messages.error}</span>

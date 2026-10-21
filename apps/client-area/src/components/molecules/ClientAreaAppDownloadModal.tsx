@@ -14,8 +14,6 @@ type ClientAreaAppDownloadModalProps = {
   subtitle: string;
   description: string;
   closeLabel: string;
-  supportHref: string;
-  supportLabel: string;
   googlePlayLink: string;
   googlePlayAlt: string;
   appStoreLink: string;
@@ -37,8 +35,6 @@ export function ClientAreaAppDownloadModal({
   subtitle,
   description,
   closeLabel,
-  supportHref,
-  supportLabel,
   googlePlayLink,
   googlePlayAlt,
   appStoreLink,

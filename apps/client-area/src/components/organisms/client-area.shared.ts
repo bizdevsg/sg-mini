@@ -72,26 +72,6 @@ type ClientAreaAccountModeData = {
   withdrawalHistory: WithdrawalHistoryItem[];
 };
 
-const EMPTY_ACCOUNT_SNAPSHOT: AccountSnapshot = {
-  typeLabel: "",
-  accountId: "",
-  accountOwner: "",
-  email: "",
-  status: "",
-  broker: "",
-  liquidationType: "",
-  balance: 0,
-  floatingPl: 0,
-  floatingDelta: "",
-  equity: 0,
-  equityDelta: "",
-  marginRequired: 0,
-  effectiveMargin: 0,
-  callMarginPlace: 0,
-  equityRatio: 0,
-  autoLiquidation: 0,
-};
-
 export const TABS: TabId[] = [
   "home",
   "market",

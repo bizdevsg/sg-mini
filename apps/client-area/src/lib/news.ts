@@ -371,28 +371,6 @@ function compareArticleDates(a: PortalNewsApiArticle, b: PortalNewsApiArticle) {
   return secondDate - firstDate;
 }
 
-function comparePublishedAtStrings(
-  firstPublishedAt?: string,
-  secondPublishedAt?: string,
-) {
-  const firstDate = getTimestamp(firstPublishedAt);
-  const secondDate = getTimestamp(secondPublishedAt);
-
-  if (firstDate === null && secondDate === null) {
-    return 0;
-  }
-
-  if (firstDate === null) {
-    return 1;
-  }
-
-  if (secondDate === null) {
-    return -1;
-  }
-
-  return secondDate - firstDate;
-}
-
 function getPublishedAt(article: PortalNewsApiArticle) {
   return getArticlePublishedAt(article);
 }

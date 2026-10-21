@@ -46,7 +46,6 @@ export function AppDownloadModalTriggerButton({
   const messages = getMessages(locale);
   const appPromoMessages = messages.appPromoSection;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
-  const supportHref = `/${locale}/contact-us`;
   const modalCopy = getAppDownloadModalCopy(locale);
 
   return (
@@ -66,8 +65,6 @@ export function AppDownloadModalTriggerButton({
         subtitle={modalCopy.subtitle}
         description={modalCopy.description}
         closeLabel={modalCopy.closeLabel}
-        supportHref={supportHref}
-        supportLabel={messages.clientArea.login.forgotPassword}
         googlePlayLink={googlePlayLink}
         googlePlayAlt={appPromoMessages.googlePlayAlt}
         appStoreLink={appStoreLink}

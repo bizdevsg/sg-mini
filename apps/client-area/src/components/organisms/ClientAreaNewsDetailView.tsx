@@ -3,7 +3,6 @@
 import type { NewsArticleDetail, NewsFeedArticle } from "@/lib/news.shared";
 import { ClientAreaNewsDetailPanel } from "@/components/organisms/ClientAreaNewsDetailPanel";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
-import { getDashboardCopy } from "@/components/organisms/client-area.shared";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import type { AppLocale } from "@/locales";
 
@@ -22,15 +21,12 @@ export function ClientAreaNewsDetailView({
   locale,
   relatedArticles,
 }: ClientAreaNewsDetailViewProps) {
-  const copy = getDashboardCopy(locale);
-
   return (
     <ClientAreaShell activeTab="news" breakingNews={breakingNews} locale={locale}>
       <ClientAreaNewsDetailPanel
         article={article}
         latestArticles={latestArticles}
         locale={locale}
-        newsLabel={copy.newsTitle}
         relatedArticles={relatedArticles}
       />
     </ClientAreaShell>

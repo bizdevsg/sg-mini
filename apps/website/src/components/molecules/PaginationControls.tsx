@@ -8,9 +8,7 @@ type PaginationControlsProps = {
   totalPages: number;
   onPrevious: () => void;
   onNext: () => void;
-  summary?: ReactNode;
   centerContent?: ReactNode;
-  className?: string;
   centerControls?: boolean;
 };
 
@@ -21,9 +19,7 @@ export function PaginationControls({
   totalPages,
   onPrevious,
   onNext,
-  summary,
   centerContent,
-  className = "",
   centerControls = false,
 }: PaginationControlsProps) {
   const isPreviousDisabled = currentPage === 1;

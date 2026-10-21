@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { ClientAreaAppDownloadModal } from "@/components/molecules/ClientAreaAppDownloadModal";
-import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import {
   getMessages,
   type AppLocale,
@@ -47,7 +46,6 @@ export function AppDownloadModalTriggerButton({
   const messages = getMessages(locale);
   const appPromoMessages = messages.appPromoSection;
   const { googlePlayLink, appStoreLink } = getClientAreaAppStoreLinks(locale);
-  const supportHref = resolveLocalizedHref(locale, "/contact-us");
   const modalCopy = getAppDownloadModalCopy(locale);
 
   return (
@@ -67,8 +65,6 @@ export function AppDownloadModalTriggerButton({
         subtitle={modalCopy.subtitle}
         description={modalCopy.description}
         closeLabel={modalCopy.closeLabel}
-        supportHref={supportHref}
-        supportLabel={messages.clientArea.login.forgotPassword}
         googlePlayLink={googlePlayLink}
         googlePlayAlt={appPromoMessages.googlePlayAlt}
         appStoreLink={appStoreLink}

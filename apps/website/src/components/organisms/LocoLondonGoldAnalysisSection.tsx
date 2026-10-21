@@ -3,14 +3,10 @@ import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import type { LocoLondonGoldAnalysisFactor } from "@/locales/loco-london-gold-page";
 
 type LocoLondonGoldAnalysisSectionProps = {
-  title: string;
-  subtitle: string;
   items: LocoLondonGoldAnalysisFactor[];
 };
 
 export function LocoLondonGoldAnalysisSection({
-  title,
-  subtitle,
   items,
 }: LocoLondonGoldAnalysisSectionProps) {
   return (

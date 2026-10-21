@@ -660,13 +660,6 @@ export function HistoricalDataBrowser({
                 Math.min(totalPages, currentPageValue + 1),
               )
             }
-            summary={
-              <>
-                {labels.showing} {startIndex + 1} {labels.to}{" "}
-                {startIndex + visibleRecords.length} {labels.ofRecords}{" "}
-                {filteredRecords.length}
-              </>
-            }
             centerContent={
               <div className="rounded-full border border-line px-4 py-2 text-sm text-foreground/72">
                 {labels.page} {safeCurrentPage} {labels.of} {totalPages}

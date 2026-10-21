@@ -24,6 +24,5 @@ const id: TradingRulesPageContent = {
   source: "Sumber: Trading Rules & Regulations Mini Account (CDD Sederhana 0,1 Lot), Februari 2026. Ringkasan ini tidak menggantikan Trade Table dan dokumen ketentuan resmi yang berlaku.",
 };
 
-const en: TradingRulesPageContent = { ...id, eyebrow: "Trading Education", description: "A summary of the Mini Account CDD Simplified trading rules with a minimum volume of 0.1 lot.", education: "Education", contractsLabel: "Available contracts", hoursTitle: "II. Trading Hours", hoursDescription: "Monday–Friday. Trading hours may change according to the applicable Trade Table.", formulaTitle: "VII. Transaction Calculation Formula", source: "Source: Trading Rules & Regulations Mini Account (CDD Simplified 0.1 Lot), February 2026. This summary does not replace the applicable Trade Table and official terms." };
 const content: Record<AppLocale, TradingRulesPageContent> = { id, en: enTradingRulesPageContent };
 export function getTradingRulesPageContent(locale: AppLocale) { return content[locale]; }

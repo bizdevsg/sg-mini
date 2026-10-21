@@ -35,6 +35,7 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Judul hero Website kini menempatkan teks putih pada baris tersendiri di bawah teks kuning agar hierarki headline lebih jelas dan konsisten di berbagai ukuran layar.
 - Urutan menu sidebar Client Area desktop dan mobile diubah menjadi Dashboard, Pasar, Transaksi, Berita, Trade Pilot, lalu Akun agar alur navigasi lebih konsisten.
 - Seluruh referensi branding lama yang tersisa pada copy Client Area website dan aplikasi Client Area diganti dengan branding aplikasi Solid/Solid Gold agar label unduhan dan panel prioritas konsisten dengan produk resmi.
 - Ketersediaan Trade Pilot di Client Area kini mengikuti flag `trade_pilot_dev` atau `trade_pilot_prod` dari API konfigurasi Client Area sesuai `APP_ENV`; ketika dimatikan, sidebar menampilkan satu tombol Trade Pilot tanpa dropdown dan seluruh route-nya menampilkan informasi Coming Soon, sedangkan ketika aktif dropdown tiga submenu kembali tersedia.
@@ -156,6 +157,8 @@
 - Konfigurasi nginx kini mengenali hostname mini untuk website publik dan Client Area.
 
 ### Removed
+- Dead code yang tidak memiliki jalur runtime aktif dibersihkan dari Website dan Client Area, mencakup 128 file source, 15 asset yang hanya dipakai oleh source tersebut, serta unused import, prop, function, constant, type, dan blok JSX komentar terkait; route valid, test, konfigurasi aktif, dan asset publik yang belum terverifikasi tetap dipertahankan.
+- Dependency `lightweight-charts` dan `jspdf-autotable` dihapus dari workspace Client Area setelah consumer terakhirnya ikut dibersihkan; `jspdf-autotable` tetap dipertahankan pada Website karena masih dipakai oleh ekspor historical data, dan `crypto-js` tidak diubah.
 - Tombol eksternal Trade Pilot beserta logo khususnya di navbar website dan Client Area dihapus dari tampilan desktop dan mobile tanpa mengubah modul Trade Pilot di dalam area pengguna.
 
 ## [0.1.0] - 2026-09-25

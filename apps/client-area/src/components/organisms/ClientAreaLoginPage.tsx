@@ -123,12 +123,7 @@ export function ClientAreaLoginPage({
       <SectionContainer className="relative flex w-full max-w-8xl flex-1 items-center overflow-visible py-6 sm:py-8 lg:!pl-8 lg:!pr-12 xl:py-10 xl:!pl-6 xl:!pr-20 2xl:!pl-8 2xl:!pr-24">
         {/* VISUAL — BELAKANG */}
         <div className="absolute inset-y-0 left-[26rem] right-12 z-10 hidden xl:block 2xl:left-[28rem] 2xl:right-16">
-          <ClientAreaLoginVisualPanel
-            googlePlayLink={googlePlayLink}
-            googlePlayAlt={appPromoMessages.googlePlayAlt}
-            appStoreLink={appStoreLink}
-            appStoreAlt={appPromoMessages.appStoreAlt}
-          />
+          <ClientAreaLoginVisualPanel />
         </div>
 
         {/* FORM — DEPAN */}
@@ -173,8 +168,6 @@ export function ClientAreaLoginPage({
         subtitle={downloadModalCopy.subtitle}
         description={downloadModalCopy.description}
         closeLabel={downloadModalCopy.closeLabel}
-        supportHref={supportHref}
-        supportLabel={login.forgotPassword}
         googlePlayLink={googlePlayLink}
         googlePlayAlt={appPromoMessages.googlePlayAlt}
         appStoreLink={appStoreLink}

@@ -6,7 +6,6 @@ import {
 } from "@/lib/env";
 import type {
   EconomicCalendarEvent,
-  EconomicCalendarEventDetails,
   EconomicCalendarHistoryEntry,
   EconomicCalendarPagination,
   EconomicCalendarRangeData,

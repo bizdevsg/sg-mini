@@ -14,7 +14,6 @@ import { getLiveQuoteDisplay } from "@/lib/live-quotes";
 import type { AppLocale } from "@/locales";
 import Link from "next/link";
 import Image from "next/image";
-import { id } from "zod/locales";
 
 type ClientAreaMarketChartViewProps = {
   breakingNews?: BreakingNewsItem[];

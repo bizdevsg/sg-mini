@@ -685,11 +685,6 @@ export function EconomicCalendarBrowser({
                 setSelectedEventId(null);
                 scrollToBrowserTop();
               }}
-              summary={
-                <>
-                  {labels.page} {safeCurrentPage} {labels.of} {totalPages}
-                </>
-              }
               centerContent={
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {paginationItems.map((item, index) =>

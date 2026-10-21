@@ -7,7 +7,7 @@ import {
   type ClientAreaSubpageProps,
 } from "@/app/[locales]/client-area/client-area-page.shared";
 import { ClientAreaTradePilotGuidePanel } from "@/components/organisms/ClientAreaTradePilotGuidePanel";
-import { getMessages, getTradePilotGuidePageContent } from "@/locales";
+import { getTradePilotGuidePageContent } from "@/locales";
 
 type ClientAreaTradePilotGuidePageProps = ClientAreaSubpageProps;
 
@@ -30,13 +30,9 @@ export default async function ClientAreaTradePilotGuidePage({
   const { locales } = await params;
   assertValidLocale(locales);
 
-  const messages = getMessages(locales);
   const copy = getTradePilotGuidePageContent(locales);
 
   return (
-    <ClientAreaTradePilotGuidePanel
-      copy={copy}
-      livePriceLabel={messages.clientArea.livePriceTicker.label}
-    />
+    <ClientAreaTradePilotGuidePanel copy={copy} />
   );
 }

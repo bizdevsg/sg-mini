@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 
 import { ClientAreaTradePilotGuideCategoryButton } from "@/components/atoms/ClientAreaTradePilotGuideCategoryButton";
-import { ClientAreaLivePriceTicker } from "@/components/molecules/ClientAreaLivePriceTicker";
 import { ClientAreaTradePilotGuideArticleCard } from "@/components/molecules/ClientAreaTradePilotGuideArticleCard";
 import type {
   TradePilotGuideArticle,
@@ -31,7 +30,6 @@ type CategoryFilter = "all" | TradePilotGuideCategoryId;
 
 type ClientAreaTradePilotGuidePanelProps = {
   copy: TradePilotGuidePageContent;
-  livePriceLabel: string;
 };
 
 const CATEGORY_ICONS: Record<TradePilotGuideCategoryId, LucideIcon> = {
@@ -48,7 +46,6 @@ function getArticleIcon(categoryId: TradePilotGuideCategoryId) {
 
 export function ClientAreaTradePilotGuidePanel({
   copy,
-  livePriceLabel,
 }: ClientAreaTradePilotGuidePanelProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
   const [query, setQuery] = useState("");

@@ -105,7 +105,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
             <h1 className="font-mono text-3xl font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3rem] xl:text-[4rem]">
               <span className="text-yellow-500">
                 {messages.hero.titleLead}
-              </span> <span className="text-white">
+              </span>
+              <span className="block text-white">
                 {messages.hero.titleBody}
               </span>
             </h1>

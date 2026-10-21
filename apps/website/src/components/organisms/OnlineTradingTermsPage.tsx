@@ -75,8 +75,6 @@ export function OnlineTradingTermsPage({
       </PageHeroBanner>
 
       <OnlineTradingTermsArticleList
-        articleTitle={page.sections.articleTitle}
-        articleSubtitle={page.sections.articleSubtitle}
         terms={page.terms}
       />
     </main>

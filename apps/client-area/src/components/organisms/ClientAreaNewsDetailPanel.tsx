@@ -11,7 +11,6 @@ type ClientAreaNewsDetailPanelProps = {
   article: NewsArticleDetail;
   latestArticles: NewsFeedArticle[];
   locale: AppLocale;
-  newsLabel: string;
   relatedArticles: NewsFeedArticle[];
 };
 
@@ -21,7 +20,6 @@ export function ClientAreaNewsDetailPanel({
   article,
   latestArticles,
   locale,
-  newsLabel,
   relatedArticles,
 }: ClientAreaNewsDetailPanelProps) {
   const messages = getMessages(locale);

@@ -1,31 +1,18 @@
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import Link from "next/link";
 
 import { StoreBadgeLink } from "@/components/atoms/StoreBadgeLink";
 import {
   CLIENT_AREA_TRADE_PILOT_APP_LINKS,
   type ClientAreaTradePilotFooterCopy,
 } from "@/lib/client-area-trade-pilot.shared";
-import type { AppLocale } from "@/locales";
 
 type ClientAreaTradePilotFooterSectionProps = {
   copy: ClientAreaTradePilotFooterCopy;
-  locale: AppLocale;
 };
 
 export function ClientAreaTradePilotFooterSection({
   copy,
-  locale,
 }: ClientAreaTradePilotFooterSectionProps) {
-  const legalLinks = [
-    { href: `/${locale}/privacy-policy`, label: copy.privacyLabel },
-    { href: `/${locale}/syarat-dan-ketentuan`, label: copy.termsLabel },
-    { href: `/${locale}/contact-us`, label: copy.helpLabel },
-    { href: `/${locale}/contact-us`, label: copy.deleteAccountLabel },
-  ];
-
   return (
     <footer className="overflow-hidden rounded-3xl">
       <div className="space-y-4">
@@ -81,53 +68,6 @@ export function ClientAreaTradePilotFooterSection({
           </div>
         </div>
 
-        {/* <p className="px-5 text-center text-[11px] leading-5 text-zinc-400 sm:px-7 sm:text-xs">
-          <span className="font-semibold text-zinc-300">{copy.disclaimerLabel}</span>{" "}
-          {copy.disclaimerDescription}
-        </p> */}
-
-        {/* <div className="border-t border-zinc-700 px-5 pt-4 sm:px-7">
-          <div className="flex flex-col items-center justify-between gap-6 xl:flex-row">
-            <nav aria-label={copy.legalNavigationLabel}>
-              <ul className="flex flex-wrap items-center justify-center gap-x-0 gap-y-3 text-xs font-semibold text-zinc-200 sm:text-sm">
-                {legalLinks.map((item, index) => (
-                  <li className="flex items-center" key={item.label}>
-                    {index > 0 ? (
-                      <span aria-hidden="true" className="mx-4 text-zinc-600">
-                        |
-                      </span>
-                    ) : null}
-                    <Link className="transition hover:text-amber-400" href={item.href}>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-              <a
-                aria-label={copy.tiktokLabel}
-                className="flex items-center gap-3 text-sm font-semibold text-white transition hover:text-amber-400"
-                href="https://www.tiktok.com/@tradepilot.id"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-white">
-                  <FontAwesomeIcon
-                    className="h-5 w-5"
-                    icon={["fab", "tiktok"] as IconProp}
-                  />
-                </span>
-                TradePilot.id
-              </a>
-              <span aria-hidden="true" className="hidden h-10 w-px bg-zinc-600 sm:block" />
-              <p className="max-w-xs text-center text-[11px] leading-5 text-zinc-300 sm:text-left sm:text-xs">
-                © {new Date().getFullYear()} {copy.copyright}
-              </p>
-            </div>
-          </div>
-        </div> */}
       </div>
     </footer>
   );

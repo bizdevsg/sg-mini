@@ -69,7 +69,6 @@ type SensitiveProfileField = keyof SensitiveProfileData;
 type SensitiveProfileDetailProps = {
   isRevealed: boolean;
   label: string;
-  locale: AppLocale;
   maskedValue: string;
   onHide: () => void;
   onRequestReveal: () => void;
@@ -104,7 +103,6 @@ function ProfileDetail({ full = false, label, value }: ProfileDetailProps) {
 function SensitiveProfileDetail({
   isRevealed,
   label,
-  locale,
   maskedValue,
   onHide,
   onRequestReveal,
@@ -455,7 +453,6 @@ export function ClientAreaAccountProfilePanel({
           <SensitiveProfileDetail
             isRevealed={Boolean(sensitiveData.identityNumber)}
             label={accountPage.fields.identityNumber}
-            locale={locale}
             maskedValue={profile.personal.identityNumber}
             onHide={() => hideSensitiveField("identityNumber")}
             onRequestReveal={() => setPendingSensitiveField("identityNumber")}
@@ -464,7 +461,6 @@ export function ClientAreaAccountProfilePanel({
           <SensitiveProfileDetail
             isRevealed={Boolean(sensitiveData.taxNumber)}
             label={accountPage.fields.taxNumber}
-            locale={locale}
             maskedValue={profile.personal.taxNumber}
             onHide={() => hideSensitiveField("taxNumber")}
             onRequestReveal={() => setPendingSensitiveField("taxNumber")}

@@ -54,20 +54,14 @@ export function LocoLondonGoldPage({
       </PageHeroBanner>
 
       <LocoLondonGoldHistorySection
-        title={page.sections.historyTitle}
-        subtitle={page.sections.historySubtitle}
         items={page.history}
       />
 
       <LocoLondonGoldMarketsSection
-        title={page.sections.marketTitle}
-        subtitle={page.sections.marketSubtitle}
         items={page.markets}
       />
 
       <LocoLondonGoldAnalysisSection
-        title={page.sections.analysisTitle}
-        subtitle={page.sections.analysisSubtitle}
         items={page.analysis}
       />
     </main>

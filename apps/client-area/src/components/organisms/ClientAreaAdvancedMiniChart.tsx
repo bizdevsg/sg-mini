@@ -8,7 +8,6 @@ import {
   clientAreaFetch,
 } from "@/lib/client-area-fetch";
 import { getClientAreaTradingViewPresetByMarketCode } from "@/lib/client-area-tradingview.shared";
-import { getLiveQuoteDisplay } from "@/lib/live-quotes";
 import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaAdvancedMiniChartProps = {
@@ -37,7 +36,6 @@ export function ClientAreaAdvancedMiniChart({
   const [state, setState] = useState<ChartState>({ status: "loading" });
   const [requestVersion, setRequestVersion] = useState(0);
   const [loadedFrameId, setLoadedFrameId] = useState<string | null>(null);
-  const display = getLiveQuoteDisplay(symbol);
   const displayCode = symbol.replace(/_BBJ$/, "");
   const fallbackPreset = getClientAreaTradingViewPresetByMarketCode(symbol);
   const shouldUseTradingViewFallback = TRADING_VIEW_FALLBACK_SYMBOLS.has(

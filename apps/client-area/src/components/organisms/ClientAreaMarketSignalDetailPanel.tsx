@@ -248,7 +248,6 @@ export function ClientAreaMarketSignalDetailPanel({
         <ClientAreaMarketSignalNewsSection
           items={newsArticles}
           locale={locale}
-          title={detailCopy.latestNewsTitle}
         />
       ) : null}
 

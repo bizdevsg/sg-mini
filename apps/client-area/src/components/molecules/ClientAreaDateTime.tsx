@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Clock3 } from "lucide-react";
 
 import type { AppLocale } from "@/locales";
 

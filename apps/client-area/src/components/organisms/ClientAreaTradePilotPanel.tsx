@@ -125,12 +125,9 @@ export function ClientAreaTradePilotPanel({
         newsLabel={newsLabel}
       />
       <ClientAreaTradePilotPageHeader
-        availableModes={bootstrap.access.availableModes}
         copy={copy}
         credit={credits[mode]}
         mockDataLabel={mockDataLabel}
-        mode={mode}
-        onModeChange={setAccountMode}
       />
 
       <div className="grid min-w-0 items-start gap-4 sm:gap-5 xl:grid-cols-[minmax(250px,300px)_minmax(0,1fr)]">
@@ -211,10 +208,7 @@ export function ClientAreaTradePilotPanel({
           />
         </>
       ) : null}
-      <ClientAreaTradePilotFooterSection
-        copy={copy.footer}
-        locale={locale}
-      />
+      <ClientAreaTradePilotFooterSection copy={copy.footer} />
     </div>
   );
 }

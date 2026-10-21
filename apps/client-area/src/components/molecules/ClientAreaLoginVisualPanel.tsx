@@ -1,12 +1,5 @@
 import Image from "next/image";
 
-type ClientAreaLoginVisualPanelProps = {
-  googlePlayLink: string;
-  googlePlayAlt: string;
-  appStoreLink: string;
-  appStoreAlt: string;
-};
-
 const heroFloatingCards = [
   {
     src: "/assets/Floating Info Card 1.png",
@@ -42,12 +35,7 @@ const heroFloatingCards = [
   },
 ] as const;
 
-export function ClientAreaLoginVisualPanel({
-  googlePlayLink,
-  googlePlayAlt,
-  appStoreLink,
-  appStoreAlt,
-}: ClientAreaLoginVisualPanelProps) {
+export function ClientAreaLoginVisualPanel() {
   return (
     <div
       className="relative flex h-full w-full items-center justify-center"

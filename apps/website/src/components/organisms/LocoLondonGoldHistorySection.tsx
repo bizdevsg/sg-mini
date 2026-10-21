@@ -4,14 +4,10 @@ import { SectionContainer } from "@/components/atoms/SectionContainer";
 import type { LocoLondonGoldArticleSection } from "@/locales/loco-london-gold-page";
 
 type LocoLondonGoldHistorySectionProps = {
-  title: string;
-  subtitle: string;
   items: LocoLondonGoldArticleSection[];
 };
 
 export function LocoLondonGoldHistorySection({
-  title,
-  subtitle,
   items,
 }: LocoLondonGoldHistorySectionProps) {
   return (

@@ -11,7 +11,6 @@ import {
   getClientAreaLoginHref,
 } from "@/lib/client-area-session";
 import type { ClientAreaSessionProfile } from "@/lib/client-area-auth";
-import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import {
   getMessages,
   isSupportedLocale,

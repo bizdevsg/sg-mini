@@ -4,14 +4,10 @@ import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import type { OnlineTradingTermSection } from "@/locales/online-trading-terms-page";
 
 type OnlineTradingTermsArticleListProps = {
-  articleTitle: string;
-  articleSubtitle: string;
   terms: OnlineTradingTermSection[];
 };
 
 export function OnlineTradingTermsArticleList({
-  articleTitle,
-  articleSubtitle,
   terms,
 }: OnlineTradingTermsArticleListProps) {
   return (

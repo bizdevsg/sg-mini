@@ -15,7 +15,6 @@ import {
   SUPPORTED_LOCALES,
   type AppLocale,
 } from "@/locales";
-import { BenefitSection } from "@/components/organisms/BenefitSection";
 import { buildPublicMetadata } from "@/lib/metadata";
 
 type LocalizedPageProps = {

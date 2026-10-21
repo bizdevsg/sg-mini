@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, LogOut, UserRound, WalletCards } from "lucide-react";
 

@@ -6,7 +6,6 @@ import type { Dispatch, SetStateAction } from "react";
 import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQuickActionsGrid";
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
 import { ClientAreaAdvancedChart } from "@/components/organisms/ClientAreaAdvancedChart";
-import { BenefitSection } from "@/components/organisms/BenefitSection";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
 import { ClientAreaMarketInsightSection } from "@/components/organisms/ClientAreaMarketInsightSection";
 import { ClientAreaMarketWatchSection } from "@/components/organisms/ClientAreaMarketWatchSection";
@@ -65,8 +64,6 @@ export function ClientAreaHomePanel({
   const {
     state: summaryState,
     retry: retrySummary,
-    updatedAt: summaryUpdatedAt,
-    isStale: isSummaryStale,
   } = useLiveAccountSummary(accountMode, {
     refreshMs: HOME_ACCOUNT_SUMMARY_REFRESH_MS,
   });
@@ -80,8 +77,6 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
-            isStale={isSummaryStale}
-            updatedAt={summaryUpdatedAt}
             locale={locale}
             onRetry={retrySummary}
             summaryState={summaryState}
@@ -130,8 +125,6 @@ export function ClientAreaHomePanel({
             copy={copy}
             currentAccount={currentAccount}
             isAccountMenuOpen={isAccountMenuOpen}
-            isStale={isSummaryStale}
-            updatedAt={summaryUpdatedAt}
             locale={locale}
             onRetry={retrySummary}
             summaryState={summaryState}
