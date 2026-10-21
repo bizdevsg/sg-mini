@@ -7,10 +7,7 @@ import { ArrowLeft, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { HeaderActions } from "@/components/molecules/HeaderActions";
-import {
-  ClientAreaDesktopSidebarNav,
-  ClientAreaSidebarLogoutButton,
-} from "@/components/molecules/ClientAreaDesktopSidebarNav";
+import { ClientAreaDesktopSidebarNav } from "@/components/molecules/ClientAreaDesktopSidebarNav";
 import { ClientAreaDateTime } from "@/components/molecules/ClientAreaDateTime";
 import { ClientAreaLiveToast } from "@/components/molecules/ClientAreaLiveToast";
 import { ClientAreaLogoutModal } from "@/components/molecules/ClientAreaLogoutModal";
@@ -107,6 +104,19 @@ export function ClientAreaAdminFrame({
       tradePilotEnabled={tradePilotEnabled}
     />
   );
+  const sidebarFooter = (
+    <div className="border-t border-gray-600 p-3">
+      <a
+        href={`${PUBLIC_WEBSITE_URL}/${locale}`}
+        className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
+      >
+        <ArrowLeft className="h-[18px] w-[18px]" />
+        <span className="text-sm font-medium leading-tight">
+          {clientArea.sidebar.backToWebsite}
+        </span>
+      </a>
+    </div>
+  );
 
   return (
     <div className="min-h-screen min-w-0 max-w-full overflow-x-clip bg-black text-zinc-100">
@@ -134,17 +144,7 @@ export function ClientAreaAdminFrame({
           {navigation}
         </div>
 
-        <div className="p-3 border-t border-gray-600">
-          <a
-            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-zinc-400 transition-colors duration-200 hover:bg-amber-500/10 hover:text-amber-300"
-          >
-            <ArrowLeft className="h-[18px] w-[18px] hover:bg-amber-500/10 hover:text-amber-300" />
-            <span className="text-sm font-medium leading-tight">
-              {clientArea.sidebar.backToWebsite}
-            </span>
-          </a>
-        </div>
+        {sidebarFooter}
 
         {/* <div className="space-y-2 border-t border-white/8 p-3">
           <ClientAreaSidebarLogoutButton
@@ -257,29 +257,7 @@ export function ClientAreaAdminFrame({
             {navigation}
           </div>
 
-          <div className="space-y-2 border-t border-white/8 p-3">
-            {/* <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-              <Image
-                src={profile.avatarSrc}
-                alt={profile.displayName}
-                width={40}
-                height={40}
-                className="h-9 w-9 rounded-lg object-cover"
-              />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-white">
-                  {profile.displayName}
-                </p>
-                <p className="truncate text-xs text-zinc-500">
-                  {profile.accountId}
-                </p>
-              </div>
-            </div> */}
-            <ClientAreaSidebarLogoutButton
-              label={clientArea.topbar.logoutLabel}
-              onClick={() => setIsLogoutModalOpen(true)}
-            />
-          </div>
+          {sidebarFooter}
         </aside>
       </div>
 

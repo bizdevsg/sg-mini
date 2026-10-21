@@ -38,6 +38,7 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Footer sidebar mobile Client Area kini memakai konten yang sama dengan sidebar desktop, termasuk tautan kembali ke Website; logout tetap tersedia melalui menu profil pada header.
 - CTA utama hero Website kini berlabel `Open Account`, memiliki lebar minimum yang lebih konsisten, dan CTA demo login sekunder disembunyikan.
 - Form login Client Area kini menyembunyikan opsi Ingat Saya dan tautan Lupa Password yang belum aktif, serta memusatkan posisi reCAPTCHA.
 - Judul hero Website kini menempatkan teks putih pada baris tersendiri di bawah teks kuning agar hierarki headline lebih jelas dan konsisten di berbagai ukuran layar.
