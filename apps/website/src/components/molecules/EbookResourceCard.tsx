@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ResilientImage } from "@/components/atoms/ResilientImage";
+import { htmlToPlainText } from "@/lib/ebook.shared";
 
 type EbookResourceCardProps = {
   categoryLabel: string;
@@ -70,7 +71,7 @@ export function EbookResourceCard({
 
       <div className="flex flex-1 flex-col p-5">
         <p className="line-clamp-3 text-sm leading-7 text-zinc-300/88">
-          {description}
+          {htmlToPlainText(description).replace(/\s+/g, " ")}
         </p>
 
         <div className="mt-5 flex items-center gap-3 text-xs text-yellow-500/60">

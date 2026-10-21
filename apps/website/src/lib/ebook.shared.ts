@@ -71,3 +71,37 @@ export function getEbookEmptyState(locale: AppLocale) {
         body: "The ebook categories or files are not available from the API right now. Please try again shortly.",
       };
 }
+
+/**
+ * Converts the API's HTML description to plain text while preserving paragraph
+ * breaks. Some records contain entity-escaped HTML, so decoding is repeated
+ * before tags are removed. This stays safe for both server and client usage.
+ */
+export function htmlToPlainText(value: string) {
+  let text = value;
+
+  for (let pass = 0; pass < 3; pass += 1) {
+    const next = text
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/&amp;/gi, "&")
+      .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ")
+      .replace(/<br\s*\/?>|<\/(p|div|li|h[1-6])>/gi, "\n\n")
+      .replace(/<[^>]*>?/g, "");
+
+    if (next === text) {
+      break;
+    }
+
+    text = next;
+  }
+
+  return text
+    .replace(/[ \t]+/g, " ")
+    .replace(/ ?\n ?/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}

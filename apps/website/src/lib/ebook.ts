@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   EBOOK_REVALIDATE_SECONDS,
+  htmlToPlainText,
   type EbookCategory,
   type EbookCategoryDetail,
   type EbookResource,
@@ -57,7 +58,7 @@ function normalizeText(value: unknown) {
 }
 
 function summarizeDescription(value: unknown) {
-  const normalizedValue = normalizeText(value);
+  const normalizedValue = htmlToPlainText(normalizeText(value));
 
   if (!normalizedValue) {
     return "";

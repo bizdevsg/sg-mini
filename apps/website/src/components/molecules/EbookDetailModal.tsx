@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 import { ResilientImage } from "@/components/atoms/ResilientImage";
-import type { EbookResource } from "@/lib/ebook.shared";
-import Link from "next/link";
+import { htmlToPlainText, type EbookResource } from "@/lib/ebook.shared";
 
 type EbookDetailModalProps = {
   closeLabel: string;
@@ -36,6 +36,13 @@ export function EbookDetailModal({
   }, [isOpen, onClose]);
 
   if (!isOpen || !item) return null;
+
+  const paragraphs = htmlToPlainText(
+    item.description || item.excerpt || item.title,
+  )
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
+    .filter(Boolean);
 
   return (
     <div
@@ -105,9 +112,11 @@ export function EbookDetailModal({
 
             {/* Deskripsi (Scrollable secara internal di desktop) */}
             <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-              <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-400">
-                {item.description || item.excerpt || item.title}
-              </p>
+              <div className="space-y-3 text-sm leading-relaxed text-zinc-400">
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
             </div>
 
             {/* Area CTA / Action Buttons */}

@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+### Fixed
+- Deskripsi ebook pada card dan modal Website kini mengubah HTML dari API menjadi teks bersih dengan pemisah paragraf, sehingga tag seperti `<p>`, `<span>`, dan `<br>` tidak lagi terlihat oleh pengguna.
+
 ### Added
 - Notifikasi live terjadwal ditambahkan ke header Client Area dan toast: Solid Prime setiap Senin–Jumat pukul 13.30 WIB serta Solid News pukul 08.30 dan 19.00 WIB, dengan jendela aktif 60 menit, tautan langsung ke TikTok, dan toast satu kali per sesi pada setiap tab browser.
 - Halaman bilingual Wakil Pialang Berjangka ditambahkan pada menu Tentang di website dan navbar Client Area; daftar perwakilan memakai card ringkas berisi inisial, nomor urut, nama, jabatan, status, nomor izin, dan perusahaan serta mengambil data dari API SG Admin `/api/v1/wakil-pialang-berjangka` dengan pagination dan fallback lokal, disertai pengingat keamanan serta tautan verifikasi ke profil resmi BAPPEBTI.
