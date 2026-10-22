@@ -24,7 +24,7 @@ import type { AppLocale, AppMessages } from "@/locales";
  * Beranda is the page people watch, so its official account figures are
  * re-fetched faster than the slow default; live prices move them in between.
  */
-const HOME_ACCOUNT_SUMMARY_REFRESH_MS = 5000;
+const HOME_ACCOUNT_SUMMARY_REFRESH_MS = 15000;
 
 type ClientAreaHomePanelProps = {
   accountMode: AccountMode;

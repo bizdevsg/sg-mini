@@ -15,6 +15,12 @@ export const enClientArea: AppMessages["clientArea"] = {
     refreshLabel: "Refresh",
     retryLabel: "Try again",
   },
+  marketTransactions: {
+    title: "Market & Transactions",
+    allTransactionsLabel: "All Transactions",
+    liveChartLabel: "Live Chart",
+    viewTransactionsLabel: "View Transactions",
+  },
   viewOnlyDisclaimer: {
     label: "Disclaimer:",
     body: "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
@@ -64,7 +70,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     highlights: [
       "Real-time balance, equity, and floating P/L summary.",
       "Fast access to deposit, withdrawal, education, and products.",
-      "Dedicated market watch, news, and transaction history sections.",
+      "Market watch and transaction history in one unified page.",
     ],
     securityTitle: "Account security",
     securityBody:
@@ -106,13 +112,8 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
       {
         id: "market",
-        label: "Market",
+        label: "Market & Transactions",
         href: "#market",
-      },
-      {
-        id: "transaction",
-        label: "Transaction",
-        href: "#actions",
       },
       {
         id: "news",

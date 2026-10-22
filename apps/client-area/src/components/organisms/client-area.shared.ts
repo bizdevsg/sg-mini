@@ -12,7 +12,6 @@ import {
   House,
   ChartNoAxesCombined,
   Rocket,
-  Wallet,
   Newspaper,
   BookOpen,
   CircleUserRound,
@@ -75,7 +74,6 @@ type ClientAreaAccountModeData = {
 export const TABS: TabId[] = [
   "home",
   "market",
-  "transaction",
   "news",
   "trade-pilot",
   "account",
@@ -1799,7 +1797,6 @@ export function getSidebarIconMap(): Record<TabId, LucideIcon> {
     home: House,
     market: ChartNoAxesCombined,
     "trade-pilot": Rocket,
-    transaction: Wallet,
     news: Newspaper,
     ebook: BookOpen,
     account: CircleUserRound,

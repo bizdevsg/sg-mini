@@ -68,7 +68,6 @@ export default async function LocalizedHome({ params }: LocalizedPageProps) {
         <BannerSlideshowSection locale={locales} />
       </Suspense>
       <LiveQuoteSection locale={locales} />
-      {/* <BenefitSection locale={locales} /> */}
       <SpreadSection locale={locales} />
       <HomeWhyChooseSection locale={locales} />
       <AppPromoSection locale={locales} />

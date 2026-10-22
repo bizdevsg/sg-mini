@@ -3,41 +3,60 @@
 import { useMemo, useState } from "react";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
-import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import { getDashboardCopy } from "@/components/organisms/client-area.shared";
 import { toPositionItem } from "@/components/organisms/client-area-open-positions";
 import { toTradeHistoryItem } from "@/components/organisms/client-area-trade-history";
 import { ClientAreaTransactionsPanel } from "@/components/organisms/ClientAreaTransactionsPanel";
-import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import { useLiveAccountSummary } from "@/hooks/useLiveAccountSummary";
 import { useTradeHistory } from "@/hooks/useTradeHistory";
 import type { AppLocale } from "@/locales";
 
 type ClientAreaTransactionsViewProps = {
-  breakingNews?: BreakingNewsItem[];
+  filterSymbol?: string | null;
   locale: AppLocale;
 };
 
+function normalizeTransactionSymbol(value: string) {
+  return value.trim().toUpperCase().replace(/_BBJ$/, "");
+}
+
 export function ClientAreaTransactionsView({
-  breakingNews,
+  filterSymbol = null,
   locale,
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
   // Open positions ride on the account summary payload (same BFF call).
   const { state, retry } = useLiveAccountSummary(accountMode);
-  const positions = useMemo(
+  const allPositions = useMemo(
     () => (state.status === "ready" ? state.positions.map(toPositionItem) : []),
     [state],
   );
+  const normalizedFilter = filterSymbol
+    ? normalizeTransactionSymbol(filterSymbol)
+    : null;
+  const positions = useMemo(
+    () =>
+      normalizedFilter
+        ? allPositions.filter(
+            (item) =>
+              normalizeTransactionSymbol(item.symbol) === normalizedFilter,
+          )
+        : allPositions,
+    [allPositions, normalizedFilter],
+  );
 
-  // The page belongs to a mode: switching Demo/Real starts again at page 0.
+  // Switching Demo/Real or instrument filter starts again at page 0.
   const [historyPageState, setHistoryPageState] = useState({
+    filter: normalizedFilter,
     mode: accountMode,
     page: 0,
   });
   const historyPage =
-    historyPageState.mode === accountMode ? historyPageState.page : 0;
+    historyPageState.mode === accountMode &&
+    historyPageState.filter === normalizedFilter
+      ? historyPageState.page
+      : 0;
   const { state: historyState, retry: retryHistory } = useTradeHistory(
     accountMode,
     historyPage,
@@ -56,17 +75,20 @@ export function ClientAreaTransactionsView({
       ]),
     );
 
-    return historyState.items.map((card) =>
+    const items = historyState.items.map((card) =>
       toTradeHistoryItem(card, settledById.get(card.id)),
     );
-  }, [historyState, state]);
+
+    return normalizedFilter
+      ? items.filter(
+          (item) =>
+            normalizeTransactionSymbol(item.symbol) === normalizedFilter,
+        )
+      : items;
+  }, [historyState, normalizedFilter, state]);
 
   return (
-    <ClientAreaShell
-      activeTab="transaction"
-      breakingNews={breakingNews}
-      locale={locale}
-    >
+    <div id="transactions" className="scroll-mt-24">
       <ClientAreaTransactionsPanel
         copy={copy}
         hasNextHistory={historyState.status === "ready" && historyState.hasNext}
@@ -74,14 +96,19 @@ export function ClientAreaTransactionsView({
         historyStatus={historyState.status}
         locale={locale}
         onHistoryPageChange={(page) =>
-          setHistoryPageState({ mode: accountMode, page })
+          setHistoryPageState({
+            filter: normalizedFilter,
+            mode: accountMode,
+            page,
+          })
         }
         onRetryHistory={retryHistory}
         onRetryPositions={retry}
         positions={positions}
         positionsStatus={state.status}
+        transactionFilter={filterSymbol}
         transactionHistory={transactionHistory}
       />
-    </ClientAreaShell>
+    </div>
   );
 }

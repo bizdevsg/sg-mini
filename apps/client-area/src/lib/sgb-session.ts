@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash, randomUUID } from "node:crypto";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { EncryptJWT, jwtDecrypt } from "jose";
 
 import { CLIENT_AREA_SESSION_SECRET } from "@/lib/env";
@@ -12,6 +12,28 @@ import {
 } from "@/lib/client-area-session";
 
 const CLIENT_AREA_OTP_SESSION_MAX_AGE = 10 * 60;
+
+/** Keeps localhost HTTP usable even when a local production build is running. */
+export async function shouldUseSecureClientAreaCookie() {
+  const requestHeaders = await headers();
+  const forwardedProtocol = requestHeaders
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim()
+    .toLowerCase();
+
+  if (forwardedProtocol) {
+    return forwardedProtocol === "https";
+  }
+
+  const host = requestHeaders.get("host") ?? "";
+
+  if (/^(localhost|127\.0\.0\.1)(?::\d+)?$/i.test(host)) {
+    return false;
+  }
+
+  return process.env.NODE_ENV === "production";
+}
 
 /**
  * Encrypted Client Area session for the real SGB API — holds the SSO bearer
@@ -90,6 +112,7 @@ export async function decryptSgbSession(
  */
 export async function getOrCreateSgbDeviceUuid(): Promise<string> {
   const cookieStore = await cookies();
+  const secure = await shouldUseSecureClientAreaCookie();
   const existing = cookieStore.get(CLIENT_AREA_DEVICE_UUID_COOKIE)?.value;
 
   if (existing) {
@@ -102,7 +125,7 @@ export async function getOrCreateSgbDeviceUuid(): Promise<string> {
     value: uuid,
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure,
     path: "/",
     maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE,
   });
@@ -121,6 +144,7 @@ export async function createPendingSgbOtpSession(
   payload: PendingSgbOtpSession,
 ) {
   const cookieStore = await cookies();
+  const secure = await shouldUseSecureClientAreaCookie();
   const encrypted = await encryptSgbSession({
     token: payload.token,
     email: payload.email,
@@ -133,7 +157,7 @@ export async function createPendingSgbOtpSession(
     name: CLIENT_AREA_OTP_SESSION_COOKIE,
     value: encrypted,
     httpOnly: true,
-    secure: true,
+    secure,
     sameSite: "lax",
     path: "/",
     maxAge: CLIENT_AREA_OTP_SESSION_MAX_AGE,

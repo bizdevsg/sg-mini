@@ -34,10 +34,6 @@ function resolveActiveTab(pathname: string): TabId {
     return "account";
   }
 
-  if (pathname.includes("/client-area/transaction")) {
-    return "transaction";
-  }
-
   if (pathname.includes("/client-area/trade-pilot")) {
     return "trade-pilot";
   }

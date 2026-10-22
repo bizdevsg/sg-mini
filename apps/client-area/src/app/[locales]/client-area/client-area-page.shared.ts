@@ -15,8 +15,7 @@ export type ClientAreaSubpageId =
   | "ebook"
   | "market"
   | "market-signal"
-  | "news"
-  | "transaction";
+  | "news";
 
 export type ClientAreaSubpageProps = {
   params: Promise<{ locales: string }>;
@@ -55,13 +54,11 @@ function getClientAreaSubpageTitle(
     case "ebook":
       return getMessages(locale).ebookPage.title;
     case "market":
-      return copy.marketWatchTitle;
+      return getMessages(locale).clientArea.marketTransactions.title;
     case "market-signal":
       return locale === "id" ? "Market Insight" : "Market Insight";
     case "news":
       return copy.newsTitle;
-    case "transaction":
-      return copy.transactionTitle;
   }
 }
 

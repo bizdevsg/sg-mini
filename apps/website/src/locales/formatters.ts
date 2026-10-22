@@ -32,7 +32,7 @@ export function formatLocaleNumber(
   }
 
   const decimalDigits = normalizedValue.includes(".")
-    ? normalizedValue.split(".")[1]?.length ?? 0
+    ? (normalizedValue.split(".")[1]?.length ?? 0)
     : 0;
   const numericValue = Number(normalizedValue);
 
@@ -107,7 +107,7 @@ export function formatLocaleTime(
   return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
+    // second: "2-digit",
     timeZone: getLocaleConfig(locale).timeZone,
   }).format(parsedDate);
 }

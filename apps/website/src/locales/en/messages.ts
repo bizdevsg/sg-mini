@@ -3,14 +3,9 @@ import { enApp } from "./content/app";
 import { enNavbar } from "./content/navbar";
 import { enHero } from "./content/hero";
 import { enRegulator } from "./content/regulator";
-import { enTrustStats } from "./content/trustStats";
-import { enSecurity } from "./content/security";
 import { enAppPromoSection } from "./content/appPromoSection";
-import { enHomeEbookPromo } from "./content/homeEbookPromo";
 import { enSpread } from "./content/spread";
-import { enBenefitSection } from "./content/benefitSection";
 import { enHomeWhyChoose } from "./content/homeWhyChoose";
-import { enFinalCta } from "./content/finalCta";
 import { enLiveQuoteSection } from "./content/liveQuoteSection";
 import { enLiveQuotePage } from "./content/liveQuotePage";
 import { enEbookPage } from "./content/ebookPage";
@@ -33,7 +28,6 @@ import { enMarketAcademyPage } from "./content/marketAcademyPage";
 import { enMarketAcademyBrowser } from "./content/marketAcademyBrowser";
 import { enMarketAcademyDetailPage } from "./content/marketAcademyDetailPage";
 import { enBannerSlideshow } from "./content/bannerSlideshow";
-import { enBannerDetailPage } from "./content/bannerDetailPage";
 import { enPromoDetailPage } from "./content/promoDetailPage";
 import { enTermsConditionsPage } from "./content/termsConditionsPage";
 import { enPromoPage } from "./content/promoPage";
@@ -51,14 +45,9 @@ export const enMessages: AppMessages = {
   navbar: enNavbar,
   hero: enHero,
   regulator: enRegulator,
-  trustStats: enTrustStats,
-  security: enSecurity,
   appPromoSection: enAppPromoSection,
-  homeEbookPromo: enHomeEbookPromo,
   spread: enSpread,
-  benefitSection: enBenefitSection,
   homeWhyChoose: enHomeWhyChoose,
-  finalCta: enFinalCta,
   liveQuoteSection: enLiveQuoteSection,
   liveQuotePage: enLiveQuotePage,
   ebookPage: enEbookPage,
@@ -82,7 +71,6 @@ export const enMessages: AppMessages = {
   marketAcademyBrowser: enMarketAcademyBrowser,
   marketAcademyDetailPage: enMarketAcademyDetailPage,
   bannerSlideshow: enBannerSlideshow,
-  bannerDetailPage: enBannerDetailPage,
   promoDetailPage: enPromoDetailPage,
   termsConditionsPage: enTermsConditionsPage,
   promoPage: enPromoPage,

@@ -4,7 +4,6 @@ export type TabId =
   | "home"
   | "market"
   | "trade-pilot"
-  | "transaction"
   | "news"
   | "ebook"
   | "account";

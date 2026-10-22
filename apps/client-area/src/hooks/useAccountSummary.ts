@@ -28,7 +28,7 @@ type SettledState = Exclude<AccountSummaryState, { status: "loading" }>;
  * (see useLiveAccountSummary); this slower poll only catches changes that no tick
  * announces (deposit, a position closed elsewhere, margin changes).
  */
-export const ACCOUNT_SUMMARY_FALLBACK_REFRESH_MS = 30000;
+export const ACCOUNT_SUMMARY_FALLBACK_REFRESH_MS = 15000;
 
 /**
  * Triggered refreshes never start closer together than this. Every request

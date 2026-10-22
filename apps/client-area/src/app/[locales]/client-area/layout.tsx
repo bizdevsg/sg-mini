@@ -11,7 +11,7 @@ import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessi
 import { ClientAreaTokenRefresh } from "@/components/providers/ClientAreaTokenRefresh";
 import {
   CLIENT_AREA_ACCOUNT_MODE_COOKIE,
-  resolveClientAreaAccountMode,
+  resolveAvailableClientAreaAccountMode,
 } from "@/lib/client-area-account-mode";
 import { getClientAreaSessionState } from "@/lib/client-area-auth";
 import { getWebsiteFeatureConfig } from "@/lib/client-area-config";
@@ -41,8 +41,9 @@ export default async function ClientAreaLayout({
   const session = await getClientAreaSessionState();
   // First visit (no saved choice): open the Real account when the customer has
   // one, like the mobile app; otherwise fall back to Demo.
-  const initialAccountMode = resolveClientAreaAccountMode(
+  const initialAccountMode = resolveAvailableClientAreaAccountMode(
     savedAccountMode ?? (session.profile?.accountIds.real ? "real" : "demo"),
+    session.profile?.accountIds ?? { demo: null, real: null },
   );
 
   if (!isSupportedLocale(locales)) {

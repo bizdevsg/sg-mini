@@ -99,7 +99,10 @@ function renderActionModalContent(
   }
 
   if (actionId === "temporary") {
-    const transactionHref = resolveLocalizedHref(locale, "/client-area/transaction");
+    const transactionHref = resolveLocalizedHref(
+      locale,
+      "/client-area/market#transactions",
+    );
     const transactionLabels =
       locale === "id"
         ? {

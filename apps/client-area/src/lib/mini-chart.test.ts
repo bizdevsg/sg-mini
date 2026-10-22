@@ -85,6 +85,16 @@ describe("GET /api/chart-url", () => {
     assert.deepEqual(await response.json(), { error: "SESSION_EXPIRED" });
   });
 
+  it("returns 409 instead of expiring the session when no chart account is available", async () => {
+    const response = buildChartUrlResponse(
+      new Request("https://portal.example/api/chart-url"),
+      { account: "", isDemo: true, token: makeToken() },
+    );
+
+    assert.equal(response.status, 409);
+    assert.deepEqual(await response.json(), { error: "ACCOUNT_UNAVAILABLE" });
+  });
+
   it("returns 400 for an invalid symbol", () => {
     const response = buildChartUrlResponse(
       new Request("https://portal.example/api/chart-url?symbol=BAD%20SYMBOL"),

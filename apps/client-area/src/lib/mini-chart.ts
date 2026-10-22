@@ -63,10 +63,17 @@ export function buildChartUrlResponse(
     return Response.json({ error: "INVALID_SYMBOL" }, { ...responseInit, status: 400 });
   }
 
-  if (!session?.account) {
+  if (!session) {
     return Response.json(
       { error: "SESSION_EXPIRED" },
       { ...responseInit, status: 401 },
+    );
+  }
+
+  if (!session.account) {
+    return Response.json(
+      { error: "ACCOUNT_UNAVAILABLE" },
+      { ...responseInit, status: 409 },
     );
   }
 

@@ -26,6 +26,7 @@ type ClientAreaTransactionsPanelProps = {
   onRetryPositions: () => void;
   positions: PositionItem[];
   positionsStatus: LoadStatus;
+  transactionFilter?: string | null;
   transactionHistory: TransactionHistoryItem[];
 };
 
@@ -131,6 +132,7 @@ export function ClientAreaTransactionsPanel({
   onRetryPositions,
   positions,
   positionsStatus,
+  transactionFilter,
   transactionHistory,
 }: ClientAreaTransactionsPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>("open");
@@ -158,6 +160,11 @@ export function ClientAreaTransactionsPanel({
         <h2 className="flex items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
           <BadgeDollarSign />
           {copy.transactionTitle}
+          {transactionFilter ? (
+            <span className="rounded-full border border-yellow-400/25 bg-yellow-400/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-yellow-300">
+              {transactionFilter.replace(/_BBJ$/, "")}
+            </span>
+          ) : null}
         </h2>
 
         <div

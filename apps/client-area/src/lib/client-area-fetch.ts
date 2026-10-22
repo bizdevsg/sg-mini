@@ -1,7 +1,11 @@
 "use client";
 
+import { createClientAreaRequestQueue } from "@/lib/client-area-request-queue";
 import { getClientAreaLoginHref } from "@/lib/client-area-session";
 import { isSupportedLocale, type AppLocale } from "@/locales";
+
+const enqueueClientAreaRequest = createClientAreaRequestQueue();
+let isRedirectingToLogin = false;
 
 export class ClientAreaSessionExpiredError extends Error {
   constructor() {
@@ -29,12 +33,19 @@ export async function clientAreaFetch(
   input: RequestInfo | URL,
   init?: RequestInit,
 ): Promise<Response> {
-  const response = await fetch(input, { ...init, cache: "no-store" });
+  return enqueueClientAreaRequest(async () => {
+    if (isRedirectingToLogin) {
+      throw new ClientAreaSessionExpiredError();
+    }
 
-  if (response.status === 401) {
-    redirectToExpiredSessionLogin();
-    throw new ClientAreaSessionExpiredError();
-  }
+    const response = await fetch(input, { ...init, cache: "no-store" });
 
-  return response;
+    if (response.status === 401) {
+      isRedirectingToLogin = true;
+      redirectToExpiredSessionLogin();
+      throw new ClientAreaSessionExpiredError();
+    }
+
+    return response;
+  });
 }

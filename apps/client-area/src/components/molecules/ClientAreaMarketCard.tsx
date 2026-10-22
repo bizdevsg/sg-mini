@@ -1,8 +1,10 @@
+"use client";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import Link from "next/link";
 
 import { ClientAreaMarketMetricItem } from "@/components/atoms/ClientAreaMarketMetricItem";
-import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import {
   formatQuoteNumber,
@@ -16,13 +18,21 @@ import { type AppLocale, type AppMessages } from "@/locales";
 type ClientAreaMarketCardProps = {
   fieldLabels: AppMessages["liveQuoteTable"]["fields"];
   item: MarketPrice;
+  isTransactionFilterActive: boolean;
+  liveChartLabel: string;
   locale: AppLocale;
+  onViewTransactions: (marketCode: string) => void;
+  viewTransactionsLabel: string;
 };
 
 export function ClientAreaMarketCard({
   fieldLabels,
   item,
+  isTransactionFilterActive,
+  liveChartLabel,
   locale,
+  onViewTransactions,
+  viewTransactionsLabel,
 }: ClientAreaMarketCardProps) {
   const direction = item.change >= 0 ? "up" : "down";
 
@@ -64,96 +74,66 @@ export function ClientAreaMarketCard({
   };
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/10 to-white/5 px-4 py-4 sm:px-6 sm:py-5">
-      <div className="absolute inset-y-0 left-0 w-24 rounded-full bg-white/[0.04] blur-2xl" />
+    <article className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border bg-zinc-900/75 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.22)] transition sm:p-5 ${isTransactionFilterActive ? "border-yellow-400/60 ring-1 ring-yellow-400/20" : "border-white/15 hover:border-yellow-400/30"}`}>
+      <div className="absolute -right-12 -top-14 h-32 w-32 rounded-full bg-yellow-400/[0.06] blur-3xl" />
 
-      <div className="relative grid gap-6 xl:grid-cols-[260px_minmax(0,1fr)_auto] xl:items-center">
-        {/* Header */}
-        <div className="flex min-w-0 items-center gap-4 sm:gap-5">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-amber-950/90 shadow-[inset_0_2px_18px_rgba(255,191,36,0.18),0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-amber-400/20 sm:h-15 sm:w-15">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-radial-[at_30%_30%] from-amber-300/20 via-transparent to-transparent sm:h-15 sm:w-15">
-              <LiveQuoteInstrumentIcon
-                symbol={marketCode}
-                className="h-12 w-12"
-              />
-            </div>
-          </div>
-
-          <div className="min-w-0">
-            <h3 className="break-words text-lg font-black uppercase tracking-tight text-white sm:text-xl">
-              {item.symbol}
-
-            </h3>
-            <p className="text-xs font-semibold text-zinc-500">
-              ({displayMarketCode})
-            </p>
-          </div>
+      <div className="relative flex min-w-0 items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="truncate text-xl font-black tracking-tight text-white">
+            {item.symbol}
+          </h3>
+          <p className="mt-0.5 text-xs font-semibold text-zinc-500">
+            ({displayMarketCode})
+          </p>
         </div>
 
-        {/* Metrics */}
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          <div className="grid gap-1">
-            <ClientAreaMarketMetricItem
-              label={fieldLabels.high}
-              value={marketMetrics.high}
-            />
-
-            <ClientAreaMarketMetricItem
-              label={fieldLabels.low}
-              value={marketMetrics.low}
-            />
-          </div>
-
-          <div className="grid gap-1 xl:border-l xl:border-white/10 xl:pl-6">
-            <ClientAreaMarketMetricItem
-              label={fieldLabels.open}
-              value={marketMetrics.open}
-            />
-
-            <ClientAreaMarketMetricItem
-              label={
-                <FontAwesomeIcon
-                  icon={["far", "alarm-clock"]}
-                  className="text-sm text-zinc-300"
-                />
-              }
-              value={marketMetrics.time}
-            />
-          </div>
-
-          <div className="grid gap-1 sm:col-span-2 xl:col-span-1 xl:border-l xl:border-white/10 xl:pl-6">
-            <ClientAreaMarketMetricItem
-              valuePrefix={
-                <DirectionIcon className={directionClassName} size={14} />
-              }
-              label={fieldLabels.sell}
-              value={marketMetrics.sell}
-              valueClassName={directionClassName}
-            />
-
-            <ClientAreaMarketMetricItem
-              valuePrefix={
-                <DirectionIcon className={directionClassName} size={14} />
-              }
-              label={fieldLabels.buy}
-              value={marketMetrics.buy}
-              valueClassName={directionClassName}
-            />
-          </div>
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black/35 ring-1 ring-yellow-400/15">
+          <LiveQuoteInstrumentIcon symbol={marketCode} className="h-8 w-8" />
         </div>
+      </div>
 
-        {/* Button */}
-        <div className="flex justify-end xl:justify-center">
-          <ButtonLink
-            href={resolveClientAreaMarketChartHref(
-              locale,
-              marketCode,
-            )}
-            className="whitespace-nowrap"
-          >
-            Live Chart
-          </ButtonLink>
-        </div>
+      <div className="relative mt-5 grid grid-cols-2 gap-2">
+        <ClientAreaMarketMetricItem
+          valuePrefix={<DirectionIcon className={directionClassName} size={13} />}
+          label={fieldLabels.buy}
+          value={marketMetrics.buy}
+          valueClassName={directionClassName}
+        />
+        <ClientAreaMarketMetricItem
+          valuePrefix={<DirectionIcon className={directionClassName} size={13} />}
+          label={fieldLabels.sell}
+          value={marketMetrics.sell}
+          valueClassName={directionClassName}
+        />
+        <ClientAreaMarketMetricItem label={fieldLabels.high} value={marketMetrics.high} />
+        <ClientAreaMarketMetricItem label={fieldLabels.low} value={marketMetrics.low} />
+        <ClientAreaMarketMetricItem label={fieldLabels.open} value={marketMetrics.open} />
+        <ClientAreaMarketMetricItem
+          label={
+            <FontAwesomeIcon
+              icon={["far", "alarm-clock"]}
+              className="text-sm text-zinc-300"
+            />
+          }
+          value={marketMetrics.time}
+        />
+      </div>
+
+      <div className="relative mt-auto grid grid-cols-2 gap-2 pt-4">
+        <Link
+          href={resolveClientAreaMarketChartHref(locale, marketCode)}
+          className="inline-flex min-h-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] px-3 text-center text-xs font-bold text-zinc-200 transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300/80"
+        >
+          {liveChartLabel}
+        </Link>
+        <button
+          type="button"
+          aria-pressed={isTransactionFilterActive}
+          onClick={() => onViewTransactions(marketCode)}
+          className={`inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl px-3 text-center text-xs font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${isTransactionFilterActive ? "bg-yellow-300 text-black" : "bg-yellow-400 text-black hover:bg-yellow-300"}`}
+        >
+          {viewTransactionsLabel}
+        </button>
       </div>
     </article>
   );

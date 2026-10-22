@@ -17,17 +17,19 @@ import {
 import {
   decryptSgbSession,
   encryptSgbSession,
+  shouldUseSecureClientAreaCookie,
   type SgbClientAreaSessionPayload,
 } from "@/lib/sgb-session";
 import type { ClientAreaAccountIds } from "@/lib/client-area-profile.shared";
 import {
   CLIENT_AREA_ACCOUNT_MODE_COOKIE,
-  resolveClientAreaAccountMode,
+  resolveAvailableClientAreaAccountMode,
 } from "@/lib/client-area-account-mode";
 import {
   accountIdsByMode,
   primaryAccountId,
 } from "@/types/account-summary";
+
 export {
   getClientAreaDashboardHref,
   getClientAreaLoginHref,
@@ -169,6 +171,7 @@ export async function startSession(
   metadata: StartSessionMetadata = {},
 ) {
   const cookieStore = await cookies();
+  const secure = await shouldUseSecureClientAreaCookie();
   const encryptedSession = await encryptSgbSession({
     token,
     account,
@@ -183,7 +186,7 @@ export async function startSession(
   const cookieOptions = {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure: true,
+    secure,
     path: "/",
     ...(metadata.rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
   };
@@ -202,7 +205,7 @@ export async function startSession(
     name: CLIENT_AREA_LAST_ACTIVITY_COOKIE,
     value: now,
     sameSite: "lax",
-    secure: true,
+    secure,
     path: "/",
     maxAge: CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
   });
@@ -217,11 +220,12 @@ export async function getSession(): Promise<MiniMicroSession | null> {
     return null;
   }
 
-  const savedMode = resolveClientAreaAccountMode(
+  const accounts = accountIdsByMode(session.accounts);
+  const savedMode = resolveAvailableClientAreaAccountMode(
     cookieStore.get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value ??
       (session.isDemo ? "demo" : "real"),
+    accounts,
   );
-  const accounts = accountIdsByMode(session.accounts);
   const hasMappedAccounts = Boolean(accounts.demo || accounts.real);
   const account = hasMappedAccounts
     ? (savedMode === "demo" ? accounts.demo : accounts.real) ?? ""
@@ -264,6 +268,7 @@ export async function refreshClientAreaSessionToken(
   }
 
   const cookieStore = await cookies();
+  const secure = await shouldUseSecureClientAreaCookie();
   const encryptedSession = await encryptSgbSession({
     ...session,
     token: newToken,
@@ -274,7 +279,7 @@ export async function refreshClientAreaSessionToken(
     value: encryptedSession,
     httpOnly: true,
     sameSite: "lax",
-    secure: true,
+    secure,
     path: "/",
     ...(session.rememberMe ? { maxAge: CLIENT_AREA_REMEMBER_ME_MAX_AGE } : {}),
   });

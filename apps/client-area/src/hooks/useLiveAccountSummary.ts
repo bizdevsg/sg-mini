@@ -14,6 +14,9 @@ import type { OpenPositionCard } from "@/types/account-summary";
 
 type ReadyState = Extract<AccountSummaryState, { status: "ready" }>;
 
+/** How often the live price estimate on screen is allowed to move. */
+const LIVE_DISPLAY_REFRESH_MS = 15000;
+
 /** Closing-side price of the held products at the moment a snapshot arrived. */
 type Baseline = {
   state: ReadyState;
@@ -137,11 +140,22 @@ export function useLiveAccountSummary(
   const { quotes } = useLiveQuoteStream();
   const quotesRef = useRef(quotes);
   const [baseline, setBaseline] = useState<Baseline | null>(null);
+  const [displayQuotes, setDisplayQuotes] = useState(quotes);
   const { state } = summary;
 
   useEffect(() => {
     quotesRef.current = quotes;
   }, [quotes]);
+
+  // The feed ticks many times a second; the screen only follows it this often.
+  useEffect(() => {
+    const timer = window.setInterval(
+      () => setDisplayQuotes(quotesRef.current),
+      LIVE_DISPLAY_REFRESH_MS,
+    );
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   // A new snapshot arrived: remember where the prices were at that moment.
   useEffect(() => {
@@ -167,6 +181,9 @@ export function useLiveAccountSummary(
     }
 
     setBaseline({ state, prices: snapshotPrices(quotesRef.current, state) });
+    // Keep the displayed quotes in step with the baseline so a fresh snapshot
+    // does not show a move measured against older prices.
+    setDisplayQuotes(quotesRef.current);
   }, [state]);
 
   const liveState = useMemo<AccountSummaryState>(() => {
@@ -174,8 +191,8 @@ export function useLiveAccountSummary(
       return state;
     }
 
-    return applyLivePrices(baseline, quotes);
-  }, [state, baseline, quotes]);
+    return applyLivePrices(baseline, displayQuotes);
+  }, [state, baseline, displayQuotes]);
 
   return { ...summary, state: liveState };
 }

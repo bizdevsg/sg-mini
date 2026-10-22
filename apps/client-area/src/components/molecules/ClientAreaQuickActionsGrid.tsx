@@ -22,7 +22,7 @@ export function ClientAreaQuickActionsGrid({
   quickActionIconMap,
 }: ClientAreaQuickActionsGridProps) {
   return (
-    <div className="space-y-2.5">
+    <div className="grid md:grid-cols-5 gap-2">
       {ACTION_IDS.map((actionId, index) => {
         const action = clientArea.quickActions.items[index];
         const href =
@@ -31,7 +31,7 @@ export function ClientAreaQuickActionsGrid({
             : actionId === "products"
               ? resolveLocalizedHref(locale, "/client-area/market")
               : actionId === "temporary"
-                ? resolveLocalizedHref(locale, "/client-area/transaction")
+                ? resolveLocalizedHref(locale, "/client-area/market#transactions")
                 : undefined;
         const isDirectLink =
           actionId === "education" ||

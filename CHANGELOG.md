@@ -1,6 +1,14 @@
 ## [Unreleased]
 
+### Removed
+- Menghapus dua komponen `BenefitSection`, satu modul tipe landing, dan 72 file konten locale Indonesia/Inggris yang tidak pernah dikonsumsi pada Website maupun Client Area; locale `clientArea` Website juga dirampingkan agar hanya menyimpan label yang masih digunakan.
+- Menghapus 62 aset publik tanpa referensi dari Website dan Client Area (sekitar 86 MiB), termasuk banner lama, gambar legal lama, aset profil lama, tekstur, logo regulator duplikat, dan ikon yang tidak lagi dipakai, sehingga ukuran source dan artefak deployment lebih kecil.
+
 ### Fixed
+- Pemilihan mode akun Client Area kini otomatis beralih ke akun Demo/Real yang benar-benar tersedia; endpoint MiniMicro chart juga mengembalikan status akun tidak tersedia tanpa mengakhiri sesi, sehingga cookie mode lama tidak lagi memicu loop dashboard dan `login?reason=expired` setelah login ulang.
+- Request BFF terautentikasi pada Client Area kini dijalankan berurutan di browser agar rotasi cookie token MiniMicro selesai sebelum request berikutnya dikirim; login tidak lagi berulang antara dashboard dan `login?reason=expired` akibat request profil dan account summary yang saling balapan.
+- Atribut `Secure` pada cookie sesi Client Area kini mengikuti protokol request, sehingga login melalui `http://localhost` tidak lagi berulang antara halaman login dan dashboard bahkan saat menjalankan production build lokal; deployment HTTPS tetap membatasi cookie ke HTTPS.
+- Modal Client Area untuk sesi yang berakhir kini memakai judul Sesi Berakhir/Session Expired, sedangkan kesalahan login biasa tetap memakai judul Login Gagal/Login Failed.
 - Deskripsi ebook pada card dan modal Website kini mengubah HTML dari API menjadi teks bersih dengan pemisah paragraf, sehingga tag seperti `<p>`, `<span>`, dan `<br>` tidak lagi terlihat oleh pengguna.
 
 ### Added
@@ -38,6 +46,7 @@
 - Dokumentasi implementasi reCAPTCHA v3 ditambahkan untuk menjelaskan konsep, konfigurasi, alur verifikasi, dan panduan deployment.
 
 ### Changed
+- Halaman Pasar dan Transaksi Client Area digabung menjadi satu halaman responsif berisi kartu live market, akses Live Chart, filter Semua Transaksi/per-instrumen, serta tab Open Position dan Trade History; menu sidebar kini memakai satu entri Pasar & Transaksi.
 - Quick Actions pada Beranda Client Area kini tampil sebagai daftar vertikal ringkas dengan ikon, label, dan indikator navigasi, menggantikan grid card.
 - Card pemilih instrumen Market Watch pada Beranda Client Area kini dapat digeser horizontal di mobile dengan snap per card tanpa scrollbar visual, sementara tablet dan desktop tetap menggunakan grid.
 - Market Watchlist pada Beranda Client Area kini menyatu dengan chart: setiap card live quote berfungsi sebagai tombol pemilih instrumen chart aktif, sehingga pemilih instrumen duplikat di atas chart dihapus.
@@ -168,6 +177,7 @@
 - Konfigurasi nginx kini mengenali hostname mini untuk website publik dan Client Area.
 
 ### Removed
+- Route halaman Transaksi Client Area yang lama dihapus setelah seluruh konten, navigasi, dan tautannya dipindahkan ke halaman Pasar & Transaksi.
 - Dead code yang tidak memiliki jalur runtime aktif dibersihkan dari Website dan Client Area, mencakup 128 file source, 15 asset yang hanya dipakai oleh source tersebut, serta unused import, prop, function, constant, type, dan blok JSX komentar terkait; route valid, test, konfigurasi aktif, dan asset publik yang belum terverifikasi tetap dipertahankan.
 - Dependency `lightweight-charts` dan `jspdf-autotable` dihapus dari workspace Client Area setelah consumer terakhirnya ikut dibersihkan; `jspdf-autotable` tetap dipertahankan pada Website karena masih dipakai oleh ekspor historical data, dan `crypto-js` tidak diubah.
 - Tombol eksternal Trade Pilot beserta logo khususnya di navbar website dan Client Area dihapus dari tampilan desktop dan mobile tanpa mengubah modul Trade Pilot di dalam area pengguna.

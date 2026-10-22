@@ -414,7 +414,7 @@ export function ClientAreaDailyStatementPanel({
             <p className="rounded-xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-sm leading-6 text-yellow-200">
               {messages.openAsOf(report.statementDate ?? EMPTY)}{" "}
               <Link
-                href={resolveLocalizedHref(locale, "/client-area/transaction")}
+                href={resolveLocalizedHref(locale, "/client-area/market#transactions")}
                 className="font-semibold underline underline-offset-2 hover:text-yellow-100"
               >
                 {messages.openLiveLink}

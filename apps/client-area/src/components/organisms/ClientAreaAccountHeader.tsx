@@ -7,6 +7,7 @@ import { useClientAreaProfile } from "@/components/providers/ClientAreaProfilePr
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { resolveClientAreaAccountId } from "@/lib/client-area-profile.shared";
 import { getMessages, type AppLocale } from "@/locales";
+import { UserRound } from "lucide-react";
 
 type ClientAreaAccountHeaderProps = {
   locale: AppLocale;
@@ -30,14 +31,18 @@ export function ClientAreaAccountHeader({
         <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
           <div className="relative shrink-0">
             <div className="h-20 w-20 overflow-hidden rounded-2xl border-2 border-yellow-500/40 ring-4 ring-yellow-500/10 sm:h-24 sm:w-24">
-              <Image
+              {/* <Image
                 src="/assets/client-area-profile-avatar.png"
                 alt={`${accountPage.viewOnly.photoLabel} ${profile.displayName}`}
                 width={96}
                 height={96}
                 className="h-full w-full object-cover"
                 preload
-              />
+              /> */}
+
+              <div className="bg-yellow-500/10 w-full h-full flex items-center justify-center">
+                <UserRound className="h-10 w-10 text-yellow-500" />
+              </div>
             </div>
             <span className="absolute -bottom-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-2 border-[#111111] bg-yellow-500 text-black">
               <FontAwesomeIcon icon={["fas", "lock"]} className="text-xs" />

@@ -79,14 +79,15 @@ export function ClientAreaLoginPage({
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(
     Boolean(sessionExpiredMessage),
   );
+  const isSessionExpired = !state.message && Boolean(sessionExpiredMessage);
   const errorModalCopy =
     locale === "id"
       ? {
-        title: "Login Gagal",
+        title: isSessionExpired ? "Sesi Berakhir" : "Login Gagal",
         closeLabel: "COBA LAGI",
       }
       : {
-        title: "Login Failed",
+        title: isSessionExpired ? "Session Expired" : "Login Failed",
         closeLabel: "TRY AGAIN",
       };
 

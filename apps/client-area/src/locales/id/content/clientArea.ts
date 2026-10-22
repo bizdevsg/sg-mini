@@ -15,6 +15,12 @@ export const idClientArea: AppMessages["clientArea"] = {
     refreshLabel: "Perbarui",
     retryLabel: "Coba lagi",
   },
+  marketTransactions: {
+    title: "Pasar & Transaksi",
+    allTransactionsLabel: "Semua Transaksi",
+    liveChartLabel: "Live Chart",
+    viewTransactionsLabel: "Lihat Transaksi",
+  },
   viewOnlyDisclaimer: {
     label: "Disclaimer:",
     body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
@@ -63,7 +69,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     highlights: [
       "Ringkasan balance, equity, dan floating P/L real-time.",
       "Akses cepat ke deposit, withdraw, edukasi, dan produk.",
-      "Market watch, berita, dan riwayat transaksi dalam area terpisah.",
+      "Market watch dan riwayat transaksi dalam satu halaman terpadu.",
     ],
     securityTitle: "Keamanan akun",
     securityBody:
@@ -104,18 +110,13 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
       {
         id: "market",
-        label: "Pasar",
+        label: "Pasar & Transaksi",
         href: "#market",
       },
       {
         id: "trade-pilot",
         label: "Trade Pilot",
         href: "/client-area/trade-pilot/analisis",
-      },
-      {
-        id: "transaction",
-        label: "Transaksi",
-        href: "#actions",
       },
       {
         id: "news",
