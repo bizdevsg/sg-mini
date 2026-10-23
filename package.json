@@ -5,6 +5,9 @@
   "workspaces": [
     "apps/*"
   ],
+  "engines": {
+    "node": ">=24.22.1 <25"
+  },
   "scripts": {
     "dev": "concurrently -n website,client-area -c blue,magenta \"npm:dev:website\" \"npm:dev:client-area\"",
     "dev:website": "npm run dev --workspace=@sgb/website",

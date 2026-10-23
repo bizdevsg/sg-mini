@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+### Changed
+- Runtime Node.js untuk development dan seluruh stage image Docker Website/Client Area dipin ke Node.js 24.22.1 LTS melalui `engines`, `.nvmrc`, dan base image eksplisit agar build konsisten serta memakai security release 21 Oktober 2026 yang menutup kerentanan runtime termasuk remote code execution pada decoder Brotli.
+
 ### Removed
 - Menghapus dua komponen `BenefitSection`, satu modul tipe landing, dan 72 file konten locale Indonesia/Inggris yang tidak pernah dikonsumsi pada Website maupun Client Area; locale `clientArea` Website juga dirampingkan agar hanya menyimpan label yang masih digunakan.
 - Menghapus 62 aset publik tanpa referensi dari Website dan Client Area (sekitar 86 MiB), termasuk banner lama, gambar legal lama, aset profil lama, tekstur, logo regulator duplikat, dan ikon yang tidak lagi dipakai, sehingga ukuran source dan artefak deployment lebih kecil.

@@ -17,6 +17,10 @@ apps/
 
 ## Development
 
+Gunakan Node.js `24.22.1` (lihat `.nvmrc`). Versi runtime project dibatasi ke
+Node.js `>=24.22.1 <25` agar development, build, dan image produksi memakai
+rilis LTS dengan security patch yang sama.
+
 Install dependency workspace dari root:
 
 ```bash
