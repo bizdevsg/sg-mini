@@ -103,7 +103,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
             effect="fade-up"
           >
             <h1 className="font-mono text-3xl font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3rem] xl:text-[4rem]">
-              <span className="text-yellow-500">
+              <span className="text-yellow-500 text-shadow-md text-shadow-black">
                 {messages.hero.titleLead}
               </span>
               <span className="block text-white">

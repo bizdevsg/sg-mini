@@ -16,15 +16,24 @@ export const enSolidGoldAppPageContent: SolidGoldAppPageContent = {
       "The Solid app helps you monitor the market, track price movements, and manage Solid Gold Berjangka trading activities faster from a single application.",
     primaryCta: "Download on Play Store",
     secondaryCta: "Download on App Store",
-    badges: [
-      "Solid: Official Trading Platform",
-      "Monitor the Market More Easily",
-      "Available on Android & iOS",
-    ],
+    badges: ["Official Platform", "Easy Market Monitoring", "Android & iOS"],
     visualSrc: getFramerImageUrl(
       "852i2sfEYXSfE1r3eJjVmPA8KZE.webp?height=1020&width=750",
     ),
     visualAlt: "Solid app displayed on a mobile device",
+  },
+
+  preview: {
+    ariaLabel: "Solid app preview gallery",
+    previousLabel: "View previous screenshot",
+    nextLabel: "View next screenshot",
+    imageAlts: [
+      "Solid app home screen and market overview",
+      "Solid app feature preview 2",
+      "Solid app feature preview 3",
+      "Solid app feature preview 4",
+      "Solid app feature preview 5",
+    ],
   },
 
   platforms: {

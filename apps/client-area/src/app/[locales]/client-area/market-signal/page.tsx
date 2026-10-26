@@ -88,12 +88,11 @@ export default async function ClientAreaMarketSignalPage({
     pageStartIndex,
     pageStartIndex + HISTORY_SIGNAL_PAGE_SIZE,
   );
-  const paginationSummary =
-    locales === "id"
-      ? `Halaman ${safeCurrentPage} dari ${totalPages}`
-      : `Page ${safeCurrentPage} of ${totalPages}`;
-  const previousLabel = locales === "id" ? "Sebelumnya" : "Previous";
-  const nextLabel = locales === "id" ? "Berikutnya" : "Next";
+  const paginationSummary = detailCopy.paginationSummary
+    .replace("{currentPage}", String(safeCurrentPage))
+    .replace("{totalPages}", String(totalPages));
+  const previousLabel = detailCopy.previousLabel;
+  const nextLabel = detailCopy.nextLabel;
 
   return (
     <ClientAreaShell activeTab="home" breakingNews={breakingNews} locale={locales}>

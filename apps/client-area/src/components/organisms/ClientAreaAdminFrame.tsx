@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowLeft, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -14,10 +13,7 @@ import { ClientAreaLogoutModal } from "@/components/molecules/ClientAreaLogoutMo
 import { ClientAreaNotificationMenu } from "@/components/molecules/ClientAreaNotificationMenu";
 import { ClientAreaProfileMenu } from "@/components/molecules/ClientAreaProfileMenu";
 import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
-import {
-  getSidebarIconMap,
-  resolveClientAreaTabHref,
-} from "@/components/organisms/client-area.shared";
+import { getSidebarIconMap } from "@/components/organisms/client-area.shared";
 import type { TabId } from "@/components/organisms/client-area.types";
 import { useClientAreaLiveSchedule } from "@/hooks/useClientAreaLiveSchedule";
 import { getMessages, type AppLocale } from "@/locales";
@@ -118,8 +114,8 @@ export function ClientAreaAdminFrame({
     <div className="min-h-screen min-w-0 max-w-full overflow-x-clip bg-black text-zinc-100">
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-white/8 bg-[#09090b] lg:flex">
         <div className="flex h-20 items-center border-b border-white/8 px-5">
-          <Link
-            href={resolveClientAreaTabHref(locale, "home")}
+          <a
+            href={`${PUBLIC_WEBSITE_URL}/${locale}`}
             className="flex min-w-0 items-center gap-3 mx-auto"
           >
             <Image
@@ -130,7 +126,7 @@ export function ClientAreaAdminFrame({
               className="h-7 w-full shrink-0 object-contain"
               priority
             />
-          </Link>
+          </a>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3">
@@ -222,19 +218,19 @@ export function ClientAreaAdminFrame({
             }`}
         >
           <div className="flex h-20 items-center justify-between border-b border-white/8 px-5">
-            <Link
-              href={resolveClientAreaTabHref(locale, "home")}
+            <a
+              href={`${PUBLIC_WEBSITE_URL}/${locale}`}
               className="flex min-w-0 items-center gap-3"
             >
               <Image
                 src="/assets/logo-utama-new.png"
                 alt={messages.app.brandName}
-                width={150}
-                height={35}
-                className="h-7 w-full shrink-0 object-contain"
+                width={130}
+                height={15}
+                className="h-3 w-full shrink-0 object-contain"
                 priority
               />
-            </Link>
+            </a>
 
             <button
               type="button"

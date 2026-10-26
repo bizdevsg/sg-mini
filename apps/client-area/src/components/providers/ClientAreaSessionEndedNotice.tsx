@@ -8,26 +8,11 @@ import {
   getClientAreaLoginHref,
 } from "@/lib/client-area-session";
 import { CLIENT_AREA_SESSION_ENDED_EVENT } from "@/lib/client-area-session-events";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaSessionEndedNoticeProps = {
   locale: AppLocale;
 };
-
-const LABELS = {
-  id: {
-    title: "Anda telah keluar dari akun",
-    description:
-      "Akun ini baru saja masuk di perangkat lain, atau sesi Anda telah berakhir. Demi keamanan, satu akun hanya bisa aktif di satu perangkat. Silakan login kembali.",
-    action: "Login kembali",
-  },
-  en: {
-    title: "You have been signed out",
-    description:
-      "This account has just signed in on another device, or your session has ended. For your security, an account can only be active on one device. Please sign in again.",
-    action: "Sign in again",
-  },
-} as const;
 
 /**
  * Blocking notice shown when an authenticated request reports the session is
@@ -39,7 +24,7 @@ export function ClientAreaSessionEndedNotice({
 }: ClientAreaSessionEndedNoticeProps) {
   const [isOpen, setIsOpen] = useState(false);
   const actionRef = useRef<HTMLButtonElement>(null);
-  const labels = LABELS[locale];
+  const labels = getMessages(locale).clientArea.sessionEndedNotice;
 
   useEffect(() => {
     const open = () => setIsOpen(true);

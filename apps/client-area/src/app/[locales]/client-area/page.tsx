@@ -10,6 +10,7 @@ import {
   getEconomicCalendarRange,
 } from "@/lib/economic-calendar";
 import { getMarketSignalFeedByCategory } from "@/lib/market-signal";
+import { getTikTokVideo } from "@/lib/tiktok-video";
 import {
   getMessages,
   isSupportedLocale,
@@ -41,11 +42,9 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const messages = getMessages(locales);
-  const title =
-    locales === "id" ? "Dashboard Client Area" : "Client Area Dashboard";
 
   return buildPrivateMetadata({
-    title,
+    title: messages.clientArea.metadataTitle,
     description: messages.clientArea.pageDescription,
     locale: locales,
     path: `/${locales}/client-area`,
@@ -58,14 +57,20 @@ export default async function ClientAreaPage({
   const { locales } = await params;
   assertValidLocale(locales);
   await requireClientAreaSession(locales);
-  const [initialBanners, breakingNews, economicCalendarToday, marketSignalFeed] =
-    await Promise.all([
+  const [
+    initialBanners,
+    breakingNews,
+    economicCalendarToday,
+    marketSignalFeed,
+    tikTokVideo,
+  ] = await Promise.all([
       getBannerRecords(),
       getClientAreaBreakingNews(locales),
       getEconomicCalendarRange("today").catch(() =>
         createEmptyEconomicCalendarRange("today"),
       ),
       getMarketSignalFeedByCategory(),
+      getTikTokVideo(),
     ]);
 
   return (
@@ -75,6 +80,7 @@ export default async function ClientAreaPage({
       initialBanners={initialBanners}
       locale={locales}
       marketSignals={marketSignalFeed.items}
+      tikTokVideo={tikTokVideo.data}
     />
   );
 }

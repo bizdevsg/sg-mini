@@ -11,7 +11,7 @@ import type {
   PositionItem,
   TransactionHistoryItem,
 } from "@/components/organisms/client-area.types";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type LoadStatus = "loading" | "ready" | "unavailable" | "error";
 
@@ -24,6 +24,7 @@ type ClientAreaTransactionsPanelProps = {
   onHistoryPageChange: (page: number) => void;
   onRetryHistory: () => void;
   onRetryPositions: () => void;
+  onShowAllTransactions: () => void;
   positions: PositionItem[];
   positionsStatus: LoadStatus;
   transactionFilter?: string | null;
@@ -31,43 +32,6 @@ type ClientAreaTransactionsPanelProps = {
 };
 
 type Tab = "open" | "history";
-
-const LABELS = {
-  id: {
-    tabs: { open: "Open Position", history: "Trade History" },
-    totalPositions: "Total Posisi",
-    buySell: "Buy / Sell",
-    totalFloating: "Total Floating P/L",
-    historyEmpty: "Belum ada riwayat transaksi untuk akun ini.",
-    historyLoading: "Memuat riwayat...",
-    historyError: "Riwayat belum bisa dimuat.",
-    previous: "Sebelumnya",
-    next: "Berikutnya",
-    page: "Halaman",
-    positionsLoading: "Memuat posisi...",
-    positionsEmpty: "Belum ada posisi terbuka untuk akun ini.",
-    unavailable: "Akun untuk mode ini tidak tersedia.",
-    positionsError: "Posisi belum bisa dimuat.",
-    retry: "Coba lagi",
-  },
-  en: {
-    tabs: { open: "Open Position", history: "Trade History" },
-    totalPositions: "Open Positions",
-    buySell: "Buy / Sell",
-    totalFloating: "Total Floating P/L",
-    historyEmpty: "There is no trade history for this account yet.",
-    historyLoading: "Loading history...",
-    historyError: "History could not be loaded.",
-    previous: "Previous",
-    next: "Next",
-    page: "Page",
-    positionsLoading: "Loading positions...",
-    positionsEmpty: "There are no open positions for this account.",
-    unavailable: "No account is available for this mode.",
-    positionsError: "Positions could not be loaded.",
-    retry: "Try again",
-  },
-} as const;
 
 function StatTile({
   label,
@@ -130,13 +94,15 @@ export function ClientAreaTransactionsPanel({
   onHistoryPageChange,
   onRetryHistory,
   onRetryPositions,
+  onShowAllTransactions,
   positions,
   positionsStatus,
   transactionFilter,
   transactionHistory,
 }: ClientAreaTransactionsPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>("open");
-  const labels = LABELS[locale];
+  const transactionMessages = getMessages(locale).clientArea.marketTransactions;
+  const labels = transactionMessages.panel;
 
   const buyCount = positions.filter((item) => item.side === "buy").length;
   const sellCount = positions.length - buyCount;
@@ -157,28 +123,51 @@ export function ClientAreaTransactionsPanel({
   return (
     <div className="space-y-5 rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-yellow-500 sm:text-xl">
-          <BadgeDollarSign />
-          {copy.transactionTitle}
-          {transactionFilter ? (
-            <span className="rounded-full border border-yellow-400/25 bg-yellow-400/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-yellow-300">
-              {transactionFilter.replace(/_BBJ$/, "")}
-            </span>
-          ) : null}
-        </h2>
+        <div>
+          <div className="">
+            <div className="flex items-center gap-2">
+              <h3 className="text-2xl font-bold">
+                {copy.transactionTitle}
+              </h3>
+              {transactionFilter ? (
+                <span className="rounded-full border border-yellow-400/25 bg-yellow-400/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-yellow-300">
+                  {transactionFilter.replace(/_BBJ$/, "")}
+                </span>
+              ) : null}
+            </div>
+
+            <p>
+              Pantau posisi terbuka, riwayat transaksi, dan pending order trading disini.
+            </p>
+          </div>
+
+
+        </div>
 
         <div
-          role="tablist"
+          role="group"
+          aria-label={copy.transactionTitle}
           className="inline-flex w-full rounded-full border border-white/10 bg-black/40 p-1 sm:w-auto"
         >
+          <button
+            type="button"
+            aria-pressed={!transactionFilter}
+            onClick={onShowAllTransactions}
+            className={`min-h-10 flex-1 cursor-pointer rounded-l-full px-4 text-xs font-semibold transition-all sm:flex-none sm:px-5 sm:text-sm ${transactionFilter
+              ? "text-zinc-300 hover:text-yellow-300"
+              : "bg-yellow-500/15 text-yellow-300"
+              }`}
+          >
+            {transactionMessages.allTransactionsLabel}
+          </button>
+
           {(["open", "history"] as const).map((tab) => (
             <button
               key={tab}
               type="button"
-              role="tab"
-              aria-selected={activeTab === tab}
+              aria-pressed={activeTab === tab}
               onClick={() => setActiveTab(tab)}
-              className={`min-h-10 flex-1 cursor-pointer px-5 text-sm font-semibold transition-all sm:flex-none ${tab === "open" ? "rounded-l-full" : "rounded-r-full"} ${activeTab === tab
+              className={`min-h-10 flex-1 cursor-pointer px-4 text-xs font-semibold transition-all sm:flex-none sm:px-5 sm:text-sm ${tab === "history" ? "rounded-r-full" : ""} ${activeTab === tab
                 ? "bg-yellow-500 text-black shadow-[0_8px_20px_rgba(234,179,8,0.25)]"
                 : "text-zinc-300 hover:text-white"
                 }`}

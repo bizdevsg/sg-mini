@@ -23,6 +23,7 @@ import type {
 } from "@/components/organisms/client-area.types";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
+import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 import { getMessages } from "@/locales";
 import type { AppLocale } from "@/locales";
 
@@ -32,6 +33,7 @@ type ClientAreaDashboardProps = {
   initialBanners?: ClientAreaBannerRecord[];
   locale: AppLocale;
   marketSignals?: MarketSignalRecord[];
+  tikTokVideo: TikTokVideo;
 };
 
 export function ClientAreaDashboard({
@@ -40,6 +42,7 @@ export function ClientAreaDashboard({
   initialBanners = [],
   locale,
   marketSignals = [],
+  tikTokVideo,
 }: ClientAreaDashboardProps) {
   const messages = getMessages(locale);
   const clientArea = messages.clientArea;
@@ -123,6 +126,7 @@ export function ClientAreaDashboard({
         economicCalendarEvents={economicCalendarEvents}
         locale={locale}
         marketSignals={marketSignals}
+        tikTokVideo={tikTokVideo}
       />
     </ClientAreaShell>
   );

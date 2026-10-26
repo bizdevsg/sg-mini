@@ -4,7 +4,6 @@ import { enNavbar } from "./content/navbar";
 import { enHero } from "./content/hero";
 import { enRegulator } from "./content/regulator";
 import { enAppPromoSection } from "./content/appPromoSection";
-import { enSpread } from "./content/spread";
 import { enHomeWhyChoose } from "./content/homeWhyChoose";
 import { enLiveQuoteSection } from "./content/liveQuoteSection";
 import { enLiveQuotePage } from "./content/liveQuotePage";
@@ -46,7 +45,6 @@ export const enMessages: AppMessages = {
   hero: enHero,
   regulator: enRegulator,
   appPromoSection: enAppPromoSection,
-  spread: enSpread,
   homeWhyChoose: enHomeWhyChoose,
   liveQuoteSection: enLiveQuoteSection,
   liveQuotePage: enLiveQuotePage,

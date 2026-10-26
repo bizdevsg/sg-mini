@@ -1,6 +1,7 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const idClientArea: AppMessages["clientArea"] = {
+  metadataTitle: "Dashboard Client Area",
   pageTitle: "Dashboard",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
@@ -14,22 +15,101 @@ export const idClientArea: AppMessages["clientArea"] = {
     loading: "Memuat chart live...",
     refreshLabel: "Perbarui",
     retryLabel: "Coba lagi",
+    availableDescription: "MiniMicro live chart untuk {marketCode}.",
+    tradingViewDisclaimer:
+      "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda.",
+    unavailableBody: "Kode market ini belum tersedia untuk MiniMicro WebView.",
+    unavailableDescription:
+      "MiniMicro WebView untuk kode market ini belum tersedia.",
+    unavailableTitle: "Data Tidak Ada",
+  },
+  accountOverview: {
+    accountMetricsTitle: "Detail Margin Akun",
+    availableAccounts: "Akun tersedia",
+    collapseAccountMetrics: "Tutup detail margin akun",
+    error: "Data akun belum bisa dimuat.",
+    expandAccountMetrics: "Buka detail margin akun",
+    loading: "Memuat ringkasan akun...",
+    openRealAccountCta: "Buka Akun Real di Aplikasi",
+    realAccountDisclaimerBody:
+      "Pembukaan akun Real dilakukan melalui aplikasi Solid Gold. Unduh aplikasinya, lalu ikuti proses pendaftaran akun Real.",
+    realAccountDisclaimerTitle: "Anda belum memiliki akun Real",
+    retry: "Coba lagi",
+    stale: "Gagal memperbarui, menampilkan data terakhir",
+    unavailable: "Akun untuk mode ini tidak tersedia.",
+    unavailableAccount: "Tidak tersedia",
+    updated: "Diperbarui",
+  },
+  homeTikTok: {
+    description: "Tonton video terbaru pilihan dari Solid Prime.",
+    frameTitle: "Video TikTok Solid Prime",
+    openVideoLabel: "Buka video di TikTok",
+    title: "Video TikTok",
   },
   marketTransactions: {
     title: "Pasar & Transaksi",
     allTransactionsLabel: "Semua Transaksi",
     liveChartLabel: "Live Chart",
     viewTransactionsLabel: "Lihat Transaksi",
+    panel: {
+      buySell: "Buy / Sell",
+      historyEmpty: "Belum ada riwayat transaksi untuk akun ini.",
+      historyError: "Riwayat belum bisa dimuat.",
+      historyLoading: "Memuat riwayat...",
+      next: "Berikutnya",
+      page: "Halaman",
+      positionsEmpty: "Belum ada posisi terbuka untuk akun ini.",
+      positionsError: "Posisi belum bisa dimuat.",
+      positionsLoading: "Memuat posisi...",
+      previous: "Sebelumnya",
+      retry: "Coba lagi",
+      tabs: { open: "Open Position", history: "Trade History" },
+      totalFloating: "Total Floating P/L",
+      totalPositions: "Total Posisi",
+      unavailable: "Akun untuk mode ini tidak tersedia.",
+    },
+    positionRow: {
+      currentPrice: "Harga Saat Ini",
+      facilityFee: "Facility Fee",
+      floatingPl: "Floating P/L",
+      lots: "Lot",
+      openPrice: "Harga Buka",
+      orderNumber: "No. Order",
+      storage: "Storage",
+      vat: "VAT",
+    },
+  },
+  sessionEndedNotice: {
+    action: "Login kembali",
+    description:
+      "Akun ini baru saja masuk di perangkat lain, atau sesi Anda telah berakhir. Demi keamanan, satu akun hanya bisa aktif di satu perangkat. Silakan login kembali.",
+    title: "Anda telah keluar dari akun",
+  },
+  whatsappWidget: {
+    close: "Tutup widget WhatsApp",
+    cta: "Mulai Chat WhatsApp",
+    greeting:
+      "Halo! 👋 Live chat sedang tidak tersedia. Silakan hubungi kami lewat WhatsApp, tim kami siap membantu.",
+    message:
+      "Halo Solid Gold Berjangka, saya ingin mendapatkan bantuan dari Customer Support.",
+    open: "Buka widget WhatsApp",
+    operatingHours: "Jam operasional: Senin–Jumat, 09.00–17.00 WIB.",
+    subtitle: "Customer Support",
+    title: "Solid Gold Berjangka",
   },
   viewOnlyDisclaimer: {
+    acknowledgeLabel: "Saya Mengerti",
     label: "Disclaimer:",
+    modalTitle: "Disclaimer",
     body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
   },
   login: {
+    backToDashboardLabel: "Kembali ke Dashboard",
     badge: "Portal Nasabah",
     title: "Masuk Client Area",
     description:
       "Autentikasi akun sedang disiapkan dan belum tersedia melalui website.",
+    errorModalTitle: "Login Gagal",
     accountLabel: "Email",
     accountPlaceholder: "Masukkan email Anda",
     passwordLabel: "Password",
@@ -65,6 +145,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       "Sesi login telah berakhir. Muat ulang halaman lalu coba masuk kembali.",
     errorServer:
       "Server login sedang bermasalah atau memberikan respons yang tidak dapat diproses. Silakan coba lagi beberapa saat lagi.",
+    hidePasswordLabel: "Sembunyikan password",
     highlightsTitle: "Yang bisa Anda pantau",
     highlights: [
       "Ringkasan balance, equity, dan floating P/L real-time.",
@@ -74,6 +155,13 @@ export const idClientArea: AppMessages["clientArea"] = {
     securityTitle: "Keamanan akun",
     securityBody:
       "Pastikan Anda hanya login melalui domain resmi dan jangan pernah membagikan OTP atau password kepada pihak lain.",
+    metadataTitle: "Login Client Area",
+    registerLabel: "REGISTRASI",
+    retryLabel: "COBA LAGI",
+    sessionExpiredMessage: "Sesi Anda telah berakhir, silakan login kembali.",
+    sessionExpiredTitle: "Sesi Berakhir",
+    showPasswordLabel: "Tampilkan password",
+    submitLabel: "LOGIN",
   },
   otp: {
     title: "Verifikasi OTP",
@@ -91,12 +179,6 @@ export const idClientArea: AppMessages["clientArea"] = {
     errorInvalidCode:
       "Kode OTP tidak sesuai atau sudah kedaluwarsa. Silakan coba lagi.",
     errorSessionExpired: "Sesi verifikasi telah berakhir. Silakan login ulang.",
-  },
-  user: {
-    name: "Anita",
-    role: "Akun Demo Saya",
-    accountId: "1003713406",
-    status: "Demo",
   },
   sidebar: {
     label: "Navigasi client",
@@ -574,6 +656,7 @@ export const idClientArea: AppMessages["clientArea"] = {
     },
   },
   topbar: {
+    activeLocaleLabel: "Aktif",
     supportLabel: "Download Aplikasi Solid",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
@@ -628,30 +711,6 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
     ],
   },
-  accountPanel: {
-    eyebrow: "Akun Demo Saya",
-    title: "1003713406",
-    primaryCta: "Ubah Demo Balance",
-    items: [
-      {
-        id: "balance",
-        label: "Balance",
-        value: "$78.23",
-      },
-      {
-        id: "equity",
-        label: "Equity",
-        value: "$78.23",
-      },
-    ],
-  },
-  promoPanel: {
-    eyebrow: "Solid Gold Priority",
-    title: "Benefit eksklusif dan akses prioritas untuk client aktif.",
-    description:
-      "Siapkan area promo utama untuk campaign, loyalty, atau edukasi yang ingin ditonjolkan setelah user login.",
-    cta: "Pelajari sekarang",
-  },
   quickActions: {
     items: [
       {
@@ -676,107 +735,31 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
     ],
   },
-  shortcutPanel: {
-    items: [
-      {
-        id: "signal",
-        label: "Trading Signal",
-      },
-      {
-        id: "mover",
-        label: "Top Mover",
-      },
-      {
-        id: "trending",
-        label: "Trending",
-      },
-      {
-        id: "products",
-        label: "Produk",
-      },
-      {
-        id: "education",
-        label: "Edukasi",
-      },
-      {
-        id: "rewards",
-        label: "Rewards",
-      },
-      {
-        id: "deposit",
-        label: "Deposit",
-      },
-      {
-        id: "more",
-        label: "Lainnya",
-      },
-    ],
-  },
-  signalsPanel: {
-    title: "Rekomendasi",
-    cta: "Lihat semua",
-    items: [
-      {
-        symbol: "XAUUSD",
-        title: "Gold",
-        time: "15:56 WIB",
-        bias: "sell",
-      },
-      {
-        symbol: "EURUSD",
-        title: "EURUSD",
-        time: "16:01 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "USDJPY",
-        title: "USDJPY",
-        time: "16:05 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "GBPUSD",
-        title: "GBPUSD",
-        time: "16:04 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "OIL",
-        title: "Oil",
-        time: "16:07 WIB",
-        bias: "sell",
-      },
-    ],
-  },
-  servicePanel: {
-    title: "Layanan Nasabah",
-    items: [
-      {
-        label: "Live Quote",
-        description:
-          "Pantau harga real-time untuk keputusan entry yang lebih cepat.",
-        cta: "Buka market feed",
-      },
-      {
-        label: "Kalender Ekonomi",
-        description:
-          "Lihat agenda high impact yang bisa memengaruhi volatilitas harian.",
-        cta: "Lihat jadwal",
-      },
-      {
-        label: "Bantuan Client Service",
-        description:
-          "Hubungi support untuk kendala login, transaksi, atau verifikasi data.",
-        cta: "Hubungi support",
-      },
-    ],
-  },
   accountPage: {
     activeAccount: "Akun aktif",
     backLabel: "Back",
     pendingSectionNote:
       "Detail untuk section ini menyusul. Untuk sekarang fokusnya baru di Data Pribadi.",
     saveLabel: "Simpan",
+    profileNotice: {
+      error: "Data profil belum bisa dimuat.",
+      retry: "Coba lagi",
+      unavailable:
+        "Data profil belum tersedia. Registrasi akun ini belum diselesaikan di sistem, jadi belum ada data yang bisa ditampilkan.",
+    },
+    sensitiveDataModal: {
+      cancel: "Batal",
+      confirm: "Konfirmasi",
+      description: "Masukkan password akun untuk melihat data sensitif.",
+      hidePassword: "Sembunyikan password",
+      invalid: "Password tidak sesuai. Silakan coba lagi.",
+      passwordLabel: "Password akun",
+      passwordPlaceholder: "Masukkan password",
+      showPassword: "Tampilkan password",
+      title: "Konfirmasi password",
+      unauthorized: "Sesi Anda telah berakhir. Silakan masuk kembali.",
+      unavailable: "Data ini belum tersedia untuk ditampilkan.",
+    },
     viewOnly: {
       badge: "Secure",
       profileLabel: "Profil Nasabah",
@@ -970,6 +953,18 @@ export const idClientArea: AppMessages["clientArea"] = {
       open: "Open Position",
       settled: "Settled Statement",
     },
+    status: {
+      error: "Statement belum bisa dimuat.",
+      loading: "Memuat statement...",
+      openAsOf:
+        "Posisi terbuka pada penutupan statement tanggal {date}, bukan kondisi saat ini. Posisi yang berjalan sekarang bisa berbeda (mis. sudah ditutup setelahnya).",
+      openEmpty: "Tidak ada posisi terbuka pada statement ini.",
+      openLiveLink: "Lihat posisi saat ini di Transaksi",
+      retry: "Coba lagi",
+      settledEmpty: "Tidak ada posisi yang ditutup pada statement ini.",
+      settledUnmapped: "Data posisi yang ditutup belum dapat ditampilkan.",
+      unavailable: "Akun untuk mode ini tidak tersedia.",
+    },
     labels: {
       accountNumber: "Account No.",
       aeCode: "AE Code",
@@ -1144,6 +1139,11 @@ export const idClientArea: AppMessages["clientArea"] = {
     sellActionLabel: "Potensi Sell",
     latestNewsTitle: "Berita Terbaru",
     historyTitle: "Riwayat Signal",
+    nextLabel: "Berikutnya",
+    paginationSummary: "Halaman {currentPage} dari {totalPages}",
+    previousLabel: "Sebelumnya",
+    todayLabel: "Hari Ini",
+    yesterdayLabel: "Kemarin",
     transactionModal: {
       buyBadgeLabel: "Sinyal Buy",
       sellBadgeLabel: "Sinyal Sell",
@@ -1156,10 +1156,11 @@ export const idClientArea: AppMessages["clientArea"] = {
       closeLabel: "Tutup",
     },
   },
-  tradingView: {
-    disclaimerLabel: "Disclaimer:",
-    disclaimerTradingView:
-      "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda.",
+  transactionActionModal: {
+    cta: "Lihat transaksi",
+    summaryLabel: "Ringkasan transaksi",
+    summaryStatus: "Buka halaman transaksi",
+    summaryTitle: "Posisi aktif dan riwayat trading",
   },
   fundTransferModal: {
     closeLabel: "Tutup",

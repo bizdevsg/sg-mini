@@ -80,16 +80,10 @@ export function ClientAreaLoginPage({
     Boolean(sessionExpiredMessage),
   );
   const isSessionExpired = !state.message && Boolean(sessionExpiredMessage);
-  const errorModalCopy =
-    locale === "id"
-      ? {
-        title: isSessionExpired ? "Sesi Berakhir" : "Login Gagal",
-        closeLabel: "COBA LAGI",
-      }
-      : {
-        title: isSessionExpired ? "Session Expired" : "Login Failed",
-        closeLabel: "TRY AGAIN",
-      };
+  const errorModalCopy = {
+    title: isSessionExpired ? login.sessionExpiredTitle : login.errorModalTitle,
+    closeLabel: login.retryLabel,
+  };
 
   // ── OTP state ──────────────────────────────────────────────────────
 

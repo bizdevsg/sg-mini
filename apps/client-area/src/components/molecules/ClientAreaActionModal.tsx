@@ -6,7 +6,7 @@ import type {
   ActionId,
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaActionModalProps = {
   actionId: ActionId;
@@ -104,19 +104,7 @@ function renderActionModalContent(
       "/client-area/market#transactions",
     );
     const transactionLabels =
-      locale === "id"
-        ? {
-          summaryLabel: "Ringkasan transaksi",
-          summaryTitle: "Posisi aktif dan riwayat trading",
-          summaryStatus: "Buka halaman transaksi",
-          cta: "Lihat transaksi",
-        }
-        : {
-          summaryLabel: "Transaction summary",
-          summaryTitle: "Open positions and trade history",
-          summaryStatus: "Open transaction page",
-          cta: "View transactions",
-        };
+      getMessages(locale).clientArea.transactionActionModal;
 
     return (
       <div className="space-y-4 text-center">

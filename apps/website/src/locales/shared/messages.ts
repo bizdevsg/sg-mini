@@ -1,5 +1,3 @@
-import type { SpreadItem } from "@/types/landing";
-
 export type HomeWhyChooseItemId = "legal" | "experience" | "support" | "ebook";
 
 export type AppMessages = {
@@ -47,18 +45,6 @@ export type AppMessages = {
     imageAlt: string;
     googlePlayAlt: string;
     appStoreAlt: string;
-  };
-  spread: {
-    title: string;
-    subtitle: string;
-    cta: string;
-    items: SpreadItem[];
-    labels: {
-      product: string;
-      targetSpread: string;
-      transactionSize: string;
-      freeSwap: string;
-    };
   };
   homeWhyChoose: {
     eyebrow: string;

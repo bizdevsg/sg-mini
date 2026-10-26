@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { resolveMarketSignalCategoryIconSrc } from "@/components/organisms/client-area.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaMarketSignalHistoryListProps = {
   items: MarketSignalRecord[];
@@ -10,6 +10,7 @@ type ClientAreaMarketSignalHistoryListProps = {
 };
 
 function formatSignalTime(dateInput: string | number | Date, locale: AppLocale) {
+  const copy = getMessages(locale).clientArea.marketSignalDetail;
   const date = new Date(dateInput);
   const time = date.toLocaleTimeString(locale === "id" ? "id-ID" : "en-US", {
     hour: "2-digit",
@@ -24,13 +25,9 @@ function formatSignalTime(dateInput: string | number | Date, locale: AppLocale) 
   const isYesterday = date.toDateString() === yesterday.toDateString();
 
   const dayLabel = isSameDay
-    ? locale === "id"
-      ? "Hari Ini"
-      : "Today"
+    ? copy.todayLabel
     : isYesterday
-      ? locale === "id"
-        ? "Kemarin"
-        : "Yesterday"
+      ? copy.yesterdayLabel
       : date.toLocaleDateString(locale === "id" ? "id-ID" : "en-US", {
         day: "2-digit",
         month: "short",

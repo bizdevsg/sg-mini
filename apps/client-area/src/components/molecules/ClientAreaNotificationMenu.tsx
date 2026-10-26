@@ -341,7 +341,7 @@ export function ClientAreaNotificationMenu({
             </button>
           </div>
 
-          <div className="max-h-[min(26rem,65vh)] space-y-2 overflow-y-auto p-2">
+          <div className="client-area-notification-scroll max-h-[min(26rem,65vh)] space-y-2 overflow-y-auto p-2">
             {items.length === 0 ? (
               <div className="flex flex-col items-center px-5 py-8 text-center">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] text-zinc-600">

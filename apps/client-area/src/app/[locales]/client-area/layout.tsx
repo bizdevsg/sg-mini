@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { PageTemplate } from "@/components/layouts/PageTemplate";
+import { ClientAreaLoginDisclaimerModal } from "@/components/molecules/ClientAreaLoginDisclaimerModal";
 import { ClientAreaViewOnlyDisclaimer } from "@/components/organisms/ClientAreaViewOnlyDisclaimer";
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
 import { ClientAreaProfileProvider } from "@/components/providers/ClientAreaProfileProvider";
@@ -86,6 +87,12 @@ export default async function ClientAreaLayout({
           <ClientAreaSessionTimeout locale={locale} />
           <ClientAreaTokenRefresh />
           <ClientAreaSessionEndedNotice locale={locale} />
+          <ClientAreaLoginDisclaimerModal
+            acknowledgeLabel={viewOnlyDisclaimer.acknowledgeLabel}
+            body={viewOnlyDisclaimer.body}
+            sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
+            title={viewOnlyDisclaimer.modalTitle}
+          />
           {children}
           {disclaimer}
         </PageTemplate>

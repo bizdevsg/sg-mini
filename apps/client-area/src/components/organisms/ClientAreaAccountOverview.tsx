@@ -18,7 +18,7 @@ import type {
   DashboardCopy,
 } from "@/components/organisms/client-area.types";
 import type { AccountSummaryState } from "@/hooks/useAccountSummary";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 import type { AccountSummaryCard } from "@/types/account-summary";
 
 type ClientAreaAccountOverviewProps = {
@@ -34,61 +34,6 @@ type ClientAreaAccountOverviewProps = {
 };
 
 const EMPTY_VALUE = "—";
-
-const SUMMARY_MESSAGES: Record<
-  AppLocale,
-  {
-    error: string;
-    availableAccounts: string;
-    accountMetricsTitle: string;
-    collapseAccountMetrics: string;
-    expandAccountMetrics: string;
-    loading: string;
-    openRealAccountCta: string;
-    realAccountDisclaimerBody: string;
-    realAccountDisclaimerTitle: string;
-    retry: string;
-    stale: string;
-    unavailable: string;
-    unavailableAccount: string;
-    updated: string;
-  }
-> = {
-  id: {
-    availableAccounts: "Akun tersedia",
-    accountMetricsTitle: "Detail Margin Akun",
-    collapseAccountMetrics: "Tutup detail margin akun",
-    error: "Data akun belum bisa dimuat.",
-    expandAccountMetrics: "Buka detail margin akun",
-    loading: "Memuat ringkasan akun...",
-    openRealAccountCta: "Buka Akun Real di Aplikasi",
-    realAccountDisclaimerBody:
-      "Pembukaan akun Real dilakukan melalui aplikasi Solid Gold. Unduh aplikasinya, lalu ikuti proses pendaftaran akun Real.",
-    realAccountDisclaimerTitle: "Anda belum memiliki akun Real",
-    retry: "Coba lagi",
-    stale: "Gagal memperbarui, menampilkan data terakhir",
-    unavailable: "Akun untuk mode ini tidak tersedia.",
-    unavailableAccount: "Tidak tersedia",
-    updated: "Diperbarui",
-  },
-  en: {
-    availableAccounts: "Available accounts",
-    accountMetricsTitle: "Account Margin Details",
-    collapseAccountMetrics: "Close account margin details",
-    error: "Account data could not be loaded.",
-    expandAccountMetrics: "Open account margin details",
-    loading: "Loading account summary...",
-    openRealAccountCta: "Open a Real Account in the App",
-    realAccountDisclaimerBody:
-      "Real accounts are opened through the Solid Gold app. Download the app, then follow the Real account registration process.",
-    realAccountDisclaimerTitle: "You do not have a Real account yet",
-    retry: "Try again",
-    stale: "Could not refresh, showing the last data",
-    unavailable: "No account is available for this mode.",
-    unavailableAccount: "Unavailable",
-    updated: "Updated",
-  },
-};
 
 const ACCOUNT_METRICS: Array<{
   key:
@@ -170,7 +115,7 @@ export function ClientAreaAccountOverview({
   const [areAccountMetricsOpen, setAreAccountMetricsOpen] = useState(false);
   const summary = summaryState.status === "ready" ? summaryState.account : null;
   const isLoading = summaryState.status === "loading";
-  const messages = SUMMARY_MESSAGES[locale];
+  const messages = getMessages(locale).clientArea.accountOverview;
   const floatingPl = summary?.floatingPl ?? null;
   // Keep the mode selector available, but hide empty figures when no Real account exists.
   const hasNoRealAccount =
@@ -428,7 +373,7 @@ export function ClientAreaAccountOverview({
           </p>
 
           <div
-            className={`relative mt-3 space-y-3 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "block" : "hidden"} lg:block`}
+            className={`relative mt-3 grid-cols-2 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "grid" : "hidden"} lg:grid`}
             id={accountMetricsId}
           >
             {ACCOUNT_METRICS.map((metric, index) => (

@@ -5,6 +5,7 @@ import { memo, useEffect, useState } from "react";
 import type {
   BreakingNewsItem,
 } from "@/components/organisms/client-area.types";
+import { Zap } from "lucide-react";
 
 type ClientAreaHeaderTickerProps = {
   breakingLabel: string;
@@ -38,15 +39,18 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
   const activeNews = breakingNews[activeIndex];
 
   return (
-    <div className="select-none rounded-[24px] bg-yellow-500/10 sm:rounded-full">
-      <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-[20px] border border-zinc-800 bg-zinc-900/60 px-3 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-4 sm:py-1.5">
-        <div className="flex items-center gap-3 sm:shrink-0">
-          <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-yellow-500">
-            {breakingLabel}
-          </span>
-          <div className="h-3 w-px shrink-0 bg-zinc-700 sm:block" />
+    <div className="select-none flex items-center gap-2">
+      <div className="items-center gap-3 sm:shrink-0 hidden md:flex">
+        <div className="bg-yellow-500 rounded-full p-1">
+          <Zap className="text-black h-4 w-4" />
         </div>
 
+        <span className="flex shrink-0 items-center gap-1.5 text-sm font-bold text-yellow-500">
+          {breakingLabel}
+        </span>
+      </div>
+
+      <div className="flex min-w-0 flex-col gap-2 w-full overflow-hidden rounded-[20px] border border-zinc-800 bg-linear-to-b from-zinc-500/20 to-zinc-500/10 px-3 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-3 sm:py-2">
         <div className="relative min-w-0 flex-1 overflow-hidden py-0.5">
           <div
             key={`${activeNews.id ?? activeNews.title}-${activeIndex}`}

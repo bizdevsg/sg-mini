@@ -14,6 +14,7 @@ import type { AppLocale } from "@/locales";
 type ClientAreaTransactionsViewProps = {
   filterSymbol?: string | null;
   locale: AppLocale;
+  onShowAllTransactions: () => void;
 };
 
 function normalizeTransactionSymbol(value: string) {
@@ -23,6 +24,7 @@ function normalizeTransactionSymbol(value: string) {
 export function ClientAreaTransactionsView({
   filterSymbol = null,
   locale,
+  onShowAllTransactions,
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
@@ -104,6 +106,7 @@ export function ClientAreaTransactionsView({
         }
         onRetryHistory={retryHistory}
         onRetryPositions={retry}
+        onShowAllTransactions={onShowAllTransactions}
         positions={positions}
         positionsStatus={state.status}
         transactionFilter={filterSymbol}

@@ -1,7 +1,6 @@
 import type { AppMessages } from "../shared/messages";
 import { enApp } from "./content/app";
 import { enNavbar } from "./content/navbar";
-import { enHero } from "./content/hero";
 import { enAppPromoSection } from "./content/appPromoSection";
 import { enEbookPage } from "./content/ebookPage";
 import { enLiveQuoteTable } from "./content/liveQuoteTable";
@@ -18,7 +17,6 @@ import { enLoadingOverlay } from "./content/loadingOverlay";
 export const enMessages: AppMessages = {
   app: enApp,
   navbar: enNavbar,
-  hero: enHero,
   appPromoSection: enAppPromoSection,
   ebookPage: enEbookPage,
   liveQuoteTable: enLiveQuoteTable,

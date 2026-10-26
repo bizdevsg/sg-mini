@@ -24,15 +24,6 @@ export type AppMessages = {
       }>;
     }>;
   };
-  hero: {
-    titleLead: string;
-    titleBody: string;
-    subTitle: string;
-    cta: string;
-    demoLoginCta: string;
-    demoDisclaimer: string;
-    visualAlt: string;
-  };
   appPromoSection: {
     title: string;
     description: string;
@@ -197,6 +188,7 @@ export type AppMessages = {
     emptyContent: string;
   };
   clientArea: {
+    metadataTitle: string;
     pageTitle: string;
     pageDescription: string;
     homeChart: {
@@ -207,22 +199,98 @@ export type AppMessages = {
       liveLabel: string;
       loading: string;
       refreshLabel: string;
-        retryLabel: string;
+      retryLabel: string;
+      availableDescription: string;
+      tradingViewDisclaimer: string;
+      unavailableBody: string;
+      unavailableDescription: string;
+      unavailableTitle: string;
+    };
+    accountOverview: {
+      accountMetricsTitle: string;
+      availableAccounts: string;
+      collapseAccountMetrics: string;
+      error: string;
+      expandAccountMetrics: string;
+      loading: string;
+      openRealAccountCta: string;
+      realAccountDisclaimerBody: string;
+      realAccountDisclaimerTitle: string;
+      retry: string;
+      stale: string;
+      unavailable: string;
+      unavailableAccount: string;
+      updated: string;
+    };
+    homeTikTok: {
+      description: string;
+      frameTitle: string;
+      openVideoLabel: string;
+      title: string;
     };
     marketTransactions: {
       title: string;
       allTransactionsLabel: string;
       liveChartLabel: string;
       viewTransactionsLabel: string;
+      panel: {
+        buySell: string;
+        historyEmpty: string;
+        historyError: string;
+        historyLoading: string;
+        next: string;
+        page: string;
+        positionsEmpty: string;
+        positionsError: string;
+        positionsLoading: string;
+        previous: string;
+        retry: string;
+        tabs: {
+          history: string;
+          open: string;
+        };
+        totalFloating: string;
+        totalPositions: string;
+        unavailable: string;
+      };
+      positionRow: {
+        currentPrice: string;
+        facilityFee: string;
+        floatingPl: string;
+        lots: string;
+        openPrice: string;
+        orderNumber: string;
+        storage: string;
+        vat: string;
+      };
+    };
+    sessionEndedNotice: {
+      action: string;
+      description: string;
+      title: string;
+    };
+    whatsappWidget: {
+      close: string;
+      cta: string;
+      greeting: string;
+      message: string;
+      open: string;
+      operatingHours: string;
+      subtitle: string;
+      title: string;
     };
     viewOnlyDisclaimer: {
+      acknowledgeLabel: string;
       label: string;
+      modalTitle: string;
       body: string;
     };
     login: {
+      backToDashboardLabel: string;
       badge: string;
       title: string;
       description: string;
+      errorModalTitle: string;
       accountLabel: string;
       accountPlaceholder: string;
       passwordLabel: string;
@@ -248,10 +316,18 @@ export type AppMessages = {
       errorTimeout: string;
       errorSessionExpired: string;
       errorServer: string;
+      hidePasswordLabel: string;
       highlightsTitle: string;
       highlights: string[];
       securityTitle: string;
       securityBody: string;
+      metadataTitle: string;
+      registerLabel: string;
+      retryLabel: string;
+      sessionExpiredMessage: string;
+      sessionExpiredTitle: string;
+      showPasswordLabel: string;
+      submitLabel: string;
     };
     otp: {
       title: string;
@@ -267,12 +343,6 @@ export type AppMessages = {
       errorRequired: string;
       errorInvalidCode: string;
       errorSessionExpired: string;
-    };
-    user: {
-      name: string;
-      role: string;
-      accountId: string;
-      status: string;
     };
     sidebar: {
       label: string;
@@ -645,6 +715,7 @@ export type AppMessages = {
       };
     };
     topbar: {
+      activeLocaleLabel: string;
       supportLabel: string;
       supportPhone: string;
       logoutLabel: string;
@@ -683,50 +754,10 @@ export type AppMessages = {
         href: string;
       }>;
     };
-    accountPanel: {
-      eyebrow: string;
-      title: string;
-      primaryCta: string;
-      items: Array<{
-        id: string;
-        label: string;
-        value: string;
-      }>;
-    };
-    promoPanel: {
-      eyebrow: string;
-      title: string;
-      description: string;
-      cta: string;
-    };
     quickActions: {
       items: Array<{
         id: string;
         label: string;
-      }>;
-    };
-    shortcutPanel: {
-      items: Array<{
-        id: string;
-        label: string;
-      }>;
-    };
-    signalsPanel: {
-      title: string;
-      cta: string;
-      items: Array<{
-        symbol: string;
-        title: string;
-        time: string;
-        bias: "buy" | "sell" | "neutral";
-      }>;
-    };
-    servicePanel: {
-      title: string;
-      items: Array<{
-        description: string;
-        label: string;
-        cta: string;
       }>;
     };
     accountPage: {
@@ -734,6 +765,24 @@ export type AppMessages = {
       backLabel: string;
       pendingSectionNote: string;
       saveLabel: string;
+      profileNotice: {
+        error: string;
+        retry: string;
+        unavailable: string;
+      };
+      sensitiveDataModal: {
+        cancel: string;
+        confirm: string;
+        description: string;
+        hidePassword: string;
+        invalid: string;
+        passwordLabel: string;
+        passwordPlaceholder: string;
+        showPassword: string;
+        title: string;
+        unauthorized: string;
+        unavailable: string;
+      };
       viewOnly: {
         badge: string;
         profileLabel: string;
@@ -863,6 +912,17 @@ export type AppMessages = {
         open: string;
         settled: string;
       };
+      status: {
+        error: string;
+        loading: string;
+        openAsOf: string;
+        openEmpty: string;
+        openLiveLink: string;
+        retry: string;
+        settledEmpty: string;
+        settledUnmapped: string;
+        unavailable: string;
+      };
       labels: Record<string, string>;
       openPositions: Array<{
         id: string;
@@ -981,6 +1041,11 @@ export type AppMessages = {
       sellActionLabel: string;
       latestNewsTitle: string;
       historyTitle: string;
+      nextLabel: string;
+      paginationSummary: string;
+      previousLabel: string;
+      todayLabel: string;
+      yesterdayLabel: string;
       transactionModal: {
         buyBadgeLabel: string;
         sellBadgeLabel: string;
@@ -991,9 +1056,11 @@ export type AppMessages = {
         closeLabel: string;
       };
     };
-    tradingView: {
-      disclaimerLabel: string;
-      disclaimerTradingView: string;
+    transactionActionModal: {
+      cta: string;
+      summaryLabel: string;
+      summaryStatus: string;
+      summaryTitle: string;
     };
     fundTransferModal: {
       closeLabel: string;

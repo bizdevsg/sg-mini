@@ -13,6 +13,12 @@ export type SolidGoldAppPageContent = {
     visualSrc: string;
     visualAlt: string;
   };
+  preview: {
+    ariaLabel: string;
+    previousLabel: string;
+    nextLabel: string;
+    imageAlts: string[];
+  };
   platforms: {
     title: string;
     subtitle: string;

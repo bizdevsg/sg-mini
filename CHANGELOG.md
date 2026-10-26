@@ -1,13 +1,25 @@
 ## [Unreleased]
 
 ### Changed
+- Video TikTok pada beranda Client Area kini mengambil video aktif terbaru dari endpoint SG Admin `/api/v1/video-tiktok`, memvalidasi ID untuk membangun URL embed TikTok yang aman, dan tetap memakai video bawaan saat API gagal atau tidak mengembalikan data aktif.
+- Seluruh halaman dashboard Client Area kini memakai latar fintech emas bergambar globe yang sebelumnya hanya diterapkan pada TradePilot, menggantikan background `BCG.png` pada shell utama tanpa mengurangi overlay keterbacaan konten.
+- Daftar dropdown notifikasi Client Area kini memakai scrollbar tipis khusus bertema amber dengan track transparan dan state hover, sehingga menyatu dengan panel gelap tanpa memengaruhi scrollbar lain.
+- Logo pada sidebar desktop dan mobile Client Area kini mengarah ke beranda website publik sesuai locale, bukan kembali ke dashboard Client Area.
+- Seluruh copy bilingual yang masih ditulis langsung di TSX Client Area dipusatkan ke locale Indonesia/Inggris, mencakup transaksi, ringkasan akun, profil sensitif, daily statement, sesi berakhir, login, chart market, market signal, topbar, modal aksi, dan widget WhatsApp agar komponen hanya mengonsumsi key locale.
+- Struktur kartu market Client Area dirapikan mengikuti atomic design: item statistik menjadi atom, header/detail quote/aksi menjadi molecules, dan card lengkap menjadi organism sehingga tiap bagian lebih mudah dirawat tanpa mengubah perilaku pengguna.
+- Kartu market Client Area didesain ulang mengikuti tampilan quote premium: header instrumen, harga utama beserta pergerakan, panel Buy/Sell berwarna dinamis, ringkasan High/Low/Open/Time, serta tombol aksi yang lebih menonjol.
+- Galeri screenshot pada halaman Aplikasi Solid Gold kini tampil sebagai app showcase interaktif dengan preview besar yang terlihat utuh tanpa terpotong pada semua ukuran layar, memperlihatkan kelima layar sekaligus dalam susunan rapat dan bertingkat, serta menyediakan navigasi infinite-loop melalui panah/dot/keyboard dan gesture swipe.
 - Runtime Node.js untuk development dan seluruh stage image Docker Website/Client Area dipin ke Node.js 24.22.1 LTS melalui `engines`, `.nvmrc`, dan base image eksplisit agar build konsisten serta memakai security release 21 Oktober 2026 yang menutup kerentanan runtime termasuk remote code execution pada decoder Brotli.
 
 ### Removed
+- Locale yang tidak memiliki consumer dibersihkan: copy `spread` lama di Website, locale hero dan panel dashboard usang di Client Area, serta duplikat locale halaman edukasi publik yang hanya digunakan Website. Locale aplikasi Solid di Client Area juga dirampingkan agar hanya menyimpan data platform/store yang dipakai untuk link download.
 - Menghapus dua komponen `BenefitSection`, satu modul tipe landing, dan 72 file konten locale Indonesia/Inggris yang tidak pernah dikonsumsi pada Website maupun Client Area; locale `clientArea` Website juga dirampingkan agar hanya menyimpan label yang masih digunakan.
 - Menghapus 62 aset publik tanpa referensi dari Website dan Client Area (sekitar 86 MiB), termasuk banner lama, gambar legal lama, aset profil lama, tekstur, logo regulator duplikat, dan ikon yang tidak lagi dipakai, sehingga ukuran source dan artefak deployment lebih kecil.
 
 ### Fixed
+- Next.js pada Website dan Client Area diperbarui dari `16.3.4` ke `16.4.3`, `eslint-config-next` diselaraskan ke versi yang sama, dan Sharp transitif diperbarui ke `0.35.5` untuk menutup kerentanan RCE serta DoS pada rilis keamanan Oktober 2026.
+- Accordion Detail Margin Akun pada Account Overview kini benar-benar dapat dibuka dan ditutup di mobile; class layout tidak lagi memaksa panel tetap tampil saat state tertutup, sementara tampilan desktop tetap selalu terbuka.
+- Port internal Docker Website dan Client Area diselaraskan dengan port runtime Next.js (`3000` dan `3009`), sehingga akses langsung melalui port host maupun reverse proxy nginx tidak lagi menghasilkan `502 Bad Gateway`; nginx lokal dapat memakai override `NGINX_PORT` saat port default sudah digunakan service lain.
 - Pemilihan mode akun Client Area kini otomatis beralih ke akun Demo/Real yang benar-benar tersedia; endpoint MiniMicro chart juga mengembalikan status akun tidak tersedia tanpa mengakhiri sesi, sehingga cookie mode lama tidak lagi memicu loop dashboard dan `login?reason=expired` setelah login ulang.
 - Request BFF terautentikasi pada Client Area kini dijalankan berurutan di browser agar rotasi cookie token MiniMicro selesai sebelum request berikutnya dikirim; login tidak lagi berulang antara dashboard dan `login?reason=expired` akibat request profil dan account summary yang saling balapan.
 - Atribut `Secure` pada cookie sesi Client Area kini mengikuti protokol request, sehingga login melalui `http://localhost` tidak lagi berulang antara halaman login dan dashboard bahkan saat menjalankan production build lokal; deployment HTTPS tetap membatasi cookie ke HTTPS.
@@ -15,6 +27,9 @@
 - Deskripsi ebook pada card dan modal Website kini mengubah HTML dari API menjadi teks bersih dengan pemisah paragraf, sehingga tag seperti `<p>`, `<span>`, dan `<br>` tidak lagi terlihat oleh pengguna.
 
 ### Added
+- Video TikTok Solid Prime `7700863615682858247` kini tampil responsif tepat di bawah Account Summary pada beranda Client Area melalui Embed Player resmi, dimuat secara lazy, dan dilengkapi tautan untuk membuka video langsung di TikTok.
+- Tombol Semua Transaksi/All Transactions ditambahkan ke segmented control yang sama dengan Open Position dan Trade History pada panel transaksi Client Area untuk menghapus filter instrumen aktif dan kembali menampilkan seluruh data transaksi.
+- Popup disclaimer view-only kini muncul satu kali setiap sesi login baru di Client Area, termasuk setelah login ulang atau sesi sebelumnya berakhir, dengan copy Indonesia/Inggris dan tombol konfirmasi sebelum pengguna melanjutkan.
 - Notifikasi live terjadwal ditambahkan ke header Client Area dan toast: Solid Prime setiap Senin–Jumat pukul 13.30 WIB serta Solid News pukul 08.30 dan 19.00 WIB, dengan jendela aktif 60 menit, tautan langsung ke TikTok, dan toast satu kali per sesi pada setiap tab browser.
 - Halaman bilingual Wakil Pialang Berjangka ditambahkan pada menu Tentang di website dan navbar Client Area; daftar perwakilan memakai card ringkas berisi inisial, nomor urut, nama, jabatan, status, nomor izin, dan perusahaan serta mengambil data dari API SG Admin `/api/v1/wakil-pialang-berjangka` dengan pagination dan fallback lokal, disertai pengingat keamanan serta tautan verifikasi ke profil resmi BAPPEBTI.
 - Body halaman produk Prime website kini memiliki grid responsif maksimal dua kolom berisi card katalog yang lebih ringkas untuk menampung banyak produk dari API SG Admin `/api/v1/produk/prime`; tinggi gambar dikunci terhadap frame agar tidak ditimpa aturan global dan fokus crop diarahkan ke objek produk, sementara setiap card membuka halaman detail yang mengambil nama, deskripsi terlokalisasi, gambar, kategori, serta ukuran transaksi langsung dari endpoint `/api/v1/produk/prime/{slug}` dengan fallback katalog dan konten lokal saat API tidak tersedia.

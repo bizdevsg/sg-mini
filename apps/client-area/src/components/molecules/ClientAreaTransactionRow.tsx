@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import type { PositionItem } from "@/components/organisms/client-area.types";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaTransactionRowProps = {
   item: PositionItem;
@@ -31,29 +31,6 @@ const PL_TEXT_CLASS: Record<PlTone, string> = {
   flat: "text-zinc-200",
 };
 
-const LABELS = {
-  id: {
-    orderNumber: "No. Order",
-    lots: "Lot",
-    openPrice: "Harga Buka",
-    currentPrice: "Harga Saat Ini",
-    storage: "Storage",
-    facilityFee: "Facility Fee",
-    vat: "VAT",
-    floatingPl: "Floating P/L",
-  },
-  en: {
-    orderNumber: "Order No.",
-    lots: "Lots",
-    openPrice: "Open Price",
-    currentPrice: "Current Price",
-    storage: "Storage",
-    facilityFee: "Facility Fee",
-    vat: "VAT",
-    floatingPl: "Floating P/L",
-  },
-} as const;
-
 /**
  * One open position. Missing values show "—" — never an invented figure.
  */
@@ -61,7 +38,7 @@ export function ClientAreaTransactionRow({
   item,
   locale,
 }: ClientAreaTransactionRowProps) {
-  const labels = LABELS[locale];
+  const labels = getMessages(locale).clientArea.marketTransactions.positionRow;
   const isBuy = item.side === "buy";
   const tone = getPlTone(item);
   const [openedDate, openedTime] = item.openedAt

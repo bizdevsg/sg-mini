@@ -1,6 +1,7 @@
 import type { AppMessages } from "../../shared/messages";
 
 export const enClientArea: AppMessages["clientArea"] = {
+  metadataTitle: "Client Area Dashboard",
   pageTitle: "Client Area",
   pageDescription:
     "A post-login home view with account summary, quick actions, and product signals.",
@@ -14,22 +15,102 @@ export const enClientArea: AppMessages["clientArea"] = {
     loading: "Loading live chart...",
     refreshLabel: "Refresh",
     retryLabel: "Try again",
+    availableDescription: "MiniMicro live chart for {marketCode}.",
+    tradingViewDisclaimer:
+      "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as EURUSD chart, XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more – simply everything a prepared trader may need.",
+    unavailableBody:
+      "This market code is not available for the MiniMicro WebView yet.",
+    unavailableDescription:
+      "The MiniMicro WebView for this market code is not available yet.",
+    unavailableTitle: "Data Unavailable",
+  },
+  accountOverview: {
+    accountMetricsTitle: "Account Margin Details",
+    availableAccounts: "Available accounts",
+    collapseAccountMetrics: "Close account margin details",
+    error: "Account data could not be loaded.",
+    expandAccountMetrics: "Open account margin details",
+    loading: "Loading account summary...",
+    openRealAccountCta: "Open a Real Account in the App",
+    realAccountDisclaimerBody:
+      "Real accounts are opened through the Solid Gold app. Download the app, then follow the Real account registration process.",
+    realAccountDisclaimerTitle: "You do not have a Real account yet",
+    retry: "Try again",
+    stale: "Could not refresh, showing the last data",
+    unavailable: "No account is available for this mode.",
+    unavailableAccount: "Unavailable",
+    updated: "Updated",
+  },
+  homeTikTok: {
+    description: "Watch a featured latest video from Solid Prime.",
+    frameTitle: "Solid Prime TikTok video",
+    openVideoLabel: "Open video on TikTok",
+    title: "TikTok Video",
   },
   marketTransactions: {
     title: "Market & Transactions",
     allTransactionsLabel: "All Transactions",
     liveChartLabel: "Live Chart",
     viewTransactionsLabel: "View Transactions",
+    panel: {
+      buySell: "Buy / Sell",
+      historyEmpty: "There is no trade history for this account yet.",
+      historyError: "History could not be loaded.",
+      historyLoading: "Loading history...",
+      next: "Next",
+      page: "Page",
+      positionsEmpty: "There are no open positions for this account.",
+      positionsError: "Positions could not be loaded.",
+      positionsLoading: "Loading positions...",
+      previous: "Previous",
+      retry: "Try again",
+      tabs: { open: "Open Position", history: "Trade History" },
+      totalFloating: "Total Floating P/L",
+      totalPositions: "Open Positions",
+      unavailable: "No account is available for this mode.",
+    },
+    positionRow: {
+      currentPrice: "Current Price",
+      facilityFee: "Facility Fee",
+      floatingPl: "Floating P/L",
+      lots: "Lots",
+      openPrice: "Open Price",
+      orderNumber: "Order No.",
+      storage: "Storage",
+      vat: "VAT",
+    },
+  },
+  sessionEndedNotice: {
+    action: "Sign in again",
+    description:
+      "This account has just signed in on another device, or your session has ended. For your security, an account can only be active on one device. Please sign in again.",
+    title: "You have been signed out",
+  },
+  whatsappWidget: {
+    close: "Close the WhatsApp widget",
+    cta: "Start WhatsApp Chat",
+    greeting:
+      "Hello! 👋 Live chat is currently unavailable. Please reach us on WhatsApp — our team is ready to help.",
+    message:
+      "Hello Solid Gold Berjangka, I would like assistance from Customer Support.",
+    open: "Open the WhatsApp widget",
+    operatingHours: "Operating hours: Monday–Friday, 09:00–17:00 WIB.",
+    subtitle: "Customer Support",
+    title: "Solid Gold Berjangka",
   },
   viewOnlyDisclaimer: {
+    acknowledgeLabel: "I Understand",
     label: "Disclaimer:",
+    modalTitle: "Disclaimer",
     body: "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
   },
   login: {
+    backToDashboardLabel: "Back to Dashboard",
     badge: "Client Portal",
     title: "Sign in Client Area",
     description:
       "Account authentication is being prepared and is not yet available on the website.",
+    errorModalTitle: "Login Failed",
     accountLabel: "Email",
     accountPlaceholder: "Enter your email",
     passwordLabel: "Password",
@@ -66,6 +147,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       "Your login session has expired. Reload the page and sign in again.",
     errorServer:
       "The login server is unavailable or returned a response that could not be processed. Please try again in a moment.",
+    hidePasswordLabel: "Hide password",
     highlightsTitle: "What you can monitor",
     highlights: [
       "Real-time balance, equity, and floating P/L summary.",
@@ -75,6 +157,13 @@ export const enClientArea: AppMessages["clientArea"] = {
     securityTitle: "Account security",
     securityBody:
       "Only sign in through official domains and never share your OTP or password with anyone.",
+    metadataTitle: "Client Area Login",
+    registerLabel: "REGISTER",
+    retryLabel: "TRY AGAIN",
+    sessionExpiredMessage: "Your session has expired. Please sign in again.",
+    sessionExpiredTitle: "Session Expired",
+    showPasswordLabel: "Show password",
+    submitLabel: "LOGIN",
   },
   otp: {
     title: "OTP Verification",
@@ -93,12 +182,6 @@ export const enClientArea: AppMessages["clientArea"] = {
       "The OTP code is incorrect or has expired. Please try again.",
     errorSessionExpired:
       "The verification session has expired. Please sign in again.",
-  },
-  user: {
-    name: "Anita",
-    role: "My Demo Account",
-    accountId: "1003713406",
-    status: "Demo",
   },
   sidebar: {
     label: "Client navigation",
@@ -576,6 +659,7 @@ export const enClientArea: AppMessages["clientArea"] = {
     },
   },
   topbar: {
+    activeLocaleLabel: "Active",
     supportLabel: "Download Solid App",
     supportPhone: "021-50996650",
     logoutLabel: "Log Out",
@@ -630,30 +714,6 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
     ],
   },
-  accountPanel: {
-    eyebrow: "My Demo Account",
-    title: "1003713406",
-    primaryCta: "Change Demo Balance",
-    items: [
-      {
-        id: "balance",
-        label: "Balance",
-        value: "$78.23",
-      },
-      {
-        id: "equity",
-        label: "Equity",
-        value: "$78.23",
-      },
-    ],
-  },
-  promoPanel: {
-    eyebrow: "Solid Gold Priority",
-    title: "Exclusive benefits and priority access for active clients.",
-    description:
-      "Use this featured banner area for campaign content, loyalty offers, or post-login education highlights.",
-    cta: "Learn more",
-  },
   quickActions: {
     items: [
       {
@@ -678,107 +738,31 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
     ],
   },
-  shortcutPanel: {
-    items: [
-      {
-        id: "signal",
-        label: "Trading Signal",
-      },
-      {
-        id: "mover",
-        label: "Top Mover",
-      },
-      {
-        id: "trending",
-        label: "Trending",
-      },
-      {
-        id: "products",
-        label: "Products",
-      },
-      {
-        id: "education",
-        label: "Education",
-      },
-      {
-        id: "rewards",
-        label: "Rewards",
-      },
-      {
-        id: "deposit",
-        label: "Deposit",
-      },
-      {
-        id: "more",
-        label: "More",
-      },
-    ],
-  },
-  signalsPanel: {
-    title: "Recommendations",
-    cta: "See all",
-    items: [
-      {
-        symbol: "XAUUSD",
-        title: "Gold",
-        time: "15:56 WIB",
-        bias: "sell",
-      },
-      {
-        symbol: "EURUSD",
-        title: "EURUSD",
-        time: "16:01 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "USDJPY",
-        title: "USDJPY",
-        time: "16:05 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "GBPUSD",
-        title: "GBPUSD",
-        time: "16:04 WIB",
-        bias: "buy",
-      },
-      {
-        symbol: "OIL",
-        title: "Oil",
-        time: "16:07 WIB",
-        bias: "sell",
-      },
-    ],
-  },
-  servicePanel: {
-    title: "Client Services",
-    items: [
-      {
-        label: "Live Quote",
-        description:
-          "Track real-time prices to prepare faster entry decisions.",
-        cta: "Open market feed",
-      },
-      {
-        label: "Economic Calendar",
-        description:
-          "Review high-impact events that may affect daily volatility.",
-        cta: "View schedule",
-      },
-      {
-        label: "Client Service Help",
-        description:
-          "Contact support for login, transaction, or verification issues.",
-        cta: "Contact support",
-      },
-    ],
-  },
   accountPage: {
     activeAccount: "Active account",
     backLabel: "Back",
     pendingSectionNote:
       "The details for this section will be added next. For now only Personal Data has been finalized.",
     saveLabel: "Save",
+    profileNotice: {
+      error: "Profile data could not be loaded.",
+      retry: "Try again",
+      unavailable:
+        "Profile data is not available yet. Registration for this account has not been completed in the system, so there is nothing to show.",
+    },
+    sensitiveDataModal: {
+      cancel: "Cancel",
+      confirm: "Confirm",
+      description: "Enter your account password to view sensitive data.",
+      hidePassword: "Hide password",
+      invalid: "The password is incorrect. Please try again.",
+      passwordLabel: "Account password",
+      passwordPlaceholder: "Enter password",
+      showPassword: "Show password",
+      title: "Confirm password",
+      unauthorized: "Your session has expired. Please sign in again.",
+      unavailable: "This data is not available to display yet.",
+    },
     viewOnly: {
       badge: "Secure",
       profileLabel: "Client Profile",
@@ -973,6 +957,18 @@ export const enClientArea: AppMessages["clientArea"] = {
       open: "Open Position",
       settled: "Settled Statement",
     },
+    status: {
+      error: "The statement could not be loaded.",
+      loading: "Loading statement...",
+      openAsOf:
+        "Positions open at the close of the statement dated {date}, not the current state. Positions running now may differ (e.g. closed since).",
+      openEmpty: "There are no open positions on this statement.",
+      openLiveLink: "See current positions in Transaction",
+      retry: "Try again",
+      settledEmpty: "There are no settled positions on this statement.",
+      settledUnmapped: "Settled position data cannot be displayed yet.",
+      unavailable: "No account is available for this mode.",
+    },
     labels: {
       accountNumber: "Account No.",
       aeCode: "AE Code",
@@ -1147,6 +1143,11 @@ export const enClientArea: AppMessages["clientArea"] = {
     sellActionLabel: "Potential Sell",
     latestNewsTitle: "Latest News",
     historyTitle: "Signal History",
+    nextLabel: "Next",
+    paginationSummary: "Page {currentPage} of {totalPages}",
+    previousLabel: "Previous",
+    todayLabel: "Today",
+    yesterdayLabel: "Yesterday",
     transactionModal: {
       buyBadgeLabel: "Buy Signal",
       sellBadgeLabel: "Sell Signal",
@@ -1159,10 +1160,11 @@ export const enClientArea: AppMessages["clientArea"] = {
       closeLabel: "Close",
     },
   },
-  tradingView: {
-    disclaimerLabel: "Disclaimer:",
-    disclaimerTradingView:
-      "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as EURUSD chart, XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more – simply everything a prepared trader may need.",
+  transactionActionModal: {
+    cta: "View transactions",
+    summaryLabel: "Transaction summary",
+    summaryStatus: "Open transaction page",
+    summaryTitle: "Open positions and trade history",
   },
   fundTransferModal: {
     closeLabel: "Close",

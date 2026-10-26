@@ -18,23 +18,6 @@ export {
   type SolidGoldAppPageContent,
 } from "./solid-gold-app-page";
 export {
-  getIndexSymbolsPageContent,
-  type IndexSymbolsPageContent,
-} from "./index-symbols-page";
-export {
-  getLocoLondonGoldPageContent,
-  type LocoLondonGoldPageContent,
-} from "./loco-london-gold-page";
-export {
-  getOnlineTradingTermsPageContent,
-  type OnlineTradingTermsPageContent,
-} from "./online-trading-terms-page";
-export {
-  getGettingStartedPageContent,
-  type GettingStartedPageContent,
-} from "./getting-started-page";
-export { getTradingRulesPageContent, type TradingRulesPageContent } from "./trading-rules-page";
-export {
   getTradePilotGuidePageContent,
   type TradePilotGuideArticle,
   type TradePilotGuideCategoryId,

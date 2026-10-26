@@ -4,7 +4,6 @@ import { idNavbar } from "./content/navbar";
 import { idHero } from "./content/hero";
 import { idRegulator } from "./content/regulator";
 import { idAppPromoSection } from "./content/appPromoSection";
-import { idSpread } from "./content/spread";
 import { idHomeWhyChoose } from "./content/homeWhyChoose";
 import { idLiveQuoteSection } from "./content/liveQuoteSection";
 import { idLiveQuotePage } from "./content/liveQuotePage";
@@ -46,7 +45,6 @@ export const idMessages: AppMessages = {
   hero: idHero,
   regulator: idRegulator,
   appPromoSection: idAppPromoSection,
-  spread: idSpread,
   homeWhyChoose: idHomeWhyChoose,
   liveQuoteSection: idLiveQuoteSection,
   liveQuotePage: idLiveQuotePage,

@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { ClientAreaQuickActionsGrid } from "@/components/molecules/ClientAreaQuickActionsGrid";
+import { ClientAreaTikTokEmbed } from "@/components/molecules/ClientAreaTikTokEmbed";
 import { ClientAreaAccountOverview } from "@/components/organisms/ClientAreaAccountOverview";
 import { ClientAreaAdvancedChart } from "@/components/organisms/ClientAreaAdvancedChart";
 import { ClientAreaEconomicCalendarSection } from "@/components/organisms/ClientAreaEconomicCalendarSection";
@@ -18,6 +19,7 @@ import type {
 import { useLiveAccountSummary } from "@/hooks/useLiveAccountSummary";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
 import type { MarketSignalRecord } from "@/lib/market-signal";
+import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 import type { AppLocale, AppMessages } from "@/locales";
 
 /**
@@ -43,6 +45,7 @@ type ClientAreaHomePanelProps = {
   quickActionIconMap: Record<ActionId, LucideIcon>;
   setCurrentSlide: Dispatch<SetStateAction<number>>;
   setIsAccountMenuOpen: Dispatch<SetStateAction<boolean>>;
+  tikTokVideo: TikTokVideo;
 };
 
 export function ClientAreaHomePanel({
@@ -58,6 +61,7 @@ export function ClientAreaHomePanel({
   onSelectAccountMode,
   quickActionIconMap,
   setIsAccountMenuOpen,
+  tikTokVideo,
 }: ClientAreaHomePanelProps) {
   // One fetch feeds both card instances (mobile and desktop layouts).
   const {
@@ -68,21 +72,26 @@ export function ClientAreaHomePanel({
   });
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(200px,0.8fr)]">
-      <div className="flex min-w-0 flex-col gap-6">
-        <div className="xl:hidden">
-          <ClientAreaAccountOverview
-            accountMode={accountMode}
-            copy={copy}
-            currentAccount={currentAccount}
-            isAccountMenuOpen={isAccountMenuOpen}
-            locale={locale}
-            onRetry={retrySummary}
-            summaryState={summaryState}
-            onSelectAccountMode={onSelectAccountMode}
-            onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
-          />
-        </div>
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(288px,0.8fr)] xl:items-start xl:gap-y-4">
+      <div className="min-w-0 xl:col-start-2 xl:row-start-1">
+        <ClientAreaAccountOverview
+          accountMode={accountMode}
+          copy={copy}
+          currentAccount={currentAccount}
+          isAccountMenuOpen={isAccountMenuOpen}
+          locale={locale}
+          onRetry={retrySummary}
+          summaryState={summaryState}
+          onSelectAccountMode={onSelectAccountMode}
+          onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
+        />
+      </div>
+
+      <div className="min-w-0 xl:col-start-2 xl:row-start-2">
+        <ClientAreaTikTokEmbed copy={clientArea.homeTikTok} video={tikTokVideo} />
+      </div>
+
+      <div className="flex min-w-0 flex-col gap-6 xl:col-start-1 xl:row-span-2 xl:row-start-1">
 
         {/*
         <ClientAreaHeroSlideshow
@@ -117,22 +126,6 @@ export function ClientAreaHomePanel({
           items={marketSignals}
           locale={locale}
         />
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div className="hidden xl:block">
-          <ClientAreaAccountOverview
-            accountMode={accountMode}
-            copy={copy}
-            currentAccount={currentAccount}
-            isAccountMenuOpen={isAccountMenuOpen}
-            locale={locale}
-            onRetry={retrySummary}
-            summaryState={summaryState}
-            onSelectAccountMode={onSelectAccountMode}
-            onToggleAccountMode={() => setIsAccountMenuOpen((open) => !open)}
-          />
-        </div>
       </div>
     </div>
   );

@@ -29,22 +29,15 @@ export function ClientAreaLoginFormPanel({
   onTogglePassword,
   onOpenDownloadModal,
 }: ClientAreaLoginFormPanelProps) {
-  const passwordToggleLabel =
-    locale === "id"
-      ? showPassword
-        ? "Sembunyikan password"
-        : "Tampilkan password"
-      : showPassword
-        ? "Hide password"
-        : "Show password";
-  const submitLabel = "LOGIN";
-  const registerLabel = locale === "id" ? "REGISTRASI" : "REGISTER";
+  const passwordToggleLabel = showPassword
+    ? login.hidePasswordLabel
+    : login.showPasswordLabel;
 
   return (
     <div className="mx-auto flex flex-1 items-center justify-center py-4 sm:py-6 xl:mx-0 xl:basis-[27.5rem] xl:grow-0 xl:shrink-0 xl:py-8">
       <div className="w-full max-w-[27.5rem] rounded-[1.25rem] border border-white/[0.12] bg-zinc-900/35 px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl sm:px-8 sm:py-9">
         <a href={`${PUBLIC_WEBSITE_URL}/${locale}`} className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-600 bg-zinc-500/20 hover:bg-zinc-500/10 rounded py-1 px-2 w-fit mb-4">
-          <ArrowLeft className="w-5" /> <span>Back to Dashboard</span>
+          <ArrowLeft className="w-5" /> <span>{login.backToDashboardLabel}</span>
         </a>
 
         <h1 className="mb-5 text-[1.75rem] font-extrabold tracking-[-0.02em] text-white">
@@ -104,7 +97,7 @@ export function ClientAreaLoginFormPanel({
                 {login.submitting}
               </>
             ) : (
-              submitLabel
+              login.submitLabel
             )}
           </button>
 
@@ -113,7 +106,7 @@ export function ClientAreaLoginFormPanel({
             className="flex h-[3.125rem] w-full items-center justify-center rounded-[0.6rem] cursor-pointer border border-amber-500/30 bg-transparent text-[0.92rem] font-black tracking-[0.12em] text-amber-500 transition-[background-color,border-color,box-shadow,transform] hover:-translate-y-px hover:border-amber-500/[0.55] hover:bg-amber-500/[0.08] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]"
             onClick={onOpenDownloadModal}
           >
-            {registerLabel}
+            {login.registerLabel}
           </button>
         </form>
       </div>

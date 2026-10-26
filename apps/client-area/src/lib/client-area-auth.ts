@@ -46,6 +46,7 @@ export type ClientAreaSessionProfile = {
 export type ClientAreaSessionState = {
   isAuthenticated: boolean;
   profile: ClientAreaSessionProfile | null;
+  sessionIssuedAtMs: number | null;
 };
 
 export type MiniMicroSession = {
@@ -133,12 +134,14 @@ export async function getClientAreaSessionState(): Promise<ClientAreaSessionStat
     return {
       isAuthenticated: false,
       profile: null,
+      sessionIssuedAtMs: null,
     };
   }
 
   return {
     isAuthenticated: true,
     profile: buildProfileFromSession(session),
+    sessionIssuedAtMs: session.issuedAtMs,
   };
 }
 

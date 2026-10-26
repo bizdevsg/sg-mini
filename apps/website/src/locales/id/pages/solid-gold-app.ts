@@ -16,15 +16,24 @@ export const idSolidGoldAppPageContent: SolidGoldAppPageContent = {
       "Aplikasi Solid membantu Anda memantau market, melihat pergerakan harga, dan menjalankan aktivitas trading Solid Gold Berjangka dengan lebih cepat dari satu aplikasi.",
     primaryCta: "Download di Play Store",
     secondaryCta: "Download di App Store",
-    badges: [
-      "Solid: Platform Trading Resmi",
-      "Pantau Market Lebih Mudah",
-      "Tersedia untuk Android & iOS",
-    ],
+    badges: ["Aplikasi Resmi", "Pantau Pasar", "Android & iOS"],
     visualSrc: getFramerImageUrl(
       "852i2sfEYXSfE1r3eJjVmPA8KZE.webp?height=1020&width=750",
     ),
     visualAlt: "Tampilan aplikasi Solid pada perangkat mobile",
+  },
+
+  preview: {
+    ariaLabel: "Galeri tampilan aplikasi Solid",
+    previousLabel: "Lihat screenshot sebelumnya",
+    nextLabel: "Lihat screenshot berikutnya",
+    imageAlts: [
+      "Beranda dan pantauan market aplikasi Solid",
+      "Tampilan fitur aplikasi Solid 2",
+      "Tampilan fitur aplikasi Solid 3",
+      "Tampilan fitur aplikasi Solid 4",
+      "Tampilan fitur aplikasi Solid 5",
+    ],
   },
 
   platforms: {

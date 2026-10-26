@@ -1,7 +1,6 @@
 import type { AppMessages } from "../shared/messages";
 import { idApp } from "./content/app";
 import { idNavbar } from "./content/navbar";
-import { idHero } from "./content/hero";
 import { idAppPromoSection } from "./content/appPromoSection";
 import { idEbookPage } from "./content/ebookPage";
 import { idLiveQuoteTable } from "./content/liveQuoteTable";
@@ -18,7 +17,6 @@ import { idLoadingOverlay } from "./content/loadingOverlay";
 export const idMessages: AppMessages = {
   app: idApp,
   navbar: idNavbar,
-  hero: idHero,
   appPromoSection: idAppPromoSection,
   ebookPage: idEbookPage,
   liveQuoteTable: idLiveQuoteTable,

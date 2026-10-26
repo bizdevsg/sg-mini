@@ -130,7 +130,7 @@ export default async function SolidGoldAppPage({
           </ButtonLink>
         </div>
 
-        <div className="mt-12 flex flex-wrap justify-center gap-3 lg:gap-4">
+        <div className="mt-5 flex flex-wrap justify-center gap-3 lg:gap-4">
           {pageContent.hero.badges.map((badge) => (
             <div
               key={badge}
@@ -146,12 +146,14 @@ export default async function SolidGoldAppPage({
       <div className="relative">
         <div className="absolute top-0 w-full h-50 bg-linear-to-b from-black to-transparent" />
 
-        <SolidGoldAppDownloadSection
-          locale={locales}
-          benefitsTitle={pageContent.benefits.title}
-          benefitsDescription={pageContent.benefits.description}
-          benefits={pageContent.benefits.items}
-        />
+        <div className="relative">
+          <SolidGoldAppDownloadSection
+            benefitsTitle={pageContent.benefits.title}
+            benefitsDescription={pageContent.benefits.description}
+            benefits={pageContent.benefits.items}
+            preview={pageContent.preview}
+          />
+        </div>
       </div>
     </main>
   );

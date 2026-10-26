@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientAreaMarketCard } from "@/components/molecules/ClientAreaMarketCard";
+import { ClientAreaMarketCard } from "@/components/organisms/ClientAreaMarketCard";
 import type { MarketPrice } from "@/components/organisms/client-area.types";
 import type { AppLocale, AppMessages } from "@/locales";
 
@@ -28,35 +28,60 @@ export function ClientAreaMarketPanel({
   viewTransactionsLabel,
 }: ClientAreaMarketPanelProps) {
   return (
-    <section aria-label={title} className="space-y-4">
-      <button
-        type="button"
-        aria-pressed={selectedTransactionFilter === null}
-        onClick={() => onTransactionFilterChange(null)}
-        className={`flex w-full cursor-pointer items-center justify-center rounded-2xl border px-5 py-5 text-center text-xl font-black tracking-tight transition sm:px-6 sm:text-2xl ${selectedTransactionFilter === null ? "border-yellow-400/35 bg-yellow-400/10 text-yellow-300 shadow-[0_14px_40px_rgba(234,179,8,0.08)]" : "border-white/15 bg-zinc-900/60 text-white hover:border-yellow-400/30 hover:text-yellow-300"}`}
-      >
-        <span>{allTransactionsLabel}</span>
-      </button>
+    <section
+      aria-label={title}
+      className="relative isolate overflow-hidden rounded-3xl bg-[#080a0b]"
+    >
+      {/* HEADER BACKGROUND */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-48 overflow-hidden sm:h-56 lg:h-64">
+        {/* Globe Background */}
+        <div
+          className="absolute inset-0 bg-right-top bg-no-repeat bg-cover"
+          style={{
+            backgroundImage: "url('/assets/bg-pasar-transaksi.png')",
+          }}
+        />
 
-      <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 xl:grid-cols-4">
-        {prices.map((item) => (
-          <div
-            key={item.code ?? item.symbol}
-            className="w-[min(84vw,20rem)] shrink-0 snap-start sm:w-auto"
-          >
-            <ClientAreaMarketCard
-              fieldLabels={fieldLabels}
-              item={item}
-              isTransactionFilterActive={
-                selectedTransactionFilter === (item.code ?? item.name)
-              }
-              liveChartLabel={liveChartLabel}
-              locale={locale}
-              onViewTransactions={onTransactionFilterChange}
-              viewTransactionsLabel={viewTransactionsLabel}
-            />
-          </div>
-        ))}
+        {/* Gradient agar teks tetap terbaca */}
+        <div className="absolute inset-0 bg-linear-to-r from-[#080a0b]/90 via-[#080a0b]/40 to-transparent" />
+
+        {/* Gradient bawah untuk transisi */}
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#080a0b]" />
+      </div>
+
+      {/* HEADER CONTENT */}
+      <div className="relative z-10 p-5">
+        <h3 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
+          Pergerakan Pasar Global
+        </h3>
+
+        <p className="mt-2 text-sm text-zinc-400 sm:text-base">
+          Pantau harga terkini dari berbagai instrumen favorit.
+        </p>
+      </div>
+
+      {/* MARKET CARDS */}
+      <div className="relative z-10">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible xl:grid-cols-4 xl:gap-4">
+          {prices.map((item) => (
+            <div
+              key={item.code ?? item.symbol}
+              className="w-[min(84vw,20rem)] shrink-0 snap-start sm:w-auto"
+            >
+              <ClientAreaMarketCard
+                fieldLabels={fieldLabels}
+                item={item}
+                isTransactionFilterActive={
+                  selectedTransactionFilter === (item.code ?? item.name)
+                }
+                liveChartLabel={liveChartLabel}
+                locale={locale}
+                onViewTransactions={onTransactionFilterChange}
+                viewTransactionsLabel={viewTransactionsLabel}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

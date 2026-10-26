@@ -57,6 +57,7 @@ export function ClientAreaMarketView({
         <ClientAreaTransactionsView
           filterSymbol={transactionFilter}
           locale={locale}
+          onShowAllTransactions={() => handleTransactionFilterChange(null)}
         />
       </div>
     </ClientAreaShell>

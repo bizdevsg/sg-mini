@@ -24,33 +24,6 @@ type StatementRow = readonly [string, string];
 
 const EMPTY = "—";
 
-const MESSAGES = {
-  id: {
-    loading: "Memuat statement...",
-    error: "Statement belum bisa dimuat.",
-    retry: "Coba lagi",
-    unavailable: "Akun untuk mode ini tidak tersedia.",
-    openEmpty: "Tidak ada posisi terbuka pada statement ini.",
-    openAsOf: (date: string) =>
-      `Posisi terbuka pada penutupan statement tanggal ${date}, bukan kondisi saat ini. Posisi yang berjalan sekarang bisa berbeda (mis. sudah ditutup setelahnya).`,
-    openLiveLink: "Lihat posisi saat ini di Transaksi",
-    settledEmpty: "Tidak ada posisi yang ditutup pada statement ini.",
-    settledUnmapped: "Data posisi yang ditutup belum dapat ditampilkan.",
-  },
-  en: {
-    loading: "Loading statement...",
-    error: "The statement could not be loaded.",
-    retry: "Try again",
-    unavailable: "No account is available for this mode.",
-    openEmpty: "There are no open positions on this statement.",
-    openAsOf: (date: string) =>
-      `Positions open at the close of the statement dated ${date}, not the current state. Positions running now may differ (e.g. closed since).`,
-    openLiveLink: "See current positions in Transaction",
-    settledEmpty: "There are no settled positions on this statement.",
-    settledUnmapped: "Settled position data cannot be displayed yet.",
-  },
-} as const;
-
 function money(value: number | null) {
   return value === null ? EMPTY : `$ ${formatStatementNumber(value)}`;
 }
@@ -66,9 +39,9 @@ function formatStatementNumber(value: number | null) {
   return value === null
     ? EMPTY
     : value.toLocaleString("en-US", {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
+      minimumFractionDigits: 4,
+      maximumFractionDigits: 4,
+    });
 }
 
 // The statement rows, all from the API. Nothing is invented: a value the API
@@ -106,9 +79,9 @@ function buildBalanceRows(report: DailyStatementReport | null): StatementRow[] {
       ratio === null
         ? EMPTY
         : `${ratio.toLocaleString("en-US", {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 4,
-          })}%`,
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4,
+        })}%`,
     ],
   ];
 }
@@ -185,9 +158,8 @@ function StatementAccountOverview({
             className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#191a1e] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.16)] sm:px-6"
           >
             <span
-              className={`absolute right-5 top-5 size-1.5 rounded-full ${
-                index === 1 ? "bg-emerald-400" : "bg-yellow-400/70"
-              }`}
+              className={`absolute right-5 top-5 size-1.5 rounded-full ${index === 1 ? "bg-emerald-400" : "bg-yellow-400/70"
+                }`}
             />
             <p className="pr-5 text-xs font-medium text-zinc-500">
               {labels[label]}
@@ -235,7 +207,7 @@ export function ClientAreaDailyStatementPanel({
 }: ClientAreaDailyStatementPanelProps) {
   const { clientArea } = getMessages(locale);
   const copy = clientArea.dailyStatementPage;
-  const messages = MESSAGES[locale];
+  const messages = clientArea.dailyStatementPage.status;
   const { accountMode } = useClientAreaAccountMode();
   const { state, retry } = useDailyStatement(accountMode);
   const [activeTab, setActiveTab] = useState<StatementTab>("account");
@@ -301,16 +273,15 @@ export function ClientAreaDailyStatementPanel({
       const rows: Array<[string, string]> =
         activeTab === "account"
           ? [...summaryRows, ...balanceRows].map(([label, value]) => [
-              copy.labels[label as keyof typeof copy.labels] as string,
-              value,
-            ])
+            copy.labels[label as keyof typeof copy.labels] as string,
+            value,
+          ])
           : activeTab === "open"
             ? report.positions.map((item) => [
-                `${item.productName} / ${item.side.toUpperCase()} ${formatLot(item.lot)}`,
-                `${formatStatementNumber(item.openPrice)} to ${formatStatementNumber(item.closingPrice)} / ${
-                  signedMoney(item.floating)
-                }`,
-              ])
+              `${item.productName} / ${item.side.toUpperCase()} ${formatLot(item.lot)}`,
+              `${formatStatementNumber(item.openPrice)} to ${formatStatementNumber(item.closingPrice)} / ${signedMoney(item.floating)
+              }`,
+            ])
             : [];
 
       for (const [label, value] of rows) {
@@ -363,11 +334,10 @@ export function ClientAreaDailyStatementPanel({
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveTab(tab.id)}
-              className={`rounded-xl border px-4 py-3 text-sm font-bold shadow-sm transition duration-200 sm:text-base ${
-                isActive
+              className={`rounded-xl border px-4 py-3 text-sm font-bold shadow-sm transition duration-200 sm:text-base ${isActive
                   ? "border-yellow-400 bg-yellow-500/10 text-white shadow-yellow-500/10 ring-1 ring-yellow-400/10"
                   : "border-white/10 bg-[#181818]/90 text-zinc-400 shadow-black/30 hover:border-white/20 hover:bg-[#202020] hover:text-zinc-200"
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -411,79 +381,77 @@ export function ClientAreaDailyStatementPanel({
             <StatusBox>{messages.openEmpty}</StatusBox>
           ) : (
             <>
-            <p className="rounded-xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-sm leading-6 text-yellow-200">
-              {messages.openAsOf(report.statementDate ?? EMPTY)}{" "}
-              <Link
-                href={resolveLocalizedHref(locale, "/client-area/market#transactions")}
-                className="font-semibold underline underline-offset-2 hover:text-yellow-100"
-              >
-                {messages.openLiveLink}
-              </Link>
-            </p>
-            <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#202125]">
-              {report.positions.map((position, index) => (
-                <article
-                  key={`${position.productName}-${position.orderDate}-${position.time}-${index}`}
-                  className="grid gap-4 border-b border-white/10 p-5 last:border-b-0 sm:grid-cols-[1.2fr_repeat(3,1fr)] sm:items-center"
+              <p className="rounded-xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-sm leading-6 text-yellow-200">
+                {messages.openAsOf.replace("{date}", report.statementDate ?? EMPTY)}{" "}
+                <Link
+                  href={resolveLocalizedHref(locale, "/client-area/market#transactions")}
+                  className="font-semibold underline underline-offset-2 hover:text-yellow-100"
                 >
-                  <div>
-                    <p className="font-bold text-white">{position.productName}</p>
-                    <p
-                      className={`mt-1 text-xs font-semibold ${
-                        position.side === "buy"
-                          ? "text-emerald-400"
-                          : "text-yellow-400"
-                      }`}
-                    >
-                      {position.side.toUpperCase()} /{" "}
-                      <ClientAreaSuperscriptDecimal
-                        value={formatLot(position.lot)}
-                      />
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-zinc-500">
-                      {copy.labels.openPrice}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-zinc-200">
-                      <ClientAreaSuperscriptDecimal
-                        value={formatStatementNumber(position.openPrice)}
-                      />
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-zinc-500">
-                      {copy.labels.marketPrice}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-zinc-200">
-                      <ClientAreaSuperscriptDecimal
-                        value={formatStatementNumber(position.closingPrice)}
-                      />
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-zinc-500">
-                      {copy.labels.floatingPl}
-                    </p>
-                    <p
-                      className={`mt-1 text-sm font-bold ${
-                        position.floating === null
-                          ? "text-zinc-500"
-                          : position.floating >= 0
+                  {messages.openLiveLink}
+                </Link>
+              </p>
+              <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#202125]">
+                {report.positions.map((position, index) => (
+                  <article
+                    key={`${position.productName}-${position.orderDate}-${position.time}-${index}`}
+                    className="grid gap-4 border-b border-white/10 p-5 last:border-b-0 sm:grid-cols-[1.2fr_repeat(3,1fr)] sm:items-center"
+                  >
+                    <div>
+                      <p className="font-bold text-white">{position.productName}</p>
+                      <p
+                        className={`mt-1 text-xs font-semibold ${position.side === "buy"
                             ? "text-emerald-400"
-                            : "text-rose-400"
-                      }`}
-                    >
-                      {position.floating === null
-                        ? EMPTY
-                        : <ClientAreaSuperscriptDecimal
+                            : "text-yellow-400"
+                          }`}
+                      >
+                        {position.side.toUpperCase()} /{" "}
+                        <ClientAreaSuperscriptDecimal
+                          value={formatLot(position.lot)}
+                        />
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-zinc-500">
+                        {copy.labels.openPrice}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-zinc-200">
+                        <ClientAreaSuperscriptDecimal
+                          value={formatStatementNumber(position.openPrice)}
+                        />
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-zinc-500">
+                        {copy.labels.marketPrice}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-zinc-200">
+                        <ClientAreaSuperscriptDecimal
+                          value={formatStatementNumber(position.closingPrice)}
+                        />
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-zinc-500">
+                        {copy.labels.floatingPl}
+                      </p>
+                      <p
+                        className={`mt-1 text-sm font-bold ${position.floating === null
+                            ? "text-zinc-500"
+                            : position.floating >= 0
+                              ? "text-emerald-400"
+                              : "text-rose-400"
+                          }`}
+                      >
+                        {position.floating === null
+                          ? EMPTY
+                          : <ClientAreaSuperscriptDecimal
                             value={signedMoney(position.floating)}
                           />}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </>
           )
         ) : null}
@@ -497,7 +465,7 @@ export function ClientAreaDailyStatementPanel({
         ) : null}
       </div>
 
-      <button
+      {/* <button
         type="button"
         disabled={isDownloading || !report}
         onClick={downloadStatement}
@@ -508,7 +476,7 @@ export function ClientAreaDailyStatementPanel({
           className={isDownloading ? "animate-spin" : "text-lg"}
         />
         {isDownloading ? copy.preparingLabel : copy.downloadLabel}
-      </button>
+      </button> */}
     </section>
   );
 }

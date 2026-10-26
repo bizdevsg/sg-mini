@@ -13,6 +13,7 @@ import {
   assertValidLocale,
   generateClientAreaStaticParams,
 } from "@/app/[locales]/client-area/client-area-page.shared";
+import { getMessages } from "@/locales";
 
 type ClientAreaMarketChartPageProps = {
   params: Promise<{ locales: string; symbol: string }>;
@@ -37,18 +38,15 @@ export async function generateMetadata({
 
   const apiPresets = await getTradingViewApiPresets();
   const preset = getClientAreaTradingViewPresetById(symbol, apiPresets);
+  const chartCopy = getMessages(locales).clientArea.homeChart;
 
   return buildPrivateMetadata({
     title: preset
       ? `${preset.label} Live Chart | Client Area`
-      : locales === "id"
-        ? "Data Tidak Ada | Client Area"
-        : "Data Unavailable | Client Area",
+      : `${chartCopy.unavailableTitle} | Client Area`,
     description: preset
-      ? `MiniMicro live chart for ${preset.marketCode}.`
-      : locales === "id"
-        ? "MiniMicro WebView untuk kode market ini belum tersedia."
-        : "The MiniMicro WebView for this market code is not available yet.",
+      ? chartCopy.availableDescription.replace("{marketCode}", preset.marketCode)
+      : chartCopy.unavailableDescription,
     locale: locales,
     path: `/${locales}/client-area/market/${symbol}`,
   });

@@ -22,23 +22,24 @@ function getFallbackText(input: string) {
 
 export function LiveQuoteInstrumentIcon({
   symbol,
-  className = "h-12 w-12",
 }: LiveQuoteInstrumentIconProps) {
   const display = getLiveQuoteDisplay(symbol);
   const iconSrc = getLiveQuoteIconSrc(symbol);
   const fallbackText = getFallbackText(display.label);
 
   return (
-    <div className={`flex shrink-0 items-center justify-center ${className}`}>
+    <div className={`flex shrink-0 items-center justify-center`}>
       {iconSrc ? (
-        <Image
-          src={iconSrc}
-          alt={`${display.label} icon`}
-          width={42}
-          height={42}
-          sizes="42px"
-          className="h-full w-full object-contain"
-        />
+        <div className="bg-zinc-800 p-1 w-15 h-15 rounded-full border border-zinc-100/20">
+          <Image
+            src={iconSrc}
+            alt={`${display.label} icon`}
+            width={45}
+            height={45}
+            sizes="10px"
+            className="h-full w-full object-contain"
+          />
+        </div>
       ) : (
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
           {fallbackText}

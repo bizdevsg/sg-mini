@@ -38,11 +38,9 @@ export async function generateMetadata({
   assertValidLocale(locales);
 
   const { clientArea } = getMessages(locales);
-  const title =
-    locales === "id" ? "Login Client Area" : "Client Area Login";
 
   return buildPrivateMetadata({
-    title,
+    title: clientArea.login.metadataTitle,
     description: clientArea.login.description,
     locale: locales,
     path: `/${locales}/client-area/login`,
@@ -67,9 +65,7 @@ export default async function ClientAreaLoginRoute({
       recaptchaSiteKey={PUBLIC_RECAPTCHA_SITE_KEY}
       sessionExpiredMessage={
         reason === "expired"
-          ? locales === "id"
-            ? "Sesi Anda telah berakhir, silakan login kembali."
-            : "Your session has expired. Please sign in again."
+          ? getMessages(locales).clientArea.login.sessionExpiredMessage
           : undefined
       }
     />

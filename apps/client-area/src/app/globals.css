@@ -82,11 +82,13 @@ body {
   box-shadow: 0 0 0 1000px #111113 inset;
 }
 
-/* TradePilot visual system: scoped so the wider Client Area keeps its own theme. */
-section[data-active-tab="trade-pilot"] {
+/* Shared dashboard background for every authenticated Client Area section. */
+.client-area-main-background {
   background-color: #000000;
-  background-image: url("/assets/Latar Fintech Emas dengan Globe Digital 1.webp") !important;
+  background-image: url("/assets/Latar Fintech Emas dengan Globe Digital 1.webp");
+  background-attachment: fixed;
   background-position: center center;
+  background-repeat: no-repeat;
   background-size: cover;
 }
 
@@ -588,4 +590,31 @@ button {
 
 .pengumuman-modal-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, rgba(255, 236, 92, 1), rgba(255, 171, 46, 1));
+}
+
+.client-area-notification-scroll {
+  scrollbar-color: rgba(245, 158, 11, 0.75) transparent;
+  scrollbar-width: thin;
+}
+
+.client-area-notification-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.client-area-notification-scroll::-webkit-scrollbar-track,
+.client-area-notification-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.client-area-notification-scroll::-webkit-scrollbar-thumb {
+  min-height: 3rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #facc15, #d97706);
+  background-clip: padding-box;
+}
+
+.client-area-notification-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #fde047, #f59e0b);
+  background-clip: padding-box;
 }

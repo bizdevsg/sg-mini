@@ -79,7 +79,7 @@ export function HeaderActions({
   ];
   const activeLocale =
     localeOptions.find((option) => option.value === locale) ?? localeOptions[0];
-  const activeLocaleLabel = locale === "id" ? "Aktif" : "Active";
+  const activeLocaleLabel = messages.clientArea.topbar.activeLocaleLabel;
   const mobileActionButtonClass =
     "min-w-[74px] rounded-[14px] text-xs font-semibold shadow-none";
   const authenticatedActionButtonClass =

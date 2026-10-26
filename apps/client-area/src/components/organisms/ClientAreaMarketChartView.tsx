@@ -11,7 +11,7 @@ import {
 } from "@/components/organisms/client-area.shared";
 import type { BreakingNewsItem } from "@/components/organisms/client-area.types";
 import { getLiveQuoteDisplay } from "@/lib/live-quotes";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -30,15 +30,14 @@ export function ClientAreaMarketChartView({
   presets,
   hasMarketData = true,
 }: ClientAreaMarketChartViewProps) {
+  const chartCopy = getMessages(locale).clientArea.homeChart;
   const fallbackPreset = presets[0];
   const selectedPreset = hasMarketData
     ? getClientAreaTradingViewPresetById(initialPresetId, presets) ?? fallbackPreset
     : null;
   const marketLabel = selectedPreset
     ? getLiveQuoteDisplay(selectedPreset.marketCode).label
-    : locale === "id"
-      ? "Data Tidak Ada"
-      : "Data Unavailable";
+    : chartCopy.unavailableTitle;
   const marketCodeLabel = selectedPreset?.marketCode ?? initialPresetId.toUpperCase();
 
   return (
@@ -70,12 +69,8 @@ export function ClientAreaMarketChartView({
           <MiniChart symbol={selectedPreset.marketCode} />
         ) : (
           <EmptyStatePanel
-            title={locale === "id" ? "Data Tidak Ada" : "Data Unavailable"}
-            body={
-              locale === "id"
-                ? "Kode market ini belum tersedia untuk MiniMicro WebView."
-                : "This market code is not available for the MiniMicro WebView yet."
-            }
+            title={chartCopy.unavailableTitle}
+            body={chartCopy.unavailableBody}
             variant="warning"
             className="py-10"
           />
@@ -86,12 +81,7 @@ export function ClientAreaMarketChartView({
         <div className="space-y-1">
           <Image src={"/assets/TradingView.png"} alt="Logo TradingView" height={100} width={200} />
           <div>
-            {
-              locale === "id" ?
-                "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda."
-                :
-                "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as EURUSD chart, XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more – simply everything a prepared trader may need."
-            }
+            {chartCopy.tradingViewDisclaimer}
           </div>
         </div>
       </div>

@@ -22,21 +22,6 @@ type ClientAreaAccountProfilePanelProps = {
   locale: AppLocale;
 };
 
-const PROFILE_NOTICE_COPY = {
-  id: {
-    error: "Data profil belum bisa dimuat.",
-    retry: "Coba lagi",
-    unavailable:
-      "Data profil belum tersedia. Registrasi akun ini belum diselesaikan di sistem, jadi belum ada data yang bisa ditampilkan.",
-  },
-  en: {
-    error: "Profile data could not be loaded.",
-    retry: "Try again",
-    unavailable:
-      "Profile data is not available yet. Registration for this account has not been completed in the system, so there is nothing to show.",
-  },
-} as const;
-
 type ProfileDetailProps = {
   full?: boolean;
   label: string;
@@ -143,33 +128,7 @@ function SensitiveProfilePasswordModal({
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const copy = locale === "id"
-    ? {
-      title: "Konfirmasi password",
-      description: "Masukkan password akun untuk melihat data sensitif.",
-      passwordLabel: "Password akun",
-      passwordPlaceholder: "Masukkan password",
-      cancel: "Batal",
-      confirm: "Konfirmasi",
-      invalid: "Password tidak sesuai. Silakan coba lagi.",
-      unauthorized: "Sesi Anda telah berakhir. Silakan masuk kembali.",
-      unavailable: "Data ini belum tersedia untuk ditampilkan.",
-      showPassword: "Tampilkan password",
-      hidePassword: "Sembunyikan password",
-    }
-    : {
-      title: "Confirm password",
-      description: "Enter your account password to view sensitive data.",
-      passwordLabel: "Account password",
-      passwordPlaceholder: "Enter password",
-      cancel: "Cancel",
-      confirm: "Confirm",
-      invalid: "The password is incorrect. Please try again.",
-      unauthorized: "Your session has expired. Please sign in again.",
-      unavailable: "This data is not available to display yet.",
-      showPassword: "Show password",
-      hidePassword: "Hide password",
-    };
+  const copy = getMessages(locale).clientArea.accountPage.sensitiveDataModal;
 
   useEffect(() => {
     if (!isOpen) {
@@ -353,7 +312,7 @@ export function ClientAreaAccountProfilePanel({
   // until getcustomerfullinfo is mapped — see client-area-account-profile.data.ts.
   const account = useClientAreaProfile();
   const { state: profileState, retry: retryProfile } = useCustomerProfile();
-  const noticeCopy = PROFILE_NOTICE_COPY[locale];
+  const noticeCopy = accountPage.profileNotice;
   const profile =
     profileState.status === "ready"
       ? profileState.profile.details

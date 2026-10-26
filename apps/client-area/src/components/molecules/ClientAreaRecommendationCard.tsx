@@ -39,7 +39,7 @@ export function ClientAreaRecommendationCard({
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           {symbolCode ? (
-            <LiveQuoteInstrumentIcon symbol={symbolCode} className="h-8 w-8" />
+            <LiveQuoteInstrumentIcon symbol={symbolCode} img_variant="sm" />
           ) : (
             <div
               className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${iconClass}`}
