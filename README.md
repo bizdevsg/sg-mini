@@ -96,7 +96,7 @@ Tambahkan hostname deployment yang diperlukan ke `NEXT_ALLOWED_ORIGINS` bila Ser
 
 ## Docker
 
-Satu `Dockerfile` menerima build argument `APP_NAME` (`website` atau `client-area`). `compose.yml` membangun kedua service secara terpisah dan secara default mengekspos website pada port `6969` (`APP_SITE_PORT`) serta Client Area pada port `6970` (`APP_CLIENT_SITE_PORT`).
+`Dockerfile`, `compose.yml`, serta file override Compose merupakan konfigurasi lokal deployment dan tidak dilacak Git. Setiap environment wajib menyediakan serta memelihara file tersebut sendiri agar perubahan khusus server, seperti port, domain, dan pemetaan IP LAN, tidak ikut masuk commit atau menimbulkan konflik saat deployment menarik pembaruan repository.
 
 ## Kompatibilitas route
 
