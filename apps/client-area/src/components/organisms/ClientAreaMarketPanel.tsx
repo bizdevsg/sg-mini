@@ -38,7 +38,7 @@ export function ClientAreaMarketPanel({
         <div
           className="absolute inset-0 bg-right-top bg-no-repeat bg-cover"
           style={{
-            backgroundImage: "url('/assets/bg-pasar-transaksi.png')",
+            backgroundImage: "url('/assets/bg-pasar-transaksi.webp')",
           }}
         />
 

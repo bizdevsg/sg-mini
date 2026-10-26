@@ -16,6 +16,33 @@ function parseDateValue(value: string) {
   return null;
 }
 
+function formatClock(
+  date: Date,
+  locale: AppLocale,
+  includeSeconds: boolean,
+) {
+  return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
+    hour: "2-digit",
+    minute: "2-digit",
+    ...(includeSeconds ? { second: "2-digit" as const } : {}),
+    hourCycle: "h23",
+    timeZone: getLocaleConfig(locale).timeZone,
+  })
+    .format(date)
+    .replace(/\./g, ":");
+}
+
+function normalizeClockFallback(value: string) {
+  const match = value.trim().match(/^(\d{1,2})[.:](\d{2})(?:[.:](\d{2}))?$/);
+
+  if (!match) {
+    return value;
+  }
+
+  const [, hour, minute, second = "00"] = match;
+  return `${hour.padStart(2, "0")}:${minute}:${second}`;
+}
+
 export function formatLocaleNumber(
   value: string | number | null | undefined,
   locale: AppLocale = DEFAULT_LOCALE,
@@ -56,11 +83,12 @@ export function formatLocaleDateTime(
     return value;
   }
 
-  return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
+  const dateLabel = new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
     dateStyle: "medium",
-    timeStyle: "medium",
     timeZone: getLocaleConfig(locale).timeZone,
   }).format(parsedDate);
+
+  return `${dateLabel}, ${formatClock(parsedDate, locale, false)}`;
 }
 
 export function formatLocaleArticleDateTime(
@@ -81,14 +109,7 @@ export function formatLocaleArticleDateTime(
     timeZone: getLocaleConfig(locale).timeZone,
   }).format(parsedDate);
 
-  const timeLabel = new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: getLocaleConfig(locale).timeZone,
-  })
-    .format(parsedDate)
-    .replace(":", ".");
+  const timeLabel = formatClock(parsedDate, locale, false);
 
   return `${dateLabel} - ${timeLabel}`;
 }
@@ -101,15 +122,10 @@ export function formatLocaleTime(
   const parsedDate = dateTime ? parseDateValue(dateTime) : null;
 
   if (!parsedDate) {
-    return value;
+    return normalizeClockFallback(value);
   }
 
-  return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
-    hour: "2-digit",
-    minute: "2-digit",
-    // second: "2-digit",
-    timeZone: getLocaleConfig(locale).timeZone,
-  }).format(parsedDate);
+  return formatClock(parsedDate, locale, true);
 }
 
 export function formatLocaleYear(
