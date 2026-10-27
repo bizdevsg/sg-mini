@@ -72,6 +72,3 @@ docs/api/samples/*.bin
 docs/api/samples/.device-uuid
 !docs/api/samples/.gitkeep
 .screenshot-sgb.mjs
-
-.composer.yml
-.DockerFile

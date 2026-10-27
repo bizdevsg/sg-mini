@@ -13,6 +13,7 @@
 - Runtime Node.js untuk development dan seluruh stage image Docker Website/Client Area dipin ke Node.js 24.22.1 LTS melalui `engines`, `.nvmrc`, dan base image eksplisit agar build konsisten serta memakai security release 21 Oktober 2026 yang menutup kerentanan runtime termasuk remote code execution pada decoder Brotli.
 
 ### Removed
+- Pola ignore legacy `.composer.yml` dan `.DockerFile` dihapus karena konfigurasi deployment lokal kini sudah dicakup oleh aturan eksplisit untuk file Compose dan `Dockerfile`.
 - `Dockerfile`, `compose.yml`, dan file override Compose dikeluarkan dari tracking Git agar konfigurasi deployment khusus setiap server tetap lokal dan tidak lagi memicu konflik autostash saat menarik pembaruan repository.
 - Locale yang tidak memiliki consumer dibersihkan: copy `spread` lama di Website, locale hero dan panel dashboard usang di Client Area, serta duplikat locale halaman edukasi publik yang hanya digunakan Website. Locale aplikasi Solid di Client Area juga dirampingkan agar hanya menyimpan data platform/store yang dipakai untuk link download.
 - Menghapus dua komponen `BenefitSection`, satu modul tipe landing, dan 72 file konten locale Indonesia/Inggris yang tidak pernah dikonsumsi pada Website maupun Client Area; locale `clientArea` Website juga dirampingkan agar hanya menyimpan label yang masih digunakan.
