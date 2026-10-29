@@ -6,6 +6,7 @@ import {
   PUBLIC_RECAPTCHA_SITE_KEY,
   RECAPTCHA_MIN_SCORE,
   RECAPTCHA_SECRET_KEY,
+  SGB_FLAVOR,
 } from "@/lib/env";
 
 type RecaptchaVerifyResponse = {
@@ -63,7 +64,9 @@ export function isRecaptchaEnabled(hostname?: string | null) {
     return false;
   }
 
-  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL) {
+  // Logging in against the SGB UAT server needs a real token even when the app
+  // itself runs in dev, so UAT behaves like ALLOW_LOCAL.
+  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL && SGB_FLAVOR !== "uat") {
     if (APP_ENV !== "prod") {
       return false;
     }
