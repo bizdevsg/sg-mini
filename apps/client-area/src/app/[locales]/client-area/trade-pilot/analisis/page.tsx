@@ -42,7 +42,7 @@ export default async function ClientAreaTradePilotAnalysisPage({
       getEconomicCalendarRange("today").catch(() =>
         createEmptyEconomicCalendarRange("today"),
       ),
-      getTradePilotBootstrap(),
+      getTradePilotBootstrap(locales),
       getNewsFeed(locales, 5),
     ]);
 

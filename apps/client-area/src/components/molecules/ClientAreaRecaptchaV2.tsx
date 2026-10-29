@@ -19,6 +19,39 @@ type ClientAreaRecaptchaV2Props = {
   siteKey: string;
 };
 
+const RECAPTCHA_TIMEOUT_PATTERN = /^(reCAPTCHA )?Timeout\b/i;
+
+let isTimeoutRejectionFilterInstalled = false;
+
+/**
+ * Google's api.js rejects a promise with "reCAPTCHA Timeout" when a widget is
+ * torn down while it is still talking to its iframe — which is exactly what
+ * happens when the widget is remounted for a fresh token or the page navigates
+ * away after a successful login. The rejection arrives after unmount and is
+ * harmless, but surfaces as a Runtime Error overlay, so it is swallowed here.
+ * Installed once and kept for the page lifetime because it fires post-unmount.
+ */
+function installRecaptchaTimeoutRejectionFilter() {
+  if (isTimeoutRejectionFilterInstalled || typeof window === "undefined") {
+    return;
+  }
+
+  isTimeoutRejectionFilterInstalled = true;
+  window.addEventListener("unhandledrejection", (event) => {
+    const reason: unknown = event.reason;
+    const message =
+      typeof reason === "string"
+        ? reason
+        : reason instanceof Error
+          ? reason.message
+          : "";
+
+    if (RECAPTCHA_TIMEOUT_PATTERN.test(message)) {
+      event.preventDefault();
+    }
+  });
+}
+
 /**
  * reCAPTCHA v2 checkbox. Rendered INSIDE the login <form>: Google adds a
  * `g-recaptcha-response` field next to the widget, so the token travels with the
@@ -31,6 +64,8 @@ export function ClientAreaRecaptchaV2({ siteKey }: ClientAreaRecaptchaV2Props) {
 
   // Runs on every mount (Script `onReady`), also when api.js is already loaded.
   const renderWidget = useCallback(() => {
+    installRecaptchaTimeoutRejectionFilter();
+
     const container = containerRef.current;
     const recaptcha = window.grecaptcha;
 

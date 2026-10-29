@@ -42,27 +42,32 @@ const ACCOUNT_METRICS: Array<{
   | "autoLiquidation"
   | "effectiveMargin"
   | "equityRatio";
-  label: string;
+  labelKey:
+  | "marginRequiredLabel"
+  | "callMarginPlaceLabel"
+  | "autoLiquidationLabel"
+  | "effectiveMarginLabel"
+  | "equityRatioLabel";
 }> = [
     {
       key: "marginRequired",
-      label: "Margin Required",
+      labelKey: "marginRequiredLabel",
     },
     {
       key: "callMarginPlace",
-      label: "Call Margin Place",
+      labelKey: "callMarginPlaceLabel",
     },
     {
       key: "autoLiquidation",
-      label: "Auto Liquidation",
+      labelKey: "autoLiquidationLabel",
     },
     {
       key: "effectiveMargin",
-      label: "Effective Margin",
+      labelKey: "effectiveMarginLabel",
     },
     {
       key: "equityRatio",
-      label: "Equity Ratio",
+      labelKey: "equityRatioLabel",
     },
   ];
 
@@ -254,7 +259,7 @@ export function ClientAreaAccountOverview({
           {hasNoRealAccount ? null : (
             <>
               <ClientAreaAccountValueCard
-                label="New Balance"
+                label={messages.balanceLabel}
                 surfaceClassName="bg-orange-500/70"
                 value={
                   isLoading ? (
@@ -268,7 +273,7 @@ export function ClientAreaAccountOverview({
                 valueClassName="text-neutral-950"
               />
               <ClientAreaAccountValueCard
-                label="Floating P/L"
+                label={messages.floatingPlLabel}
                 surfaceClassName="bg-white/50"
                 value={
                   isLoading ? (
@@ -288,7 +293,7 @@ export function ClientAreaAccountOverview({
                 }
               />
               <ClientAreaAccountValueCard
-                label="Equity"
+                label={messages.equityLabel}
                 surfaceClassName="bg-orange-500/70"
                 value={
                   isLoading ? (
@@ -372,14 +377,16 @@ export function ClientAreaAccountOverview({
             {messages.accountMetricsTitle}
           </p>
 
+          <hr className="border border-zinc-500/20 mt-3" />
+
           <div
-            className={`relative mt-3 grid-cols-2 border-t border-black/10 px-1 pt-3 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "grid" : "hidden"} lg:grid`}
+            className={`relative grid-cols-2 px-1 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "grid" : "hidden"} lg:grid`}
             id={accountMetricsId}
           >
             {ACCOUNT_METRICS.map((metric, index) => (
               <ClientAreaAccountMetricRow
-                key={metric.label}
-                label={metric.label}
+                key={metric.key}
+                label={messages[metric.labelKey]}
                 value={
                   isLoading ? (
                     <AccountValueSkeleton className="h-5 w-24 sm:w-28" />

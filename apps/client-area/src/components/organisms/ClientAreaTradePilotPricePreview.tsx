@@ -1,106 +1,159 @@
 "use client";
 
-import { Maximize2, Share2 } from "lucide-react";
+import { useState } from "react";
+import { LoaderCircle, Maximize2, Minimize2, Share2 } from "lucide-react";
 
-import TradingView, {
-  type TradingViewPreset,
-} from "@/components/organisms/TradingView";
+import { ClientAreaTradePilotLevelsChart } from "@/components/organisms/ClientAreaTradePilotLevelsChart";
+import { useClientAreaTradePilotChartActions } from "@/hooks/useClientAreaTradePilotChartActions";
 import type {
   ClientAreaTradePilotAnalysisResultCopy,
-  ClientAreaTradePilotTimeframe,
+  ClientAreaTradePilotCopy,
 } from "@/lib/client-area-trade-pilot.shared";
-import type { AppLocale } from "@/locales";
+import { renderTradePilotChartPng } from "@/lib/trade-pilot/trade-pilot-chart-share";
+import type {
+  TradePilotAnalysisResult,
+  TradePilotCandleSnapshot,
+} from "@/lib/trade-pilot/trade-pilot.types";
 
 type ClientAreaTradePilotPricePreviewProps = {
+  analysis: TradePilotAnalysisResult;
   copy: ClientAreaTradePilotAnalysisResultCopy;
-  instrumentLabel: string;
-  locale: AppLocale;
-  timeframe: ClientAreaTradePilotTimeframe;
+  fullCopy: ClientAreaTradePilotCopy;
+  locale: "id" | "en";
 };
 
-const ANALYSIS_TRADING_VIEW_PRESETS: TradingViewPreset[] = [
-  {
-    id: "analysis-xauusd",
-    label: "XAU/USD",
-    symbol: "OANDA:XAUUSD",
-  },
-];
-
-const ANALYSIS_TRADING_VIEW_URL =
-  "https://www.tradingview.com/chart/?symbol=OANDA%3AXAUUSD";
-
 export function ClientAreaTradePilotPricePreview({
+  analysis,
   copy,
-  instrumentLabel,
+  fullCopy,
   locale,
-  timeframe,
 }: ClientAreaTradePilotPricePreviewProps) {
-  const handleFullChart = () => {
-    document
-      .getElementById("trade-pilot-main-chart")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  const instrumentLabel = analysis.instrumentLabel;
+  const { isFullscreen, panelRef, toggleFullscreen } =
+    useClientAreaTradePilotChartActions({
+      captureFailedMessage: fullCopy.captureFailedMessage,
+      captureUnsupportedMessage: fullCopy.captureUnsupportedMessage,
+      fileLabel: `trade-pilot-${analysis.instrumentId}`,
+      fullscreenUnsupportedMessage: fullCopy.fullscreenUnsupportedMessage,
+    });
+  const FullscreenIcon = isFullscreen ? Minimize2 : Maximize2;
 
+  const [shareState, setShareState] = useState<"idle" | "preparing" | "downloaded" | "error">("idle");
+
+  // Bagikan grafik sebagai PNG: share sheet (bila didukung) atau unduh file.
   const handleShare = async () => {
+    setShareState("preparing");
     try {
-      if (navigator.share) {
-        await navigator.share({
-          title: `${copy.priceChartTitle} - ${instrumentLabel}`,
-          text: `${instrumentLabel} (OANDA:XAUUSD)`,
-          url: ANALYSIS_TRADING_VIEW_URL,
+      let candles: TradePilotCandleSnapshot["candles"] = [];
+      let candleTimeframe = analysis.timeframeLabel;
+      if (analysis.source === "api") {
+        const params = new URLSearchParams({
+          instrumentId: analysis.instrumentId,
+          timeframe: analysis.timeframe,
         });
-        return;
+        const response = await fetch(`/api/client-area/trade-pilot/candles?${params}`, { cache: "no-store" });
+        if (response.ok) {
+          const snapshot = (await response.json()) as TradePilotCandleSnapshot;
+          candles = snapshot.candles;
+          candleTimeframe = snapshot.candleTimeframe;
+        }
       }
 
-      await navigator.clipboard.writeText(ANALYSIS_TRADING_VIEW_URL);
+      const blob = await renderTradePilotChartPng({
+        analysis,
+        candleTimeframe,
+        candles,
+        copy: copy.chartShare,
+        locale,
+      });
+      const fileName = `tradepilot-${analysis.instrumentId}-${analysis.timeframeLabel}-${analysis.id}.png`;
+      const file = new File([blob], fileName, { type: "image/png" });
+      const title = `${copy.chartShare.title} · ${instrumentLabel} · ${analysis.timeframeLabel}`;
+
+      if (navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title });
+          setShareState("idle");
+          return;
+        } catch (shareError) {
+          if (shareError instanceof DOMException && shareError.name === "AbortError") {
+            setShareState("idle");
+            return;
+          }
+          // Share sheet gagal: lanjut unduh.
+        }
+      }
+
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = fileName;
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
+      setShareState("downloaded");
     } catch {
-      // The native share sheet may be cancelled by the user.
+      setShareState("error");
     }
   };
 
   return (
-    <article className="rounded-3xl border border-zinc-800 bg-zinc-500/10 p-5 sm:p-7">
+    <article
+      ref={panelRef}
+      className="rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-5 sm:p-7 fullscreen:overflow-y-auto fullscreen:rounded-none fullscreen:border-0 fullscreen:bg-zinc-950"
+    >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h3 className="text-lg font-bold text-white">{copy.priceChartTitle}</h3>
-          <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
-            <strong className="text-white">{instrumentLabel}</strong>
-            <span className="rounded-md border border-zinc-700 bg-zinc-900/80 px-2 py-1 font-mono text-xs font-semibold text-amber-400">
-              OANDA:XAUUSD
-            </span>
+          <div className="mt-1 border border-yellow-500 bg-yellow-600/10 text-yellow-100 rounded-md w-fit px-2 py-1 flex flex-wrap items-center gap-2 text-xxs">
+            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+            <strong>{instrumentLabel}</strong>
           </div>
         </div>
 
         <button
           type="button"
-          onClick={handleFullChart}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-500/10 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/50"
+          onClick={toggleFullscreen}
+          aria-pressed={isFullscreen}
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900/70 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/50"
         >
-          <Maximize2 className="h-4 w-4" />
+          <FullscreenIcon className="h-4 w-4" />
           {copy.viewFullChartLabel}
         </button>
       </div>
 
-      <TradingView
-        activePresetId="analysis-xauusd"
-        chartHeightClassName="h-[290px] sm:h-[350px]"
-        className="pt-5"
-        defaultInterval={timeframe}
-        embedded
-        hideSideToolbar
-        hideTopToolbar
-        locale={locale}
-        presets={ANALYSIS_TRADING_VIEW_PRESETS}
-      />
+      <div className="pt-5">
+        <ClientAreaTradePilotLevelsChart
+          key={`${analysis.id}-${analysis.instrumentId}-${analysis.timeframe}`}
+          analysis={analysis}
+          copy={fullCopy}
+          heightClassName={
+            isFullscreen ? "h-[calc(100vh-14rem)] min-h-80" : undefined
+          }
+          instrumentId={analysis.instrumentId}
+          timeframe={analysis.timeframe}
+        />
+      </div>
 
-      <div className="mt-4 flex justify-end">
+      <div className="mt-4 flex flex-wrap items-center justify-end gap-3">
+        {shareState === "downloaded" || shareState === "error" ? (
+          <p role="status" className={`text-xs ${shareState === "error" ? "text-rose-300" : "text-zinc-400"}`}>
+            {shareState === "error" ? copy.shareChartErrorLabel : copy.shareChartDownloadedLabel}
+          </p>
+        ) : null}
         <button
           type="button"
-          onClick={handleShare}
-          className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-500/10 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/50"
+          onClick={() => void handleShare()}
+          disabled={shareState === "preparing"}
+          className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-900/70 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/50 disabled:cursor-wait disabled:opacity-60"
         >
-          <Share2 className="h-4 w-4" />
-          {copy.shareChartLabel}
+          {shareState === "preparing" ? (
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+          ) : (
+            <Share2 className="h-4 w-4" />
+          )}
+          {shareState === "preparing" ? copy.shareChartPreparingLabel : copy.shareChartLabel}
         </button>
       </div>
     </article>

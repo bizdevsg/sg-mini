@@ -31,6 +31,55 @@ describe("client area request queue", () => {
     assert.deepEqual(events, ["first:start", "first:end", "second:start"]);
   });
 
+  it("serializes requests across separate queues through Web Locks", async () => {
+    // Two queues stand in for two browser tabs sharing one lock manager.
+    let tail: Promise<unknown> = Promise.resolve();
+    const fakeLocks = {
+      request<T>(_name: string, task: () => Promise<T>) {
+        const result = tail.then(task, task);
+        tail = result.catch(() => undefined);
+        return result;
+      },
+    };
+    const original = Object.getOwnPropertyDescriptor(globalThis, "navigator");
+    Object.defineProperty(globalThis, "navigator", {
+      configurable: true,
+      value: { locks: fakeLocks },
+    });
+
+    try {
+      const tabA = createClientAreaRequestQueue();
+      const tabB = createClientAreaRequestQueue();
+      const events: string[] = [];
+      let finishA!: () => void;
+      const aCanFinish = new Promise<void>((resolve) => {
+        finishA = resolve;
+      });
+
+      const a = tabA(async () => {
+        events.push("a:start");
+        await aCanFinish;
+        events.push("a:end");
+      });
+      const b = tabB(async () => {
+        events.push("b:start");
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      assert.deepEqual(events, ["a:start"]);
+
+      finishA();
+      await Promise.all([a, b]);
+      assert.deepEqual(events, ["a:start", "a:end", "b:start"]);
+    } finally {
+      if (original) {
+        Object.defineProperty(globalThis, "navigator", original);
+      } else {
+        Reflect.deleteProperty(globalThis, "navigator");
+      }
+    }
+  });
+
   it("continues the queue after a request fails", async () => {
     const enqueue = createClientAreaRequestQueue();
     const expectedError = new Error("expired");

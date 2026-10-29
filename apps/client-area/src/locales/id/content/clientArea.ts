@@ -2,6 +2,7 @@ import type { AppMessages } from "../../shared/messages";
 
 export const idClientArea: AppMessages["clientArea"] = {
   metadataTitle: "Dashboard Client Area",
+  seoLabel: "Client Area",
   pageTitle: "Dashboard",
   pageDescription:
     "Tampilan utama nasabah setelah login dengan ringkasan akun, aksi cepat, dan signal market.",
@@ -12,12 +13,15 @@ export const idClientArea: AppMessages["clientArea"] = {
       "Data MiniMicro tidak tersedia. Menampilkan chart dari TradingView.",
     frameTitle: "Chart live MiniMicro",
     liveLabel: "Live",
+    liveChartTitle: "Chart Live {symbol}",
+    closeChartLabel: "Tutup chart live",
     loading: "Memuat chart live...",
     refreshLabel: "Perbarui",
     retryLabel: "Coba lagi",
     availableDescription: "MiniMicro live chart untuk {marketCode}.",
     tradingViewDisclaimer:
       "Chart yang kami gunakan disediakan oleh TradingView, sebuah platform charting bagi para trader dan investor dari seluruh penjuru dunia. Temukan berbagai instrumen finansial seperti chart EURUSD, XAUUSD dan instrumen forex lainnya, dan juga peralatan seperti kalender ekonomi, berita finansial, dan masih banyak lagi yang tersedia secara gratis dan dapat membantu dalam aktivitas trading dan investasi Anda.",
+    tradingViewLogoAlt: "Logo TradingView",
     unavailableBody: "Kode market ini belum tersedia untuk MiniMicro WebView.",
     unavailableDescription:
       "MiniMicro WebView untuk kode market ini belum tersedia.",
@@ -39,6 +43,14 @@ export const idClientArea: AppMessages["clientArea"] = {
     unavailable: "Akun untuk mode ini tidak tersedia.",
     unavailableAccount: "Tidak tersedia",
     updated: "Diperbarui",
+    balanceLabel: "Saldo Baru",
+    floatingPlLabel: "Floating P/L",
+    equityLabel: "Ekuitas",
+    marginRequiredLabel: "Margin yang Dibutuhkan",
+    callMarginPlaceLabel: "Batas Call Margin",
+    autoLiquidationLabel: "Likuidasi Otomatis",
+    effectiveMarginLabel: "Margin Efektif",
+    equityRatioLabel: "Rasio Ekuitas",
   },
   homeTikTok: {
     description: "Tonton video terbaru pilihan dari Solid Prime.",
@@ -48,11 +60,18 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   marketTransactions: {
     title: "Pasar & Transaksi",
+    marketMovementTitle: "Pergerakan Pasar Global",
+    marketMovementDescription:
+      "Pantau harga terkini dari berbagai instrumen favorit.",
     allTransactionsLabel: "Semua Transaksi",
     liveChartLabel: "Live Chart",
     viewTransactionsLabel: "Lihat Transaksi",
     panel: {
       buySell: "Buy / Sell",
+      description:
+        "Pantau posisi terbuka, riwayat transaksi, dan pending order trading di sini.",
+      emptyImageAlt: "Ilustrasi belum ada transaksi",
+      emptyTitle: "Belum Ada Transaksi",
       historyEmpty: "Belum ada riwayat transaksi untuk akun ini.",
       historyError: "Riwayat belum bisa dimuat.",
       historyLoading: "Memuat riwayat...",
@@ -69,13 +88,32 @@ export const idClientArea: AppMessages["clientArea"] = {
       unavailable: "Akun untuk mode ini tidak tersedia.",
     },
     positionRow: {
+      buy: "Buy",
       currentPrice: "Harga Saat Ini",
       facilityFee: "Facility Fee",
       floatingPl: "Floating P/L",
+      lotUnit: "Lot",
       lots: "Lot",
       openPrice: "Harga Buka",
       orderNumber: "No. Order",
+      sell: "Sell",
       storage: "Storage",
+      vat: "VAT",
+    },
+    tradeHistoryRow: {
+      buy: "Buy",
+      buyPrice: "Harga Buy",
+      date: "Tanggal",
+      facilityFee: "Facility Fee",
+      liquidation: "Likuidasi",
+      lotUnit: "Lot",
+      orderNumber: "No. Order",
+      price: "Harga",
+      profitLoss: "Profit Loss",
+      quantityLots: "Jumlah Lot",
+      sell: "Sell",
+      sellPrice: "Harga Sell",
+      side: "Sisi",
       vat: "VAT",
     },
   },
@@ -182,6 +220,7 @@ export const idClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Navigasi client",
+    navigationLabel: "Navigasi",
     backToWebsite: "Kembali ke Home",
     tradeCta: "Trade",
     navItems: [
@@ -220,8 +259,10 @@ export const idClientArea: AppMessages["clientArea"] = {
   livePriceTicker: {
     label: "Harga live dan berita terbaru",
     newsLabel: "Berita",
+    tickLabel: "Tick Live",
   },
   tradePilotPage: {
+    loadingLabel: "Memuat Trade Pilot...",
     comingSoon: {
       title: "Coming Soon",
       description:
@@ -238,6 +279,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       missingRealDescription:
         "Pilih akun Demo untuk tetap menggunakan Trade Pilot, atau buka akun Real terlebih dahulu.",
       mockDataLabel: "Data simulasi",
+      berandaBack: "Kembali ke Beranda",
     },
     navigation: {
       label: "Navigasi Trade Pilot",
@@ -251,22 +293,45 @@ export const idClientArea: AppMessages["clientArea"] = {
       title: "Analisis Pasar",
       description:
         "Analisis pergerakan harga real-time dengan chart interaktif dan data terkini.",
-      quotaValue: "10/30 Hari",
       quotaLabel: "Kuota Analisis",
-      sessionValue: "Sydney - Tokyo",
       sessionLabel: "Sesi Aktif",
+      sessionClosedValue: "Pasar Tutup",
+      sessionClosedLabel: "Tidak ada sesi aktif",
+      sessionInfoLabel: "Lihat jam sesi pasar",
+      sessionHoursTitle: "Jam sesi pasar (WIB)",
+      sessionOpenBadge: "Buka",
+      sessionHoursNote:
+        "Perkiraan jam sesi forex. Otomatis menyesuaikan pergantian jam musim panas/dingin; pasar tutup Sabtu–Minggu.",
       instrumentPickerTitle: "Pilih Instrumen",
       searchPlaceholder: "Cari instrumen...",
       favoritesLabel: "Favorit",
       addFavoriteLabel: "Tambah instrumen favorit",
       setAlertLabel: "Pasang Alert",
-      analysisActionLabel: "Analisis",
+      analysisActionLabel: "Analisis - 1 Token",
       analysisLoadingLabel: "Menganalisis...",
       insufficientCreditMessage: "Credit analisis untuk mode ini sudah habis.",
       analysisErrorMessage: "Analisis belum dapat dibuat. Silakan coba lagi.",
+      accessDeniedMessage: "Mode akun ini belum tersedia untuk Anda.",
+      analysisPausedMessage:
+        "Analisis TradePilot sedang dijeda sementara oleh admin. Silakan coba lagi nanti.",
+      analysisPausedSelectionMessage:
+        "Analisis untuk {target} sedang dijeda sementara. Pilih instrumen atau timeframe lain.",
+      analysisUnavailableMessage:
+        "Data pasar sedang tidak tersedia. Silakan coba lagi.",
+      rateLimitedMessage:
+        "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      rateLimitedRetryMessage:
+        "Terlalu banyak permintaan. Coba lagi dalam {seconds} detik.",
+      creditResetsMessage: "Kuota akan direset pada {date}.",
+      serviceUnavailableMessage:
+        "TradePilot sedang tidak dapat dihubungi. Kredit dan riwayat belum dapat dimuat.",
+      onboardingTitle: "Selamat datang di TradePilot",
+      onboardingDescription:
+        "TradePilot memberi analisis teknikal berbasis AI untuk edukasi dan informasi. Setiap analisis memakai 1 kredit sesuai mode akun Anda. Hasil analisis bukan ajakan atau jaminan keuntungan; keputusan transaksi sepenuhnya ada pada Anda.",
+      onboardingDismissLabel: "Saya mengerti",
       noAnalysisTitle: "Belum ada hasil analisis",
       noAnalysisDescription:
-        "Pilih instrumen dan timeframe, lalu tekan Analisis. Hasil yang tampil masih berupa simulasi deterministik.",
+        "Pilih instrumen dan timeframe, lalu tekan Analisis. Hasil terbaru akan tampil di sini.",
       demoModeLabel: "Demo",
       realModeLabel: "Real",
       instrumentLabel: "Instrumen:",
@@ -284,6 +349,13 @@ export const idClientArea: AppMessages["clientArea"] = {
         "Tangkapan chart gagal dibuat. Pilih tab Client Area saat browser meminta sumber layar.",
       fullscreenUnsupportedMessage:
         "Mode layar penuh tidak didukung oleh browser ini.",
+      chartLoadingLabel: "Memuat candle Trade Pilot...",
+      chartErrorLabel: "Data candle belum tersedia.",
+      chartRetryLabel: "Coba lagi",
+      chartDelayedLabel: "Data tertunda",
+      chartTimeframeLabel: "Candle",
+      chartEmptyLabel: "Belum ada candle untuk instrumen dan timeframe ini.",
+      chartBothLabel: "Keduanya",
       instrumentNames: {
         gold: "Emas / Dollar A.S.",
         brent: "Minyak Mentah Brent",
@@ -291,6 +363,9 @@ export const idClientArea: AppMessages["clientArea"] = {
         nikkei: "Indeks Nikkei 225",
       },
       analysisResult: {
+        disclaimerTitle: "Disclaimer",
+        disclaimerFallback:
+          "Hasil analisis TradePilot bersifat informasi dan edukasi, bukan ajakan atau jaminan keuntungan. Perdagangan berjangka memiliki risiko tinggi.",
         relevanceLabel: "Relevan hingga sekitar 4 jam lagi",
         pendingLabel: "Pending",
         sessionWindowLabel: "Tokyo • London",
@@ -301,6 +376,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         changeTimeframeTitle: "Ganti Timeframe",
         changeTimeframeDescription:
           "Instrumen sama, timeframe berbeda — pilih salah satu untuk langsung dianalisis.",
+        changeTimeframeCostNote: "Setiap analisis timeframe baru memakai 1 kredit.",
         compareRiskLabel: "Bandingkan Risiko",
         directionBiasTitle: "Bias Arah",
         neutralWaitLabel: "Netral / Tunggu",
@@ -318,15 +394,53 @@ export const idClientArea: AppMessages["clientArea"] = {
         confidenceReasonDescription:
           "Pergerakan harga dan perubahan sesi pasar dapat menambah volatilitas, sehingga keyakinan skenario teknikal tetap dibatasi.",
         fullReasonLabel: "Lihat Alasan Lengkap",
+        lowRiskLabel: "Risiko Rendah",
+        highRiskLabel: "Risiko Tinggi",
+        confidenceModal: {
+          sourcesTitle: "Sumber yang dirujuk:",
+          technicalTitle: "Bukti teknikal",
+          contextTitle: "Konteks berita & kalender",
+          riskTitle: "Risiko utama",
+          invalidationTitle: "Penilaian berubah jika",
+          footer: "Analisis ini bukan instruksi transaksi. Periksa kembali kondisi pasar terkini.",
+          closeLabel: "Tutup",
+          empty: "Belum ada detail alasan untuk analisis ini.",
+        },
         analyzedAtLabel: "Dianalisis",
-        refreshAnalysisLabel: "Perbarui Analisis",
+        refreshAnalysisLabel: "Perbarui Analisis - 1 Token",
         priceChartTitle: "Grafik Harga",
         updatedAtLabel: "Diperbarui",
         viewFullChartLabel: "Lihat chart lengkap",
         resetLabel: "Reset",
         shareChartLabel: "Bagikan grafik",
+        shareChartPreparingLabel: "Menyiapkan gambar…",
+        shareChartErrorLabel: "Gambar grafik gagal dibuat. Silakan coba lagi.",
+        shareChartDownloadedLabel: "Gambar grafik diunduh.",
+        chartShare: {
+          brand: "TRADEPILOT · SOLID GOLD BERJANGKA",
+          title: "Grafik analisis",
+          analyzed: "Dianalisis",
+          made: "Gambar dibuat",
+          bias: "Bias Arah",
+          suggested: "Saran",
+          bullish: "Bullish",
+          bearish: "Bearish",
+          neutral: "Netral / Tunggu",
+          buy: "Skenario Buy",
+          sell: "Skenario Sell",
+          both: "Skenario Buy & Sell",
+          entry: "Entry",
+          stop: "Stop Loss",
+          tp1: "Take Profit 1",
+          tp2: "Take Profit 2",
+          sourceNote: "Candle historis diambil saat gambar dibuat dan dibatasi sebelum analisis. Level dan bias berasal dari analisis tersimpan, bukan harga live.",
+          noCandles: "Data candle historis belum tersedia untuk analisis ini.",
+          warning: "Level hanya acuan, bukan instruksi entry. Periksa syarat entry, risiko, invalidasi, dan kondisi pasar terkini sebelum bertindak.",
+        },
         suggestedLevelsTitle: "Saran Level",
         recommendedSideLabel: "Sisi yang disarankan",
+        recommendedBuyLabel: "Buy",
+        recommendedSellLabel: "Sell",
         waitLabel: "Tunggu",
         suggestedLevelsDescription:
           "Level Entry, Stop Loss, dan Take Profit untuk skenario Buy dan Sell berdasarkan rentang harga saat analisis dibuat.",
@@ -370,21 +484,6 @@ export const idClientArea: AppMessages["clientArea"] = {
         buyLabel: "Beli",
         sellLabel: "Jual",
         waitLabel: "Tunggu",
-      },
-      priceAlert: {
-        title: "Alert harga",
-        description:
-          "Dapat notifikasi push begitu harga live menyentuh tiap level dari AI.",
-        toggleLabel: "Aktifkan atau nonaktifkan alert harga",
-        statusLabel: "Alert",
-        activeLabel: "Aktif",
-        inactiveLabel: "Nonaktif",
-        entryLabel: "Entry",
-        stopLossLabel: "Stop Loss",
-        takeProfitOneLabel: "Take Profit 1",
-        takeProfitTwoLabel: "Take Profit 2",
-        triggeredLabel: "Terpicu",
-        cancelledLabel: "Dibatalkan",
       },
       footer: {
         eyebrow: "Dapatkan TradePilot di",
@@ -453,16 +552,18 @@ export const idClientArea: AppMessages["clientArea"] = {
         eyebrow: "Ringkasan Konteks Pasar",
         bearishTitle: "Cenderung Bearish",
         bullishTitle: "Cenderung Bullish",
+        neutralTitle: "Netral / Tunggu",
         sellLabel: "Jual",
         buyLabel: "Beli",
-        bearishDescription:
-          "7 dari 11 indikator cenderung bearish, sementara 3 bullish dan 1 netral.",
-        bullishDescription:
-          "7 dari 11 indikator cenderung bullish, sementara 3 bearish dan 1 netral.",
+        waitLabel: "Tunggu",
+        indicatorTallyDescription:
+          "{bullish} dari {total} indikator cenderung bullish, {bearish} bearish, dan {neutral} netral.",
         bearishNote:
           "Data saat ini condong ke skenario penurunan — konfirmasi dengan price action sebelum mengambil keputusan.",
         bullishNote:
           "Data saat ini condong ke skenario kenaikan — konfirmasi dengan price action sebelum mengambil keputusan.",
+        neutralNote:
+          "Rekomendasi AI saat ini adalah menunggu: sinyal belum cukup kuat untuk satu arah. Hindari entry sampai harga mengonfirmasi skenario buy atau sell.",
       },
       tradingPlan: {
         title: "Trading Plan Adaptif",
@@ -484,7 +585,6 @@ export const idClientArea: AppMessages["clientArea"] = {
         intradayNote:
           "Perhitungan ini khusus untuk posisi intraday (day trade); posisi overnight tidak tercakup.",
         snapshotLabel: "Snapshot candle analisis diambil",
-        snapshotValue: "2/10/2026, 09:10:15",
         createRecommendationLabel: "Buat Rekomendasi",
         selectDirectionLabel: "Pilih Satu Arah",
         waitStatusLabel: "Tunggu",
@@ -536,7 +636,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         recommendationUsageLabel: "Cara memakai rekomendasi ini",
         entryAndLotTitle: "Harga entry & lot tiap posisi",
         allEntriesFilledDescription:
-          "Jika semua entry terisi: 1 posisi · {lot} lot",
+          "Jika semua entry terisi: {positions} posisi · {lot} lot",
         initialEntryLabel: "Posisi 1: Entry awal",
         riskSectionTitle: "Risiko",
         finalStopLossLabel: "Satu Stop Loss final",
@@ -585,6 +685,70 @@ export const idClientArea: AppMessages["clientArea"] = {
         additionalLossLimitLabel: "Tambahan batas rugi yang dibutuhkan",
         manualOrderWarning:
           "Tetap manual: harga bergerak melawan posisi saja bukan pemicu.",
+        planLoadingLabel:
+          "Menghitung rekomendasi...",
+        planErrorMessage:
+          "Rekomendasi belum dapat dihitung. Silakan coba lagi.",
+        planMockUnavailableMessage:
+          "Rekomendasi posisi hanya tersedia untuk analisis langsung dari TradePilot.",
+        planLossLimitExceedsCapitalMessage:
+          "Batas rugi tidak boleh melebihi dana trading.",
+        planAnalysisExpiredMessage:
+          "Analisis ini sudah selesai atau kedaluwarsa. Buat analisis baru untuk mendapatkan rekomendasi posisi.",
+        planRulesSourceLabel:
+          "Dihitung dari aturan trading broker versi {version}. Level harga dari analisis AI; lot, margin, dan risiko dihitung dengan rumus pasti.",
+        planPostureLabel:
+          "Status rekomendasi",
+        planReasonsLabel:
+          "Pertimbangan",
+        sideBlockedTitle:
+          "Dana atau batas rugi belum cukup untuk lot minimal",
+        sideBlockedDescription:
+          "Lot minimal {lot} butuh margin {margin} dan berisiko {risk} di Stop Loss. Kekurangan dana {fundsShortfall} · kekurangan batas rugi {riskShortfall}.",
+        sideUnavailableDescription:
+          "Skenario ini tidak tersedia untuk analisis dan pengaturan ini.",
+        noUnusedLayersLabel:
+          "Tidak ada kandidat layer yang ditolak untuk skenario ini.",
+        noAdditionalLayersNote:
+          "Skenario ini hanya untuk entry awal; tidak ada layer tambahan yang direkomendasikan.",
+        additionalLayersNote:
+          "Layer tambahan hanya diisi bila harga bergerak ke level layer sebelum Stop Loss tersentuh.",
+        layerLabel:
+          "Layer {level} · {price}",
+        planPostureLabels: {
+          scaling_allowed: "Boleh menambah posisi bertahap",
+          entry_only: "Hanya entry awal",
+          not_recommended: "Belum disarankan",
+        },
+        rejectReasonLabels: {
+          day_margin: "Melebihi margin yang tersedia",
+          loss_ceiling: "Melewati batas keras akumulasi rugi",
+          tier_limit: "Melebihi batas lot jenis akun",
+          analysis_limit: "Di luar batas level analisis",
+        },
+        planReasonLabels: {
+          context_unavailable: "Data konteks analisis belum lengkap",
+          short_timeframe: "Timeframe pendek, risiko dikurangi",
+          high_risk: "Tingkat risiko analisis tinggi",
+          volatile_market: "Pasar sedang volatil",
+          low_confidence: "Keyakinan analisis di bawah 70%",
+          range_supports_scaling: "Pasar sideways mendukung entry bertahap",
+          trend_favors_buy: "Arah analisis mendukung Buy",
+          trend_favors_sell: "Arah analisis mendukung Sell",
+          trend_opposes_buy: "Arah analisis berlawanan dengan Buy",
+          trend_opposes_sell: "Arah analisis berlawanan dengan Sell",
+          technical_supports_buy: "Indikator teknikal condong Buy",
+          technical_supports_sell: "Indikator teknikal condong Sell",
+          technical_mixed: "Indikator teknikal campuran",
+          technical_unavailable: "Indikator teknikal tidak tersedia",
+          neutral_bias: "Analisis netral (tunggu)",
+          fundamental_high_impact: "Ada event berdampak tinggi dalam 24 jam",
+          fundamental_present: "Ada berita/event fundamental terkait",
+          fundamental_clear: "Tidak ada event fundamental penting",
+          fundamental_unavailable: "Data fundamental tidak tersedia",
+          directional_conflict: "Arah analisis dan indikator bertentangan",
+          staged_add_condition: "Layer tambahan hanya jika harga mencapai levelnya",
+        },
         chooseScenarioUsageTitle: "Pilih satu skenario",
         chooseScenarioUsageDescription:
           "Pilih satu skenario naik atau turun sesuai keputusan kamu.",
@@ -681,7 +845,8 @@ export const idClientArea: AppMessages["clientArea"] = {
       emptyLabel: "Belum ada riwayat notifikasi.",
       markAllReadLabel: "Tandai semua dibaca",
       scheduledLive: {
-        description: "Siaran langsung TikTok sedang berlangsung. Tonton sekarang.",
+        description:
+          "Siaran langsung TikTok sedang berlangsung. Tonton sekarang.",
         dismissLabel: "Tutup notifikasi live",
         historyDescription:
           "Siaran langsung TikTok telah berlangsung. Buka channel untuk melihat konten terbaru.",
@@ -1144,6 +1309,16 @@ export const idClientArea: AppMessages["clientArea"] = {
     previousLabel: "Sebelumnya",
     todayLabel: "Hari Ini",
     yesterdayLabel: "Kemarin",
+    expiredLabel: "Kedaluwarsa",
+    viewInsightLabel: "Lihat Insight",
+    insightTitle: "Market Insight",
+    scrollLeftLabel: "Geser ke kiri",
+    scrollRightLabel: "Geser ke kanan",
+    disclaimerTitle: "Disclaimer",
+    disclaimerBody:
+      "Informasi ini hanya sebagai referensi, bukan rekomendasi transaksi. Risiko dan keputusan trading sepenuhnya tanggung jawab nasabah.",
+    metadataTitle: "Sinyal {category} | Market Insight",
+    metadataDescription: "Sinyal trading {category}",
     transactionModal: {
       buyBadgeLabel: "Sinyal Buy",
       sellBadgeLabel: "Sinyal Sell",
@@ -1161,6 +1336,23 @@ export const idClientArea: AppMessages["clientArea"] = {
     summaryLabel: "Ringkasan transaksi",
     summaryStatus: "Buka halaman transaksi",
     summaryTitle: "Posisi aktif dan riwayat trading",
+  },
+  quickActionModal: {
+    goldDescription:
+      "Kontrak emas gulir harian dengan likuiditas tinggi dan update market cepat.",
+    crudeOleinDescription:
+      "Trading komoditas unggulan dengan struktur margin yang kompetitif.",
+    futuresIntroTitle: "Pengenalan Pasar Berjangka",
+    futuresIntroReadingTime: "Estimasi 12 menit baca",
+    candlestickTitle: "Membaca Grafik Candlestick",
+    candlestickReadingTime: "Estimasi 18 menit baca",
+    depositNotice:
+      "Gunakan rekening segregated account resmi untuk top-up dana.",
+    withdrawalNotice:
+      "Permintaan withdrawal diproses ke rekening bank yang sudah terdaftar.",
+    processNotice:
+      "Untuk proses aktual, lanjutkan melalui tim support atau halaman transaksi resmi.",
+    contactSupport: "Hubungi support",
   },
   fundTransferModal: {
     closeLabel: "Tutup",

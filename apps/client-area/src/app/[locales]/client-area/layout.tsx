@@ -85,7 +85,9 @@ export default async function ClientAreaLayout({
           tradePilotEnabled={featureConfig.tradePilotEnabled}
         >
           <ClientAreaSessionTimeout locale={locale} />
-          <ClientAreaTokenRefresh />
+          <ClientAreaTokenRefresh
+            sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
+          />
           <ClientAreaSessionEndedNotice locale={locale} />
           <ClientAreaLoginDisclaimerModal
             acknowledgeLabel={viewOnlyDisclaimer.acknowledgeLabel}

@@ -53,9 +53,9 @@ function initialState(userId: string): MockState {
     completedRequests: [],
     creditOperationKeys: [],
     histories: [
-      { createdAt: "2026-10-06T02:00:00.000Z", id: "mock-seed-real-1", instrumentLabel: "XAU/USD", mode: "real", source: "mock", status: "take_profit_2", timeframeLabel: "1h" },
-      { createdAt: "2026-10-05T06:00:00.000Z", id: "mock-seed-real-2", instrumentLabel: "XAU/USD", mode: "real", source: "mock", status: "stop_loss", timeframeLabel: "1h" },
-      { createdAt: "2026-10-04T03:00:00.000Z", id: "mock-seed-real-3", instrumentLabel: "XAU/USD", mode: "real", source: "mock", status: "expired", timeframeLabel: "4h" },
+      { createdAt: "2026-10-06T02:00:00.000Z", id: "mock-seed-real-1", instrumentLabel: "XAU/USD", mode: "real", resolvedAt: "2026-10-06T04:00:00.000Z", source: "mock", status: "take_profit_2", timeframeLabel: "1h" },
+      { createdAt: "2026-10-05T06:00:00.000Z", id: "mock-seed-real-2", instrumentLabel: "XAU/USD", mode: "real", resolvedAt: "2026-10-05T08:00:00.000Z", source: "mock", status: "stop_loss", timeframeLabel: "1h" },
+      { createdAt: "2026-10-04T03:00:00.000Z", id: "mock-seed-real-3", instrumentLabel: "XAU/USD", mode: "real", resolvedAt: "2026-10-04T19:00:00.000Z", source: "mock", status: "expired", timeframeLabel: "4h" },
     ],
     latestAnalyses: {},
     userId,
@@ -111,6 +111,7 @@ function credit(mode: TradePilotMode, consumed: number): TradePilotCreditBalance
     consumed: safeConsumed,
     mode,
     remaining: allowance - safeConsumed,
+    resetsAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     source: "mock",
   };
 }
@@ -134,7 +135,7 @@ function consumeCreditInState(
 }
 
 function timeframeLabel(timeframe: TradePilotAnalysisRequest["timeframe"]): string {
-  return ({ "1": "1m", "5": "5m", "15": "15m", "60": "1h", "240": "4h", D: "1D", W: "1W", M: "1M" })[timeframe];
+  return ({ "1": "1m", "5": "5m", "15": "15m", "30": "30m", "60": "1h", "240": "4h", D: "1D", W: "1W", M: "1M" })[timeframe];
 }
 
 function buildAnalysis(
@@ -147,9 +148,15 @@ function buildAnalysis(
   );
   const direction = (["bullish", "bearish", "neutral"] as const)[seed % 3];
   const base = request.instrumentId === "gold" ? 4162 : 100 + (seed % 900);
+  const analyzedAt = new Date();
 
   return {
-    analyzedAt: new Date().toISOString(),
+    analyzedAt: analyzedAt.toISOString(),
+    dataSnapshot: {
+      asOf: analyzedAt.toISOString(),
+      candleCount: 0,
+      price: base.toFixed(2),
+    },
     buyLevels: {
       entry: (base + 10).toFixed(2),
       stopLoss: (base - 10).toFixed(2),
@@ -158,9 +165,19 @@ function buildAnalysis(
     },
     direction,
     id: createHash("sha256").update(idempotencyKey).digest("hex").slice(0, 16),
+    indicators: [
+      { group: "oscillator", key: "rsi_14", label: "RSI (14)", marker: 45, status: "buy", value: "44.87" },
+      { group: "oscillator", key: "macd_12_26", label: "MACD (12,26)", marker: 15, status: "sell", value: "-5.4698" },
+      { group: "oscillator", key: "stoch_k", label: "Stochastic %K", marker: 21, status: "buy", value: "20.69" },
+      { group: "movingAverage", key: "ema_9", label: "EMA (9)", marker: 25, status: "buy", value: (base - 2).toFixed(2) },
+      { group: "movingAverage", key: "sma_50", label: "SMA (50)", marker: 70, status: "sell", value: (base + 6).toFixed(2) },
+    ],
+    instrumentId: request.instrumentId,
     instrumentLabel: request.instrumentLabel,
     marketSentiment: direction === "bullish" ? "bullish" : "bearish",
     mode: request.mode,
+    priceAtAnalysis: base.toFixed(2),
+    resolvedAt: null,
     sellLevels: {
       entry: (base - 14).toFixed(2),
       stopLoss: (base + 6).toFixed(2),
@@ -168,8 +185,10 @@ function buildAnalysis(
       takeProfitTwo: (base - 54).toFixed(2),
     },
     source: "mock",
+    status: "still_valid",
     timeframe: request.timeframe,
     timeframeLabel: timeframeLabel(request.timeframe),
+    validUntil: new Date(analyzedAt.getTime() + 4 * 60 * 60 * 1000).toISOString(),
   };
 }
 
@@ -186,7 +205,10 @@ export async function getMockTradePilotSnapshot(userId: string) {
       real: state.histories.filter(({ mode }) => mode === "real"),
     },
     latestAnalyses: state.latestAnalyses,
-    timeframePerformance: STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE,
+    timeframePerformance: {
+      demo: STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE,
+      real: STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE,
+    },
   };
 }
 
@@ -212,9 +234,10 @@ export async function runMockTradePilotAnalysis(
   const analysis = buildAnalysis(request, idempotencyKey);
   const history: TradePilotHistoryItem = {
     createdAt: analysis.analyzedAt,
-    id: idempotencyKey,
+    id: analysis.id, // samakan dengan API: history.id === analysis.id
     instrumentLabel: request.instrumentLabel,
     mode: request.mode,
+    resolvedAt: null,
     source: "mock",
     status: "still_valid",
     timeframeLabel: analysis.timeframeLabel,

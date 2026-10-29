@@ -18,6 +18,8 @@ type ClientAreaRecommendationCardProps = {
   iconClass: string;
   isSelected?: boolean;
   onClick?: () => void;
+  liveTickLabel: string;
+  priceLabel: string;
 };
 
 export function ClientAreaRecommendationCard({
@@ -29,6 +31,8 @@ export function ClientAreaRecommendationCard({
   iconClass,
   isSelected = false,
   onClick,
+  liveTickLabel,
+  priceLabel,
 }: ClientAreaRecommendationCardProps) {
   const signal = resolveSignalBadge(item.change);
   const SignalIcon = signal.icon;
@@ -63,7 +67,7 @@ export function ClientAreaRecommendationCard({
       <div className="flex items-end justify-between border-t border-zinc-800/50 pt-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-            Price
+            {priceLabel}
           </p>
           <p className="text-base font-bold tracking-tight text-zinc-100">
             {formatUsd(item.bid)}
@@ -77,7 +81,7 @@ export function ClientAreaRecommendationCard({
             <SignalIcon className="h-3 w-3" />
             {formatSignedPercent(item.change)}
           </span>
-          <span className="text-[9px] text-zinc-500">Live Tick</span>
+          <span className="text-[9px] text-zinc-500">{liveTickLabel}</span>
         </div>
       </div>
     </>

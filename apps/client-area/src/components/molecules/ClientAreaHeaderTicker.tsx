@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 
 import type {
   BreakingNewsItem,
@@ -20,24 +20,6 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
     return null;
   }
 
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    if (breakingNews.length <= 1) {
-      return;
-    }
-
-    const rotationTimer = window.setInterval(() => {
-      setActiveIndex((currentIndex) => (currentIndex + 1) % breakingNews.length);
-    }, 4500);
-
-    return () => {
-      window.clearInterval(rotationTimer);
-    };
-  }, [breakingNews.length]);
-
-  const activeNews = breakingNews[activeIndex];
-
   return (
     <div className="select-none flex items-center gap-2">
       <div className="items-center gap-3 sm:shrink-0 hidden md:flex">
@@ -50,24 +32,31 @@ export const ClientAreaHeaderTicker = memo(function ClientAreaHeaderTicker({
         </span>
       </div>
 
-      <div className="flex min-w-0 flex-col gap-2 w-full overflow-hidden rounded-[20px] border border-zinc-800 bg-linear-to-b from-zinc-500/20 to-zinc-500/10 px-3 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:px-3 sm:py-2">
-        <div className="relative min-w-0 flex-1 overflow-hidden py-0.5">
-          <div
-            key={`${activeNews.id ?? activeNews.title}-${activeIndex}`}
-            className="flex items-start gap-2 text-sm text-zinc-300 animate-[ticker-slide-left-in_320ms_cubic-bezier(0.22,1,0.36,1)] sm:items-center"
-          >
-            <span className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full bg-amber-500 sm:mt-0" />
-            <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-              <div className="min-w-0">
-                <span className="block line-clamp-2 leading-snug sm:line-clamp-1 sm:leading-none">
-                  {activeNews.title}
-                </span>
+      <div className="flex min-w-0 flex-col gap-2 w-full overflow-hidden rounded-full border border-zinc-800 bg-linear-to-b from-zinc-500/20 to-zinc-500/10 py-3 sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:py-2">
+        <div className="relative min-w-0 flex-1 rounded-full overflow-hidden py-0.5">
+          <div className="client-area-header-news-track text-sm text-zinc-300">
+            {[false, true].map((isDuplicate) => (
+              <div
+                key={isDuplicate ? "duplicate" : "primary"}
+                aria-hidden={isDuplicate || undefined}
+                className="client-area-header-news-group"
+              >
+                {breakingNews.map((news, index) => (
+                  <div
+                    key={`${news.id ?? news.title}-${index}`}
+                    className="flex shrink-0 items-center gap-2 pr-8"
+                  >
+                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-amber-500" />
+                    <span className="whitespace-nowrap leading-none">
+                      {news.title}
+                    </span>
+                    <span className="shrink-0 whitespace-nowrap text-[11px] leading-none text-zinc-500 sm:text-xs">
+                      {news.timeAgo}
+                    </span>
+                  </div>
+                ))}
               </div>
-
-              <span className="shrink-0 text-[11px] leading-none text-zinc-500 sm:text-xs">
-                {activeNews.timeAgo}
-              </span>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -7,9 +7,11 @@ import {
   ClientAreaSessionExpiredError,
   clientAreaFetch,
 } from "@/lib/client-area-fetch";
+import { getMessages, type AppLocale } from "@/locales";
 
 type MiniChartProps = {
   className?: string;
+  locale: AppLocale;
   symbol?: string;
 };
 
@@ -18,7 +20,8 @@ type ChartState =
   | { status: "ready"; url: string; frameKey: number; symbol: string }
   | { status: "error"; symbol: string };
 
-export function MiniChart({ className = "", symbol = "XUL10" }: MiniChartProps) {
+export function MiniChart({ className = "", locale, symbol = "XUL10" }: MiniChartProps) {
+  const copy = getMessages(locale).clientArea.homeChart;
   const [state, setState] = useState<ChartState>({ status: "loading" });
   const [requestVersion, setRequestVersion] = useState(0);
 
@@ -82,7 +85,9 @@ export function MiniChart({ className = "", symbol = "XUL10" }: MiniChartProps) 
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500/80">
             MiniMicro
           </p>
-          <h2 className="text-lg font-bold text-white">Live Chart {symbol}</h2>
+          <h2 className="text-lg font-bold text-white">
+            {copy.liveChartTitle.replace("{symbol}", symbol)}
+          </h2>
         </div>
         <button
           type="button"
@@ -93,7 +98,7 @@ export function MiniChart({ className = "", symbol = "XUL10" }: MiniChartProps) 
           <RefreshCw
             className={`h-4 w-4 ${state.status === "loading" ? "animate-spin" : ""}`}
           />
-          Refresh
+          {copy.refreshLabel}
         </button>
       </div>
 
@@ -101,20 +106,20 @@ export function MiniChart({ className = "", symbol = "XUL10" }: MiniChartProps) 
         <div className="h-[28rem] animate-pulse bg-gradient-to-br from-zinc-900 via-zinc-800/70 to-zinc-950 sm:h-[34rem] lg:h-[40rem]" />
       ) : state.status === "error" ? (
         <div className="flex h-[28rem] flex-col items-center justify-center gap-4 px-6 text-center sm:h-[34rem] lg:h-[40rem]">
-          <p className="text-sm font-medium text-zinc-300">Chart gagal dimuat.</p>
+          <p className="text-sm font-medium text-zinc-300">{copy.error}</p>
           <button
             type="button"
             onClick={refresh}
             className="cursor-pointer rounded-full bg-yellow-500 px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-yellow-400"
           >
-            Coba lagi
+            {copy.retryLabel}
           </button>
         </div>
       ) : (
         <iframe
           key={`${symbol}:${state.frameKey}`}
           src={state.url}
-          title={`MiniMicro live chart ${symbol}`}
+          title={`${copy.frameTitle} ${symbol}`}
           referrerPolicy="no-referrer"
           className="h-[28rem] w-full border-0 bg-zinc-950 sm:h-[34rem] lg:h-[40rem]"
         />

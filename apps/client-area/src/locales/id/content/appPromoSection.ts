@@ -12,4 +12,5 @@ export const idAppPromoSection: AppMessages["appPromoSection"] = {
   imageAlt: "Mockup aplikasi Solid Gold di handphone",
   googlePlayAlt: "Download di Google Play",
   appStoreAlt: "Download di App Store",
+  qrCodeAlt: "Kode QR untuk mengunduh aplikasi Solid Gold Berjangka",
 };

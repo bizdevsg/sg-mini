@@ -10,21 +10,35 @@ import {
   parseClientAreaLastActivity,
 } from "@/lib/client-area-session";
 
-function readLastRefresh() {
+type ClientAreaTokenRefreshProps = {
+  sessionIssuedAtMs: number;
+};
+
+function parseStoredRefresh(value: string | null, sessionIssuedAtMs: number) {
+  if (!value) return null;
+
+  const [storedSession, storedTimestamp] = value.split(":");
+  if (Number(storedSession) !== sessionIssuedAtMs) return null;
+
+  return parseClientAreaLastActivity(storedTimestamp);
+}
+
+function readLastRefresh(sessionIssuedAtMs: number) {
   try {
-    return parseClientAreaLastActivity(
+    return parseStoredRefresh(
       window.localStorage.getItem(CLIENT_AREA_TOKEN_REFRESH_STORAGE_KEY),
+      sessionIssuedAtMs,
     );
   } catch {
     return null;
   }
 }
 
-function persistLastRefresh(timestamp: number) {
+function persistLastRefresh(timestamp: number, sessionIssuedAtMs: number) {
   try {
     window.localStorage.setItem(
       CLIENT_AREA_TOKEN_REFRESH_STORAGE_KEY,
-      timestamp.toString(),
+      `${sessionIssuedAtMs}:${timestamp}`,
     );
   } catch {
     // A restricted browser can still refresh its own tab without cross-tab
@@ -32,9 +46,9 @@ function persistLastRefresh(timestamp: number) {
   }
 }
 
-function clearLastRefresh(timestamp: number) {
+function clearLastRefresh(timestamp: number, sessionIssuedAtMs: number) {
   try {
-    if (readLastRefresh() === timestamp) {
+    if (readLastRefresh(sessionIssuedAtMs) === timestamp) {
       window.localStorage.removeItem(CLIENT_AREA_TOKEN_REFRESH_STORAGE_KEY);
     }
   } catch {
@@ -43,16 +57,21 @@ function clearLastRefresh(timestamp: number) {
 }
 
 /**
- * Refreshes the encrypted server-side SGB session approximately every five
- * minutes while the Client Area is in use. Only a non-sensitive timestamp is
- * stored in localStorage; the bearer token remains in an httpOnly cookie.
+ * Refreshes the encrypted server-side SGB session before the upstream token's
+ * five-minute boundary. Refresh timestamps are scoped to the current login so
+ * a previous session cannot delay the first keep-alive of a newly issued token.
+ * Only a non-sensitive timestamp is stored in localStorage; the bearer token
+ * remains in an httpOnly cookie.
  */
-export function ClientAreaTokenRefresh() {
+export function ClientAreaTokenRefresh({
+  sessionIssuedAtMs,
+}: ClientAreaTokenRefreshProps) {
   useEffect(() => {
     const controller = new AbortController();
     let timer: number | null = null;
     let requestInFlight = false;
-    let localLastRefresh = readLastRefresh() ?? Date.now();
+    let localLastRefresh =
+      readLastRefresh(sessionIssuedAtMs) || sessionIssuedAtMs || Date.now();
 
     function schedule(delay: number) {
       if (timer !== null) {
@@ -74,7 +93,7 @@ export function ClientAreaTokenRefresh() {
         return;
       }
 
-      const sharedLastRefresh = readLastRefresh() ?? 0;
+      const sharedLastRefresh = readLastRefresh(sessionIssuedAtMs) ?? 0;
       const lastRefresh = Math.max(localLastRefresh, sharedLastRefresh);
       const elapsed = Date.now() - lastRefresh;
 
@@ -88,7 +107,7 @@ export function ClientAreaTokenRefresh() {
       // token concurrently.
       const attemptAt = Date.now();
       localLastRefresh = attemptAt;
-      persistLastRefresh(attemptAt);
+      persistLastRefresh(attemptAt, sessionIssuedAtMs);
       requestInFlight = true;
 
       try {
@@ -104,18 +123,18 @@ export function ClientAreaTokenRefresh() {
         });
 
         if (!response.ok) {
-          clearLastRefresh(attemptAt);
+          clearLastRefresh(attemptAt, sessionIssuedAtMs);
           localLastRefresh = 0;
           schedule(CLIENT_AREA_TOKEN_REFRESH_RETRY_MS);
           return;
         }
 
         localLastRefresh = Date.now();
-        persistLastRefresh(localLastRefresh);
+        persistLastRefresh(localLastRefresh, sessionIssuedAtMs);
         schedule(CLIENT_AREA_TOKEN_REFRESH_INTERVAL_MS);
       } catch {
         if (!controller.signal.aborted) {
-          clearLastRefresh(attemptAt);
+          clearLastRefresh(attemptAt, sessionIssuedAtMs);
           localLastRefresh = 0;
           schedule(CLIENT_AREA_TOKEN_REFRESH_RETRY_MS);
         }
@@ -136,10 +155,13 @@ export function ClientAreaTokenRefresh() {
       }
     }
 
-    // Existing data requests normally rotate the freshly issued login token;
-    // begin the dedicated keep-alive after one interval to avoid an extra call
-    // during initial page hydration.
-    schedule(CLIENT_AREA_TOKEN_REFRESH_INTERVAL_MS);
+    // Count the first interval from when this login session was issued, not
+    // from when a tab mounted. A newly opened tab must not postpone refresh for
+    // an already aging token by another full interval.
+    schedule(
+      CLIENT_AREA_TOKEN_REFRESH_INTERVAL_MS -
+        (Date.now() - localLastRefresh),
+    );
 
     window.addEventListener("online", refreshIfDue);
     window.addEventListener("focus", refreshIfDue);
@@ -153,12 +175,12 @@ export function ClientAreaTokenRefresh() {
         window.clearTimeout(timer);
       }
 
-    window.removeEventListener("online", refreshIfDue);
-    window.removeEventListener("focus", refreshIfDue);
-    window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("online", refreshIfDue);
+      window.removeEventListener("focus", refreshIfDue);
+      window.removeEventListener("storage", handleStorage);
       document.removeEventListener("visibilitychange", refreshIfDue);
     };
-  }, []);
+  }, [sessionIssuedAtMs]);
 
   return null;
 }

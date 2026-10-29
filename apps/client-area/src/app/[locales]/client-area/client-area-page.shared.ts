@@ -39,7 +39,7 @@ export function generateClientAreaStaticParams() {
 }
 
 export function getClientAreaSeoLabel(locale: AppLocale) {
-  return locale === "id" ? "Client Area" : "Client Area";
+  return getMessages(locale).clientArea.seoLabel;
 }
 
 function getClientAreaSubpageTitle(
@@ -56,7 +56,7 @@ function getClientAreaSubpageTitle(
     case "market":
       return getMessages(locale).clientArea.marketTransactions.title;
     case "market-signal":
-      return locale === "id" ? "Market Insight" : "Market Insight";
+      return getMessages(locale).clientArea.marketSignalDetail.insightTitle;
     case "news":
       return copy.newsTitle;
   }

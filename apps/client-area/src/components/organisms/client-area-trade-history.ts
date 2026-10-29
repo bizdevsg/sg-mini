@@ -3,6 +3,7 @@ import {
   formatUsd,
 } from "@/components/organisms/client-area.shared";
 import type { TransactionHistoryItem } from "@/components/organisms/client-area.types";
+import { getMessages, type AppLocale } from "@/locales";
 import type { SettledPositionCard } from "@/types/account-summary";
 import type { TradeHistoryCard } from "@/types/trade-history";
 
@@ -27,24 +28,29 @@ function formatPrice(value: number | null) {
 export function toTradeHistoryItem(
   card: TradeHistoryCard,
   settled?: SettledPositionCard,
+  locale: AppLocale = "id",
 ): TransactionHistoryItem {
+  const labels = getMessages(locale).clientArea.marketTransactions.tradeHistoryRow;
   const [date = "-", time = "-"] = (card.executedAt ?? "").split(" ");
-  const sideName = card.side === "buy" ? "BUY" : "SELL";
+  const sideName = card.side === "buy" ? labels.buy : labels.sell;
   const isLiquidation = card.liquidId !== null;
 
   return {
     id: card.id,
     instrument: card.product,
     symbol: card.product,
-    statusLabel: isLiquidation ? "Liq" : sideName,
+    statusLabel: isLiquidation ? labels.liquidation : sideName,
     statusTone: "muted",
     orderNumber: card.id,
-    volume: card.lot === null ? "-" : `${card.lot.toFixed(2)} Lot`,
+    volume:
+      card.lot === null ? "-" : `${card.lot.toFixed(2)} ${labels.lotUnit}`,
     date: date || "-",
     time: time || "-",
-    closeLabel: `${card.side === "buy" ? "Buy" : "Sell"} Price`,
+    closeLabel: card.side === "buy" ? labels.buyPrice : labels.sellPrice,
     closePrice: formatPrice(card.price),
-    sideLabel: isLiquidation ? `Liq #${card.liquidId}` : "Side",
+    sideLabel: isLiquidation
+      ? `${labels.liquidation} #${card.liquidId}`
+      : labels.side,
     sidePrice: isLiquidation ? formatPrice(card.liquidPrice) : sideName,
     // Real figures for a liquidation, matched by id from the account summary's
     // `settledPositions`; rows without a match keep "-" (never computed).

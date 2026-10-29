@@ -235,6 +235,12 @@ export async function submitClientAreaLogin(
       return { status: "error", message: login.errorSessionExpired };
     }
 
+    // The failed response may still have rotated the token; the old one can
+    // already be invalid upstream.
+    if (error instanceof SgbApiError && error.newToken) {
+      token = error.newToken;
+    }
+
     // Non-fatal — the session is still created without account list data.
     console.error("[client-area-login] list-account call failed", describeError(error));
   }

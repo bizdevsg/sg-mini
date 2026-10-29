@@ -226,7 +226,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
           <h1 className="text-lg font-bold text-white sm:text-xl">{title}</h1>
           <p className="mt-1 text-sm text-zinc-400">{description}</p>
         </div>
-        <div className="rounded-2xl border border-zinc-800 bg-[#101113] p-5 text-sm leading-6 text-zinc-400 sm:p-7">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-5 text-sm leading-6 text-zinc-400 sm:p-7">
           {description}
         </div>
       </section>
@@ -264,7 +264,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
       </div>
 
       <div
-        className="grid grid-cols-2 rounded-xl border border-zinc-700/80 bg-[#101113]/70 p-1 backdrop-blur-xl"
+        className="grid grid-cols-2 rounded-xl border border-zinc-700/80 bg-zinc-950/70 p-1 backdrop-blur-xl"
         role="tablist"
         aria-label={title}
       >
@@ -361,7 +361,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
         </div>
       ) : (
         <div className="space-y-4" role="tabpanel">
-          <div className="overflow-hidden rounded-xl border border-zinc-700/80 bg-[#101113]/75 backdrop-blur-xl">
+          <div className="overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-950/75 backdrop-blur-xl">
             <div className="flex min-h-11 items-stretch">
               <label className="flex min-w-0 flex-1 items-center gap-2 px-3 sm:px-4">
                 <Search className="size-4 shrink-0 text-zinc-500" aria-hidden="true" />
@@ -441,7 +441,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
                 return (
                   <article
                     key={item.id}
-                    className="group flex min-h-44 flex-col rounded-2xl border border-zinc-700/80 bg-[#101113]/75 p-4 shadow-[0_12px_35px_rgba(0,0,0,0.16)] backdrop-blur-xl transition-colors hover:border-amber-400/35 sm:p-5"
+                    className="group flex min-h-44 flex-col rounded-2xl border border-zinc-700/80 bg-zinc-950/75 p-4 shadow-[0_12px_35px_rgba(0,0,0,0.16)] backdrop-blur-xl transition-colors hover:border-amber-400/35 sm:p-5"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -492,7 +492,7 @@ export function ClientAreaTradePilotPlaceholderPanel({
               })}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-zinc-700 bg-[#101113]/70 px-5 py-12 text-center backdrop-blur-xl">
+            <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/70 px-5 py-12 text-center backdrop-blur-xl">
               <Search className="mx-auto size-8 text-zinc-600" aria-hidden="true" />
               <h2 className="mt-3 text-sm font-semibold text-white">
                 {performanceCopy.history.emptyTitle}

@@ -6,7 +6,7 @@ import {
   formatMarketSignalUpdateTime,
   resolveMarketSignalCategoryIconSrc,
 } from "@/components/organisms/client-area.shared";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 import type { MarketSignalRecord } from "@/lib/market-signal";
 
 type ClientAreaMarketInsightCardProps = {
@@ -18,10 +18,11 @@ export function ClientAreaMarketInsightCard({
   item,
   locale,
 }: ClientAreaMarketInsightCardProps) {
+  const copy = getMessages(locale).clientArea.marketSignalDetail;
   const isSell = item.potensi?.toLowerCase() === "sell";
 
   const biasDirection = isSell ? "down" : "up";
-  const biasLabel = isSell ? "Potensi Melemah" : "Potensi Menguat";
+  const biasLabel = isSell ? copy.biasDownLabel : copy.biasUpLabel;
 
   const theme = isSell
     ? {
@@ -71,7 +72,7 @@ export function ClientAreaMarketInsightCard({
 
             {updateLabel ? (
               <p className="text-xs text-zinc-400">
-                Update {updateLabel}
+                {copy.updatedLabel} {updateLabel}
               </p>
             ) : null}
           </div>
@@ -87,7 +88,7 @@ export function ClientAreaMarketInsightCard({
       </div>
 
       <div>
-        <p className="text-zinc-400 text-sm">Bias</p>
+        <p className="text-zinc-400 text-sm">{copy.biasLabel}</p>
 
         <ClientAreaMarketInsightBiasIndicator
           direction={biasDirection}
@@ -112,14 +113,14 @@ export function ClientAreaMarketInsightCard({
 
       <div className="flex items-end justify-between gap-3">
         <div className="flex-1 rounded-2xl bg-white/5 px-3.5 py-2.5">
-          <p className="text-xxs text-zinc-400">Take Profit</p>
+          <p className="text-xxs text-zinc-400">{copy.takeProfitLabel}</p>
           <p className="mt-1 font-bold text-white">
             {item.takingProfit || "-"}
           </p>
         </div>
 
         <div className="flex-1 rounded-2xl bg-white/5 px-3.5 py-2.5">
-          <p className="text-xxs text-zinc-400">Stop Loss</p>
+          <p className="text-xxs text-zinc-400">{copy.stopLossLabel}</p>
           <p className="mt-1 font-bold text-white">
             {item.stopLoss || "-"}
           </p>
@@ -129,7 +130,7 @@ export function ClientAreaMarketInsightCard({
       <div className="flex items-center justify-between gap-3">
         {item.source ? (
           <div className="text-[11px] italic leading-snug text-zinc-400">
-            <p className="font-semibold">Source:</p>
+            <p className="font-semibold">{copy.sourceLabel}:</p>
             <p>{item.source}</p>
           </div>
         ) : (
@@ -140,7 +141,7 @@ export function ClientAreaMarketInsightCard({
           href={`/${locale}/client-area/market-signal/${encodeURIComponent(item.categorySlug)}`}
           className={`shrink-0 rounded-lg px-4 py-1.5 text-xs font-bold text-black transition-colors ${theme.button}`}
         >
-          Lihat Insight
+          {copy.viewInsightLabel}
         </Link>
       </div>
     </div>

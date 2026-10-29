@@ -1,25 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { ShieldCheck, TrendingDown, TrendingUp } from "lucide-react";
+import { LoaderCircle, ShieldCheck, TrendingDown, TrendingUp } from "lucide-react";
 
 import { ClientAreaTradePilotStaticOption } from "@/components/atoms/ClientAreaTradePilotStaticOption";
 import { ClientAreaTradePilotCurrencyField } from "@/components/molecules/ClientAreaTradePilotCurrencyField";
 import { ClientAreaTradePilotRecommendationScenarioCard } from "@/components/molecules/ClientAreaTradePilotRecommendationScenarioCard";
 import { ClientAreaTradePilotPlanDetails } from "@/components/organisms/ClientAreaTradePilotPlanDetails";
 import type { ClientAreaTradePilotTradingPlanCopy } from "@/lib/client-area-trade-pilot.shared";
-import type { TradePilotAnalysisResult } from "@/lib/trade-pilot/trade-pilot.types";
+import { formatTradePilotDateTime } from "@/lib/trade-pilot/trade-pilot-format";
+import type {
+  TradePilotAnalysisResult,
+  TradePilotPositionPlan,
+  TradePilotSidePositionPlan,
+} from "@/lib/trade-pilot/trade-pilot.types";
 
 type ClientAreaTradePilotTradingPlanSectionProps = {
   analysis?: TradePilotAnalysisResult;
   copy: ClientAreaTradePilotTradingPlanCopy;
+  locale: "id" | "en";
   onRecommendationVisibilityChange: (visible: boolean) => void;
 };
+
+type PlanState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "error"; message: string }
+  | { status: "ready"; plan: TradePilotPositionPlan };
+
+/** "moderate" di UI = "balanced" di mesin Adaptive Position Plan. */
+const RISK_STYLE_TO_API = {
+  conservative: "conservative",
+  moderate: "balanced",
+  aggressive: "aggressive",
+} as const;
+
+export function formatPlanMoney(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return "—";
+  return `$${Math.max(0, value).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+}
+
+/** Rencana untuk satu sisi: utama (searah analisis) atau skenario alternatif. */
+export function sidePlanFor(plan: TradePilotPositionPlan, side: "buy" | "sell"): TradePilotSidePositionPlan | null {
+  return plan[side] ?? plan.sideEvaluations[side].conditionalPlan ?? null;
+}
 
 export function ClientAreaTradePilotTradingPlanSection({
   analysis,
   copy,
+  locale,
   onRecommendationVisibilityChange,
 }: ClientAreaTradePilotTradingPlanSectionProps) {
   const [accountType, setAccountType] = useState<"micro" | "mini" | "regular">(
@@ -30,30 +60,77 @@ export function ClientAreaTradePilotTradingPlanSection({
   >("conservative");
   const [tradingCapital, setTradingCapital] = useState("1000");
   const [lossLimit, setLossLimit] = useState("800");
-  const [hasRecommendation, setHasRecommendation] = useState(false);
+  const [planState, setPlanState] = useState<PlanState>({ status: "idle" });
+  const requestRef = useRef(0);
+  const plan = planState.status === "ready" ? planState.plan : null;
   const [selectedDirection, setSelectedDirection] = useState<
     "buy" | "sell" | null
   >(null);
 
   const canCreateRecommendation =
-    Boolean(analysis) && Number(tradingCapital) > 0 && Number(lossLimit) > 0;
+    Boolean(analysis) &&
+    Number(tradingCapital) > 0 &&
+    Number(lossLimit) > 0 &&
+    planState.status !== "loading";
 
   function resetRecommendation() {
-    setHasRecommendation(false);
+    requestRef.current += 1;
+    setPlanState({ status: "idle" });
     setSelectedDirection(null);
     onRecommendationVisibilityChange(false);
   }
 
-  function createRecommendation() {
-    setHasRecommendation(true);
-    onRecommendationVisibilityChange(true);
-    setSelectedDirection(
-      analysis?.direction === "bullish"
-        ? "buy"
-        : analysis?.direction === "bearish"
-          ? "sell"
-          : null,
-    );
+  async function createRecommendation() {
+    if (!analysis) return;
+    if (analysis.source !== "api") {
+      setPlanState({ status: "error", message: copy.planMockUnavailableMessage });
+      return;
+    }
+    if (Number(lossLimit) > Number(tradingCapital)) {
+      setPlanState({ status: "error", message: copy.planLossLimitExceedsCapitalMessage });
+      return;
+    }
+    const requestId = ++requestRef.current;
+    setPlanState({ status: "loading" });
+    try {
+      const response = await fetch(
+        `/api/client-area/trade-pilot/analyses/${encodeURIComponent(analysis.id)}/position-plan`,
+        {
+          body: JSON.stringify({
+            accountType,
+            lossLimit: Number(lossLimit),
+            riskStyle: RISK_STYLE_TO_API[riskStyle],
+            tradingCapital: Number(tradingCapital),
+          }),
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+        },
+      );
+      if (!response.ok) throw new Error("position_plan_failed");
+      const nextPlan = (await response.json()) as TradePilotPositionPlan;
+      if (requestId !== requestRef.current) return;
+      if (!nextPlan.valid && nextPlan.decision.posture === "not_recommended" && !nextPlan.buy && !nextPlan.sell &&
+          nextPlan.sideEvaluations.buy.status === "unavailable" && nextPlan.sideEvaluations.sell.status === "unavailable") {
+        // Analisis sudah selesai/kedaluwarsa: perlu analisis ulang.
+        setPlanState({ status: "error", message: copy.planAnalysisExpiredMessage });
+        return;
+      }
+      setPlanState({ status: "ready", plan: nextPlan });
+      onRecommendationVisibilityChange(true);
+      const preferred = nextPlan.decision.preferredSide;
+      setSelectedDirection(
+        preferred === "buy" || preferred === "sell"
+          ? preferred
+          : analysis.direction === "bullish"
+            ? "buy"
+            : analysis.direction === "bearish"
+              ? "sell"
+              : null,
+      );
+    } catch {
+      if (requestId !== requestRef.current) return;
+      setPlanState({ status: "error", message: copy.planErrorMessage });
+    }
   }
 
   function selectDirection(direction: "buy" | "sell") {
@@ -66,7 +143,7 @@ export function ClientAreaTradePilotTradingPlanSection({
   }
 
   return (
-    <section className="trade-pilot-glass-panel rounded-3xl border border-zinc-800 bg-blue-950/15 p-5 sm:p-7">
+    <section className="rounded-3xl border border-zinc-800 bg-zinc-900/20 backdrop-blur-md p-5 sm:p-7">
       <div className="flex items-center gap-2">
         <div className="p-3 bg-yellow-500/20 rounded-lg">
           <Image src={"/assets/carbon_content-navigator-sync-warning.webp"} alt="" width={300} height={300} className="w-7 h-7" />
@@ -173,58 +250,90 @@ export function ClientAreaTradePilotTradingPlanSection({
 
       <div className="mt-7 space-y-1 text-xs leading-5 text-zinc-400 sm:text-sm sm:leading-6">
         <p>{copy.intradayNote}</p>
-        <p>
-          {copy.snapshotLabel}: {copy.snapshotValue}
-        </p>
+        {analysis?.dataSnapshot?.asOf ? (
+          <p>
+            {copy.snapshotLabel}: {formatTradePilotDateTime(analysis.dataSnapshot.asOf, locale)}
+          </p>
+        ) : null}
       </div>
 
       <button
         type="button"
         disabled={!canCreateRecommendation}
-        onClick={createRecommendation}
+        onClick={() => void createRecommendation()}
         className="mt-7 flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-amber-400 px-5 py-3.5 text-sm font-bold text-black transition-colors hover:bg-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <ShieldCheck className="h-6 w-6" />
-        {copy.createRecommendationLabel}
+        {planState.status === "loading" ? (
+          <LoaderCircle className="h-6 w-6 animate-spin" />
+        ) : (
+          <ShieldCheck className="h-6 w-6" />
+        )}
+        {planState.status === "loading" ? copy.planLoadingLabel : copy.createRecommendationLabel}
       </button>
 
-      {hasRecommendation && analysis?.direction === "bullish" && (
+      {planState.status === "error" ? (
+        <p role="alert" className="mt-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300 sm:text-sm">
+          {planState.message}
+        </p>
+      ) : null}
+
+      {plan ? (
+        <div aria-live="polite" className="mt-7 rounded-2xl border border-zinc-700 bg-zinc-900/70 p-4 sm:p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-zinc-400 sm:text-sm">{copy.planPostureLabel}:</span>
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-bold ${
+                plan.decision.posture === "scaling_allowed"
+                  ? "bg-emerald-500/15 text-emerald-400"
+                  : plan.decision.posture === "entry_only"
+                    ? "bg-amber-500/15 text-amber-400"
+                    : "bg-rose-500/15 text-rose-400"
+              }`}
+            >
+              {copy.planPostureLabels[plan.decision.posture]}
+            </span>
+          </div>
+          {plan.decision.reasonCodes.length > 0 ? (
+            <div className="mt-3">
+              <p className="text-xs text-zinc-400">{copy.planReasonsLabel}</p>
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {plan.decision.reasonCodes.map((code) => (
+                  <li key={code} className="rounded-lg border border-zinc-700 px-2 py-1 text-[11px] text-zinc-300">
+                    {copy.planReasonLabels[code] ?? code}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          <p className="mt-3 text-[11px] leading-4 text-zinc-500">
+            {copy.planRulesSourceLabel.replace("{version}", plan.rulesVersion)}
+          </p>
+        </div>
+      ) : null}
+
+      {plan && analysis?.direction === "bullish" && (
         <div aria-live="polite" className="mt-7">
-          <ClientAreaTradePilotRecommendationScenarioCard
-            brokerFundsLabel={copy.brokerFundsUntilStopLabel}
-            brokerFundsValue="$400"
-            description={copy.buyScenarioDescription}
-            guidance={copy.buyScenarioGuidance.replace(
-              "{entry}",
-              analysis.buyLevels.entry,
-            )}
-            minimumRiskLabel={copy.minimumStopRiskLabel}
-            minimumRiskValue="$300"
-            title={copy.buyScenarioLabel}
-            variant="buy"
+          <ScenarioSummary
+            analysis={analysis}
+            copy={copy}
+            plan={plan}
+            side="buy"
           />
         </div>
       )}
 
-      {hasRecommendation && analysis?.direction === "bearish" && (
+      {plan && analysis?.direction === "bearish" && (
         <div aria-live="polite" className="mt-7">
-          <ClientAreaTradePilotRecommendationScenarioCard
-            brokerFundsLabel={copy.brokerFundsUntilStopLabel}
-            brokerFundsValue="$450"
-            description={copy.sellScenarioDescription}
-            guidance={copy.sellScenarioGuidance.replace(
-              "{entry}",
-              analysis.sellLevels.entry,
-            )}
-            minimumRiskLabel={copy.minimumStopRiskLabel}
-            minimumRiskValue="$350"
-            title={copy.sellScenarioLabel}
-            variant="sell"
+          <ScenarioSummary
+            analysis={analysis}
+            copy={copy}
+            plan={plan}
+            side="sell"
           />
         </div>
       )}
 
-      {hasRecommendation && analysis?.direction === "neutral" && (
+      {plan && analysis?.direction === "neutral" && (
         <div
           aria-live="polite"
           className="mt-7 rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5 sm:p-7"
@@ -246,7 +355,7 @@ export function ClientAreaTradePilotTradingPlanSection({
         </div>
       )}
 
-      {hasRecommendation &&
+      {plan &&
         (analysis?.direction === "bullish" ||
           analysis?.direction === "bearish") && (
           <div className="mt-7 space-y-3">
@@ -282,31 +391,88 @@ export function ClientAreaTradePilotTradingPlanSection({
           </div>
         )}
 
-      {hasRecommendation && selectedDirection === "buy" && analysis && (
+      {plan && selectedDirection === "buy" && analysis && (
         <ClientAreaTradePilotPlanDetails
           accountType={accountType}
+          analysisId={analysis.source === "api" ? analysis.id : undefined}
           copy={copy}
-          isPrimaryScenario={analysis.direction === "bullish"}
+          isPrimaryScenario={plan.decision.preferredSide === "buy"}
           levels={analysis.buyLevels}
           lossLimit={Number(lossLimit)}
+          plan={plan}
           riskStyle={riskStyle}
+          sidePlan={sidePlanFor(plan, "buy")}
           tradingCapital={Number(tradingCapital)}
           variant="buy"
         />
       )}
 
-      {hasRecommendation && selectedDirection === "sell" && analysis && (
+      {plan && selectedDirection === "sell" && analysis && (
         <ClientAreaTradePilotPlanDetails
           accountType={accountType}
+          analysisId={analysis.source === "api" ? analysis.id : undefined}
           copy={copy}
-          isPrimaryScenario={analysis.direction === "bearish"}
+          isPrimaryScenario={plan.decision.preferredSide === "sell"}
           levels={analysis.sellLevels}
           lossLimit={Number(lossLimit)}
+          plan={plan}
           riskStyle={riskStyle}
+          sidePlan={sidePlanFor(plan, "sell")}
           tradingCapital={Number(tradingCapital)}
           variant="sell"
         />
       )}
     </section>
+  );
+}
+
+/** Kartu skenario utama: risiko di SL & dana yang dibutuhkan dari hasil backend. */
+function ScenarioSummary({
+  analysis,
+  copy,
+  plan,
+  side,
+}: {
+  analysis: TradePilotAnalysisResult;
+  copy: ClientAreaTradePilotTradingPlanCopy;
+  plan: TradePilotPositionPlan;
+  side: "buy" | "sell";
+}) {
+  const sidePlan = sidePlanFor(plan, side);
+  const diagnostic = plan.sideEvaluations[side].diagnostic;
+  const isBuy = side === "buy";
+  return (
+    <div className="space-y-3">
+      <ClientAreaTradePilotRecommendationScenarioCard
+        brokerFundsLabel={copy.brokerFundsUntilStopLabel}
+        brokerFundsValue={formatPlanMoney(sidePlan?.totalFundsAtStop ?? diagnostic?.fundsRequiredAtStop)}
+        description={isBuy ? copy.buyScenarioDescription : copy.sellScenarioDescription}
+        guidance={(isBuy ? copy.buyScenarioGuidance : copy.sellScenarioGuidance).replace(
+          "{entry}",
+          isBuy ? analysis.buyLevels.entry : analysis.sellLevels.entry,
+        )}
+        minimumRiskLabel={copy.minimumStopRiskLabel}
+        minimumRiskValue={formatPlanMoney(sidePlan?.estimatedCycleLoss ?? diagnostic?.riskAtStop)}
+        title={isBuy ? copy.buyScenarioLabel : copy.sellScenarioLabel}
+        variant={side}
+      />
+      {!sidePlan ? (
+        <div role="status" className="rounded-2xl border border-amber-500/40 bg-amber-950/20 p-4 text-xs leading-5 text-amber-200 sm:text-sm">
+          {diagnostic ? (
+            <>
+              <strong className="block text-amber-400">{copy.sideBlockedTitle}</strong>
+              {copy.sideBlockedDescription
+                .replace("{lot}", String(diagnostic.lot))
+                .replace("{margin}", formatPlanMoney(diagnostic.marginRequired))
+                .replace("{risk}", formatPlanMoney(diagnostic.riskAtStop))
+                .replace("{fundsShortfall}", formatPlanMoney(diagnostic.marginShortfall))
+                .replace("{riskShortfall}", formatPlanMoney(diagnostic.riskShortfall))}
+            </>
+          ) : (
+            copy.sideUnavailableDescription
+          )}
+        </div>
+      ) : null}
+    </div>
   );
 }

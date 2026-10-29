@@ -58,7 +58,7 @@ export function ClientAreaTradePilotStatCard({
 
   return (
     <article
-      className={`relative min-w-0 overflow-hidden rounded-xl border bg-[#0b0c0e] p-3 shadow-md shadow-black/10 ${styles.border}`}
+      className={`relative min-w-0 overflow-hidden rounded-xl border bg-zinc-900/70 backdrop-blur-sm p-3 shadow-md shadow-black/10 ${styles.border}`}
     >
       {/* <span className={`absolute inset-x-0 top-0 h-px ${styles.accent}`} /> */}
       <span

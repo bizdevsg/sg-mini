@@ -1,4 +1,4 @@
-import { Bell, ChartNoAxesCombined } from "lucide-react";
+import { ChartNoAxesCombined } from "lucide-react";
 
 import { ClientAreaTradePilotActionButton } from "@/components/atoms/ClientAreaTradePilotActionButton";
 import type { ClientAreaTradePilotCopy } from "@/lib/client-area-trade-pilot.shared";
@@ -17,16 +17,10 @@ export function ClientAreaTradePilotActions({
   onAnalyze,
 }: ClientAreaTradePilotActionsProps) {
   return (
-    <section className="min-w-0 space-y-3 rounded-2xl border border-zinc-800 bg-zinc-500/10 p-4 sm:rounded-3xl sm:p-5">
-      <ClientAreaTradePilotActionButton
-        icon={<Bell className="h-6 w-6" />}
-        variant="outline"
-      >
-        {copy.setAlertLabel}
-      </ClientAreaTradePilotActionButton>
+    <section className="min-w-0 space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-4 sm:rounded-3xl sm:p-5">
       <ClientAreaTradePilotActionButton
         disabled={disabled || isAnalyzing}
-        icon={<ChartNoAxesCombined className="h-6 w-6" />}
+        icon={<ChartNoAxesCombined className="h-5 w-5" />}
         onClick={onAnalyze}
         variant="primary"
       >

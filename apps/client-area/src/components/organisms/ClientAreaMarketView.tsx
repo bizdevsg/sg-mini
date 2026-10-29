@@ -44,6 +44,8 @@ export function ClientAreaMarketView({
           allTransactionsLabel={marketTransactions.allTransactionsLabel}
           fieldLabels={fieldLabels}
           liveChartLabel={marketTransactions.liveChartLabel}
+          marketMovementDescription={marketTransactions.marketMovementDescription}
+          marketMovementTitle={marketTransactions.marketMovementTitle}
           locale={locale}
           onTransactionFilterChange={handleTransactionFilterChange}
           prices={prices}

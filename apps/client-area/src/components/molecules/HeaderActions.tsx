@@ -68,13 +68,13 @@ export function HeaderActions({
       value: "id",
       href: resolveLocaleSwitcherHref("id", pathname),
       iconSrc: "/assets/icon-id.png",
-      alt: "Indonesia",
+      alt: messages.cookieConsent.languageNames.id,
     },
     {
       value: "en",
       href: resolveLocaleSwitcherHref("en", pathname),
       iconSrc: "/assets/icon-us.png",
-      alt: "English",
+      alt: messages.cookieConsent.languageNames.en,
     },
   ];
   const activeLocale =
@@ -94,7 +94,9 @@ export function HeaderActions({
   const clientAreaTitle = clientAreaProfile?.displayName
     ? `${messages.clientArea.pageTitle} - ${clientAreaProfile.displayName}`
     : messages.clientArea.pageTitle;
-  const clientAreaLabel = isClientAreaAuthenticated ? "Client Area" : "Login";
+  const clientAreaLabel = isClientAreaAuthenticated
+    ? messages.clientArea.pageTitle
+    : messages.navbar.login;
   const clientAreaAction = isClientAreaEnabled ? (
     <Link
       aria-label={clientAreaTitle}
@@ -137,6 +139,7 @@ export function HeaderActions({
   const localeDialog = (
     <LocaleSwitcherDialog
       activeLabel={activeLocaleLabel}
+      closeLabel={messages.navbar.closeMenuLabel}
       currentLocale={locale}
       dialogId={localeDialogId}
       isOpen={isLocaleOpen}

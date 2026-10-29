@@ -48,7 +48,7 @@ export function ClientAreaTradePilotChartToolbar({
         <span className="shrink-0 text-sm font-semibold text-zinc-400">
           {copy.timeframeLabel}
         </span>
-        <div className="flex w-full min-w-0 max-w-full overflow-x-auto rounded-xl border border-zinc-800 bg-[#151820] p-1 sm:w-auto">
+        <div className="flex w-full min-w-0 max-w-full overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-1 sm:w-auto">
           {CLIENT_AREA_TRADE_PILOT_TIMEFRAMES.map((item) => (
             <ClientAreaTradePilotTimeframeButton
               key={item.value}
@@ -77,7 +77,7 @@ export function ClientAreaTradePilotChartToolbar({
           className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-semibold transition ${
             isIndicatorToolbarVisible
               ? "border-yellow-500/60 bg-yellow-500/15 text-yellow-400"
-              : "border-zinc-800 bg-[#151820] text-zinc-300 hover:text-white"
+              : "border-zinc-800 bg-zinc-900/70 backdrop-blur-sm text-zinc-300 hover:text-white"
           }`}
         >
           <ChartNoAxesCombined className="h-5 w-5" />

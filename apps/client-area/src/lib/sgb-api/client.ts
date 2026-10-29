@@ -23,18 +23,26 @@ export class SgbApiError extends Error {
   readonly kind: SgbApiErrorKind;
   readonly safeMessage: string;
   readonly errorType?: unknown;
+  /**
+   * Token the server rotated via the `csrf` header on this failed response. The
+   * previous token may already be invalid upstream, so callers that keep a
+   * session must persist it even though the call failed.
+   */
+  readonly newToken?: string;
 
   constructor(
     kind: SgbApiErrorKind,
     message: string,
     safeMessage: string,
     errorType?: unknown,
+    newToken?: string,
   ) {
     super(message);
     this.name = "SgbApiError";
     this.kind = kind;
     this.safeMessage = safeMessage;
     this.errorType = errorType;
+    this.newToken = newToken;
   }
 }
 
@@ -156,6 +164,8 @@ export async function callSgbApi<T = unknown>(
         "session_expired",
         envelope.message ?? "Session has been expired",
         "Sesi Anda telah berakhir. Silakan login kembali.",
+        undefined,
+        newToken,
       );
     }
 
@@ -167,6 +177,7 @@ export async function callSgbApi<T = unknown>(
         ? envelope.message
         : "Terjadi kesalahan. Coba lagi nanti.",
       envelope.errorType,
+      newToken,
     );
   }
 

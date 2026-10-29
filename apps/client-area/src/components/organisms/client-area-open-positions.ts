@@ -3,6 +3,7 @@ import {
   formatUsd,
 } from "@/components/organisms/client-area.shared";
 import type { PositionItem } from "@/components/organisms/client-area.types";
+import { getMessages, type AppLocale } from "@/locales";
 import type { OpenPositionCard } from "@/types/account-summary";
 
 const EMPTY = "—";
@@ -29,7 +30,11 @@ function formatMoney(value: number | null) {
  * identifier in the payload (its `tradeID` is 0). `commission` is shown as
  * "Facility Fee" — the closest match in the payload, not confirmed by SGB.
  */
-export function toPositionItem(card: OpenPositionCard): PositionItem {
+export function toPositionItem(
+  card: OpenPositionCard,
+  locale: AppLocale = "id",
+): PositionItem {
+  const labels = getMessages(locale).clientArea.marketTransactions.positionRow;
   const openedAt = [card.orderDate, card.time].filter(Boolean).join(", ");
 
   return {
@@ -38,7 +43,8 @@ export function toPositionItem(card: OpenPositionCard): PositionItem {
     instrument: card.productName,
     side: card.side,
     orderNumber: card.id,
-    volume: card.lot === null ? EMPTY : `${card.lot.toFixed(2)} Lot`,
+    volume:
+      card.lot === null ? EMPTY : `${card.lot.toFixed(2)} ${labels.lotUnit}`,
     openPrice: formatPrice(card.openPrice),
     currentPrice: formatPrice(card.currentPrice),
     floatingPl:

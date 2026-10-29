@@ -131,7 +131,7 @@ export function ClientAreaAdminFrame({
 
         <div className="flex-1 overflow-y-auto p-3">
           <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
-            Navigation
+            {clientArea.sidebar.navigationLabel}
           </p>
           {navigation}
         </div>
@@ -152,14 +152,16 @@ export function ClientAreaAdminFrame({
             <button
               type="button"
               onClick={() => setIsMobileSidebarOpen(true)}
-              aria-label="Open dashboard menu"
+              aria-label={messages.navbar.openMenuLabel}
               className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-500 transition hover:bg-white/10 min-[380px]:h-11 min-[380px]:w-11 lg:hidden"
             >
               <Menu className="h-5 w-5" />
             </button>
 
             <div className="min-w-0 hidden lg:block">
-              <p className="text-xs font-medium text-zinc-500">Client Area</p>
+              <p className="text-xs font-medium text-zinc-500">
+                {clientArea.pageTitle}
+              </p>
               <h1 className="truncate text-base font-bold text-white sm:text-lg">
                 {activeLabel}
               </h1>
@@ -208,7 +210,7 @@ export function ClientAreaAdminFrame({
       >
         <button
           type="button"
-          aria-label="Close dashboard menu"
+          aria-label={messages.navbar.closeMenuLabel}
           onClick={() => setIsMobileSidebarOpen(false)}
           className={`absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity ${isMobileSidebarOpen ? "opacity-100" : "opacity-0"
             }`}
@@ -235,7 +237,7 @@ export function ClientAreaAdminFrame({
             <button
               type="button"
               onClick={() => setIsMobileSidebarOpen(false)}
-              aria-label="Close dashboard menu"
+              aria-label={messages.navbar.closeMenuLabel}
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-300"
             >
               <X className="h-5 w-5" />
@@ -244,7 +246,7 @@ export function ClientAreaAdminFrame({
 
           <div className="flex-1 overflow-y-auto px-3 py-5">
             <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
-              Navigation
+              {clientArea.sidebar.navigationLabel}
             </p>
             {navigation}
           </div>

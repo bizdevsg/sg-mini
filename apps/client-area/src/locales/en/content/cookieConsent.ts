@@ -7,4 +7,9 @@ export const enCookieConsent: AppMessages["cookieConsent"] = {
     "This website uses essential cookies to ensure that key services and features function properly. With your consent, we also use preference cookies to save your settings so that your user experience is more comfortable and consistent.",
   dismissLabel: "Maybe later",
   acceptLabel: "I agree",
+  imageAlt: "Cookie illustration",
+  languageNames: {
+    id: "Indonesian",
+    en: "English",
+  },
 };

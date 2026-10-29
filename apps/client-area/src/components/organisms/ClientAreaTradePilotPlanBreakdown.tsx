@@ -51,7 +51,7 @@ export function ClientAreaTradePilotPlanBreakdown({
         )}
         title={copy.initialPositionTitle}
       >
-        <div className="mt-5 rounded-xl border border-zinc-700 bg-[#1a1d29] p-4">
+        <div className="mt-5 rounded-xl border border-zinc-700 bg-zinc-900/70 backdrop-blur-sm p-4">
           <p className="text-xs text-zinc-400">{copy.initialEntryLabel}</p>
           <strong className="mt-1 block text-sm font-black text-white">
             {entry} · {lot} {copy.lotUnitLabel}

@@ -78,8 +78,9 @@ export default async function ClientAreaTradePilotLayout({
           children
         ) : (
           <ClientAreaTradePilotAccessDenied
+            berandaBack={accessCopy.berandaBack}
             description={deniedDescription}
-            mockDataLabel={accessCopy.mockDataLabel}
+            href={`/${locales}/client-area`}
             title={deniedTitle}
           />
         )}

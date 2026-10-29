@@ -31,6 +31,7 @@ export type AppMessages = {
     imageAlt: string;
     googlePlayAlt: string;
     appStoreAlt: string;
+    qrCodeAlt: string;
   };
   ebookPage: {
     title: string;
@@ -189,6 +190,7 @@ export type AppMessages = {
   };
   clientArea: {
     metadataTitle: string;
+    seoLabel: string;
     pageTitle: string;
     pageDescription: string;
     homeChart: {
@@ -197,11 +199,14 @@ export type AppMessages = {
       fallbackNotice: string;
       frameTitle: string;
       liveLabel: string;
+      liveChartTitle: string;
+      closeChartLabel: string;
       loading: string;
       refreshLabel: string;
       retryLabel: string;
       availableDescription: string;
       tradingViewDisclaimer: string;
+      tradingViewLogoAlt: string;
       unavailableBody: string;
       unavailableDescription: string;
       unavailableTitle: string;
@@ -221,6 +226,14 @@ export type AppMessages = {
       unavailable: string;
       unavailableAccount: string;
       updated: string;
+      balanceLabel: string;
+      floatingPlLabel: string;
+      equityLabel: string;
+      marginRequiredLabel: string;
+      callMarginPlaceLabel: string;
+      autoLiquidationLabel: string;
+      effectiveMarginLabel: string;
+      equityRatioLabel: string;
     };
     homeTikTok: {
       description: string;
@@ -230,11 +243,16 @@ export type AppMessages = {
     };
     marketTransactions: {
       title: string;
+      marketMovementTitle: string;
+      marketMovementDescription: string;
       allTransactionsLabel: string;
       liveChartLabel: string;
       viewTransactionsLabel: string;
       panel: {
         buySell: string;
+        description: string;
+        emptyImageAlt: string;
+        emptyTitle: string;
         historyEmpty: string;
         historyError: string;
         historyLoading: string;
@@ -254,13 +272,32 @@ export type AppMessages = {
         unavailable: string;
       };
       positionRow: {
+        buy: string;
         currentPrice: string;
         facilityFee: string;
         floatingPl: string;
+        lotUnit: string;
         lots: string;
         openPrice: string;
         orderNumber: string;
+        sell: string;
         storage: string;
+        vat: string;
+      };
+      tradeHistoryRow: {
+        buy: string;
+        buyPrice: string;
+        date: string;
+        facilityFee: string;
+        liquidation: string;
+        lotUnit: string;
+        orderNumber: string;
+        price: string;
+        profitLoss: string;
+        quantityLots: string;
+        sell: string;
+        sellPrice: string;
+        side: string;
         vat: string;
       };
     };
@@ -346,6 +383,7 @@ export type AppMessages = {
     };
     sidebar: {
       label: string;
+      navigationLabel: string;
       backToWebsite: string;
       tradeCta: string;
       navItems: Array<{
@@ -357,8 +395,10 @@ export type AppMessages = {
     livePriceTicker: {
       label: string;
       newsLabel: string;
+      tickLabel: string;
     };
     tradePilotPage: {
+      loadingLabel: string;
       comingSoon: {
         title: string;
         description: string;
@@ -371,6 +411,7 @@ export type AppMessages = {
         missingRealTitle: string;
         missingRealDescription: string;
         mockDataLabel: string;
+        berandaBack: string;
       };
       navigation: {
         label: string;
@@ -383,10 +424,14 @@ export type AppMessages = {
       analysis: {
         title: string;
         description: string;
-        quotaValue: string;
         quotaLabel: string;
-        sessionValue: string;
         sessionLabel: string;
+        sessionClosedValue: string;
+        sessionClosedLabel: string;
+        sessionInfoLabel: string;
+        sessionHoursTitle: string;
+        sessionOpenBadge: string;
+        sessionHoursNote: string;
         instrumentPickerTitle: string;
         searchPlaceholder: string;
         favoritesLabel: string;
@@ -396,6 +441,17 @@ export type AppMessages = {
         analysisLoadingLabel: string;
         insufficientCreditMessage: string;
         analysisErrorMessage: string;
+        accessDeniedMessage: string;
+        analysisUnavailableMessage: string;
+        analysisPausedMessage: string;
+        analysisPausedSelectionMessage: string;
+        rateLimitedMessage: string;
+        rateLimitedRetryMessage: string;
+        creditResetsMessage: string;
+        serviceUnavailableMessage: string;
+        onboardingTitle: string;
+        onboardingDescription: string;
+        onboardingDismissLabel: string;
         noAnalysisTitle: string;
         noAnalysisDescription: string;
         demoModeLabel: string;
@@ -412,6 +468,13 @@ export type AppMessages = {
         captureUnsupportedMessage: string;
         captureFailedMessage: string;
         fullscreenUnsupportedMessage: string;
+        chartLoadingLabel: string;
+        chartErrorLabel: string;
+        chartRetryLabel: string;
+        chartDelayedLabel: string;
+        chartTimeframeLabel: string;
+        chartEmptyLabel: string;
+        chartBothLabel: string;
         instrumentNames: {
           gold: string;
           brent: string;
@@ -419,6 +482,8 @@ export type AppMessages = {
           nikkei: string;
         };
         analysisResult: {
+          disclaimerTitle: string;
+          disclaimerFallback: string;
           relevanceLabel: string;
           pendingLabel: string;
           sessionWindowLabel: string;
@@ -428,6 +493,7 @@ export type AppMessages = {
           sidewaysLabel: string;
           changeTimeframeTitle: string;
           changeTimeframeDescription: string;
+          changeTimeframeCostNote: string;
           compareRiskLabel: string;
           directionBiasTitle: string;
           neutralWaitLabel: string;
@@ -443,6 +509,18 @@ export type AppMessages = {
           confidenceReasonTitle: string;
           confidenceReasonDescription: string;
           fullReasonLabel: string;
+          lowRiskLabel: string;
+          highRiskLabel: string;
+          confidenceModal: {
+            sourcesTitle: string;
+            technicalTitle: string;
+            contextTitle: string;
+            riskTitle: string;
+            invalidationTitle: string;
+            footer: string;
+            closeLabel: string;
+            empty: string;
+          };
           analyzedAtLabel: string;
           refreshAnalysisLabel: string;
           priceChartTitle: string;
@@ -450,8 +528,34 @@ export type AppMessages = {
           viewFullChartLabel: string;
           resetLabel: string;
           shareChartLabel: string;
+          shareChartPreparingLabel: string;
+          shareChartErrorLabel: string;
+          shareChartDownloadedLabel: string;
+          chartShare: {
+            brand: string;
+            title: string;
+            analyzed: string;
+            made: string;
+            bias: string;
+            suggested: string;
+            bullish: string;
+            bearish: string;
+            neutral: string;
+            buy: string;
+            sell: string;
+            both: string;
+            entry: string;
+            stop: string;
+            tp1: string;
+            tp2: string;
+            sourceNote: string;
+            noCandles: string;
+            warning: string;
+          };
           suggestedLevelsTitle: string;
           recommendedSideLabel: string;
+          recommendedBuyLabel: string;
+          recommendedSellLabel: string;
           waitLabel: string;
           suggestedLevelsDescription: string;
           buyScenarioLabel: string;
@@ -492,20 +596,6 @@ export type AppMessages = {
           sellLabel: string;
           waitLabel: string;
         };
-        priceAlert: {
-          title: string;
-          description: string;
-          toggleLabel: string;
-          statusLabel: string;
-          activeLabel: string;
-          inactiveLabel: string;
-          entryLabel: string;
-          stopLossLabel: string;
-          takeProfitOneLabel: string;
-          takeProfitTwoLabel: string;
-          triggeredLabel: string;
-          cancelledLabel: string;
-        };
         footer: {
           eyebrow: string;
           title: string;
@@ -542,12 +632,14 @@ export type AppMessages = {
           eyebrow: string;
           bearishTitle: string;
           bullishTitle: string;
+          neutralTitle: string;
           sellLabel: string;
           buyLabel: string;
-          bearishDescription: string;
-          bullishDescription: string;
+          waitLabel: string;
+          indicatorTallyDescription: string;
           bearishNote: string;
           bullishNote: string;
+          neutralNote: string;
         };
         tradingPlan: {
           title: string;
@@ -568,7 +660,6 @@ export type AppMessages = {
           aggressiveLabel: string;
           intradayNote: string;
           snapshotLabel: string;
-          snapshotValue: string;
           createRecommendationLabel: string;
           selectDirectionLabel: string;
           waitStatusLabel: string;
@@ -653,6 +744,24 @@ export type AppMessages = {
           totalFundsAtFinalStopLabel: string;
           additionalLossLimitLabel: string;
           manualOrderWarning: string;
+          planLoadingLabel: string;
+          planErrorMessage: string;
+          planMockUnavailableMessage: string;
+          planLossLimitExceedsCapitalMessage: string;
+          planAnalysisExpiredMessage: string;
+          planRulesSourceLabel: string;
+          planPostureLabel: string;
+          planReasonsLabel: string;
+          sideBlockedTitle: string;
+          sideBlockedDescription: string;
+          sideUnavailableDescription: string;
+          noUnusedLayersLabel: string;
+          noAdditionalLayersNote: string;
+          additionalLayersNote: string;
+          layerLabel: string;
+          planPostureLabels: Record<"scaling_allowed" | "entry_only" | "not_recommended", string>;
+          rejectReasonLabels: Record<"day_margin" | "loss_ceiling" | "tier_limit" | "analysis_limit", string>;
+          planReasonLabels: Record<string, string>;
           chooseScenarioUsageTitle: string;
           chooseScenarioUsageDescription: string;
           checkEntryUsageTitle: string;
@@ -1046,6 +1155,15 @@ export type AppMessages = {
       previousLabel: string;
       todayLabel: string;
       yesterdayLabel: string;
+      expiredLabel: string;
+      viewInsightLabel: string;
+      insightTitle: string;
+      scrollLeftLabel: string;
+      scrollRightLabel: string;
+      disclaimerTitle: string;
+      disclaimerBody: string;
+      metadataTitle: string;
+      metadataDescription: string;
       transactionModal: {
         buyBadgeLabel: string;
         sellBadgeLabel: string;
@@ -1062,6 +1180,18 @@ export type AppMessages = {
       summaryStatus: string;
       summaryTitle: string;
     };
+    quickActionModal: {
+      goldDescription: string;
+      crudeOleinDescription: string;
+      futuresIntroTitle: string;
+      futuresIntroReadingTime: string;
+      candlestickTitle: string;
+      candlestickReadingTime: string;
+      depositNotice: string;
+      withdrawalNotice: string;
+      processNotice: string;
+      contactSupport: string;
+    };
     fundTransferModal: {
       closeLabel: string;
       depositTitle: string;
@@ -1076,6 +1206,11 @@ export type AppMessages = {
     description: string;
     dismissLabel: string;
     acceptLabel: string;
+    imageAlt: string;
+    languageNames: {
+      id: string;
+      en: string;
+    };
   };
   footer: {
     companyName: string;

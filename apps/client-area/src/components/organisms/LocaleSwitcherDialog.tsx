@@ -16,6 +16,7 @@ export type LocaleSwitcherOption = {
 type LocaleSwitcherDialogProps = {
   activeLabel: string;
   currentLocale: AppLocale;
+  closeLabel: string;
   dialogId: string;
   isOpen: boolean;
   onClose: () => void;
@@ -25,6 +26,7 @@ type LocaleSwitcherDialogProps = {
 
 export function LocaleSwitcherDialog({
   activeLabel,
+  closeLabel,
   currentLocale,
   dialogId,
   isOpen,
@@ -70,7 +72,7 @@ export function LocaleSwitcherDialog({
 
             <button
               type="button"
-              aria-label="Close"
+              aria-label={closeLabel}
               onClick={onClose}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-300 transition-colors duration-200 hover:bg-white/10 hover:text-white"
             >

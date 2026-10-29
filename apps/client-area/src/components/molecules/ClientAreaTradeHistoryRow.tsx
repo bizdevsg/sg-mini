@@ -2,9 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentIcon";
 import type { TransactionHistoryItem } from "@/components/organisms/client-area.types";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaTradeHistoryRowProps = {
   item: TransactionHistoryItem;
+  locale: AppLocale;
 };
 
 function getStatusClassName(tone: TransactionHistoryItem["statusTone"]) {
@@ -25,10 +27,12 @@ function getStatusClassName(tone: TransactionHistoryItem["statusTone"]) {
 
 export function ClientAreaTradeHistoryRow({
   item,
+  locale,
 }: ClientAreaTradeHistoryRowProps) {
-  const sideLabel = item.sideLabel ?? "Date";
+  const labels = getMessages(locale).clientArea.marketTransactions.tradeHistoryRow;
+  const sideLabel = item.sideLabel ?? labels.date;
   const sidePrice = item.sidePrice ?? item.date;
-  const closeLabel = item.closeLabel ?? "Price";
+  const closeLabel = item.closeLabel ?? labels.price;
   const profitLoss = item.profitLoss ?? "-";
   const profitLossClassName =
     profitLoss === "-"
@@ -37,11 +41,11 @@ export function ClientAreaTradeHistoryRow({
         ? "text-rose-400"
         : "text-white";
   const stats: Array<{ label: string; value: string }> = [
-    { label: "Quantity Lots", value: item.volume },
+    { label: labels.quantityLots, value: item.volume },
     { label: sideLabel, value: sidePrice },
     { label: closeLabel, value: item.closePrice ?? "-" },
-    { label: "Facility Fee", value: item.facilityFee ?? "-" },
-    { label: "VAT", value: item.vat ?? "-" },
+    { label: labels.facilityFee, value: item.facilityFee ?? "-" },
+    { label: labels.vat, value: item.vat ?? "-" },
   ];
 
   return (
@@ -64,7 +68,9 @@ export function ClientAreaTradeHistoryRow({
               </span>
             </div>
             <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-zinc-400">
-              <span>No. Order {item.orderNumber}</span>
+              <span>
+                {labels.orderNumber} {item.orderNumber}
+              </span>
               <span>{item.date}</span>
               <span className="flex items-center gap-1.5">
                 <FontAwesomeIcon icon={["fas", "clock"]} className="text-[11px] text-zinc-500" />
@@ -76,7 +82,7 @@ export function ClientAreaTradeHistoryRow({
 
         <div className="shrink-0 text-right">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-            Profit Loss
+            {labels.profitLoss}
           </p>
           <p className={`text-xl font-black tabular-nums sm:text-2xl ${profitLossClassName}`}>
             {profitLoss}

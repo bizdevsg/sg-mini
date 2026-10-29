@@ -23,7 +23,7 @@ export function ClientAreaTradePilotPlanMetric({
 }: ClientAreaTradePilotPlanMetricProps) {
   return (
     <div
-      className={`${variant === "compact" ? "rounded-xl bg-[#1a1d29]" : "rounded-2xl bg-[#171924]/95"} border border-zinc-700/80 p-4`}
+      className={`${variant === "compact" ? "rounded-xl bg-zinc-900/70 backdrop-blur-sm" : "rounded-2xl bg-zinc-900/95"} border border-zinc-700/80 p-4`}
     >
       <p
         className={`${variant === "compact" ? "text-xs" : "text-xs sm:text-sm"} font-medium text-zinc-400`}

@@ -30,7 +30,8 @@ export function ClientAreaMarketChartView({
   presets,
   hasMarketData = true,
 }: ClientAreaMarketChartViewProps) {
-  const chartCopy = getMessages(locale).clientArea.homeChart;
+  const clientAreaCopy = getMessages(locale).clientArea;
+  const chartCopy = clientAreaCopy.homeChart;
   const fallbackPreset = presets[0];
   const selectedPreset = hasMarketData
     ? getClientAreaTradingViewPresetById(initialPresetId, presets) ?? fallbackPreset
@@ -45,6 +46,7 @@ export function ClientAreaMarketChartView({
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <Link
+            aria-label={chartCopy.closeChartLabel}
             href={resolveLocalizedHref(locale, "/client-area/market")}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-yellow-500 bg-zinc-900 text-yellow-500 transition-all duration-300 hover:rotate-90 hover:bg-yellow-500 hover:text-black"
           >
@@ -53,7 +55,7 @@ export function ClientAreaMarketChartView({
 
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-yellow-500/80">
-              Live Chart
+              {clientAreaCopy.marketTransactions.liveChartLabel}
             </p>
             <div className="flex flex-wrap items-end gap-x-1 gap-y-1">
               <h1 className="break-words text-2xl font-black tracking-tight text-white sm:text-3xl">
@@ -66,7 +68,7 @@ export function ClientAreaMarketChartView({
         </div>
 
         {hasMarketData && selectedPreset ? (
-          <MiniChart symbol={selectedPreset.marketCode} />
+          <MiniChart locale={locale} symbol={selectedPreset.marketCode} />
         ) : (
           <EmptyStatePanel
             title={chartCopy.unavailableTitle}
@@ -79,7 +81,7 @@ export function ClientAreaMarketChartView({
 
       <div className="bg-red-500/10 border border-red-500/30 mt-7 p-5 rounded-3xl">
         <div className="space-y-1">
-          <Image src={"/assets/TradingView.png"} alt="Logo TradingView" height={100} width={200} />
+          <Image src={"/assets/TradingView.png"} alt={chartCopy.tradingViewLogoAlt} height={100} width={200} />
           <div>
             {chartCopy.tradingViewDisclaimer}
           </div>

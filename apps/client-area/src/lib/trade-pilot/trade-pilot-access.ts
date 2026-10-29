@@ -1,19 +1,8 @@
 import "server-only";
 
-import { createHmac } from "node:crypto";
 import { getClientAreaTradePilotIdentity } from "@/lib/client-area-trade-pilot-entitlement";
-import { CLIENT_AREA_SESSION_SECRET } from "@/lib/env";
+import { tradePilotUserId } from "@/lib/trade-pilot/trade-pilot-user-id";
 import type { TradePilotAccessContext } from "@/lib/trade-pilot/trade-pilot.types";
-
-function deriveOpaqueUserId(email: string): string {
-  if (!CLIENT_AREA_SESSION_SECRET) {
-    throw new Error("CLIENT_AREA_SESSION_SECRET is required for Trade Pilot.");
-  }
-
-  return createHmac("sha256", CLIENT_AREA_SESSION_SECRET)
-    .update(`trade-pilot:${email.trim().toLowerCase()}`)
-    .digest("hex");
-}
 
 export async function getTradePilotAccessContext(): Promise<TradePilotAccessContext> {
   const identity = await getClientAreaTradePilotIdentity();
@@ -39,11 +28,13 @@ export async function getTradePilotAccessContext(): Promise<TradePilotAccessCont
       ? "allowed"
       : "trading_account_required";
 
+  const userId = tradePilotUserId(identity.email);
+
   return {
     ...capabilities,
     allowed: reason === "allowed",
     authenticated: true,
     reason,
-    userId: deriveOpaqueUserId(identity.email),
+    userId,
   };
 }

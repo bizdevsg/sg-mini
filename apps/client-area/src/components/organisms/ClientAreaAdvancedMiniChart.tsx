@@ -12,6 +12,7 @@ import type { AppLocale, AppMessages } from "@/locales";
 
 type ClientAreaAdvancedMiniChartProps = {
   copy: AppMessages["clientArea"]["homeChart"];
+  enabled?: boolean;
   locale: AppLocale;
   symbol: string;
 };
@@ -30,6 +31,7 @@ const TRADING_VIEW_FALLBACK_SYMBOLS = new Set([
 
 export function ClientAreaAdvancedMiniChart({
   copy,
+  enabled = true,
   locale,
   symbol,
 }: ClientAreaAdvancedMiniChartProps) {
@@ -52,7 +54,7 @@ export function ClientAreaAdvancedMiniChart({
   }, []);
 
   useEffect(() => {
-    if (shouldUseTradingViewFallback) {
+    if (!enabled || shouldUseTradingViewFallback) {
       return;
     }
 
@@ -99,7 +101,7 @@ export function ClientAreaAdvancedMiniChart({
     void loadChartUrl();
 
     return () => controller.abort();
-  }, [requestVersion, shouldUseTradingViewFallback, symbol]);
+  }, [enabled, requestVersion, shouldUseTradingViewFallback, symbol]);
 
   useEffect(() => {
     if (!frameId || loadedFrameId === frameId) {

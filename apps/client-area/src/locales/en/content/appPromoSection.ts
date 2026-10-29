@@ -12,4 +12,5 @@ export const enAppPromoSection: AppMessages["appPromoSection"] = {
   imageAlt: "Solid Gold app mockup on a phone",
   googlePlayAlt: "Download on Google Play",
   appStoreAlt: "Download on the App Store",
+  qrCodeAlt: "QR code to download the Solid Gold Berjangka app",
 };

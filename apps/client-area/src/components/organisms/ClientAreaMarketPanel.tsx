@@ -8,6 +8,8 @@ type ClientAreaMarketPanelProps = {
   allTransactionsLabel: string;
   fieldLabels: AppMessages["liveQuoteTable"]["fields"];
   liveChartLabel: string;
+  marketMovementDescription: string;
+  marketMovementTitle: string;
   locale: AppLocale;
   onTransactionFilterChange: (marketCode: string | null) => void;
   prices: MarketPrice[];
@@ -20,6 +22,8 @@ export function ClientAreaMarketPanel({
   allTransactionsLabel,
   fieldLabels,
   liveChartLabel,
+  marketMovementDescription,
+  marketMovementTitle,
   locale,
   onTransactionFilterChange,
   prices,
@@ -30,7 +34,7 @@ export function ClientAreaMarketPanel({
   return (
     <section
       aria-label={title}
-      className="relative isolate overflow-hidden rounded-3xl bg-[#080a0b]"
+      className="relative isolate overflow-hidden rounded-4xl bg-[#080a0b] border border-zinc-500/10"
     >
       {/* HEADER BACKGROUND */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-48 overflow-hidden sm:h-56 lg:h-64">
@@ -52,11 +56,11 @@ export function ClientAreaMarketPanel({
       {/* HEADER CONTENT */}
       <div className="relative z-10 p-5">
         <h3 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-          Pergerakan Pasar Global
+          {marketMovementTitle}
         </h3>
 
         <p className="mt-2 text-sm text-zinc-400 sm:text-base">
-          Pantau harga terkini dari berbagai instrumen favorit.
+          {marketMovementDescription}
         </p>
       </div>
 

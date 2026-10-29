@@ -12,12 +12,14 @@ type HomeMarketSymbol = (typeof CLIENT_AREA_HOME_MARKET_SYMBOLS)[number];
 
 type ClientAreaAdvancedChartProps = {
   copy: AppMessages["clientArea"]["homeChart"];
+  miniChartEnabled?: boolean;
   locale: AppLocale;
   marketWatchCopy: DashboardCopy;
 };
 
 export function ClientAreaAdvancedChart({
   copy,
+  miniChartEnabled = true,
   locale,
   marketWatchCopy,
 }: ClientAreaAdvancedChartProps) {
@@ -35,6 +37,7 @@ export function ClientAreaAdvancedChart({
 
       <ClientAreaAdvancedMiniChart
         copy={copy}
+        enabled={miniChartEnabled}
         locale={locale}
         symbol={selectedSymbol}
       />

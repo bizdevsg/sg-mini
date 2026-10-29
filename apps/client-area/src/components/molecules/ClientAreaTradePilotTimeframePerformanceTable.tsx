@@ -13,7 +13,7 @@ export function ClientAreaTradePilotTimeframePerformanceTable({
   rows,
 }: ClientAreaTradePilotTimeframePerformanceTableProps) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#0b0c0e]/50">
+    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50">
       <div className="border-b border-zinc-800 px-4 py-4 sm:px-5">
         <h2 className="text-sm font-bold text-white">
           {copy.timeframePerformanceTitle} · XAU/USD
@@ -27,7 +27,7 @@ export function ClientAreaTradePilotTimeframePerformanceTable({
         <table className="w-full min-w-[820px] border-collapse text-left text-xs">
           <thead className="text-zinc-400">
             <tr>
-              <th className="sticky left-0 z-10 bg-[#0b0c0e] px-4 py-3 font-medium sm:px-5">
+              <th className="sticky left-0 z-10 bg-zinc-950 px-4 py-3 font-medium sm:px-5">
                 {copy.timeframeColumnLabel}
               </th>
               <th className="px-3 py-3 font-medium">{copy.sampleColumnLabel}</th>
@@ -43,7 +43,7 @@ export function ClientAreaTradePilotTimeframePerformanceTable({
           <tbody>
             {rows.map((row) => (
               <tr key={row.timeframe} className="border-t border-zinc-800/90 text-zinc-200">
-                <th className="sticky left-0 z-10 bg-[#0b0c0e] px-4 py-4 text-sm font-bold text-white sm:px-5">
+                <th className="sticky left-0 z-10 bg-zinc-950 px-4 py-4 text-sm font-bold text-white sm:px-5">
                   {row.timeframe}
                 </th>
                 <td className="px-3 py-4 font-semibold">{row.sample}</td>

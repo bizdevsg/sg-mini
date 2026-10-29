@@ -3,7 +3,6 @@ import Image from "next/image";
 const heroFloatingCards = [
   {
     src: "/assets/Floating Info Card 1.png",
-    alt: "Floating trading insight card",
     width: 648,
     height: 264,
     desktopClassName: "left-[88%] top-[30%] w-[10%]",
@@ -11,7 +10,6 @@ const heroFloatingCards = [
   },
   {
     src: "/assets/Floating Info Card 2.png",
-    alt: "Floating market card",
     width: 648,
     height: 264,
     desktopClassName: "left-[87%] top-[55%] w-[10%]",
@@ -19,7 +17,6 @@ const heroFloatingCards = [
   },
   {
     src: "/assets/Floating Info Card 3.png",
-    alt: "Floating growth card",
     width: 684,
     height: 264,
     desktopClassName: "left-[65%] top-[40%] w-[10%]",
@@ -27,7 +24,6 @@ const heroFloatingCards = [
   },
   {
     src: "/assets/Floating Info Card 4.png",
-    alt: "Floating metrics card",
     width: 768,
     height: 264,
     desktopClassName: "left-[63%] top-[65%] w-[10%]",
@@ -46,7 +42,7 @@ export function ClientAreaLoginVisualPanel() {
         <div className="absolute inset-0">
           <Image
             src="/assets/BANNER-UTAMA-SOLID.png"
-            alt="SG Berjangka Client Area"
+            alt=""
             fill
             priority
             sizes="100vw"
@@ -63,7 +59,7 @@ export function ClientAreaLoginVisualPanel() {
             >
               <Image
                 src={card.src}
-                alt={card.alt}
+                alt=""
                 width={card.width}
                 height={card.height}
                 sizes="200px"

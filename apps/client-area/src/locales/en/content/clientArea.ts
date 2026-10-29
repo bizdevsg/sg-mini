@@ -2,6 +2,7 @@ import type { AppMessages } from "../../shared/messages";
 
 export const enClientArea: AppMessages["clientArea"] = {
   metadataTitle: "Client Area Dashboard",
+  seoLabel: "Client Area",
   pageTitle: "Client Area",
   pageDescription:
     "A post-login home view with account summary, quick actions, and product signals.",
@@ -12,12 +13,15 @@ export const enClientArea: AppMessages["clientArea"] = {
       "MiniMicro data is unavailable. Showing the TradingView fallback chart.",
     frameTitle: "MiniMicro live chart",
     liveLabel: "Live",
+    liveChartTitle: "Live Chart {symbol}",
+    closeChartLabel: "Close live chart",
     loading: "Loading live chart...",
     refreshLabel: "Refresh",
     retryLabel: "Try again",
     availableDescription: "MiniMicro live chart for {marketCode}.",
     tradingViewDisclaimer:
       "Our chart is provided by TradingView, an international charting platform for traders and investors, providing high-performance market data such as EURUSD chart, XAUUSD and other forex instruments, as well as advanced tools for more comprehensive market analysis: detailed symbol charts, the latest financial news, economic calendar, and more – simply everything a prepared trader may need.",
+    tradingViewLogoAlt: "TradingView logo",
     unavailableBody:
       "This market code is not available for the MiniMicro WebView yet.",
     unavailableDescription:
@@ -40,6 +44,14 @@ export const enClientArea: AppMessages["clientArea"] = {
     unavailable: "No account is available for this mode.",
     unavailableAccount: "Unavailable",
     updated: "Updated",
+    balanceLabel: "New Balance",
+    floatingPlLabel: "Floating P/L",
+    equityLabel: "Equity",
+    marginRequiredLabel: "Margin Required",
+    callMarginPlaceLabel: "Call Margin Level",
+    autoLiquidationLabel: "Auto Liquidation",
+    effectiveMarginLabel: "Effective Margin",
+    equityRatioLabel: "Equity Ratio",
   },
   homeTikTok: {
     description: "Watch a featured latest video from Solid Prime.",
@@ -49,11 +61,18 @@ export const enClientArea: AppMessages["clientArea"] = {
   },
   marketTransactions: {
     title: "Market & Transactions",
+    marketMovementTitle: "Global Market Movements",
+    marketMovementDescription:
+      "Monitor the latest prices for your favorite instruments.",
     allTransactionsLabel: "All Transactions",
     liveChartLabel: "Live Chart",
     viewTransactionsLabel: "View Transactions",
     panel: {
       buySell: "Buy / Sell",
+      description:
+        "Monitor open positions, trade history, and pending trading orders here.",
+      emptyImageAlt: "No transactions illustration",
+      emptyTitle: "No Transactions Yet",
       historyEmpty: "There is no trade history for this account yet.",
       historyError: "History could not be loaded.",
       historyLoading: "Loading history...",
@@ -70,13 +89,32 @@ export const enClientArea: AppMessages["clientArea"] = {
       unavailable: "No account is available for this mode.",
     },
     positionRow: {
+      buy: "Buy",
       currentPrice: "Current Price",
       facilityFee: "Facility Fee",
       floatingPl: "Floating P/L",
+      lotUnit: "Lot",
       lots: "Lots",
       openPrice: "Open Price",
       orderNumber: "Order No.",
+      sell: "Sell",
       storage: "Storage",
+      vat: "VAT",
+    },
+    tradeHistoryRow: {
+      buy: "Buy",
+      buyPrice: "Buy Price",
+      date: "Date",
+      facilityFee: "Facility Fee",
+      liquidation: "Liquidation",
+      lotUnit: "Lot",
+      orderNumber: "Order No.",
+      price: "Price",
+      profitLoss: "Profit Loss",
+      quantityLots: "Quantity Lots",
+      sell: "Sell",
+      sellPrice: "Sell Price",
+      side: "Side",
       vat: "VAT",
     },
   },
@@ -185,6 +223,7 @@ export const enClientArea: AppMessages["clientArea"] = {
   },
   sidebar: {
     label: "Client navigation",
+    navigationLabel: "Navigation",
     backToWebsite: "Back to Home",
     tradeCta: "Trade",
     navItems: [
@@ -223,8 +262,10 @@ export const enClientArea: AppMessages["clientArea"] = {
   livePriceTicker: {
     label: "Live prices and latest news",
     newsLabel: "News",
+    tickLabel: "Live Tick",
   },
   tradePilotPage: {
+    loadingLabel: "Loading Trade Pilot...",
     comingSoon: {
       title: "Coming Soon",
       description:
@@ -241,6 +282,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       missingRealDescription:
         "Select your Demo account to keep using Trade Pilot, or open a Real account first.",
       mockDataLabel: "Simulated data",
+      berandaBack: "Back to Home",
     },
     navigation: {
       label: "Trade Pilot navigation",
@@ -254,24 +296,47 @@ export const enClientArea: AppMessages["clientArea"] = {
       title: "Market Analysis",
       description:
         "Analyze real-time price movements with interactive charts and current market data.",
-      quotaValue: "10/30 Days",
       quotaLabel: "Analysis Quota",
-      sessionValue: "Sydney - Tokyo",
       sessionLabel: "Active Session",
+      sessionClosedValue: "Market Closed",
+      sessionClosedLabel: "No active session",
+      sessionInfoLabel: "View market session hours",
+      sessionHoursTitle: "Market session hours (WIB)",
+      sessionOpenBadge: "Open",
+      sessionHoursNote:
+        "Approximate forex session hours. Adjusts automatically for daylight saving; markets are closed on weekends.",
       instrumentPickerTitle: "Select Instrument",
       searchPlaceholder: "Search instruments...",
       favoritesLabel: "Favorites",
       addFavoriteLabel: "Add favorite instrument",
       setAlertLabel: "Set Alert",
-      analysisActionLabel: "Analyze",
+      analysisActionLabel: "Analyze - 1 Token",
       analysisLoadingLabel: "Analyzing...",
       insufficientCreditMessage:
         "The analysis credit for this mode is depleted.",
       analysisErrorMessage:
         "The analysis could not be created. Please try again.",
+      accessDeniedMessage: "This account mode is not available to you.",
+      analysisPausedMessage:
+        "TradePilot analysis is temporarily paused by an administrator. Please try again later.",
+      analysisPausedSelectionMessage:
+        "Analysis for {target} is temporarily paused. Please choose another instrument or timeframe.",
+      analysisUnavailableMessage:
+        "Market data is currently unavailable. Please try again.",
+      rateLimitedMessage:
+        "Too many requests. Please wait a moment and try again.",
+      rateLimitedRetryMessage:
+        "Too many requests. Please try again in {seconds} seconds.",
+      creditResetsMessage: "Your quota resets on {date}.",
+      serviceUnavailableMessage:
+        "TradePilot cannot be reached right now. Credits and history could not be loaded.",
+      onboardingTitle: "Welcome to TradePilot",
+      onboardingDescription:
+        "TradePilot provides AI-based technical analysis for education and information. Each analysis uses 1 credit for your account mode. Results are not a solicitation or a guarantee of profit; trading decisions remain entirely yours.",
+      onboardingDismissLabel: "I understand",
       noAnalysisTitle: "No analysis result yet",
       noAnalysisDescription:
-        "Select an instrument and timeframe, then press Analyze. Results are currently deterministic simulations.",
+        "Select an instrument and timeframe, then press Analyze. The latest result will appear here.",
       demoModeLabel: "Demo",
       realModeLabel: "Real",
       instrumentLabel: "Instrument:",
@@ -288,6 +353,14 @@ export const enClientArea: AppMessages["clientArea"] = {
         "The chart could not be captured. Select the Client Area tab when the browser asks for a screen source.",
       fullscreenUnsupportedMessage:
         "Fullscreen mode is not supported by this browser.",
+      chartLoadingLabel: "Loading Trade Pilot candles...",
+      chartErrorLabel: "Candle data is currently unavailable.",
+      chartRetryLabel: "Try again",
+      chartDelayedLabel: "Delayed data",
+      chartTimeframeLabel: "Candle",
+      chartEmptyLabel:
+        "No candles are available for this instrument and timeframe.",
+      chartBothLabel: "Both",
       instrumentNames: {
         gold: "Gold / U.S. Dollar",
         brent: "Brent Crude Oil",
@@ -295,6 +368,9 @@ export const enClientArea: AppMessages["clientArea"] = {
         nikkei: "Nikkei 225 Index",
       },
       analysisResult: {
+        disclaimerTitle: "Disclaimer",
+        disclaimerFallback:
+          "TradePilot analysis results are for information and education only, not a solicitation or a guarantee of profit. Futures trading carries high risk.",
         relevanceLabel: "Relevant for approximately 4 more hours",
         pendingLabel: "Pending",
         sessionWindowLabel: "Tokyo • London",
@@ -305,6 +381,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         changeTimeframeTitle: "Change Timeframe",
         changeTimeframeDescription:
           "Same instrument, different timeframe — select one to analyze it immediately.",
+        changeTimeframeCostNote: "Each new timeframe analysis uses 1 credit.",
         compareRiskLabel: "Compare Risk",
         directionBiasTitle: "Direction Bias",
         neutralWaitLabel: "Neutral / Wait",
@@ -322,15 +399,53 @@ export const enClientArea: AppMessages["clientArea"] = {
         confidenceReasonDescription:
           "Price movement and changing market sessions can add volatility, so confidence in the technical scenario remains limited.",
         fullReasonLabel: "View Full Reason",
+        lowRiskLabel: "Low Risk",
+        highRiskLabel: "High Risk",
+        confidenceModal: {
+          sourcesTitle: "Sources referenced:",
+          technicalTitle: "Technical evidence",
+          contextTitle: "News & calendar context",
+          riskTitle: "Main risk",
+          invalidationTitle: "Assessment changes if",
+          footer: "This analysis is not a trading instruction. Re-check current market conditions.",
+          closeLabel: "Close",
+          empty: "No detailed reasoning is available for this analysis yet.",
+        },
         analyzedAtLabel: "Analyzed",
-        refreshAnalysisLabel: "Refresh Analysis",
+        refreshAnalysisLabel: "Refresh Analysis - 1 Token",
         priceChartTitle: "Price Chart",
         updatedAtLabel: "Updated",
         viewFullChartLabel: "View full chart",
         resetLabel: "Reset",
         shareChartLabel: "Share chart",
+        shareChartPreparingLabel: "Preparing image…",
+        shareChartErrorLabel: "The chart image could not be created. Please try again.",
+        shareChartDownloadedLabel: "Chart image downloaded.",
+        chartShare: {
+          brand: "TRADEPILOT · SOLID GOLD BERJANGKA",
+          title: "Analysis chart",
+          analyzed: "Analyzed",
+          made: "Image created",
+          bias: "Direction bias",
+          suggested: "Suggested",
+          bullish: "Bullish",
+          bearish: "Bearish",
+          neutral: "Neutral / Wait",
+          buy: "Buy scenario",
+          sell: "Sell scenario",
+          both: "Buy & Sell scenarios",
+          entry: "Entry",
+          stop: "Stop Loss",
+          tp1: "Take Profit 1",
+          tp2: "Take Profit 2",
+          sourceNote: "Historical candles are fetched when the image is created and limited to before the analysis. Levels and bias come from the stored analysis, not live prices.",
+          noCandles: "Historical candle data is not available for this analysis yet.",
+          warning: "Levels are references, not entry instructions. Check entry conditions, risk, invalidation, and current market conditions before acting.",
+        },
         suggestedLevelsTitle: "Suggested Levels",
         recommendedSideLabel: "Recommended side",
+        recommendedBuyLabel: "Buy",
+        recommendedSellLabel: "Sell",
         waitLabel: "Wait",
         suggestedLevelsDescription:
           "Entry, Stop Loss, and Take Profit levels for Buy and Sell scenarios based on the price range when the analysis was created.",
@@ -374,21 +489,6 @@ export const enClientArea: AppMessages["clientArea"] = {
         buyLabel: "Buy",
         sellLabel: "Sell",
         waitLabel: "Wait",
-      },
-      priceAlert: {
-        title: "Price alerts",
-        description:
-          "Get a push notification when the live price reaches each AI level.",
-        toggleLabel: "Enable or disable price alerts",
-        statusLabel: "Alert",
-        activeLabel: "Active",
-        inactiveLabel: "Inactive",
-        entryLabel: "Entry",
-        stopLossLabel: "Stop Loss",
-        takeProfitOneLabel: "Take Profit 1",
-        takeProfitTwoLabel: "Take Profit 2",
-        triggeredLabel: "Triggered",
-        cancelledLabel: "Cancelled",
       },
       footer: {
         eyebrow: "Get TradePilot on",
@@ -455,16 +555,18 @@ export const enClientArea: AppMessages["clientArea"] = {
         eyebrow: "Market Context Summary",
         bearishTitle: "Leaning Bearish",
         bullishTitle: "Leaning Bullish",
+        neutralTitle: "Neutral / Wait",
         sellLabel: "Sell",
         buyLabel: "Buy",
-        bearishDescription:
-          "7 of 11 indicators are leaning bearish, while 3 are bullish and 1 is neutral.",
-        bullishDescription:
-          "7 of 11 indicators are leaning bullish, while 3 are bearish and 1 is neutral.",
+        waitLabel: "Wait",
+        indicatorTallyDescription:
+          "{bullish} of {total} indicators lean bullish, {bearish} bearish, and {neutral} neutral.",
         bearishNote:
           "Current data favors a downside scenario — confirm with price action before making a decision.",
         bullishNote:
           "Current data favors an upside scenario — confirm with price action before making a decision.",
+        neutralNote:
+          "The AI currently recommends waiting: signals are not strong enough for one direction. Avoid entering until price confirms the buy or sell scenario.",
       },
       tradingPlan: {
         title: "Adaptive Trading Plan",
@@ -487,7 +589,6 @@ export const enClientArea: AppMessages["clientArea"] = {
         intradayNote:
           "This calculation only covers intraday positions (day trades); overnight positions are not included.",
         snapshotLabel: "Analysis candle snapshot captured",
-        snapshotValue: "2/10/2026, 09:10:15",
         createRecommendationLabel: "Create Recommendation",
         selectDirectionLabel: "Choose One Direction",
         waitStatusLabel: "Wait",
@@ -539,7 +640,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         recommendationUsageLabel: "How to use this recommendation",
         entryAndLotTitle: "Entry price & lot per position",
         allEntriesFilledDescription:
-          "When all entries are filled: 1 position · {lot} lot",
+          "When all entries are filled: {positions} positions · {lot} lot",
         initialEntryLabel: "Position 1: Initial entry",
         riskSectionTitle: "Risk",
         finalStopLossLabel: "One final Stop Loss",
@@ -588,6 +689,70 @@ export const enClientArea: AppMessages["clientArea"] = {
         additionalLossLimitLabel: "Additional loss limit required",
         manualOrderWarning:
           "Manual only: price moving against the position is not a trigger by itself.",
+        planLoadingLabel:
+          "Calculating recommendation...",
+        planErrorMessage:
+          "The recommendation could not be calculated. Please try again.",
+        planMockUnavailableMessage:
+          "Position recommendations are only available for live TradePilot analyses.",
+        planLossLimitExceedsCapitalMessage:
+          "The loss limit cannot exceed your trading funds.",
+        planAnalysisExpiredMessage:
+          "This analysis has resolved or expired. Run a new analysis to get a position recommendation.",
+        planRulesSourceLabel:
+          "Calculated from broker trading rules version {version}. Price levels come from the AI analysis; lot, margin and risk use fixed formulas.",
+        planPostureLabel:
+          "Recommendation status",
+        planReasonsLabel:
+          "Considerations",
+        sideBlockedTitle:
+          "Funds or loss limit are not enough for the minimum lot",
+        sideBlockedDescription:
+          "The minimum lot {lot} needs {margin} margin and risks {risk} at Stop Loss. Funds short by {fundsShortfall} · loss limit short by {riskShortfall}.",
+        sideUnavailableDescription:
+          "This scenario is not available for this analysis and these settings.",
+        noUnusedLayersLabel:
+          "No layer candidates were rejected for this scenario.",
+        noAdditionalLayersNote:
+          "This scenario is for the initial entry only; no additional layers are recommended.",
+        additionalLayersNote:
+          "Additional layers are only filled if price reaches the layer level before Stop Loss is hit.",
+        layerLabel:
+          "Layer {level} · {price}",
+        planPostureLabels: {
+          scaling_allowed: "Staged additions allowed",
+          entry_only: "Initial entry only",
+          not_recommended: "Not recommended yet",
+        },
+        rejectReasonLabels: {
+          day_margin: "Exceeds available margin",
+          loss_ceiling: "Exceeds the cumulative loss hard limit",
+          tier_limit: "Exceeds the account type lot limit",
+          analysis_limit: "Outside the analysis level limits",
+        },
+        planReasonLabels: {
+          context_unavailable: "Analysis context is incomplete",
+          short_timeframe: "Short timeframe, risk reduced",
+          high_risk: "Analysis risk level is high",
+          volatile_market: "Market is volatile",
+          low_confidence: "Analysis confidence below 70%",
+          range_supports_scaling: "Ranging market supports staged entries",
+          trend_favors_buy: "Analysis direction favors Buy",
+          trend_favors_sell: "Analysis direction favors Sell",
+          trend_opposes_buy: "Analysis direction opposes Buy",
+          trend_opposes_sell: "Analysis direction opposes Sell",
+          technical_supports_buy: "Technical indicators lean Buy",
+          technical_supports_sell: "Technical indicators lean Sell",
+          technical_mixed: "Technical indicators are mixed",
+          technical_unavailable: "Technical indicators unavailable",
+          neutral_bias: "Neutral analysis (wait)",
+          fundamental_high_impact: "High-impact event within 24 hours",
+          fundamental_present: "Related fundamental news/events present",
+          fundamental_clear: "No major fundamental events",
+          fundamental_unavailable: "Fundamental data unavailable",
+          directional_conflict: "Analysis direction and indicators conflict",
+          staged_add_condition: "Extra layers only if price reaches their level",
+        },
         chooseScenarioUsageTitle: "Choose one scenario",
         chooseScenarioUsageDescription:
           "Choose either the upside or downside scenario based on your decision.",
@@ -1148,6 +1313,16 @@ export const enClientArea: AppMessages["clientArea"] = {
     previousLabel: "Previous",
     todayLabel: "Today",
     yesterdayLabel: "Yesterday",
+    expiredLabel: "Expired",
+    viewInsightLabel: "View Insight",
+    insightTitle: "Market Insight",
+    scrollLeftLabel: "Scroll left",
+    scrollRightLabel: "Scroll right",
+    disclaimerTitle: "Disclaimer",
+    disclaimerBody:
+      "This information is provided for reference only and is not a transaction recommendation. Trading risks and decisions remain entirely the client's responsibility.",
+    metadataTitle: "{category} Signal | Market Insight",
+    metadataDescription: "{category} trading signal",
     transactionModal: {
       buyBadgeLabel: "Buy Signal",
       sellBadgeLabel: "Sell Signal",
@@ -1165,6 +1340,22 @@ export const enClientArea: AppMessages["clientArea"] = {
     summaryLabel: "Transaction summary",
     summaryStatus: "Open transaction page",
     summaryTitle: "Open positions and trade history",
+  },
+  quickActionModal: {
+    goldDescription:
+      "A daily rolling gold contract with high liquidity and rapid market updates.",
+    crudeOleinDescription:
+      "Trade a leading commodity with a competitive margin structure.",
+    futuresIntroTitle: "Introduction to Futures Markets",
+    futuresIntroReadingTime: "Estimated 12-minute read",
+    candlestickTitle: "Reading Candlestick Charts",
+    candlestickReadingTime: "Estimated 18-minute read",
+    depositNotice: "Use the official segregated account to add funds.",
+    withdrawalNotice:
+      "Withdrawal requests are processed to your registered bank account.",
+    processNotice:
+      "To continue with the actual process, contact support or use the official transaction page.",
+    contactSupport: "Contact support",
   },
   fundTransferModal: {
     closeLabel: "Close",

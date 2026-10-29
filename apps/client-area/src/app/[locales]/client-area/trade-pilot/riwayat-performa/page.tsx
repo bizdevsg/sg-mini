@@ -37,7 +37,7 @@ export default async function ClientAreaTradePilotPerformancePage({
   assertValidLocale(locales);
 
   const copy = getMessages(locales).clientArea.tradePilotPage.performanceHistory;
-  const bootstrap = await getTradePilotBootstrap();
+  const bootstrap = await getTradePilotBootstrap(locales);
   const requestedMode = resolveClientAreaAccountMode(
     (await cookies()).get(CLIENT_AREA_ACCOUNT_MODE_COOKIE)?.value,
   );
@@ -52,7 +52,7 @@ export default async function ClientAreaTradePilotPerformancePage({
       description={copy.description}
       performanceCopy={copy}
       histories={bootstrap.histories[mode] ?? []}
-      timeframePerformance={bootstrap.timeframePerformance}
+      timeframePerformance={bootstrap.timeframePerformance[mode] ?? []}
       title={copy.title}
     />
   );

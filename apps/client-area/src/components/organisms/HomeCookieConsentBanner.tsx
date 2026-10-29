@@ -32,12 +32,12 @@ export function HomeCookieConsentBanner({
     {
       value: "id" as const,
       iconSrc: "/assets/icon-id.png",
-      alt: "Indonesia",
+      alt: copy.languageNames.id,
     },
     {
       value: "en" as const,
       iconSrc: "/assets/icon-us.png",
-      alt: "English",
+      alt: copy.languageNames.en,
     },
   ];
 
@@ -164,7 +164,7 @@ export function HomeCookieConsentBanner({
                         ? "/assets/icon-id.png"
                         : "/assets/icon-us.png"
                     }
-                    alt={modalLocale === "id" ? "Indonesia" : "English"}
+                    alt={copy.languageNames[modalLocale]}
                     width={20}
                     height={20}
                     className="h-5 w-5 rounded-full object-cover"
@@ -221,7 +221,7 @@ export function HomeCookieConsentBanner({
                   <div className="shrink-0">
                     <Image
                       src="/assets/cookies.png"
-                      alt="Icon Cookies"
+                      alt={copy.imageAlt}
                       width={220}
                       height={220}
                       sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 220px"

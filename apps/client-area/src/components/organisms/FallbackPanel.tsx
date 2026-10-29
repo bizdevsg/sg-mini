@@ -30,7 +30,7 @@ export function FallbackPanel({
             src="/assets/icon-impact/error-image.svg"
             width={1000}
             height={1000}
-            alt="Error Illustration"
+            alt=""
             loading="eager"
             className="overflow-hiddenoverflow-hidden"
           />

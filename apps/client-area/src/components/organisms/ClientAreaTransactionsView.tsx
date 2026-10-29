@@ -31,8 +31,11 @@ export function ClientAreaTransactionsView({
   // Open positions ride on the account summary payload (same BFF call).
   const { state, retry } = useLiveAccountSummary(accountMode);
   const allPositions = useMemo(
-    () => (state.status === "ready" ? state.positions.map(toPositionItem) : []),
-    [state],
+    () =>
+      state.status === "ready"
+        ? state.positions.map((position) => toPositionItem(position, locale))
+        : [],
+    [locale, state],
   );
   const normalizedFilter = filterSymbol
     ? normalizeTransactionSymbol(filterSymbol)
@@ -78,7 +81,7 @@ export function ClientAreaTransactionsView({
     );
 
     const items = historyState.items.map((card) =>
-      toTradeHistoryItem(card, settledById.get(card.id)),
+      toTradeHistoryItem(card, settledById.get(card.id), locale),
     );
 
     return normalizedFilter
@@ -87,7 +90,7 @@ export function ClientAreaTransactionsView({
             normalizeTransactionSymbol(item.symbol) === normalizedFilter,
         )
       : items;
-  }, [historyState, normalizedFilter, state]);
+  }, [historyState, locale, normalizedFilter, state]);
 
   return (
     <div id="transactions" className="scroll-mt-24">

@@ -41,12 +41,12 @@ export function ClientAreaTradePilotInstrumentPicker({
   }, [copy.instrumentNames, instruments, query]);
 
   return (
-    <section className="min-w-0 rounded-2xl border border-zinc-800 bg-zinc-500/10 p-4 sm:rounded-3xl sm:p-5">
+    <section className="min-w-0 rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-4 sm:rounded-3xl sm:p-5">
       <h2 className="text-base font-bold text-white">
         {copy.instrumentPickerTitle}
       </h2>
 
-      <label className="mt-5 flex items-center gap-2 rounded-2xl border border-zinc-800 bg-[#18191c] px-4 py-3 text-zinc-500 focus-within:border-yellow-500/60">
+      <label className="mt-5 flex items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-zinc-500 focus-within:border-yellow-500/60">
         <Search className="h-5 w-5 shrink-0" aria-hidden="true" />
         <span className="sr-only">{copy.searchPlaceholder}</span>
         <input
@@ -84,25 +84,29 @@ export function ClientAreaTradePilotInstrumentPicker({
               type="button"
               aria-pressed={active}
               onClick={() => onSelect(instrument.id)}
-              className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${active
-                  ? "trade-pilot-instrument-active border-yellow-500/50 bg-yellow-500/10"
-                  : "border-transparent hover:border-zinc-700 hover:bg-zinc-800/60"
+              className={`flex w-full items-center gap-3 rounded-xl border px-2 py-2 text-left transition ${active
+                ? "trade-pilot-instrument-active border-yellow-500/50 bg-yellow-500/10"
+                : "border-transparent hover:border-zinc-700 hover:bg-zinc-800/60"
                 }`}
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-yellow-500/15 p-1">
-                <LiveQuoteInstrumentIcon symbol={symbol} className="h-7 w-7" />
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <LiveQuoteInstrumentIcon symbol={symbol} className="h-3 w-3" />
+
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold text-white">
+                      {instrument.label}
+                    </span>
+                    <span className="block truncate text-xs text-zinc-500">
+                      {copy.instrumentNames[instrument.nameKey]}
+                    </span>
+                  </span>
+                </div>
+
+                <Star
+                  className={`h-4 w-4 ${active ? "trade-pilot-instrument-star fill-yellow-400 text-yellow-400" : "text-zinc-600"}`}
+                />
               </div>
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-white">
-                  {instrument.label}
-                </span>
-                <span className="block truncate text-xs text-zinc-500">
-                  {copy.instrumentNames[instrument.nameKey]}
-                </span>
-              </span>
-              <Star
-                className={`h-4 w-4 ${active ? "trade-pilot-instrument-star fill-yellow-400 text-yellow-400" : "text-zinc-600"}`}
-              />
             </button>
           );
         })}

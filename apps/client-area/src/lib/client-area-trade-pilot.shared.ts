@@ -13,9 +13,6 @@ export type ClientAreaTradePilotAnalysisResultCopy =
 export type ClientAreaTradePilotTechnicalIndicatorsCopy =
   ClientAreaTradePilotCopy["technicalIndicators"];
 
-export type ClientAreaTradePilotPriceAlertCopy =
-  ClientAreaTradePilotCopy["priceAlert"];
-
 export type ClientAreaTradePilotFooterCopy =
   ClientAreaTradePilotCopy["footer"];
 
@@ -48,6 +45,7 @@ export type ClientAreaTradePilotTimeframe =
   | "1"
   | "5"
   | "15"
+  | "30"
   | "60"
   | "240"
   | "D"
@@ -113,6 +111,18 @@ export const STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE: ClientAreaTra
       minimumSamples: 6,
     },
     {
+      timeframe: "30m",
+      sample: 0,
+      stillValid: 0,
+      expired: 0,
+      stopLoss: 0,
+      takeProfitOne: 0,
+      takeProfitTwo: 0,
+      winRate: null,
+      completion: null,
+      minimumSamples: 10,
+    },
+    {
       timeframe: "1m",
       sample: 2,
       stillValid: 0,
@@ -143,18 +153,6 @@ export const STATIC_CLIENT_AREA_TRADE_PILOT_TIMEFRAME_PERFORMANCE: ClientAreaTra
       expired: 0,
       stopLoss: 0,
       takeProfitOne: 0,
-      takeProfitTwo: 0,
-      winRate: null,
-      completion: null,
-      minimumSamples: 9,
-    },
-    {
-      timeframe: "30m",
-      sample: 1,
-      stillValid: 0,
-      expired: 0,
-      stopLoss: 0,
-      takeProfitOne: 1,
       takeProfitTwo: 0,
       winRate: null,
       completion: null,
@@ -255,6 +253,7 @@ export const CLIENT_AREA_TRADE_PILOT_TIMEFRAMES: Array<{
   { label: "1m", value: "1" },
   { label: "5m", value: "5" },
   { label: "15m", value: "15" },
+  { label: "30m", value: "30" },
   { label: "1h", value: "60" },
   { label: "4h", value: "240" },
   { label: "D", value: "D" },

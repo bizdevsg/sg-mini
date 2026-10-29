@@ -77,7 +77,7 @@ export function ClientAreaTransactionRow({
                   : "bg-amber-400/15 text-amber-300"
                   }`}
               >
-                {isBuy ? "Buy" : "Sell"}
+                {isBuy ? labels.buy : labels.sell}
               </span>
             </div>
             <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-zinc-400">

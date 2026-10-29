@@ -7,4 +7,9 @@ export const idCookieConsent: AppMessages["cookieConsent"] = {
     "Website ini menggunakan cookie esensial untuk memastikan layanan dan fitur utama berfungsi dengan baik. Dengan persetujuan Anda, kami juga menggunakan cookie preferensi untuk menyimpan pengaturan sehingga pengalaman pengguna menjadi lebih nyaaman dan konsisten.",
   dismissLabel: "Nanti saja",
   acceptLabel: "Saya setuju",
+  imageAlt: "Ilustrasi cookie",
+  languageNames: {
+    id: "Indonesia",
+    en: "Inggris",
+  },
 };

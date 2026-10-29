@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 import { StoreBadgeLink } from "@/components/atoms/StoreBadgeLink";
 
 type ClientAreaAppDownloadModalProps = {
@@ -42,6 +42,7 @@ export function ClientAreaAppDownloadModal({
   visualVariant = "phone",
   onClose,
 }: ClientAreaAppDownloadModalProps) {
+  const appPromoCopy = getMessages(locale).appPromoSection;
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isClosing, setIsClosing] = useState(false);
   const smartDownloadUrl =
@@ -137,7 +138,7 @@ export function ClientAreaAppDownloadModal({
           <div className="mt-6">
             <Image
               src="/assets/HP Solid-3.png"
-              alt="Solid Gold Berjangka App"
+              alt={appPromoCopy.imageAlt}
               width={400}
               height={300}
               className="mx-auto mb-2 h-auto w-full max-w-[320px] object-contain"
@@ -158,7 +159,7 @@ export function ClientAreaAppDownloadModal({
             <div className="overflow-hidden rounded-xl border border-white/10 bg-white p-3 shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
               <img
                 src={buildQrCodeUrl(smartDownloadUrl)}
-                alt="App Download QR Code"
+                alt={appPromoCopy.qrCodeAlt}
                 width={220}
                 height={220}
                 className="block h-[220px] w-[220px]"

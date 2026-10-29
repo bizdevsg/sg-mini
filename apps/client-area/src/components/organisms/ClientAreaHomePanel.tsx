@@ -106,6 +106,10 @@ export function ClientAreaHomePanel({
           copy={clientArea.homeChart}
           locale={locale}
           marketWatchCopy={copy}
+          // The chart iframe consumes the same upstream token as the account
+          // BFF. Let the initial summary request finish (and persist any csrf
+          // rotation) before handing that token to MiniMicro.
+          miniChartEnabled={summaryState.status !== "loading"}
         />
 
         <ClientAreaQuickActionsGrid

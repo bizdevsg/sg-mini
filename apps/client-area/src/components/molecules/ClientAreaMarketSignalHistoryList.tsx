@@ -40,19 +40,21 @@ export function ClientAreaMarketSignalHistoryList({
   items,
   locale,
 }: ClientAreaMarketSignalHistoryListProps) {
+  const copy = getMessages(locale).clientArea.marketSignalDetail;
+  const resolvePotentialLabel = (isExpired: boolean, isSell: boolean) =>
+    isExpired
+      ? copy.expiredLabel
+      : isSell
+        ? copy.sellActionLabel
+        : copy.buyActionLabel;
+
   return (
     <>
       <div className="space-y-3 sm:hidden">
         {items.map((item, index) => {
           const isSell = item.potensi?.toLowerCase() === "sell";
           const isExpired = item.isExpired ?? index !== 0;
-          const potensiLabel = isExpired
-            ? "Expired"
-            : item.potensi
-              ? `Potensi ${item.potensi.charAt(0).toUpperCase()}${item.potensi.slice(1).toLowerCase()}`
-              : isSell
-                ? "Potensi Sell"
-                : "Potensi Buy";
+          const potensiLabel = resolvePotentialLabel(isExpired, isSell);
           const theme = isExpired
             ? {
               badge: "border-zinc-600/60 bg-zinc-800 text-zinc-300",
@@ -128,14 +130,14 @@ export function ClientAreaMarketSignalHistoryList({
 
               <div className="mt-4 grid grid-cols-2 gap-2.5">
                 <div className="rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                  <p className="text-[11px] text-zinc-100">Take Profit</p>
+                  <p className="text-[11px] text-zinc-100">{copy.takeProfitLabel}</p>
                   <p className="mt-1 text-sm font-bold text-white">
                     {item.takingProfit || "-"}
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                  <p className="text-[11px] text-zinc-100">Stop Loss</p>
+                  <p className="text-[11px] text-zinc-100">{copy.stopLossLabel}</p>
                   <p className="mt-1 text-sm font-bold text-white">
                     {item.stopLoss || "-"}
                   </p>
@@ -143,7 +145,7 @@ export function ClientAreaMarketSignalHistoryList({
 
                 {item.source ? (
                   <div className="col-span-2 rounded-xl border border-white/5 bg-white/[0.04] p-3">
-                    <p className="text-[11px] text-zinc-100">Sumber</p>
+                    <p className="text-[11px] text-zinc-100">{copy.sourceLabel}</p>
                     <p className="mt-1 text-sm font-bold text-white">
                       {item.source}
                     </p>
@@ -153,7 +155,7 @@ export function ClientAreaMarketSignalHistoryList({
 
               {item.timeframe ? (
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-3 text-xs text-zinc-400">
-                  <span>Timeframe</span>
+                  <span>{copy.timeframeLabel}</span>
                   <span className="font-semibold text-white">{item.timeframe}</span>
                 </div>
               ) : null}
@@ -170,13 +172,7 @@ export function ClientAreaMarketSignalHistoryList({
         {items.map((item, index) => {
           const isSell = item.potensi?.toLowerCase() === "sell";
           const isExpired = item.isExpired ?? index !== 0;
-          const potensiLabel = isExpired
-            ? "Expired"
-            : item.potensi
-              ? `Potensi ${item.potensi.charAt(0).toUpperCase()}${item.potensi.slice(1).toLowerCase()}`
-              : isSell
-                ? "Potensi Sell"
-                : "Potensi Buy";
+          const potensiLabel = resolvePotentialLabel(isExpired, isSell);
 
           const theme = isExpired
             ? { border: "border-zinc-500/10", button: "bg-zinc-700 text-zinc-400" }
@@ -253,14 +249,14 @@ export function ClientAreaMarketSignalHistoryList({
 
                     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
                       <div className="w-full rounded-xl border border-white/5 bg-white/[0.04] p-2">
-                        <p className="text-xs text-zinc-500">Take Profit</p>
+                        <p className="text-xs text-zinc-500">{copy.takeProfitLabel}</p>
                         <p className="text-sm font-bold text-white">
                           {item.takingProfit || "-"}
                         </p>
                       </div>
 
                       <div className="w-full rounded-xl border border-white/5 bg-white/[0.04] p-2">
-                        <p className="text-xs text-zinc-500">Stop Loss</p>
+                        <p className="text-xs text-zinc-500">{copy.stopLossLabel}</p>
                         <p className="text-sm font-bold text-white">
                           {item.stopLoss || "-"}
                         </p>
@@ -268,7 +264,7 @@ export function ClientAreaMarketSignalHistoryList({
 
                       {item.source ? (
                         <div className="w-full rounded-xl border border-white/5 bg-white/[0.04] p-2">
-                          <p className="text-xs text-zinc-500">Sumber</p>
+                          <p className="text-xs text-zinc-500">{copy.sourceLabel}</p>
                           <p className="text-sm font-bold text-white">{item.source}</p>
                         </div>
                       ) : null}
@@ -278,7 +274,7 @@ export function ClientAreaMarketSignalHistoryList({
 
                 {item.timeframe ? (
                   <div className="flex flex-col items-start gap-1 border-t border-white/10 px-4 py-2.5 text-xs text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
-                    <span>Timeframe Analisis Signal</span>
+                    <span>{copy.timeframeLabel}</span>
                     <span className="font-semibold text-white">{item.timeframe}</span>
                   </div>
                 ) : null}

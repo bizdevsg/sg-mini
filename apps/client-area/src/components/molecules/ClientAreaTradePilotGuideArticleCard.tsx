@@ -27,7 +27,7 @@ export function ClientAreaTradePilotGuideArticleCard({
       onClick={onSelect}
       className={`group flex h-full min-w-0 flex-col text-left transition ${featured
         ? "rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4 hover:border-yellow-500/60"
-        : "rounded-xl border border-zinc-800 bg-[#101113]/50 p-4 hover:border-zinc-700 hover:bg-[#141517]/50"
+        : "rounded-xl border border-zinc-800 bg-zinc-950/50 p-4 hover:border-zinc-700 hover:bg-zinc-950/50"
         }`}
     >
       <div className="flex w-full items-start justify-between gap-3">

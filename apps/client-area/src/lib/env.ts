@@ -69,6 +69,41 @@ export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
 export const CLIENT_AREA_SESSION_SECRET =
   process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
 
+export type TradePilotDataSourceMode = "api" | "mock";
+
+const TRADE_PILOT_API_PATH = "/v1/trade-pilot";
+
+function resolveTradePilotApiRoot(): string {
+  // Kontrak v1: TRADE_PILOT_API_BASE_URL tanpa path; client menambahkan /v1/trade-pilot.
+  // TRADE_PILOT_API_URL lama (sudah memuat /v1/trade-pilot) tetap diterima.
+  const rawUrl =
+    process.env.TRADE_PILOT_API_BASE_URL?.trim() ||
+    process.env.TRADE_PILOT_API_URL?.trim() ||
+    "";
+  const baseUrl = rawUrl
+    .replace(/\/+$/, "")
+    .replace(new RegExp(`${TRADE_PILOT_API_PATH}$`), "");
+  return baseUrl ? `${baseUrl}${TRADE_PILOT_API_PATH}` : "";
+}
+
+/** URL lengkap sampai `/v1/trade-pilot` (server-only). */
+export const TRADE_PILOT_API_ROOT = resolveTradePilotApiRoot();
+export const TRADE_PILOT_API_KEY =
+  process.env.TRADE_PILOT_API_KEY?.trim() ?? "";
+/** Secret HMAC khusus userId TradePilot. Jangan dirotasi tanpa rencana migrasi. */
+export const TRADE_PILOT_USER_ID_SECRET =
+  process.env.TRADE_PILOT_USER_ID_SECRET?.trim() ?? "";
+/** File JSON pemetaan userId TradePilot -> nasabah (dipakai webhook price alert). */
+function normalizeTradePilotDataSource(value: string | undefined): TradePilotDataSourceMode {
+  const normalizedValue = value?.trim().toLowerCase();
+  // "live" diterima sebagai alias lama dari "api".
+  return normalizedValue === "api" || normalizedValue === "live" ? "api" : "mock";
+}
+
+export const TRADE_PILOT_DATA_SOURCE = normalizeTradePilotDataSource(
+  process.env.TRADE_PILOT_DATA_SOURCE,
+);
+
 export type SgbFlavor = "dev" | "uat" | "prod";
 const DEFAULT_SGB_FLAVOR: SgbFlavor = "uat";
 

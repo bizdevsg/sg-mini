@@ -22,7 +22,7 @@ export function ClientAreaTradePilotIndicatorCard({
   value,
 }: ClientAreaTradePilotIndicatorCardProps) {
   return (
-    <article className="rounded-2xl border border-zinc-700/70 bg-[#171924]/20 p-4">
+    <article className="rounded-2xl border border-zinc-700/70 bg-zinc-900/20 p-4">
       <div className="flex items-start justify-between gap-4">
         <h4 className="text-sm font-medium text-zinc-400 sm:text-base">{label}</h4>
         <strong className="shrink-0 text-sm font-black text-white sm:text-base">

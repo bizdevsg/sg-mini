@@ -19,6 +19,7 @@ type ClientAreaSignalTransactionModalProps = {
   googlePlayAlt: string;
   appStoreLink: string;
   appStoreAlt: string;
+  imageAlt: string;
   onClose: () => void;
 };
 
@@ -49,6 +50,7 @@ export function ClientAreaSignalTransactionModal({
   googlePlayAlt,
   appStoreLink,
   appStoreAlt,
+  imageAlt,
   onClose,
 }: ClientAreaSignalTransactionModalProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
@@ -139,7 +141,7 @@ export function ClientAreaSignalTransactionModal({
         <div className="my-5">
           <Image
             src="/assets/HP Solid-3.png"
-            alt="Solid Gold Berjangka App"
+            alt={imageAlt}
             width={200}
             height={100}
             className="mx-auto mb-2 h-auto w-75 max-w-[10px] object-contain"

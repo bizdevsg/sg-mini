@@ -297,20 +297,20 @@ export function formatMarketSignalUpdateTime(
 }
 
 const MARKET_SIGNAL_CATEGORY_ICON_BY_SLUG: Record<string, string> = {
-  gold: "/assets/icon-symbol/gold-icon.png",
-  silver: "/assets/icon-symbol/silver-icon.png",
-  oil: "/assets/icon-symbol/oil-icon.png",
-  dxy: "/assets/icon-symbol/dxy-icon.png",
-  audusd: "/assets/icon-symbol/audusd-icon.png",
-  eurusd: "/assets/icon-symbol/eurousd-icon.png",
-  eurousd: "/assets/icon-symbol/eurousd-icon.png",
-  gbpusd: "/assets/icon-symbol/gbpusd-icon.png",
-  usdcad: "/assets/icon-symbol/usdcad-icon.png",
-  usdchf: "/assets/icon-symbol/usdchf-icon.png",
-  usdjpy: "/assets/icon-symbol/usdjpy-icon.png",
-  usdidr: "/assets/icon-symbol/usdidr-icon.png",
-  nikkei: "/assets/icon-symbol/nikkei-icon.png",
-  hangseng: "/assets/icon-symbol/hangseng-icon.png",
+  gold: "/assets/icon/gold-icon.webp",
+  silver: "/assets/icon/silver-icon.webp",
+  oil: "/assets/icon/bco-icon.webp",
+  dxy: "/assets/icon/dxy-icon.webp",
+  audusd: "/assets/icon/aud-usd-icon.webp",
+  eurusd: "/assets/icon/eur-usd-icon.webp",
+  eurousd: "/assets/icon/eur-usd-icon.webp",
+  gbpusd: "/assets/icon/gbp-usd-icon.webp",
+  usdcad: "/assets/icon/usd-cad-icon.webp",
+  usdchf: "/assets/icon/usd-chf-icon.webp",
+  usdjpy: "/assets/icon/usd-jpy-icon.webp",
+  usdidr: "/assets/icon/usd-idr-icon.webp",
+  nikkei: "/assets/icon/jpk-icon.webp",
+  hangseng: "/assets/icon/hkk-icon.webp",
 };
 
 export function resolveMarketSignalCategoryIconSrc(categorySlug: string) {

@@ -17,7 +17,7 @@ export function ClientAreaTradePilotInstrumentPerformance({
   const winRate = completed > 0 ? Math.round((takeProfit / completed) * 100) : 0;
   const stopLossRate = completed > 0 ? Math.round((stopLoss / completed) * 100) : 0;
   return (
-    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-[#0b0c0e]/50">
+    <section className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50">
       <div className="border-b border-zinc-800 px-4 py-4 sm:px-5">
         <h2 className="text-sm font-bold text-white">
           {copy.instrumentPerformanceTitle}

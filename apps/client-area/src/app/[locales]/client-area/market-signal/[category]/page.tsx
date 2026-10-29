@@ -38,9 +38,12 @@ export async function generateMetadata({
     notFound();
   }
 
+  const copy = getMessages(locales).clientArea.marketSignalDetail;
+
   return buildPrivateMetadata({
-    title: `${item.categoryName} Signal | Market Insight`,
-    description: item.title || `${item.categoryName} trading signal`,
+    title: copy.metadataTitle.replace("{category}", item.categoryName),
+    description:
+      item.title || copy.metadataDescription.replace("{category}", item.categoryName),
     locale: locales,
     path: `/${locales}/client-area/market-signal/${item.categorySlug}`,
   });

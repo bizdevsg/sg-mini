@@ -84,7 +84,7 @@ export function ClientAreaMarketCard({
 
   return (
     <article
-      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border bg-linear-to-br from-zinc-900/75 via-zinc-950/75 to-black/75 backdrop-blur-lg p-5 shadow-[0_20px_55px_rgba(0,0,0,0.32)] transition sm:p-6 ${isTransactionFilterActive ? "border-yellow-400/60 ring-1 ring-yellow-400/20" : "border-white/15 hover:border-yellow-400/35"}`}
+      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border bg-linear-to-br from-zinc-900/50 via-zinc-950/50 to-black/50 backdrop-blur-sm p-5 shadow-[0_20px_55px_rgba(0,0,0,0.32)] transition sm:p-6 ${isTransactionFilterActive ? "border-yellow-400/60 ring-1 ring-yellow-400/20" : "border-white/15 hover:border-yellow-400/35"}`}
     >
       <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-black blur-3xl" />
 

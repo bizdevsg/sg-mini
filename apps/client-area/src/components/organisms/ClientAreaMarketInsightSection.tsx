@@ -7,7 +7,7 @@ import { ClientAreaMarketInsightCard } from "@/components/molecules/ClientAreaMa
 import { ClientAreaSectionHeader } from "@/components/molecules/ClientAreaSectionHeader";
 import type { DashboardCopy } from "@/components/organisms/client-area.types";
 import type { MarketSignalRecord } from "@/lib/market-signal";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaMarketInsightSectionProps = {
   copy: DashboardCopy;
@@ -23,6 +23,7 @@ export function ClientAreaMarketInsightSection({
   items,
   locale,
 }: ClientAreaMarketInsightSectionProps) {
+  const insightCopy = getMessages(locale).clientArea.marketSignalDetail;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -59,7 +60,7 @@ export function ClientAreaMarketInsightSection({
   return (
     <div>
       <ClientAreaSectionHeader
-        title="Market Insight"
+        title={insightCopy.insightTitle}
         actionHref={`/${locale}/client-area/market-signal`}
         actionLabel={copy.viewMoreLabel}
       />
@@ -67,7 +68,7 @@ export function ClientAreaMarketInsightSection({
       <div className="relative w-full">
         {/* Left Arrow */}
         <ClientAreaScrollArrowButton
-          ariaLabel="Scroll ke kiri"
+          ariaLabel={insightCopy.scrollLeftLabel}
           direction="left"
           disabled={!canScrollLeft}
           onClick={() => scrollByStep("left")}
@@ -97,7 +98,7 @@ export function ClientAreaMarketInsightSection({
 
         {/* Right Arrow */}
         <ClientAreaScrollArrowButton
-          ariaLabel="Scroll ke kanan"
+          ariaLabel={insightCopy.scrollRightLabel}
           direction="right"
           disabled={!canScrollRight}
           onClick={() => scrollByStep("right")}

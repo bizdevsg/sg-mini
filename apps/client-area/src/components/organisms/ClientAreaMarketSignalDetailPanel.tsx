@@ -254,9 +254,9 @@ export function ClientAreaMarketSignalDetailPanel({
       <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-amber-500/20 bg-amber-500/[0.04] p-5 sm:flex-row sm:p-8">
         <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
         <div className="space-y-1.5">
-          <p className="font-bold text-amber-500">Disclaimer</p>
+          <p className="font-bold text-amber-500">{detailCopy.disclaimerTitle}</p>
           <p className="text-sm text-zinc-400">
-            Informasi ini hanya sebagai referensi, bukan rekomendasi transaksi. Risiko dan keputusan trading sepenuhnya tanggung jawab nasabah.
+            {detailCopy.disclaimerBody}
           </p>
         </div>
       </div>
@@ -288,6 +288,7 @@ export function ClientAreaMarketSignalDetailPanel({
         googlePlayAlt={appPromoMessages.googlePlayAlt}
         appStoreLink={appStoreLink}
         appStoreAlt={appPromoMessages.appStoreAlt}
+        imageAlt={appPromoMessages.imageAlt}
         onClose={() => setIsTransactionModalOpen(false)}
       />
     </ClientAreaShell>

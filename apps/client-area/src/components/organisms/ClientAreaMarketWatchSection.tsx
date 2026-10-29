@@ -11,7 +11,7 @@ import {
 } from "@/components/organisms/client-area.shared";
 import type { DashboardCopy } from "@/components/organisms/client-area.types";
 import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
-import type { AppLocale } from "@/locales";
+import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaMarketWatchSectionProps = {
   copy: DashboardCopy;
@@ -79,6 +79,7 @@ export function ClientAreaMarketWatchSection({
   onSelectSymbol,
   selectedSymbol,
 }: ClientAreaMarketWatchSectionProps) {
+  const messages = getMessages(locale);
   const { quotes } = useLiveQuoteStream();
   const watchlistItems = getClientAreaFeaturedMarketPrices(quotes).map((item) => ({
     badge: resolveMarketBadge(item.code),
@@ -107,6 +108,8 @@ export function ClientAreaMarketWatchSection({
               icon={resolveMarketIcon(badge.label)}
               iconClass={resolveMarketIconClassName(badge.label)}
               isSelected={item.code === selectedSymbol}
+              liveTickLabel={messages.clientArea.livePriceTicker.tickLabel}
+              priceLabel={messages.liveQuoteTable.fields.price}
               onClick={
                 item.code && onSelectSymbol
                   ? () => onSelectSymbol(item.code as string)

@@ -131,15 +131,6 @@ section[data-active-tab="trade-pilot"] > .absolute.inset-0 {
   /* Remap existing Tailwind utilities to the approved TradePilot palette. */
   --color-black: var(--tp-canvas);
   --color-white: var(--tp-text);
-  --color-zinc-100: var(--tp-body);
-  --color-zinc-200: var(--tp-body);
-  --color-zinc-300: #cbd5e1;
-  --color-zinc-400: var(--tp-muted);
-  --color-zinc-500: var(--tp-meta);
-  --color-zinc-600: #71717a;
-  --color-zinc-700: var(--tp-line);
-  --color-zinc-800: var(--tp-border);
-  --color-zinc-900: var(--tp-panel);
   --color-yellow-400: var(--tp-gold);
   --color-yellow-500: var(--tp-gold);
   --color-amber-200: #ffd461;
@@ -179,85 +170,6 @@ section[data-active-tab="trade-pilot"] > .absolute.inset-0 {
   color: var(--tp-body);
   color-scheme: dark;
   accent-color: var(--tp-gold);
-}
-
-.trade-pilot-theme [class~="bg-[#0b0c0e]"] {
-  background-color: color-mix(in srgb, var(--tp-content) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#0b0c0e]/50"] {
-  background-color: color-mix(in srgb, var(--tp-content) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#101113]"],
-.trade-pilot-theme [class~="bg-[#151820]"],
-.trade-pilot-theme [class~="bg-[#151821]"],
-.trade-pilot-theme [class~="bg-[#171a23]"] {
-  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#101113]/10"] {
-  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#101113]/50"] {
-  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#141823]"],
-.trade-pilot-theme [class~="bg-[#18191c]"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#141517]/50"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#171924]/20"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#171924]/70"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#171924]/90"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#171924]/95"] {
-  background-color: color-mix(in srgb, var(--tp-panel-alt) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-[#1a1d29]"] {
-  background-color: color-mix(in srgb, var(--tp-control) 70%, transparent);
-}
-
-.trade-pilot-theme [class~="bg-zinc-500/10"] {
-  background-color: color-mix(in srgb, var(--tp-panel) 70%, transparent);
-}
-
-.trade-pilot-theme :is(
-  [class~="bg-[#0b0c0e]"],
-  [class~="bg-[#0b0c0e]/50"],
-  [class~="bg-[#101113]"],
-  [class~="bg-[#101113]/10"],
-  [class~="bg-[#101113]/50"],
-  [class~="bg-[#141517]/50"],
-  [class~="bg-[#141823]"],
-  [class~="bg-[#151820]"],
-  [class~="bg-[#151821]"],
-  [class~="bg-[#171924]/20"],
-  [class~="bg-[#171924]/70"],
-  [class~="bg-[#171924]/90"],
-  [class~="bg-[#171924]/95"],
-  [class~="bg-[#171a23]"],
-  [class~="bg-[#18191c]"],
-  [class~="bg-[#1a1d29]"],
-  [class~="bg-zinc-500/10"]
-) {
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
 }
 
 .trade-pilot-theme .trade-pilot-glass-panel {
@@ -388,16 +300,27 @@ button {
   }
 }
 
-@keyframes ticker-slide-left-in {
+@keyframes client-area-header-news-ticker {
   from {
-    opacity: 0;
-    transform: translate3d(24px, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(-50%, 0, 0);
   }
+}
+
+.client-area-header-news-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: client-area-header-news-ticker 40s linear infinite;
+}
+
+.client-area-header-news-group {
+  display: flex;
+  flex: none;
+  align-items: center;
 }
 
 @keyframes client-area-live-price-ticker {
@@ -424,6 +347,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .client-area-header-news-track,
   .client-area-live-price-track {
     animation: none;
   }

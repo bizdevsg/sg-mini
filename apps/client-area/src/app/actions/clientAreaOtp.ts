@@ -97,6 +97,9 @@ export async function submitSendOtp(
         await clearPendingSgbOtpSession();
         return { status: "error", message: otp.errorSessionExpired };
       }
+      if (error.newToken) {
+        await rotatePendingSgbOtpToken(error.newToken);
+      }
       return { status: "error", message: error.safeMessage };
     }
 
@@ -153,6 +156,8 @@ async function getOtpRequestId(
       (err instanceof SgbApiError && err.kind === "session_expired")
     ) {
       await clearPendingSgbOtpSession();
+    } else if (err instanceof SgbApiError && err.newToken) {
+      await rotatePendingSgbOtpToken(err.newToken);
     }
   }
   return null;
@@ -230,6 +235,9 @@ export async function submitVerifyOtp(
     if (error instanceof SgbApiError) {
       if (error.kind === "session_expired") {
         await clearPendingSgbOtpSession();
+      } else if (error.newToken) {
+        // Wrong code etc. must not strand the retry on a rotated-away token.
+        await rotatePendingSgbOtpToken(error.newToken);
       }
 
       return {
@@ -282,6 +290,10 @@ export async function submitVerifyOtp(
     ) {
       await clearPendingSgbOtpSession();
       return { status: "error", message: otp.errorSessionExpired };
+    }
+
+    if (error instanceof SgbApiError && error.newToken) {
+      finalToken = error.newToken;
     }
 
     console.error("[client-area-otp] list-account call failed", describeError(error));

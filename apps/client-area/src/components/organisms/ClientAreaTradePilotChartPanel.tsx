@@ -63,7 +63,7 @@ export function ClientAreaTradePilotChartPanel({
     <section
       id="trade-pilot-main-chart"
       ref={panelRef}
-      className="min-w-0 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-500/10 p-3 sm:rounded-3xl sm:p-5 2xl:p-6 fullscreen:overflow-y-auto fullscreen:rounded-none fullscreen:border-0"
+      className="min-w-0 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-3 sm:rounded-3xl sm:p-5 2xl:p-6 fullscreen:overflow-y-auto fullscreen:rounded-none fullscreen:border-0"
     >
       <ClientAreaTradePilotMarketHeader
         copy={copy}
@@ -95,9 +95,7 @@ export function ClientAreaTradePilotChartPanel({
         defaultInterval={timeframe}
         embedded
         chartHeightClassName={
-          isFullscreen
-            ? "h-[calc(100vh-15rem)] min-h-[340px]"
-            : undefined
+          isFullscreen ? "h-[calc(100vh-15rem)] min-h-[340px]" : undefined
         }
         hideSideToolbar={!isSideToolbarVisible}
         hideTopToolbar={!isIndicatorToolbarVisible}

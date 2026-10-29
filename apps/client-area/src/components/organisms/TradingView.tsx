@@ -18,6 +18,7 @@ export type TradingViewInterval =
     | "1"
     | "5"
     | "15"
+    | "30"
     | "60"
     | "240"
     | "D"

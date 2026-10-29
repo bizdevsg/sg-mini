@@ -42,7 +42,7 @@ export function ClientAreaTradePilotRecommendationUsage({
 
   return (
     <div className="mt-5 space-y-4" role="tabpanel">
-      <section className="rounded-2xl border border-zinc-700 bg-[#171924]/90 p-5">
+      <section className="rounded-2xl border border-zinc-700 bg-zinc-900/90 p-5">
         <ol className="space-y-4">
           {steps.map((step, index) => (
             <li className="flex gap-3" key={step.title}>

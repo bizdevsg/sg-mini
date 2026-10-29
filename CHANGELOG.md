@@ -1,6 +1,27 @@
 ## [Unreleased]
 
 ### Changed
+- Konfigurasi lokal Client Area kini memakai flavor API SGB UAT kembali, menggantikan target production selama pengembangan lokal.
+- Tombol analisis Trade Pilot kini mencantumkan biaya 1 token secara ringkas langsung pada label tombol dalam bahasa Indonesia dan Inggris.
+- Tombol kembali pada halaman akses Trade Pilot ditautkan ke Beranda Client Area sesuai locale aktif, dilengkapi state hover, dan copy bahasa Inggrisnya diperbaiki menjadi "Back to Home".
+- Chart level Trade Pilot berbasis Lightweight Charts v5 kini menampilkan logo atribusi TradingView bawaan beserta tautannya pada area chart.
+- Integrasi Trade Pilot diselaraskan dengan kontrak backend SGB-TP v1 per 27 Oktober 2026: autentikasi `Authorization: Bearer` + `X-TradePilot-User`, endpoint `/bootstrap`, `/histories`, `/performance/timeframes`, `/analyses/latest`, `/analyses/{id}/price-alert`, `/fundamental-news`, `/trading-plans`, dan `/instruments`; error kini membawa `requestId` dan `Retry-After`, serta `TRADE_PILOT_DATA_SOURCE=api` (alias lama `live` tetap diterima).
+- userId Trade Pilot kini dibentuk dari secret khusus `TRADE_PILOT_USER_ID_SECRET`, terpisah dari `CLIENT_AREA_SESSION_SECRET`; base URL backend dibaca dari `TRADE_PILOT_API_BASE_URL` dengan fallback ke `TRADE_PILOT_API_URL` lama.
+- Hasil analisis Trade Pilot kini selalu menampilkan `disclaimer` (ID/EN), onboarding saat bootstrap pertama (`isNewUser`), pesan kredit habis beserta tanggal reset, pesan rate limit dengan sisa detik, berita fundamental per instrumen dari backend, dan rencana trading yang disimpan ke backend saat tombol simpan ditekan.
+- Idempotency-Key analisis Trade Pilot dibuat sekali per klik di client dan dipakai ulang hanya saat retry payload yang sama setelah error sementara, sehingga kredit tidak terpotong dua kali.
+- Timeframe `30m` ditambahkan ke Trade Pilot (picker, chart level, validasi BFF, dan data performa), selaras dengan backend SGB-TP yang kini menerima `timeframe=30` dengan masa berlaku sinyal 2 jam.
+- Toggle Alert Harga Trade Pilot kini memakai `PUT/GET /analyses/{id}/price-alert` dengan status per level (`pending`/`triggered`/`cancelled`) dan disembunyikan bila analisis sudah tidak `still_valid`.
+- Audit i18n Client Area memindahkan sisa copy hardcode pada navigasi, account overview, market/chart, market insight dan signal, quick-action modal, cookie consent, pemilih bahasa, loading Trade Pilot, metadata, serta label aksesibilitas ke locale Indonesia dan Inggris; nama produk, simbol instrumen, dan singkatan teknis tetap diperlakukan sebagai data.
+- Seluruh copy pada panel transaksi Client Area kini mengikuti locale aktif, termasuk judul dan alt empty state, arah Buy/Sell, label detail posisi, serta label riwayat transaksi dalam bahasa Indonesia dan Inggris.
+- Panel transaksi Client Area kini disusun sebagai komponen atom, molecule, dan organism yang terpisah; ringkasannya menghitung total posisi, jumlah Buy/Sell, dan floating P/L dari akun aktif, sedangkan deskripsi panel tersedia dalam locale Indonesia dan Inggris.
+- Breaking news pada header Client Area kini tampil sebagai running text horizontal kontinu yang memuat seluruh berita, menggantikan pergantian satu berita setiap beberapa detik.
+- Integrasi Trade Pilot live kini meneruskan `X-Allowed-Modes` dan locale terverifikasi pada setiap request upstream, memvalidasi schema analisis/alert lengkap, mempertahankan idempotency key tanpa retry berbayar otomatis, serta membatasi request BFF per user.
+- Chart Trade Pilot mode live kini memakai hingga 300 candle dari endpoint backend, menampilkan granularitas candle, status data tertunda, dan garis Entry/Stop Loss/TP analisis; TradingView dipertahankan hanya sebagai tampilan mode mock.
+- Panel indikator dan price alert Trade Pilot kini dipoll dari endpoint live, termasuk status `active` serta level alert terakhir yang terpicu, sehingga nilai dan status statis tidak lagi ditampilkan sebagai data pasar aktual.
+- Trade Pilot Client Area kini dapat beralih antara sumber `mock` dan backend `live`; bootstrap kredit, analisis terakhir, riwayat, performa timeframe, hasil indikator, dan eksekusi analisis memakai kontrak API server-to-server serta tetap menyimpan URL/API key hanya di server.
+- Container Client Area kini meneruskan konfigurasi Trade Pilot live dari `.env` root dan memakai alamat `host.docker.internal` saat backend berjalan di port 5000 pada host, sehingga URL `localhost` tidak salah diarahkan ke container Client Area sendiri.
+- Label data mock Trade Pilot kini hanya tampil saat sumber data benar-benar `mock`, sedangkan indikator teknikal dan harga analisis memakai payload hasil analisis backend saat mode `live`.
+- Toggle Alert Harga Trade Pilot kini membaca, membuat, dan menonaktifkan alert backend untuk analisis live, dengan status proses dan pesan gagal bilingual.
 - Latar header Pasar & Transaksi Client Area kini memakai aset WebP baru agar gambar tetap tajam dengan format yang lebih efisien untuk pemuatan halaman.
 - Video TikTok pada beranda Client Area kini mengambil video aktif terbaru dari endpoint SG Admin `/api/v1/video-tiktok`, memvalidasi ID untuk membangun URL embed TikTok yang aman, dan tetap memakai video bawaan saat API gagal atau tidak mengembalikan data aktif.
 - Seluruh halaman dashboard Client Area kini memakai latar fintech emas bergambar globe yang sebelumnya hanya diterapkan pada TradePilot, menggantikan background `BCG.png` pada shell utama tanpa mengurangi overlay keterbacaan konten.
@@ -12,7 +33,11 @@
 - Galeri screenshot pada halaman Aplikasi Solid Gold kini tampil sebagai app showcase interaktif dengan preview besar yang terlihat utuh tanpa terpotong pada semua ukuran layar, memperlihatkan kelima layar sekaligus dalam susunan rapat dan bertingkat, serta menyediakan navigasi infinite-loop melalui panah/dot/keyboard dan gesture swipe.
 - Runtime Node.js untuk development dan seluruh stage image Docker Website/Client Area dipin ke Node.js 24.22.1 LTS melalui `engines`, `.nvmrc`, dan base image eksplisit agar build konsisten serta memakai security release 21 Oktober 2026 yang menutup kerentanan runtime termasuk remote code execution pada decoder Brotli.
 
+### Added
+- Route webhook `POST /api/internal/trade-pilot/alerts` untuk price alert dari backend (verifikasi `X-Api-Key` constant-time) beserta tabel pemetaan `tradePilotUserId -> nasabah` berbasis file JSON (`TRADE_PILOT_USER_MAP_FILE`, default `.data/`); pengiriman notifikasi masih stub log sampai kanal diputuskan.
+
 ### Removed
+- Route BFF Trade Pilot `/api/client-area/trade-pilot/state` dan `/alerts` yang mengikuti kontrak lama.
 - Pola ignore legacy `.composer.yml` dan `.DockerFile` dihapus karena konfigurasi deployment lokal kini sudah dicakup oleh aturan eksplisit untuk file Compose dan `Dockerfile`.
 - `Dockerfile`, `compose.yml`, dan file override Compose dikeluarkan dari tracking Git agar konfigurasi deployment khusus setiap server tetap lokal dan tidak lagi memicu konflik autostash saat menarik pembaruan repository.
 - Locale yang tidak memiliki consumer dibersihkan: copy `spread` lama di Website, locale hero dan panel dashboard usang di Client Area, serta duplikat locale halaman edukasi publik yang hanya digunakan Website. Locale aplikasi Solid di Client Area juga dirampingkan agar hanya menyimpan data platform/store yang dipakai untuk link download.
@@ -20,6 +45,10 @@
 - Menghapus 62 aset publik tanpa referensi dari Website dan Client Area (sekitar 86 MiB), termasuk banner lama, gambar legal lama, aset profil lama, tekstur, logo regulator duplikat, dan ikon yang tidak lagi dipakai, sehingga ukuran source dan artefak deployment lebih kecil.
 
 ### Fixed
+- Pemuatan MiniMicro chart di Beranda Client Area kini menunggu request awal account summary selesai, sehingga token hasil rotasi `csrf` sudah tersimpan sebelum dipakai iframe dan sesi tidak lagi berakhir dengan `401` akibat balapan kedua request saat dashboard dibuka.
+- Dropdown informasi sesi aktif Trade Pilot kini menaikkan stacking context saat dibuka, sehingga panel jam pasar tidak lagi tertutup kartu harga atau konten analisis di bawahnya.
+- Refresh sesi Client Area kini berjalan setiap empat menit dengan jadwal pertama dihitung sejak token sesi diterbitkan; timestamp koordinasinya juga diikat ke sesi login aktif, sehingga tab baru maupun sesi baru tidak menunda keep-alive dan risiko `401` akibat token kedaluwarsa berkurang.
+- Detail analisis Trade Pilot kini mempertahankan `status` dan `resolvedAt`, memeriksa kepemilikan mode di BFF, serta memperbarui status sinyal aktif secara berkala tanpa mengekspos identitas atau API key ke browser.
 - Next.js pada Website dan Client Area diperbarui dari `16.3.4` ke `16.4.3`, `eslint-config-next` diselaraskan ke versi yang sama, dan Sharp transitif diperbarui ke `0.35.5` untuk menutup kerentanan RCE serta DoS pada rilis keamanan Oktober 2026.
 - Format waktu Website dan Client Area diseragamkan: Live Quote selalu menampilkan jam 24-hour lengkap `HH:MM:SS`, sedangkan waktu publikasi Berita memakai `HH:MM` tanpa detik dengan pemisah titik dua pada locale Indonesia maupun Inggris.
 - Accordion Detail Margin Akun pada Account Overview kini benar-benar dapat dibuka dan ditutup di mobile; class layout tidak lagi memaksa panel tetap tampil saat state tertutup, sementara tampilan desktop tetap selalu terbuka.
@@ -30,6 +59,9 @@
 - Deskripsi ebook pada card dan modal Website kini mengubah HTML dari API menjadi teks bersih dengan pemisah paragraf, sehingga tag seperti `<p>`, `<span>`, dan `<br>` tidak lagi terlihat oleh pengguna.
 
 ### Added
+- BFF Trade Pilot dilengkapi route kredit, pembuatan analisis, detail analisis plural, performa, indikator, dan candle, melengkapi route state, history, dan alert yang sudah tersedia.
+- BFF Trade Pilot yang terlindungi session dan same-origin ditambahkan untuk state, detail analisis, riwayat berkursor, serta daftar/buat/hapus price alert; seluruh request backend memakai ID user samaran HMAC dan validasi respons runtime.
+- Konfigurasi server-only `TRADE_PILOT_API_URL`, `TRADE_PILOT_API_KEY`, dan `TRADE_PILOT_DATA_SOURCE` ditambahkan ke environment root, development Client Area, deployment Compose, serta template agar integrasi dapat diaktifkan tanpa mengekspos kredensial ke browser.
 - Video TikTok Solid Prime `7700863615682858247` kini tampil responsif tepat di bawah Account Summary pada beranda Client Area melalui Embed Player resmi, dimuat secara lazy, dan dilengkapi tautan untuk membuka video langsung di TikTok.
 - Tombol Semua Transaksi/All Transactions ditambahkan ke segmented control yang sama dengan Open Position dan Trade History pada panel transaksi Client Area untuk menghapus filter instrumen aktif dan kembali menampilkan seluruh data transaksi.
 - Popup disclaimer view-only kini muncul satu kali setiap sesi login baru di Client Area, termasuk setelah login ulang atau sesi sebelumnya berakhir, dengan copy Indonesia/Inggris dan tombol konfirmasi sebelum pengguna melanjutkan.

@@ -25,7 +25,7 @@ export function ClientAreaTradePilotIconButton({
       className={`rounded-xl border p-2.5 transition disabled:cursor-not-allowed disabled:opacity-50 ${
         active
           ? "border-yellow-500/60 bg-yellow-500/15 text-yellow-400"
-          : "border-zinc-800 bg-[#151820] text-zinc-400 hover:text-white"
+          : "border-zinc-800 bg-zinc-900/70 backdrop-blur-sm text-zinc-400 hover:text-white"
       }`}
     >
       {children}

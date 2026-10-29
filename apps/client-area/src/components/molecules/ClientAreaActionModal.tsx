@@ -20,6 +20,7 @@ function renderActionModalContent(
   copy: DashboardCopy,
   locale: AppLocale,
 ) {
+  const actionCopy = getMessages(locale).clientArea.quickActionModal;
   const productHref = resolveLocalizedHref(locale, "/produk/prime");
   const educationHref = resolveLocalizedHref(locale, "/education/cara-memulai");
   const contactHref = resolveLocalizedHref(locale, "/contact-us");
@@ -46,7 +47,7 @@ function renderActionModalContent(
           >
             <p className="font-bold text-yellow-500">Loco London Gold</p>
             <p className="mt-1 text-xs text-zinc-400">
-              Kontrak emas gulir harian dengan likuiditas tinggi dan update market cepat.
+              {actionCopy.goldDescription}
             </p>
           </Link>
           <Link
@@ -55,7 +56,7 @@ function renderActionModalContent(
           >
             <p className="font-bold text-amber-500">Crude Olein</p>
             <p className="mt-1 text-xs text-zinc-400">
-              Trading komoditas unggulan dengan struktur margin yang kompetitif.
+              {actionCopy.crudeOleinDescription}
             </p>
           </Link>
         </div>
@@ -83,15 +84,15 @@ function renderActionModalContent(
             href={educationHref}
             className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-3 text-sm text-zinc-200 transition hover:border-yellow-500/30"
           >
-            <p className="font-bold">1. Pengenalan Pasar Berjangka</p>
-            <p className="mt-1 text-xs text-zinc-500">Estimasi 12 menit baca</p>
+            <p className="font-bold">1. {actionCopy.futuresIntroTitle}</p>
+            <p className="mt-1 text-xs text-zinc-500">{actionCopy.futuresIntroReadingTime}</p>
           </Link>
           <Link
             href={educationHref}
             className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-3 text-sm text-zinc-200 transition hover:border-yellow-500/30"
           >
-            <p className="font-bold">2. Membaca Grafik Candlestick</p>
-            <p className="mt-1 text-xs text-zinc-500">Estimasi 18 menit baca</p>
+            <p className="font-bold">2. {actionCopy.candlestickTitle}</p>
+            <p className="mt-1 text-xs text-zinc-500">{actionCopy.candlestickReadingTime}</p>
           </Link>
         </div>
       </div>
@@ -174,11 +175,11 @@ function renderActionModalContent(
       <div className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-4 text-sm text-zinc-200">
         <p className="font-semibold">
           {actionId === "deposit"
-            ? "Gunakan rekening segregated account resmi untuk top-up dana."
-            : "Permintaan withdrawal diproses ke rekening bank yang sudah terdaftar."}
+            ? actionCopy.depositNotice
+            : actionCopy.withdrawalNotice}
         </p>
         <p className="mt-2 text-xs text-zinc-400">
-          Untuk proses aktual, lanjutkan melalui tim support atau halaman transaksi resmi.
+          {actionCopy.processNotice}
         </p>
       </div>
 
@@ -186,7 +187,7 @@ function renderActionModalContent(
         href={contactHref}
         className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 px-4 py-3 text-sm font-bold text-black transition hover:from-yellow-400 hover:to-amber-500"
       >
-        Hubungi support
+        {actionCopy.contactSupport}
       </Link>
     </div>
   );
