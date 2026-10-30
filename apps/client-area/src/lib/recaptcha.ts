@@ -59,14 +59,18 @@ export function isRecaptchaUnsupportedHostname(hostname: string) {
   return LOCAL_RECAPTCHA_HOSTS.has(hostname);
 }
 
-export function isRecaptchaEnabled(hostname?: string | null) {
+export function isRecaptchaRequired(hostname?: string | null) {
+  // SGB login environments must always fail closed. The runtime switch and
+  // local-host exception are only available while using the dev SGB flavor.
+  if (SGB_FLAVOR === "uat" || SGB_FLAVOR === "prod") {
+    return true;
+  }
+
   if (!CLIENT_AREA_RECAPTCHA_ENABLED) {
     return false;
   }
 
-  // Logging in against the SGB UAT server needs a real token even when the app
-  // itself runs in dev, so UAT behaves like ALLOW_LOCAL.
-  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL && SGB_FLAVOR !== "uat") {
+  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL) {
     if (APP_ENV !== "prod") {
       return false;
     }
@@ -81,9 +85,17 @@ export function isRecaptchaEnabled(hostname?: string | null) {
     }
   }
 
+  return true;
+}
+
+export function isRecaptchaConfigured() {
+  return Boolean(PUBLIC_RECAPTCHA_SITE_KEY);
+}
+
+export function isRecaptchaEnabled(hostname?: string | null) {
   // Only the site key is needed: the widget runs in the browser and SGB verifies
   // the token itself (it is forwarded as `token_captcha`), so no secret key here.
-  return Boolean(PUBLIC_RECAPTCHA_SITE_KEY);
+  return isRecaptchaRequired(hostname) && isRecaptchaConfigured();
 }
 
 export async function verifyRecaptchaToken(

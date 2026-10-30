@@ -171,6 +171,8 @@ export const idClientArea: AppMessages["clientArea"] = {
       "Email atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.",
     errorSessionConfiguration:
       "Login belum bisa diproses karena konfigurasi session server belum lengkap. Isi CLIENT_AREA_SESSION_SECRET terlebih dahulu.",
+    errorCaptchaConfiguration:
+      "Login tidak dapat diproses karena konfigurasi reCAPTCHA belum lengkap. Silakan hubungi support.",
     errorCaptchaRequired:
       "Verifikasi keamanan belum berhasil. Silakan coba lagi.",
     errorCaptchaFailed:

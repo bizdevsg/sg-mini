@@ -347,6 +347,7 @@ export type AppMessages = {
       errorRequired: string;
       errorInvalidCredentials: string;
       errorSessionConfiguration: string;
+      errorCaptchaConfiguration: string;
       errorCaptchaRequired: string;
       errorCaptchaFailed: string;
       errorNetwork: string;

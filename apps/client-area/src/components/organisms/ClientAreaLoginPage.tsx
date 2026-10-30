@@ -22,6 +22,7 @@ import { getClientAreaAppStoreLinks } from "@/lib/solidGoldAppLinks";
 
 type ClientAreaLoginPageProps = {
   isRecaptchaEnabled: boolean;
+  isRecaptchaRequired: boolean;
   locale: AppLocale;
   recaptchaSiteKey: string;
   sessionExpiredMessage?: string;
@@ -34,6 +35,7 @@ const INITIAL_STATE: ClientAreaLoginState = {
 
 export function ClientAreaLoginPage({
   isRecaptchaEnabled,
+  isRecaptchaRequired,
   locale,
   recaptchaSiteKey,
   sessionExpiredMessage,
@@ -48,6 +50,13 @@ export function ClientAreaLoginPage({
   const [captchaResetKey, setCaptchaResetKey] = useState(0);
   const loginAction = useCallback(
     async (prevState: ClientAreaLoginState, formData: FormData) => {
+      if (isRecaptchaRequired && !isRecaptchaEnabled) {
+        return {
+          status: "error" as const,
+          message: login.errorCaptchaConfiguration,
+        };
+      }
+
       if (!isRecaptchaEnabled) {
         return submitClientAreaLogin(prevState, formData);
       }
@@ -68,7 +77,12 @@ export function ClientAreaLoginPage({
         setCaptchaResetKey((key) => key + 1);
       }
     },
-    [isRecaptchaEnabled, login.errorCaptchaRequired],
+    [
+      isRecaptchaEnabled,
+      isRecaptchaRequired,
+      login.errorCaptchaConfiguration,
+      login.errorCaptchaRequired,
+    ],
   );
   const [state, formAction, pending] = useActionState(
     loginAction,

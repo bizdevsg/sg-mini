@@ -6,7 +6,11 @@ import { ClientAreaLoginPage } from "@/components/organisms/ClientAreaLoginPage"
 import { redirectAuthenticatedClientAreaUser } from "@/lib/client-area-auth";
 import { PUBLIC_RECAPTCHA_SITE_KEY } from "@/lib/env";
 import { buildPrivateMetadata } from "@/lib/metadata";
-import { isRecaptchaEnabled, resolveRequestHostname } from "@/lib/recaptcha";
+import {
+  isRecaptchaEnabled,
+  isRecaptchaRequired,
+  resolveRequestHostname,
+} from "@/lib/recaptcha";
 import {
   getMessages,
   isSupportedLocale,
@@ -61,6 +65,7 @@ export default async function ClientAreaLoginRoute({
   return (
     <ClientAreaLoginPage
       isRecaptchaEnabled={isRecaptchaEnabled(requestHostname)}
+      isRecaptchaRequired={isRecaptchaRequired(requestHostname)}
       locale={locales}
       recaptchaSiteKey={PUBLIC_RECAPTCHA_SITE_KEY}
       sessionExpiredMessage={

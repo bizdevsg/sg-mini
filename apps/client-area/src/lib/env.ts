@@ -431,7 +431,8 @@ export const RECAPTCHA_SECRET_KEY =
   process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
 
 // Saklar runtime (bukan NEXT_PUBLIC, tidak ditanam saat build) khusus Client Area.
-// Isi "false" untuk mematikan reCAPTCHA di login Client Area tanpa menyentuh website.
+// Hanya dapat mematikan reCAPTCHA saat memakai SGB_FLAVOR=dev; UAT dan production
+// selalu mewajibkan reCAPTCHA agar login tidak pernah gagal secara terbuka.
 export const CLIENT_AREA_RECAPTCHA_ENABLED =
   process.env.CLIENT_AREA_RECAPTCHA_ENABLED?.trim().toLowerCase() !== "false";
 

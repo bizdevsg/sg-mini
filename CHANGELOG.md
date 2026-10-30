@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+### Fixed
+- Login Client Area dengan flavor SGB UAT atau production kini selalu mewajibkan reCAPTCHA dan gagal tertutup ketika site key atau token tidak tersedia, sehingga request autentikasi tidak lagi dapat diteruskan dengan `token_captcha` kosong.
+
 ### Changed
 - Seluruh asset raster lokal Website dan Client Area dikonversi dari PNG/AVIF ke WebP berkualitas tinggi, seluruh referensi source diperbarui, dan file sumber lama dihapus untuk mengurangi ukuran transfer serta penyimpanan asset.
 - Tombol Live Chart pada halaman Pasar & Transaksi Client Area kini membuka chart MiniMicro dalam modal responsif tanpa meninggalkan halaman atau kehilangan konteks transaksi; route detail `/client-area/market/[symbol]` beserta komponen dan fetcher khususnya dihapus karena tidak lagi digunakan.
