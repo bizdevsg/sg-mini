@@ -19,19 +19,19 @@ type PlayStoreImage = {
 
 const IMAGE_PLAY_STORE: PlayStoreImage[] = [
   {
-    assets: "/assets/play-store/Artboard-1.png",
+    assets: "/assets/play-store/Artboard-1.webp",
   },
   {
-    assets: "/assets/play-store/Artboard-2.png",
+    assets: "/assets/play-store/Artboard-2.webp",
   },
   {
-    assets: "/assets/play-store/Artboard-3.png",
+    assets: "/assets/play-store/Artboard-3.webp",
   },
   {
-    assets: "/assets/play-store/Artboard-4.png",
+    assets: "/assets/play-store/Artboard-4.webp",
   },
   {
-    assets: "/assets/play-store/Artboard-5.png",
+    assets: "/assets/play-store/Artboard-5.webp",
   },
 ];
 

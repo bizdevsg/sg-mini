@@ -23,7 +23,7 @@ export function AboutBusinessLegalityCard({
     <article className="group relative overflow-hidden h-full rounded-xl border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.05),rgba(0,0,0,0.28))] text-left transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_0_40px_rgba(205,161,58,0.08)]">
       <div className="relative min-h-52 overflow-hidden">
         <Image
-          src="/assets/d42edfb4-35a2-4653-9246-dcfdf972d127.avif"
+          src="/assets/d42edfb4-35a2-4653-9246-dcfdf972d127.webp"
           alt={title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"

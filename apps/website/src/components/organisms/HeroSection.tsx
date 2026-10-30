@@ -14,7 +14,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   const HERO_FLOATING_CARDS = [
     {
-      src: "/assets/Floating Info Card 1.png",
+      src: "/assets/Floating Info Card 1.webp",
       alt: "Floating trading insight card",
       width: 648,
       height: 264,
@@ -24,7 +24,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
     },
     {
-      src: "/assets/Floating Info Card 2.png",
+      src: "/assets/Floating Info Card 2.webp",
       alt: "Floating market card",
       width: 648,
       height: 264,
@@ -34,7 +34,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       animationClass: "animate-[hero-float-alt_7.2s_ease-in-out_infinite]",
     },
     {
-      src: "/assets/Floating Info Card 3.png",
+      src: "/assets/Floating Info Card 3.webp",
       alt: "Floating growth card",
       width: 684,
       height: 264,
@@ -44,7 +44,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
       animationClass: "animate-[hero-float_7.6s_ease-in-out_infinite]",
     },
     {
-      src: "/assets/Floating Info Card 4.png",
+      src: "/assets/Floating Info Card 4.webp",
       alt: "Floating metrics card",
       width: 768,
       height: 264,
@@ -59,7 +59,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
     <div
       className="relative overflow-hidden bg-black bg-top bg-no-repeat"
       style={{
-        backgroundImage: "url('/assets/BCG.png')",
+        backgroundImage: "url('/assets/BCG.webp')",
       }}
     >
       <SectionContainer className="relative mb-10 sm:mb-0 sm:pt-16 sm:mt-10 md:mt-0 md:pt-20">
@@ -72,7 +72,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
           >
             <div className="pointer-events-none absolute top-15 left-[57%] h-full w-[min(1320px,210vw)] -translate-x-1/2">
               <img
-                src="/assets/Banner Utama-HP-NO CUT.png"
+                src="/assets/Banner Utama-HP-NO CUT.webp"
                 alt={messages.hero.visualAlt}
                 className="h-full w-full object-contain"
               />
@@ -87,9 +87,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
                     alt={card.alt}
                     width={card.width}
                     height={card.height}
-                    priority={card.src === "/assets/Floating Info Card 3.png"}
+                    priority={card.src === "/assets/Floating Info Card 3.webp"}
                     sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, 176px"
-                    unoptimized={card.src === "/assets/Floating Info Card 3.png"}
+                    unoptimized={card.src === "/assets/Floating Info Card 3.webp"}
                     className="h-auto w-full object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.32)]"
                   />
                 </div>
@@ -154,7 +154,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
             delay={160}
           >
             <img
-              src="/assets/Banner SGB-FIX.png"
+              src="/assets/Banner SGB-FIX.webp"
               alt=""
               className="w-[900px] max-w-none object-contain xl:w-[1060px]"
             />
@@ -169,9 +169,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
                   alt={card.alt}
                   width={card.width}
                   height={card.height}
-                  priority={card.src === "/assets/Floating Info Card 3.png"}
+                  priority={card.src === "/assets/Floating Info Card 3.webp"}
                   sizes="256px"
-                  unoptimized={card.src === "/assets/Floating Info Card 3.png"}
+                  unoptimized={card.src === "/assets/Floating Info Card 3.webp"}
                   className="h-auto w-40 object-contain drop-shadow-[0_24px_48px_rgba(0,0,0,0.32)]"
                 />
               </div>

@@ -32,7 +32,7 @@ export function ClientAreaAccountHeader({
           <div className="relative shrink-0">
             <div className="h-20 w-20 overflow-hidden rounded-2xl border-2 border-yellow-500/40 ring-4 ring-yellow-500/10 sm:h-24 sm:w-24">
               {/* <Image
-                src="/assets/client-area-profile-avatar.png"
+                src="/assets/client-area-profile-avatar.webp"
                 alt={`${accountPage.viewOnly.photoLabel} ${profile.displayName}`}
                 width={96}
                 height={96}

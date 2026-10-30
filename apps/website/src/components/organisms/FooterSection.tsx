@@ -34,7 +34,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
             <div className="space-y-4">
               <Link href={`/${locale}`} className="flex items-center gap-3">
                 <Image
-                  src="/assets/logo-utama.png"
+                  src="/assets/logo-utama.webp"
                   alt={messages.footer.logoAlt}
                   preload
                   sizes="220px"
@@ -117,7 +117,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
                 <StoreBadgeLink
                   href={googlePlayLink}
                   alt={googlePlayAlt}
-                  imageSrc="/assets/GOOGLE-PLAY.png"
+                  imageSrc="/assets/GOOGLE-PLAY.webp"
                   sizes="300"
                   imageClassName="h-auto w-full object-contain"
                   className="inline-flex w-full max-w-50"
@@ -126,7 +126,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
                 <StoreBadgeLink
                   href={appStoreLink}
                   alt={appStoreAlt}
-                  imageSrc="/assets/APPS-STORE.png"
+                  imageSrc="/assets/APPS-STORE.webp"
                   sizes="300"
                   imageClassName="h-auto w-full object-contain"
                   className="inline-flex w-full max-w-50"
@@ -137,7 +137,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
               <div className="mt-5 flex items-center gap-4">
                 <div className="flex items-center justify-center rounded-xl bg-white p-3">
                   <Image
-                    src="/assets/logo-komdigi.png"
+                    src="/assets/logo-komdigi.webp"
                     alt={messages.footer.komdigiAlt}
                     width={100}
                     height={29}
@@ -147,7 +147,7 @@ export function FooterSection({ locale }: FooterSectionProps) {
 
                 <div className="flex items-center justify-center rounded-xl bg-white p-3">
                   <Image
-                    src="/assets/logo TSI.png"
+                    src="/assets/logo TSI.webp"
                     alt={messages.footer.tsiAlt}
                     width={100}
                     height={29}

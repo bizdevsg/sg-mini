@@ -297,6 +297,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       description:
         "Analyze real-time price movements with interactive charts and current market data.",
       quotaLabel: "Analysis Quota",
+      quotaResetLabel: "Resets {date}",
       sessionLabel: "Active Session",
       sessionClosedValue: "Market Closed",
       sessionClosedLabel: "No active session",
@@ -317,6 +318,9 @@ export const enClientArea: AppMessages["clientArea"] = {
       analysisErrorMessage:
         "The analysis could not be created. Please try again.",
       accessDeniedMessage: "This account mode is not available to you.",
+      historyViewBanner: "Showing an analysis from history · {date}",
+      historyViewBackLabel: "Close",
+      historyViewErrorMessage: "The analysis from history could not be loaded. Please try again.",
       analysisPausedMessage:
         "TradePilot analysis is temporarily paused by an administrator. Please try again later.",
       analysisPausedSelectionMessage:
@@ -659,16 +663,19 @@ export const enClientArea: AppMessages["clientArea"] = {
         weightedAverageEntryLabel: "Weighted average entry",
         usedMarginLabel: "Margin used",
         marginAndStopLossLabel: "Day margin + loss at SL",
+        additionalPositionTitle: "Position {position} · Additional layer",
+        layerTriggerDescription: "Only filled if price reaches {price} before Stop Loss is hit",
+        cumulativeFundsAtStopLabel: "Total funds needed at SL (cumulative)",
         initialPositionTitle: "Position 1 · Initial entry",
         entryFromPlanDescription: "Entry from the {account} Plan",
         positionMarginLabel: "Position margin",
         positionRiskAtStopLabel: "Position risk at SL",
         fundsNeededAtFinalStopLabel: "Funds required at final SL",
         remainingFundsLabel: "Remaining funds",
-        ifEntryFilledTitle: "When the entry is filled",
+        ifEntryFilledTitle: "When all entries are filled",
         firstEntryOnlyDescription: "Initial entry only · {lot} lot",
         filledEntrySummary:
-          "1 position · {lot} lot · {margin} margin · {risk} loss at SL ({riskPercentage}% of free funds), TP2 gross profit {profit} ({profitPercentage}% of free funds).",
+          "{positions} position(s) · {lot} lot · {margin} margin · {risk} loss at SL ({riskPercentage}% of free funds), TP2 gross profit {profit} ({profitPercentage}% of free funds).",
         whyNotAllLossLimitTitle: "Why isn't the entire loss limit used?",
         marginAndRiskExplanationLabel: "Margin and risk-limit explanation",
         whyNotAllLossLimitDescription:
@@ -781,6 +788,22 @@ export const enClientArea: AppMessages["clientArea"] = {
         filterTitle: "Filter analysis status",
         allStatusLabel: "All statuses",
         reanalyzeLabel: "Analyze Again",
+        viewDetailLabel: "View Details",
+        analyzedAtLabel: "Analyzed",
+        priceAtAnalysisLabel: "Price at analysis",
+        entryLabel: "Entry",
+        stopLossLabel: "SL",
+        takeProfitOneLabel: "TP1",
+        takeProfitTwoLabel: "TP2",
+        resolvedAtLabel: "Outcome reached",
+        validUntilLabel: "Valid until",
+        neutralNoLevelsLabel: "Neutral analysis (wait): no entry levels suggested.",
+        entryHitLabel: "{side} entry triggered",
+        directionLabels: {
+          bullish: "Bullish",
+          bearish: "Bearish",
+          neutral: "Wait",
+        },
         emptyTitle: "No history found",
         emptyDescription:
           "Try changing your search term or selected status filter.",

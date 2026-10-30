@@ -23,7 +23,7 @@ export function ClientAreaTransactionEmptyState({
         {/* Illustration */}
         <div className="relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/[0.03] sm:size-50">
           <Image
-            src="/assets/sorry-image.png"
+            src="/assets/sorry-image.webp"
             alt={imageAlt}
             width={360}
             height={360}

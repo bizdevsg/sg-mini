@@ -1,12 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { LiveQuotePayload, LiveQuoteTick } from "@/lib/live-quotes";
 import { getLiveQuoteDisplay, getSortedSymbols } from "@/lib/live-quotes";
-import {
-  getClientAreaTradingViewPresetById as getTradingViewPresetById,
-  getClientAreaTradingViewPresetByMarketCode as getTradingViewPresetByMarketCode,
-  getClientAreaTradingViewPresets as getTradingViewPresets,
-  type ClientAreaTradingViewPreset as SharedClientAreaTradingViewPreset,
-} from "@/lib/client-area-tradingview.shared";
 import type { NewsFeedArticle } from "@/lib/news.shared";
 import {
   House,
@@ -108,41 +102,6 @@ export function resolveClientAreaTabHref(locale: AppLocale, tab: TabId) {
   }
 
   return resolveLocalizedHref(locale, `/client-area/${tab}`);
-}
-
-export type { ClientAreaTradingViewPreset } from "@/lib/client-area-tradingview.shared";
-
-export function getClientAreaTradingViewPresets(
-  presets?: SharedClientAreaTradingViewPreset[],
-) {
-  return getTradingViewPresets(presets);
-}
-
-export function getClientAreaTradingViewPresetById(
-  presetId: string,
-  presets?: SharedClientAreaTradingViewPreset[],
-) {
-  return getTradingViewPresetById(presetId, presets);
-}
-
-export function getClientAreaTradingViewPresetByMarketCode(
-  marketCode: string,
-  presets?: SharedClientAreaTradingViewPreset[],
-) {
-  return getTradingViewPresetByMarketCode(marketCode, presets);
-}
-
-export function resolveClientAreaMarketChartHref(
-  locale: AppLocale,
-  marketCode: string,
-) {
-  const preset = getClientAreaTradingViewPresetByMarketCode(marketCode);
-
-  if (!preset) {
-    return resolveLocalizedHref(locale, "/client-area/market");
-  }
-
-  return resolveLocalizedHref(locale, `/client-area/market/${preset.id}`);
 }
 
 export function formatUsd(value: number) {
@@ -484,7 +443,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
       ],
       articles: [
         {
-          imageUrl: "/assets/img-card-2.png",
+          imageUrl: "/assets/img-card-2.webp",
           category: "COMMODITIES",
           title:
             "Minyak berjangka mengakhiri sesi dan bulan lebih tinggi, tetapi turun di kuartal ini",
@@ -493,7 +452,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
           timeAgo: "2 menit lalu",
         },
         {
-          imageUrl: "/assets/img-card-3.png",
+          imageUrl: "/assets/img-card-3.webp",
           category: "GOLD",
           title:
             "Harga emas menahan level support di tengah spekulasi suku bunga Federal Reserve",
@@ -1064,7 +1023,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
     ],
     articles: [
       {
-        imageUrl: "/assets/img-card-2.png",
+        imageUrl: "/assets/img-card-2.webp",
         category: "COMMODITIES",
         title:
           "Crude futures ended the session and month higher, but the quarter still closed softer",
@@ -1073,7 +1032,7 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
         timeAgo: "2 mins ago",
       },
       {
-        imageUrl: "/assets/img-card-3.png",
+        imageUrl: "/assets/img-card-3.webp",
         category: "GOLD",
         title:
           "Gold prices continue holding support amid fresh Federal Reserve rate-cut speculation",

@@ -11,7 +11,7 @@ import { getMessages, type AppLocale } from "@/locales";
 import { LogoMark } from "@/components/atoms/LogoMark";
 import { HeaderActions } from "@/components/molecules/HeaderActions";
 
-import logoMark from "../../../public/assets/logo-utama.png";
+import logoMark from "../../../public/assets/logo-utama.webp";
 
 type NavbarProps = {
   isClientAreaEnabled: boolean;

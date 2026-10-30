@@ -8,7 +8,7 @@ import {
 } from "@/locales";
 
 const BRAND_NAME = "Solid Gold Berjangka";
-const DEFAULT_OG_IMAGE_PATH = "/assets/BANNER-UTAMA-SOLID.png";
+const DEFAULT_OG_IMAGE_PATH = "/assets/BANNER-UTAMA-SOLID.webp";
 
 export const SITE_METADATA_BASE = new URL(PUBLIC_SITE_URL);
 export const DEFAULT_SITE_TITLE =

@@ -80,28 +80,6 @@ export function MiniChart({ className = "", locale, symbol = "XUL10" }: MiniChar
     <section
       className={`overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/70 ${className}`}
     >
-      <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-6">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500/80">
-            MiniMicro
-          </p>
-          <h2 className="text-lg font-bold text-white">
-            {copy.liveChartTitle.replace("{symbol}", symbol)}
-          </h2>
-        </div>
-        <button
-          type="button"
-          onClick={refresh}
-          disabled={state.status === "loading"}
-          className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-yellow-500/30 px-4 text-sm font-semibold text-yellow-400 transition hover:bg-yellow-500/10 disabled:cursor-wait disabled:opacity-50"
-        >
-          <RefreshCw
-            className={`h-4 w-4 ${state.status === "loading" ? "animate-spin" : ""}`}
-          />
-          {copy.refreshLabel}
-        </button>
-      </div>
-
       {state.status === "loading" || state.symbol !== symbol ? (
         <div className="h-[28rem] animate-pulse bg-gradient-to-br from-zinc-900 via-zinc-800/70 to-zinc-950 sm:h-[34rem] lg:h-[40rem]" />
       ) : state.status === "error" ? (

@@ -85,7 +85,7 @@ function buildProfileFromSession(
     // list is missing, per the rule for fields we can't map.
     accountId: primaryAccount ?? "—",
     accountIds,
-    avatarSrc: "/assets/client-area-profile-avatar.png",
+    avatarSrc: "/assets/client-area-profile-avatar.webp",
     // The real name only arrives with getcustomerfullinfo; until then show the
     // account number rather than a name guessed from the email.
     displayName: primaryAccount ?? deriveDisplayNameFromEmail(session.email),

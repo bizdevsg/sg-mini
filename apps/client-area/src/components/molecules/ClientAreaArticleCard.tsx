@@ -12,7 +12,7 @@ export function ClientAreaArticleCard({
   article,
   href,
 }: ClientAreaArticleCardProps) {
-  const imageUrl = article.imageUrl ?? "/assets/img-card.png";
+  const imageUrl = article.imageUrl ?? "/assets/img-card.webp";
   const imageAlt = article.title;
 
   const content = (

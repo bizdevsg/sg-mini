@@ -140,7 +140,7 @@ export function ClientAreaSignalTransactionModal({
 
         <div className="my-5">
           <Image
-            src="/assets/HP Solid-3.png"
+            src="/assets/HP Solid-3.webp"
             alt={imageAlt}
             width={200}
             height={100}
@@ -163,7 +163,7 @@ export function ClientAreaSignalTransactionModal({
           <StoreBadgeLink
             href={googlePlayLink}
             alt={googlePlayAlt}
-            imageSrc="/assets/gp-button.png"
+            imageSrc="/assets/gp-button.webp"
             sizes="(max-width: 640px) 160px, 180px"
             imageClassName="h-auto w-full object-contain"
             className="inline-flex"
@@ -172,7 +172,7 @@ export function ClientAreaSignalTransactionModal({
           <StoreBadgeLink
             href={appStoreLink}
             alt={appStoreAlt}
-            imageSrc="/assets/as-button.png"
+            imageSrc="/assets/as-button.webp"
             sizes="(max-width: 640px) 160px, 180px"
             imageClassName="h-auto w-full object-contain"
             className="inline-flex"

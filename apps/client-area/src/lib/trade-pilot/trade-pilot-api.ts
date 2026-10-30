@@ -275,6 +275,15 @@ const historySchema = z.object({
   resolvedAt: z.string().nullable(),
   status: statusSchema,
   timeframeLabel: z.string(),
+  // Ringkasan kartu riwayat; opsional untuk backend lama.
+  activeSide: z.enum(["buy", "sell"]).nullable().optional().catch(null),
+  buyLevels: levelsSchema.optional().catch(undefined),
+  direction: z.enum(["bullish", "bearish", "neutral"]).optional().catch(undefined),
+  instrumentId: z.string().optional().catch(undefined),
+  priceAtAnalysis: z.string().optional().catch(undefined),
+  sellLevels: levelsSchema.optional().catch(undefined),
+  timeframe: z.string().optional().catch(undefined),
+  validUntil: z.string().optional().catch(undefined),
 });
 const performanceSchema = z.object({
   completion: z.number().nullable(),

@@ -32,7 +32,7 @@ export function PageHeroBanner({
   eyebrow,
   title,
   description,
-  backgroundImageUrl = "/assets/BCG.png",
+  backgroundImageUrl = "/assets/BCG.webp",
   breadcrumbs,
   className = "py-20 md:py-24",
   breadcrumbClassName = "mb-6",

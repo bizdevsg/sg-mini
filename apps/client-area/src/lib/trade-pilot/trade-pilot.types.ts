@@ -124,6 +124,15 @@ export type TradePilotHistoryItem = {
   source: TradePilotDataSource;
   status: TradePilotHistoryStatus;
   timeframeLabel: string;
+  /** Ringkasan untuk kartu riwayat (tidak tersedia pada data mock/backend lama). */
+  activeSide?: "buy" | "sell" | null;
+  buyLevels?: ClientAreaTradePilotScenarioLevels;
+  direction?: "bullish" | "bearish" | "neutral";
+  instrumentId?: string;
+  priceAtAnalysis?: string;
+  sellLevels?: ClientAreaTradePilotScenarioLevels;
+  timeframe?: string;
+  validUntil?: string;
 };
 
 /** Kill switch analisis dari konsol admin TradePilot (GET /bootstrap). */

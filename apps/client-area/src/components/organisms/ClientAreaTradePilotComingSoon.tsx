@@ -14,7 +14,7 @@ export function ClientAreaTradePilotComingSoon({
       <div className="w-full min-w-0 rounded-3xl border border-amber-500/30 bg-yellow-500/5 p-5 text-center backdrop-blur-xs min-[380px]:p-6 sm:p-10">
         <div className="mx-auto h-fit w-fit rounded-lg bg-yellow-500/10 p-1">
           <Image
-            src="/assets/logo-tp.png"
+            src="/assets/logo-tp.webp"
             alt={title}
             height={75}
             width={75}

@@ -110,7 +110,7 @@ export function ClientAreaLoginPage({
     <div
       className="flex min-h-0 flex-1 overflow-hidden bg-black bg-top bg-no-repeat"
       style={{
-        backgroundImage: "url('/assets/BCG.png')",
+        backgroundImage: "url('/assets/BCG.webp')",
       }}
     >
       <SectionContainer className="relative flex w-full max-w-8xl flex-1 items-center overflow-visible py-6 sm:py-8 lg:!pl-8 lg:!pr-12 xl:py-10 xl:!pl-6 xl:!pr-20 2xl:!pl-8 2xl:!pr-24">

@@ -8,7 +8,6 @@ import {
   formatQuoteTime,
   getDirectionClassName,
 } from "@/components/molecules/live-quote.shared";
-import { resolveClientAreaMarketChartHref } from "@/components/organisms/client-area.shared";
 import type { MarketPrice } from "@/components/organisms/client-area.types";
 import type { AppLocale, AppMessages } from "@/locales";
 
@@ -18,6 +17,7 @@ type ClientAreaMarketCardProps = {
   isTransactionFilterActive: boolean;
   liveChartLabel: string;
   locale: AppLocale;
+  onOpenLiveChart: (marketCode: string) => void;
   onViewTransactions: (marketCode: string) => void;
   viewTransactionsLabel: string;
 };
@@ -28,6 +28,7 @@ export function ClientAreaMarketCard({
   isTransactionFilterActive,
   liveChartLabel,
   locale,
+  onOpenLiveChart,
   onViewTransactions,
   viewTransactionsLabel,
 }: ClientAreaMarketCardProps) {
@@ -106,9 +107,9 @@ export function ClientAreaMarketCard({
       />
 
       <ClientAreaMarketActions
-        chartHref={resolveClientAreaMarketChartHref(locale, marketCode)}
         isTransactionFilterActive={isTransactionFilterActive}
         liveChartLabel={liveChartLabel}
+        onOpenLiveChart={() => onOpenLiveChart(marketCode)}
         onViewTransactions={() => onViewTransactions(marketCode)}
         viewTransactionsLabel={viewTransactionsLabel}
       />

@@ -110,7 +110,7 @@ export function ClientAreaTradePilotTradingPlanSection({
       const nextPlan = (await response.json()) as TradePilotPositionPlan;
       if (requestId !== requestRef.current) return;
       if (!nextPlan.valid && nextPlan.decision.posture === "not_recommended" && !nextPlan.buy && !nextPlan.sell &&
-          nextPlan.sideEvaluations.buy.status === "unavailable" && nextPlan.sideEvaluations.sell.status === "unavailable") {
+        nextPlan.sideEvaluations.buy.status === "unavailable" && nextPlan.sideEvaluations.sell.status === "unavailable") {
         // Analisis sudah selesai/kedaluwarsa: perlu analisis ulang.
         setPlanState({ status: "error", message: copy.planAnalysisExpiredMessage });
         return;
@@ -143,7 +143,7 @@ export function ClientAreaTradePilotTradingPlanSection({
   }
 
   return (
-    <section className="rounded-3xl border border-zinc-800 bg-zinc-900/20 backdrop-blur-md p-5 sm:p-7">
+    <section className="rounded-3xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-md p-5 sm:p-7">
       <div className="flex items-center gap-2">
         <div className="p-3 bg-yellow-500/20 rounded-lg">
           <Image src={"/assets/carbon_content-navigator-sync-warning.webp"} alt="" width={300} height={300} className="w-7 h-7" />
@@ -282,13 +282,12 @@ export function ClientAreaTradePilotTradingPlanSection({
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs text-zinc-400 sm:text-sm">{copy.planPostureLabel}:</span>
             <span
-              className={`rounded-full px-3 py-1 text-xs font-bold ${
-                plan.decision.posture === "scaling_allowed"
-                  ? "bg-emerald-500/15 text-emerald-400"
-                  : plan.decision.posture === "entry_only"
-                    ? "bg-amber-500/15 text-amber-400"
-                    : "bg-rose-500/15 text-rose-400"
-              }`}
+              className={`rounded-full px-3 py-1 text-xs font-bold ${plan.decision.posture === "scaling_allowed"
+                ? "bg-emerald-500/15 text-emerald-400"
+                : plan.decision.posture === "entry_only"
+                  ? "bg-amber-500/15 text-amber-400"
+                  : "bg-rose-500/15 text-rose-400"
+                }`}
             >
               {copy.planPostureLabels[plan.decision.posture]}
             </span>

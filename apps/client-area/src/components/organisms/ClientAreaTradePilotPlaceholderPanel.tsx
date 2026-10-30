@@ -3,10 +3,14 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
   CalendarClock,
   ChevronLeft,
   ChevronRight,
   Clock3,
+  Eye,
   Filter,
   RefreshCcw,
   Search,
@@ -42,7 +46,7 @@ type ClientAreaTradePilotPlaceholderPanelProps = {
 
 type HistoryStatusFilter = "all" | TradePilotHistoryStatus;
 
-const HISTORY_PAGE_SIZE = 5;
+const HISTORY_PAGE_SIZE = 8;
 const HISTORY_STATUSES: TradePilotHistoryStatus[] = [
   "still_valid",
   "expired",
@@ -108,6 +112,43 @@ function formatHistoryDate(value: string, locale: string) {
       timeZone: "Asia/Jakarta",
     }).format(date),
   };
+}
+
+function analysisLink(base: string, params: Record<string, string | undefined>) {
+  const query = new URLSearchParams(
+    Object.entries(params).filter((entry): entry is [string, string] => Boolean(entry[1])),
+  ).toString();
+  return query ? `${base}?${query}` : base;
+}
+
+const DIRECTION_TONES = {
+  bullish: "text-emerald-300",
+  bearish: "text-rose-300",
+  neutral: "text-amber-300",
+} as const;
+
+function HistoryLevel({
+  label,
+  tone = "default",
+  value,
+}: {
+  label: string;
+  tone?: "default" | "danger" | "success";
+  value: string;
+}) {
+  return (
+    <div className="min-w-0 rounded-lg border border-zinc-800 bg-zinc-900/60 px-2.5 py-2">
+      <dt className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{label}</dt>
+      <dd
+        className={`mt-0.5 truncate text-xs font-semibold tabular-nums ${
+          tone === "danger" ? "text-rose-300" : tone === "success" ? "text-emerald-300" : "text-white"
+        }`}
+        title={value}
+      >
+        {value}
+      </dd>
+    </div>
+  );
 }
 
 export function ClientAreaTradePilotPlaceholderPanel({
@@ -437,6 +478,24 @@ export function ClientAreaTradePilotPlaceholderPanel({
             <div className="grid gap-3 md:grid-cols-2">
               {visibleHistories.map((item) => {
                 const timestamp = formatHistoryDate(item.createdAt, dateLocale);
+                const resolved = item.resolvedAt ? formatHistoryDate(item.resolvedAt, dateLocale) : null;
+                const validUntil =
+                  item.status === "still_valid" && item.validUntil
+                    ? formatHistoryDate(item.validUntil, dateLocale)
+                    : null;
+                // Level yang relevan: sisi yang entry-nya sudah tersentuh, atau sisi searah analisis.
+                const side =
+                  item.activeSide ??
+                  (item.direction === "bullish" ? "buy" : item.direction === "bearish" ? "sell" : null);
+                const levels = side === "buy" ? item.buyLevels : side === "sell" ? item.sellLevels : undefined;
+                const DirectionIcon =
+                  item.direction === "bullish" ? ArrowUpRight : item.direction === "bearish" ? ArrowDownRight : ArrowRight;
+                const detailHref =
+                  item.source === "api" ? analysisLink(analysisHref, { analysisId: item.id }) : null;
+                const reanalyzeHref = analysisLink(analysisHref, {
+                  instrument: item.instrumentId,
+                  timeframe: item.timeframe,
+                });
 
                 return (
                   <article
@@ -447,7 +506,13 @@ export function ClientAreaTradePilotPlaceholderPanel({
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <h2 className="text-base font-bold text-white">
-                            {item.instrumentLabel}
+                            {detailHref ? (
+                              <Link href={detailHref} className="hover:text-amber-300">
+                                {item.instrumentLabel}
+                              </Link>
+                            ) : (
+                              item.instrumentLabel
+                            )}
                           </h2>
                           <span className="rounded-md bg-zinc-800 px-2 py-1 text-[11px] font-semibold text-zinc-300">
                             {item.timeframeLabel}
@@ -455,37 +520,91 @@ export function ClientAreaTradePilotPlaceholderPanel({
                           <span className="rounded-md border border-zinc-700 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                             {item.mode}
                           </span>
+                          {item.direction ? (
+                            <span className={`inline-flex items-center gap-0.5 text-xs font-semibold ${DIRECTION_TONES[item.direction]}`}>
+                              <DirectionIcon className="size-3.5" aria-hidden="true" />
+                              {performanceCopy.history.directionLabels[item.direction]}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
-                      <Link
-                        href={analysisHref}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-xs font-semibold text-amber-300 transition-colors hover:border-amber-300 hover:bg-amber-400/15"
-                      >
-                        <RefreshCcw className="size-3.5" aria-hidden="true" />
-                        {performanceCopy.history.reanalyzeLabel}
-                      </Link>
+                      <div className="flex flex-wrap gap-2">
+                        {detailHref ? (
+                          <Link
+                            href={detailHref}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 px-2.5 py-1.5 text-xs font-semibold text-zinc-200 transition-colors hover:border-zinc-500 hover:text-white"
+                          >
+                            <Eye className="size-3.5" aria-hidden="true" />
+                            {performanceCopy.history.viewDetailLabel}
+                          </Link>
+                        ) : null}
+                        <Link
+                          href={reanalyzeHref}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-xs font-semibold text-amber-300 transition-colors hover:border-amber-300 hover:bg-amber-400/15"
+                        >
+                          <RefreshCcw className="size-3.5" aria-hidden="true" />
+                          {performanceCopy.history.reanalyzeLabel}
+                        </Link>
+                      </div>
                     </div>
 
-                    <div className="mt-5">
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
                       <span
                         className={`inline-flex rounded-lg border px-2.5 py-1.5 text-xs font-semibold ${HISTORY_STATUS_TONES[item.status]}`}
                       >
                         {historyStatusLabel(item.status, performanceCopy)}
                       </span>
+                      {item.activeSide ? (
+                        <span className="text-xs text-zinc-400">
+                          {interpolate(performanceCopy.history.entryHitLabel, {
+                            side: item.activeSide === "buy" ? "Buy" : "Sell",
+                          })}
+                        </span>
+                      ) : null}
                     </div>
 
-                    <div className="mt-auto flex items-end justify-between gap-3 pt-5">
-                      <div className="flex items-start gap-2 text-xs text-zinc-400">
-                        <CalendarClock
-                          className="mt-0.5 size-3.5 shrink-0 text-zinc-500"
-                          aria-hidden="true"
-                        />
+                    {levels ? (
+                      <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        <HistoryLevel label={`${performanceCopy.history.entryLabel}${side ? ` ${side === "buy" ? "Buy" : "Sell"}` : ""}`} value={levels.entry} />
+                        <HistoryLevel label={performanceCopy.history.stopLossLabel} tone="danger" value={levels.stopLoss} />
+                        <HistoryLevel label={performanceCopy.history.takeProfitOneLabel} tone="success" value={levels.takeProfitOne} />
+                        <HistoryLevel label={performanceCopy.history.takeProfitTwoLabel} tone="success" value={levels.takeProfitTwo} />
+                      </dl>
+                    ) : item.direction === "neutral" ? (
+                      <p className="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/5 px-3 py-2 text-xs text-amber-200">
+                        {performanceCopy.history.neutralNoLevelsLabel}
+                      </p>
+                    ) : null}
+
+                    <div className="mt-auto grid gap-2 pt-4 text-xs text-zinc-400 sm:grid-cols-2">
+                      <div className="flex items-start gap-2">
+                        <CalendarClock className="mt-0.5 size-3.5 shrink-0 text-zinc-500" aria-hidden="true" />
                         <span>
-                          <span className="block">{timestamp.date}</span>
-                          <span className="mt-0.5 block text-zinc-500">{timestamp.time} WIB</span>
+                          <span className="block text-zinc-500">{performanceCopy.history.analyzedAtLabel}</span>
+                          <span className="block text-zinc-300">
+                            {timestamp.date} · {timestamp.time} WIB
+                          </span>
+                          {item.priceAtAnalysis ? (
+                            <span className="block text-zinc-500">
+                              {performanceCopy.history.priceAtAnalysisLabel}:{" "}
+                              <span className="tabular-nums text-zinc-300">{item.priceAtAnalysis}</span>
+                            </span>
+                          ) : null}
                         </span>
                       </div>
-                      <span className="h-px w-12 bg-gradient-to-r from-transparent to-amber-400/60 transition-all group-hover:w-20" />
+                      {resolved || validUntil ? (
+                        <div className="flex items-start gap-2 sm:justify-end sm:text-right">
+                          <Clock3 className="mt-0.5 size-3.5 shrink-0 text-zinc-500 sm:order-2" aria-hidden="true" />
+                          <span>
+                            <span className="block text-zinc-500">
+                              {resolved ? performanceCopy.history.resolvedAtLabel : performanceCopy.history.validUntilLabel}
+                            </span>
+                            <span className="block text-zinc-300">
+                              {(resolved ?? validUntil)!.date} · {(resolved ?? validUntil)!.time} WIB
+                            </span>
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
                   </article>
                 );

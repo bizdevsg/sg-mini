@@ -84,7 +84,6 @@ export function ClientAreaTradePilotPlanDetails({
   const marginRequired = sidePlan?.marginRequired ?? 0;
   const firstProfit = sidePlan?.profitToTakeProfit1 ?? null;
   const secondProfit = sidePlan?.profitToTakeProfit2 ?? null;
-  const remainingFunds = sidePlan?.remainingFundsAtStop ?? tradingCapital - (sidePlan?.totalFundsAtStop ?? 0);
   const entryLabel = sidePlan ? String(sidePlan.entry) : levels.entry;
   const title = isBuy ? copy.buyScenarioLabel : copy.sellScenarioLabel;
   const riskStyleLabel =
@@ -379,12 +378,7 @@ export function ClientAreaTradePilotPlanDetails({
                       : copy.regularAccountLabel
                 }
                 copy={copy}
-                entry={entryLabel}
-                lot={formatLot(firstLayer?.lot ?? sidePlan?.totalLots ?? 0)}
-                margin={firstLayer?.dayMarginForLot ?? marginRequired}
-                maximumProfit={firstLayer?.profitToTakeProfit2 ?? secondProfit ?? 0}
-                remainingFunds={firstLayer?.remainingFundsAtStop ?? remainingFunds}
-                riskBudget={firstLayer?.riskToStopForLot ?? riskAtStop}
+                sidePlan={sidePlan}
                 tradingCapital={tradingCapital}
               />
             </div>

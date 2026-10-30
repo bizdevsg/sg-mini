@@ -18,6 +18,7 @@ import { ClientAreaTradePilotTradingPlanSection } from "@/components/organisms/C
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
 import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
 import { getTradePilotPauseReason } from "@/lib/trade-pilot/trade-pilot-availability";
+import { formatTradePilotDateTime } from "@/lib/trade-pilot/trade-pilot-format";
 import {
   CLIENT_AREA_TRADE_PILOT_INSTRUMENTS,
   CLIENT_AREA_TRADE_PILOT_TIMEFRAMES,
@@ -42,6 +43,10 @@ type ClientAreaTradePilotPanelProps = {
   livePriceLabel: string;
   locale: AppLocale;
   bootstrap: TradePilotBootstrap;
+  /** Dari URL halaman Riwayat: buka analisis tertentu / preset instrumen & timeframe. */
+  initialAnalysisId?: string;
+  initialInstrumentId?: string;
+  initialTimeframe?: string;
   mockDataLabel: string;
   newsLabel: string;
 };
@@ -53,6 +58,9 @@ export function ClientAreaTradePilotPanel({
   livePriceLabel,
   locale,
   bootstrap,
+  initialAnalysisId,
+  initialInstrumentId,
+  initialTimeframe,
   mockDataLabel,
   newsLabel,
 }: ClientAreaTradePilotPanelProps) {
@@ -60,7 +68,9 @@ export function ClientAreaTradePilotPanel({
   const { quotes } = useLiveQuoteStream();
   const [isAnalyzing, startAnalysisTransition] = useTransition();
   const [credits, setCredits] = useState(bootstrap.credits);
-  const [latestAnalyses, setLatestAnalyses] = useState(bootstrap.latestAnalyses);
+  // Halaman dibuka kosong (tanpa analisis terakhir); hasil muncul setelah nasabah
+  // menjalankan analisis atau membuka analisis dari halaman Riwayat.
+  const [latestAnalyses, setLatestAnalyses] = useState<TradePilotBootstrap["latestAnalyses"]>({});
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   // Lokasi tampilan error: tombol Analisis (picker) atau baris Ganti Timeframe.
   const [errorOrigin, setErrorOrigin] = useState<"picker" | "timeframe">("picker");
@@ -73,12 +83,66 @@ export function ClientAreaTradePilotPanel({
   const [technicalIndicatorsAnalysisId, setTechnicalIndicatorsAnalysisId] =
     useState<string | null>(null);
   const [selectedInstrumentId, setSelectedInstrumentId] =
-    useState<ClientAreaTradePilotInstrument["id"]>("gold");
+    useState<ClientAreaTradePilotInstrument["id"]>(() =>
+      CLIENT_AREA_TRADE_PILOT_INSTRUMENTS.some(({ id }) => id === initialInstrumentId)
+        ? (initialInstrumentId as ClientAreaTradePilotInstrument["id"])
+        : "gold",
+    );
   const [timeframe, setTimeframe] =
-    useState<ClientAreaTradePilotTimeframe>("60");
+    useState<ClientAreaTradePilotTimeframe>(() =>
+      CLIENT_AREA_TRADE_PILOT_TIMEFRAMES.some(({ value }) => value === initialTimeframe)
+        ? (initialTimeframe as ClientAreaTradePilotTimeframe)
+        : "60",
+    );
   const mode: TradePilotMode = bootstrap.access.availableModes.includes(accountMode)
     ? accountMode
     : "real";
+  // Analisis yang dibuka dari halaman Riwayat (?analysisId=...).
+  const [historyView, setHistoryView] = useState<{ analyzedAt: string } | null>(null);
+  const [historyViewError, setHistoryViewError] = useState(false);
+  const resultAnchorRef = useRef<HTMLDivElement>(null);
+  // Naik setiap analisis selesai; efek di bawah menggulir ke hasil setelah render.
+  const [resultScrollRequest, setResultScrollRequest] = useState(0);
+
+  useEffect(() => {
+    if (resultScrollRequest === 0) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    resultAnchorRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }, [resultScrollRequest]);
+
+  useEffect(() => {
+    const analysisId = initialAnalysisId;
+    if (!analysisId || !/^[a-zA-Z0-9_-]{3,100}$/.test(analysisId)) return;
+    const controller = new AbortController();
+    fetch(`/api/client-area/trade-pilot/analyses/${encodeURIComponent(analysisId)}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("history_analysis_failed");
+        return response.json() as Promise<TradePilotAnalysisResult>;
+      })
+      .then((historyAnalysis) => {
+        setLatestAnalyses((value) => ({ ...value, [historyAnalysis.mode]: historyAnalysis }));
+        setSelectedInstrumentId(historyAnalysis.instrumentId as ClientAreaTradePilotInstrument["id"]);
+        setTimeframe(historyAnalysis.timeframe as ClientAreaTradePilotTimeframe);
+        setHistoryView({ analyzedAt: historyAnalysis.analyzedAt });
+        requestAnimationFrame(() =>
+          resultAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        );
+      })
+      .catch((error: unknown) => {
+        if ((error as { name?: string })?.name !== "AbortError") setHistoryViewError(true);
+      });
+    return () => controller.abort();
+  }, [initialAnalysisId]);
+
+  function closeHistoryView() {
+    setHistoryView(null);
+    setHistoryViewError(false);
+    setLatestAnalyses({});
+    window.history.replaceState(null, "", window.location.pathname);
+  }
 
   useEffect(() => {
     if (accountMode !== mode) setAccountMode(mode);
@@ -212,6 +276,8 @@ export function ClientAreaTradePilotPanel({
     }
 
     if (result.status === "success") {
+      setHistoryView(null);
+      setResultScrollRequest((count) => count + 1);
       setCredits((current) => ({ ...current, [mode]: result.credit }));
       setLatestAnalyses((current) => ({ ...current, [mode]: result.analysis }));
       return;
@@ -267,6 +333,7 @@ export function ClientAreaTradePilotPanel({
       <ClientAreaTradePilotPageHeader
         copy={copy}
         credit={credits[mode]}
+        locale={locale}
         mockDataLabel={mockDataLabel}
       />
 
@@ -316,6 +383,11 @@ export function ClientAreaTradePilotPanel({
             <p role="alert" className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
               {analysisError}
             </p>
+          ) : (credits[mode]?.remaining ?? 1) < 1 && credits[mode]?.resetsAt ? (
+            <p role="status" className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
+              {copy.insufficientCreditMessage}{" "}
+              {copy.creditResetsMessage.replace("{date}", formatTradePilotDateTime(credits[mode]!.resetsAt, locale))}
+            </p>
           ) : pauseMessage ? (
             <p role="status" className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
               {pauseMessage}
@@ -333,6 +405,31 @@ export function ClientAreaTradePilotPanel({
           timeframe={timeframe}
         />
       </div>
+
+      <div ref={resultAnchorRef} className="scroll-mt-24" />
+      {historyView || historyViewError ? (
+        <div
+          role="status"
+          className={`flex flex-col gap-3 rounded-2xl border p-4 text-sm sm:flex-row sm:items-center sm:justify-between ${
+            historyViewError
+              ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
+              : "border-sky-500/30 bg-sky-500/10 text-sky-200"
+          }`}
+        >
+          <span>
+            {historyViewError
+              ? copy.historyViewErrorMessage
+              : copy.historyViewBanner.replace("{date}", formatTradePilotDateTime(historyView!.analyzedAt, locale))}
+          </span>
+          <button
+            type="button"
+            onClick={closeHistoryView}
+            className="shrink-0 rounded-xl border border-current/40 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/5"
+          >
+            {copy.historyViewBackLabel}
+          </button>
+        </div>
+      ) : null}
 
       {analysis ? (
         <ClientAreaTradePilotAnalysisResultSection

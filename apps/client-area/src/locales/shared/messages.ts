@@ -425,6 +425,7 @@ export type AppMessages = {
         title: string;
         description: string;
         quotaLabel: string;
+        quotaResetLabel: string;
         sessionLabel: string;
         sessionClosedValue: string;
         sessionClosedLabel: string;
@@ -443,6 +444,9 @@ export type AppMessages = {
         analysisErrorMessage: string;
         accessDeniedMessage: string;
         analysisUnavailableMessage: string;
+        historyViewBanner: string;
+        historyViewBackLabel: string;
+        historyViewErrorMessage: string;
         analysisPausedMessage: string;
         analysisPausedSelectionMessage: string;
         rateLimitedMessage: string;
@@ -719,6 +723,9 @@ export type AppMessages = {
           weightedAverageEntryLabel: string;
           usedMarginLabel: string;
           marginAndStopLossLabel: string;
+          additionalPositionTitle: string;
+          layerTriggerDescription: string;
+          cumulativeFundsAtStopLabel: string;
           initialPositionTitle: string;
           entryFromPlanDescription: string;
           positionMarginLabel: string;
@@ -785,6 +792,18 @@ export type AppMessages = {
           filterTitle: string;
           allStatusLabel: string;
           reanalyzeLabel: string;
+          viewDetailLabel: string;
+          analyzedAtLabel: string;
+          priceAtAnalysisLabel: string;
+          entryLabel: string;
+          stopLossLabel: string;
+          takeProfitOneLabel: string;
+          takeProfitTwoLabel: string;
+          resolvedAtLabel: string;
+          validUntilLabel: string;
+          neutralNoLevelsLabel: string;
+          entryHitLabel: string;
+          directionLabels: Record<"bullish" | "bearish" | "neutral", string>;
           emptyTitle: string;
           emptyDescription: string;
           pageLabel: string;

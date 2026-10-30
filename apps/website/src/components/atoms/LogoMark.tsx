@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { getMessages, type AppLocale } from "@/locales";
-import mobileLogoMark from "../../../public/assets/Logo SG-WEB111.png";
-import logoMark from "../../../public/assets/logo-utama.png";
+import mobileLogoMark from "../../../public/assets/Logo SG-WEB111.webp";
+import logoMark from "../../../public/assets/logo-utama.webp";
 
 type LogoMarkProps = {
   locale: AppLocale;

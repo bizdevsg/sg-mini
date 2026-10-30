@@ -67,13 +67,13 @@ export function HeaderActions({
     {
       value: "id",
       href: resolveLocaleSwitcherHref("id", pathname),
-      iconSrc: "/assets/icon-id.png",
+      iconSrc: "/assets/icon-id.webp",
       alt: messages.cookieConsent.languageNames.id,
     },
     {
       value: "en",
       href: resolveLocaleSwitcherHref("en", pathname),
-      iconSrc: "/assets/icon-us.png",
+      iconSrc: "/assets/icon-us.webp",
       alt: messages.cookieConsent.languageNames.en,
     },
   ];
@@ -108,7 +108,7 @@ export function HeaderActions({
         <Image
           src={
             clientAreaProfile?.avatarSrc ??
-            "/assets/client-area-profile-avatar.png"
+            "/assets/client-area-profile-avatar.webp"
           }
           alt={clientAreaProfile?.displayName ?? messages.clientArea.pageTitle}
           width={40}

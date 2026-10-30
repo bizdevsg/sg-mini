@@ -117,7 +117,7 @@ export function ClientAreaFundTransferUnavailableModal({
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <div className="relative mt-2 w-full max-w-[360px] sm:max-w-[430px]">
             <Image
-              src="/assets/sorry-image.png"
+              src="/assets/sorry-image.webp"
               alt={title}
               width={320}
               height={392}
@@ -141,7 +141,7 @@ export function ClientAreaFundTransferUnavailableModal({
             <StoreBadgeLink
               href={googlePlayLink}
               alt={appPromoMessages.googlePlayAlt}
-              imageSrc="/assets/gp-button.png"
+              imageSrc="/assets/gp-button.webp"
               sizes="(max-width: 640px) 180px, 210px"
               imageClassName="h-auto w-full max-w-[130px] object-contain sm:max-w-[150px]"
               className="inline-flex"
@@ -150,7 +150,7 @@ export function ClientAreaFundTransferUnavailableModal({
             <StoreBadgeLink
               href={appStoreLink}
               alt={appPromoMessages.appStoreAlt}
-              imageSrc="/assets/as-button.png"
+              imageSrc="/assets/as-button.webp"
               sizes="(max-width: 640px) 180px, 210px"
               imageClassName="h-auto w-full max-w-[80px] object-contain sm:max-w-[100px]"
               className="inline-flex"

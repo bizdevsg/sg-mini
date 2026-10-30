@@ -8,13 +8,13 @@ type ClientAreaTradePilotMarketContextSectionProps = {
 
 const MARKET_CONTEXT_STYLES = {
   bearish: {
-    backgroundImage: "url(/assets/bearishBG.png)",
+    backgroundImage: "url(/assets/bearishBG.webp)",
     borderClass: "border-red-600/90",
     badgeClass: "bg-red-800 text-white",
     titleClass: "text-red-500",
   },
   bullish: {
-    backgroundImage: "url(/assets/bullishBG.png)",
+    backgroundImage: "url(/assets/bullishBG.webp)",
     borderClass: "border-emerald-500/90",
     badgeClass: "bg-emerald-700 text-white",
     titleClass: "text-emerald-400",

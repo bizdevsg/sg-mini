@@ -1,6 +1,8 @@
 ## [Unreleased]
 
 ### Changed
+- Seluruh asset raster lokal Website dan Client Area dikonversi dari PNG/AVIF ke WebP berkualitas tinggi, seluruh referensi source diperbarui, dan file sumber lama dihapus untuk mengurangi ukuran transfer serta penyimpanan asset.
+- Tombol Live Chart pada halaman Pasar & Transaksi Client Area kini membuka chart MiniMicro dalam modal responsif tanpa meninggalkan halaman atau kehilangan konteks transaksi; route detail `/client-area/market/[symbol]` beserta komponen dan fetcher khususnya dihapus karena tidak lagi digunakan.
 - Konfigurasi lokal Client Area kini memakai flavor API SGB UAT kembali, menggantikan target production selama pengembangan lokal.
 - Tombol analisis Trade Pilot kini mencantumkan biaya 1 token secara ringkas langsung pada label tombol dalam bahasa Indonesia dan Inggris.
 - Tombol kembali pada halaman akses Trade Pilot ditautkan ke Beranda Client Area sesuai locale aktif, dilengkapi state hover, dan copy bahasa Inggrisnya diperbaiki menjadi "Back to Home".

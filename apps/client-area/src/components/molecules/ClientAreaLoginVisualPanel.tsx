@@ -2,28 +2,28 @@ import Image from "next/image";
 
 const heroFloatingCards = [
   {
-    src: "/assets/Floating Info Card 1.png",
+    src: "/assets/Floating Info Card 1.webp",
     width: 648,
     height: 264,
     desktopClassName: "left-[88%] top-[30%] w-[10%]",
     animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
   },
   {
-    src: "/assets/Floating Info Card 2.png",
+    src: "/assets/Floating Info Card 2.webp",
     width: 648,
     height: 264,
     desktopClassName: "left-[87%] top-[55%] w-[10%]",
     animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
   },
   {
-    src: "/assets/Floating Info Card 3.png",
+    src: "/assets/Floating Info Card 3.webp",
     width: 684,
     height: 264,
     desktopClassName: "left-[65%] top-[40%] w-[10%]",
     animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
   },
   {
-    src: "/assets/Floating Info Card 4.png",
+    src: "/assets/Floating Info Card 4.webp",
     width: 768,
     height: 264,
     desktopClassName: "left-[63%] top-[65%] w-[10%]",
@@ -41,7 +41,7 @@ export function ClientAreaLoginVisualPanel() {
         {/* MAIN VISUAL */}
         <div className="absolute inset-0">
           <Image
-            src="/assets/BANNER-UTAMA-SOLID.png"
+            src="/assets/BANNER-UTAMA-SOLID.webp"
             alt=""
             fill
             priority

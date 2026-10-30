@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description: DEFAULT_SITE_DESCRIPTION,
     images: [
       {
-        url: "/assets/BANNER-UTAMA-SOLID.png",
+        url: "/assets/BANNER-UTAMA-SOLID.webp",
         alt: "Solid Gold Berjangka",
       },
     ],
@@ -44,12 +44,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: DEFAULT_SITE_TITLE,
     description: DEFAULT_SITE_DESCRIPTION,
-    images: ["/assets/BANNER-UTAMA-SOLID.png"],
+    images: ["/assets/BANNER-UTAMA-SOLID.webp"],
   },
   icons: {
-    icon: "/assets/Logo SG-WEB111.png",
-    shortcut: "/assets/Logo SG-WEB111.png",
-    apple: "/assets/Logo SG-WEB111.png",
+    icon: "/assets/Logo SG-WEB111.webp",
+    shortcut: "/assets/Logo SG-WEB111.webp",
+    apple: "/assets/Logo SG-WEB111.webp",
   },
 };
 

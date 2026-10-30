@@ -27,7 +27,7 @@ export function AboutCompanyProfileSection({
     <div
       className="relative bg-cover bg-top bg-no-repeat backdrop-blur-2xl sm:pt-10"
       style={{
-        backgroundImage: "url('/assets/BCG.png')",
+        backgroundImage: "url('/assets/BCG.webp')",
       }}
     >
       <SectionContainer className="relative z-10 py-10 sm:py-16 mt-5">
@@ -38,7 +38,7 @@ export function AboutCompanyProfileSection({
           >
             <div className="relative flex h-full items-center justify-center">
               <Image
-                src="/assets/Logo SG-WEB111.png"
+                src="/assets/Logo SG-WEB111.webp"
                 alt={companyProfile.logoAlt}
                 width={180}
                 height={180}

@@ -23,7 +23,7 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
         <div
           className="relative overflow-hidden rounded-4xl border-2 border-yellow-500/50 bg-black bg-cover bg-center"
           style={{
-            backgroundImage: "url('/assets/bg-tengah.png')",
+            backgroundImage: "url('/assets/bg-tengah.webp')",
           }}
         >
           <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
@@ -41,7 +41,7 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
               <div className="mt-5 flex flex-wrap justify-center gap-4 md:justify-start">
                 <a href={googlePlayLink} target="_blank" rel="noreferrer">
                   <Image
-                    src="/assets/gp-button.png"
+                    src="/assets/gp-button.webp"
                     alt={messages.googlePlayAlt}
                     width={5514}
                     height={1612}
@@ -52,7 +52,7 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
 
                 <a href={appStoreLink} target="_blank" rel="noreferrer">
                   <Image
-                    src="/assets/as-button.png"
+                    src="/assets/as-button.webp"
                     alt={messages.appStoreAlt}
                     width={5514}
                     height={1612}
@@ -65,7 +65,7 @@ export function AppPromoSection({ locale }: AppPromoSectionProps) {
 
             <div className="order-1 relative w-full max-w-[17rem] shrink-0 sm:max-w-[19rem] md:order-2 md:max-w-[20rem] lg:max-w-[22rem]">
               <Image
-                src="/assets/HP Solid-3.png"
+                src="/assets/HP Solid-3.webp"
                 width={400}
                 height={520}
                 alt={messages.imageAlt}

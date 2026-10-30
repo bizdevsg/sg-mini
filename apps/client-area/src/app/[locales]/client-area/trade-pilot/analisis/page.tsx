@@ -15,7 +15,13 @@ import { getMessages } from "@/locales";
 import { getNewsFeed } from "@/lib/news";
 import { getTradePilotBootstrap } from "@/lib/trade-pilot/trade-pilot";
 
-type ClientAreaTradePilotAnalysisPageProps = ClientAreaSubpageProps;
+type ClientAreaTradePilotAnalysisPageProps = ClientAreaSubpageProps & {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function firstParam(value: string | string[] | undefined) {
+  return typeof value === "string" ? value : undefined;
+}
 
 export function generateStaticParams() {
   return generateClientAreaStaticParams();
@@ -32,9 +38,12 @@ export async function generateMetadata({
 
 export default async function ClientAreaTradePilotAnalysisPage({
   params,
+  searchParams,
 }: ClientAreaTradePilotAnalysisPageProps) {
   const { locales } = await params;
   assertValidLocale(locales);
+  // Dari halaman Riwayat: ?analysisId= (lihat detail) atau ?instrument=&timeframe= (analisis ulang).
+  const query = (await searchParams) ?? {};
 
   const { livePriceTicker, tradePilotPage } = getMessages(locales).clientArea;
   const [economicCalendarToday, bootstrap, { articles: latestNews }] =
@@ -50,6 +59,9 @@ export default async function ClientAreaTradePilotAnalysisPage({
     <ClientAreaTradePilotPanel
       copy={tradePilotPage.analysis}
       bootstrap={bootstrap}
+      initialAnalysisId={firstParam(query.analysisId)}
+      initialInstrumentId={firstParam(query.instrument)}
+      initialTimeframe={firstParam(query.timeframe)}
       economicCalendarEvents={economicCalendarToday.events}
       latestNews={latestNews}
       livePriceLabel={livePriceTicker.label}

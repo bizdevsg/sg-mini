@@ -561,7 +561,7 @@ export function HistoricalDataBrowser({
             <div className="relative">
               <div className="absolute top-1/2 left-1/2 h-50 w-auto -translate-x-1/2 -translate-y-[130%]">
                 <Image
-                  src="/assets/Logo SG-WEB111.png"
+                  src="/assets/Logo SG-WEB111.webp"
                   alt="Logo Solid Gold Berjangka"
                   height={300}
                   width={300}

@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { ClientAreaMarketPanel } from "@/components/organisms/ClientAreaMarketPanel";
+import { ClientAreaMarketChartModal } from "@/components/organisms/ClientAreaMarketChartModal";
 import { ClientAreaShell } from "@/components/organisms/ClientAreaShell";
 import { ClientAreaTransactionsView } from "@/components/organisms/ClientAreaTransactionsView";
 import { getClientAreaFeaturedMarketPrices } from "@/components/organisms/client-area.shared";
@@ -20,6 +21,7 @@ export function ClientAreaMarketView({
   locale,
 }: ClientAreaMarketViewProps) {
   const [transactionFilter, setTransactionFilter] = useState<string | null>(null);
+  const [chartMarketCode, setChartMarketCode] = useState<string | null>(null);
   const messages = getMessages(locale);
   const fieldLabels = messages.liveQuoteTable.fields;
   const marketTransactions = messages.clientArea.marketTransactions;
@@ -47,6 +49,7 @@ export function ClientAreaMarketView({
           marketMovementDescription={marketTransactions.marketMovementDescription}
           marketMovementTitle={marketTransactions.marketMovementTitle}
           locale={locale}
+          onOpenLiveChart={setChartMarketCode}
           onTransactionFilterChange={handleTransactionFilterChange}
           prices={prices}
           selectedTransactionFilter={transactionFilter}
@@ -60,6 +63,12 @@ export function ClientAreaMarketView({
           filterSymbol={transactionFilter}
           locale={locale}
           onShowAllTransactions={() => handleTransactionFilterChange(null)}
+        />
+
+        <ClientAreaMarketChartModal
+          locale={locale}
+          marketCode={chartMarketCode}
+          onClose={() => setChartMarketCode(null)}
         />
       </div>
     </ClientAreaShell>

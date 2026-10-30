@@ -31,12 +31,12 @@ export function HomeCookieConsentBanner({
   const localeOptions = [
     {
       value: "id" as const,
-      iconSrc: "/assets/icon-id.png",
+      iconSrc: "/assets/icon-id.webp",
       alt: "Indonesia",
     },
     {
       value: "en" as const,
-      iconSrc: "/assets/icon-us.png",
+      iconSrc: "/assets/icon-us.webp",
       alt: "English",
     },
   ];
@@ -161,8 +161,8 @@ export function HomeCookieConsentBanner({
                   <Image
                     src={
                       modalLocale === "id"
-                        ? "/assets/icon-id.png"
-                        : "/assets/icon-us.png"
+                        ? "/assets/icon-id.webp"
+                        : "/assets/icon-us.webp"
                     }
                     alt={modalLocale === "id" ? "Indonesia" : "English"}
                     width={20}
@@ -224,7 +224,7 @@ export function HomeCookieConsentBanner({
                     <div className="flex items-center gap-5">
                       <div className="shrink-0">
                         <Image
-                          src="/assets/cookies.png"
+                          src="/assets/cookies.webp"
                           alt="Icon Cookies"
                           width={220}
                           height={220}

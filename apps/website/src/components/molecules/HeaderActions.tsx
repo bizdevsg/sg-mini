@@ -98,13 +98,13 @@ export function HeaderActions({
     {
       value: "id",
       href: resolveLocaleSwitcherHref("id", pathname),
-      iconSrc: "/assets/icon-id.png",
+      iconSrc: "/assets/icon-id.webp",
       alt: "Indonesia",
     },
     {
       value: "en",
       href: resolveLocaleSwitcherHref("en", pathname),
-      iconSrc: "/assets/icon-us.png",
+      iconSrc: "/assets/icon-us.webp",
       alt: "English",
     },
   ];

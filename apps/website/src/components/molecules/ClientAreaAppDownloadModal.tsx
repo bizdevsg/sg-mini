@@ -136,7 +136,7 @@ export function ClientAreaAppDownloadModal({
         {visualVariant === "phone" ? (
           <div className="mt-6">
             <Image
-              src="/assets/HP Solid-3.png"
+              src="/assets/HP Solid-3.webp"
               alt="Solid Gold Berjangka App"
               width={400}
               height={300}
@@ -173,7 +173,7 @@ export function ClientAreaAppDownloadModal({
           <StoreBadgeLink
             href={googlePlayLink}
             alt={googlePlayAlt}
-            imageSrc="/assets/gp-button.png"
+            imageSrc="/assets/gp-button.webp"
             sizes="(max-width: 640px) 160px, 180px"
             imageClassName="h-auto w-full object-contain"
             className="inline-flex"
@@ -182,7 +182,7 @@ export function ClientAreaAppDownloadModal({
           <StoreBadgeLink
             href={appStoreLink}
             alt={appStoreAlt}
-            imageSrc="/assets/as-button.png"
+            imageSrc="/assets/as-button.webp"
             sizes="(max-width: 640px) 160px, 180px"
             imageClassName="h-auto w-full object-contain"
             className="inline-flex"

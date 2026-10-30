@@ -119,7 +119,7 @@ export function ClientAreaAdminFrame({
             className="flex min-w-0 items-center gap-3 mx-auto"
           >
             <Image
-              src="/assets/logo-utama-new.png"
+              src="/assets/logo-utama-new.webp"
               alt={messages.app.brandName}
               width={150}
               height={35}
@@ -225,7 +225,7 @@ export function ClientAreaAdminFrame({
               className="flex min-w-0 items-center gap-3"
             >
               <Image
-                src="/assets/logo-utama-new.png"
+                src="/assets/logo-utama-new.webp"
                 alt={messages.app.brandName}
                 width={130}
                 height={15}

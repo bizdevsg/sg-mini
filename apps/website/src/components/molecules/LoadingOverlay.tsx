@@ -33,7 +33,7 @@ export function LoadingOverlay({
         {/* Inner Circle */}
         <div className="relative flex h-20 w-20 items-center justify-center rounded-full backdrop-blur-md">
           <Image
-            src="/assets/Logo SG-WEB111.png"
+            src="/assets/Logo SG-WEB111.webp"
             alt={logoAlt}
             width={48}
             height={48}

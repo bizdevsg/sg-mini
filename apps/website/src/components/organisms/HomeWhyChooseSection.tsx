@@ -10,10 +10,10 @@ type HomeWhyChooseSectionProps = {
 };
 
 const ICON_MAP: Record<HomeWhyChooseItemId, string> = {
-  legal: "/assets/justice_1781185.png",
-  experience: "/assets/experience_9295588.png",
-  support: "/assets/online-chat_2600350.png",
-  ebook: "/assets/ebook_6795784.png",
+  legal: "/assets/justice_1781185.webp",
+  experience: "/assets/experience_9295588.webp",
+  support: "/assets/online-chat_2600350.webp",
+  ebook: "/assets/ebook_6795784.webp",
 };
 
 export function HomeWhyChooseSection({

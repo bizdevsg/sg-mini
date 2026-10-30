@@ -11,6 +11,7 @@ type ClientAreaMarketPanelProps = {
   marketMovementDescription: string;
   marketMovementTitle: string;
   locale: AppLocale;
+  onOpenLiveChart: (marketCode: string) => void;
   onTransactionFilterChange: (marketCode: string | null) => void;
   prices: MarketPrice[];
   selectedTransactionFilter: string | null;
@@ -25,6 +26,7 @@ export function ClientAreaMarketPanel({
   marketMovementDescription,
   marketMovementTitle,
   locale,
+  onOpenLiveChart,
   onTransactionFilterChange,
   prices,
   selectedTransactionFilter,
@@ -80,6 +82,7 @@ export function ClientAreaMarketPanel({
                 }
                 liveChartLabel={liveChartLabel}
                 locale={locale}
+                onOpenLiveChart={onOpenLiveChart}
                 onViewTransactions={onTransactionFilterChange}
                 viewTransactionsLabel={viewTransactionsLabel}
               />

@@ -1,6 +1,7 @@
-import { CreditCard } from "lucide-react";
+import { CreditCard, Info } from "lucide-react";
 
 import { ClientAreaTradePilotMarketSession } from "@/components/molecules/ClientAreaTradePilotMarketSession";
+import { formatTradePilotDateTime } from "@/lib/trade-pilot/trade-pilot-format";
 
 import type { ClientAreaTradePilotCopy } from "@/lib/client-area-trade-pilot.shared";
 import type {
@@ -10,12 +11,14 @@ import type {
 type ClientAreaTradePilotPageHeaderProps = {
   copy: ClientAreaTradePilotCopy;
   credit?: TradePilotCreditBalance;
+  locale: "id" | "en";
   mockDataLabel: string;
 };
 
 export function ClientAreaTradePilotPageHeader({
   copy,
   credit,
+  locale,
   mockDataLabel,
 }: ClientAreaTradePilotPageHeaderProps) {
   return (
@@ -43,6 +46,28 @@ export function ClientAreaTradePilotPageHeader({
             </span>
             <span className="text-xs text-zinc-400">{copy.quotaLabel}</span>
           </div>
+          {credit?.resetsAt ? (
+            // Tooltip waktu reset kuota: tampil saat hover atau fokus (tap di layar sentuh).
+            <span className="group relative ml-auto shrink-0">
+              <button
+                type="button"
+                aria-describedby="trade-pilot-quota-reset"
+                aria-label={copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))}
+                className={`flex rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/50 ${credit.remaining < 1 ? "text-amber-400" : "text-yellow-500/60 hover:text-yellow-400"
+                  }`}
+              >
+                <Info className="h-5 w-5" />
+              </button>
+
+              <div
+                id="trade-pilot-quota-reset"
+                role="tooltip"
+                className="pointer-events-none absolute right-0 top-full z-30 mt-2 w-max max-w-[16rem] rounded-xl border border-zinc-700 bg-zinc-900/95 px-3 py-2 text-xs text-yellow-200 opacity-0 shadow-xl backdrop-blur-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+              >
+                {copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))}
+              </div>
+            </span>
+          ) : null}
         </div>
 
         <ClientAreaTradePilotMarketSession copy={copy} />

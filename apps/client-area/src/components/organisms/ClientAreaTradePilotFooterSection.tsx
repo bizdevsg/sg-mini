@@ -33,7 +33,7 @@ export function ClientAreaTradePilotFooterSection({
               className="inline-flex w-40 p-1 transition hover:bg-amber-400/10 sm:w-44"
               href={CLIENT_AREA_TRADE_PILOT_APP_LINKS.googlePlay}
               imageClassName="h-auto w-full object-contain"
-              imageSrc="/assets/GOOGLE-PLAY.png"
+              imageSrc="/assets/GOOGLE-PLAY.webp"
               sizes="176px"
             />
 
@@ -42,7 +42,7 @@ export function ClientAreaTradePilotFooterSection({
               className="inline-flex w-40 p-1 transition hover:bg-amber-400/10 sm:w-44"
               href={CLIENT_AREA_TRADE_PILOT_APP_LINKS.appStore}
               imageClassName="h-auto w-full object-contain"
-              imageSrc="/assets/APPS-STORE.png"
+              imageSrc="/assets/APPS-STORE.webp"
               sizes="176px"
             />
           </div>
@@ -54,7 +54,7 @@ export function ClientAreaTradePilotFooterSection({
               alt={copy.logoAlt}
               className="h-11 w-11 object-contain"
               height={44}
-              src="/assets/logo-tp.png"
+              src="/assets/logo-tp.webp"
               width={44}
             />
           </span>
