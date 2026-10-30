@@ -36,7 +36,7 @@ export function ClientAreaTikTokEmbed({
       </div>
 
       <a
-        className="mx-auto mt-4 inline-flex w-full max-w-[360px] items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-xs font-bold text-zinc-200 transition hover:border-amber-400/40 hover:bg-amber-400/10 hover:text-amber-300"
+        className="mx-auto mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-xs font-bold text-zinc-200 transition hover:border-amber-400/40 hover:bg-amber-400/10 hover:text-amber-300"
         href={video.videoUrl}
         rel="noreferrer"
         target="_blank"

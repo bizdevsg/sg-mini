@@ -50,7 +50,9 @@ export function LocaleSwitcherDialog({
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className={`fixed inset-0 z-[90] transition-all duration-200 ${
+      aria-hidden={!isOpen}
+      inert={!isOpen}
+      className={`fixed inset-0 z-[90] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none ${
         isOpen
           ? "visible opacity-100"
           : "pointer-events-none invisible opacity-0"
@@ -64,7 +66,13 @@ export function LocaleSwitcherDialog({
       />
 
       <div className="relative flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-sm rounded-[28px] border border-white/10 bg-[rgba(12,12,12,0.96)] p-4 shadow-[0_30px_90px_rgba(0,0,0,0.56)] backdrop-blur-xl sm:p-5">
+        <div
+          className={`w-full max-w-sm rounded-[28px] border border-white/10 bg-[rgba(12,12,12,0.96)] p-4 shadow-[0_30px_90px_rgba(0,0,0,0.56)] backdrop-blur-xl transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none sm:p-5 ${
+            isOpen
+              ? "translate-y-0 scale-100 opacity-100"
+              : "translate-y-3 scale-95 opacity-0"
+          }`}
+        >
           <div className="mb-4 flex items-center justify-between gap-3 border-b border-white/8 pb-4">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-yellow-500/90">
               {title}

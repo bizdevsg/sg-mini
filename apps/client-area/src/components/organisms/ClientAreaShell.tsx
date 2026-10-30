@@ -40,7 +40,7 @@ export function ClientAreaShell({
   return (
     <section
       data-active-tab={activeTab}
-      className="client-area-main-background relative min-h-[calc(100vh-5rem)] overflow-x-clip py-5 sm:py-7 lg:py-8"
+      className="client-area-main-background relative min-h-[calc(100vh-5rem)] overflow-x-clip pb-5 pt-3 sm:py-7 lg:py-8"
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 import { usePathname } from "next/navigation";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
@@ -25,7 +26,7 @@ export default function LocalizedNotFound() {
           <ButtonLink href={`/${locale}`}>{copy.primaryLabel}</ButtonLink>
         }
         secondaryAction={
-          <ButtonLink href={`/${locale}/news`} variant="dark">
+          <ButtonLink href={`${PUBLIC_WEBSITE_URL}/${locale}/news`} variant="dark">
             {copy.secondaryLabel}
           </ButtonLink>
         }

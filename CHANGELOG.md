@@ -4,6 +4,10 @@
 - Login Client Area dengan flavor SGB UAT atau production kini selalu mewajibkan reCAPTCHA dan gagal tertutup ketika site key atau token tidak tersedia, sehingga request autentikasi tidak lagi dapat diteruskan dengan `token_captcha` kosong.
 
 ### Changed
+- Jarak atas konten Client Area pada tampilan mobile diperkecil agar ticker dan dashboard tampil lebih dekat ke topbar tanpa mengubah spacing tablet maupun desktop.
+- Dropdown profil, notifikasi, dan bahasa di topbar serta submenu Trade Pilot kini memakai animasi buka-tutup yang konsisten, sedangkan drawer sidebar mobile memakai transisi slide horizontal tanpa fade pada panel; seluruh menu menjadi non-interaktif saat tertutup.
+- Dropdown pemilih akun serta panel Detail Margin pada Account Summary kini membuka dan menutup dengan transisi posisi, skala, tinggi, opacity, dan rotasi chevron yang halus; metric terakhir juga memenuhi dua kolom grid agar baris penutup tampil seimbang.
+- Urutan dashboard Client Area pada layout satu kolom kini menampilkan Account Summary, judul Market Watchlist, Mini Chart, kartu Market Watchlist, Kalender Ekonomi, Market Insight, Quick Link, lalu video TikTok; judul tetap berada di atas kedua panel, sedangkan susunan desktop mempertahankan kartu Market Watchlist sebelum Mini Chart.
 - Informasi fax dihapus dari halaman Hubungi Kami untuk locale Indonesia dan Inggris, sehingga kanal kontak yang ditampilkan kini hanya telepon, email, dan unit pengaduan.
 - Seluruh asset raster lokal Website dan Client Area dikonversi dari PNG/AVIF ke WebP berkualitas tinggi, seluruh referensi source diperbarui, dan file sumber lama dihapus untuk mengurangi ukuran transfer serta penyimpanan asset.
 - Tombol Live Chart pada halaman Pasar & Transaksi Client Area kini membuka chart MiniMicro dalam modal responsif tanpa meninggalkan halaman atau kehilangan konteks transaksi; route detail `/client-area/market/[symbol]` beserta komponen dan fetcher khususnya dihapus karena tidak lagi digunakan.

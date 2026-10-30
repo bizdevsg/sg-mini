@@ -1,5 +1,6 @@
 "use client";
 
+import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 import {
   BookOpen,
   Calendar,
@@ -62,7 +63,8 @@ export function ClientAreaTradePilotFundamentalSection({
   const [activeTab, setActiveTab] = useState<FundamentalTab>("news");
   const [isRefreshing, startRefreshTransition] = useTransition();
   const newsHref = `/${locale}/client-area/news`;
-  const economicCalendarHref = `/${locale}/economic-calendar`;
+  // Kalender ekonomi ada di website utama (domain lain), bukan di client area.
+  const economicCalendarHref = `${PUBLIC_WEBSITE_URL}/${locale}/economic-calendar`;
   const calendarCopy = getMessages(locale).economicCalendarBrowser;
   const isNewsTabActive = activeTab === "news";
 
@@ -185,13 +187,23 @@ export function ClientAreaTradePilotFundamentalSection({
         )}
       </div>
 
-      <Link
-        href={isNewsTabActive ? newsHref : economicCalendarHref}
-        className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-amber-300"
-      >
-        <BookOpen className="h-4 w-4" />
-        {copy.learnLabel}
-      </Link>
+      {isNewsTabActive ? (
+        <Link
+          href={newsHref}
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-amber-300"
+        >
+          <BookOpen className="h-4 w-4" />
+          {copy.learnLabel}
+        </Link>
+      ) : (
+        <a
+          href={economicCalendarHref}
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-amber-300"
+        >
+          <BookOpen className="h-4 w-4" />
+          {copy.learnLabel}
+        </a>
+      )}
     </section>
   );
 }

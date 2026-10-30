@@ -188,61 +188,64 @@ export function ClientAreaAccountOverview({
                   </span>
                 </span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-zinc-300 transition-transform ${isAccountMenuOpen ? "rotate-180" : ""}`}
+                  className={`h-4 w-4 shrink-0 text-zinc-300 transition-transform duration-300 motion-reduce:transition-none ${isAccountMenuOpen ? "rotate-180" : "rotate-0"}`}
                 />
               </button>
 
-              {isAccountMenuOpen ? (
-                <div
-                  role="menu"
-                  className="absolute left-0 top-[calc(100%+0.5rem)] z-20 w-64 max-w-[calc(100vw-4rem)] rounded-2xl border border-white/10 bg-zinc-950 p-2 text-white shadow-2xl"
-                >
-                  <p className="px-2 pb-2 pt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
-                    {messages.availableAccounts}
-                  </p>
-                  <div className="space-y-1">
-                    {accountOptions.map((option) => {
-                      const isActive = accountMode === option.mode;
-                      const isAvailable = Boolean(option.accountId);
+              <div
+                aria-hidden={!isAccountMenuOpen}
+                inert={!isAccountMenuOpen}
+                role="menu"
+                className={`absolute left-0 top-[calc(100%+0.5rem)] z-20 w-64 max-w-[calc(100vw-4rem)] origin-top-left rounded-2xl border border-white/10 bg-zinc-950 p-2 text-white shadow-2xl transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none ${isAccountMenuOpen
+                  ? "visible pointer-events-auto translate-y-0 scale-100 opacity-100"
+                  : "invisible pointer-events-none -translate-y-2 scale-95 opacity-0"
+                  }`}
+              >
+                <p className="px-2 pb-2 pt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                  {messages.availableAccounts}
+                </p>
+                <div className="space-y-1">
+                  {accountOptions.map((option) => {
+                    const isActive = accountMode === option.mode;
+                    const isAvailable = Boolean(option.accountId);
 
-                      return (
-                        <button
-                          key={option.mode}
-                          type="button"
-                          role="menuitemradio"
-                          aria-checked={isActive}
-                          disabled={!isAvailable}
-                          onClick={() => onSelectAccountMode(option.mode)}
-                          className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${isActive
-                            ? "border-yellow-400/50 bg-yellow-400/10"
-                            : "border-transparent hover:border-white/10 hover:bg-white/5"
-                            } disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-transparent disabled:hover:bg-transparent`}
+                    return (
+                      <button
+                        key={option.mode}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={isActive}
+                        disabled={!isAvailable}
+                        onClick={() => onSelectAccountMode(option.mode)}
+                        className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${isActive
+                          ? "border-yellow-400/50 bg-yellow-400/10"
+                          : "border-transparent hover:border-white/10 hover:bg-white/5"
+                          } disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-transparent disabled:hover:bg-transparent`}
+                      >
+                        <span
+                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-black ${option.mode === "demo"
+                            ? "bg-green-500/50 text-green-100"
+                            : "bg-yellow-400/15 text-yellow-100"
+                            }`}
                         >
-                          <span
-                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-black ${option.mode === "demo"
-                              ? "bg-green-500/50 text-green-100"
-                              : "bg-yellow-400/15 text-yellow-100"
-                              }`}
-                          >
-                            {option.mode === "demo" ? "D" : "R"}
+                          {option.mode === "demo" ? "D" : "R"}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs font-bold text-white">
+                            {option.label}
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-xs font-bold text-white">
-                              {option.label}
-                            </span>
-                            <span className="block truncate text-[11px] text-zinc-400">
-                              {option.accountId ?? messages.unavailableAccount}
-                            </span>
+                          <span className="block truncate text-[11px] text-zinc-400">
+                            {option.accountId ?? messages.unavailableAccount}
                           </span>
-                          {isActive ? (
-                            <Check className="h-4 w-4 shrink-0 text-yellow-400" />
-                          ) : null}
-                        </button>
-                      );
-                    })}
-                  </div>
+                        </span>
+                        {isActive ? (
+                          <Check className="h-4 w-4 shrink-0 text-yellow-400" />
+                        ) : null}
+                      </button>
+                    );
+                  })}
                 </div>
-              ) : null}
+              </div>
             </div>
 
           </div>
@@ -368,7 +371,7 @@ export function ClientAreaAccountOverview({
             <span>{messages.accountMetricsTitle}</span>
             <ChevronDown
               aria-hidden="true"
-              className={`h-5 w-5 shrink-0 transition-transform duration-200 ${areAccountMetricsOpen ? "rotate-180" : "rotate-0"
+              className={`h-5 w-5 shrink-0 transition-transform duration-300 motion-reduce:transition-none ${areAccountMetricsOpen ? "rotate-180" : "rotate-0"
                 }`}
             />
           </button>
@@ -380,23 +383,32 @@ export function ClientAreaAccountOverview({
           <hr className="border border-zinc-500/20 mt-3" />
 
           <div
-            className={`relative grid-cols-2 px-1 font-semibold text-neutral-900 ${areAccountMetricsOpen ? "grid" : "hidden"} lg:grid`}
+            className={`relative grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${areAccountMetricsOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"} lg:grid-rows-[1fr] lg:opacity-100`}
             id={accountMetricsId}
           >
-            {ACCOUNT_METRICS.map((metric, index) => (
-              <ClientAreaAccountMetricRow
-                key={metric.key}
-                label={messages[metric.labelKey]}
-                value={
-                  isLoading ? (
-                    <AccountValueSkeleton className="h-5 w-24 sm:w-28" />
-                  ) : (
-                    resolveMetricValue(summary, metric.key)
-                  )
-                }
-                withDivider={index !== ACCOUNT_METRICS.length - 1}
-              />
-            ))}
+            <div className="min-h-0 overflow-hidden">
+              <div className="grid grid-cols-2 px-1 font-semibold text-neutral-900">
+                {ACCOUNT_METRICS.map((metric, index) => (
+                  <ClientAreaAccountMetricRow
+                    key={metric.key}
+                    className={
+                      index === ACCOUNT_METRICS.length - 1
+                        ? "col-span-2"
+                        : undefined
+                    }
+                    label={messages[metric.labelKey]}
+                    value={
+                      isLoading ? (
+                        <AccountValueSkeleton className="h-5 w-24 sm:w-28" />
+                      ) : (
+                        resolveMetricValue(summary, metric.key)
+                      )
+                    }
+                    withDivider={index !== ACCOUNT_METRICS.length - 1}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

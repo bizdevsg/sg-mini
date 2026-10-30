@@ -207,16 +207,17 @@ export function ClientAreaAdminFrame({
         className={`fixed inset-0 z-50 lg:hidden ${isMobileSidebarOpen ? "pointer-events-auto" : "pointer-events-none"
           }`}
         aria-hidden={!isMobileSidebarOpen}
+        inert={!isMobileSidebarOpen}
       >
         <button
           type="button"
           aria-label={messages.navbar.closeMenuLabel}
           onClick={() => setIsMobileSidebarOpen(false)}
-          className={`absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity ${isMobileSidebarOpen ? "opacity-100" : "opacity-0"
+          className={`absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity duration-300 ease-out motion-reduce:transition-none ${isMobileSidebarOpen ? "opacity-100" : "opacity-0"
             }`}
         />
         <aside
-          className={`absolute inset-y-0 left-0 flex w-[min(88vw,20rem)] flex-col border-r border-white/10 bg-zinc-950 shadow-2xl transition-transform duration-300 ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`absolute inset-y-0 left-0 flex w-[min(88vw,20rem)] flex-col border-r border-white/10 bg-zinc-950 shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
             }`}
         >
           <div className="flex h-20 items-center justify-between border-b border-white/8 px-5">

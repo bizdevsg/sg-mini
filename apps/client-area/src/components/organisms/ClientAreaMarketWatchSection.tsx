@@ -3,18 +3,14 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 import { ClientAreaRecommendationCard } from "@/components/molecules/ClientAreaRecommendationCard";
-import { ClientAreaSectionHeader } from "@/components/molecules/ClientAreaSectionHeader";
 import {
   getClientAreaFeaturedMarketPrices,
   getClientAreaMarketCategory,
-  resolveClientAreaTabHref,
 } from "@/components/organisms/client-area.shared";
-import type { DashboardCopy } from "@/components/organisms/client-area.types";
 import { useLiveQuoteStream } from "@/hooks/useLiveQuoteStream";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaMarketWatchSectionProps = {
-  copy: DashboardCopy;
   locale: AppLocale;
   onSelectSymbol?: (symbol: string) => void;
   selectedSymbol?: string;
@@ -74,7 +70,6 @@ function resolveHomeMarketDisplayCode(symbol?: string) {
 }
 
 export function ClientAreaMarketWatchSection({
-  copy,
   locale,
   onSelectSymbol,
   selectedSymbol,
@@ -88,12 +83,6 @@ export function ClientAreaMarketWatchSection({
 
   return (
     <div>
-      <ClientAreaSectionHeader
-        title={copy.marketWatchTitle}
-        actionHref={resolveClientAreaTabHref(locale, "market")}
-        actionLabel={copy.viewMoreLabel}
-      />
-
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 pr-1 touch-pan-x overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 sm:pr-0 2xl:grid-cols-4">
         {watchlistItems.map(({ badge, item }) => (
           <div

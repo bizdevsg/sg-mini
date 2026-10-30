@@ -73,7 +73,7 @@ export function ClientAreaHomePanel({
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(288px,0.8fr)] xl:items-start xl:gap-y-4">
-      <div className="min-w-0 xl:col-start-2 xl:row-start-1">
+      <div className="order-1 min-w-0 xl:order-none xl:col-start-2 xl:row-start-1">
         <ClientAreaAccountOverview
           accountMode={accountMode}
           copy={copy}
@@ -87,11 +87,11 @@ export function ClientAreaHomePanel({
         />
       </div>
 
-      <div className="min-w-0 xl:col-start-2 xl:row-start-2">
+      <div className="order-3 min-w-0 xl:order-none xl:col-start-2 xl:row-start-2">
         <ClientAreaTikTokEmbed copy={clientArea.homeTikTok} video={tikTokVideo} />
       </div>
 
-      <div className="flex min-w-0 flex-col gap-6 xl:col-start-1 xl:row-span-2 xl:row-start-1">
+      <div className="order-2 flex min-w-0 flex-col gap-6 xl:order-none xl:col-start-1 xl:row-span-2 xl:row-start-1">
 
         {/*
         <ClientAreaHeroSlideshow
@@ -102,34 +102,42 @@ export function ClientAreaHomePanel({
         />
         */}
 
-        <ClientAreaAdvancedChart
-          copy={clientArea.homeChart}
-          locale={locale}
-          marketWatchCopy={copy}
-          // The chart iframe consumes the same upstream token as the account
-          // BFF. Let the initial summary request finish (and persist any csrf
-          // rotation) before handing that token to MiniMicro.
-          miniChartEnabled={summaryState.status !== "loading"}
-        />
+        <div className="order-1 xl:order-none">
+          <ClientAreaAdvancedChart
+            copy={clientArea.homeChart}
+            locale={locale}
+            marketWatchCopy={copy}
+            // The chart iframe consumes the same upstream token as the account
+            // BFF. Let the initial summary request finish (and persist any csrf
+            // rotation) before handing that token to MiniMicro.
+            miniChartEnabled={summaryState.status !== "loading"}
+          />
+        </div>
 
-        <ClientAreaQuickActionsGrid
-          clientArea={clientArea}
-          locale={locale}
-          onActionClick={onActionClick}
-          quickActionIconMap={quickActionIconMap}
-        />
+        <div className="order-4 xl:order-none">
+          <ClientAreaQuickActionsGrid
+            clientArea={clientArea}
+            locale={locale}
+            onActionClick={onActionClick}
+            quickActionIconMap={quickActionIconMap}
+          />
+        </div>
 
-        <ClientAreaEconomicCalendarSection
-          copy={copy}
-          events={economicCalendarEvents}
-          locale={locale}
-        />
+        <div className="order-2 xl:order-none">
+          <ClientAreaEconomicCalendarSection
+            copy={copy}
+            events={economicCalendarEvents}
+            locale={locale}
+          />
+        </div>
 
-        <ClientAreaMarketInsightSection
-          copy={copy}
-          items={marketSignals}
-          locale={locale}
-        />
+        <div className="order-3 xl:order-none">
+          <ClientAreaMarketInsightSection
+            copy={copy}
+            items={marketSignals}
+            locale={locale}
+          />
+        </div>
       </div>
     </div>
   );

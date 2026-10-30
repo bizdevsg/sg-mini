@@ -86,15 +86,19 @@ export function ClientAreaProfileMenu({
           ) : null}
         </div>
         <ChevronDown
-          className={`hidden h-3.5 w-3.5 shrink-0 text-zinc-500 transition-transform min-[360px]:block ${isOpen ? "rotate-180" : ""}`}
+          className={`hidden h-3.5 w-3.5 shrink-0 text-zinc-500 transition-transform duration-300 motion-reduce:transition-none min-[360px]:block ${isOpen ? "rotate-180" : "rotate-0"}`}
         />
       </button>
 
-      {isOpen ? (
-        <div
-          role="menu"
-          className="fixed inset-x-4 top-[5.75rem] z-50 w-auto overflow-hidden rounded-2xl border border-white/10 bg-[#111214] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.55)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+0.65rem)] sm:w-56"
-        >
+      <div
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        role="menu"
+        className={`fixed inset-x-4 top-[5.75rem] z-50 w-auto origin-top-right overflow-hidden rounded-2xl border border-white/10 bg-[#111214] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.55)] transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+0.65rem)] sm:w-56 ${isOpen
+          ? "visible pointer-events-auto translate-y-0 scale-100 opacity-100"
+          : "invisible pointer-events-none -translate-y-2 scale-95 opacity-0"
+          }`}
+      >
           <div className="flex items-center gap-2 px-2 py-2 text-xs font-semibold text-zinc-400">
             <WalletCards className="h-4 w-4 text-amber-400" />
             {accountModeLabel}
@@ -130,8 +134,7 @@ export function ClientAreaProfileMenu({
             <LogOut className="h-4 w-4" />
             {logoutLabel}
           </button>
-        </div>
-      ) : null}
+      </div>
     </div>
   );
 }

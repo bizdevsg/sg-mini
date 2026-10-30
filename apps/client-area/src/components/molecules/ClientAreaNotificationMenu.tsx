@@ -315,12 +315,16 @@ export function ClientAreaNotificationMenu({
         ) : null}
       </button>
 
-      {isOpen ? (
-        <div
-          aria-label={copy.title}
-          className="fixed inset-x-4 top-[5.75rem] z-50 w-auto overflow-hidden rounded-2xl border border-white/10 bg-[#111217] shadow-2xl shadow-black/60 sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+0.75rem)] sm:w-[min(22rem,calc(100vw-2rem))]"
-          role="menu"
-        >
+      <div
+        aria-hidden={!isOpen}
+        aria-label={copy.title}
+        inert={!isOpen}
+        className={`fixed inset-x-4 top-[5.75rem] z-50 w-auto origin-top-right overflow-hidden rounded-2xl border border-white/10 bg-[#111217] shadow-2xl shadow-black/60 transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+0.75rem)] sm:w-[min(22rem,calc(100vw-2rem))] ${isOpen
+          ? "visible pointer-events-auto translate-y-0 scale-100 opacity-100"
+          : "invisible pointer-events-none -translate-y-2 scale-95 opacity-0"
+          }`}
+        role="menu"
+      >
           <div className="flex items-center justify-between gap-4 border-b border-white/8 px-4 py-3.5">
             <div>
               <h2 className="text-sm font-bold text-white">{copy.title}</h2>
@@ -390,8 +394,7 @@ export function ClientAreaNotificationMenu({
               );
             })}
           </div>
-        </div>
-      ) : null}
+      </div>
     </div>
   );
 }

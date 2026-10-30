@@ -3,6 +3,7 @@ import { ClientAreaSectionHeader } from "@/components/molecules/ClientAreaSectio
 import { getClientAreaEconomicCalendarPreview } from "@/components/organisms/client-area.shared";
 import type { DashboardCopy } from "@/components/organisms/client-area.types";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
+import { PUBLIC_WEBSITE_URL } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
 
 type ClientAreaEconomicCalendarSectionProps = {
@@ -23,7 +24,7 @@ export function ClientAreaEconomicCalendarSection({
     <div>
       <ClientAreaSectionHeader
         title={copy.economicCalendarTitle}
-        actionHref={`/${locale}/economic-calendar`}
+        actionHref={`${PUBLIC_WEBSITE_URL}/${locale}/economic-calendar`}
         actionLabel={copy.viewMoreLabel}
       />
 

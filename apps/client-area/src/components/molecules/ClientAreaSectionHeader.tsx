@@ -35,12 +35,23 @@ export function ClientAreaSectionHeader({
       </div>
 
       {actionHref && actionLabel ? (
-        <Link
-          href={actionHref}
-          className="w-fit text-sm text-yellow-500 transition duration-300 hover:text-yellow-600"
-        >
-          {actionLabel}
-        </Link>
+        /^https?:\/\//.test(actionHref) ? (
+          // Halaman website utama (domain lain): pakai <a> biasa, bukan <Link>,
+          // supaya Next tidak prefetch RSC lintas domain (diblokir CORS).
+          <a
+            href={actionHref}
+            className="w-fit text-sm text-yellow-500 transition duration-300 hover:text-yellow-600"
+          >
+            {actionLabel}
+          </a>
+        ) : (
+          <Link
+            href={actionHref}
+            className="w-fit text-sm text-yellow-500 transition duration-300 hover:text-yellow-600"
+          >
+            {actionLabel}
+          </Link>
+        )
       ) : null}
     </div>
   );

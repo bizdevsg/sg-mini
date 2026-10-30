@@ -116,7 +116,7 @@ export function ClientAreaDesktopSidebarNav({
                   {tabLabel}
                 </span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isTradePilotOpen ? "rotate-180" : "rotate-0"
+                  className={`h-4 w-4 shrink-0 transition-transform duration-300 motion-reduce:transition-none ${isTradePilotOpen ? "rotate-180" : "rotate-0"
                     }`}
                 />
               </button>
@@ -125,7 +125,9 @@ export function ClientAreaDesktopSidebarNav({
                 id={tradePilotSubmenuId}
                 role="group"
                 aria-label={clientArea.tradePilotPage.navigation.label}
-                className={`grid transition-[grid-template-rows,opacity] duration-200 ${isTradePilotOpen
+                aria-hidden={!isTradePilotOpen}
+                inert={!isTradePilotOpen}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${isTradePilotOpen
                   ? "grid-rows-[1fr] opacity-100"
                   : "grid-rows-[0fr] opacity-0"
                   }`}
