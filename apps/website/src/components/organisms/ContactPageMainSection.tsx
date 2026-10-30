@@ -16,7 +16,6 @@ type ContactPageMainSectionProps = {
     | "mapsEmbedUrl"
     | "phone"
     | "email"
-    | "fax"
     | "complaintLink"
     | "updatedAt"
   >;
@@ -34,7 +33,6 @@ export function ContactPageMainSection({
     ? `tel:${normalizedPhone}`
     : copy.headOffice.phoneHref;
   const email = companyProfile.email || copy.headOffice.email;
-  const fax = companyProfile.fax || copy.headOffice.fax;
   const mapEmbedUrl =
     companyProfile.mapsEmbedUrl ||
     `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
@@ -69,12 +67,6 @@ export function ContactPageMainSection({
         value: copy.support.complaintValue,
         href: companyProfile.complaintLink,
         icon: ["fas", "headset"] as IconProp,
-      },
-      {
-        title: copy.support.faxTitle,
-        description: copy.support.faxDescription,
-        value: fax,
-        icon: ["fas", "fax"] as IconProp,
       },
     ];
 

@@ -741,7 +741,6 @@ export type AppMessages = {
       email: string;
       phone: string;
       phoneHref: string;
-      fax: string;
       complaintPhone: string;
       complaintPhoneHref: string;
     };
@@ -762,22 +761,18 @@ export type AppMessages = {
       complaintTitle: string;
       complaintDescription: string;
       complaintValue: string;
-      faxTitle: string;
-      faxDescription: string;
     };
     offices: {
       title: string;
       description: string;
       phoneLabel: string;
       emailLabel: string;
-      faxLabel: string;
       items: Array<{
         name: string;
         address: string;
         phone?: string;
         phoneHref?: string;
         email?: string;
-        fax?: string;
       }>;
     };
   };

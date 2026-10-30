@@ -59,7 +59,6 @@ export const idContactPage: AppMessages["contactPage"] = {
       email: "berjangka@solidgold.co.id",
       phone: "021-29675088",
       phoneHref: "tel:02129675088",
-      fax: "021-29675089",
       complaintPhone: "021-29675088 ext. 116",
       complaintPhoneHref: "tel:02129675088",
     },
@@ -83,8 +82,6 @@ export const idContactPage: AppMessages["contactPage"] = {
       complaintTitle: "Unit Pengaduan",
       complaintDescription: "Gunakan ext. 116 untuk kebutuhan pengaduan.",
       complaintValue: "Pengaduan Resmi",
-      faxTitle: "Fax",
-      faxDescription: "Kanal fax resmi perusahaan.",
     },
     offices: {
       title: "Kantor Cabang SGB",
@@ -92,7 +89,6 @@ export const idContactPage: AppMessages["contactPage"] = {
         "Lokasi operasional PT. Solid Gold Berjangka yang ditampilkan mengikuti informasi kontak publik resmi perusahaan.",
       phoneLabel: "Telepon",
       emailLabel: "Email",
-      faxLabel: "Fax",
       items: [
         {
           name: "Kantor Pusat Jakarta",
@@ -101,7 +97,6 @@ export const idContactPage: AppMessages["contactPage"] = {
           phone: "021-29675088",
           phoneHref: "tel:02129675088",
           email: "berjangka@solidgold.co.id",
-          fax: "021-29675089",
         },
         {
           name: "Kantor Semarang",
