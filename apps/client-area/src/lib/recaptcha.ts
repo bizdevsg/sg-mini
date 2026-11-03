@@ -1,12 +1,8 @@
 import { describeError } from "@/lib/safe-log";
 import {
-  APP_ENV,
-  CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL,
-  CLIENT_AREA_RECAPTCHA_ENABLED,
   PUBLIC_RECAPTCHA_SITE_KEY,
   RECAPTCHA_MIN_SCORE,
   RECAPTCHA_SECRET_KEY,
-  SGB_FLAVOR,
 } from "@/lib/env";
 
 type RecaptchaVerifyResponse = {
@@ -20,8 +16,6 @@ type VerifyRecaptchaTokenOptions = {
   expectedAction: string;
   expectedHostname?: string | null;
 };
-
-const LOCAL_RECAPTCHA_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
 function normalizeHostHeader(value: string | null | undefined) {
   const normalizedValue = value?.split(",")[0]?.trim().toLowerCase();
@@ -55,44 +49,7 @@ export function resolveRequestHostname(
   );
 }
 
-export function isRecaptchaUnsupportedHostname(hostname: string) {
-  return LOCAL_RECAPTCHA_HOSTS.has(hostname);
-}
-
-export function isRecaptchaRequired(hostname?: string | null) {
-  if (
-    process.env.NODE_ENV === "development" &&
-    process.env.CLIENT_AREA_RECAPTCHA_BYPASS_LOCAL === "true" &&
-    isRecaptchaUnsupportedHostname(normalizeHostHeader(hostname))
-  ) {
-    return false;
-  }
-
-  // SGB login environments must always fail closed. The runtime switch and
-  // local-host exception are only available while using the dev SGB flavor.
-  if (SGB_FLAVOR === "uat" || SGB_FLAVOR === "prod") {
-    return true;
-  }
-
-  if (!CLIENT_AREA_RECAPTCHA_ENABLED) {
-    return false;
-  }
-
-  if (!CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL) {
-    if (APP_ENV !== "prod") {
-      return false;
-    }
-
-    const normalizedHostname = normalizeHostHeader(hostname);
-
-    if (
-      normalizedHostname &&
-      isRecaptchaUnsupportedHostname(normalizedHostname)
-    ) {
-      return false;
-    }
-  }
-
+export function isRecaptchaRequired(_hostname?: string | null) {
   return true;
 }
 

@@ -430,18 +430,6 @@ export const PUBLIC_RECAPTCHA_SITE_KEY =
 export const RECAPTCHA_SECRET_KEY =
   process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
 
-// Saklar runtime (bukan NEXT_PUBLIC, tidak ditanam saat build) khusus Client Area.
-// Hanya dapat mematikan reCAPTCHA saat memakai SGB_FLAVOR=dev; UAT dan production
-// selalu mewajibkan reCAPTCHA agar login tidak pernah gagal secara terbuka.
-export const CLIENT_AREA_RECAPTCHA_ENABLED =
-  process.env.CLIENT_AREA_RECAPTCHA_ENABLED?.trim().toLowerCase() !== "false";
-
-// Khusus pengembangan lokal: paksa reCAPTCHA aktif walau APP_ENV bukan prod dan
-// hostname-nya localhost, supaya token captcha sungguhan bisa dikirim ke SGB.
-export const CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL =
-  process.env.CLIENT_AREA_RECAPTCHA_ALLOW_LOCAL?.trim().toLowerCase() ===
-  "true";
-
 function normalizeRecaptchaMinScore(value: string | undefined) {
   const parsedValue = Number(value);
 

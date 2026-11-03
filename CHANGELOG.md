@@ -1,7 +1,16 @@
 ## [Unreleased]
 
 ### Changed
-- Login Client Area dapat melewati pemeriksaan reCAPTCHA aplikasi di localhost saat development melalui `CLIENT_AREA_RECAPTCHA_BYPASS_LOCAL`, untuk memudahkan pengujian lokal; validasi backend SGB tetap berlaku.
+- Nilai kosong pada ringkasan akun Client Area ditampilkan sebagai “Belum tersedia” agar status data lebih jelas.
+- Live price dan ringkasan akun Client Area kini menggunakan satu stream SAI per mode akun, dengan pemrosesan format harga IDR/USD, heartbeat, reconnect, dan penanganan sesi kedaluwarsa sesuai dokumentasi integrasi.
+- Endpoint WebSocket SAI dipetakan langsung di `hosts.ts` berdasarkan `SGB_FLAVOR` dan akun real/demo sesuai dokumentasi Postman integrasi SGB.
+- Ringkasan akun Client Area kini hanya menggunakan stream WebSocket SAI tanpa polling HTTP atau estimasi lokal; posisi terbuka ditandai tidak tersedia karena tidak disertakan dalam stream.
+- Ringkasan akun Client Area dapat menerima angka resmi melalui relay WebSocket SAI server-side setelah URL untuk environment dan mode akun dikonfigurasi.
+- Variabel `NEXT_PUBLIC_CDN_ASSET_BASE_URL` yang tidak digunakan dihapus dari `.env` lokal agar konfigurasi lebih ringkas.
+- Seluruh konfigurasi `.env` lokal dikelompokkan berdasarkan fungsi agar lebih mudah dibaca tanpa mengubah key maupun nilainya.
+- Konfigurasi reCAPTCHA di `.env` lokal dirapikan dengan mengelompokkan site key dan menghapus opsi bypass yang tidak lagi digunakan.
+- Konfigurasi lokal Client Area kini menggunakan site key reCAPTCHA khusus dari konfigurasi server agar widget login tidak memakai key umum website.
+- Login Client Area kini selalu mewajibkan reCAPTCHA, termasuk pada localhost dan seluruh flavor SGB; opsi bypass development dihapus agar login tanpa token tidak diteruskan.
 - Konfigurasi lokal Website dan Client Area disatukan di `.env` root; kunci tambahan dipertahankan dan file `.env.local` dihapus agar URL Trade Pilot mengikuti konfigurasi global.
 
 ### Fixed
