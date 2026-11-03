@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Changed
+- Login Client Area dapat melewati pemeriksaan reCAPTCHA aplikasi di localhost saat development melalui `CLIENT_AREA_RECAPTCHA_BYPASS_LOCAL`, untuk memudahkan pengujian lokal; validasi backend SGB tetap berlaku.
+- Konfigurasi lokal Website dan Client Area disatukan di `.env` root; kunci tambahan dipertahankan dan file `.env.local` dihapus agar URL Trade Pilot mengikuti konfigurasi global.
+
 ### Fixed
 - Login Client Area dengan flavor SGB UAT atau production kini selalu mewajibkan reCAPTCHA dan gagal tertutup ketika site key atau token tidak tersedia, sehingga request autentikasi tidak lagi dapat diteruskan dengan `token_captcha` kosong.
 

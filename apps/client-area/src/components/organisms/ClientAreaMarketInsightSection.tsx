@@ -15,7 +15,6 @@ type ClientAreaMarketInsightSectionProps = {
   locale: AppLocale;
 };
 
-const SCROLL_STEP_PX = 336;
 const SCROLL_EDGE_THRESHOLD_PX = 1;
 
 export function ClientAreaMarketInsightSection({
@@ -46,9 +45,31 @@ export function ClientAreaMarketInsightSection({
     updateScrollAvailability();
   }, [items]);
 
+  // Scrolls to the neighbouring card's measured position instead of a fixed
+  // pixel step: that position is exactly a snap point, so `snap-mandatory`
+  // cannot overshoot to a later card.
   const scrollByStep = (direction: "left" | "right") => {
-    scrollRef.current?.scrollBy({
-      left: direction === "left" ? -SCROLL_STEP_PX : SCROLL_STEP_PX,
+    const scrollEl = scrollRef.current;
+
+    if (!scrollEl) {
+      return;
+    }
+
+    const containerLeft = scrollEl.getBoundingClientRect().left;
+    const cardOffsets = Array.from(scrollEl.children).map(
+      (card) =>
+        card.getBoundingClientRect().left - containerLeft + scrollEl.scrollLeft,
+    );
+    const current = scrollEl.scrollLeft;
+    const target =
+      direction === "right"
+        ? cardOffsets.find((offset) => offset > current + SCROLL_EDGE_THRESHOLD_PX)
+        : [...cardOffsets]
+            .reverse()
+            .find((offset) => offset < current - SCROLL_EDGE_THRESHOLD_PX);
+
+    scrollEl.scrollTo({
+      left: target ?? (direction === "right" ? scrollEl.scrollWidth : 0),
       behavior: "smooth",
     });
   };

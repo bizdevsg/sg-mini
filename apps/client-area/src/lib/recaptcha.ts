@@ -60,6 +60,14 @@ export function isRecaptchaUnsupportedHostname(hostname: string) {
 }
 
 export function isRecaptchaRequired(hostname?: string | null) {
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.CLIENT_AREA_RECAPTCHA_BYPASS_LOCAL === "true" &&
+    isRecaptchaUnsupportedHostname(normalizeHostHeader(hostname))
+  ) {
+    return false;
+  }
+
   // SGB login environments must always fail closed. The runtime switch and
   // local-host exception are only available while using the dev SGB flavor.
   if (SGB_FLAVOR === "uat" || SGB_FLAVOR === "prod") {
