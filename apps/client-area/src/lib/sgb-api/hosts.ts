@@ -11,29 +11,6 @@ import type { SgbFlavor } from "../env";
 export type SgbHostKind = "trading" | "register" | "sso";
 export type SgbApiMode = "demo" | "normal";
 
-/** WebSocket hosts follow the same flavor and account-mode mapping as trading. */
-const ACCOUNT_STREAM_HOST_MAP: Record<SgbFlavor, Record<SgbApiMode, string>> = {
-  dev: {
-    normal: "wss://mmwsuat.sgberjangka.id/admin-socket/connect-admin-price",
-    demo: "wss://mmwslab.sgberjangka.id/admin-socket/connect-admin-price",
-  },
-  uat: {
-    normal: "wss://demominiws.sgberjangka.com/admin-socket/connect-admin-price",
-    demo: "wss://mmwsuat.sgberjangka.id/admin-socket/connect-admin-price",
-  },
-  prod: {
-    normal: "wss://miniws.sgberjangka.com/admin-socket/connect-admin-price",
-    demo: "wss://demominiws.sgberjangka.com/admin-socket/connect-admin-price",
-  },
-};
-
-export function resolveSgbAccountStreamUrl(
-  flavor: SgbFlavor,
-  mode: SgbApiMode,
-): string {
-  return ACCOUNT_STREAM_HOST_MAP[flavor][mode];
-}
-
 type HostsByMode = Partial<Record<SgbApiMode, string>>;
 type HostsByFlavor = Record<SgbFlavor, HostsByMode>;
 

@@ -16,29 +16,6 @@ export type LiveQuoteTick = {
 
 export type LiveQuotePayload = Record<string, LiveQuoteTick>;
 
-/** Convert the SAI price arrays into the quote shape used by the UI. */
-export function parseSaiPrices(payload: unknown): LiveQuotePayload | null {
-  if (!payload || typeof payload !== "object") return null;
-  const message = payload as Record<string, unknown>;
-  const rows = message.sendPriceRp ?? message.sendPriceUSD ?? message.sendPrice;
-  if (!Array.isArray(rows)) return null;
-  const quotes: LiveQuotePayload = {};
-  for (const item of rows) {
-    if (!item || typeof item !== "object") continue;
-    const row = item as Record<string, unknown>;
-    if (typeof row.product !== "string" || !row.product.trim() || row.hide === 1 || row.hide === "1") continue;
-    const value = (key: string) =>
-      typeof row[key] === "string" || typeof row[key] === "number" ? String(row[key]) : "";
-    quotes[row.product.trim()] = {
-      price: value("price"), buy: value("buy"), sell: value("sell"),
-      oprice: value("oprice"), hprice: value("hprice"), lprice: value("lprice"),
-      time: value("time"), date_time: value("date_time"),
-      price_change: row.status === true ? "up" : row.status === false ? "down" : "-",
-    };
-  }
-  return quotes;
-}
-
 export type LiveQuoteDisplay = {
   label: string;
   symbol: string | null;
