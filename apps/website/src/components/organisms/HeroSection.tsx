@@ -19,8 +19,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 648,
       height: 264,
       mobileClassName:
-        "right-[48%] top-[20%] w-[6.75rem] sm:right-[48.5%] sm:top-[18%] sm:w-[8.75rem]",
-      desktopClassName: "left-[36rem] top-[4.75rem] w-[8rem]",
+        "right-[28%] top-[20%] w-[7rem] sm:right-[28%] sm:top-[25%] sm:w-[10rem]",
+      desktopClassName: "left-[38rem] top-[4.75rem] w-[6rem]",
       animationClass: "animate-[hero-float_6.5s_ease-in-out_infinite]",
     },
     {
@@ -29,8 +29,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 648,
       height: 264,
       mobileClassName:
-        "right-[31%] top-[33%] w-[6.75rem] sm:right-[28%] sm:top-[33%] sm:w-[8.75rem]",
-      desktopClassName: "right-[7.5rem] top-[10rem] w-[8rem]",
+        "right-[-3%] top-[43%] w-[7rem] sm:right-[-3%] sm:top-[50%] sm:w-[10rem]",
+      desktopClassName: "right-[9.5rem] top-[10rem] w-[6rem]",
       animationClass: "animate-[hero-float-alt_7.2s_ease-in-out_infinite]",
     },
     {
@@ -39,8 +39,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 684,
       height: 264,
       mobileClassName:
-        "right-[50%] top-[50%] w-[6.75rem] sm:right-[50.5%] sm:top-[50%] sm:w-[8.75rem]",
-      desktopClassName: "left-[34rem] bottom-[13.5rem] w-[8rem]",
+        "right-[32%] top-[80%] w-[7rem] sm:right-[32%] sm:top-[80%] sm:w-[10rem]",
+      desktopClassName: "left-[36rem] bottom-[17.5rem] w-[6rem]",
       animationClass: "animate-[hero-float_7.6s_ease-in-out_infinite]",
     },
     {
@@ -49,8 +49,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
       width: 768,
       height: 264,
       mobileClassName:
-        "right-[32%] top-[65%] w-[6.75rem] sm:right-[30%] sm:top-[65%] sm:w-[8.75rem]",
-      desktopClassName: "right-[8.5rem] bottom-[10rem] w-[8rem]",
+        "right-[0%] top-[110%] w-[7rem] sm:right-[0%] sm:top-[105%] sm:w-[10rem]",
+      desktopClassName: "right-[10.5rem] bottom-[12rem] w-[6rem]",
       animationClass: "animate-[hero-float-alt_6.8s_ease-in-out_infinite]",
     },
   ] as const;
@@ -70,9 +70,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
             effect="fade-left"
             delay={120}
           >
-            <div className="pointer-events-none absolute top-15 left-[57%] h-full w-[min(1320px,210vw)] -translate-x-1/2">
+            <div className="pointer-events-none absolute top-15 left-[34%] sm:left-[45%] h-full w-[min(1100px,170vw)] -translate-x-1/2 origin-top scale-[0.65] sm:scale-[0.75]">
               <img
-                src="/assets/Banner Utama-HP-NO CUT.webp"
+                src="/assets/Banner Paten Web Solid New-5.webp"
                 alt={messages.hero.visualAlt}
                 className="h-full w-full object-contain"
               />
@@ -99,7 +99,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
           {/* Text Content */}
           <ScrollReveal
-            className="relative order-2 z-10 mx-auto max-w-[22rem] text-center sm:max-w-[30rem] md:max-w-[38rem] lg:max-w-[34rem] xl:mx-0 xl:max-w-[48rem] xl:text-left"
+            className="relative order-2 z-10 mx-auto text-center lg:max-w-2xl xl:mx-0 xl:max-w-[48rem] xl:text-left"
             effect="fade-up"
           >
             <h1 className="font-mono text-3xl font-bold leading-[1.2] tracking-[-0.05em] sm:text-[3.2rem] md:text-[4rem] lg:text-[3rem] xl:text-[4rem]">
@@ -111,7 +111,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
               </span>
             </h1>
 
-            <p className="mt-3 max-w-2xl text-center sm:text-lg text-white/85 text-shadow-lg text-shadow-black xl:text-left">
+            <p className="mt-3 text-center sm:text-lg text-white/85 text-shadow-lg text-shadow-black xl:text-left">
               {messages.hero.subTitle}
             </p>
 
@@ -154,7 +154,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
             delay={160}
           >
             <img
-              src="/assets/Banner SGB-FIX.webp"
+              src="/assets/Banner SGB-FIX-1.webp"
               alt=""
               className="w-[900px] max-w-none object-contain xl:w-[1060px]"
             />

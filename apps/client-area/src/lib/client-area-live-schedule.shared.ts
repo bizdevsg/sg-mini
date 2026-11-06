@@ -16,10 +16,10 @@ export type ClientAreaActiveLiveSession = ClientAreaLiveSchedule & {
 
 export const CLIENT_AREA_LIVE_SCHEDULES: ClientAreaLiveSchedule[] = [
   {
-    channelName: "Solid Prime",
+    channelName: "Solid News",
     hour: 13,
-    href: "https://www.tiktok.com/@solid.prime",
-    id: "solid-prime-1330",
+    href: "https://www.tiktok.com/@solidgold_news",
+    id: "solid-news-1330",
     minute: 30,
   },
   {
@@ -49,7 +49,9 @@ function getJakartaDateParts(date: Date) {
     weekday: "short",
     year: "numeric",
   }).formatToParts(date);
-  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  const values = Object.fromEntries(
+    parts.map((part) => [part.type, part.value]),
+  );
 
   return {
     dateKey: `${values.year}-${values.month}-${values.day}`,
