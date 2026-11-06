@@ -335,20 +335,27 @@ export const enClientArea: AppMessages["clientArea"] = {
         "Too many requests. Please try again in {seconds} seconds.",
       creditResetsMessage: "Your quota resets on {date}.",
       quotaNotice: {
-        demoDailyTitle: "Today's demo analysis quota is used up",
+        demoDailyTitle: "Your demo analysis quota is used up",
         demoDailyBody:
-          "Demo accounts get {allowance} analyses per day. Your quota resets on {date}. Don't want to wait? Open a live account or use the TradePilot app.",
+          "Demo accounts get {allowance} analyses {per}. Your quota resets on {date}. Don't want to wait? Open a live account or use the TradePilot app.",
         demoExpiredTitle: "Your TradePilot demo access has ended",
         demoExpiredBody:
-          "TradePilot analysis for demo accounts is available for 2 weeks and ended on {date}. To continue, open a live account or download the TradePilot app.",
+          "TradePilot analysis for demo accounts is available for {days} days and ended on {date}. To continue, open a live account or download the TradePilot app.",
         demoTrialInfo: "TradePilot demo access is available until {date}.",
+        trialEndedLabel: "Access ended {date}",
+        periodLabels: {
+          daily: "per day",
+          weekly: "per week",
+          monthly: "per month",
+          never: "in total",
+        },
         openLiveCta: "Open a Live Account",
         downloadTradePilotTitle: "Or download the TradePilot app",
         googlePlayAlt: "Get TradePilot on Google Play",
         appStoreAlt: "Download TradePilot on the App Store",
         noEquityTitle: "Live account equity is below {minEquity}",
         noEquityBody:
-          "TradePilot for real accounts offers {allowance} analyses per day while your live account equity is at least {minEquity}. Make a deposit to reactivate it.",
+          "TradePilot for real accounts offers {allowance} analyses {per} while your live account equity is at least {minEquity}. Make a deposit to reactivate it.",
         equityUnknownBody:
           "We couldn't check your live account equity right now, so real analyses can't run yet. Please try again shortly.",
         equityCheckingMessage: "Checking live account equity...",

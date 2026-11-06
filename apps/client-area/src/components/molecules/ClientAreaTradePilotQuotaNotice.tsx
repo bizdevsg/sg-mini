@@ -6,6 +6,7 @@ import {
   CLIENT_AREA_TRADE_PILOT_APP_LINKS,
   type ClientAreaTradePilotCopy,
 } from "@/lib/client-area-trade-pilot.shared";
+import type { TradePilotCreditBalance } from "@/lib/trade-pilot/trade-pilot.types";
 import type { AppLocale } from "@/locales";
 
 export type ClientAreaTradePilotQuotaNoticeKind =
@@ -18,11 +19,12 @@ type ClientAreaTradePilotQuotaNoticeProps = {
   copy: ClientAreaTradePilotCopy["quotaNotice"];
   kind: ClientAreaTradePilotQuotaNoticeKind;
   locale: AppLocale;
-  /** Sudah diformat; dipakai untuk {date} (reset harian / akhir masa demo). */
+  /** Sudah diformat; dipakai untuk {date} (reset kuota / akhir masa demo). */
   date: string | null;
-  allowance: number | null;
-  /** Equity minimum akun live (USD) untuk mode Real. */
-  minEquityUsd?: number;
+  /** Saldo mode aktif — allowance, periode & masa berlaku mengikuti konsol admin. */
+  credit?: TradePilotCreditBalance;
+  /** Equity minimum akun live (USD) untuk mode Real, dari konsol admin. */
+  minEquityUsd?: number | null;
 };
 
 function fill(template: string, values: Record<string, string>) {
@@ -40,13 +42,19 @@ export function ClientAreaTradePilotQuotaNotice({
   kind,
   locale,
   date,
-  allowance,
-  minEquityUsd = 10,
+  credit,
+  minEquityUsd,
 }: ClientAreaTradePilotQuotaNoticeProps) {
+  const numberLocale = locale === "en" ? "en-US" : "id-ID";
   const values = {
-    allowance: String(allowance ?? 3),
+    allowance: credit ? String(credit.allowance) : "-",
     date: date ?? "-",
-    minEquity: `$${minEquityUsd.toLocaleString(locale === "en" ? "en-US" : "id-ID")}`,
+    days: credit?.trialDays ? String(credit.trialDays) : "-",
+    minEquity:
+      minEquityUsd === null || minEquityUsd === undefined
+        ? "-"
+        : `$${minEquityUsd.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}`,
+    per: copy.periodLabels[credit?.period ?? "daily"],
   };
   const isDemo = kind === "demo_daily" || kind === "demo_expired";
   const title =

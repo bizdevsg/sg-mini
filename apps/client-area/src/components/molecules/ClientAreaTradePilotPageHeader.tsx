@@ -21,6 +21,13 @@ export function ClientAreaTradePilotPageHeader({
   locale,
   mockDataLabel,
 }: ClientAreaTradePilotPageHeaderProps) {
+  // Demo kedaluwarsa: tampilkan akhir masa akses, bukan jadwal reset.
+  const quotaTooltip = credit?.expired && credit.trialEndsAt
+    ? copy.quotaNotice.trialEndedLabel.replace("{date}", formatTradePilotDateTime(credit.trialEndsAt, locale))
+    : credit?.resetsAt
+      ? copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))
+      : null;
+
   return (
     <div className="flex min-w-0 flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
       <div className="min-w-0">
@@ -46,14 +53,14 @@ export function ClientAreaTradePilotPageHeader({
             </span>
             <span className="text-xs text-zinc-400">{copy.quotaLabel}</span>
           </div>
-          {credit?.resetsAt ? (
+          {quotaTooltip ? (
             // Tooltip waktu reset kuota: tampil saat hover atau fokus (tap di layar sentuh).
             <span className="group relative ml-auto shrink-0">
               <button
                 type="button"
                 aria-describedby="trade-pilot-quota-reset"
-                aria-label={copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))}
-                className={`flex rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/50 ${credit.remaining < 1 ? "text-amber-400" : "text-yellow-500/60 hover:text-yellow-400"
+                aria-label={quotaTooltip}
+                className={`flex rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/50 ${(credit?.remaining ?? 0) < 1 ? "text-amber-400" : "text-yellow-500/60 hover:text-yellow-400"
                   }`}
               >
                 <Info className="h-5 w-5" />
@@ -64,7 +71,7 @@ export function ClientAreaTradePilotPageHeader({
                 role="tooltip"
                 className="pointer-events-none absolute right-0 top-full z-30 mt-2 w-max max-w-[16rem] rounded-xl border border-zinc-700 bg-zinc-900/95 px-3 py-2 text-xs text-yellow-200 opacity-0 shadow-xl backdrop-blur-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
               >
-                {copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))}
+                {quotaTooltip}
               </div>
             </span>
           ) : null}

@@ -1,7 +1,7 @@
 ## [Unreleased]
 
 ### Added
-- TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10 (`TRADE_PILOT_MIN_REAL_EQUITY_USD`). Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim `X-TradePilot-Real-Equity` ke backend.
+- TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10. Seluruh angka (jumlah, periode, masa berlaku, equity minimum) mengikuti Pengaturan kuota di konsol admin SGB-TP lewat objek credit (`period`, `trialDays`, `trialEndsAt`, `expired`, `minEquityUsd`), termasuk teks disclaimer dan tooltip kuota. Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim nilai equity (USD) lewat `X-TradePilot-Real-Equity` ke backend.
 
 ### Changed
 - Nilai kosong pada ringkasan akun Client Area ditampilkan sebagai “Belum tersedia” agar status data lebih jelas.

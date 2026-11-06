@@ -106,23 +106,26 @@ export function ClientAreaTradePilotPanel({
     ? accountMode
     : "real";
   // Mode Real hanya selama akun live punya equity; dicek di server saat mode Real aktif.
-  const [realEquity, setRealEquity] = useState<
-    TradePilotRealEquityStatus | "checking" | "not_applicable"
-  >("checking");
-  const [minEquityUsd, setMinEquityUsd] = useState(10);
+  // Equity akun live (USD); batas minimum datang dari backend (credits.real.minEquityUsd).
+  const [realEquityCheck, setRealEquityCheck] = useState<
+    { equityUsd: number | null; status: "checked" } | { status: "checking" | "not_applicable" }
+  >({ status: "checking" });
+  // Ditolak backend (no_equity) walau cek lokal lolos, mis. batas baru diubah admin.
+  const [realEquityRejected, setRealEquityRejected] =
+    useState<TradePilotRealEquityStatus | null>(null);
 
   useEffect(() => {
     if (mode !== "real") return;
     let cancelled = false;
     // Awal "checking"; saat kembali ke Real, hasil sebelumnya dipakai sampai cek baru selesai.
     getClientAreaTradePilotRealEquity()
-      .then(({ minEquityUsd: min, status }) => {
+      .then((result) => {
         if (cancelled) return;
-        setMinEquityUsd(min);
-        setRealEquity(status);
+        setRealEquityCheck(result);
+        setRealEquityRejected(null);
       })
       .catch(() => {
-        if (!cancelled) setRealEquity("unknown");
+        if (!cancelled) setRealEquityCheck({ equityUsd: null, status: "checked" });
       });
     return () => {
       cancelled = true;
@@ -130,6 +133,18 @@ export function ClientAreaTradePilotPanel({
   }, [mode]);
 
   const modeCredit = credits[mode];
+  const minEquityUsd = credits.real?.minEquityUsd ?? null;
+  const realEquity: TradePilotRealEquityStatus | "checking" | "not_applicable" =
+    realEquityRejected ??
+    (realEquityCheck.status === "checked"
+      ? minEquityUsd === null
+        ? "positive"
+        : realEquityCheck.equityUsd === null
+          ? "unknown"
+          : realEquityCheck.equityUsd >= minEquityUsd
+            ? "positive"
+            : "none"
+      : realEquityCheck.status);
   const quotaNoticeKind: ClientAreaTradePilotQuotaNoticeKind | null =
     mode === "demo"
       ? modeCredit?.expired
@@ -347,7 +362,7 @@ export function ClientAreaTradePilotPanel({
     }
 
     if (result.status === "no_equity") {
-      setRealEquity(result.reason);
+      setRealEquityRejected(result.reason);
       return;
     }
 
@@ -472,8 +487,8 @@ export function ClientAreaTradePilotPanel({
             </p>
           ) : quotaNoticeKind ? (
             <ClientAreaTradePilotQuotaNotice
-              allowance={modeCredit?.allowance ?? null}
               copy={copy.quotaNotice}
+              credit={modeCredit}
               date={quotaNoticeDate}
               kind={quotaNoticeKind}
               locale={locale}

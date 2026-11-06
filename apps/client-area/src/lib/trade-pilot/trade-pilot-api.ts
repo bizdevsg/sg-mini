@@ -231,8 +231,11 @@ const creditSchema = z.object({
   remaining: z.number().int().nonnegative(),
   resetsAt: z.string(),
   // Opsional: backend sebelum kebijakan masa berlaku tidak mengirim field ini.
+  period: z.enum(["daily", "weekly", "monthly", "never"]).optional().catch(undefined),
+  trialDays: z.number().int().nullable().optional().catch(null),
   trialEndsAt: z.string().nullable().optional().catch(null),
   expired: z.boolean().optional().catch(false),
+  minEquityUsd: z.number().nullable().optional().catch(null),
 });
 const confidenceSchema = z.object({
   fundamental: z.string().nullable(),

@@ -34,13 +34,19 @@ export type TradePilotCreditBalance = {
   remaining: number;
   resetsAt: string;
   source: TradePilotDataSource;
+  /** Periode reset kuota yang diatur di konsol admin. */
+  period?: "daily" | "weekly" | "monthly" | "never";
+  /** Masa berlaku (hari) sejak pertama pakai mode ini; null = tanpa batas. */
+  trialDays?: number | null;
   /** Akhir masa berlaku mode ini (demo: 14 hari sejak pertama pakai); null = tanpa batas. */
   trialEndsAt?: string | null;
   /** true bila masa berlaku sudah lewat — tidak ada reset harian lagi. */
   expired?: boolean;
+  /** Equity minimum akun live (USD) untuk mode real, diatur di konsol admin; null = tanpa syarat. */
+  minEquityUsd?: number | null;
 };
 
-/** Status equity akun live; mode Real hanya boleh dipakai bila "positive". */
+/** Status equity akun live vs batas minimum; mode Real hanya boleh dipakai bila "positive". */
 export type TradePilotRealEquityStatus = "positive" | "none" | "unknown";
 
 export type TradePilotAnalysisRequest = {
@@ -363,8 +369,8 @@ export type TradePilotRequestContext = {
   language?: "id" | "en";
   /** HMAC hex 64 karakter, dikirim sebagai X-TradePilot-User. */
   userId: string;
-  /** Dikirim sebagai X-TradePilot-Real-Equity (wajib "positive" untuk analisis Real). */
-  realEquity?: TradePilotRealEquityStatus;
+  /** Dikirim sebagai X-TradePilot-Real-Equity: angka USD atau "unknown". */
+  realEquity?: string;
 };
 
 export type TradePilotHistoryPage = {

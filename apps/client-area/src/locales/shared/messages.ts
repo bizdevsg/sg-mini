@@ -459,6 +459,13 @@ export type AppMessages = {
           demoExpiredTitle: string;
           demoExpiredBody: string;
           demoTrialInfo: string;
+          trialEndedLabel: string;
+          periodLabels: {
+            daily: string;
+            weekly: string;
+            monthly: string;
+            never: string;
+          };
           openLiveCta: string;
           downloadTradePilotTitle: string;
           googlePlayAlt: string;

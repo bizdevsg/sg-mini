@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 import { runLiveTradePilotAnalysis } from "@/lib/trade-pilot/trade-pilot-api";
-import { getTradePilotRealEquityStatus } from "@/lib/trade-pilot/trade-pilot-equity";
+import {
+  getTradePilotRealEquityUsd,
+  realEquityHeaderValue,
+} from "@/lib/trade-pilot/trade-pilot-equity";
 import {
   authorizeTradePilotRoute,
   rateLimitTradePilotRoute,
@@ -30,12 +33,11 @@ export async function POST(request: Request) {
     return tradePilotJson({ error: "invalid_request" }, 400);
   }
 
-  // Mode Real hanya selama akun live punya equity (fail closed).
+  // Mode Real: equity dikirim ke backend; batas minimum diatur di konsol admin.
   const realEquity =
-    input.data.mode === "real" ? await getTradePilotRealEquityStatus() : undefined;
-  if (realEquity && realEquity !== "positive") {
-    return tradePilotJson({ error: "no_equity", reason: realEquity }, 403);
-  }
+    input.data.mode === "real"
+      ? realEquityHeaderValue(await getTradePilotRealEquityUsd())
+      : undefined;
 
   try {
     return tradePilotJson(

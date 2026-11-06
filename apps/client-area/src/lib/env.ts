@@ -88,13 +88,6 @@ function resolveTradePilotApiRoot(): string {
 
 /** URL lengkap sampai `/v1/trade-pilot` (server-only). */
 export const TRADE_PILOT_API_ROOT = resolveTradePilotApiRoot();
-/**
- * Equity minimum akun live (USD) agar TradePilot mode Real aktif. Default $10.
- */
-export const TRADE_PILOT_MIN_REAL_EQUITY_USD = (() => {
-  const parsed = Number(process.env.TRADE_PILOT_MIN_REAL_EQUITY_USD?.trim());
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 10;
-})();
 export const TRADE_PILOT_API_KEY =
   process.env.TRADE_PILOT_API_KEY?.trim() ?? "";
 /** Secret HMAC khusus userId TradePilot. Jangan dirotasi tanpa rencana migrasi. */
