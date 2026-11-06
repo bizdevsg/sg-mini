@@ -42,6 +42,8 @@ export type TradePilotUiStatus =
   | "invalid_request"
   | "access_denied"
   | "insufficient_credit"
+  | "trial_expired"
+  | "no_equity"
   | "error";
 
 export const TRADE_PILOT_UNAVAILABLE_MESSAGE =
@@ -61,6 +63,8 @@ export class TradePilotApiError extends Error {
 
   get uiStatus(): TradePilotUiStatus {
     if (this.code === "insufficient_credit") return "insufficient_credit";
+    if (this.code === "trial_expired") return "trial_expired";
+    if (this.code === "no_equity") return "no_equity";
     if (this.httpStatus === 401 || this.httpStatus === 403) return "access_denied";
     if (this.httpStatus === 400 || this.httpStatus === 404 || this.httpStatus === 409) {
       return "invalid_request";
@@ -131,6 +135,7 @@ async function tradePilotFetch(
     "X-Request-Id": requestId,
     "X-TradePilot-User": context.userId,
   };
+  if (context.realEquity) headers["X-TradePilot-Real-Equity"] = context.realEquity;
   if (options.body !== undefined) headers["Content-Type"] = "application/json";
   if (options.idempotencyKey) headers["Idempotency-Key"] = options.idempotencyKey;
 
@@ -225,6 +230,9 @@ const creditSchema = z.object({
   mode: modeSchema,
   remaining: z.number().int().nonnegative(),
   resetsAt: z.string(),
+  // Opsional: backend sebelum kebijakan masa berlaku tidak mengirim field ini.
+  trialEndsAt: z.string().nullable().optional().catch(null),
+  expired: z.boolean().optional().catch(false),
 });
 const confidenceSchema = z.object({
   fundamental: z.string().nullable(),

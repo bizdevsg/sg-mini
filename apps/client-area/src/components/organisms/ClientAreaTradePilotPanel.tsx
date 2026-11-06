@@ -2,12 +2,19 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 
-import { runClientAreaTradePilotAnalysis } from "@/app/actions/clientAreaTradePilot";
+import {
+  getClientAreaTradePilotRealEquity,
+  runClientAreaTradePilotAnalysis,
+} from "@/app/actions/clientAreaTradePilot";
 
 import { ClientAreaLivePriceTicker } from "@/components/molecules/ClientAreaLivePriceTicker";
 import { ClientAreaTradePilotActions } from "@/components/molecules/ClientAreaTradePilotActions";
 import { ClientAreaTradePilotInstrumentPicker } from "@/components/molecules/ClientAreaTradePilotInstrumentPicker";
 import { ClientAreaTradePilotPageHeader } from "@/components/molecules/ClientAreaTradePilotPageHeader";
+import {
+  ClientAreaTradePilotQuotaNotice,
+  type ClientAreaTradePilotQuotaNoticeKind,
+} from "@/components/molecules/ClientAreaTradePilotQuotaNotice";
 import { ClientAreaTradePilotChartPanel } from "@/components/organisms/ClientAreaTradePilotChartPanel";
 import { ClientAreaTradePilotAnalysisResultSection } from "@/components/organisms/ClientAreaTradePilotAnalysisResultSection";
 import { ClientAreaTradePilotFundamentalSection } from "@/components/organisms/ClientAreaTradePilotFundamentalSection";
@@ -31,6 +38,7 @@ import type {
   TradePilotAnalysisResult,
   TradePilotBootstrap,
   TradePilotMode,
+  TradePilotRealEquityStatus,
 } from "@/lib/trade-pilot/trade-pilot.types";
 import type { AppLocale } from "@/locales";
 import type { EconomicCalendarEvent } from "@/lib/economic-calendar.shared";
@@ -97,6 +105,52 @@ export function ClientAreaTradePilotPanel({
   const mode: TradePilotMode = bootstrap.access.availableModes.includes(accountMode)
     ? accountMode
     : "real";
+  // Mode Real hanya selama akun live punya equity; dicek di server saat mode Real aktif.
+  const [realEquity, setRealEquity] = useState<
+    TradePilotRealEquityStatus | "checking" | "not_applicable"
+  >("checking");
+  const [minEquityUsd, setMinEquityUsd] = useState(10);
+
+  useEffect(() => {
+    if (mode !== "real") return;
+    let cancelled = false;
+    // Awal "checking"; saat kembali ke Real, hasil sebelumnya dipakai sampai cek baru selesai.
+    getClientAreaTradePilotRealEquity()
+      .then(({ minEquityUsd: min, status }) => {
+        if (cancelled) return;
+        setMinEquityUsd(min);
+        setRealEquity(status);
+      })
+      .catch(() => {
+        if (!cancelled) setRealEquity("unknown");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [mode]);
+
+  const modeCredit = credits[mode];
+  const quotaNoticeKind: ClientAreaTradePilotQuotaNoticeKind | null =
+    mode === "demo"
+      ? modeCredit?.expired
+        ? "demo_expired"
+        : modeCredit && modeCredit.remaining < 1
+          ? "demo_daily"
+          : null
+      : realEquity === "none"
+        ? "no_equity"
+        : realEquity === "unknown"
+          ? "equity_unknown"
+          : null;
+  const quotaBlocked =
+    quotaNoticeKind !== null || (mode === "real" && realEquity === "checking");
+  const quotaNoticeDate =
+    quotaNoticeKind === "demo_expired" && modeCredit?.trialEndsAt
+      ? formatTradePilotDateTime(modeCredit.trialEndsAt, locale)
+      : quotaNoticeKind === "demo_daily" && modeCredit?.resetsAt
+        ? formatTradePilotDateTime(modeCredit.resetsAt, locale)
+        : null;
+
   // Analisis yang dibuka dari halaman Riwayat (?analysisId=...).
   const [historyView, setHistoryView] = useState<{ analyzedAt: string } | null>(null);
   const [historyViewError, setHistoryViewError] = useState(false);
@@ -283,6 +337,39 @@ export function ClientAreaTradePilotPanel({
       return;
     }
 
+    if (result.status === "trial_expired") {
+      // Notice demo_expired diambil dari credits; jangan tampilkan error ganda.
+      setCredits((current) => {
+        const credit = current[mode];
+        return credit ? { ...current, [mode]: { ...credit, expired: true, remaining: 0 } } : current;
+      });
+      return;
+    }
+
+    if (result.status === "no_equity") {
+      setRealEquity(result.reason);
+      return;
+    }
+
+    if (result.status === "insufficient_credit" && mode === "demo") {
+      // Kuota harian demo habis: tampilkan disclaimer buka akun live / download app.
+      setCredits((current) => {
+        const credit = current[mode];
+        return credit
+          ? {
+              ...current,
+              [mode]: {
+                ...credit,
+                consumed: credit.allowance,
+                remaining: 0,
+                resetsAt: result.resetsAt ?? credit.resetsAt,
+              },
+            }
+          : current;
+      });
+      return;
+    }
+
     if (result.status === "insufficient_credit") {
       const resetsAt = result.resetsAt ?? credits[mode]?.resetsAt;
       setAnalysisError(
@@ -375,13 +462,26 @@ export function ClientAreaTradePilotPanel({
           />
           <ClientAreaTradePilotActions
             copy={copy}
-            disabled={(credits[mode]?.remaining ?? 0) < 1 || pauseReason !== null}
+            disabled={(credits[mode]?.remaining ?? 0) < 1 || pauseReason !== null || quotaBlocked}
             isAnalyzing={isAnalyzing}
             onAnalyze={handleAnalyze}
           />
           {analysisError && errorOrigin === "picker" ? (
             <p role="alert" className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
               {analysisError}
+            </p>
+          ) : quotaNoticeKind ? (
+            <ClientAreaTradePilotQuotaNotice
+              allowance={modeCredit?.allowance ?? null}
+              copy={copy.quotaNotice}
+              date={quotaNoticeDate}
+              kind={quotaNoticeKind}
+              locale={locale}
+              minEquityUsd={minEquityUsd}
+            />
+          ) : mode === "real" && realEquity === "checking" ? (
+            <p role="status" className="mt-3 rounded-xl border border-zinc-700 bg-zinc-800/60 p-3 text-xs text-zinc-300">
+              {copy.quotaNotice.equityCheckingMessage}
             </p>
           ) : (credits[mode]?.remaining ?? 1) < 1 && credits[mode]?.resetsAt ? (
             <p role="status" className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
@@ -391,6 +491,13 @@ export function ClientAreaTradePilotPanel({
           ) : pauseMessage ? (
             <p role="status" className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
               {pauseMessage}
+            </p>
+          ) : mode === "demo" && modeCredit?.trialEndsAt ? (
+            <p className="mt-3 text-center text-[11px] text-zinc-400">
+              {copy.quotaNotice.demoTrialInfo.replace(
+                "{date}",
+                formatTradePilotDateTime(modeCredit.trialEndsAt, locale),
+              )}
             </p>
           ) : null}
         </aside>

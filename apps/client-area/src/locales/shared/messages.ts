@@ -453,6 +453,21 @@ export type AppMessages = {
         rateLimitedMessage: string;
         rateLimitedRetryMessage: string;
         creditResetsMessage: string;
+        quotaNotice: {
+          demoDailyTitle: string;
+          demoDailyBody: string;
+          demoExpiredTitle: string;
+          demoExpiredBody: string;
+          demoTrialInfo: string;
+          openLiveCta: string;
+          downloadTradePilotTitle: string;
+          googlePlayAlt: string;
+          appStoreAlt: string;
+          noEquityTitle: string;
+          noEquityBody: string;
+          equityUnknownBody: string;
+          equityCheckingMessage: string;
+        };
         serviceUnavailableMessage: string;
         onboardingTitle: string;
         onboardingDescription: string;

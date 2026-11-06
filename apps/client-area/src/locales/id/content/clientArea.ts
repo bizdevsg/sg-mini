@@ -329,6 +329,25 @@ export const idClientArea: AppMessages["clientArea"] = {
       rateLimitedRetryMessage:
         "Terlalu banyak permintaan. Coba lagi dalam {seconds} detik.",
       creditResetsMessage: "Kuota akan direset pada {date}.",
+      quotaNotice: {
+        demoDailyTitle: "Kuota analisis demo hari ini sudah habis",
+        demoDailyBody:
+          "Akun demo mendapat {allowance} analisis per hari. Kuota direset pada {date}. Ingin analisis tanpa menunggu? Buka akun live atau gunakan aplikasi TradePilot.",
+        demoExpiredTitle: "Masa akses TradePilot demo sudah berakhir",
+        demoExpiredBody:
+          "Akses analisis TradePilot untuk akun demo berlaku 2 minggu dan telah berakhir pada {date}. Untuk melanjutkan, buka akun live atau download aplikasi TradePilot.",
+        demoTrialInfo: "Akses TradePilot demo berlaku sampai {date}.",
+        openLiveCta: "Buka Akun Live",
+        downloadTradePilotTitle: "Atau download aplikasi TradePilot",
+        googlePlayAlt: "Download TradePilot di Google Play",
+        appStoreAlt: "Download TradePilot di App Store",
+        noEquityTitle: "Equity akun live di bawah {minEquity}",
+        noEquityBody:
+          "TradePilot akun real tersedia {allowance} analisis per hari selama equity akun live Anda minimal {minEquity}. Lakukan deposit untuk mengaktifkan kembali.",
+        equityUnknownBody:
+          "Equity akun live belum dapat diperiksa saat ini, sehingga analisis real belum bisa dijalankan. Silakan coba lagi sebentar lagi.",
+        equityCheckingMessage: "Memeriksa equity akun live...",
+      },
       serviceUnavailableMessage:
         "TradePilot sedang tidak dapat dihubungi. Kredit dan riwayat belum dapat dimuat.",
       onboardingTitle: "Selamat datang di TradePilot",

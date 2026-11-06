@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+### Added
+- TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10 (`TRADE_PILOT_MIN_REAL_EQUITY_USD`). Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim `X-TradePilot-Real-Equity` ke backend.
+
 ### Changed
 - Nilai kosong pada ringkasan akun Client Area ditampilkan sebagai “Belum tersedia” agar status data lebih jelas.
 - Live price dan ringkasan akun Client Area kini menggunakan satu stream SAI per mode akun, dengan pemrosesan format harga IDR/USD, heartbeat, reconnect, dan penanganan sesi kedaluwarsa sesuai dokumentasi integrasi.

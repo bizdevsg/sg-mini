@@ -34,7 +34,14 @@ export type TradePilotCreditBalance = {
   remaining: number;
   resetsAt: string;
   source: TradePilotDataSource;
+  /** Akhir masa berlaku mode ini (demo: 14 hari sejak pertama pakai); null = tanpa batas. */
+  trialEndsAt?: string | null;
+  /** true bila masa berlaku sudah lewat — tidak ada reset harian lagi. */
+  expired?: boolean;
 };
+
+/** Status equity akun live; mode Real hanya boleh dipakai bila "positive". */
+export type TradePilotRealEquityStatus = "positive" | "none" | "unknown";
 
 export type TradePilotAnalysisRequest = {
   instrumentId: TradePilotInstrumentId;
@@ -356,6 +363,8 @@ export type TradePilotRequestContext = {
   language?: "id" | "en";
   /** HMAC hex 64 karakter, dikirim sebagai X-TradePilot-User. */
   userId: string;
+  /** Dikirim sebagai X-TradePilot-Real-Equity (wajib "positive" untuk analisis Real). */
+  realEquity?: TradePilotRealEquityStatus;
 };
 
 export type TradePilotHistoryPage = {
@@ -371,6 +380,10 @@ export type TradePilotAnalysisActionResult =
       status: "success";
     }
   | { resetsAt: string | null; status: "insufficient_credit" }
+  /** Masa berlaku demo (14 hari) sudah habis. */
+  | { status: "trial_expired" }
+  /** Akun live tanpa equity ("none") atau equity gagal dicek ("unknown"). */
+  | { reason: "none" | "unknown"; status: "no_equity" }
   | { retryAfterSeconds: number | null; status: "rate_limited" }
   /** Analisis dijeda admin (kill switch); message dari backend sudah terlokalisasi. */
   | { message: string; status: "analysis_paused" }

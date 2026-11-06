@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 
-import { TRADE_PILOT_DATA_SOURCE } from "@/lib/env";
+import { TRADE_PILOT_DATA_SOURCE, TRADE_PILOT_MIN_REAL_EQUITY_USD } from "@/lib/env";
 import { getTradePilotAccessContext } from "@/lib/trade-pilot/trade-pilot-access";
+import { getTradePilotRealEquityStatus } from "@/lib/trade-pilot/trade-pilot-equity";
 import {
   getLiveTradePilotCredits,
   runLiveTradePilotAnalysis,
@@ -15,6 +16,7 @@ import { consumeTradePilotRateLimit } from "@/lib/trade-pilot/trade-pilot-rate-l
 import type {
   TradePilotAnalysisActionResult,
   TradePilotMode,
+  TradePilotRealEquityStatus,
 } from "@/lib/trade-pilot/trade-pilot.types";
 
 const requestSchema = z.object({
@@ -58,6 +60,16 @@ export async function runClientAreaTradePilotAnalysis(
     instrumentLabel: INSTRUMENT_LABELS[request.data.instrumentId],
   };
 
+  // Mode Real: 3 analisis/hari HANYA selama akun live punya equity.
+  // Fail closed — equity yang gagal dicek juga ditolak (sebelum kredit dipotong).
+  let realEquity: TradePilotRealEquityStatus | undefined;
+  if (TRADE_PILOT_DATA_SOURCE === "api" && request.data.mode === "real") {
+    realEquity = await getTradePilotRealEquityStatus();
+    if (realEquity !== "positive") {
+      return { reason: realEquity, status: "no_equity" };
+    }
+  }
+
   try {
     let result;
 
@@ -68,6 +80,7 @@ export async function runClientAreaTradePilotAnalysis(
         {
           allowedModes: access.availableModes,
           language,
+          realEquity,
           userId: access.userId,
         },
         analysisRequest,
@@ -109,6 +122,10 @@ export async function runClientAreaTradePilotAnalysis(
             resetsAt: await getCreditResetsAt(access, request.data.mode, language),
             status: "insufficient_credit",
           };
+        case "trial_expired":
+          return { status: "trial_expired" };
+        case "no_equity":
+          return { reason: "none", status: "no_equity" };
         case "access_denied":
           return { status: "access_denied" };
         case "invalid_request":
@@ -136,4 +153,21 @@ async function getCreditResetsAt(
   } catch {
     return null;
   }
+}
+
+/**
+ * Status equity akun live untuk UI mode Real (tombol Analisis & pesan).
+ * Penegakan tetap di runClientAreaTradePilotAnalysis dan backend.
+ */
+export async function getClientAreaTradePilotRealEquity(): Promise<{
+  minEquityUsd: number;
+  status: TradePilotRealEquityStatus | "not_applicable";
+}> {
+  const minEquityUsd = TRADE_PILOT_MIN_REAL_EQUITY_USD;
+  if (TRADE_PILOT_DATA_SOURCE !== "api") return { minEquityUsd, status: "not_applicable" };
+  const access = await getTradePilotAccessContext();
+  if (!access.allowed || !access.availableModes.includes("real")) {
+    return { minEquityUsd, status: "not_applicable" };
+  }
+  return { minEquityUsd, status: await getTradePilotRealEquityStatus() };
 }
