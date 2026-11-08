@@ -5,10 +5,10 @@ import { LiveQuoteInstrumentIcon } from "@/components/atoms/LiveQuoteInstrumentI
 type ClientAreaMarketHeaderProps = {
   absoluteChange: string | null;
   currentPrice: string;
-  direction: "up" | "down";
+  direction: "up" | "down" | "-";
   directionClassName: string;
   marketCode: string;
-  percentageChange: string;
+  percentageChange: string | null;
   symbol: string;
 };
 
@@ -50,7 +50,7 @@ export function ClientAreaMarketHeader({
           </span>
         </div>
 
-        <span
+        {percentageChange !== null ? <span
           className={`ml-1 inline-flex items-center gap-1 text-sm font-medium sm:text-base ${directionClassName}`}
         >
           <DirectionIcon
@@ -59,7 +59,7 @@ export function ClientAreaMarketHeader({
           />
           {absoluteChange ? `${absoluteChange} ` : null}
           ({percentageChange})
-        </span>
+        </span> : null}
       </div>
     </>
   );

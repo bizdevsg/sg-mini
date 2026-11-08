@@ -203,9 +203,9 @@ export type MarketPrice = {
   symbol: string;
   name: string;
   code?: string;
-  bid: number;
-  ask: number;
-  change: number;
+  bid: number | null;
+  ask: number | null;
+  change: number | null;
   price?: string;
   sell?: string;
   buy?: string;

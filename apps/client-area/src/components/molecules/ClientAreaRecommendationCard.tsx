@@ -34,8 +34,8 @@ export function ClientAreaRecommendationCard({
   liveTickLabel,
   priceLabel,
 }: ClientAreaRecommendationCardProps) {
-  const signal = resolveSignalBadge(item.change);
-  const SignalIcon = signal.icon;
+  const signal = item.change === null ? null : resolveSignalBadge(item.change);
+  const SignalIcon = signal?.icon;
   const symbolCode = item.code ?? item.name;
 
   const content = (
@@ -70,18 +70,18 @@ export function ClientAreaRecommendationCard({
             {priceLabel}
           </p>
           <p className="text-base font-bold tracking-tight text-zinc-100">
-            {formatUsd(item.bid)}
+            {item.bid === null ? "-" : formatUsd(item.bid)}
           </p>
         </div>
 
         <div className="text-right">
           <span
-            className={`flex items-center justify-end gap-1 text-xs font-bold ${signal.className}`}
+            className={`flex items-center justify-end gap-1 text-xs font-bold ${signal?.className ?? "text-zinc-500"}`}
           >
-            <SignalIcon className="h-3 w-3" />
-            {formatSignedPercent(item.change)}
+            {SignalIcon ? <SignalIcon className="h-3 w-3" /> : null}
+            {item.change === null ? "-" : formatSignedPercent(item.change)}
           </span>
-          <span className="text-[9px] text-zinc-500">{liveTickLabel}</span>
+          {item.bid !== null ? <span className="text-[9px] text-zinc-500">{liveTickLabel}</span> : null}
         </div>
       </div>
     </>

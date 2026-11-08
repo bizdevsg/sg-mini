@@ -32,17 +32,19 @@ export function ClientAreaMarketCard({
   onViewTransactions,
   viewTransactionsLabel,
 }: ClientAreaMarketCardProps) {
-  const direction = item.change >= 0 ? "up" : "down";
+  const direction = item.change === null ? "-" : item.change >= 0 ? "up" : "down";
   const directionClassName = getDirectionClassName(direction);
   const directionContainerClassName =
-    direction === "up"
+    direction === "-"
+      ? "border-zinc-700/35 bg-zinc-900/30"
+      : direction === "up"
       ? "border-emerald-400/35 bg-linear-to-br from-emerald-500/20 to-emerald-950/15"
       : "border-red-400/35 bg-linear-to-br from-red-500/20 to-red-950/15";
   const marketCode = item.code ?? item.name;
 
   function formatMetricValue(
     value: string | undefined,
-    fallback?: number,
+    fallback?: number | null,
   ) {
     if (value) {
       return formatQuoteNumber(value, locale);
@@ -56,9 +58,9 @@ export function ClientAreaMarketCard({
   }
 
   const marketMetrics = {
-    high: formatMetricValue(item.high, item.ask),
-    low: formatMetricValue(item.low, item.bid),
-    open: formatMetricValue(item.open, item.bid),
+    high: formatMetricValue(item.high),
+    low: formatMetricValue(item.low),
+    open: formatMetricValue(item.open),
     sell: formatMetricValue(item.sell, item.ask),
     buy: formatMetricValue(item.buy, item.bid),
     time:
@@ -68,12 +70,12 @@ export function ClientAreaMarketCard({
   };
 
   const currentPrice = formatMetricValue(item.price, item.bid);
-  const parsedCurrentPrice = Number(
-    (item.price ?? String(item.bid)).replace(/,/g, ""),
-  );
+  const parsedCurrentPrice = item.price
+    ? Number(item.price.replace(/,/g, ""))
+    : item.bid;
   const parsedOpenPrice = Number(item.open?.replace(/,/g, ""));
   const absoluteChange =
-    Number.isFinite(parsedCurrentPrice) && Number.isFinite(parsedOpenPrice)
+    parsedCurrentPrice !== null && Number.isFinite(parsedCurrentPrice) && Number.isFinite(parsedOpenPrice)
       ? parsedCurrentPrice - parsedOpenPrice
       : null;
   const changeSign = direction === "up" ? "+" : "-";
@@ -81,7 +83,9 @@ export function ClientAreaMarketCard({
     absoluteChange === null
       ? null
       : `${absoluteChange >= 0 ? "+" : "-"}${formatQuoteNumber(Math.abs(absoluteChange).toFixed(2), locale)}`;
-  const formattedPercentageChange = `${changeSign}${formatQuoteNumber(Math.abs(item.change).toFixed(2), locale)}%`;
+  const formattedPercentageChange = item.change === null
+    ? null
+    : `${changeSign}${formatQuoteNumber(Math.abs(item.change).toFixed(2), locale)}%`;
 
   return (
     <article

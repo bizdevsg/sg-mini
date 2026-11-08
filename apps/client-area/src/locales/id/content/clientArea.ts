@@ -938,12 +938,8 @@ export const idClientArea: AppMessages["clientArea"] = {
         label: "Produk",
       },
       {
-        id: "withdraw",
-        label: "Withdraw",
-      },
-      {
-        id: "deposit",
-        label: "Deposit",
+        id: "trade-pilot",
+        label: "Trade Pilot",
       },
       {
         id: "temporary",

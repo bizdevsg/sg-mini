@@ -507,13 +507,6 @@ export function ClientAreaTradePilotPanel({
             <p role="status" className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
               {pauseMessage}
             </p>
-          ) : mode === "demo" && modeCredit?.trialEndsAt ? (
-            <p className="mt-3 text-center text-[11px] text-zinc-400">
-              {copy.quotaNotice.demoTrialInfo.replace(
-                "{date}",
-                formatTradePilotDateTime(modeCredit.trialEndsAt, locale),
-              )}
-            </p>
           ) : null}
         </aside>
 

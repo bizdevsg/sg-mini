@@ -22,14 +22,28 @@ export function ClientAreaTradePilotPageHeader({
   mockDataLabel,
 }: ClientAreaTradePilotPageHeaderProps) {
   // Demo kedaluwarsa: tampilkan akhir masa akses, bukan jadwal reset.
-  const quotaTooltip = credit?.expired && credit.trialEndsAt
-    ? copy.quotaNotice.trialEndedLabel.replace("{date}", formatTradePilotDateTime(credit.trialEndsAt, locale))
-    : credit?.resetsAt
-      ? copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale))
-      : null;
+  const quotaTooltipLines: string[] = [];
+  if (credit?.expired && credit.trialEndsAt) {
+    quotaTooltipLines.push(
+      copy.quotaNotice.trialEndedLabel.replace("{date}", formatTradePilotDateTime(credit.trialEndsAt, locale)),
+    );
+  } else {
+    if (credit?.resetsAt) {
+      quotaTooltipLines.push(
+        copy.quotaResetLabel.replace("{date}", formatTradePilotDateTime(credit.resetsAt, locale)),
+      );
+    }
+    // Masa akses demo (trialEndsAt hanya ada untuk akun demo).
+    if (credit?.trialEndsAt) {
+      quotaTooltipLines.push(
+        copy.quotaNotice.demoTrialInfo.replace("{date}", formatTradePilotDateTime(credit.trialEndsAt, locale)),
+      );
+    }
+  }
+  const quotaTooltip = quotaTooltipLines.length ? quotaTooltipLines.join(" ") : null;
 
   return (
-    <div className="flex min-w-0 flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
+    <div className="relative z-30 flex min-w-0 flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="text-lg font-bold text-white sm:text-xl">{copy.title}</h1>
@@ -45,7 +59,7 @@ export function ClientAreaTradePilotPageHeader({
       </div>
 
       <div className="grid w-full min-w-0 gap-3 sm:grid-cols-2 2xl:flex 2xl:w-auto 2xl:shrink-0">
-        <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-zinc-500/10 bg-zinc-900/70 px-4 py-2.5 backdrop-blur-lg sm:rounded-full sm:px-5">
+        <div className="relative z-20 flex min-w-0 items-center gap-3 rounded-2xl border border-zinc-500/10 bg-zinc-900/70 px-4 py-2.5 backdrop-blur-lg sm:rounded-full sm:px-5">
           <CreditCard className="h-7 w-7 shrink-0 text-yellow-400" />
           <div className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-semibold">
@@ -55,7 +69,7 @@ export function ClientAreaTradePilotPageHeader({
           </div>
           {quotaTooltip ? (
             // Tooltip waktu reset kuota: tampil saat hover atau fokus (tap di layar sentuh).
-            <span className="group relative ml-auto shrink-0">
+            <span className="group relative ml-auto z-10 shrink-0">
               <button
                 type="button"
                 aria-describedby="trade-pilot-quota-reset"
@@ -69,9 +83,11 @@ export function ClientAreaTradePilotPageHeader({
               <div
                 id="trade-pilot-quota-reset"
                 role="tooltip"
-                className="pointer-events-none absolute right-0 top-full z-30 mt-2 w-max max-w-[16rem] rounded-xl border border-zinc-700 bg-zinc-900/95 px-3 py-2 text-xs text-yellow-200 opacity-0 shadow-xl backdrop-blur-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+                className="pointer-events-none absolute right-0 top-full z-40 mt-2 w-max max-w-[16rem] rounded-xl border border-zinc-700 bg-zinc-900/95 px-3 py-2 text-xs text-yellow-200 opacity-0 shadow-xl backdrop-blur-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
               >
-                {quotaTooltip}
+                {quotaTooltipLines.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
               </div>
             </span>
           ) : null}

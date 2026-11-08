@@ -1,10 +1,7 @@
-import type { LucideIcon } from "lucide-react";
+import { Rocket, type LucideIcon } from "lucide-react";
 
 import { ClientAreaQuickActionButton } from "@/components/atoms/ClientAreaQuickActionButton";
-import {
-  ACTION_IDS,
-  resolveLocalizedHref,
-} from "@/components/organisms/client-area.shared";
+import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
 import type { ActionId } from "@/components/organisms/client-area.types";
 import type { AppLocale, AppMessages } from "@/locales";
 
@@ -18,33 +15,28 @@ type ClientAreaQuickActionsGridProps = {
 export function ClientAreaQuickActionsGrid({
   clientArea,
   locale,
-  onActionClick,
   quickActionIconMap,
 }: ClientAreaQuickActionsGridProps) {
+  const actions = [
+    { id: "education", href: "/client-area/ebook", icon: quickActionIconMap.education },
+    { id: "products", href: "/client-area/market", icon: quickActionIconMap.products },
+    { id: "trade-pilot", href: "/client-area/trade-pilot/analisis", icon: Rocket },
+    { id: "temporary", href: "/client-area/market#transactions", icon: quickActionIconMap.temporary },
+  ];
+
   return (
-    <div className="grid md:grid-cols-5 gap-2">
-      {ACTION_IDS.map((actionId, index) => {
-        const action = clientArea.quickActions.items[index];
-        const href =
-          actionId === "education"
-            ? resolveLocalizedHref(locale, "/client-area/ebook")
-            : actionId === "products"
-              ? resolveLocalizedHref(locale, "/client-area/market")
-              : actionId === "temporary"
-                ? resolveLocalizedHref(locale, "/client-area/market#transactions")
-                : undefined;
-        const isDirectLink =
-          actionId === "education" ||
-          actionId === "products" ||
-          actionId === "temporary";
+    <div className="grid md:grid-cols-4 gap-2">
+      {actions.map(({ id, href, icon }) => {
+        const action = clientArea.quickActions.items.find((item) => item.id === id);
+
+        if (!action) return null;
 
         return (
           <ClientAreaQuickActionButton
-            key={actionId}
-            href={href}
-            icon={quickActionIconMap[actionId]}
-            label={action?.label ?? actionId}
-            onClick={isDirectLink ? undefined : () => onActionClick(actionId)}
+            key={id}
+            href={resolveLocalizedHref(locale, href)}
+            icon={icon}
+            label={action.label}
           />
         );
       })}

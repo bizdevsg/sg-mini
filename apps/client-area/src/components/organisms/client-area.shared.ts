@@ -1535,13 +1535,6 @@ export function getDashboardCopy(locale: AppLocale): DashboardCopy {
   };
 }
 
-type ClientAreaMarketFeed = {
-  bid: number;
-  ask: number;
-  change: number;
-  liveSymbol: string;
-};
-
 export type ClientAreaMarketCategory = "Commodity" | "Index" | "Forex";
 
 const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
@@ -1569,48 +1562,21 @@ export const CLIENT_AREA_HOME_MARKET_SYMBOLS = [
   "JPK50_BBJ",
 ] as const;
 
-const CLIENT_AREA_MARKET_FEEDS: ClientAreaMarketFeed[] = [
-  {
-    bid: 2550.21,
-    ask: 2551.45,
-    change: 0.56,
-    liveSymbol: "XUL10",
-  },
-  {
-    bid: 78.45,
-    ask: 78.5,
-    change: -1.12,
-    liveSymbol: "BCO10_BBJ",
-  },
-  {
-    bid: 23069,
-    ask: 23053,
-    change: -0.16,
-    liveSymbol: "HKK50_BBJ",
-  },
-  {
-    bid: 1.1789,
-    ask: 1.1785,
-    change: 0.12,
-    liveSymbol: "EU1010_BBJ",
-  },
-];
-
 function parseLiveQuoteNumber(value: string | undefined) {
-  if (!value) {
+  if (!value?.trim()) {
     return null;
   }
 
-  const normalizedValue = Number.parseFloat(value);
+  const normalizedValue = Number(value.replace(/,/g, "").trim());
   return Number.isFinite(normalizedValue) ? normalizedValue : null;
 }
 
-function resolveLiveQuoteChange(tick: LiveQuoteTick, fallbackChange: number) {
+function resolveLiveQuoteChange(tick: LiveQuoteTick) {
   const price = parseLiveQuoteNumber(tick.price);
   const openPrice = parseLiveQuoteNumber(tick.oprice);
 
   if (price === null || openPrice === null || openPrice === 0) {
-    return fallbackChange;
+    return null;
   }
 
   return Number((((price - openPrice) / openPrice) * 100).toFixed(2));
@@ -1619,10 +1585,10 @@ function resolveLiveQuoteChange(tick: LiveQuoteTick, fallbackChange: number) {
 function buildClientAreaMarketPrice(
   liveSymbol: string,
   values: {
-    ask: number;
-    bid: number;
+    ask: number | null;
+    bid: number | null;
     buy?: string;
-    change: number;
+    change: number | null;
     dateTime?: string;
     high?: string;
     low?: string;
@@ -1662,33 +1628,6 @@ export function getClientAreaMarketCategory(
   return CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL[symbol] ?? "Forex";
 }
 
-export function getClientAreaMarketPrices(
-  quotes: LiveQuotePayload,
-): MarketPrice[] {
-  return CLIENT_AREA_MARKET_FEEDS.map((fallback) => {
-    const { liveSymbol } = fallback;
-    const tick = quotes[liveSymbol];
-
-    if (!tick) {
-      return buildClientAreaMarketPrice(liveSymbol, fallback);
-    }
-
-    return buildClientAreaMarketPrice(liveSymbol, {
-      bid: parseLiveQuoteNumber(tick.buy) ?? fallback.bid,
-      ask: parseLiveQuoteNumber(tick.sell) ?? fallback.ask,
-      change: resolveLiveQuoteChange(tick, fallback.change),
-      price: tick.price,
-      sell: tick.sell,
-      buy: tick.buy,
-      open: tick.oprice,
-      high: tick.hprice,
-      low: tick.lprice,
-      time: tick.time,
-      dateTime: tick.date_time,
-    });
-  });
-}
-
 export function getClientAreaAllMarketPrices(
   quotes: LiveQuotePayload,
 ): MarketPrice[] {
@@ -1700,9 +1639,9 @@ export function getClientAreaAllMarketPrices(
       symbol: display.label,
       name: display.symbol ?? symbol,
       code: symbol,
-      bid: parseLiveQuoteNumber(tick.buy) ?? 0,
-      ask: parseLiveQuoteNumber(tick.sell) ?? 0,
-      change: resolveLiveQuoteChange(tick, 0),
+      bid: parseLiveQuoteNumber(tick.buy),
+      ask: parseLiveQuoteNumber(tick.sell),
+      change: resolveLiveQuoteChange(tick),
       price: tick.price,
       sell: tick.sell,
       buy: tick.buy,
@@ -1727,18 +1666,8 @@ export function getClientAreaFeaturedMarketPrices(
 
     if (livePrice) return livePrice;
 
-    const fallback = CLIENT_AREA_MARKET_FEEDS.find(
-      (item) => item.liveSymbol === symbol,
-    ) ?? { ask: 0, bid: 0, change: 0, liveSymbol: symbol };
-
-    return buildClientAreaMarketPrice(symbol, fallback);
+    return buildClientAreaMarketPrice(symbol, { ask: null, bid: null, change: null });
   });
-}
-
-export function getInitialPrices(): MarketPrice[] {
-  return CLIENT_AREA_MARKET_FEEDS.map((item) =>
-    buildClientAreaMarketPrice(item.liveSymbol, item),
-  );
 }
 
 export function getQuickActionIconMap(): Record<ActionId, LucideIcon> {

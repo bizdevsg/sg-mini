@@ -941,12 +941,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         label: "Product",
       },
       {
-        id: "withdraw",
-        label: "Withdraw",
-      },
-      {
-        id: "deposit",
-        label: "Deposit",
+        id: "trade-pilot",
+        label: "Trade Pilot",
       },
       {
         id: "temporary",

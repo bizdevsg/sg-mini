@@ -1,9 +1,15 @@
 ## [Unreleased]
 
 ### Added
+- Panduan pengguna website dan Client Area ditambahkan dalam format Word dan Markdown di `docs`, mencakup navigasi, data pasar, edukasi, akun, Trade Pilot, dan bantuan pengguna.
 - TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10. Seluruh angka (jumlah, periode, masa berlaku, equity minimum) mengikuti Pengaturan kuota di konsol admin SGB-TP lewat objek credit (`period`, `trialDays`, `trialEndsAt`, `expired`, `minEquityUsd`), termasuk teks disclaimer dan tooltip kuota. Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim nilai equity (USD) lewat `X-TradePilot-Real-Equity` ke backend.
 
 ### Changed
+- Pintasan Deposit dan Withdraw pada Dashboard Client Area diganti dengan tautan Trade Pilot, sehingga pengguna dapat langsung membuka halaman analisis dari Dashboard dalam bahasa Indonesia maupun Inggris.
+- Panduan pengguna disusun menjadi dua bab utama, Website Company dan Client Area, dengan subbab dan daftar isi yang disesuaikan.
+- Tata letak panduan Word diperbarui dengan halaman judul, daftar isi yang dapat diklik, hierarki judul, tabel yang lebih mudah dibaca, dan nomor halaman.
+- Panduan pengguna disusun ulang menjadi satu alur per topik; bagian ringkas dan detail digabung agar pembaca tidak menemukan pembahasan yang berulang.
+- Panduan pengguna Word dan Markdown diperluas dengan langkah per menu, penjelasan data, skenario penggunaan, panduan Trade Pilot, dan glosarium agar pengguna dapat mengikuti alur secara mandiri.
 - Nilai kosong pada ringkasan akun Client Area ditampilkan sebagai “Belum tersedia” agar status data lebih jelas.
 - Live price dan ringkasan akun Client Area kini menggunakan satu stream SAI per mode akun, dengan pemrosesan format harga IDR/USD, heartbeat, reconnect, dan penanganan sesi kedaluwarsa sesuai dokumentasi integrasi.
 - Endpoint WebSocket SAI dipetakan langsung di `hosts.ts` berdasarkan `SGB_FLAVOR` dan akun real/demo sesuai dokumentasi Postman integrasi SGB.
@@ -17,6 +23,7 @@
 - Konfigurasi lokal Website dan Client Area disatukan di `.env` root; kunci tambahan dipertahankan dan file `.env.local` dihapus agar URL Trade Pilot mengikuti konfigurasi global.
 
 ### Fixed
+- Kartu Market Watchlist dan Pasar & Transaksi Client Area tidak lagi menampilkan harga contoh saat quote belum tersedia; nilai yang belum diterima kini ditandai kosong agar harga emas 2.550 tidak disalahartikan sebagai harga live.
 - Login Client Area dengan flavor SGB UAT atau production kini selalu mewajibkan reCAPTCHA dan gagal tertutup ketika site key atau token tidak tersedia, sehingga request autentikasi tidak lagi dapat diteruskan dengan `token_captcha` kosong.
 
 ### Changed
