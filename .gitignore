@@ -64,6 +64,9 @@ tmp
 /compose.override.yaml
 /Dockerfile
 
+# Dokumentasi dan materi internal hanya disimpan secara lokal.
+/docs/
+
 # sgb-discovery.ts output — PII-masking is best-effort, never auto-commit this.
 # Dokumentasi/koleksi API pihak ketiga berisi detail integrasi internal — hanya lokal, repo ini publik.
 docs/api/
@@ -75,3 +78,5 @@ docs/api/samples/.device-uuid
 
 # Trade Pilot runtime data (pemetaan userId -> nasabah)
 .data/
+
+screenshot-sgb.mjs

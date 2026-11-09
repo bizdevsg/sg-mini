@@ -25,7 +25,7 @@ export function ClientAreaQuickActionsGrid({
   ];
 
   return (
-    <div className="grid md:grid-cols-4 gap-2">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
       {actions.map(({ id, href, icon }) => {
         const action = clientArea.quickActions.items.find((item) => item.id === id);
 

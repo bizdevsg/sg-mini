@@ -8,6 +8,8 @@ type ClientAreaTradePilotActionsProps = {
   disabled?: boolean;
   isAnalyzing: boolean;
   onAnalyze: () => void;
+  /** Token unlimited: label tanpa "1 Token". */
+  unlimited?: boolean;
 };
 
 export function ClientAreaTradePilotActions({
@@ -15,6 +17,7 @@ export function ClientAreaTradePilotActions({
   disabled = false,
   isAnalyzing,
   onAnalyze,
+  unlimited = false,
 }: ClientAreaTradePilotActionsProps) {
   return (
     <section className="min-w-0 space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-4 sm:rounded-3xl sm:p-5">
@@ -24,7 +27,11 @@ export function ClientAreaTradePilotActions({
         onClick={onAnalyze}
         variant="primary"
       >
-        {isAnalyzing ? copy.analysisLoadingLabel : copy.analysisActionLabel}
+        {isAnalyzing
+          ? copy.analysisLoadingLabel
+          : unlimited
+            ? copy.analysisActionUnlimitedLabel
+            : copy.analysisActionLabel}
       </ClientAreaTradePilotActionButton>
     </section>
   );

@@ -40,7 +40,9 @@ export function ClientAreaTradePilotPageHeader({
       );
     }
   }
-  const quotaTooltip = quotaTooltipLines.length ? quotaTooltipLines.join(" ") : null;
+  // Token unlimited: tidak ada jadwal reset / masa akses yang relevan.
+  const quotaTooltip =
+    !credit?.unlimited && quotaTooltipLines.length ? quotaTooltipLines.join(" ") : null;
 
   return (
     <div className="relative z-30 flex min-w-0 flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
@@ -63,7 +65,7 @@ export function ClientAreaTradePilotPageHeader({
           <CreditCard className="h-7 w-7 shrink-0 text-yellow-400" />
           <div className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-semibold">
-              {credit ? `${credit.remaining}/${credit.allowance}` : "—"}
+              {!credit ? "—" : credit.unlimited ? copy.quotaUnlimitedLabel : `${credit.remaining}/${credit.allowance}`}
             </span>
             <span className="text-xs text-zinc-400">{copy.quotaLabel}</span>
           </div>

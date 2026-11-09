@@ -24,6 +24,10 @@ type ClientAreaTradePilotAnalysisResultSectionProps = {
   pendingTimeframe?: ClientAreaTradePilotTimeframe | null;
   isAnalyzing?: boolean;
   hasCredit?: boolean;
+  /** Alasan analisis terkunci (demo berakhir / equity real); default: kredit habis. */
+  noCreditMessage?: string | null;
+  /** Token unlimited: catatan biaya kredit tidak ditampilkan. */
+  unlimited?: boolean;
   /** Timeframe yang sedang dijeda admin (kill switch) tidak bisa dipilih. */
   isTimeframePaused?: (timeframe: ClientAreaTradePilotTimeframe) => boolean;
   /** Pesan jeda analisis (global/mode) menggantikan catatan biaya. */
@@ -40,6 +44,8 @@ export function ClientAreaTradePilotAnalysisResultSection({
   pendingTimeframe = null,
   isAnalyzing = false,
   hasCredit = true,
+  noCreditMessage = null,
+  unlimited = false,
   isTimeframePaused,
   analysisPausedMessage = null,
   analysisError = null,
@@ -158,9 +164,11 @@ export function ClientAreaTradePilotAnalysisResultSection({
           <Coins className="h-3.5 w-3.5 text-yellow-500" />
           {analysisPausedMessage
             ? analysisPausedMessage
-            : hasCredit
-              ? resultCopy.changeTimeframeCostNote
-              : copy.insufficientCreditMessage}
+            : !hasCredit
+              ? noCreditMessage ?? copy.insufficientCreditMessage
+              : unlimited
+                ? resultCopy.changeTimeframeUnlimitedNote
+                : resultCopy.changeTimeframeCostNote}
         </p>
         {analysisError ? (
           <p role="alert" className="mt-2 text-xs text-rose-300">
@@ -189,7 +197,7 @@ export function ClientAreaTradePilotAnalysisResultSection({
               ? analysisPausedMessage ??
                 copy.analysisPausedSelectionMessage.replace("{target}", analysis.timeframeLabel)
               : !hasCredit
-                ? copy.insufficientCreditMessage
+                ? noCreditMessage ?? copy.insufficientCreditMessage
                 : null
           }
           timeframeLabel={analysis.timeframeLabel}

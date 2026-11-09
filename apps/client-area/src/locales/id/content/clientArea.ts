@@ -296,6 +296,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       description:
         "Analisis pergerakan harga real-time dengan chart interaktif dan data terkini.",
       quotaLabel: "Kuota Analisis",
+      quotaUnlimitedLabel: "Unlimited",
       quotaResetLabel: "Reset {date}",
       sessionLabel: "Sesi Aktif",
       sessionClosedValue: "Pasar Tutup",
@@ -311,6 +312,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       addFavoriteLabel: "Tambah instrumen favorit",
       setAlertLabel: "Pasang Alert",
       analysisActionLabel: "Analisis - 1 Token",
+      analysisActionUnlimitedLabel: "Analisis",
       analysisLoadingLabel: "Menganalisis...",
       insufficientCreditMessage: "Credit analisis untuk mode ini sudah habis.",
       analysisErrorMessage: "Analisis belum dapat dibuat. Silakan coba lagi.",
@@ -409,6 +411,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         changeTimeframeDescription:
           "Instrumen sama, timeframe berbeda — pilih salah satu untuk langsung dianalisis.",
         changeTimeframeCostNote: "Setiap analisis timeframe baru memakai 1 kredit.",
+        changeTimeframeUnlimitedNote: "Token analisis Anda unlimited.",
         compareRiskLabel: "Bandingkan Risiko",
         directionBiasTitle: "Bias Arah",
         neutralWaitLabel: "Netral / Tunggu",

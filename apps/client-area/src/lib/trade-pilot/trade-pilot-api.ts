@@ -231,6 +231,7 @@ const creditSchema = z.object({
   remaining: z.number().int().nonnegative(),
   resetsAt: z.string(),
   // Opsional: backend sebelum kebijakan masa berlaku tidak mengirim field ini.
+  unlimited: z.boolean().optional().catch(false),
   period: z.enum(["daily", "weekly", "monthly", "never"]).optional().catch(undefined),
   trialDays: z.number().int().nullable().optional().catch(null),
   trialEndsAt: z.string().nullable().optional().catch(null),

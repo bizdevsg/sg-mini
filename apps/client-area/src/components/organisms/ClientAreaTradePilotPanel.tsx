@@ -159,6 +159,23 @@ export function ClientAreaTradePilotPanel({
           : null;
   const quotaBlocked =
     quotaNoticeKind !== null || (mode === "real" && realEquity === "checking");
+  // Alasan tombol analisis terkunci untuk catatan di hasil analisis
+  // (bukan selalu "kredit habis": bisa demo berakhir / equity real).
+  const formattedMinEquity =
+    minEquityUsd === null
+      ? "-"
+      : `$${minEquityUsd.toLocaleString(locale === "en" ? "en-US" : "id-ID", { maximumFractionDigits: 2 })}`;
+  const quotaBlockedMessage =
+    quotaNoticeKind === "demo_expired"
+      ? copy.quotaNotice.demoExpiredTitle
+      : quotaNoticeKind === "no_equity"
+        ? copy.quotaNotice.noEquityTitle.replace("{minEquity}", formattedMinEquity)
+        : quotaNoticeKind === "equity_unknown"
+          ? copy.quotaNotice.equityUnknownBody
+          : mode === "real" && realEquity === "checking"
+            ? copy.quotaNotice.equityCheckingMessage
+            : null;
+  const isUnlimited = modeCredit?.unlimited === true;
   const quotaNoticeDate =
     quotaNoticeKind === "demo_expired" && modeCredit?.trialEndsAt
       ? formatTradePilotDateTime(modeCredit.trialEndsAt, locale)
@@ -477,6 +494,7 @@ export function ClientAreaTradePilotPanel({
           />
           <ClientAreaTradePilotActions
             copy={copy}
+            unlimited={isUnlimited}
             disabled={(credits[mode]?.remaining ?? 0) < 1 || pauseReason !== null || quotaBlocked}
             isAnalyzing={isAnalyzing}
             onAnalyze={handleAnalyze}
@@ -552,7 +570,9 @@ export function ClientAreaTradePilotPanel({
           copy={copy}
           mockDataLabel={mockDataLabel}
           analysisError={errorOrigin === "timeframe" ? analysisError : null}
-          hasCredit={(credits[mode]?.remaining ?? 0) >= 1}
+          hasCredit={(credits[mode]?.remaining ?? 0) >= 1 && !quotaBlocked}
+          noCreditMessage={quotaBlockedMessage}
+          unlimited={isUnlimited}
           isAnalyzing={isAnalyzing}
           isTimeframePaused={(nextTimeframe) =>
             getTradePilotPauseReason(availability, {

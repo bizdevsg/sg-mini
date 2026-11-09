@@ -34,6 +34,8 @@ export type TradePilotCreditBalance = {
   remaining: number;
   resetsAt: string;
   source: TradePilotDataSource;
+  /** Token khusus tanpa batas (diatur per nasabah di konsol admin). */
+  unlimited?: boolean;
   /** Periode reset kuota yang diatur di konsol admin. */
   period?: "daily" | "weekly" | "monthly" | "never";
   /** Masa berlaku (hari) sejak pertama pakai mode ini; null = tanpa batas. */

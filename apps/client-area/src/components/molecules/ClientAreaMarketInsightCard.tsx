@@ -45,7 +45,7 @@ export function ClientAreaMarketInsightCard({
 
   return (
     <div
-      className={`w-80 space-y-2 rounded-3xl border bg-linear-to-br p-5 ${theme.card} ${theme.border}`}
+      className={`w-full space-y-2 rounded-3xl border bg-linear-to-br p-5 sm:w-80 ${theme.card} ${theme.border}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

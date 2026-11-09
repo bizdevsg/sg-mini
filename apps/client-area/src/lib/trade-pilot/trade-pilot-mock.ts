@@ -19,9 +19,10 @@ import type {
 
 const TRADE_PILOT_MOCK_COOKIE = "sgb_trade_pilot_mock";
 const MAX_HISTORY_ITEMS = 12;
+// Mengikuti kebijakan default backend: demo 3/hari (14 hari), real 3/hari (equity >= $10).
 const POLICY = {
-  demo: { allowance: 5, initialConsumed: 0 },
-  real: { allowance: 50, initialConsumed: 3 },
+  demo: { allowance: 3, initialConsumed: 0, trialDays: 14, minEquityUsd: null },
+  real: { allowance: 3, initialConsumed: 1, trialDays: null, minEquityUsd: 10 },
 } as const;
 
 type MockState = {
@@ -112,6 +113,9 @@ function credit(mode: TradePilotMode, consumed: number): TradePilotCreditBalance
     mode,
     remaining: allowance - safeConsumed,
     resetsAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    period: "daily",
+    trialDays: POLICY[mode].trialDays,
+    minEquityUsd: POLICY[mode].minEquityUsd,
     source: "mock",
   };
 }

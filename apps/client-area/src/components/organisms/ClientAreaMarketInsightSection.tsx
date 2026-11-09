@@ -106,7 +106,7 @@ export function ClientAreaMarketInsightSection({
             {items.map((item) => (
               <div
                 key={item.id}
-                className="shrink-0 snap-start"
+                className="w-full shrink-0 snap-start snap-always sm:w-auto sm:snap-normal"
               >
                 <ClientAreaMarketInsightCard
                   item={item}

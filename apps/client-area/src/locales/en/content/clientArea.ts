@@ -299,6 +299,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       description:
         "Analyze real-time price movements with interactive charts and current market data.",
       quotaLabel: "Analysis Quota",
+      quotaUnlimitedLabel: "Unlimited",
       quotaResetLabel: "Resets {date}",
       sessionLabel: "Active Session",
       sessionClosedValue: "Market Closed",
@@ -314,6 +315,7 @@ export const enClientArea: AppMessages["clientArea"] = {
       addFavoriteLabel: "Add favorite instrument",
       setAlertLabel: "Set Alert",
       analysisActionLabel: "Analyze - 1 Token",
+      analysisActionUnlimitedLabel: "Analyze",
       analysisLoadingLabel: "Analyzing...",
       insufficientCreditMessage:
         "The analysis credit for this mode is depleted.",
@@ -414,6 +416,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         changeTimeframeDescription:
           "Same instrument, different timeframe — select one to analyze it immediately.",
         changeTimeframeCostNote: "Each new timeframe analysis uses 1 credit.",
+        changeTimeframeUnlimitedNote: "Your analysis tokens are unlimited.",
         compareRiskLabel: "Compare Risk",
         directionBiasTitle: "Direction Bias",
         neutralWaitLabel: "Neutral / Wait",

@@ -426,6 +426,7 @@ export type AppMessages = {
         title: string;
         description: string;
         quotaLabel: string;
+        quotaUnlimitedLabel: string;
         quotaResetLabel: string;
         sessionLabel: string;
         sessionClosedValue: string;
@@ -440,6 +441,7 @@ export type AppMessages = {
         addFavoriteLabel: string;
         setAlertLabel: string;
         analysisActionLabel: string;
+        analysisActionUnlimitedLabel: string;
         analysisLoadingLabel: string;
         insufficientCreditMessage: string;
         analysisErrorMessage: string;
@@ -521,6 +523,7 @@ export type AppMessages = {
           changeTimeframeTitle: string;
           changeTimeframeDescription: string;
           changeTimeframeCostNote: string;
+          changeTimeframeUnlimitedNote: string;
           compareRiskLabel: string;
           directionBiasTitle: string;
           neutralWaitLabel: string;
