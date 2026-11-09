@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { LoaderCircle, ShieldCheck, TrendingDown, TrendingUp } from "lucide-react";
+import { LoaderCircle, TrendingDown, TrendingUp } from "lucide-react";
 
 import { ClientAreaTradePilotStaticOption } from "@/components/atoms/ClientAreaTradePilotStaticOption";
 import { ClientAreaTradePilotCurrencyField } from "@/components/molecules/ClientAreaTradePilotCurrencyField";
@@ -20,7 +20,6 @@ type ClientAreaTradePilotTradingPlanSectionProps = {
   analysis?: TradePilotAnalysisResult;
   copy: ClientAreaTradePilotTradingPlanCopy;
   locale: "id" | "en";
-  onRecommendationVisibilityChange: (visible: boolean) => void;
 };
 
 type PlanState =
@@ -50,7 +49,6 @@ export function ClientAreaTradePilotTradingPlanSection({
   analysis,
   copy,
   locale,
-  onRecommendationVisibilityChange,
 }: ClientAreaTradePilotTradingPlanSectionProps) {
   const [accountType, setAccountType] = useState<"micro" | "mini" | "regular">(
     "mini",
@@ -77,15 +75,10 @@ export function ClientAreaTradePilotTradingPlanSection({
     requestRef.current += 1;
     setPlanState({ status: "idle" });
     setSelectedDirection(null);
-    onRecommendationVisibilityChange(false);
   }
 
   async function createRecommendation() {
     if (!analysis) return;
-    if (analysis.source !== "api") {
-      setPlanState({ status: "error", message: copy.planMockUnavailableMessage });
-      return;
-    }
     if (Number(lossLimit) > Number(tradingCapital)) {
       setPlanState({ status: "error", message: copy.planLossLimitExceedsCapitalMessage });
       return;
@@ -116,7 +109,6 @@ export function ClientAreaTradePilotTradingPlanSection({
         return;
       }
       setPlanState({ status: "ready", plan: nextPlan });
-      onRecommendationVisibilityChange(true);
       const preferred = nextPlan.decision.preferredSide;
       setSelectedDirection(
         preferred === "buy" || preferred === "sell"
@@ -266,7 +258,14 @@ export function ClientAreaTradePilotTradingPlanSection({
         {planState.status === "loading" ? (
           <LoaderCircle className="h-6 w-6 animate-spin" />
         ) : (
-          <ShieldCheck className="h-6 w-6" />
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="h-6 w-6 object-contain"
+            height={24}
+            src="/assets/charm_shield-tick.png"
+            width={24}
+          />
         )}
         {planState.status === "loading" ? copy.planLoadingLabel : copy.createRecommendationLabel}
       </button>

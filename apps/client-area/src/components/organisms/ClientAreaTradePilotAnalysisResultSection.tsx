@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock3, Coins, Hourglass, Info, LoaderCircle, ShieldAlert } from "lucide-react";
+import { Clock3, Coins, Hourglass, LoaderCircle, ShieldAlert } from "lucide-react";
 import { useRef } from "react";
 
 import { ClientAreaTradePilotTimeframeButton } from "@/components/atoms/ClientAreaTradePilotTimeframeButton";
@@ -12,12 +12,12 @@ import {
   type ClientAreaTradePilotCopy,
   type ClientAreaTradePilotTimeframe,
 } from "@/lib/client-area-trade-pilot.shared";
+import { formatTradePilotDateTime } from "@/lib/trade-pilot/trade-pilot-format";
 import type { TradePilotAnalysisResult } from "@/lib/trade-pilot/trade-pilot.types";
 
 type ClientAreaTradePilotAnalysisResultSectionProps = {
   copy: ClientAreaTradePilotCopy;
   analysis: TradePilotAnalysisResult;
-  mockDataLabel: string;
   /** Jalankan analisis baru (memotong 1 kredit) untuk instrumen sama, timeframe lain. */
   onTimeframeAnalyze?: (timeframe: ClientAreaTradePilotTimeframe) => void;
   /** Timeframe yang sedang dianalisis (null bila tidak ada proses). */
@@ -39,7 +39,6 @@ type ClientAreaTradePilotAnalysisResultSectionProps = {
 export function ClientAreaTradePilotAnalysisResultSection({
   copy,
   analysis,
-  mockDataLabel,
   onTimeframeAnalyze,
   pendingTimeframe = null,
   isAnalyzing = false,
@@ -86,31 +85,22 @@ export function ClientAreaTradePilotAnalysisResultSection({
             <span className="rounded-full bg-amber-400 px-4 py-1 text-xs uppercase font-bold text-black">
               {directionLabel}
             </span>
-            {analysis.source === "mock" ? (
-              <span className="rounded-full border border-amber-500/40 px-3 py-1 text-xs font-semibold text-amber-400">
-                {mockDataLabel}
-              </span>
-            ) : null}
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
             <span className="inline-flex items-center gap-2 font-semibold text-emerald-400">
               <Clock3 className="h-5 w-5" />
-              {resultCopy.relevanceLabel}
+              {resultCopy.relevanceLabel.replace(
+                "{time}",
+                formatTradePilotDateTime(analysis.validUntil, locale),
+              )}
             </span>
-            <span className="inline-flex items-center gap-2 rounded-xl bg-zinc-800/80 px-3 py-2 text-zinc-400 text-xs">
-              <Hourglass className="h-4 w-4" />
-              {resultCopy.pendingLabel}
-            </span>
+            {analysis.resolvedAt ? null : (
+              <span className="inline-flex items-center gap-2 rounded-xl bg-zinc-800/80 px-3 py-2 text-zinc-400 text-xs">
+                <Hourglass className="h-4 w-4" />
+                {resultCopy.pendingLabel}
+              </span>
+            )}
           </div>
-        </div>
-
-        <div className="flex w-full flex-wrap items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5 text-sm text-zinc-400 sm:w-fit">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-          <strong className="text-zinc-200">
-            {resultCopy.sessionWindowLabel}
-          </strong>
-          <span>· {resultCopy.highestLiquidityLabel}</span>
-          <Info className="h-4 w-4" />
         </div>
       </div>
 

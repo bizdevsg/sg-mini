@@ -1,7 +1,7 @@
 /*
- * Sesi pasar forex (perkiraan umum) dihitung dari jam lokal masing-masing kota,
- * sehingga pergantian jam musim panas/dingin (Sydney, London, New York) ikut
- * otomatis. Ditampilkan ke nasabah dalam WIB (Asia/Jakarta).
+ * Sesi pasar forex memakai jam tetap dalam WIB (Asia/Jakarta), sama persis
+ * dengan yang ditampilkan ke nasabah. Sesi boleh melewati tengah malam
+ * (closeHour <= openHour, mis. New York 20.00–05.00).
  */
 
 export type MarketSessionId = "sydney" | "tokyo" | "london" | "new-york";
@@ -9,20 +9,21 @@ export type MarketSessionId = "sydney" | "tokyo" | "london" | "new-york";
 type MarketSessionDefinition = {
   id: MarketSessionId;
   name: string;
-  timeZone: string;
+  /** Jam buka dalam WIB. */
   openHour: number;
+  /** Jam tutup dalam WIB (0 = 24.00). */
   closeHour: number;
 };
 
 export const MARKET_SESSIONS: MarketSessionDefinition[] = [
-  { id: "sydney", name: "Sydney", timeZone: "Australia/Sydney", openHour: 7, closeHour: 16 },
-  { id: "tokyo", name: "Tokyo", timeZone: "Asia/Tokyo", openHour: 9, closeHour: 18 },
-  { id: "london", name: "London", timeZone: "Europe/London", openHour: 8, closeHour: 17 },
-  { id: "new-york", name: "New York", timeZone: "America/New_York", openHour: 8, closeHour: 17 },
+  { id: "sydney", name: "Sydney", openHour: 5, closeHour: 14 },
+  { id: "tokyo", name: "Tokyo", openHour: 7, closeHour: 16 },
+  { id: "london", name: "London", openHour: 15, closeHour: 0 },
+  { id: "new-york", name: "New York", openHour: 20, closeHour: 5 },
 ];
 
 const DISPLAY_TIME_ZONE = "Asia/Jakarta";
-const WEEKDAYS = new Set(["Mon", "Tue", "Wed", "Thu", "Fri"]);
+const WEEKDAY_INDEX: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
 function zonedParts(date: Date, timeZone: string) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -46,13 +47,6 @@ function zonedParts(date: Date, timeZone: string) {
   };
 }
 
-/** Selisih (menit) zona waktu terhadap UTC pada saat `date`. */
-function offsetMinutes(date: Date, timeZone: string) {
-  const p = zonedParts(date, timeZone);
-  const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute);
-  return Math.round((asUtc - Math.floor(date.getTime() / 60_000) * 60_000) / 60_000);
-}
-
 function formatClock(totalMinutes: number) {
   const normalized = ((totalMinutes % 1440) + 1440) % 1440;
   const hours = Math.floor(normalized / 60);
@@ -69,16 +63,23 @@ export type MarketSessionState = {
 };
 
 export function getMarketSessions(now: Date = new Date()): MarketSessionState[] {
-  const displayOffset = offsetMinutes(now, DISPLAY_TIME_ZONE);
+  const wib = zonedParts(now, DISPLAY_TIME_ZONE);
+  const minutes = wib.hour * 60 + wib.minute;
+  const today = WEEKDAY_INDEX[wib.weekday] ?? 0;
   return MARKET_SESSIONS.map((session) => {
-    const local = zonedParts(now, session.timeZone);
-    const minutes = local.hour * 60 + local.minute;
-    const open =
-      WEEKDAYS.has(local.weekday) && minutes >= session.openHour * 60 && minutes < session.closeHour * 60;
-    const shift = displayOffset - offsetMinutes(now, session.timeZone);
-    const start = session.openHour * 60 + shift;
-    const end = session.closeHour * 60 + shift;
+    const start = session.openHour * 60;
+    const end = session.closeHour * 60;
+    const wraps = end <= start;
+    const open = wraps ? minutes >= start || minutes < end : minutes >= start && minutes < end;
+    // Bagian sesi setelah tengah malam milik hari kerja sebelumnya.
+    const sessionDay = wraps && minutes < end ? (today + 6) % 7 : today;
+    const isWeekday = sessionDay >= 1 && sessionDay <= 5;
     const endLabel = formatClock(end) === "00.00" ? "24.00" : formatClock(end);
-    return { id: session.id, name: session.name, open, displayRange: `${formatClock(start)}–${endLabel}` };
+    return {
+      id: session.id,
+      name: session.name,
+      open: open && isWeekday,
+      displayRange: `${formatClock(start)}–${endLabel}`,
+    };
   });
 }

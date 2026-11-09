@@ -280,7 +280,6 @@ export const idClientArea: AppMessages["clientArea"] = {
       missingRealTitle: "Maaf, Anda belum memiliki akun Real",
       missingRealDescription:
         "Pilih akun Demo untuk tetap menggunakan Trade Pilot, atau buka akun Real terlebih dahulu.",
-      mockDataLabel: "Data simulasi",
       berandaBack: "Kembali ke Beranda",
     },
     navigation: {
@@ -311,7 +310,7 @@ export const idClientArea: AppMessages["clientArea"] = {
       favoritesLabel: "Favorit",
       addFavoriteLabel: "Tambah instrumen favorit",
       setAlertLabel: "Pasang Alert",
-      analysisActionLabel: "Analisis - 1 Token",
+      analysisActionLabel: "Analisis (1 Kredit)",
       analysisActionUnlimitedLabel: "Analisis",
       analysisLoadingLabel: "Menganalisis...",
       insufficientCreditMessage: "Credit analisis untuk mode ini sudah habis.",
@@ -319,7 +318,8 @@ export const idClientArea: AppMessages["clientArea"] = {
       accessDeniedMessage: "Mode akun ini belum tersedia untuk Anda.",
       historyViewBanner: "Menampilkan analisis dari riwayat · {date}",
       historyViewBackLabel: "Tutup",
-      historyViewErrorMessage: "Analisis dari riwayat tidak dapat dimuat. Silakan coba lagi.",
+      historyViewErrorMessage:
+        "Analisis dari riwayat tidak dapat dimuat. Silakan coba lagi.",
       analysisPausedMessage:
         "Analisis TradePilot sedang dijeda sementara oleh admin. Silakan coba lagi nanti.",
       analysisPausedSelectionMessage:
@@ -400,17 +400,16 @@ export const idClientArea: AppMessages["clientArea"] = {
         disclaimerTitle: "Disclaimer",
         disclaimerFallback:
           "Hasil analisis TradePilot bersifat informasi dan edukasi, bukan ajakan atau jaminan keuntungan. Perdagangan berjangka memiliki risiko tinggi.",
-        relevanceLabel: "Relevan hingga sekitar 4 jam lagi",
+        relevanceLabel: "Relevan hingga {time}",
         pendingLabel: "Pending",
-        sessionWindowLabel: "Tokyo • London",
-        highestLiquidityLabel: "likuiditas tertinggi",
         bullishLabel: "Bullish",
         bearishLabel: "Bearish",
         sidewaysLabel: "Sideways",
         changeTimeframeTitle: "Ganti Timeframe",
         changeTimeframeDescription:
           "Instrumen sama, timeframe berbeda — pilih salah satu untuk langsung dianalisis.",
-        changeTimeframeCostNote: "Setiap analisis timeframe baru memakai 1 kredit.",
+        changeTimeframeCostNote:
+          "Setiap analisis timeframe baru memakai 1 kredit.",
         changeTimeframeUnlimitedNote: "Token analisis Anda unlimited.",
         compareRiskLabel: "Bandingkan Risiko",
         directionBiasTitle: "Bias Arah",
@@ -437,7 +436,8 @@ export const idClientArea: AppMessages["clientArea"] = {
           contextTitle: "Konteks berita & kalender",
           riskTitle: "Risiko utama",
           invalidationTitle: "Penilaian berubah jika",
-          footer: "Analisis ini bukan instruksi transaksi. Periksa kembali kondisi pasar terkini.",
+          footer:
+            "Analisis ini bukan instruksi transaksi. Periksa kembali kondisi pasar terkini.",
           closeLabel: "Tutup",
           empty: "Belum ada detail alasan untuk analisis ini.",
         },
@@ -468,9 +468,11 @@ export const idClientArea: AppMessages["clientArea"] = {
           stop: "Stop Loss",
           tp1: "Take Profit 1",
           tp2: "Take Profit 2",
-          sourceNote: "Candle historis diambil saat gambar dibuat dan dibatasi sebelum analisis. Level dan bias berasal dari analisis tersimpan, bukan harga live.",
+          sourceNote:
+            "Candle historis diambil saat gambar dibuat dan dibatasi sebelum analisis. Level dan bias berasal dari analisis tersimpan, bukan harga live.",
           noCandles: "Data candle historis belum tersedia untuk analisis ini.",
-          warning: "Level hanya acuan, bukan instruksi entry. Periksa syarat entry, risiko, invalidasi, dan kondisi pasar terkini sebelum bertindak.",
+          warning:
+            "Level hanya acuan, bukan instruksi entry. Periksa syarat entry, risiko, invalidasi, dan kondisi pasar terkini sebelum bertindak.",
         },
         suggestedLevelsTitle: "Saran Level",
         recommendedSideLabel: "Sisi yang disarankan",
@@ -550,38 +552,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         latestNewsLabel: "Berita Terkini",
         economicCalendarLabel: "Kalender Ekonomi",
         learnLabel: "Pelajari",
-        items: [
-          {
-            title:
-              "US Bond Yields Keep Climbing — But Retail Traders Still Can't Get Enough Stocks",
-            source: "Yahoo Finance",
-            publishedAt: "sekitar 1 jam yang lalu",
-          },
-          {
-            title:
-              "Emas Masih Dalam Mode Tertekan, Dolar dan Yield AS Jadi Beban Utama",
-            source: "Newsmaker.id",
-            publishedAt: "sekitar 4 jam yang lalu",
-          },
-          {
-            title:
-              "Menteri Keuangan Jepang Dukung Kenaikan Bunga BoJ, Fokus Capai Target Inflasi",
-            source: "Newsmaker.id",
-            publishedAt: "sekitar 4 jam yang lalu",
-          },
-          {
-            title:
-              "Pasar Menanti Data Ekonomi AS di Tengah Penguatan Imbal Hasil Obligasi",
-            source: "Newsmaker.id",
-            publishedAt: "sekitar 5 jam yang lalu",
-          },
-          {
-            title:
-              "Harga Emas Bergerak Sideways Menjelang Pembukaan Sesi London",
-            source: "Newsmaker.id",
-            publishedAt: "sekitar 6 jam yang lalu",
-          },
-        ],
+        newsEmptyLabel: "Belum ada berita untuk ditampilkan.",
       },
       marketContextSummary: {
         eyebrow: "Ringkasan Konteks Pasar",
@@ -691,7 +662,8 @@ export const idClientArea: AppMessages["clientArea"] = {
         usedMarginLabel: "Margin yang dipakai",
         marginAndStopLossLabel: "Margin day + rugi di SL",
         additionalPositionTitle: "Posisi {position} · Layer tambahan",
-        layerTriggerDescription: "Hanya diisi bila harga mencapai {price} sebelum Stop Loss tersentuh",
+        layerTriggerDescription:
+          "Hanya diisi bila harga mencapai {price} sebelum Stop Loss tersentuh",
         cumulativeFundsAtStopLabel: "Total dana dibutuhkan di SL (kumulatif)",
         initialPositionTitle: "Posisi 1 · Entry awal",
         entryFromPlanDescription: "Entry dari {account} Plan",
@@ -723,24 +695,18 @@ export const idClientArea: AppMessages["clientArea"] = {
         additionalLossLimitLabel: "Tambahan batas rugi yang dibutuhkan",
         manualOrderWarning:
           "Tetap manual: harga bergerak melawan posisi saja bukan pemicu.",
-        planLoadingLabel:
-          "Menghitung rekomendasi...",
+        planLoadingLabel: "Menghitung rekomendasi...",
         planErrorMessage:
           "Rekomendasi belum dapat dihitung. Silakan coba lagi.",
-        planMockUnavailableMessage:
-          "Rekomendasi posisi hanya tersedia untuk analisis langsung dari TradePilot.",
         planLossLimitExceedsCapitalMessage:
           "Batas rugi tidak boleh melebihi dana trading.",
         planAnalysisExpiredMessage:
           "Analisis ini sudah selesai atau kedaluwarsa. Buat analisis baru untuk mendapatkan rekomendasi posisi.",
         planRulesSourceLabel:
           "Dihitung dari aturan trading broker versi {version}. Level harga dari analisis AI; lot, margin, dan risiko dihitung dengan rumus pasti.",
-        planPostureLabel:
-          "Status rekomendasi",
-        planReasonsLabel:
-          "Pertimbangan",
-        sideBlockedTitle:
-          "Dana atau batas rugi belum cukup untuk lot minimal",
+        planPostureLabel: "Status rekomendasi",
+        planReasonsLabel: "Pertimbangan",
+        sideBlockedTitle: "Dana atau batas rugi belum cukup untuk lot minimal",
         sideBlockedDescription:
           "Lot minimal {lot} butuh margin {margin} dan berisiko {risk} di Stop Loss. Kekurangan dana {fundsShortfall} · kekurangan batas rugi {riskShortfall}.",
         sideUnavailableDescription:
@@ -751,8 +717,7 @@ export const idClientArea: AppMessages["clientArea"] = {
           "Skenario ini hanya untuk entry awal; tidak ada layer tambahan yang direkomendasikan.",
         additionalLayersNote:
           "Layer tambahan hanya diisi bila harga bergerak ke level layer sebelum Stop Loss tersentuh.",
-        layerLabel:
-          "Layer {level} · {price}",
+        layerLabel: "Layer {level} · {price}",
         planPostureLabels: {
           scaling_allowed: "Boleh menambah posisi bertahap",
           entry_only: "Hanya entry awal",
@@ -785,7 +750,8 @@ export const idClientArea: AppMessages["clientArea"] = {
           fundamental_clear: "Tidak ada event fundamental penting",
           fundamental_unavailable: "Data fundamental tidak tersedia",
           directional_conflict: "Arah analisis dan indikator bertentangan",
-          staged_add_condition: "Layer tambahan hanya jika harga mencapai levelnya",
+          staged_add_condition:
+            "Layer tambahan hanya jika harga mencapai levelnya",
         },
         chooseScenarioUsageTitle: "Pilih satu skenario",
         chooseScenarioUsageDescription:
@@ -824,7 +790,8 @@ export const idClientArea: AppMessages["clientArea"] = {
         takeProfitTwoLabel: "TP2",
         resolvedAtLabel: "Hasil tercapai",
         validUntilLabel: "Berlaku sampai",
-        neutralNoLevelsLabel: "Analisis netral (tunggu): tidak ada level entry yang disarankan.",
+        neutralNoLevelsLabel:
+          "Analisis netral (tunggu): tidak ada level entry yang disarankan.",
         entryHitLabel: "Entry {side} tersentuh",
         directionLabels: {
           bullish: "Bullish",
@@ -1203,46 +1170,6 @@ export const idClientArea: AppMessages["clientArea"] = {
       marketPrice: "Market Price",
       closePrice: "Close Price",
     },
-    openPositions: [
-      {
-        id: "open-xul10",
-        symbol: "XUL10",
-        side: "BUY",
-        volume: "1.00 lot",
-        openPrice: "$ 2,615.40",
-        marketPrice: "$ 2,619.90",
-        floatingPl: "+$ 450.00",
-      },
-      {
-        id: "open-eu1010",
-        symbol: "EU1010",
-        side: "BUY",
-        volume: "0.50 lot",
-        openPrice: "$ 1.08320",
-        marketPrice: "$ 1.08410",
-        floatingPl: "+$ 45.00",
-      },
-    ],
-    settledPositions: [
-      {
-        id: "settled-xul10",
-        symbol: "XUL10",
-        side: "BUY",
-        volume: "2.00 lot",
-        openPrice: "$ 2,594.20",
-        closePrice: "$ 2,613.75",
-        profitLoss: "+$ 3,910.00",
-      },
-      {
-        id: "settled-hkk50",
-        symbol: "HKK50_BBJ",
-        side: "SELL",
-        volume: "1.00 lot",
-        openPrice: "$ 19,844.00",
-        closePrice: "$ 19,812.00",
-        profitLoss: "+$ 320.00",
-      },
-    ],
   },
   referralPage: {
     title: "Referral Code",

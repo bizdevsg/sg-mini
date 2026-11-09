@@ -55,7 +55,6 @@ type ClientAreaTradePilotPanelProps = {
   initialAnalysisId?: string;
   initialInstrumentId?: string;
   initialTimeframe?: string;
-  mockDataLabel: string;
   newsLabel: string;
 };
 
@@ -69,7 +68,6 @@ export function ClientAreaTradePilotPanel({
   initialAnalysisId,
   initialInstrumentId,
   initialTimeframe,
-  mockDataLabel,
   newsLabel,
 }: ClientAreaTradePilotPanelProps) {
   const { accountMode, setAccountMode } = useClientAreaAccountMode();
@@ -88,8 +86,6 @@ export function ClientAreaTradePilotPanel({
   // Idempotency-Key dibuat sekali per klik. Retry setelah error jaringan/timeout
   // dengan payload yang sama memakai key yang sama agar kredit tidak terpotong dua kali.
   const pendingAnalysisRef = useRef<{ key: string; signature: string } | null>(null);
-  const [technicalIndicatorsAnalysisId, setTechnicalIndicatorsAnalysisId] =
-    useState<string | null>(null);
   const [selectedInstrumentId, setSelectedInstrumentId] =
     useState<ClientAreaTradePilotInstrument["id"]>(() =>
       CLIENT_AREA_TRADE_PILOT_INSTRUMENTS.some(({ id }) => id === initialInstrumentId)
@@ -286,21 +282,17 @@ export function ClientAreaTradePilotPanel({
         ? copy.analysisPausedSelectionMessage.replace("{target}", selectedInstrument.label)
         : pauseReason === "timeframe"
           ? copy.analysisPausedSelectionMessage.replace(
-              "{target}",
-              CLIENT_AREA_TRADE_PILOT_TIMEFRAMES.find(({ value }) => value === timeframe)?.label ?? timeframe,
-            )
+            "{target}",
+            CLIENT_AREA_TRADE_PILOT_TIMEFRAMES.find(({ value }) => value === timeframe)?.label ?? timeframe,
+          )
           : null;
   const resultPauseReason = analysis
     ? getTradePilotPauseReason(availability, {
-        instrumentId: analysis.instrumentId,
-        mode,
-        timeframe: analysis.timeframe,
-      })
+      instrumentId: analysis.instrumentId,
+      mode,
+      timeframe: analysis.timeframe,
+    })
     : null;
-
-  function handleRecommendationVisibilityChange(visible: boolean) {
-    setTechnicalIndicatorsAnalysisId(visible && analysis ? analysis.id : null);
-  }
 
   function handleAnalyze() {
     setErrorOrigin("picker");
@@ -389,14 +381,14 @@ export function ClientAreaTradePilotPanel({
         const credit = current[mode];
         return credit
           ? {
-              ...current,
-              [mode]: {
-                ...credit,
-                consumed: credit.allowance,
-                remaining: 0,
-                resetsAt: result.resetsAt ?? credit.resetsAt,
-              },
-            }
+            ...current,
+            [mode]: {
+              ...credit,
+              consumed: credit.allowance,
+              remaining: 0,
+              resetsAt: result.resetsAt ?? credit.resetsAt,
+            },
+          }
           : current;
       });
       return;
@@ -407,9 +399,9 @@ export function ClientAreaTradePilotPanel({
       setAnalysisError(
         resetsAt
           ? `${copy.insufficientCreditMessage} ${copy.creditResetsMessage.replace(
-              "{date}",
-              formatResetDate(resetsAt, locale),
-            )}`
+            "{date}",
+            formatResetDate(resetsAt, locale),
+          )}`
           : copy.insufficientCreditMessage,
       );
       return;
@@ -424,9 +416,9 @@ export function ClientAreaTradePilotPanel({
       setAnalysisError(
         result.retryAfterSeconds
           ? copy.rateLimitedRetryMessage.replace(
-              "{seconds}",
-              String(result.retryAfterSeconds),
-            )
+            "{seconds}",
+            String(result.retryAfterSeconds),
+          )
           : copy.rateLimitedMessage,
       );
       return;
@@ -453,7 +445,6 @@ export function ClientAreaTradePilotPanel({
         copy={copy}
         credit={credits[mode]}
         locale={locale}
-        mockDataLabel={mockDataLabel}
       />
 
       {bootstrap.unavailable ? (
@@ -543,11 +534,10 @@ export function ClientAreaTradePilotPanel({
       {historyView || historyViewError ? (
         <div
           role="status"
-          className={`flex flex-col gap-3 rounded-2xl border p-4 text-sm sm:flex-row sm:items-center sm:justify-between ${
-            historyViewError
-              ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
-              : "border-sky-500/30 bg-sky-500/10 text-sky-200"
-          }`}
+          className={`flex flex-col gap-3 rounded-2xl border p-4 text-sm sm:flex-row sm:items-center sm:justify-between ${historyViewError
+            ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
+            : "border-sky-500/30 bg-sky-500/10 text-sky-200"
+            }`}
         >
           <span>
             {historyViewError
@@ -568,7 +558,6 @@ export function ClientAreaTradePilotPanel({
         <ClientAreaTradePilotAnalysisResultSection
           analysis={analysis}
           copy={copy}
-          mockDataLabel={mockDataLabel}
           analysisError={errorOrigin === "timeframe" ? analysisError : null}
           hasCredit={(credits[mode]?.remaining ?? 0) >= 1 && !quotaBlocked}
           noCreditMessage={quotaBlockedMessage}
@@ -599,33 +588,34 @@ export function ClientAreaTradePilotPanel({
         </section>
       )}
 
-      <ClientAreaTradePilotFundamentalSection
-        copy={copy.fundamentalContext}
-        events={economicCalendarEvents}
-        instrumentId={bootstrap.source === "api" ? selectedInstrument.id : undefined}
-        locale={locale}
-      />
       {analysis ? (
         <ClientAreaTradePilotMarketContextSection
           analysis={analysis}
           copy={copy.marketContextSummary}
         />
       ) : null}
-      <ClientAreaTradePilotTradingPlanSection
-        locale={locale}
-        key={analysis?.id ?? "no-analysis"}
-        analysis={analysis}
-        copy={copy.tradingPlan}
-        onRecommendationVisibilityChange={
-          handleRecommendationVisibilityChange
-        }
-      />
-      {analysis && technicalIndicatorsAnalysisId === analysis.id ? (
+
+      {analysis ? (
         <ClientAreaTradePilotTechnicalIndicatorsSection
           analysis={analysis}
           copy={copy.technicalIndicators}
         />
       ) : null}
+
+      <ClientAreaTradePilotFundamentalSection
+        copy={copy.fundamentalContext}
+        events={economicCalendarEvents}
+        instrumentId={bootstrap.source === "api" ? selectedInstrument.id : undefined}
+        locale={locale}
+      />
+
+      <ClientAreaTradePilotTradingPlanSection
+        locale={locale}
+        key={analysis?.id ?? "no-analysis"}
+        analysis={analysis}
+        copy={copy.tradingPlan}
+      />
+
       <ClientAreaTradePilotFooterSection copy={copy.footer} />
     </div>
   );

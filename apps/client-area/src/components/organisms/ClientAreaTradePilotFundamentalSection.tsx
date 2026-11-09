@@ -55,7 +55,9 @@ export function ClientAreaTradePilotFundamentalSection({
         return response.json() as Promise<TradePilotFundamentalNews>;
       })
       .then((news) => setApiNews(news.items))
-      .catch(() => undefined);
+      .catch(() => {
+        if (!controller.signal.aborted) setApiNews([]);
+      });
     return () => controller.abort();
   }, [instrumentId, newsReloadKey]);
 
@@ -158,15 +160,13 @@ export function ClientAreaTradePilotFundamentalSection({
                     title={item.title}
                   />
                 ))
-              : copy.items.map((item, index) => (
-                  <ClientAreaTradePilotFundamentalNewsItem
-                    key={`${item.source}-${index}`}
-                    href={newsHref}
-                    publishedAt={item.publishedAt}
-                    source={item.source}
-                    title={item.title}
-                  />
-                ))}
+              : instrumentId && apiNews === null
+                ? null
+                : (
+                    <div className="rounded-2xl border border-dashed border-zinc-700 bg-black/20 px-4 py-8 text-center text-sm text-zinc-400">
+                      {copy.newsEmptyLabel}
+                    </div>
+                  )}
           </div>
         ) : events.length > 0 ? (
           <div className="grid gap-3">

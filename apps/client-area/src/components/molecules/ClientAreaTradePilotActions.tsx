@@ -1,4 +1,4 @@
-import { ChartNoAxesCombined } from "lucide-react";
+import Image from "next/image";
 
 import { ClientAreaTradePilotActionButton } from "@/components/atoms/ClientAreaTradePilotActionButton";
 import type { ClientAreaTradePilotCopy } from "@/lib/client-area-trade-pilot.shared";
@@ -23,7 +23,16 @@ export function ClientAreaTradePilotActions({
     <section className="min-w-0 space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 backdrop-blur-sm p-4 sm:rounded-3xl sm:p-5">
       <ClientAreaTradePilotActionButton
         disabled={disabled || isAnalyzing}
-        icon={<ChartNoAxesCombined className="h-5 w-5" />}
+        icon={
+          <Image
+            alt="Icon Analisis"
+            aria-hidden="true"
+            className="h-5 w-5 object-contain"
+            height={20}
+            width={20}
+            src="/assets/streamline_ai-science-spark.png"
+          />
+        }
         onClick={onAnalyze}
         variant="primary"
       >

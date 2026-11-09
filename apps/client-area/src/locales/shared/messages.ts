@@ -411,7 +411,6 @@ export type AppMessages = {
         missingDemoDescription: string;
         missingRealTitle: string;
         missingRealDescription: string;
-        mockDataLabel: string;
         berandaBack: string;
       };
       navigation: {
@@ -515,8 +514,6 @@ export type AppMessages = {
           disclaimerFallback: string;
           relevanceLabel: string;
           pendingLabel: string;
-          sessionWindowLabel: string;
-          highestLiquidityLabel: string;
           bullishLabel: string;
           bearishLabel: string;
           sidewaysLabel: string;
@@ -652,11 +649,7 @@ export type AppMessages = {
           latestNewsLabel: string;
           economicCalendarLabel: string;
           learnLabel: string;
-          items: Array<{
-            title: string;
-            source: string;
-            publishedAt: string;
-          }>;
+          newsEmptyLabel: string;
         };
         marketContextSummary: {
           eyebrow: string;
@@ -779,7 +772,6 @@ export type AppMessages = {
           manualOrderWarning: string;
           planLoadingLabel: string;
           planErrorMessage: string;
-          planMockUnavailableMessage: string;
           planLossLimitExceedsCapitalMessage: string;
           planAnalysisExpiredMessage: string;
           planRulesSourceLabel: string;
@@ -1078,24 +1070,6 @@ export type AppMessages = {
         unavailable: string;
       };
       labels: Record<string, string>;
-      openPositions: Array<{
-        id: string;
-        symbol: string;
-        side: string;
-        volume: string;
-        openPrice: string;
-        marketPrice: string;
-        floatingPl: string;
-      }>;
-      settledPositions: Array<{
-        id: string;
-        symbol: string;
-        side: string;
-        volume: string;
-        openPrice: string;
-        closePrice: string;
-        profitLoss: string;
-      }>;
     };
     referralPage: {
       title: string;

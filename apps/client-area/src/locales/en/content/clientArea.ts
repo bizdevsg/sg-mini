@@ -283,7 +283,6 @@ export const enClientArea: AppMessages["clientArea"] = {
       missingRealTitle: "Sorry, you do not have a Real account yet",
       missingRealDescription:
         "Select your Demo account to keep using Trade Pilot, or open a Real account first.",
-      mockDataLabel: "Simulated data",
       berandaBack: "Back to Home",
     },
     navigation: {
@@ -405,10 +404,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         disclaimerTitle: "Disclaimer",
         disclaimerFallback:
           "TradePilot analysis results are for information and education only, not a solicitation or a guarantee of profit. Futures trading carries high risk.",
-        relevanceLabel: "Relevant for approximately 4 more hours",
+        relevanceLabel: "Relevant until {time}",
         pendingLabel: "Pending",
-        sessionWindowLabel: "Tokyo • London",
-        highestLiquidityLabel: "highest liquidity",
         bullishLabel: "Bullish",
         bearishLabel: "Bearish",
         sidewaysLabel: "Sideways",
@@ -555,36 +552,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         latestNewsLabel: "Latest News",
         economicCalendarLabel: "Economic Calendar",
         learnLabel: "Learn",
-        items: [
-          {
-            title:
-              "US Bond Yields Keep Climbing — But Retail Traders Still Can't Get Enough Stocks",
-            source: "Yahoo Finance",
-            publishedAt: "about 1 hour ago",
-          },
-          {
-            title:
-              "Gold Remains Under Pressure as the Dollar and US Yields Weigh on Prices",
-            source: "Newsmaker.id",
-            publishedAt: "about 4 hours ago",
-          },
-          {
-            title:
-              "Japan's Finance Minister Supports BoJ Rate Hikes and Inflation Target",
-            source: "Newsmaker.id",
-            publishedAt: "about 4 hours ago",
-          },
-          {
-            title: "Markets Await US Economic Data Amid Rising Bond Yields",
-            source: "Newsmaker.id",
-            publishedAt: "about 5 hours ago",
-          },
-          {
-            title: "Gold Trades Sideways Ahead of the London Session Open",
-            source: "Newsmaker.id",
-            publishedAt: "about 6 hours ago",
-          },
-        ],
+        newsEmptyLabel: "No news to display right now.",
       },
       marketContextSummary: {
         eyebrow: "Market Context Summary",
@@ -731,8 +699,6 @@ export const enClientArea: AppMessages["clientArea"] = {
           "Calculating recommendation...",
         planErrorMessage:
           "The recommendation could not be calculated. Please try again.",
-        planMockUnavailableMessage:
-          "Position recommendations are only available for live TradePilot analyses.",
         planLossLimitExceedsCapitalMessage:
           "The loss limit cannot exceed your trading funds.",
         planAnalysisExpiredMessage:
@@ -1207,46 +1173,6 @@ export const enClientArea: AppMessages["clientArea"] = {
       marketPrice: "Market Price",
       closePrice: "Close Price",
     },
-    openPositions: [
-      {
-        id: "open-xul10",
-        symbol: "XUL10",
-        side: "BUY",
-        volume: "1.00 lot",
-        openPrice: "$ 2,615.40",
-        marketPrice: "$ 2,619.90",
-        floatingPl: "+$ 450.00",
-      },
-      {
-        id: "open-eu1010",
-        symbol: "EU1010",
-        side: "BUY",
-        volume: "0.50 lot",
-        openPrice: "$ 1.08320",
-        marketPrice: "$ 1.08410",
-        floatingPl: "+$ 45.00",
-      },
-    ],
-    settledPositions: [
-      {
-        id: "settled-xul10",
-        symbol: "XUL10",
-        side: "BUY",
-        volume: "2.00 lot",
-        openPrice: "$ 2,594.20",
-        closePrice: "$ 2,613.75",
-        profitLoss: "+$ 3,910.00",
-      },
-      {
-        id: "settled-hkk50",
-        symbol: "HKK50_BBJ",
-        side: "SELL",
-        volume: "1.00 lot",
-        openPrice: "$ 19,844.00",
-        closePrice: "$ 19,812.00",
-        profitLoss: "+$ 320.00",
-      },
-    ],
   },
   referralPage: {
     title: "Referral Code",

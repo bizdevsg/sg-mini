@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { SectionContainer } from "@/components/atoms/SectionContainer";
 import { ClientAreaHeaderTicker } from "@/components/molecules/ClientAreaHeaderTicker";
@@ -28,14 +28,8 @@ export function ClientAreaShell({
   modal,
   showHeaderTicker = true,
 }: ClientAreaShellProps) {
-  const copy = useMemo(() => getDashboardCopy(locale), [locale]);
-  const resolvedBreakingNews = useMemo(
-    () =>
-      breakingNews && breakingNews.length > 0
-        ? breakingNews
-        : copy.breakingNews,
-    [breakingNews, copy.breakingNews],
-  );
+  const copy = getDashboardCopy(locale);
+  const resolvedBreakingNews = breakingNews ?? [];
 
   return (
     <section

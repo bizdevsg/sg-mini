@@ -69,8 +69,6 @@ export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
 export const CLIENT_AREA_SESSION_SECRET =
   process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
 
-export type TradePilotDataSourceMode = "api" | "mock";
-
 const TRADE_PILOT_API_PATH = "/v1/trade-pilot";
 
 function resolveTradePilotApiRoot(): string {
@@ -93,17 +91,6 @@ export const TRADE_PILOT_API_KEY =
 /** Secret HMAC khusus userId TradePilot. Jangan dirotasi tanpa rencana migrasi. */
 export const TRADE_PILOT_USER_ID_SECRET =
   process.env.TRADE_PILOT_USER_ID_SECRET?.trim() ?? "";
-/** File JSON pemetaan userId TradePilot -> nasabah (dipakai webhook price alert). */
-function normalizeTradePilotDataSource(value: string | undefined): TradePilotDataSourceMode {
-  const normalizedValue = value?.trim().toLowerCase();
-  // "live" diterima sebagai alias lama dari "api".
-  return normalizedValue === "api" || normalizedValue === "live" ? "api" : "mock";
-}
-
-export const TRADE_PILOT_DATA_SOURCE = normalizeTradePilotDataSource(
-  process.env.TRADE_PILOT_DATA_SOURCE,
-);
-
 export type SgbFlavor = "dev" | "uat" | "prod";
 const DEFAULT_SGB_FLAVOR: SgbFlavor = "uat";
 

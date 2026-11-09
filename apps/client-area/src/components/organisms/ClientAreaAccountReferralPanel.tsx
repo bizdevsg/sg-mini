@@ -5,11 +5,9 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
-import {
-  getClientAreaAccountModeData,
-  getDashboardCopy,
-  resolveLocalizedHref,
-} from "@/components/organisms/client-area.shared";
+import { useClientAreaProfile } from "@/components/providers/ClientAreaProfileProvider";
+import { resolveLocalizedHref } from "@/components/organisms/client-area.shared";
+import { resolveClientAreaAccountId } from "@/lib/client-area-profile.shared";
 import { PUBLIC_REGISTER_URL } from "@/lib/env";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -22,16 +20,13 @@ export function ClientAreaAccountReferralPanel({
 }: ClientAreaAccountReferralPanelProps) {
   const { clientArea } = getMessages(locale);
   const { accountMode } = useClientAreaAccountMode();
-  const { currentAccount } = getClientAreaAccountModeData(
-    getDashboardCopy(locale),
-    accountMode,
-  );
+  const profile = useClientAreaProfile();
   const [copiedField, setCopiedField] = useState<"code" | "link" | null>(
     null,
   );
   const accountHref = resolveLocalizedHref(locale, "/client-area/account");
   const referralPage = clientArea.referralPage;
-  const referralCode = currentAccount.accountId;
+  const referralCode = resolveClientAreaAccountId(profile, accountMode);
   const referralUrl = `${PUBLIC_REGISTER_URL}${PUBLIC_REGISTER_URL.includes("?") ? "&" : "?"
     }ref=${encodeURIComponent(referralCode)}`;
 

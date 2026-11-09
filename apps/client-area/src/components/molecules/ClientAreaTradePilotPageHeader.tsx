@@ -12,14 +12,12 @@ type ClientAreaTradePilotPageHeaderProps = {
   copy: ClientAreaTradePilotCopy;
   credit?: TradePilotCreditBalance;
   locale: "id" | "en";
-  mockDataLabel: string;
 };
 
 export function ClientAreaTradePilotPageHeader({
   copy,
   credit,
   locale,
-  mockDataLabel,
 }: ClientAreaTradePilotPageHeaderProps) {
   // Demo kedaluwarsa: tampilkan akhir masa akses, bukan jadwal reset.
   const quotaTooltipLines: string[] = [];
@@ -49,11 +47,6 @@ export function ClientAreaTradePilotPageHeader({
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="text-lg font-bold text-white sm:text-xl">{copy.title}</h1>
-          {credit?.source === "mock" ? (
-            <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-400">
-              {mockDataLabel}
-            </span>
-          ) : null}
         </div>
         <p className="mt-1 text-sm text-zinc-400">
           {copy.description}

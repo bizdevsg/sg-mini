@@ -1,8 +1,10 @@
-import { ClientAreaTradePilotIndicatorScale } from "@/components/atoms/ClientAreaTradePilotIndicatorScale";
+import {
+  ClientAreaTradePilotIndicatorScale,
+  getTradePilotIndicatorMarker,
+} from "@/components/atoms/ClientAreaTradePilotIndicatorScale";
 
 type ClientAreaTradePilotIndicatorCardProps = {
   label: string;
-  marker: number;
   status: "buy" | "neutral" | "sell";
   statusLabel: string;
   value: string;
@@ -16,7 +18,6 @@ const STATUS_CLASS_NAMES = {
 
 export function ClientAreaTradePilotIndicatorCard({
   label,
-  marker,
   status,
   statusLabel,
   value,
@@ -30,7 +31,7 @@ export function ClientAreaTradePilotIndicatorCard({
         </strong>
       </div>
       <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-        <ClientAreaTradePilotIndicatorScale marker={marker} />
+        <ClientAreaTradePilotIndicatorScale marker={getTradePilotIndicatorMarker(status)} />
         <strong className={`text-xs ${STATUS_CLASS_NAMES[status]}`}>
           {statusLabel}
         </strong>

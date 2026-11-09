@@ -6,7 +6,7 @@ import type {
 } from "@/lib/client-area-trade-pilot.shared";
 
 export type TradePilotMode = "demo" | "real";
-export type TradePilotDataSource = "api" | "mock";
+export type TradePilotDataSource = "api";
 export type TradePilotInstrumentId = "gold" | "brent" | "hang-seng" | "nikkei";
 export type TradePilotIndicatorStatus = "buy" | "neutral" | "sell";
 export type TradePilotIndicatorGroup = "oscillator" | "movingAverage";

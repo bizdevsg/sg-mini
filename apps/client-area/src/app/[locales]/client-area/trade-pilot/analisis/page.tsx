@@ -66,7 +66,6 @@ export default async function ClientAreaTradePilotAnalysisPage({
       latestNews={latestNews}
       livePriceLabel={livePriceTicker.label}
       locale={locales}
-      mockDataLabel={tradePilotPage.access.mockDataLabel}
       newsLabel={livePriceTicker.newsLabel}
     />
   );

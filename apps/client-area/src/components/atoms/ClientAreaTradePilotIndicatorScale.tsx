@@ -1,3 +1,9 @@
+import type { TradePilotIndicatorStatus } from "@/lib/trade-pilot/trade-pilot.types";
+
+export function getTradePilotIndicatorMarker(status: TradePilotIndicatorStatus) {
+  return status === "buy" ? 67 : status === "sell" ? 33 : 50;
+}
+
 type ClientAreaTradePilotIndicatorScaleProps = {
   marker: number;
 };

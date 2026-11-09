@@ -3,11 +3,15 @@
 ### Removed
 - Dua puluh aset gambar tanpa referensi langsung pada Website dan Client Area dihapus bersama folder kosong, sehingga ukuran aset proyek berkurang sekitar 8,9 MiB.
 
+### Fixed
+- Warna dan posisi sinyal Indikator Teknikal Trade Pilot diselaraskan: Sell berada di sisi merah, netral di tengah, dan Buy di sisi hijau, sehingga penanda indikator tidak bertentangan dengan labelnya.
+
 ### Added
 - Panduan pengguna website dan Client Area ditambahkan dalam format Word dan Markdown di `docs`, mencakup navigasi, data pasar, edukasi, akun, Trade Pilot, dan bantuan pengguna.
 - TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10. Seluruh angka (jumlah, periode, masa berlaku, equity minimum) mengikuti Pengaturan kuota di konsol admin SGB-TP lewat objek credit (`period`, `trialDays`, `trialEndsAt`, `expired`, `minEquityUsd`), termasuk teks disclaimer dan tooltip kuota. Nasabah dengan token khusus **Unlimited** melihat label "Unlimited" pada kuota analisis, tombol **Analisis** tanpa keterangan token, dan catatan "Token analisis Anda unlimited". Catatan di hasil analisis kini menyebut alasan sebenarnya saat analisis terkunci (masa demo berakhir, equity real di bawah batas, atau equity belum dapat diperiksa), dan data mock mengikuti kebijakan 3/hari. Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim nilai equity (USD) lewat `X-TradePilot-Real-Equity` ke backend.
 
 ### Changed
+- Indikator Teknikal Trade Pilot kini tampil di atas Konteks Fundamental hanya ketika ada hasil analisis, dan memakai indikator dari analisis yang sedang ditampilkan agar tetap sesuai dengan instrumen dan timeframe hasil tersebut.
 - Folder `docs` ditambahkan ke `.gitignore` agar dokumentasi lokal baru tidak otomatis ikut ter-commit.
 - Market Insight pada Dashboard Client Area kini menampilkan satu kartu penuh di mobile dan berhenti pada setiap kartu saat digeser, sehingga navigasi lebih mudah di layar kecil.
 - Pintasan Deposit dan Withdraw pada Dashboard Client Area diganti dengan tautan Trade Pilot, sehingga pengguna dapat langsung membuka halaman analisis dari Dashboard dalam bahasa Indonesia maupun Inggris.

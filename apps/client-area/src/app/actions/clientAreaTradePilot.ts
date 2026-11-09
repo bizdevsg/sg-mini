@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 
-import { TRADE_PILOT_DATA_SOURCE } from "@/lib/env";
 import { getTradePilotAccessContext } from "@/lib/trade-pilot/trade-pilot-access";
 import {
   getTradePilotRealEquityUsd,
@@ -14,7 +13,6 @@ import {
   TRADE_PILOT_UNAVAILABLE_MESSAGE,
   TradePilotApiError,
 } from "@/lib/trade-pilot/trade-pilot-api";
-import { mockTradePilotAnalysisService } from "@/lib/trade-pilot/trade-pilot-mock";
 import { consumeTradePilotRateLimit } from "@/lib/trade-pilot/trade-pilot-rate-limit";
 import type {
   TradePilotAnalysisActionResult,
@@ -66,40 +64,27 @@ export async function runClientAreaTradePilotAnalysis(
   // super_admin di konsol SGB-TP. Gagal cek = "unknown" -> backend menolak.
   let realEquityUsd: number | null = null;
   let realEquity: string | undefined;
-  if (TRADE_PILOT_DATA_SOURCE === "api" && request.data.mode === "real") {
+  if (request.data.mode === "real") {
     realEquityUsd = await getTradePilotRealEquityUsd();
     realEquity = realEquityHeaderValue(realEquityUsd);
   }
 
   try {
-    let result;
+    // idempotencyKey dibuat di client per klik; JANGAN dibuat ulang di sini
+    // supaya retry tidak memotong kredit dua kali.
+    const result = await runLiveTradePilotAnalysis(
+      {
+        allowedModes: access.availableModes,
+        language,
+        realEquity,
+        userId: access.userId,
+      },
+      analysisRequest,
+      idempotencyKey,
+    );
 
-    if (TRADE_PILOT_DATA_SOURCE === "api") {
-      // idempotencyKey dibuat di client per klik; JANGAN dibuat ulang di sini
-      // supaya retry tidak memotong kredit dua kali.
-      result = await runLiveTradePilotAnalysis(
-        {
-          allowedModes: access.availableModes,
-          language,
-          realEquity,
-          userId: access.userId,
-        },
-        analysisRequest,
-        idempotencyKey,
-      );
-    } else {
-      result = await mockTradePilotAnalysisService.run(
-        access.userId,
-        analysisRequest,
-        idempotencyKey,
-      );
-    }
-
-    if (result === "insufficient_credit") {
-      return { resetsAt: null, status: "insufficient_credit" };
-    }
     if (!result || !result.history) {
-      return { message: "Mock analysis state could not be resolved.", status: "error" };
+      return { message: TRADE_PILOT_UNAVAILABLE_MESSAGE, status: "error" };
     }
     return { ...result, status: "success" };
   } catch (error) {
@@ -163,7 +148,6 @@ async function getCreditResetsAt(
 export async function getClientAreaTradePilotRealEquity(): Promise<
   { equityUsd: number | null; status: "checked" } | { status: "not_applicable" }
 > {
-  if (TRADE_PILOT_DATA_SOURCE !== "api") return { status: "not_applicable" };
   const access = await getTradePilotAccessContext();
   if (!access.allowed || !access.availableModes.includes("real")) {
     return { status: "not_applicable" };
