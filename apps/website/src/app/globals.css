@@ -203,6 +203,11 @@ button {
   margin-bottom: 0;
 }
 
+.pengumuman-content p:has(span[style*="mso-list"]) {
+  text-indent: 0 !important;
+  overflow-wrap: anywhere;
+}
+
 .pengumuman-content strong,
 .pengumuman-content b {
   font-weight: 600;
@@ -291,17 +296,18 @@ button {
 }
 
 .pengumuman-content .pengumuman-table-wrap {
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   width: 100%;
   overflow-x: auto;
+  border: 1px solid rgba(234, 179, 8, 0.16);
+  border-radius: 0.75rem;
 }
 
 .pengumuman-content table {
-  width: 100%;
-  min-width: 36rem;
+  width: 100% !important;
+  min-width: 32rem;
+  max-width: none;
   border-collapse: collapse;
-  border-radius: 1rem;
-  overflow: hidden;
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -311,10 +317,11 @@ button {
 
 .pengumuman-content th,
 .pengumuman-content td {
-  border: 1px solid rgba(234, 179, 8, 0.12);
-  padding: 0.75rem 0.875rem;
+  border: 1px solid rgba(234, 179, 8, 0.1);
+  padding: 0.875rem 1rem;
   text-align: left;
   vertical-align: top;
+  line-height: 1.6;
 }
 
 .pengumuman-content th {

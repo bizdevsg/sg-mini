@@ -72,9 +72,9 @@ Konfigurasi API konten yang digunakan kedua aplikasi perlu ditambahkan pada masi
 
 Buat dua project Vercel dari repository dan branch yang sama:
 
-| Project | Root Directory | Domain contoh |
-| --- | --- | --- |
-| Website | `apps/website` | `mini.sg-berjangka.com` |
+| Project     | Root Directory     | Domain contoh                  |
+| ----------- | ------------------ | ------------------------------ |
+| Website     | `apps/website`     | `mini.sg-berjangka.com`        |
 | Client Area | `apps/client-area` | `client-mini.sg-berjangka.com` |
 
 Konfigurasi Website:
