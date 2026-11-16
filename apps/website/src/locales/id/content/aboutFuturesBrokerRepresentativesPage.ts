@@ -6,9 +6,9 @@ export const idAboutFuturesBrokerRepresentativesPage: AppMessages["aboutFuturesB
     parentLabel: "Tentang Kami",
     hero: {
       eyebrow: "Perwakilan Berizin",
-      title: "Wakil Pialang Berjangka PT Solid Gold Berjangka",
+      title: "Wakil Pialang Berjangka",
       description:
-        "Kenali Wakil Pialang Berjangka yang tercatat untuk memberikan penjelasan dan pendampingan sesuai ruang lingkup kewenangannya.",
+        "Temukan informasi Wakil Pialang Berjangka resmi yang terdaftar di PT Solid Gold Berjangka.",
     },
     overview: {
       eyebrow: "Daftar Resmi",
@@ -21,6 +21,9 @@ export const idAboutFuturesBrokerRepresentativesPage: AppMessages["aboutFuturesB
       description:
         "Data wakil pialang berikut diperbarui melalui sistem resmi PT Solid Gold Berjangka. Lakukan verifikasi kembali melalui kanal resmi sebelum mengambil keputusan atau menyerahkan dokumen.",
       roleLabel: "Wakil Pialang Berjangka",
+      activeStatus: "Aktif",
+      inactiveStatus: "Tidak Aktif",
+      unknownStatus: "Status belum tersedia",
       companyLabel: "PT Solid Gold Berjangka",
       licenseLabel: "Nomor izin",
       officeLabel: "Kantor",

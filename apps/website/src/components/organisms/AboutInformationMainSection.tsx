@@ -24,7 +24,7 @@ export async function AboutInformationMainSection({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
-        className="pb-10 pt-20 md:pb-36 md:pt-24"
+        className="pb-10 pt-20 md:pb-20 md:pt-24"
         titleClassName="mx-auto max-w-4xl tracking-[-0.02em] sm:text-4xl md:text-5xl"
         descriptionClassName="mx-auto max-w-3xl leading-relaxed text-gray-300"
         breadcrumbs={[

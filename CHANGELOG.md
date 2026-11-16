@@ -4,6 +4,8 @@
 - Dua puluh aset gambar tanpa referensi langsung pada Website dan Client Area dihapus bersama folder kosong, sehingga ukuran aset proyek berkurang sekitar 8,9 MiB.
 
 ### Fixed
+- Status wakil pialang berjangka kini memakai warna dan terjemahan sesuai data API; jika API tidak tersedia, data cadangan menampilkan status belum tersedia alih-alih menandai semua orang aktif.
+- Scroll halaman Informasi dikunci saat modal pengumuman terbuka dan kembali normal setelah modal ditutup, sementara isi modal tetap dapat di-scroll.
 - Warna dan posisi sinyal Indikator Teknikal Trade Pilot diselaraskan: Sell berada di sisi merah, netral di tengah, dan Buy di sisi hijau, sehingga penanda indikator tidak bertentangan dengan labelnya.
 
 ### Added
@@ -11,6 +13,11 @@
 - TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10. Seluruh angka (jumlah, periode, masa berlaku, equity minimum) mengikuti Pengaturan kuota di konsol admin SGB-TP lewat objek credit (`period`, `trialDays`, `trialEndsAt`, `expired`, `minEquityUsd`), termasuk teks disclaimer dan tooltip kuota. Nasabah dengan token khusus **Unlimited** melihat label "Unlimited" pada kuota analisis, tombol **Analisis** tanpa keterangan token, dan catatan "Token analisis Anda unlimited". Catatan di hasil analisis kini menyebut alasan sebenarnya saat analisis terkunci (masa demo berakhir, equity real di bawah batas, atau equity belum dapat diperiksa), dan data mock mengikuti kebijakan 3/hari. Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim nilai equity (USD) lewat `X-TradePilot-Real-Equity` ke backend.
 
 ### Changed
+- Tampilan halaman Wakil Pialang Berjangka dan Informasi disesuaikan pada jarak konten, judul, deskripsi, gambar, serta ukuran modal pengumuman; class tombol unduhan aplikasi dan format komponen eyebrow juga dirapikan.
+- Tab Kalender Ekonomi yang dipilih kini tetap aktif setelah halaman di-refresh selama sesi browser yang sama, tanpa menampilkan tab Today sementara.
+- Daftar wakil pialang berjangka diurutkan berdasarkan tanggal pembuatan data dari yang paling lama ke yang paling baru agar urutannya konsisten.
+- Disclaimer hasil analisis TradePilot kini selalu menggunakan terjemahan locale yang dipilih, sehingga bahasanya konsisten dengan Client Area.
+- Panduan environment menjelaskan lokasi file yang dipantau Next.js saat development agar perubahan konfigurasi dapat dimuat ulang secara otomatis.
 - Konten modal detail pengumuman di halaman Informasi dirapikan: paragraf bernomor dari Microsoft Word tidak lagi menjorok keluar, sementara tabel mengisi lebar yang tersedia dan dapat digeser pada layar kecil.
 - Indikator Teknikal Trade Pilot kini tampil di atas Konteks Fundamental hanya ketika ada hasil analisis, dan memakai indikator dari analisis yang sedang ditampilkan agar tetap sesuai dengan instrumen dan timeframe hasil tersebut.
 - Folder `docs` ditambahkan ke `.gitignore` agar dokumentasi lokal baru tidak otomatis ikut ter-commit.

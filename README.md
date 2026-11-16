@@ -44,7 +44,7 @@ npm run lint
 
 ## Environment variables
 
-Template lengkap tersedia di `.env.example`. Karena setiap aplikasi adalah root Next.js sendiri, buat file lokal berikut sesuai kebutuhan:
+Template lengkap tersedia di `.env.example`. Kedua aplikasi juga membaca `.env` di root repository. Untuk reload bawaan Next.js saat development, gunakan file env di root aplikasi masing-masing:
 
 ```text
 apps/website/.env.local

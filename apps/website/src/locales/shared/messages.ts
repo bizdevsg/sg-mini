@@ -291,6 +291,9 @@ export type AppMessages = {
       title: string;
       description: string;
       roleLabel: string;
+      activeStatus: string;
+      inactiveStatus: string;
+      unknownStatus: string;
       companyLabel: string;
       licenseLabel: string;
       officeLabel: string;

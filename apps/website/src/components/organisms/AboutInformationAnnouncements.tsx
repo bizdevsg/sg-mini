@@ -54,7 +54,9 @@ export function AboutInformationAnnouncements({
       (left, right) =>
         getAnnouncementTimestamp(right) - getAnnouncementTimestamp(left),
     );
-  const [selectedItem, setSelectedItem] = useState<PengumumanRecord | null>(null);
+  const [selectedItem, setSelectedItem] = useState<PengumumanRecord | null>(
+    null,
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   function handleOpenItem(item: PengumumanRecord) {
@@ -79,7 +81,9 @@ export function AboutInformationAnnouncements({
     });
 
     const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -92,6 +96,7 @@ export function AboutInformationAnnouncements({
     return () => {
       window.cancelAnimationFrame(animationFrameId);
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedItem]);
@@ -148,7 +153,7 @@ export function AboutInformationAnnouncements({
                       src={item.image_url}
                       alt={imageAlt}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="!h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       fallback={
                         <div className="relative flex h-full w-full items-end bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent p-5">
                           <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
@@ -160,7 +165,8 @@ export function AboutInformationAnnouncements({
                         </div>
                       }
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
 
                     {isNew ? (
                       <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1">
@@ -228,20 +234,22 @@ export function AboutInformationAnnouncements({
 
       {selectedItem ? (
         <div
-          className={`fixed inset-0 z-[140] flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-all duration-[240ms] ease-out ${isModalVisible
-            ? "opacity-100 backdrop-blur-sm"
-            : "opacity-0 backdrop-blur-none"
-            }`}
+          className={`fixed inset-0 z-[140] flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-all duration-[240ms] ease-out ${
+            isModalVisible
+              ? "opacity-100 backdrop-blur-sm"
+              : "opacity-0 backdrop-blur-none"
+          }`}
           onClick={handleCloseModal}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby={`pengumuman-title-${selectedItem.id}`}
-            className={`relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl md:rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${isModalVisible
-              ? "translate-y-0 scale-100 opacity-100"
-              : "translate-y-6 scale-[0.96] opacity-0"
-              }`}
+            className={`relative flex max-h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl md:rounded-[2rem] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(18,18,18,0.98)_0%,rgba(8,8,8,1)_100%)] shadow-[0_25px_100px_rgba(0,0,0,0.55)] transition-all duration-[240ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
+              isModalVisible
+                ? "translate-y-0 scale-100 opacity-100"
+                : "translate-y-6 scale-[0.96] opacity-0"
+            }`}
             onClick={(event) => event.stopPropagation()}
           >
             <button
@@ -259,7 +267,7 @@ export function AboutInformationAnnouncements({
                   src={selectedItem.image_url}
                   alt={selectedItem.judul?.trim() || labels.defaultTitle}
                   loading="eager"
-                  className="h-full w-full object-center object-cover"
+                  className="!h-full w-full object-center object-cover"
                   fallback={
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-yellow-500/10 via-black to-black overflow-hidden">
                       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-400">
@@ -280,12 +288,11 @@ export function AboutInformationAnnouncements({
                   </h2>
                 </div>
 
-
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
               </div>
             ) : null}
 
-            <div className="pengumuman-modal-scroll min-h-0 flex-1 overflow-y-auto">
+            <div className="pengumuman-modal-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 text-xs text-yellow-500/70 w-full">
                   <p className="flex items-center w-fit text-nowrap gap-1.5">
@@ -309,7 +316,9 @@ export function AboutInformationAnnouncements({
                   <div
                     className="pengumuman-content prose-sm mt-6 max-w-none text-sm leading-7 text-white"
                     // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{ __html: selectedItem.konten ?? "" }}
+                    dangerouslySetInnerHTML={{
+                      __html: selectedItem.konten ?? "",
+                    }}
                   />
                 </div>
               </div>

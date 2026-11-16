@@ -36,7 +36,7 @@ export function AboutFuturesBrokerRepresentativesMainSection({
         eyebrow={page.hero.eyebrow}
         title={page.hero.title}
         description={page.hero.description}
-        className="pb-32 pt-20 md:pb-36 md:pt-24"
+        className="pb-0 pt-20 md:pb-16 md:pt-24"
         titleClassName="mx-auto max-w-4xl tracking-[-0.02em] sm:text-4xl md:text-5xl"
         descriptionClassName="mx-auto max-w-3xl leading-relaxed text-gray-300"
         breadcrumbs={[
@@ -57,47 +57,62 @@ export function AboutFuturesBrokerRepresentativesMainSection({
 
         <div className="relative z-10 mx-auto">
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {representatives.map((representative, index) => (
-              <ScrollReveal
-                key={`${representative.id}-${representative.slug || representative.name}`}
-                effect="fade-up"
-                delay={Math.min((index % 3) * 80, 160)}
-                className="h-full"
-              >
-                <article className="group flex h-full flex-col rounded-2xl border border-white/10 bg-[linear-gradient(155deg,rgba(27,27,27,0.95),rgba(8,8,8,0.98))] p-5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/30 hover:shadow-[0_18px_45px_rgba(205,161,58,0.1)]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-amber-300/20 bg-amber-400/[0.08] text-sm font-bold text-amber-300">
-                        {getInitials(representative.name)}
+            {representatives.map((representative, index) => {
+              const status = representative.status.trim().toLowerCase();
+              const isActive = status === "aktif" || status === "active";
+              const isInactive =
+                status === "tidak_aktif" || status === "inactive";
+              const statusLabel = isActive
+                ? page.representatives.activeStatus
+                : isInactive
+                  ? page.representatives.inactiveStatus
+                  : representative.statusLabel ||
+                    page.representatives.unknownStatus;
+
+              return (
+                <ScrollReveal
+                  key={`${representative.id}-${representative.slug || representative.name}`}
+                  effect="fade-up"
+                  delay={Math.min((index % 3) * 80, 160)}
+                  className="h-full"
+                >
+                  <article className="group flex h-full flex-col rounded-2xl border border-white/10 bg-[linear-gradient(155deg,rgba(27,27,27,0.95),rgba(8,8,8,0.98))] p-5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/30 hover:shadow-[0_18px_45px_rgba(205,161,58,0.1)]">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-amber-300/20 bg-amber-400/[0.08] text-sm font-bold text-amber-300">
+                          {getInitials(representative.name)}
+                        </div>
+
+                        <div>
+                          <h3 className="text-lg font-bold leading-snug text-white transition-colors group-hover:text-amber-300">
+                            {representative.name}
+                          </h3>
+                          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-400/80">
+                            {page.representatives.roleLabel}
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <h3 className="text-lg font-bold leading-snug text-white transition-colors group-hover:text-amber-300">
-                          {representative.name}
-                        </h3>
-                        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-400/80">
-                          {page.representatives.roleLabel}
-                        </p>
-                      </div>
+                      <span className="font-mono text-xs text-zinc-600">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
                     </div>
 
-                    <span className="font-mono text-xs text-zinc-600">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-4 text-xs">
+                      <span
+                        className={`rounded-full border px-2.5 py-1 font-semibold ${isActive ? "border-emerald-400/20 bg-emerald-400/[0.08] text-emerald-300" : isInactive ? "border-red-400/20 bg-red-400/[0.08] text-red-300" : "border-zinc-400/20 bg-zinc-400/[0.08] text-zinc-300"}`}
+                      >
+                        {statusLabel}
+                      </span>
 
-                  <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-4 text-xs">
-                    <span className="rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-2.5 py-1 font-semibold text-emerald-300">
-                      {representative.statusLabel || representative.status}
-                    </span>
-
-                    <span className="font-medium text-zinc-300">
-                      {representative.licenseNumber || "-"}
-                    </span>
-                  </div>
-                </article>
-              </ScrollReveal>
-            ))}
+                      <span className="font-medium text-zinc-300">
+                        {representative.licenseNumber || "-"}
+                      </span>
+                    </div>
+                  </article>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </SectionContainer>

@@ -2,7 +2,6 @@ import "server-only";
 
 import { FUTURES_BROKER_REPRESENTATIVES_API_URL } from "@/lib/env";
 import { getSgAdminApiHeaders } from "@/lib/sg-admin-api";
-import type { AppLocale } from "@/locales";
 
 export type FuturesBrokerRepresentative = {
   id: number;
@@ -29,6 +28,7 @@ type RepresentativeApiRecord = {
   no_identitas?: string | null;
   status?: string | null;
   status_label?: string | null;
+  created_at?: string | null;
   category?: {
     nama_kategori?: string | null;
     alamat_kantor_cabang?: string | null;
@@ -51,6 +51,11 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function creationTimestamp(item: RepresentativeApiRecord) {
+  const timestamp = Date.parse(normalizeText(item.created_at));
+  return Number.isNaN(timestamp) ? Number.POSITIVE_INFINITY : timestamp;
+}
+
 function normalizeExternalUrl(value: unknown) {
   const text = normalizeText(value);
 
@@ -68,7 +73,6 @@ function normalizeExternalUrl(value: unknown) {
 
 function mapApiRecord(
   item: RepresentativeApiRecord,
-  locale: AppLocale,
 ): FuturesBrokerRepresentative | null {
   const name = normalizeText(item.nama);
   const status = normalizeText(item.status);
@@ -83,10 +87,7 @@ function mapApiRecord(
     name,
     licenseNumber: normalizeText(item.no_identitas) || null,
     status,
-    statusLabel:
-      locale === "en" && status.toLowerCase() === "aktif"
-        ? "Active"
-        : normalizeText(item.status_label) || status,
+    statusLabel: normalizeText(item.status_label) || status,
     categoryName: normalizeText(item.category?.nama_kategori) || null,
     officeAddress: normalizeText(item.category?.alamat_kantor_cabang) || null,
     phone: normalizeText(item.category?.telp) || null,
@@ -94,17 +95,14 @@ function mapApiRecord(
   };
 }
 
-function createFallbackRecords(
-  locale: AppLocale,
-  names: string[],
-): FuturesBrokerRepresentative[] {
+function createFallbackRecords(names: string[]): FuturesBrokerRepresentative[] {
   return names.map((name, index) => ({
     id: -(index + 1),
     slug: "",
     name,
     licenseNumber: null,
-    status: "aktif",
-    statusLabel: locale === "en" ? "Active" : "Aktif",
+    status: "",
+    statusLabel: "",
     categoryName: null,
     officeAddress: null,
     phone: null,
@@ -137,11 +135,10 @@ async function fetchPage(page: number, headers: Headers) {
 }
 
 export async function getFuturesBrokerRepresentatives(
-  locale: AppLocale,
   fallbackNames: string[],
 ): Promise<FuturesBrokerRepresentativesResult> {
   const fallbackResult: FuturesBrokerRepresentativesResult = {
-    data: createFallbackRecords(locale, fallbackNames),
+    data: createFallbackRecords(fallbackNames),
     source: "fallback",
   };
 
@@ -159,7 +156,13 @@ export async function getFuturesBrokerRepresentatives(
     );
     const records = [firstPage, ...remainingPages]
       .flatMap((payload) => (Array.isArray(payload.data) ? payload.data : []))
-      .map((item) => mapApiRecord(item, locale))
+      .sort((left, right) => {
+        const leftTime = creationTimestamp(left);
+        const rightTime = creationTimestamp(right);
+        if (leftTime !== rightTime) return leftTime - rightTime;
+        return (left.id ?? 0) - (right.id ?? 0);
+      })
+      .map((item) => mapApiRecord(item))
       .filter(
         (item): item is FuturesBrokerRepresentative => item !== null,
       );

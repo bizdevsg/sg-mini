@@ -57,7 +57,6 @@ export default async function AboutFuturesBrokerRepresentativesPage({
   assertValidLocale(locales);
   const page = getMessages(locales).aboutFuturesBrokerRepresentativesPage;
   const representatives = await getFuturesBrokerRepresentatives(
-    locales,
     page.representatives.names,
   );
 

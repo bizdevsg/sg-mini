@@ -103,7 +103,7 @@ export default async function SolidGoldAppPage({
             target="_blank"
             rel="noreferrer"
             size="lg"
-            className="group w-full sm:min-w-[220px] sm:w-auto"
+            className="group w-full sm:min-w-55 sm:w-auto"
           >
             <FontAwesomeIcon icon={["fab", "google-play"]} />
             {pageContent.hero.primaryCta}
@@ -119,7 +119,7 @@ export default async function SolidGoldAppPage({
             rel="noreferrer"
             variant="ghost"
             size="lg"
-            className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-[220px] sm:w-auto"
+            className="group w-full border-white/15 text-white backdrop-blur-md sm:min-w-55 sm:w-auto"
           >
             <FontAwesomeIcon icon={["fab", "apple"]} />
             {pageContent.hero.secondaryCta}

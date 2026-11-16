@@ -6,9 +6,9 @@ export const enAboutFuturesBrokerRepresentativesPage: AppMessages["aboutFuturesB
     parentLabel: "About Us",
     hero: {
       eyebrow: "Licensed Representatives",
-      title: "PT Solid Gold Berjangka Futures Broker Representatives",
+      title: "Futures Broker Representatives",
       description:
-        "Meet the registered Futures Broker Representatives who provide information and assistance within the scope of their authority.",
+        "Find information on the official sub-brokers registered with PT Solid Gold Berjangka.",
     },
     overview: {
       eyebrow: "Official List",
@@ -21,6 +21,9 @@ export const enAboutFuturesBrokerRepresentativesPage: AppMessages["aboutFuturesB
       description:
         "The representatives below are updated through PT Solid Gold Berjangka's official system. Verify the latest information through official channels before making decisions or submitting documents.",
       roleLabel: "Futures Broker Representative",
+      activeStatus: "Active",
+      inactiveStatus: "Inactive",
+      unknownStatus: "Status unavailable",
       companyLabel: "PT Solid Gold Berjangka",
       licenseLabel: "License number",
       officeLabel: "Office",

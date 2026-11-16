@@ -35,6 +35,7 @@ type EconomicCalendarBrowserProps = {
 
 const ECONOMIC_CALENDAR_CLIENT_STALE_MS = 30_000;
 const ECONOMIC_CALENDAR_REFRESH_INTERVAL_MS = 30_000;
+const ECONOMIC_CALENDAR_ACTIVE_RANGE_KEY = "sgb-economic-calendar-active-range";
 
 type PaginationItem = number | "...";
 
@@ -171,9 +172,23 @@ export function EconomicCalendarBrowser({
 
   const [activeRange, setActiveRange] =
     useState<EconomicCalendarRangeKey>("today");
+  const [isRangeRestored, setIsRangeRestored] = useState(false);
   const [rangeOverview, setRangeOverview] = useState(overview);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    try {
+      const savedRange = window.sessionStorage.getItem(ECONOMIC_CALENDAR_ACTIVE_RANGE_KEY);
+
+      if (ECONOMIC_CALENDAR_RANGE_KEYS.some((rangeKey) => rangeKey === savedRange)) {
+        setActiveRange(savedRange as EconomicCalendarRangeKey);
+      }
+    } catch {
+      // Keep the default tab if browser storage is unavailable.
+    }
+    setIsRangeRestored(true);
+  }, []);
 
   useEffect(() => {
     activeRangeRef.current = activeRange;
@@ -412,6 +427,10 @@ export function EconomicCalendarBrowser({
     });
   }
 
+  if (!isRangeRestored) {
+    return null;
+  }
+
   return (
     <div ref={browserRef} className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -424,6 +443,11 @@ export function EconomicCalendarBrowser({
                 type="button"
                 onClick={() => {
                   setActiveRange(rangeKey);
+                  try {
+                    window.sessionStorage.setItem(ECONOMIC_CALENDAR_ACTIVE_RANGE_KEY, rangeKey);
+                  } catch {
+                    // Tab selection still works when browser storage is unavailable.
+                  }
                   setSelectedEventId(null);
                   setCurrentPage(1);
                 }}
