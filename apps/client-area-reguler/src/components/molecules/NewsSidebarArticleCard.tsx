@@ -2,10 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { NewsFeedArticle } from "@/lib/news.shared";
-import {
-  formatLocaleArticleDateTime,
-  type AppLocale,
-} from "@/locales";
+import { formatLocaleArticleDateTime, type AppLocale } from "@/locales";
 
 type NewsSidebarArticleCardProps = {
   article: NewsFeedArticle;

@@ -16,11 +16,7 @@ function parseDateValue(value: string) {
   return null;
 }
 
-function formatClock(
-  date: Date,
-  locale: AppLocale,
-  includeSeconds: boolean,
-) {
+function formatClock(date: Date, locale: AppLocale, includeSeconds: boolean) {
   return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
     hour: "2-digit",
     minute: "2-digit",
@@ -102,16 +98,16 @@ export function formatLocaleArticleDateTime(
   }
 
   const dateLabel = new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
-    weekday: "long",
+    // weekday: "short",
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
     timeZone: getLocaleConfig(locale).timeZone,
   }).format(parsedDate);
 
   const timeLabel = formatClock(parsedDate, locale, false);
 
-  return `${dateLabel} - ${timeLabel}`;
+  return `${dateLabel}, ${timeLabel}`;
 }
 
 export function formatLocaleTime(

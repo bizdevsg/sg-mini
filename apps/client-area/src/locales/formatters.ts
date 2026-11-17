@@ -16,11 +16,7 @@ function parseDateValue(value: string) {
   return null;
 }
 
-function formatClock(
-  date: Date,
-  locale: AppLocale,
-  includeSeconds: boolean,
-) {
+function formatClock(date: Date, locale: AppLocale, includeSeconds: boolean) {
   return new Intl.DateTimeFormat(getLocaleConfig(locale).intl, {
     hour: "2-digit",
     minute: "2-digit",
