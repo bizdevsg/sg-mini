@@ -1,11 +1,7 @@
 "use client";
 
-import { StoreBadgeLink } from "@/components/atoms/StoreBadgeLink";
 import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
-import {
-  CLIENT_AREA_TRADE_PILOT_APP_LINKS,
-  type ClientAreaTradePilotCopy,
-} from "@/lib/client-area-trade-pilot.shared";
+import type { ClientAreaTradePilotCopy } from "@/lib/client-area-trade-pilot.shared";
 import type { TradePilotCreditBalance } from "@/lib/trade-pilot/trade-pilot.types";
 import type { AppLocale } from "@/locales";
 
@@ -33,8 +29,7 @@ function fill(template: string, values: Record<string, string>) {
 
 /**
  * Disclaimer kuota TradePilot:
- * - demo_daily / demo_expired: ajakan buka akun live (modal download app SGB)
- *   atau download aplikasi TradePilot.
+ * - demo_daily / demo_expired: ajakan buka akun live (modal download app SGB).
  * - no_equity / equity_unknown: mode Real hanya selama akun live punya equity.
  */
 export function ClientAreaTradePilotQuotaNotice({
@@ -91,27 +86,6 @@ export function ClientAreaTradePilotQuotaNotice({
             size="sm"
             className="w-full !px-4 !text-sm"
           />
-          <p className="pt-1 text-center text-[11px] font-semibold text-amber-100/80">
-            {copy.downloadTradePilotTitle}
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <StoreBadgeLink
-              alt={copy.googlePlayAlt}
-              className="inline-flex w-32 p-0.5 transition hover:bg-amber-400/10"
-              href={CLIENT_AREA_TRADE_PILOT_APP_LINKS.googlePlay}
-              imageClassName="h-auto w-full object-contain"
-              imageSrc="/assets/GOOGLE-PLAY.webp"
-              sizes="128px"
-            />
-            <StoreBadgeLink
-              alt={copy.appStoreAlt}
-              className="inline-flex w-32 p-0.5 transition hover:bg-amber-400/10"
-              href={CLIENT_AREA_TRADE_PILOT_APP_LINKS.appStore}
-              imageClassName="h-auto w-full object-contain"
-              imageSrc="/assets/APPS-STORE.webp"
-              sizes="128px"
-            />
-          </div>
         </div>
       ) : null}
     </div>

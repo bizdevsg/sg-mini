@@ -341,10 +341,10 @@ export const enClientArea: AppMessages["clientArea"] = {
       quotaNotice: {
         demoDailyTitle: "Your demo analysis quota is used up",
         demoDailyBody:
-          "Demo accounts get {allowance} analyses {per}. Your quota resets on {date}. Don't want to wait? Open a live account or use the TradePilot app.",
+          "Demo accounts get {allowance} analyses {per}. Your quota resets on {date}. Don't want to wait? Open a live account.",
         demoExpiredTitle: "Your TradePilot demo access has ended",
         demoExpiredBody:
-          "TradePilot analysis for demo accounts is available for {days} days and ended on {date}. To continue, open a live account or download the TradePilot app.",
+          "TradePilot analysis for demo accounts is available for {days} days and ended on {date}. To continue, open a live account.",
         demoTrialInfo: "TradePilot demo access is available until {date}.",
         trialEndedLabel: "Access ended {date}",
         periodLabels: {

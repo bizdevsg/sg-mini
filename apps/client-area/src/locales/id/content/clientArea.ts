@@ -337,10 +337,10 @@ export const idClientArea: AppMessages["clientArea"] = {
       quotaNotice: {
         demoDailyTitle: "Kuota analisis demo sudah habis",
         demoDailyBody:
-          "Akun demo mendapat {allowance} analisis {per}. Kuota direset pada {date}. Ingin analisis tanpa menunggu? Buka akun live atau gunakan aplikasi TradePilot.",
+          "Akun demo mendapat {allowance} analisis {per}. Kuota direset pada {date}. Ingin analisis tanpa menunggu? Buka akun live.",
         demoExpiredTitle: "Masa akses TradePilot demo sudah berakhir",
         demoExpiredBody:
-          "Akses analisis TradePilot untuk akun demo berlaku {days} hari dan telah berakhir pada {date}. Untuk melanjutkan, buka akun live atau download aplikasi TradePilot.",
+          "Akses analisis TradePilot untuk akun demo berlaku {days} hari dan telah berakhir pada {date}. Untuk melanjutkan, buka akun live.",
         demoTrialInfo: "Akses TradePilot demo berlaku sampai {date}.",
         trialEndedLabel: "Masa akses berakhir {date}",
         periodLabels: {
