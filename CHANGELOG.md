@@ -4,6 +4,7 @@
 - Dua puluh aset gambar tanpa referensi langsung pada Website dan Client Area dihapus bersama folder kosong, sehingga ukuran aset proyek berkurang sekitar 8,9 MiB.
 
 ### Fixed
+- Video TikTok di Client Area Mini/Micro kini menggunakan file video dari API jika tersedia, sehingga dapat diputar langsung tanpa bergantung pada player TikTok.
 - Status wakil pialang berjangka kini memakai warna dan terjemahan sesuai data API; jika API tidak tersedia, data cadangan menampilkan status belum tersedia alih-alih menandai semua orang aktif.
 - Scroll halaman Informasi dikunci saat modal pengumuman terbuka dan kembali normal setelah modal ditutup, sementara isi modal tetap dapat di-scroll.
 - Warna dan posisi sinyal Indikator Teknikal Trade Pilot diselaraskan: Sell berada di sisi merah, netral di tengah, dan Buy di sisi hijau, sehingga penanda indikator tidak bertentangan dengan labelnya.

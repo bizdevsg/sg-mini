@@ -24,6 +24,16 @@ export function ClientAreaTikTokEmbed({
       </div>
 
       <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
+        {video.directVideoUrl ? (
+          <video
+            className="aspect-[9/16] w-full bg-black object-contain"
+            controls
+            playsInline
+            preload="metadata"
+            src={video.directVideoUrl}
+            aria-label={copy.frameTitle}
+          />
+        ) : (
         <iframe
           allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
           allowFullScreen
@@ -33,6 +43,7 @@ export function ClientAreaTikTokEmbed({
           src={video.embedUrl}
           title={copy.frameTitle}
         />
+        )}
       </div>
 
       <a

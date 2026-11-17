@@ -9,6 +9,7 @@ import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 type RawTikTokVideo = {
   id?: number | string | null;
   video_id?: string | number | null;
+  file_url?: string | null;
   title?: string | null;
   is_active?: boolean | number | string | null;
 };
@@ -26,9 +27,19 @@ const TIKTOK_VIDEO_TIMEOUT_MS = 8000;
 const TIKTOK_VIDEO_REVALIDATE_SECONDS = 300;
 const FALLBACK_TIKTOK_VIDEO_ID = "7700863615682858247";
 
+function getDirectVideoUrl(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+  try {
+    const url = new URL(value.trim(), new URL(TIKTOK_VIDEO_API_URL).origin + "/");
+    return url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function buildTikTokVideo(
   videoId: string,
-  options: { id?: number; title?: string } = {},
+  options: { id?: number; title?: string; directVideoUrl?: string | null } = {},
 ): TikTokVideo {
   return {
     id: options.id ?? 0,
@@ -36,6 +47,7 @@ function buildTikTokVideo(
     videoId,
     videoUrl: `https://www.tiktok.com/@solid.prime/video/${videoId}`,
     embedUrl: `https://www.tiktok.com/player/v1/${videoId}`,
+    directVideoUrl: options.directVideoUrl ?? null,
   };
 }
 
@@ -80,6 +92,7 @@ function mapTikTokVideo(record: RawTikTokVideo): TikTokVideo | null {
   return buildTikTokVideo(videoId, {
     id: normalizeId(record.id),
     title: record.title?.trim() ?? "",
+    directVideoUrl: getDirectVideoUrl(record.file_url),
   });
 }
 

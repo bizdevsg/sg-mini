@@ -4,4 +4,5 @@ export type TikTokVideo = {
   videoId: string;
   videoUrl: string;
   embedUrl: string;
+  directVideoUrl: string | null;
 };
