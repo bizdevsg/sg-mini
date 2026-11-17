@@ -534,9 +534,9 @@ export const idClientArea: AppMessages["clientArea"] = {
         appStoreAlt: "Dapatkan TradePilot di App Store",
         logoAlt: "Logo TradePilot",
         supportTitle:
-          "TradePilot adalah alat pendukung keputusan, bukan saran keuangan atau layanan trading.",
+          "TradePilot adalah layanan pihak ketiga yang bekerja sama dengan PT Solid Gold Berjangka.",
         supportDescription:
-          "Keputusan dan risiko tetap milikmu. Performa masa lalu tidak menjamin hasil di masa depan.",
+          "PT Solid Gold Berjangka bekerja sama dengan TradePilot.id dalam menyediakan fitur ini. TradePilot adalah alat pendukung keputusan, bukan saran keuangan atau layanan trading. Keputusan dan risiko tetap milikmu. Performa masa lalu tidak menjamin hasil di masa depan.",
         disclaimerLabel: "Disclaimer:",
         disclaimerDescription:
           "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",

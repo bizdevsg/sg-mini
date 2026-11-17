@@ -536,9 +536,9 @@ export const enClientArea: AppMessages["clientArea"] = {
         appStoreAlt: "Get TradePilot on the App Store",
         logoAlt: "TradePilot logo",
         supportTitle:
-          "TradePilot is a decision-support tool, not financial advice or a trading service.",
+          "TradePilot is a third-party service in partnership with PT Solid Gold Berjangka.",
         supportDescription:
-          "Decisions and risks remain yours. Past performance does not guarantee future results.",
+          "PT Solid Gold Berjangka partners with TradePilot.id to provide this feature. TradePilot is a decision-support tool, not financial advice or a trading service. Decisions and risks remain yours. Past performance does not guarantee future results.",
         disclaimerLabel: "Disclaimer:",
         disclaimerDescription:
           "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
