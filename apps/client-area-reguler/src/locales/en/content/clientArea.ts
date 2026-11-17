@@ -555,7 +555,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         description: "News and events related to this analysis.",
         refreshLabel: "Refresh fundamentals",
         latestNewsLabel: "Latest News",
-        economicCalendarLabel: "Economic Calendar",
+        economicCalendarLabel: "Economic Insight",
         learnLabel: "Learn",
         newsEmptyLabel: "No news to display right now.",
       },

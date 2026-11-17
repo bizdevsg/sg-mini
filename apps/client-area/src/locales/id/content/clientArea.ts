@@ -553,7 +553,7 @@ export const idClientArea: AppMessages["clientArea"] = {
         description: "Berita & event terkait analisis ini.",
         refreshLabel: "Refresh fundamental",
         latestNewsLabel: "Berita Terkini",
-        economicCalendarLabel: "Kalender Ekonomi",
+        economicCalendarLabel: "Economic Insight",
         learnLabel: "Pelajari",
         newsEmptyLabel: "Belum ada berita untuk ditampilkan.",
       },
