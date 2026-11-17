@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeClosed } from "lucide-react";
 
 import { PUBLIC_WEBSITE_URL } from "@/lib/env";
@@ -29,6 +31,20 @@ export function ClientAreaLoginFormPanel({
   onTogglePassword,
   onOpenDownloadModal,
 }: ClientAreaLoginFormPanelProps) {
+  const router = useRouter();
+  const [accountType, setAccountType] = useState<"mini" | "regular">("mini");
+  const isRegular = accountType === "regular";
+  const miniUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_MINI_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3009" : "");
+  const regularUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_REGULER_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3010" : "");
+
+  function selectAccountType(type: "mini" | "regular") {
+    const target = type === "mini" ? miniUrl : regularUrl;
+    if (type !== "mini" && target) {
+      router.push(`${target.replace(/\/$/, "")}/${locale}/client-area/login`);
+      return;
+    }
+    setAccountType(type);
+  }
   const passwordToggleLabel = showPassword
     ? login.hidePasswordLabel
     : login.showPasswordLabel;
@@ -44,6 +60,24 @@ export function ClientAreaLoginFormPanel({
           {login.title}
         </h1>
 
+        <div className="mb-5 grid grid-cols-2 rounded-xl border border-amber-500/30 p-1">
+          {(["mini", "regular"] as const).map((type) => (
+            <button
+              key={type}
+              type="button"
+              aria-pressed={accountType === type}
+              onClick={() => selectAccountType(type)}
+              className={`rounded-lg px-3 py-3 text-sm font-black tracking-wider transition-colors ${accountType === type ? "bg-amber-500 text-black" : "text-amber-500 hover:bg-amber-500/10"}`}
+            >
+              {type === "mini" ? login.miniMicroTab : login.regularTab}
+            </button>
+          ))}
+        </div>
+
+        {isRegular ? (
+          <p role="status" className="mb-4 text-sm text-amber-400">{login.regularUnavailable}</p>
+        ) : null}
+
         <form action={formAction} className="flex flex-col gap-[0.9rem]">
           <input type="hidden" name="locale" value={locale} />
 
@@ -54,7 +88,7 @@ export function ClientAreaLoginFormPanel({
               type="email"
               autoComplete="email"
               required
-              disabled={pending}
+              disabled={pending || isRegular}
               placeholder={login.accountPlaceholder}
               className={inputClassName}
             />
@@ -67,7 +101,7 @@ export function ClientAreaLoginFormPanel({
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               required
-              disabled={pending}
+              disabled={pending || isRegular}
               placeholder={login.passwordPlaceholder}
               className={`${inputClassName} pr-12`}
             />
@@ -83,12 +117,12 @@ export function ClientAreaLoginFormPanel({
           </div>
 
           <div className="mx-auto">
-            {captcha}
+            {!isRegular && captcha}
           </div>
 
           <button
             type="submit"
-            disabled={pending}
+            disabled={pending || isRegular}
             className="mt-1 flex h-[3.125rem] w-full items-center justify-center gap-2 cursor-pointer rounded-[0.6rem] bg-gradient-to-r from-amber-500 to-amber-600 text-[0.92rem] font-black tracking-[0.12em] text-black shadow-[0_4px_24px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[opacity,box-shadow,transform] enabled:hover:-translate-y-px enabled:hover:opacity-95 enabled:hover:shadow-[0_6px_32px_rgba(245,158,11,0.55)] disabled:cursor-not-allowed disabled:opacity-[0.55]"
           >
             {pending ? (

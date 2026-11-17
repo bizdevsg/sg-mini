@@ -1,0 +1,57 @@
+"use client";
+
+import type { ReactNode } from "react";
+
+import { SectionContainer } from "@/components/atoms/SectionContainer";
+import { ClientAreaHeaderTicker } from "@/components/molecules/ClientAreaHeaderTicker";
+import { getDashboardCopy } from "@/components/organisms/client-area.shared";
+import type {
+  BreakingNewsItem,
+  TabId,
+} from "@/components/organisms/client-area.types";
+import type { AppLocale } from "@/locales";
+
+type ClientAreaShellProps = {
+  activeTab: TabId;
+  breakingNews?: BreakingNewsItem[];
+  children: ReactNode;
+  locale: AppLocale;
+  modal?: ReactNode;
+  showHeaderTicker?: boolean;
+};
+
+export function ClientAreaShell({
+  activeTab,
+  breakingNews,
+  children,
+  locale,
+  modal,
+  showHeaderTicker = true,
+}: ClientAreaShellProps) {
+  const copy = getDashboardCopy(locale);
+  const resolvedBreakingNews = breakingNews ?? [];
+
+  return (
+    <section
+      data-active-tab={activeTab}
+      className="client-area-main-background relative min-h-[calc(100vh-5rem)] overflow-x-clip pb-5 pt-3 sm:py-7 lg:py-8"
+    >
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
+
+      <SectionContainer className="relative min-w-0 max-w-full">
+        <section className="space-y-4 sm:space-y-5">
+          {showHeaderTicker ? (
+            <ClientAreaHeaderTicker
+              breakingLabel={copy.breakingLabel}
+              breakingNews={resolvedBreakingNews}
+            />
+          ) : null}
+
+          <div className="w-full min-w-0">{children}</div>
+
+          {modal}
+        </section>
+      </SectionContainer>
+    </section>
+  );
+}

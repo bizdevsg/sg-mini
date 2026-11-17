@@ -5,17 +5,24 @@
 
 ### Fixed
 - Video TikTok di Client Area Mini/Micro kini menggunakan file video dari API jika tersedia, sehingga dapat diputar langsung tanpa bergantung pada player TikTok.
+- Pemutar TikTok di Client Area Reguler kini menampilkan pilihan coba lagi dan tautan ke video saat player gagal atau tidak siap, sehingga pengguna tetap dapat membuka video.
 - Status wakil pialang berjangka kini memakai warna dan terjemahan sesuai data API; jika API tidak tersedia, data cadangan menampilkan status belum tersedia alih-alih menandai semua orang aktif.
 - Scroll halaman Informasi dikunci saat modal pengumuman terbuka dan kembali normal setelah modal ditutup, sementara isi modal tetap dapat di-scroll.
 - Warna dan posisi sinyal Indikator Teknikal Trade Pilot diselaraskan: Sell berada di sisi merah, netral di tengah, dan Buy di sisi hijau, sehingga penanda indikator tidak bertentangan dengan labelnya.
 
 ### Added
+- Client Area Reguler dapat memutar file video dari field `file_url` API video TikTok sebagai alternatif embed; jika field belum tersedia, player memakai embed TikTok.
+- Berita, ebook, sinyal pasar, kalender ekonomi, dan harga WebSocket di Client Area Reguler menggunakan sumber data aslinya; layanan Trade Pilot tetap membutuhkan identitas akun yang valid.
+- Aplikasi `client-area-reguler` ditambahkan sebagai salinan Client Area dengan port tersendiri dan pilihan Mini/Micro serta Reguler pada form login.
 - Panduan pengguna website dan Client Area ditambahkan dalam format Word dan Markdown di `docs`, mencakup navigasi, data pasar, edukasi, akun, Trade Pilot, dan bantuan pengguna.
 - TradePilot mengikuti kebijakan kuota baru: akun demo 3 analisis/hari selama 2 minggu dan akun real 3 analisis/hari selama equity akun live minimal $10. Seluruh angka (jumlah, periode, masa berlaku, equity minimum) mengikuti Pengaturan kuota di konsol admin SGB-TP lewat objek credit (`period`, `trialDays`, `trialEndsAt`, `expired`, `minEquityUsd`), termasuk teks disclaimer dan tooltip kuota. Nasabah dengan token khusus **Unlimited** melihat label "Unlimited" pada kuota analisis, tombol **Analisis** tanpa keterangan token, dan catatan "Token analisis Anda unlimited". Catatan di hasil analisis kini menyebut alasan sebenarnya saat analisis terkunci (masa demo berakhir, equity real di bawah batas, atau equity belum dapat diperiksa), dan data mock mengikuti kebijakan 3/hari. Saat kuota demo harian habis atau masa demo berakhir muncul disclaimer dengan tombol **Buka Akun Live** dan tautan download aplikasi TradePilot; mode real memeriksa equity akun live di server (fail closed) dan mengirim nilai equity (USD) lewat `X-TradePilot-Real-Equity` ke backend.
 
 ### Changed
-- Istilah teknis pada kartu ringkasan akun Client Area Mini/Micro versi Indonesia memakai istilah trading berbahasa Inggris agar maknanya tetap konsisten.
-- Next.js dan eslint-config-next pada Website dan Client Area diperbarui ke 16.4.5 untuk menerapkan perbaikan keamanan framework.
+- Konfigurasi Docker dan Nginx lokal menyiapkan service Client Area Reguler untuk domain client-reguler.sg-berjangka.com serta menyelaraskan port upstream dengan container.
+- Client Area Reguler kini menggunakan login, sesi, profil, ringkasan akun, transaksi, dan daily statement dari integrasi Mini/Micro; data akun dummy tidak lagi dipakai.
+- Istilah teknis pada kartu ringkasan akun Client Area Mini/Micro dan Reguler versi Indonesia memakai istilah trading berbahasa Inggris agar maknanya tetap konsisten.
+- Perintah `npm run dev` di root kini menjalankan Website, Client Area Mini/Micro, dan Client Area Reguler secara bersamaan pada port 3000, 3009, dan 3010.
+- Next.js dan eslint-config-next pada Website, Client Area, dan Client Area Reguler diperbarui ke 16.4.5 untuk menerapkan perbaikan keamanan framework.
 - Tampilan halaman Wakil Pialang Berjangka dan Informasi disesuaikan pada jarak konten, judul, deskripsi, gambar, serta ukuran modal pengumuman; class tombol unduhan aplikasi dan format komponen eyebrow juga dirapikan.
 - Tab Kalender Ekonomi yang dipilih kini tetap aktif setelah halaman di-refresh selama sesi browser yang sama, tanpa menampilkan tab Today sementara.
 - Daftar wakil pialang berjangka diurutkan berdasarkan tanggal pembuatan data dari yang paling lama ke yang paling baru agar urutannya konsisten.

@@ -1,0 +1,145 @@
+import type { ReactNode } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Eye, EyeClosed } from "lucide-react";
+
+import { PUBLIC_WEBSITE_URL } from "@/lib/env";
+import type { AppLocale, AppMessages } from "@/locales";
+
+type ClientAreaLoginFormPanelProps = {
+  /** Optional captcha widget, rendered inside the form above the submit button. */
+  captcha?: ReactNode;
+  locale: AppLocale;
+  login: AppMessages["clientArea"]["login"];
+  pending: boolean;
+  showPassword: boolean;
+  formAction: (formData: FormData) => void | Promise<void>;
+  onTogglePassword: () => void;
+  onOpenDownloadModal: () => void;
+};
+
+const inputClassName =
+  "client-area-login-input h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
+
+export function ClientAreaLoginFormPanel({
+  captcha,
+  locale,
+  login,
+  pending,
+  showPassword,
+  formAction,
+  onTogglePassword,
+  onOpenDownloadModal,
+}: ClientAreaLoginFormPanelProps) {
+  const router = useRouter();
+  const [accountType, setAccountType] = useState<"mini" | "regular">("regular");
+  const miniUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_MINI_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3009" : "");
+  const regularUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_REGULER_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3010" : "");
+
+  function selectAccountType(type: "mini" | "regular") {
+    const target = type === "mini" ? miniUrl : regularUrl;
+    if (type !== "regular" && target) {
+      router.push(`${target.replace(/\/$/, "")}/${locale}/client-area/login`);
+      return;
+    }
+    if (type === "mini") return;
+    setAccountType(type);
+  }
+  const passwordToggleLabel = showPassword
+    ? login.hidePasswordLabel
+    : login.showPasswordLabel;
+
+  return (
+    <div className="mx-auto flex flex-1 items-center justify-center py-4 sm:py-6 xl:mx-0 xl:basis-[27.5rem] xl:grow-0 xl:shrink-0 xl:py-8">
+      <div className="w-full max-w-[27.5rem] rounded-[1.25rem] border border-white/[0.12] bg-zinc-900/35 px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl sm:px-8 sm:py-9">
+        <a href={`${PUBLIC_WEBSITE_URL}/${locale}`} className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-600 bg-zinc-500/20 hover:bg-zinc-500/10 rounded py-1 px-2 w-fit mb-4">
+          <ArrowLeft className="w-5" /> <span>{login.backToDashboardLabel}</span>
+        </a>
+
+        <h1 className="mb-5 text-[1.75rem] font-extrabold tracking-[-0.02em] text-white">
+          {login.title}
+        </h1>
+
+        <div className="mb-5 grid grid-cols-2 rounded-xl border border-amber-500/30 p-1">
+          {(["mini", "regular"] as const).map((type) => (
+            <button
+              key={type}
+              type="button"
+              aria-pressed={accountType === type}
+              onClick={() => selectAccountType(type)}
+              className={`rounded-lg px-3 py-3 text-sm font-black tracking-wider transition-colors ${accountType === type ? "bg-amber-500 text-black" : "text-amber-500 hover:bg-amber-500/10"}`}
+            >
+              {type === "mini" ? login.miniMicroTab : login.regularTab}
+            </button>
+          ))}
+        </div>
+
+        <form action={formAction} className="flex flex-col gap-[0.9rem]">
+          <input type="hidden" name="locale" value={locale} />
+
+          <div className="relative">
+            <input
+              id="client-area-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              disabled={pending}
+              placeholder={login.accountPlaceholder}
+              className={inputClassName}
+            />
+          </div>
+
+          <div className="relative flex items-center">
+            <input
+              id="client-area-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              disabled={pending}
+              placeholder={login.passwordPlaceholder}
+              className={`${inputClassName} pr-12`}
+            />
+            <button
+              type="button"
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-[0.9rem] leading-none text-gray-500 transition-colors hover:text-gray-300"
+              onClick={onTogglePassword}
+              aria-label={passwordToggleLabel}
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeClosed /> : <Eye />}
+            </button>
+          </div>
+
+          <div className="mx-auto">
+            {captcha}
+          </div>
+
+          <button
+            type="submit"
+            disabled={pending}
+            className="mt-1 flex h-[3.125rem] w-full items-center justify-center gap-2 cursor-pointer rounded-[0.6rem] bg-gradient-to-r from-amber-500 to-amber-600 text-[0.92rem] font-black tracking-[0.12em] text-black shadow-[0_4px_24px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[opacity,box-shadow,transform] enabled:hover:-translate-y-px enabled:hover:opacity-95 enabled:hover:shadow-[0_6px_32px_rgba(245,158,11,0.55)] disabled:cursor-not-allowed disabled:opacity-[0.55]"
+          >
+            {pending ? (
+              <>
+                <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-black/25 border-t-black" />
+                {login.submitting}
+              </>
+            ) : (
+              login.submitLabel
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="flex h-[3.125rem] w-full items-center justify-center rounded-[0.6rem] cursor-pointer border border-amber-500/30 bg-transparent text-[0.92rem] font-black tracking-[0.12em] text-amber-500 transition-[background-color,border-color,box-shadow,transform] hover:-translate-y-px hover:border-amber-500/[0.55] hover:bg-amber-500/[0.08] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+            onClick={onOpenDownloadModal}
+          >
+            {login.registerLabel}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

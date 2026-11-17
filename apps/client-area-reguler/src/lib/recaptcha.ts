@@ -1,0 +1,129 @@
+import { describeError } from "@/lib/safe-log";
+import {
+  PUBLIC_RECAPTCHA_SITE_KEY,
+  RECAPTCHA_MIN_SCORE,
+  RECAPTCHA_SECRET_KEY,
+} from "@/lib/env";
+
+type RecaptchaVerifyResponse = {
+  action?: string;
+  hostname?: string;
+  score?: number;
+  success?: boolean;
+};
+
+type VerifyRecaptchaTokenOptions = {
+  expectedAction: string;
+  expectedHostname?: string | null;
+};
+
+function normalizeHostHeader(value: string | null | undefined) {
+  const normalizedValue = value?.split(",")[0]?.trim().toLowerCase();
+
+  if (!normalizedValue) {
+    return "";
+  }
+
+  if (normalizedValue.startsWith("[")) {
+    const closingBracketIndex = normalizedValue.indexOf("]");
+
+    if (closingBracketIndex > 0) {
+      return normalizedValue.slice(1, closingBracketIndex);
+    }
+  }
+
+  const colonIndex = normalizedValue.indexOf(":");
+
+  if (colonIndex > -1) {
+    return normalizedValue.slice(0, colonIndex);
+  }
+
+  return normalizedValue;
+}
+
+export function resolveRequestHostname(
+  headersList: Pick<Headers, "get">,
+) {
+  return normalizeHostHeader(
+    headersList.get("x-forwarded-host") ?? headersList.get("host"),
+  );
+}
+
+export function isRecaptchaRequired(_hostname?: string | null) {
+  return true;
+}
+
+export function isRecaptchaConfigured() {
+  return Boolean(PUBLIC_RECAPTCHA_SITE_KEY);
+}
+
+export function isRecaptchaEnabled(hostname?: string | null) {
+  // Only the site key is needed: the widget runs in the browser and SGB verifies
+  // the token itself (it is forwarded as `token_captcha`), so no secret key here.
+  return isRecaptchaRequired(hostname) && isRecaptchaConfigured();
+}
+
+export async function verifyRecaptchaToken(
+  token: string,
+  { expectedAction, expectedHostname }: VerifyRecaptchaTokenOptions,
+) {
+  // Local verification needs the secret key; without it (SGB verifies instead)
+  // there is nothing to check here.
+  if (!isRecaptchaEnabled() || !RECAPTCHA_SECRET_KEY) {
+    return true;
+  }
+
+  if (!token.trim()) {
+    return false;
+  }
+
+  try {
+    const response = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          secret: RECAPTCHA_SECRET_KEY,
+          response: token,
+        }),
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const payload = (await response.json()) as RecaptchaVerifyResponse;
+    const normalizedExpectedHostname = normalizeHostHeader(expectedHostname);
+    const normalizedVerifiedHostname = normalizeHostHeader(payload.hostname);
+    const hostnameMatches =
+      !normalizedExpectedHostname ||
+      normalizedVerifiedHostname === normalizedExpectedHostname;
+    const scoreOk =
+      typeof payload.score === "number" && payload.score >= RECAPTCHA_MIN_SCORE;
+    const actionOk = payload.action === expectedAction;
+    const isValid =
+      payload.success === true && scoreOk && actionOk && hostnameMatches;
+
+    if (!isValid) {
+      console.error("[recaptcha] verification failed", {
+        success: payload.success,
+        score: payload.score,
+        minScore: RECAPTCHA_MIN_SCORE,
+        action: payload.action,
+        expectedAction,
+        verifiedHostname: normalizedVerifiedHostname,
+        expectedHostname: normalizedExpectedHostname,
+      });
+    }
+
+    return isValid;
+  } catch (error) {
+    console.error("[recaptcha] verification request threw", describeError(error));
+    return false;
+  }
+}

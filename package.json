@@ -9,12 +9,14 @@
     "node": ">=24.22.1 <25"
   },
   "scripts": {
-    "dev": "concurrently -n website,client-area -c blue,magenta \"npm:dev:website\" \"npm:dev:client-area\"",
+    "dev": "concurrently -n website,client-area,client-area-reguler -c blue,magenta,yellow \"npm:dev:website\" \"npm:dev:client-area\" \"npm:dev:client-area-reguler\"",
     "dev:website": "npm run dev --workspace=@sgb/website",
     "dev:client-area": "npm run dev --workspace=@sgb/client-area",
+    "dev:client-area-reguler": "npm run dev --workspace=@sgb/client-area-reguler",
     "build": "npm run build:website && npm run build:client-area",
     "build:website": "npm run build --workspace=@sgb/website",
     "build:client-area": "npm run build --workspace=@sgb/client-area",
+    "build:client-area-reguler": "npm run build --workspace=@sgb/client-area-reguler",
     "lint": "npm run lint --workspaces --if-present"
   },
   "devDependencies": {

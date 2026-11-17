@@ -1,0 +1,59 @@
+import type { AppLocale } from "@/locales";
+
+export const CLIENT_AREA_SESSION_COOKIE = "sgb_reguler_client_area_session";
+export const CLIENT_AREA_IDENTIFIER_COOKIE = "sgb_reguler_client_area_identifier";
+export const CLIENT_AREA_DEVICE_UUID_COOKIE = "sgb_reguler_client_area_device_uuid";
+export const CLIENT_AREA_OTP_SESSION_COOKIE = "sgb_reguler_client_area_otp_session";
+export const CLIENT_AREA_LAST_ACTIVITY_COOKIE =
+  "sgb_reguler_client_area_last_activity";
+export const CLIENT_AREA_LAST_ACTIVITY_STORAGE_KEY =
+  "sgb_reguler_client_area_last_activity";
+export const CLIENT_AREA_TOKEN_REFRESH_STORAGE_KEY =
+  "sgb_reguler_client_area_token_refreshed_at";
+// Refresh before the upstream token reaches its five-minute boundary. Running
+// exactly at that boundary is vulnerable to timer throttling and network delay.
+export const CLIENT_AREA_TOKEN_REFRESH_INTERVAL_MS = 4 * 60 * 1000;
+export const CLIENT_AREA_TOKEN_REFRESH_RETRY_MS = 30 * 1000;
+export const CLIENT_AREA_REMEMBER_ME_MAX_AGE = 60 * 60 * 24 * 30;
+export const CLIENT_AREA_INACTIVITY_TIMEOUT_MS = 60 * 60 * 1000;
+export const CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS =
+  CLIENT_AREA_INACTIVITY_TIMEOUT_MS / 1000;
+
+export function normalizeClientAreaIdentifier(value: string) {
+  return value.trim().toLowerCase();
+}
+
+export function getClientAreaDashboardHref(locale: AppLocale) {
+  return `/${locale}/client-area`;
+}
+
+export function getClientAreaLoginHref(locale: AppLocale) {
+  return `/${locale}/client-area/login`;
+}
+
+export function parseClientAreaLastActivity(value?: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  const parsedValue = Number(value);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
+export function isClientAreaLastActivityActive(
+  value?: string | null,
+  now = Date.now(),
+) {
+  const lastActivity = parseClientAreaLastActivity(value);
+
+  if (lastActivity === null) {
+    return false;
+  }
+
+  return now - lastActivity < CLIENT_AREA_INACTIVITY_TIMEOUT_MS;
+}

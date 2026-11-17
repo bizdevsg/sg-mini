@@ -142,6 +142,9 @@ export const idClientArea: AppMessages["clientArea"] = {
     body: "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",
   },
   login: {
+    miniMicroTab: "MINI/MICRO",
+    regularTab: "REGULER",
+    regularUnavailable: "Login Reguler belum tersedia.",
     backToDashboardLabel: "Kembali ke Dashboard",
     badge: "Portal Nasabah",
     title: "Masuk Client Area",

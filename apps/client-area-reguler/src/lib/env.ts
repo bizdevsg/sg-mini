@@ -1,0 +1,654 @@
+const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
+const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
+const DEFAULT_NEWS_API_URL = "https://sg-admin.sg-berjangka.com/api/v1/berita";
+const DEFAULT_NEWS_API_URL_ID =
+  "https://sg-admin.sg-berjangka.com/api/v1/berita";
+const DEFAULT_NEWS_PORTAL_BASE_URL = "https://sg-admin.sg-berjangka.com";
+const DEFAULT_NEWS_IMAGE_BASE_URL = "https://sg-admin.sg-berjangka.com";
+const DEFAULT_SG_ADMIN_ORIGIN = "https://sg-admin.sg-berjangka.com";
+const DEFAULT_SG_ADMIN_LEGACY_ORIGIN = "http://sg-admin.test";
+const DEFAULT_SG_ADMIN_API_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/api/v1`;
+const DEFAULT_CLIENT_AREA_CONFIG_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/client-area`;
+const DEFAULT_EBOOK_CATEGORY_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/ebook/categories`;
+const DEFAULT_NEWS_CATEGORY_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/berita/categories`;
+const DEFAULT_PRODUCT_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/produk`;
+const DEFAULT_PRODUCT_PORTAL_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/`;
+const DEFAULT_BANNER_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
+const DEFAULT_BANNER_DETAIL_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/banner`;
+const DEFAULT_TIKTOK_VIDEO_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/video-tiktok`;
+const DEFAULT_BANNER_IMAGE_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/banner`;
+const DEFAULT_PENGHARGAAN_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/penghargaan`;
+const DEFAULT_PENGHARGAAN_IMAGE_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/penghargaan-images`;
+const DEFAULT_PENGUMUMAN_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/pengumuman`;
+const DEFAULT_CONTACT_MESSAGE_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/massages`;
+const DEFAULT_COMPANY_PROFILE_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/company-profile`;
+const DEFAULT_LEGALITAS_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/legalitas`;
+const DEFAULT_PRIVACY_POLICY_API_URL = `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/privacy-policy`;
+const DEFAULT_HISTORICAL_DATA_API_URL =
+  "https://portalnews.newsmaker.id/api/v1/newsmaker/historical-data";
+// API tokens must come from env (never hardcode them: this module is also imported by client components).
+const DEFAULT_HISTORICAL_DATA_API_TOKEN = "";
+const DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL =
+  "https://portalnews.newsmaker.id/api/v1/newsmaker/kalender-ekonomi";
+const DEFAULT_ECONOMIC_CALENDAR_API_TOKEN = "";
+const DEFAULT_TRADINGVIEW_SYMBOL_API_URL = `${DEFAULT_SG_ADMIN_API_BASE_URL}/tradingview-symbol`;
+const DEFAULT_MARKET_SIGNAL_API_URL = `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/signal`;
+const DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL = `${DEFAULT_SG_ADMIN_ORIGIN}/storage/uploads/signal`;
+const DEFAULT_MARKET_ACADEMY_API_URL =
+  "https://endpoapi-production-3202.up.railway.app/api/market-academy";
+const DEFAULT_FRANKFURTER_API_URL = "https://api.frankfurter.dev/v1/latest";
+const DEFAULT_LOGIN_URL = "https://etrade.sgberjangka.com/login";
+const DEFAULT_REGISTER_URL = "https://regol.solidgold.co.id/";
+const DEFAULT_HERO_CTA_URL = "https://sg-berjangka.com/";
+const DEFAULT_SPREAD_CTA_URL = "https://sg-berjangka.com/";
+const DEFAULT_SOLID_GOLD_PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.solidgoldberjangka.minimicro&pcampaignid=web_share";
+const DEFAULT_SOLID_GOLD_APP_STORE_URL =
+  "https://apps.apple.com/id/app/solid/id6756168987?l=id";
+const DEFAULT_PLACEHOLDER_BASE_URL = "https://placehold.co/600x400";
+const DEFAULT_SITE_URL = "https://client-mini.sg-berjangka.com";
+const DEFAULT_WEBSITE_URL = "https://mini.sg-berjangka.com";
+const DEFAULT_PUBLIC_CLIENT_AREA_ENABLED = false;
+const DEFAULT_PUBLIC_TAWK_CHAT_ENABLED = false;
+
+export type AppEnvMode = "dev" | "prod";
+const DEFAULT_APP_ENV: AppEnvMode = "dev";
+
+function normalizeAppEnvMode(value: string | undefined): AppEnvMode {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (normalizedValue === "dev" || normalizedValue === "prod") {
+    return normalizedValue;
+  }
+
+  return DEFAULT_APP_ENV;
+}
+
+export const APP_ENV = normalizeAppEnvMode(process.env.APP_ENV);
+
+export const CLIENT_AREA_SESSION_SECRET =
+  process.env.CLIENT_AREA_SESSION_SECRET?.trim() ?? "";
+
+const TRADE_PILOT_API_PATH = "/v1/trade-pilot";
+
+function resolveTradePilotApiRoot(): string {
+  // Kontrak v1: TRADE_PILOT_API_BASE_URL tanpa path; client menambahkan /v1/trade-pilot.
+  // TRADE_PILOT_API_URL lama (sudah memuat /v1/trade-pilot) tetap diterima.
+  const rawUrl =
+    process.env.TRADE_PILOT_API_BASE_URL?.trim() ||
+    process.env.TRADE_PILOT_API_URL?.trim() ||
+    "";
+  const baseUrl = rawUrl
+    .replace(/\/+$/, "")
+    .replace(new RegExp(`${TRADE_PILOT_API_PATH}$`), "");
+  return baseUrl ? `${baseUrl}${TRADE_PILOT_API_PATH}` : "";
+}
+
+/** URL lengkap sampai `/v1/trade-pilot` (server-only). */
+export const TRADE_PILOT_API_ROOT = resolveTradePilotApiRoot();
+export const TRADE_PILOT_API_KEY =
+  process.env.TRADE_PILOT_API_KEY?.trim() ?? "";
+/** Secret HMAC khusus userId TradePilot. Jangan dirotasi tanpa rencana migrasi. */
+export const TRADE_PILOT_USER_ID_SECRET =
+  process.env.TRADE_PILOT_USER_ID_SECRET?.trim() ?? "";
+export type SgbFlavor = "dev" | "uat" | "prod";
+const DEFAULT_SGB_FLAVOR: SgbFlavor = "uat";
+
+function normalizeSgbFlavor(value: string | undefined): SgbFlavor {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (
+    normalizedValue === "dev" ||
+    normalizedValue === "uat" ||
+    normalizedValue === "prod"
+  ) {
+    return normalizedValue;
+  }
+
+  return DEFAULT_SGB_FLAVOR;
+}
+
+// Flavor server pihak ketiga (SSO/Trading/Registrasi) — lihat docs/api/. Jangan
+// pernah menjalankan request ke flavor "prod" tanpa izin eksplisit di chat.
+export const SGB_FLAVOR = normalizeSgbFlavor(process.env.SGB_FLAVOR);
+
+// Passphrase enkripsi password login; nilainya dari tim integrasi SGB dan hanya diisi lewat env
+// server/lokal (jangan di-commit).
+// Sengaja tidak diberi default — kosong berarti konfigurasi belum lengkap.
+// Bypass OTP khusus development: hanya aktif kalau APP_ENV=dev, bukan build
+// production, dan SGB_FLAVOR bukan prod. Session yang dibuat memakai token
+// dummy, jadi call SGB yang butuh token asli (mis. logout remote) akan gagal
+// secara non-fatal.
+export const CLIENT_AREA_SKIP_OTP =
+  process.env.CLIENT_AREA_SKIP_OTP?.trim().toLowerCase() === "true" &&
+  APP_ENV === "dev" &&
+  process.env.NODE_ENV !== "production" &&
+  SGB_FLAVOR !== "prod";
+
+export const SGB_PASSWORD_PASSPHRASE =
+  process.env.SGB_PASSWORD_PASSPHRASE?.trim() ?? "";
+
+export const SGB_DEVICE_OS = process.env.SGB_DEVICE_OS?.trim() || "Client Area";
+
+export const SGB_DEVICE_BRAND_MODEL =
+  process.env.SGB_DEVICE_BRAND_MODEL?.trim() || "Client Area";
+
+export const SGB_DEVICE_MANUFACTURER =
+  process.env.SGB_DEVICE_MANUFACTURER?.trim() || "Solid Gold Berjangka";
+
+export const SGB_APP_VERSION = process.env.SGB_APP_VERSION?.trim() || "1.28.2";
+
+export const SGB_DEFAULT_LATITUDE =
+  process.env.SGB_DEFAULT_LATITUDE?.trim() || "-6.175392";
+
+export const SGB_DEFAULT_LONGITUDE =
+  process.env.SGB_DEFAULT_LONGITUDE?.trim() || "106.827153";
+
+function normalizeSgbRequestTimeoutMs(value: string | undefined) {
+  const parsedValue = Number(value);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return 20000;
+  }
+
+  return parsedValue;
+}
+
+export const SGB_REQUEST_TIMEOUT_MS = normalizeSgbRequestTimeoutMs(
+  process.env.SGB_REQUEST_TIMEOUT_MS,
+);
+
+// Akun uji untuk scripts/sgb-discovery.ts — hanya diisi lewat .env.local, tidak
+// pernah di-commit, dan tidak pernah dipakai kalau SGB_FLAVOR=prod.
+export const SGB_TEST_EMAIL = process.env.SGB_TEST_EMAIL?.trim() ?? "";
+export const SGB_TEST_PASSWORD = process.env.SGB_TEST_PASSWORD ?? "";
+
+function normalizePublicLiveQuoteSocketUrl(value: string | undefined) {
+  const normalizedValue = value?.trim();
+
+  if (
+    !normalizedValue ||
+    normalizedValue === "$LIVE_QUOTE_SOCKET_URL" ||
+    normalizedValue === "${LIVE_QUOTE_SOCKET_URL}"
+  ) {
+    return DEFAULT_LIVE_QUOTE_SOCKET_URL;
+  }
+
+  return normalizedValue;
+}
+
+export const PUBLIC_LIVE_QUOTE_SOCKET_URL = normalizePublicLiveQuoteSocketUrl(
+  process.env.NEXT_PUBLIC_LIVE_QUOTE_SOCKET_URL,
+);
+
+export const PUBLIC_FRAMER_IMAGE_BASE_URL =
+  process.env.NEXT_PUBLIC_FRAMER_IMAGE_BASE_URL ??
+  DEFAULT_FRAMER_IMAGE_BASE_URL;
+
+function normalizeUrlEnv(value: string | undefined, fallbackUrl: string) {
+  const normalizedValue = value?.trim();
+
+  return normalizedValue || fallbackUrl;
+}
+
+function normalizeBooleanEnv(value: string | undefined, fallback: boolean) {
+  const normalizedValue = value?.trim().toLowerCase();
+
+  if (!normalizedValue) {
+    return fallback;
+  }
+
+  if (
+    ["1", "true", "yes", "on", "enabled", "active"].includes(normalizedValue)
+  ) {
+    return true;
+  }
+
+  if (
+    ["0", "false", "no", "off", "disabled", "inactive"].includes(
+      normalizedValue,
+    )
+  ) {
+    return false;
+  }
+
+  return fallback;
+}
+
+export const NEWS_API_URL = normalizeUrlEnv(
+  process.env.NEWS_API_URL,
+  DEFAULT_NEWS_API_URL,
+);
+
+export const NEWS_API_URL_ID = normalizeUrlEnv(
+  process.env.NEWS_API_URL_ID,
+  DEFAULT_NEWS_API_URL_ID,
+);
+
+export const NEWS_CATEGORY_API_URL = normalizeUrlEnv(
+  process.env.NEWS_CATEGORY_API_URL,
+  DEFAULT_NEWS_CATEGORY_API_URL,
+);
+
+export const NEWS_PORTAL_BASE_URL = normalizeUrlEnv(
+  process.env.NEWS_PORTAL_BASE_URL,
+  DEFAULT_NEWS_PORTAL_BASE_URL,
+);
+
+export const NEWS_IMAGE_BASE_URL = normalizeUrlEnv(
+  process.env.NEWS_IMAGE_BASE_URL,
+  DEFAULT_NEWS_IMAGE_BASE_URL,
+);
+
+export const PRODUCT_API_URL = normalizeUrlEnv(
+  process.env.PRODUCT_API_URL,
+  DEFAULT_PRODUCT_API_URL,
+);
+
+export const EBOOK_CATEGORY_API_URL = normalizeUrlEnv(
+  process.env.EBOOK_CATEGORY_API_URL,
+  DEFAULT_EBOOK_CATEGORY_API_URL,
+);
+
+export const PRODUCT_PORTAL_BASE_URL = normalizeUrlEnv(
+  process.env.PRODUCT_PORTAL_BASE_URL,
+  DEFAULT_PRODUCT_PORTAL_BASE_URL,
+);
+
+export const CLIENT_AREA_CONFIG_API_URL = normalizeUrlEnv(
+  process.env.CLIENT_AREA_CONFIG_API_URL,
+  DEFAULT_CLIENT_AREA_CONFIG_API_URL,
+);
+
+export const CLIENT_AREA_CONFIG_API_TOKEN =
+  process.env.CLIENT_AREA_CONFIG_API_TOKEN?.trim() ?? "";
+
+export const BANNER_API_URL = normalizeUrlEnv(
+  process.env.BANNER_API_URL,
+  DEFAULT_BANNER_API_URL,
+);
+
+export const BANNER_DETAIL_API_URL = normalizeUrlEnv(
+  process.env.BANNER_DETAIL_API_URL,
+  DEFAULT_BANNER_DETAIL_API_URL,
+);
+
+export const TIKTOK_VIDEO_API_URL = normalizeUrlEnv(
+  process.env.TIKTOK_VIDEO_API_URL,
+  DEFAULT_TIKTOK_VIDEO_API_URL,
+);
+
+export const BANNER_IMAGE_BASE_URL = normalizeUrlEnv(
+  process.env.BANNER_IMAGE_BASE_URL,
+  DEFAULT_BANNER_IMAGE_BASE_URL,
+);
+
+export const PENGHARGAAN_API_URL = normalizeUrlEnv(
+  process.env.PENGHARGAAN_API_URL,
+  DEFAULT_PENGHARGAAN_API_URL,
+);
+
+export const PENGHARGAAN_IMAGE_BASE_URL = normalizeUrlEnv(
+  process.env.PENGHARGAAN_IMAGE_BASE_URL,
+  DEFAULT_PENGHARGAAN_IMAGE_BASE_URL,
+);
+
+export const PENGUMUMAN_API_URL = normalizeUrlEnv(
+  process.env.PENGUMUMAN_API_URL,
+  DEFAULT_PENGUMUMAN_API_URL,
+);
+
+export const CONTACT_MESSAGE_API_URL = normalizeUrlEnv(
+  process.env.CONTACT_MESSAGE_API_URL,
+  DEFAULT_CONTACT_MESSAGE_API_URL,
+);
+
+export const COMPANY_PROFILE_API_URL = normalizeUrlEnv(
+  process.env.COMPANY_PROFILE_API_URL,
+  DEFAULT_COMPANY_PROFILE_API_URL,
+);
+
+export const LEGALITAS_API_URL = normalizeUrlEnv(
+  process.env.LEGALITAS_API_URL,
+  DEFAULT_LEGALITAS_API_URL,
+);
+
+export const PRIVACY_POLICY_API_URL = normalizeUrlEnv(
+  process.env.PRIVACY_POLICY_API_URL,
+  APP_ENV === "dev"
+    ? DEFAULT_PRIVACY_POLICY_API_URL
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/privacy-policy`,
+);
+
+export const TERMS_CONDITIONS_API_URL = normalizeUrlEnv(
+  process.env.TERMS_CONDITIONS_API_URL,
+  APP_ENV === "dev"
+    ? `${DEFAULT_SG_ADMIN_LEGACY_ORIGIN}/api/v1/terms-and-conditions`
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/terms-and-conditions`,
+);
+
+export const HISTORICAL_DATA_API_URL = normalizeUrlEnv(
+  process.env.HISTORICAL_DATA_API_URL,
+  DEFAULT_HISTORICAL_DATA_API_URL,
+);
+
+export const HISTORICAL_DATA_API_TOKEN =
+  process.env.HISTORICAL_DATA_API_TOKEN ?? DEFAULT_HISTORICAL_DATA_API_TOKEN;
+
+export const ECONOMIC_CALENDAR_API_BASE_URL = normalizeUrlEnv(
+  process.env.ECONOMIC_CALENDAR_API_BASE_URL,
+  DEFAULT_ECONOMIC_CALENDAR_API_BASE_URL,
+);
+
+export const ECONOMIC_CALENDAR_API_TOKEN =
+  process.env.ECONOMIC_CALENDAR_API_TOKEN ??
+  DEFAULT_ECONOMIC_CALENDAR_API_TOKEN;
+
+export const TRADINGVIEW_SYMBOL_API_URL = normalizeUrlEnv(
+  process.env.TRADINGVIEW_SYMBOL_API_URL,
+  DEFAULT_TRADINGVIEW_SYMBOL_API_URL,
+);
+
+export const MARKET_SIGNAL_API_URL = normalizeUrlEnv(
+  process.env.MARKET_SIGNAL_API_URL,
+  APP_ENV === "dev"
+    ? DEFAULT_MARKET_SIGNAL_API_URL
+    : `${DEFAULT_SG_ADMIN_API_BASE_URL}/signal`,
+);
+
+export const MARKET_SIGNAL_IMAGE_BASE_URL = normalizeUrlEnv(
+  process.env.MARKET_SIGNAL_IMAGE_BASE_URL,
+  DEFAULT_MARKET_SIGNAL_IMAGE_BASE_URL,
+);
+
+export const MARKET_ACADEMY_API_URL = normalizeUrlEnv(
+  process.env.MARKET_ACADEMY_API_URL,
+  DEFAULT_MARKET_ACADEMY_API_URL,
+);
+
+export const FRANKFURTER_API_URL = normalizeUrlEnv(
+  process.env.FRANKFURTER_API_URL,
+  DEFAULT_FRANKFURTER_API_URL,
+);
+
+export const PUBLIC_PLACEHOLDER_BASE_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_PLACEHODER_BASE_URL,
+  DEFAULT_PLACEHOLDER_BASE_URL,
+);
+
+export const PUBLIC_LOGIN_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_LOGIN_URL,
+  DEFAULT_LOGIN_URL,
+);
+
+export const PUBLIC_REGISTER_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_REGISTER_URL,
+  DEFAULT_REGISTER_URL,
+);
+
+export const PUBLIC_WEBSITE_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_WEBSITE_URL,
+  DEFAULT_WEBSITE_URL,
+).replace(/\/+$/, "");
+
+export const PUBLIC_CLIENT_AREA_ENABLED = normalizeBooleanEnv(
+  process.env.NEXT_PUBLIC_ENABLE_CLIENT_AREA,
+  DEFAULT_PUBLIC_CLIENT_AREA_ENABLED,
+);
+
+// Nomor WhatsApp cadangan: ditampilkan saat live chat mati / gagal dimuat.
+export const PUBLIC_WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || "+628212665636";
+
+export const PUBLIC_TAWK_CHAT_ENABLED = normalizeBooleanEnv(
+  process.env.NEXT_PUBLIC_ENABLE_TAWK_CHAT,
+  DEFAULT_PUBLIC_TAWK_CHAT_ENABLED,
+);
+
+// Site key khusus Client Area (reCAPTCHA v2 dari SGB, tokennya diteruskan ke SGB
+// sebagai token_captcha). `.env.prod` dipakai bersama oleh website dan client
+// area, sedangkan NEXT_PUBLIC_RECAPTCHA_SITE_KEY adalah key website — jadi key
+// client area punya variabel sendiri. Kalau kosong, jatuh ke variabel lama.
+export const PUBLIC_RECAPTCHA_SITE_KEY =
+  process.env.NEXT_PUBLIC_CLIENT_AREA_RECAPTCHA_SITE_KEY?.trim() ||
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ||
+  "";
+
+export const RECAPTCHA_SECRET_KEY =
+  process.env.RECAPTCHA_SECRET_KEY?.trim() ?? "";
+
+function normalizeRecaptchaMinScore(value: string | undefined) {
+  const parsedValue = Number(value);
+
+  if (!Number.isFinite(parsedValue) || parsedValue < 0 || parsedValue > 1) {
+    return 0.65;
+  }
+
+  return parsedValue;
+}
+
+export const RECAPTCHA_MIN_SCORE = normalizeRecaptchaMinScore(
+  process.env.RECAPTCHA_MIN_SCORE,
+);
+
+export const PUBLIC_HERO_CTA_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_HERO_CTA_URL,
+  DEFAULT_HERO_CTA_URL,
+);
+
+export const PUBLIC_SPREAD_CTA_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_SPREAD_CTA_URL,
+  DEFAULT_SPREAD_CTA_URL,
+);
+
+function normalizePublicSiteUrl(value: string | undefined) {
+  const normalizedValue = value?.trim();
+
+  if (!normalizedValue) {
+    return DEFAULT_SITE_URL;
+  }
+
+  try {
+    return new URL(normalizedValue).origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
+export const PUBLIC_SITE_URL = normalizePublicSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL ?? PUBLIC_HERO_CTA_URL,
+);
+
+export const PUBLIC_SOLID_GOLD_PLAY_STORE_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_SOLID_GOLD_PLAY_STORE_URL,
+  DEFAULT_SOLID_GOLD_PLAY_STORE_URL,
+);
+
+export const PUBLIC_SOLID_GOLD_APP_STORE_URL = normalizeUrlEnv(
+  process.env.NEXT_PUBLIC_SOLID_GOLD_APP_STORE_URL,
+  DEFAULT_SOLID_GOLD_APP_STORE_URL,
+);
+
+function isAbsoluteHttpUrl(value: string) {
+  return /^https?:\/\//i.test(value);
+}
+
+function buildAssetUrl(baseUrl: string, assetPath: string) {
+  const normalizedBaseUrl = baseUrl.replace(/\/+$/, "");
+  const normalizedAssetPath = assetPath.replace(/^\/+/, "");
+
+  return `${normalizedBaseUrl}/${normalizedAssetPath}`;
+}
+
+function getAssetOrigin(baseUrl: string) {
+  try {
+    return new URL(baseUrl).origin;
+  } catch {
+    return baseUrl;
+  }
+}
+
+function isSameHostname(left: string, right: string) {
+  return left.trim().toLowerCase() === right.trim().toLowerCase();
+}
+
+function getActiveSgAdminOrigin() {
+  return getAssetOrigin(PRODUCT_PORTAL_BASE_URL);
+}
+
+function isSgAdminHostname(hostname: string) {
+  try {
+    const activeHostname = new URL(getActiveSgAdminOrigin()).hostname;
+    const defaultHostname = new URL(DEFAULT_SG_ADMIN_ORIGIN).hostname;
+    const legacyHostname = new URL(DEFAULT_SG_ADMIN_LEGACY_ORIGIN).hostname;
+
+    return (
+      isSameHostname(hostname, activeHostname) ||
+      isSameHostname(hostname, defaultHostname) ||
+      isSameHostname(hostname, legacyHostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function isSgAdminUrl(assetUrl: string) {
+  try {
+    return isSgAdminHostname(new URL(assetUrl).hostname);
+  } catch {
+    return false;
+  }
+}
+
+export function normalizeSgAdminUrl(assetUrl: string) {
+  const normalizedAssetUrl = assetUrl.trim();
+
+  if (!normalizedAssetUrl || !isAbsoluteHttpUrl(normalizedAssetUrl)) {
+    return normalizedAssetUrl;
+  }
+
+  try {
+    const parsedUrl = new URL(normalizedAssetUrl);
+
+    if (!isSgAdminHostname(parsedUrl.hostname)) {
+      return normalizedAssetUrl;
+    }
+
+    const normalizedUrl = new URL(
+      `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`,
+      getActiveSgAdminOrigin(),
+    );
+
+    return normalizedUrl.toString();
+  } catch {
+    return normalizedAssetUrl;
+  }
+}
+
+function resolveAssetUrl(baseUrl: string, assetPath: string) {
+  const normalizedAssetPath = assetPath.trim();
+
+  if (!normalizedAssetPath) {
+    return "";
+  }
+
+  if (isAbsoluteHttpUrl(normalizedAssetPath)) {
+    return normalizeSgAdminUrl(normalizedAssetPath);
+  }
+
+  if (normalizedAssetPath.startsWith("/")) {
+    return `${getAssetOrigin(baseUrl)}${normalizedAssetPath}`;
+  }
+
+  return buildAssetUrl(baseUrl, normalizedAssetPath);
+}
+
+export function getImageProxyUrl(assetUrl: string) {
+  const normalizedAssetUrl = normalizeSgAdminUrl(assetUrl.trim());
+
+  if (!normalizedAssetUrl) {
+    return "";
+  }
+
+  const encodedAssetUrl = Buffer.from(normalizedAssetUrl, "utf8").toString(
+    "base64url",
+  );
+
+  return `/api/image-proxy/${encodedAssetUrl}`;
+}
+
+const IMAGE_PROXY_ALLOWED_HOSTS = new Set(
+  [
+    PUBLIC_FRAMER_IMAGE_BASE_URL,
+    NEWS_PORTAL_BASE_URL,
+    NEWS_IMAGE_BASE_URL,
+    PRODUCT_PORTAL_BASE_URL,
+    BANNER_IMAGE_BASE_URL,
+    PENGHARGAAN_IMAGE_BASE_URL,
+    PENGUMUMAN_API_URL,
+    PUBLIC_PLACEHOLDER_BASE_URL,
+    MARKET_SIGNAL_IMAGE_BASE_URL,
+  ]
+    .map((value) => {
+      try {
+        return new URL(value).hostname;
+      } catch {
+        return null;
+      }
+    })
+    .filter((value): value is string => Boolean(value)),
+);
+
+export function isAllowedImageProxySource(assetUrl: string) {
+  try {
+    const parsedUrl = new URL(normalizeSgAdminUrl(assetUrl));
+
+    return (
+      (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") &&
+      IMAGE_PROXY_ALLOWED_HOSTS.has(parsedUrl.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function getFramerImageUrl(assetPath: string) {
+  return buildAssetUrl(PUBLIC_FRAMER_IMAGE_BASE_URL, assetPath);
+}
+
+export function getNewsAssetUrl(assetPath: string) {
+  const normalizedAssetPath = assetPath.trim();
+  const storageAssetPath = normalizedAssetPath.startsWith("uploads/")
+    ? `/storage/${normalizedAssetPath}`
+    : normalizedAssetPath;
+
+  return getImageProxyUrl(
+    resolveAssetUrl(NEWS_IMAGE_BASE_URL, storageAssetPath),
+  );
+}
+
+export function getProductAssetUrl(assetPath: string) {
+  return getImageProxyUrl(resolveAssetUrl(PRODUCT_PORTAL_BASE_URL, assetPath));
+}
+
+export function getBannerAssetUrl(assetPath: string) {
+  return getImageProxyUrl(resolveAssetUrl(BANNER_IMAGE_BASE_URL, assetPath));
+}
+
+export function getPenghargaanAssetUrl(assetPath: string) {
+  return getImageProxyUrl(
+    resolveAssetUrl(PENGHARGAAN_IMAGE_BASE_URL, assetPath),
+  );
+}
+
+export function getPengumumanAssetUrl(assetPath: string) {
+  return getImageProxyUrl(
+    resolveAssetUrl(getAssetOrigin(PENGUMUMAN_API_URL), assetPath),
+  );
+}
+
+export function getMarketSignalAssetUrl(assetPath: string) {
+  return getImageProxyUrl(
+    resolveAssetUrl(MARKET_SIGNAL_IMAGE_BASE_URL, assetPath),
+  );
+}

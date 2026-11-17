@@ -323,6 +323,9 @@ export type AppMessages = {
       body: string;
     };
     login: {
+      miniMicroTab: string;
+      regularTab: string;
+      regularUnavailable: string;
       backToDashboardLabel: string;
       badge: string;
       title: string;

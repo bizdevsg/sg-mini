@@ -1,13 +1,14 @@
 # SGB Platform Monorepo
 
-Website publik dan Client Area PT Solid Gold Berjangka berada dalam dua aplikasi Next.js yang dapat dijalankan dan di-deploy secara independen.
+Website publik, Client Area Mini/Micro, dan Client Area Reguler berada dalam aplikasi Next.js yang dapat dijalankan dan di-deploy secara independen.
 
 ## Struktur
 
 ```text
 apps/
 ├── website/       # Website publik, port lokal 3000
-└── client-area/   # Login dan dashboard nasabah, port lokal 3009
+├── client-area/   # Login dan dashboard Mini/Micro, port lokal 3009
+└── client-area-reguler/ # Client Area Reguler, port lokal 3010
 ```
 
 - `website` menangani landing page, produk, edukasi, berita, legalitas, dan contact.
@@ -27,11 +28,12 @@ Install dependency workspace dari root:
 npm install
 ```
 
-Jalankan salah satu aplikasi:
+Jalankan seluruh aplikasi dengan `npm run dev`, atau jalankan salah satu aplikasi:
 
 ```bash
 npm run dev:website
 npm run dev:client-area
+npm run dev:client-area-reguler
 ```
 
 Build dan lint:
@@ -76,6 +78,9 @@ Buat dua project Vercel dari repository dan branch yang sama:
 | ----------- | ------------------ | ------------------------------ |
 | Website     | `apps/website`     | `mini.sg-berjangka.com`        |
 | Client Area | `apps/client-area` | `client-mini.sg-berjangka.com` |
+| Client Area Reguler | `apps/client-area-reguler` | `client-reguler.sg-berjangka.com` |
+
+Client Area Reguler dapat dijalankan dengan `npm run dev:client-area-reguler` pada port 3010 dan sementara menggunakan integrasi login serta data Mini/Micro. Atur `NEXT_PUBLIC_CLIENT_AREA_MINI_URL` dan `NEXT_PUBLIC_CLIENT_AREA_REGULER_URL` untuk perpindahan antar aplikasi di deployment; pada development keduanya menggunakan localhost port 3009 dan 3010.
 
 Konfigurasi Website:
 
