@@ -518,8 +518,8 @@ const CLIENT_AREA_MARKET_CATEGORY_BY_SYMBOL: Record<
 export const CLIENT_AREA_HOME_MARKET_SYMBOLS = [
   "XUL10",
   "BCO10_BBJ",
-  "HKK50_BBJ",
-  "JPK50_BBJ",
+  // "HKK50_BBJ",
+  // "JPK50_BBJ",
 ] as const;
 
 function parseLiveQuoteNumber(value: string | undefined) {

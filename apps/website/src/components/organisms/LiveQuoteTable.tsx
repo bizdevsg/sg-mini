@@ -20,8 +20,8 @@ const LIVE_QUOTE_INITIAL_LOADING_TIMEOUT_MS = 4000;
 const HOME_LIVE_QUOTE_SYMBOLS = [
   "XUL10",
   "BCO10_BBJ",
-  "HKK50_BBJ",
-  "JPK50_BBJ",
+  // "HKK50_BBJ",
+  // "JPK50_BBJ",
 ] as const;
 
 export function LiveQuoteTable({

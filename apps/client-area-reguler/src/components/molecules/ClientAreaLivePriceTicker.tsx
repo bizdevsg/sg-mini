@@ -29,14 +29,14 @@ const TICKER_INSTRUMENTS: TickerInstrument[] = [
     label: "BCO10",
     symbols: ["BCO10", "BCO10_BBJ"],
   },
-  {
-    label: "HKK50",
-    symbols: ["HKK50", "HKK50_BBJ"],
-  },
-  {
-    label: "JPK50",
-    symbols: ["JPK50", "JPK50_BBJ"],
-  },
+  // {
+  //   label: "HKK50",
+  //   symbols: ["HKK50", "HKK50_BBJ"],
+  // },
+  // {
+  //   label: "JPK50",
+  //   symbols: ["JPK50", "JPK50_BBJ"],
+  // },
 ];
 
 function resolveTickerTick(

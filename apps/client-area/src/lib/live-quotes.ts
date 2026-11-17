@@ -48,8 +48,19 @@ const LIVE_QUOTE_ICON_VERSION = "20260626-1";
 export const LIVE_QUOTE_SOCKET_URL = PUBLIC_LIVE_QUOTE_SOCKET_URL;
 
 // Simbol yang tetap dikirim feed websocket tetapi tidak boleh tampil di list
-// mana pun (duplikat "-NC" dari instrumen yang sudah diwakili kontrak BBJ-nya).
-const LIVE_QUOTE_EXCLUDED_SYMBOLS = new Set(["BCO-NC", "HKK-NC", "JPK-NC"]);
+// mana pun (duplikat "-NC" dari instrumen yang sudah diwakili kontrak BBJ-nya,
+// serta produk HKK/JPK yang sementara disembunyikan dari client area).
+const LIVE_QUOTE_EXCLUDED_SYMBOLS = new Set([
+  "BCO-NC",
+  "HKK-NC",
+  "JPK-NC",
+  "HKK",
+  "HKK50",
+  "HKK50_BBJ",
+  "JPK",
+  "JPK50",
+  "JPK50_BBJ",
+]);
 
 export function isExcludedLiveQuoteSymbol(symbol: string) {
   return LIVE_QUOTE_EXCLUDED_SYMBOLS.has(symbol.trim().toUpperCase());

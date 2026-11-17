@@ -88,20 +88,20 @@ export const CLIENT_AREA_TRADE_PILOT_INSTRUMENTS: ClientAreaTradePilotInstrument
       quoteSymbols: ["BCO10_BBJ", "BCO"],
       tradingViewSymbol: "VELOCITY:BRENT",
     },
-    {
-      id: "hang-seng",
-      label: "HKK",
-      nameKey: "hangSeng",
-      quoteSymbols: ["HKK50_BBJ", "HKK"],
-      tradingViewSymbol: "VANTAGE:HK50",
-    },
-    {
-      id: "nikkei",
-      label: "JPK",
-      nameKey: "nikkei",
-      quoteSymbols: ["JPK50_BBJ", "JPK"],
-      tradingViewSymbol: "SPREADEX:NIKKEI",
-    },
+    // {
+    //   id: "hang-seng",
+    //   label: "HKK",
+    //   nameKey: "hangSeng",
+    //   quoteSymbols: ["HKK50_BBJ", "HKK"],
+    //   tradingViewSymbol: "VANTAGE:HK50",
+    // },
+    // {
+    //   id: "nikkei",
+    //   label: "JPK",
+    //   nameKey: "nikkei",
+    //   quoteSymbols: ["JPK50_BBJ", "JPK"],
+    //   tradingViewSymbol: "SPREADEX:NIKKEI",
+    // },
   ];
 
 export const CLIENT_AREA_TRADE_PILOT_TIMEFRAMES: Array<{
