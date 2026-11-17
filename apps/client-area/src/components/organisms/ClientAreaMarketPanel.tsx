@@ -68,7 +68,15 @@ export function ClientAreaMarketPanel({
 
       {/* MARKET CARDS */}
       <div className="relative z-10">
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible xl:grid-cols-4 xl:gap-4">
+        <div
+          className={`flex snap-x snap-mandatory gap-3 overflow-x-auto sm:grid sm:gap-4 sm:overflow-visible xl:gap-4 ${
+            prices.length <= 2
+              ? "sm:grid-cols-2"
+              : prices.length === 3
+                ? "sm:grid-cols-2 xl:grid-cols-3"
+                : "sm:grid-cols-2 xl:grid-cols-4"
+          }`}
+        >
           {prices.map((item) => (
             <div
               key={item.code ?? item.symbol}
