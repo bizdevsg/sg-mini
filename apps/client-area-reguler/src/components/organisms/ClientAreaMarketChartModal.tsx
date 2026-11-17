@@ -4,7 +4,7 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-import { MiniChart } from "@/components/organisms/MiniChart";
+import { ClientAreaAdvancedMiniChart } from "@/components/organisms/ClientAreaAdvancedMiniChart";
 import { getLiveQuoteDisplay } from "@/lib/live-quotes";
 import { getMessages, type AppLocale } from "@/locales";
 
@@ -72,7 +72,13 @@ export function ClientAreaMarketChartModal({
           </button>
         </div>
 
-        {marketCode ? <MiniChart locale={locale} symbol={marketCode} /> : null}
+        {marketCode ? (
+          <ClientAreaAdvancedMiniChart
+            copy={chartCopy}
+            locale={locale}
+            symbol={marketCode}
+          />
+        ) : null}
 
         <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 sm:p-5">
           <Image

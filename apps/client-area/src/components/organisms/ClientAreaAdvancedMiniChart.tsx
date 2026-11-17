@@ -24,10 +24,7 @@ type ChartState =
   | { status: "error"; symbol: string };
 
 const FRAME_LOAD_TIMEOUT_MS = 12000;
-const TRADING_VIEW_FALLBACK_SYMBOLS = new Set([
-  "HKK50_BBJ",
-  "JPK50_BBJ",
-]);
+const TRADING_VIEW_FALLBACK_SYMBOLS = new Set(["HKK50_BBJ", "JPK50_BBJ"]);
 
 export function ClientAreaAdvancedMiniChart({
   copy,
@@ -44,9 +41,7 @@ export function ClientAreaAdvancedMiniChart({
     symbol.toUpperCase(),
   );
   const frameId =
-    state.status === "ready"
-      ? `${state.symbol}:${state.frameKey}`
-      : null;
+    state.status === "ready" ? `${state.symbol}:${state.frameKey}` : null;
 
   const refresh = useCallback(() => {
     setState({ status: "loading" });
@@ -160,9 +155,9 @@ export function ClientAreaAdvancedMiniChart({
       <div className="relative bg-black">
         {shouldUseTradingViewFallback && fallbackPreset ? (
           <div>
-            <p className="border-b border-white/10 bg-yellow-400/10 px-4 py-2.5 text-center text-xs font-semibold text-yellow-200">
+            {/* <p className="border-b border-white/10 bg-yellow-400/10 px-4 py-2.5 text-center text-xs font-semibold text-yellow-200">
               {copy.fallbackNotice}
-            </p>
+            </p> */}
             <TradingView
               activePresetId={fallbackPreset.id}
               chartHeightClassName="h-[26rem] sm:h-[32rem] lg:h-[36rem]"
@@ -176,14 +171,16 @@ export function ClientAreaAdvancedMiniChart({
           <div className="flex h-[26rem] items-center justify-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-black sm:h-[32rem] lg:h-[36rem]">
             <div className="flex flex-col items-center gap-3 text-center">
               <span className="h-9 w-9 animate-spin rounded-full border-2 border-zinc-700 border-t-yellow-400" />
-              <p className="text-sm font-semibold text-zinc-400">{copy.loading}</p>
+              <p className="text-sm font-semibold text-zinc-400">
+                {copy.loading}
+              </p>
             </div>
           </div>
         ) : state.status === "fallback" && fallbackPreset ? (
           <div>
-            <p className="border-b border-white/10 bg-yellow-400/10 px-4 py-2.5 text-center text-xs font-semibold text-yellow-200">
+            {/* <p className="border-b border-white/10 bg-yellow-400/10 px-4 py-2.5 text-center text-xs font-semibold text-yellow-200">
               {copy.fallbackNotice}
-            </p>
+            </p> */}
             <TradingView
               activePresetId={fallbackPreset.id}
               chartHeightClassName="h-[26rem] sm:h-[32rem] lg:h-[36rem]"
