@@ -40,48 +40,53 @@ export function ClientAreaRecommendationCard({
 
   const content = (
     <>
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-2.5">
           {symbolCode ? (
             <LiveQuoteInstrumentIcon symbol={symbolCode} img_variant="sm" />
           ) : (
             <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${iconClass}`}
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${iconClass}`}
             >
               <FontAwesomeIcon icon={icon} />
             </div>
           )}
-          <div>
-            <h3 className="text-xs font-extrabold text-zinc-200">{item.symbol}</h3>
-            <span className="text-[10px] text-zinc-500">
-              {displayCode ?? symbolCode}
-            </span>
+          <div className="min-w-0">
+            <h3 className="truncate text-xs font-extrabold text-zinc-200 sm:text-sm">
+              {item.symbol}
+            </h3>
+            <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] text-zinc-500">
+                {displayCode ?? symbolCode}
+              </span>
+              <span
+                className={`rounded-full border px-1.5 py-px text-[9px] ${badgeClass}`}
+              >
+                {badge}
+              </span>
+            </div>
           </div>
         </div>
 
-        <span className={`rounded-full border px-2 py-0.5 text-[9px] ${badgeClass}`}>
-          {badge}
-        </span>
-      </div>
-
-      <div className="flex items-end justify-between border-t border-zinc-800/50 pt-3">
-        <div>
+        <div className="min-w-0 flex-1 border-l border-zinc-800/50 pl-3 sm:pl-4">
           <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
             {priceLabel}
           </p>
-          <p className="text-base font-bold tracking-tight text-zinc-100">
+          <p className="truncate text-base font-bold tracking-tight text-zinc-100 sm:text-xl">
             {item.bid === null ? "-" : formatUsd(item.bid)}
           </p>
         </div>
 
-        <div className="text-right">
+        <div className="shrink-0 text-right">
           <span
-            className={`flex items-center justify-end gap-1 text-xs font-bold ${signal?.className ?? "text-zinc-500"}`}
+            className={`flex items-center justify-end gap-1 text-xs font-bold sm:text-sm ${signal?.className ?? "text-zinc-500"}`}
           >
             {SignalIcon ? <SignalIcon className="h-3 w-3" /> : null}
             {item.change === null ? "-" : formatSignedPercent(item.change)}
           </span>
-          {item.bid !== null ? <span className="text-[9px] text-zinc-500">{liveTickLabel}</span> : null}
+          {item.bid !== null ? (
+            <span className="text-[9px] text-zinc-500">{liveTickLabel}</span>
+          ) : null}
         </div>
       </div>
     </>
