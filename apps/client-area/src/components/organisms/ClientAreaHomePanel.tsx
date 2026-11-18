@@ -22,12 +22,6 @@ import type { MarketSignalRecord } from "@/lib/market-signal";
 import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 import type { AppLocale, AppMessages } from "@/locales";
 
-/**
- * Beranda is the page people watch, so its official account figures are
- * re-fetched faster than the slow default; live prices move them in between.
- */
-const HOME_ACCOUNT_SUMMARY_REFRESH_MS = 15000;
-
 type ClientAreaHomePanelProps = {
   accountMode: AccountMode;
   clientArea: AppMessages["clientArea"];
@@ -67,9 +61,7 @@ export function ClientAreaHomePanel({
   const {
     state: summaryState,
     retry: retrySummary,
-  } = useLiveAccountSummary(accountMode, {
-    refreshMs: HOME_ACCOUNT_SUMMARY_REFRESH_MS,
-  });
+  } = useLiveAccountSummary(accountMode);
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(288px,0.8fr)] xl:items-start xl:gap-y-4">
