@@ -58,10 +58,8 @@ export function ClientAreaHomePanel({
   tikTokVideo,
 }: ClientAreaHomePanelProps) {
   // One fetch feeds both card instances (mobile and desktop layouts).
-  const {
-    state: summaryState,
-    retry: retrySummary,
-  } = useLiveAccountSummary(accountMode);
+  const { state: summaryState, retry: retrySummary } =
+    useLiveAccountSummary(accountMode);
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(288px,0.8fr)] xl:items-start xl:gap-y-4">
@@ -80,19 +78,19 @@ export function ClientAreaHomePanel({
       </div>
 
       <div className="order-3 min-w-0 xl:order-none xl:col-start-2 xl:row-start-2">
-        <ClientAreaTikTokEmbed copy={clientArea.homeTikTok} video={tikTokVideo} />
+        <ClientAreaTikTokEmbed
+          copy={clientArea.homeTikTok}
+          video={tikTokVideo}
+        />
       </div>
 
       <div className="order-2 flex min-w-0 flex-col gap-6 xl:order-none xl:col-start-1 xl:row-span-2 xl:row-start-1">
-
-        {/*
-        <ClientAreaHeroSlideshow
+        {/* <ClientAreaHeroSlideshow
           slides={heroSlides}
           currentSlide={currentSlide}
           detailLabel={detailLabel}
           setCurrentSlide={setCurrentSlide}
-        />
-        */}
+        /> */}
 
         <div className="order-1 xl:order-none">
           <ClientAreaAdvancedChart
