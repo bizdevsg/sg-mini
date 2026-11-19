@@ -68,7 +68,11 @@ export default async function ClientAreaLayout({
 
   if (!session.isAuthenticated || !session.profile) {
     return (
-      <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
+      <ClientAreaAccountModeProvider
+        key="signed-out"
+        initialAccountMode={initialAccountMode}
+        persistOnMount={false}
+      >
         <div className="flex min-h-dvh flex-col bg-black">
           <div className="flex min-h-0 flex-1">{children}</div>
           {disclaimer}
@@ -78,7 +82,10 @@ export default async function ClientAreaLayout({
   }
 
   return (
-    <ClientAreaAccountModeProvider initialAccountMode={initialAccountMode}>
+    <ClientAreaAccountModeProvider
+      key="signed-in"
+      initialAccountMode={initialAccountMode}
+    >
       <ClientAreaProfileProvider profile={session.profile}>
         <PageTemplate
           locale={locale}

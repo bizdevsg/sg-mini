@@ -28,7 +28,7 @@ export function ClientAreaTransactionsView({
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
-  // The SAI stream does not include open or settled positions.
+  // Open positions ride on the account summary payload (same BFF call).
   const { state, retry } = useLiveAccountSummary(accountMode);
   const allPositions = useMemo(
     () =>
@@ -111,7 +111,7 @@ export function ClientAreaTransactionsView({
         onRetryPositions={retry}
         onShowAllTransactions={onShowAllTransactions}
         positions={positions}
-        positionsStatus={state.status === "ready" ? "unavailable" : state.status}
+        positionsStatus={state.status}
         transactionFilter={filterSymbol}
         transactionHistory={transactionHistory}
       />

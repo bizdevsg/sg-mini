@@ -212,6 +212,9 @@ export async function startSession(
     path: "/",
     maxAge: CLIENT_AREA_INACTIVITY_TIMEOUT_SECONDS,
   });
+  // Every login starts fresh: drop the remembered Demo/Real choice so the first
+  // screen opens the Real account whenever the customer has one.
+  cookieStore.delete(CLIENT_AREA_ACCOUNT_MODE_COOKIE);
 }
 
 /** Returns only the MiniMicro fields needed by authenticated server calls. */
@@ -303,6 +306,7 @@ export async function clearClientAreaSession() {
   cookieStore.delete(CLIENT_AREA_IDENTIFIER_COOKIE);
   cookieStore.delete(CLIENT_AREA_LAST_ACTIVITY_COOKIE);
   cookieStore.delete(CLIENT_AREA_OTP_SESSION_COOKIE);
+  cookieStore.delete(CLIENT_AREA_ACCOUNT_MODE_COOKIE);
 }
 
 /** Ends the local MiniMicro session. */

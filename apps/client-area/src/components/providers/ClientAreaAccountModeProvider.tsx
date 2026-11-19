@@ -36,11 +36,17 @@ function persistClientAreaAccountMode(accountMode: AccountMode) {
 type ClientAreaAccountModeProviderProps = {
   children: ReactNode;
   initialAccountMode: AccountMode;
+  /**
+   * Write the resolved mode to the cookie on mount. Turn off before login so the
+   * placeholder Demo mode is not remembered and Real can open first after login.
+   */
+  persistOnMount?: boolean;
 };
 
 export function ClientAreaAccountModeProvider({
   children,
   initialAccountMode,
+  persistOnMount = true,
 }: ClientAreaAccountModeProviderProps) {
   const [accountMode, setAccountMode] =
     useState<AccountMode>(initialAccountMode);
@@ -50,8 +56,10 @@ export function ClientAreaAccountModeProvider({
   }, []);
 
   useEffect(() => {
-    persistClientAreaAccountMode(accountMode);
-  }, [accountMode]);
+    if (persistOnMount) {
+      persistClientAreaAccountMode(accountMode);
+    }
+  }, [accountMode, persistOnMount]);
 
   return (
     <ClientAreaAccountModeContext.Provider

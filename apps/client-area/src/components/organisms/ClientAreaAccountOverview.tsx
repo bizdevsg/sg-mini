@@ -33,7 +33,7 @@ type ClientAreaAccountOverviewProps = {
   summaryState: AccountSummaryState;
 };
 
-const EMPTY_VALUE = "Belum tersedia";
+const EMPTY_VALUE = "—";
 
 const ACCOUNT_METRICS: Array<{
   key:
