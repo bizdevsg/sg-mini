@@ -40,6 +40,8 @@ const MIN_TRIGGERED_GAP_MS = 10000;
 type UseAccountSummaryOptions = {
   /** Poll every N ms while the tab is visible. 0 (default) = fetch once. */
   refreshMs?: number;
+  /** false = do not fetch at all (the summary comes from another source). */
+  enabled?: boolean;
 };
 
 type Result = {
@@ -100,13 +102,17 @@ function waitUntilVisible(signal: AbortSignal) {
  */
 export function useAccountSummary(
   mode: AccountMode,
-  { refreshMs = 0 }: UseAccountSummaryOptions = {},
+  { refreshMs = 0, enabled = true }: UseAccountSummaryOptions = {},
 ) {
   const [attempt, setAttempt] = useState(0);
   const [result, setResult] = useState<Result | null>(null);
   const refreshNowRef = useRef<() => void>(() => {});
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const controller = new AbortController();
     const { signal } = controller;
     // `wake` ends the current wait early; `pending` remembers a trigger that
@@ -240,7 +246,7 @@ export function useAccountSummary(
       controller.abort();
       refreshNowRef.current = () => {};
     };
-  }, [mode, attempt, refreshMs]);
+  }, [mode, attempt, refreshMs, enabled]);
 
   const retry = useCallback(() => setAttempt((current) => current + 1), []);
   const refreshNow = useCallback(() => refreshNowRef.current(), []);

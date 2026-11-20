@@ -6,6 +6,7 @@ import { PageTemplate } from "@/components/layouts/PageTemplate";
 import { ClientAreaLoginDisclaimerModal } from "@/components/molecules/ClientAreaLoginDisclaimerModal";
 import { ClientAreaViewOnlyDisclaimer } from "@/components/organisms/ClientAreaViewOnlyDisclaimer";
 import { ClientAreaAccountModeProvider } from "@/components/providers/ClientAreaAccountModeProvider";
+import { ClientAreaAccountSummarySourceProvider } from "@/components/providers/ClientAreaAccountSummarySourceProvider";
 import { ClientAreaProfileProvider } from "@/components/providers/ClientAreaProfileProvider";
 import { ClientAreaSessionEndedNotice } from "@/components/providers/ClientAreaSessionEndedNotice";
 import { ClientAreaSessionTimeout } from "@/components/providers/ClientAreaSessionTimeout";
@@ -16,6 +17,7 @@ import {
 } from "@/lib/client-area-account-mode";
 import { getClientAreaSessionState } from "@/lib/client-area-auth";
 import { getWebsiteFeatureConfig } from "@/lib/client-area-config";
+import { ACCOUNT_SUMMARY_SOURCE } from "@/lib/env";
 import { getMessages, isSupportedLocale, type AppLocale } from "@/locales";
 
 type ClientAreaLayoutProps = {
@@ -87,24 +89,26 @@ export default async function ClientAreaLayout({
       initialAccountMode={initialAccountMode}
     >
       <ClientAreaProfileProvider profile={session.profile}>
-        <PageTemplate
-          locale={locale}
-          tradePilotEnabled={featureConfig.tradePilotEnabled}
-        >
-          <ClientAreaSessionTimeout locale={locale} />
-          <ClientAreaTokenRefresh
-            sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
-          />
-          <ClientAreaSessionEndedNotice locale={locale} />
-          <ClientAreaLoginDisclaimerModal
-            acknowledgeLabel={viewOnlyDisclaimer.acknowledgeLabel}
-            body={viewOnlyDisclaimer.body}
-            sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
-            title={viewOnlyDisclaimer.modalTitle}
-          />
-          {children}
-          {disclaimer}
-        </PageTemplate>
+        <ClientAreaAccountSummarySourceProvider source={ACCOUNT_SUMMARY_SOURCE}>
+          <PageTemplate
+            locale={locale}
+            tradePilotEnabled={featureConfig.tradePilotEnabled}
+          >
+            <ClientAreaSessionTimeout locale={locale} />
+            <ClientAreaTokenRefresh
+              sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
+            />
+            <ClientAreaSessionEndedNotice locale={locale} />
+            <ClientAreaLoginDisclaimerModal
+              acknowledgeLabel={viewOnlyDisclaimer.acknowledgeLabel}
+              body={viewOnlyDisclaimer.body}
+              sessionIssuedAtMs={session.sessionIssuedAtMs ?? 0}
+              title={viewOnlyDisclaimer.modalTitle}
+            />
+            {children}
+            {disclaimer}
+          </PageTemplate>
+        </ClientAreaAccountSummarySourceProvider>
       </ClientAreaProfileProvider>
     </ClientAreaAccountModeProvider>
   );

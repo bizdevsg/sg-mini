@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
+import { useAccountSummarySource } from "@/components/providers/ClientAreaAccountSummarySourceProvider";
 import { getDashboardCopy } from "@/components/organisms/client-area.shared";
 import { toPositionItem } from "@/components/organisms/client-area-open-positions";
 import { toTradeHistoryItem } from "@/components/organisms/client-area-trade-history";
@@ -28,7 +29,7 @@ export function ClientAreaTransactionsView({
 }: ClientAreaTransactionsViewProps) {
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
-  // The SAI stream does not include open or settled positions.
+  const accountSummarySource = useAccountSummarySource();
   const { state, retry } = useLiveAccountSummary(accountMode);
   const allPositions = useMemo(
     () =>
@@ -111,7 +112,13 @@ export function ClientAreaTransactionsView({
         onRetryPositions={retry}
         onShowAllTransactions={onShowAllTransactions}
         positions={positions}
-        positionsStatus={state.status === "ready" ? "unavailable" : state.status}
+        // The SAI stream does not include open or settled positions; the HTTP
+        // summary does (same BFF call).
+        positionsStatus={
+          accountSummarySource === "websocket" && state.status === "ready"
+            ? "unavailable"
+            : state.status
+        }
         transactionFilter={filterSymbol}
         transactionHistory={transactionHistory}
       />

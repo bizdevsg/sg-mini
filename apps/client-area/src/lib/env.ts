@@ -1,3 +1,5 @@
+import { normalizeAccountSummarySource } from "@/lib/account-summary-source";
+
 const DEFAULT_LIVE_QUOTE_SOCKET_URL = "wss://wsprc.royalassetindo.co.id";
 const DEFAULT_FRAMER_IMAGE_BASE_URL = "https://framerusercontent.com/images";
 const DEFAULT_NEWS_API_URL = "https://sg-admin.sg-berjangka.com/api/v1/berita";
@@ -111,6 +113,13 @@ function normalizeSgbFlavor(value: string | undefined): SgbFlavor {
 // Flavor server pihak ketiga (SSO/Trading/Registrasi) — lihat docs/api/. Jangan
 // pernah menjalankan request ke flavor "prod" tanpa izin eksplisit di chat.
 export const SGB_FLAVOR = normalizeSgbFlavor(process.env.SGB_FLAVOR);
+
+// Sumber account summary di Beranda/Transaksi: "websocket" (stream SAI, tanpa
+// posisi) atau "http" (polling /etrade/accountsummary, dengan posisi). Dibaca di
+// server saat runtime lalu diteruskan ke browser lewat layout.
+export const ACCOUNT_SUMMARY_SOURCE = normalizeAccountSummarySource(
+  process.env.ACCOUNT_SUMMARY_SOURCE,
+);
 
 // Passphrase enkripsi password login; nilainya dari tim integrasi SGB dan hanya diisi lewat env
 // server/lokal (jangan di-commit).
