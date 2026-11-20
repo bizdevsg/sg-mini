@@ -238,6 +238,12 @@ export type AppMessages = {
     homeTikTok: {
       description: string;
       frameTitle: string;
+      fullscreenLabel: string;
+      muteLabel: string;
+      pauseLabel: string;
+      playLabel: string;
+      seekLabel: string;
+      unmuteLabel: string;
       openVideoLabel: string;
       title: string;
     };

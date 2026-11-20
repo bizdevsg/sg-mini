@@ -55,6 +55,12 @@ export const idClientArea: AppMessages["clientArea"] = {
   homeTikTok: {
     description: "Tonton video terbaru pilihan dari Solid Prime.",
     frameTitle: "Video TikTok Solid Prime",
+    fullscreenLabel: "Layar penuh",
+    muteLabel: "Matikan suara",
+    pauseLabel: "Jeda",
+    playLabel: "Putar",
+    seekLabel: "Posisi video",
+    unmuteLabel: "Nyalakan suara",
     openVideoLabel: "Buka video di TikTok",
     playerUnavailable: "Video tidak dapat diputar di sini. Coba lagi atau buka langsung di TikTok.",
     retryPlayer: "Coba lagi",

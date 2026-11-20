@@ -56,6 +56,12 @@ export const enClientArea: AppMessages["clientArea"] = {
   homeTikTok: {
     description: "Watch a featured latest video from Solid Prime.",
     frameTitle: "Solid Prime TikTok video",
+    fullscreenLabel: "Fullscreen",
+    muteLabel: "Mute",
+    pauseLabel: "Pause",
+    playLabel: "Play",
+    seekLabel: "Video position",
+    unmuteLabel: "Unmute",
     openVideoLabel: "Open video on TikTok",
     title: "TikTok Video",
   },

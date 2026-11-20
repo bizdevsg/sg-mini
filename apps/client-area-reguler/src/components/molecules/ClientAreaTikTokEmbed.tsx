@@ -3,6 +3,7 @@
 import { ExternalLink } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { ClientAreaVideoPlayer } from "@/components/molecules/ClientAreaVideoPlayer";
 import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 import type { AppMessages } from "@/locales";
 
@@ -68,15 +69,19 @@ export function ClientAreaTikTokEmbed({
             </button>
           </div>
         ) : video.directVideoUrl ? (
-          <video
+          <ClientAreaVideoPlayer
             key={attempt}
-            className="aspect-[9/16] w-full bg-black object-contain"
-            controls
-            playsInline
-            preload="metadata"
-            src={video.directVideoUrl}
-            aria-label={copy.frameTitle}
+            label={copy.frameTitle}
+            labels={{
+              fullscreen: copy.fullscreenLabel,
+              mute: copy.muteLabel,
+              pause: copy.pauseLabel,
+              play: copy.playLabel,
+              seek: copy.seekLabel,
+              unmute: copy.unmuteLabel,
+            }}
             onError={() => setPlayerFailed(true)}
+            src={video.directVideoUrl}
           />
         ) : (
         <iframe

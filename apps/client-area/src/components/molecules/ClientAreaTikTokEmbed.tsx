@@ -2,6 +2,7 @@
 
 import { ExternalLink } from "lucide-react";
 
+import { ClientAreaVideoPlayer } from "@/components/molecules/ClientAreaVideoPlayer";
 import type { TikTokVideo } from "@/lib/tiktok-video.shared";
 import type { AppMessages } from "@/locales";
 
@@ -25,13 +26,17 @@ export function ClientAreaTikTokEmbed({
 
       <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
         {video.directVideoUrl ? (
-          <video
-            className="aspect-[9/16] w-full bg-black object-contain"
-            controls
-            playsInline
-            preload="metadata"
+          <ClientAreaVideoPlayer
+            label={copy.frameTitle}
+            labels={{
+              fullscreen: copy.fullscreenLabel,
+              mute: copy.muteLabel,
+              pause: copy.pauseLabel,
+              play: copy.playLabel,
+              seek: copy.seekLabel,
+              unmute: copy.unmuteLabel,
+            }}
             src={video.directVideoUrl}
-            aria-label={copy.frameTitle}
           />
         ) : (
         <iframe
