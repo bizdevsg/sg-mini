@@ -194,17 +194,51 @@ function useHttpLiveAccountSummary(mode: AccountMode, enabled: boolean) {
 }
 
 /**
- * ACCOUNT_SUMMARY_SOURCE=websocket: the SAI stream carries the account figures,
- * but not open or settled positions, so `positions`/`settled` are empty. The
- * stream store is shared with the live price feed, so reading it here opens no
- * extra connection.
+ * ACCOUNT_SUMMARY_SOURCE=websocket: the SAI stream carries the account figures
+ * (live, every tick) but not open or settled positions. Those come from the
+ * slow /etrade/accountsummary poll (same hook as the http source, so their P/L
+ * still moves with the live price feed) and are merged in here. The stream
+ * store is shared with the live price feed, so reading it opens no extra
+ * connection.
+ *
+ * While the first positions request is in flight the state stays `loading`, so
+ * the Transaksi list does not flash "no positions". If that request fails the
+ * account figures still show and positions fall back to empty.
  */
-function useSaiAccountSummary(mode: AccountMode) {
+function useSaiAccountSummary(mode: AccountMode, enabled: boolean) {
   const { account, status } = useSaiStream(mode);
-  const retry = useCallback(() => retrySaiStream(mode), [mode]);
-  const state: AccountSummaryState = account
-    ? { status: "ready", account, positions: [], settled: [] }
-    : { status: status === "connecting" ? "loading" : "error" };
+  // The SAI stream never carries positions (verified on a captured stream:
+  // only `account`, `prices` and `alive` events), so they come from the slow
+  // /account-summary poll, whose P/L still moves with the live price feed.
+  const positionsSource = useHttpLiveAccountSummary(mode, enabled);
+  const retryStream = useCallback(() => retrySaiStream(mode), [mode]);
+  const retryPositions = positionsSource.retry;
+  const retry = useCallback(() => {
+    retryStream();
+    retryPositions();
+  }, [retryStream, retryPositions]);
+  const positionsState = positionsSource.state;
+
+  const state = useMemo<AccountSummaryState>(() => {
+    if (!account) {
+      return { status: status === "connecting" ? "loading" : "error" };
+    }
+
+    // Wait for the first positions request so the Transaksi list does not
+    // flash "no positions".
+    if (positionsState.status === "loading") {
+      return { status: "loading" };
+    }
+
+    // If that request fails the account figures still show; positions stay empty.
+    return {
+      status: "ready",
+      account,
+      positions:
+        positionsState.status === "ready" ? positionsState.positions : [],
+      settled: positionsState.status === "ready" ? positionsState.settled : [],
+    };
+  }, [account, positionsState, status]);
 
   return { state, retry };
 }
@@ -217,7 +251,7 @@ function useSaiAccountSummary(mode: AccountMode) {
  */
 export function useLiveAccountSummary(mode: AccountMode) {
   const source = useAccountSummarySource();
-  const websocket = useSaiAccountSummary(mode);
+  const websocket = useSaiAccountSummary(mode, source === "websocket");
   const http = useHttpLiveAccountSummary(mode, source === "http");
 
   return source === "websocket" ? websocket : http;
