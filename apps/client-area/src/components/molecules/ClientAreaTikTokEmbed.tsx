@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Play } from "lucide-react";
 
 import { ClientAreaVideoPlayer } from "@/components/molecules/ClientAreaVideoPlayer";
 import type { TikTokVideo } from "@/lib/tiktok-video.shared";
@@ -16,15 +16,18 @@ export function ClientAreaTikTokEmbed({
   video,
 }: ClientAreaTikTokEmbedProps) {
   return (
-    <section className="min-w-0 overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/10 p-4 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-5">
-      <div className="mb-4">
-        <h2 className="text-base font-bold text-white">{copy.title}</h2>
-        <p className="mt-1 text-xs leading-5 text-zinc-400">
-          {copy.description}
-        </p>
+    <section className="min-w-0 overflow-hidden rounded-2xl border border-yellow-400/20 bg-[#0a0a0b] p-3 shadow-xl shadow-black/30">
+      <div className="flex items-center gap-3 pb-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-yellow-400">
+          <Play aria-hidden="true" className="ml-0.5 h-4 w-4 fill-current" />
+        </span>
+        <div className="min-w-0">
+          <h2 className="text-sm font-bold text-white">{copy.title}</h2>
+          <p className="text-xs leading-4 text-zinc-400">{copy.description}</p>
+        </div>
       </div>
 
-      <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
+      <div className="w-full overflow-hidden rounded-xl bg-black ring-1 ring-white/10">
         {video.directVideoUrl ? (
           <ClientAreaVideoPlayer
             label={copy.frameTitle}
@@ -52,7 +55,7 @@ export function ClientAreaTikTokEmbed({
       </div>
 
       <a
-        className="mx-auto mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-xs font-bold text-zinc-200 transition hover:border-amber-400/40 hover:bg-amber-400/10 hover:text-amber-300"
+        className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-400/10 px-4 py-2.5 text-xs font-bold text-yellow-300 transition hover:border-yellow-400/40 hover:bg-yellow-400/20 hover:text-yellow-200"
         href={video.videoUrl}
         rel="noreferrer"
         target="_blank"
