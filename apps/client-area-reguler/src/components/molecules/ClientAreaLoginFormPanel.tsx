@@ -19,7 +19,7 @@ type ClientAreaLoginFormPanelProps = {
 };
 
 const inputClassName =
-  "client-area-login-input h-[3.125rem] w-full border-b border-yellow-500 text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
+  "client-area-login-input h-[3.125rem] w-full border-b border-yellow-500 px-12 text-center text-[0.9rem] text-white outline-none transition-[border-color,box-shadow,opacity] placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ClientAreaLoginFormPanel({
   captcha,
@@ -33,8 +33,12 @@ export function ClientAreaLoginFormPanel({
 }: ClientAreaLoginFormPanelProps) {
   const router = useRouter();
   const [accountType, setAccountType] = useState<"mini" | "regular">("regular");
-  const miniUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_MINI_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3009" : "");
-  const regularUrl = process.env.NEXT_PUBLIC_CLIENT_AREA_REGULER_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3010" : "");
+  const miniUrl =
+    process.env.NEXT_PUBLIC_CLIENT_AREA_MINI_URL ||
+    (process.env.NODE_ENV === "development" ? "http://localhost:3009" : "");
+  const regularUrl =
+    process.env.NEXT_PUBLIC_CLIENT_AREA_REGULER_URL ||
+    (process.env.NODE_ENV === "development" ? "http://localhost:3010" : "");
 
   function selectAccountType(type: "mini" | "regular") {
     const target = type === "mini" ? miniUrl : regularUrl;
@@ -50,15 +54,19 @@ export function ClientAreaLoginFormPanel({
     : login.showPasswordLabel;
 
   return (
-    <div className="mx-auto flex flex-1 items-center justify-center py-4 sm:py-6 xl:mx-0 xl:basis-[27.5rem] xl:grow-0 xl:shrink-0 xl:py-8">
-      <div className="w-full max-w-[27.5rem] rounded-[1.25rem] border border-white/[0.12] bg-zinc-900/35 px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-xl sm:px-8 sm:py-9">
-        <a href={`${PUBLIC_WEBSITE_URL}/${locale}`} className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-600 bg-zinc-500/20 hover:bg-zinc-500/10 rounded py-1 px-2 w-fit mb-4">
-          <ArrowLeft className="w-5" /> <span>{login.backToDashboardLabel}</span>
-        </a>
+    <div className="mx-auto flex flex-1 flex-col items-center justify-center gap-6 py-4 sm:py-6 xl:mx-0 xl:basis-[27.5rem] xl:grow-0 xl:shrink-0 xl:py-8">
+      <h1 className="text-center text-[1.75rem] font-extrabold tracking-[-0.02em] text-white">
+        {login.title}
+      </h1>
 
-        <h1 className="mb-5 text-[1.75rem] font-extrabold tracking-[-0.02em] text-white">
-          {login.title}
-        </h1>
+      <div className="w-full max-w-[27.5rem] rounded-[2rem] border border-amber-500/20 bg-zinc-900/10 px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-sm sm:px-8 sm:py-9">
+        <a
+          href={`${PUBLIC_WEBSITE_URL}/${locale}`}
+          className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-600 bg-zinc-500/20 hover:bg-zinc-500/10 rounded py-1 px-2 w-fit mb-4"
+        >
+          <ArrowLeft className="w-5" />{" "}
+          <span>{login.backToDashboardLabel}</span>
+        </a>
 
         <div className="mb-5 grid grid-cols-2 rounded-xl border border-amber-500/30 p-1">
           {(["mini", "regular"] as const).map((type) => (
@@ -99,7 +107,7 @@ export function ClientAreaLoginFormPanel({
               required
               disabled={pending}
               placeholder={login.passwordPlaceholder}
-              className={`${inputClassName} pr-12`}
+              className={inputClassName}
             />
             <button
               type="button"
@@ -112,14 +120,22 @@ export function ClientAreaLoginFormPanel({
             </button>
           </div>
 
-          <div className="mx-auto">
-            {captcha}
-          </div>
+          {/* <label className="mx-auto flex cursor-pointer items-center gap-2 text-xs text-white">
+            <input
+              type="checkbox"
+              name="rememberMe"
+              disabled={pending}
+              className="size-5 cursor-pointer rounded-md border border-amber-500/60 bg-white accent-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            {login.rememberMe}
+          </label> */}
+
+          <div className="mx-auto">{captcha}</div>
 
           <button
             type="submit"
             disabled={pending}
-            className="mt-1 flex h-[3.125rem] w-full items-center justify-center gap-2 cursor-pointer rounded-[0.6rem] bg-gradient-to-r from-amber-500 to-amber-600 text-[0.92rem] font-black tracking-[0.12em] text-black shadow-[0_4px_24px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] transition-[opacity,box-shadow,transform] enabled:hover:-translate-y-px enabled:hover:opacity-95 enabled:hover:shadow-[0_6px_32px_rgba(245,158,11,0.55)] disabled:cursor-not-allowed disabled:opacity-[0.55]"
+            className="mt-1 flex h-[3.125rem] w-full items-center justify-center gap-2 cursor-pointer rounded-xl bg-linear-to-b from-yellow-400 to-amber-500 text-[0.95rem] font-bold text-black shadow-[0_4px_24px_rgba(245,158,11,0.3)] transition-[opacity,box-shadow,transform] enabled:hover:-translate-y-px enabled:hover:opacity-95 enabled:hover:shadow-[0_6px_32px_rgba(245,158,11,0.5)] disabled:cursor-not-allowed disabled:opacity-[0.55]"
           >
             {pending ? (
               <>
@@ -133,7 +149,7 @@ export function ClientAreaLoginFormPanel({
 
           <button
             type="button"
-            className="flex h-[3.125rem] w-full items-center justify-center rounded-[0.6rem] cursor-pointer border border-amber-500/30 bg-transparent text-[0.92rem] font-black tracking-[0.12em] text-amber-500 transition-[background-color,border-color,box-shadow,transform] hover:-translate-y-px hover:border-amber-500/[0.55] hover:bg-amber-500/[0.08] hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+            className="flex h-[3.125rem] w-full items-center justify-center rounded-xl cursor-pointer bg-linear-to-b from-yellow-400 to-amber-500 text-[0.95rem] font-bold text-black shadow-[0_4px_24px_rgba(245,158,11,0.3)] transition-[opacity,box-shadow,transform] hover:-translate-y-px hover:opacity-95 hover:shadow-[0_6px_32px_rgba(245,158,11,0.5)]"
             onClick={onOpenDownloadModal}
           >
             {login.registerLabel}
