@@ -3,6 +3,8 @@ import { formatSignedUsd } from "@/components/organisms/client-area.shared";
 import type { PositionItem } from "@/components/organisms/client-area.types";
 
 type ClientAreaTransactionSummaryProps = {
+  /** Total floating P/L from the account stream; null/undefined = sum the rows. */
+  accountFloating?: number | null;
   buySellLabel: string;
   positions: PositionItem[];
   status: "loading" | "ready" | "unavailable" | "error";
@@ -11,6 +13,7 @@ type ClientAreaTransactionSummaryProps = {
 };
 
 export function ClientAreaTransactionSummary({
+  accountFloating,
   buySellLabel,
   positions,
   status,
@@ -23,10 +26,12 @@ export function ClientAreaTransactionSummary({
   const floatingValues = positions
     .map((item) => item.floatingValue)
     .filter((value): value is number => typeof value === "number");
+  // A figure supplied by the account stream wins over the sum of the rows.
   const totalFloating =
-    floatingValues.length > 0
+    accountFloating ??
+    (floatingValues.length > 0
       ? floatingValues.reduce((sum, value) => sum + value, 0)
-      : null;
+      : null);
   const totalFloatingClassName =
     totalFloating === null || totalFloating === 0
       ? "text-white"

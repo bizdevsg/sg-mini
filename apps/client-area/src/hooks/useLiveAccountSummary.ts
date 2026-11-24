@@ -18,6 +18,8 @@ type ReadyState = Extract<AccountSummaryState, { status: "ready" }>;
 
 /** How often the live price estimate on screen is allowed to move. */
 const LIVE_DISPLAY_REFRESH_MS = 15000;
+/** With the websocket source the screen follows the price stream every second. */
+const SAI_DISPLAY_REFRESH_MS = 1000;
 
 /** Closing-side price of the held products at the moment a snapshot arrived. */
 type Baseline = {
@@ -136,7 +138,11 @@ function applyLivePrices(
  *
  * `enabled: false` turns the whole hook into a no-op (no polling, no timers).
  */
-function useHttpLiveAccountSummary(mode: AccountMode, enabled: boolean) {
+function useHttpLiveAccountSummary(
+  mode: AccountMode,
+  enabled: boolean,
+  displayRefreshMs: number = LIVE_DISPLAY_REFRESH_MS,
+) {
   const summary = useAccountSummary(mode, {
     refreshMs: ACCOUNT_SUMMARY_FALLBACK_REFRESH_MS,
     enabled,
@@ -159,11 +165,11 @@ function useHttpLiveAccountSummary(mode: AccountMode, enabled: boolean) {
 
     const timer = window.setInterval(
       () => setDisplayQuotes(quotesRef.current),
-      LIVE_DISPLAY_REFRESH_MS,
+      displayRefreshMs,
     );
 
     return () => window.clearInterval(timer);
-  }, [enabled]);
+  }, [enabled, displayRefreshMs]);
 
   // A new snapshot arrived: remember where the prices were at that moment.
   useEffect(() => {
@@ -210,7 +216,11 @@ function useSaiAccountSummary(mode: AccountMode, enabled: boolean) {
   // The SAI stream never carries positions (verified on a captured stream:
   // only `account`, `prices` and `alive` events), so they come from the slow
   // /account-summary poll, whose P/L still moves with the live price feed.
-  const positionsSource = useHttpLiveAccountSummary(mode, enabled);
+  const positionsSource = useHttpLiveAccountSummary(
+    mode,
+    enabled,
+    SAI_DISPLAY_REFRESH_MS,
+  );
   const retryStream = useCallback(() => retrySaiStream(mode), [mode]);
   const retryPositions = positionsSource.retry;
   const retry = useCallback(() => {
@@ -231,11 +241,15 @@ function useSaiAccountSummary(mode: AccountMode, enabled: boolean) {
     }
 
     // If that request fails the account figures still show; positions stay empty.
+    const positions =
+      positionsState.status === "ready" ? positionsState.positions : [];
+
+    // Account figures, Floating P/L included, come straight from the websocket
+    // stream; only the positions list comes from the HTTP poll.
     return {
       status: "ready",
       account,
-      positions:
-        positionsState.status === "ready" ? positionsState.positions : [],
+      positions,
       settled: positionsState.status === "ready" ? positionsState.settled : [],
     };
   }, [account, positionsState, status]);

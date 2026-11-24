@@ -22,6 +22,7 @@ import { getMessages, type AppLocale } from "@/locales";
 type LoadStatus = "loading" | "ready" | "unavailable" | "error";
 
 type ClientAreaTransactionsPanelProps = {
+  accountFloating?: number | null;
   copy: DashboardCopy;
   hasNextHistory: boolean;
   historyPage: number;
@@ -38,6 +39,7 @@ type ClientAreaTransactionsPanelProps = {
 };
 
 export function ClientAreaTransactionsPanel({
+  accountFloating,
   copy,
   hasNextHistory,
   historyPage,
@@ -71,6 +73,7 @@ export function ClientAreaTransactionsPanel({
       />
 
       <ClientAreaTransactionSummary
+        accountFloating={accountFloating}
         buySellLabel={labels.buySell}
         positions={positions}
         status={positionsStatus}

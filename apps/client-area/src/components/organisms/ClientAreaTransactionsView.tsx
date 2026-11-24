@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { useClientAreaAccountMode } from "@/components/providers/ClientAreaAccountModeProvider";
+import { useAccountSummarySource } from "@/components/providers/ClientAreaAccountSummarySourceProvider";
 import { getDashboardCopy } from "@/components/organisms/client-area.shared";
 import { toPositionItem } from "@/components/organisms/client-area-open-positions";
 import { toTradeHistoryItem } from "@/components/organisms/client-area-trade-history";
@@ -29,6 +30,15 @@ export function ClientAreaTransactionsView({
   const copy = getDashboardCopy(locale);
   const { accountMode } = useClientAreaAccountMode();
   const { state, retry } = useLiveAccountSummary(accountMode);
+  const accountSummarySource = useAccountSummarySource();
+  // With the websocket source the total comes straight from the stream's
+  // account event. A symbol filter shows only some rows, so it keeps the row sum.
+  const accountFloating =
+    accountSummarySource === "websocket" &&
+    !filterSymbol &&
+    state.status === "ready"
+      ? state.account.floatingPl
+      : null;
   const allPositions = useMemo(
     () =>
       state.status === "ready"
@@ -94,6 +104,7 @@ export function ClientAreaTransactionsView({
   return (
     <div id="transactions" className="scroll-mt-24">
       <ClientAreaTransactionsPanel
+        accountFloating={accountFloating}
         copy={copy}
         hasNextHistory={historyState.status === "ready" && historyState.hasNext}
         historyPage={historyPage}
