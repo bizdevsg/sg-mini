@@ -475,6 +475,8 @@ export type AppMessages = {
     download: string;
     downloadCsv: string;
     downloadPdf: string;
+    csvDescription: string;
+    pdfDescription: string;
     date: string;
     category: string;
     open: string;

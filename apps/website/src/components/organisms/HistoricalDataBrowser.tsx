@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { EmptyStatePanel } from "@/components/molecules/EmptyStatePanel";
+import { HistoricalDataDownloadMenu } from "@/components/molecules/HistoricalDataDownloadMenu";
 import { HistoricalDataMetricCard } from "@/components/molecules/HistoricalDataMetricCard";
 import { HistoricalDataRecordCard } from "@/components/molecules/HistoricalDataRecordCard";
 import { PaginationControls } from "@/components/molecules/PaginationControls";
@@ -409,23 +410,23 @@ export function HistoricalDataBrowser({
           </div>
 
           {selectedCategory ? (
-            <div className="flex flex-wrap items-center gap-2">
-              <a
-                href={buildExportHref("csv")}
-                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
-              >
-                <FontAwesomeIcon icon={["fas", "file-csv"]} className="text-xs" />
-                {labels.downloadCsv}
-              </a>
-
-              <a
-                href={buildExportHref("pdf")}
-                className="inline-flex items-center gap-2 rounded-full border border-yellow-500/60 bg-yellow-500/10 px-3 py-1.5 text-xs font-medium text-yellow-500 transition hover:bg-yellow-500/20"
-              >
-                <FontAwesomeIcon icon={["fas", "file-pdf"]} className="text-xs" />
-                {labels.downloadPdf}
-              </a>
-            </div>
+            <HistoricalDataDownloadMenu
+              label={labels.download}
+              options={[
+                {
+                  format: "pdf",
+                  label: labels.downloadPdf,
+                  description: labels.pdfDescription,
+                  href: buildExportHref("pdf"),
+                },
+                {
+                  format: "csv",
+                  label: labels.downloadCsv,
+                  description: labels.csvDescription,
+                  href: buildExportHref("csv"),
+                },
+              ]}
+            />
           ) : null}
         </div>
       </ScrollReveal>
