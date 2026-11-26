@@ -445,6 +445,7 @@ export function ClientAreaTradePilotPanel({
         copy={copy}
         credit={credits[mode]}
         locale={locale}
+        locked={quotaNoticeKind === "no_equity"}
       />
 
       {bootstrap.unavailable ? (

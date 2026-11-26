@@ -18,14 +18,18 @@ type Props = {
   copy: ClientAreaTradePilotTechnicalIndicatorsCopy;
 };
 
-export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy }: Props) {
+export function ClientAreaTradePilotTechnicalIndicatorsSection({
+  analysis,
+  copy,
+}: Props) {
   const indicators = analysis.indicators.map((indicator) => ({
     ...indicator,
     group: indicator.group === "oscillator" ? "oscillator" : "movingAverage",
   }));
   const count = (status: TradePilotIndicatorStatus, group?: string) =>
     indicators.filter(
-      (indicator) => indicator.status === status && (!group || indicator.group === group),
+      (indicator) =>
+        indicator.status === status && (!group || indicator.group === group),
     ).length;
   const summaryStatus: TradePilotIndicatorStatus =
     count("buy") > count("sell")
@@ -56,7 +60,9 @@ export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy 
             <h2 className="text-lg font-black text-white sm:text-xl">
               {copy.title} — {analysis.timeframeLabel}
             </h2>
-            <p className="mt-1 text-xs text-zinc-400 sm:text-sm">{copy.description}</p>
+            <p className="mt-1 text-xs text-zinc-400 sm:text-sm">
+              {copy.description}
+            </p>
           </div>
         </div>
         <p className="text-xs text-zinc-400 sm:text-sm">
@@ -74,28 +80,40 @@ export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy 
           {copy.signalSummaryLabel}
         </h3>
         <div className="mx-auto mt-6 max-w-xl">
-          <ClientAreaTradePilotIndicatorScale marker={getTradePilotIndicatorMarker(summaryStatus)} />
-          <h4 className={`mt-4 text-center text-2xl font-black ${statusTone(summaryStatus)}`}>
+          <ClientAreaTradePilotIndicatorScale
+            marker={getTradePilotIndicatorMarker(summaryStatus)}
+          />
+          <h4
+            className={`mt-4 text-center text-2xl font-black ${statusTone(summaryStatus)}`}
+          >
             {summaryStatus === "buy"
               ? copy.leaningBullishLabel
               : summaryStatus === "sell"
                 ? copy.leaningBearishLabel
                 : copy.neutralLabel}
           </h4>
-          <p className={`mt-1 text-center text-sm font-bold uppercase ${statusTone(summaryStatus)}`}>
+          <p
+            className={`mt-1 text-center text-sm font-bold uppercase ${statusTone(summaryStatus)}`}
+          >
             ({statusLabel(summaryStatus)})
           </p>
           <div className="mt-6 grid grid-cols-3 text-center text-xs font-bold sm:text-sm gap-2">
             <div className="p-4 bg-red-700/10 rounded-lg border border-red-500/20">
-              <p className="text-red-400">{count("sell")} {copy.bearishLabel}</p>
+              <p className="text-red-400">
+                {count("sell")} {copy.bearishLabel}
+              </p>
             </div>
 
             <div className="p-4 bg-zinc-700/10 rounded-lg border border-zinc-500/20">
-              <p className="text-zinc-400">{count("neutral")} {copy.neutralLabel}</p>
+              <p className="text-zinc-400">
+                {count("neutral")} {copy.neutralLabel}
+              </p>
             </div>
 
             <div className="p-4 bg-emerald-700/10 rounded-lg border border-emerald-500/20">
-              <p className="text-emerald-400">{count("buy")} {copy.bullishLabel}</p>
+              <p className="text-emerald-400">
+                {count("buy")} {copy.bullishLabel}
+              </p>
             </div>
           </div>
         </div>
@@ -109,16 +127,49 @@ export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy 
                   ? "sell"
                   : "neutral";
             return (
-              <div className="rounded-2xl border border-zinc-700/70 p-5" key={group}>
-                <p className="text-center text-sm text-zinc-400">
-                  {group === "oscillator" ? copy.oscillatorLabel : copy.movingAverageLabel}
-                </p>
-                <div className="mx-auto mt-4 max-w-xs">
-                  <ClientAreaTradePilotIndicatorScale marker={getTradePilotIndicatorMarker(groupStatus)} />
+              <div
+                className="rounded-2xl border border-zinc-700/70 p-5"
+                key={group}
+              >
+                <div className="w-fit mx-auto space-y-4">
+                  <p className="text-center text-sm text-zinc-400">
+                    {group === "oscillator"
+                      ? copy.oscillatorLabel
+                      : copy.movingAverageLabel}
+                  </p>
+
+                  <div className="w-full sm:min-w-sm">
+                    <ClientAreaTradePilotIndicatorScale
+                      marker={getTradePilotIndicatorMarker(groupStatus)}
+                    />
+                  </div>
+
+                  <p
+                    className={`text-center text-sm font-bold ${statusTone(groupStatus)}`}
+                  >
+                    {statusLabel(groupStatus)}
+                  </p>
+
+                  <div className="text-center font-semibold flex items-center justify-center gap-2">
+                    <div className="w-full py-2 px-6 bg-red-700/10 rounded-lg border border-red-500/20">
+                      <p className="text-red-400 text-nowrap">
+                        {count("sell", group)} {copy.sellLabel}
+                      </p>
+                    </div>
+
+                    <div className="w-full py-2 px-6 bg-zinc-700/10 rounded-lg border border-zinc-500/20">
+                      <p className="text-zinc-400 text-nowrap">
+                        {count("neutral", group)} {copy.neutralLabel}
+                      </p>
+                    </div>
+
+                    <div className="w-full py-2 px-6 bg-emerald-700/10 rounded-lg border border-emerald-500/20">
+                      <p className="text-emerald-400 text-nowrap">
+                        {count("buy", group)} {copy.buyLabel}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <p className={`mt-4 text-center text-sm font-bold ${statusTone(groupStatus)}`}>
-                  {statusLabel(groupStatus)}
-                </p>
               </div>
             );
           })}
@@ -128,19 +179,25 @@ export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy 
       {(["oscillator", "movingAverage"] as const).map((group) => (
         <div className="mt-7" key={group}>
           <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-zinc-400">
-            {group === "oscillator" ? copy.oscillatorLabel : copy.movingAveragesLabel}
+            {group === "oscillator"
+              ? copy.oscillatorLabel
+              : copy.movingAveragesLabel}
           </h3>
 
-          <div className={`grid gap-4 ${group === "oscillator" ? "md:grid-cols-2" : "md:grid-cols-2 xl:grid-cols-3"}`}>
-            {indicators.filter((indicator) => indicator.group === group).map((indicator) => (
-              <ClientAreaTradePilotIndicatorCard
-                key={indicator.key}
-                label={indicator.label}
-                status={indicator.status}
-                statusLabel={statusLabel(indicator.status)}
-                value={indicator.value}
-              />
-            ))}
+          <div
+            className={`grid gap-4 ${group === "oscillator" ? "md:grid-cols-2" : "md:grid-cols-2 xl:grid-cols-3"}`}
+          >
+            {indicators
+              .filter((indicator) => indicator.group === group)
+              .map((indicator) => (
+                <ClientAreaTradePilotIndicatorCard
+                  key={indicator.key}
+                  label={indicator.label}
+                  status={indicator.status}
+                  statusLabel={statusLabel(indicator.status)}
+                  value={indicator.value}
+                />
+              ))}
           </div>
         </div>
       ))}

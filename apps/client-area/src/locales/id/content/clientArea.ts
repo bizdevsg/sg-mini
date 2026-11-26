@@ -300,9 +300,11 @@ export const idClientArea: AppMessages["clientArea"] = {
       },
     },
     analysis: {
-      title: "Analisis Pasar",
+      title: "TradePilot - AI Market Navigator",
+      partnerLabel: "Layanan Teknologi Mitra PT Solid Gold Berjangka.",
       description:
-        "Analisis pergerakan harga real-time dengan chart interaktif dan data terkini.",
+        "Perangkat bantu navigasi pasar, analisis data, dan simulasi risiko berbasis kecerdasan buatan yang dikembangkan dan dioperasikan oleh TradePilot.id.",
+      poweredByLabel: "Powered by TradePilot.id",
       quotaLabel: "Kuota Analisis",
       quotaUnlimitedLabel: "Unlimited",
       quotaResetLabel: "Reset {date}",
@@ -539,10 +541,16 @@ export const idClientArea: AppMessages["clientArea"] = {
         googlePlayAlt: "Dapatkan TradePilot di Google Play",
         appStoreAlt: "Dapatkan TradePilot di App Store",
         logoAlt: "Logo TradePilot",
-        supportTitle:
-          "TradePilot adalah layanan pihak ketiga yang bekerja sama dengan PT Solid Gold Berjangka.",
-        supportDescription:
-          "PT Solid Gold Berjangka bekerja sama dengan TradePilot.id dalam menyediakan fitur ini. TradePilot adalah alat pendukung keputusan, bukan saran keuangan atau layanan trading. Keputusan dan risiko tetap milikmu. Performa masa lalu tidak menjamin hasil di masa depan.",
+        supportTitle: "Disclaimer",
+        supportParagraphs: [
+          "TradePilot merupakan layanan teknologi mitra yang dikembangkan dan dioperasikan oleh TradePilot.id.",
+          "Hasil analisis dan simulasi dihasilkan secara otomatis oleh sistem AI TradePilot dan bukan pernyataan atau rekomendasi resmi PT Solid Gold Berjangka.",
+          "TradePilot tidak mengeksekusi transaksi maupun mengelola dana perdagangan nasabah.",
+          "Penggunaan TradePilot bersifat opsional dan bukan merupakan persyaratan untuk membuka rekening atau melakukan transaksi.",
+          "Pembelian kredit dilakukan melalui TradePilot.id dan dikelola secara terpisah dari saldo, rekening, serta margin perdagangan nasabah PT Solid Gold Berjangka.",
+          "Hasil analisis dapat mengandung ketidakakuratan dan tidak menjamin hasil perdagangan. Keputusan transaksi tetap berada pada pengguna.",
+          "Masing-masing penyedia layanan bertanggung jawab sesuai ruang lingkup layanan dan kewajibannya berdasarkan ketentuan hukum yang berlaku.",
+        ],
         disclaimerLabel: "Disclaimer:",
         disclaimerDescription:
           "Seluruh informasi, data, grafik, dan fitur yang ditampilkan di Client Area bersifat hanya untuk dilihat (view only) dan tidak dapat digunakan untuk mengeksekusi transaksi.",

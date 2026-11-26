@@ -303,9 +303,11 @@ export const enClientArea: AppMessages["clientArea"] = {
       },
     },
     analysis: {
-      title: "Market Analysis",
+      title: "TradePilot - AI Market Navigator",
+      partnerLabel: "A Technology Partner Service of PT Solid Gold Berjangka.",
       description:
-        "Analyze real-time price movements with interactive charts and current market data.",
+        "An artificial intelligence-based tool for market navigation, data analysis, and risk simulation, developed and operated by TradePilot.id.",
+      poweredByLabel: "Powered by TradePilot.id",
       quotaLabel: "Analysis Quota",
       quotaUnlimitedLabel: "Unlimited",
       quotaResetLabel: "Resets {date}",
@@ -332,7 +334,8 @@ export const enClientArea: AppMessages["clientArea"] = {
       accessDeniedMessage: "This account mode is not available to you.",
       historyViewBanner: "Showing an analysis from history · {date}",
       historyViewBackLabel: "Close",
-      historyViewErrorMessage: "The analysis from history could not be loaded. Please try again.",
+      historyViewErrorMessage:
+        "The analysis from history could not be loaded. Please try again.",
       analysisPausedMessage:
         "TradePilot analysis is temporarily paused by an administrator. Please try again later.",
       analysisPausedSelectionMessage:
@@ -448,7 +451,8 @@ export const enClientArea: AppMessages["clientArea"] = {
           contextTitle: "News & calendar context",
           riskTitle: "Main risk",
           invalidationTitle: "Assessment changes if",
-          footer: "This analysis is not a trading instruction. Re-check current market conditions.",
+          footer:
+            "This analysis is not a trading instruction. Re-check current market conditions.",
           closeLabel: "Close",
           empty: "No detailed reasoning is available for this analysis yet.",
         },
@@ -460,7 +464,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         resetLabel: "Reset",
         shareChartLabel: "Share chart",
         shareChartPreparingLabel: "Preparing image…",
-        shareChartErrorLabel: "The chart image could not be created. Please try again.",
+        shareChartErrorLabel:
+          "The chart image could not be created. Please try again.",
         shareChartDownloadedLabel: "Chart image downloaded.",
         chartShare: {
           brand: "TRADEPILOT · SOLID GOLD BERJANGKA",
@@ -479,9 +484,12 @@ export const enClientArea: AppMessages["clientArea"] = {
           stop: "Stop Loss",
           tp1: "Take Profit 1",
           tp2: "Take Profit 2",
-          sourceNote: "Historical candles are fetched when the image is created and limited to before the analysis. Levels and bias come from the stored analysis, not live prices.",
-          noCandles: "Historical candle data is not available for this analysis yet.",
-          warning: "Levels are references, not entry instructions. Check entry conditions, risk, invalidation, and current market conditions before acting.",
+          sourceNote:
+            "Historical candles are fetched when the image is created and limited to before the analysis. Levels and bias come from the stored analysis, not live prices.",
+          noCandles:
+            "Historical candle data is not available for this analysis yet.",
+          warning:
+            "Levels are references, not entry instructions. Check entry conditions, risk, invalidation, and current market conditions before acting.",
         },
         suggestedLevelsTitle: "Suggested Levels",
         recommendedSideLabel: "Recommended side",
@@ -539,10 +547,16 @@ export const enClientArea: AppMessages["clientArea"] = {
         googlePlayAlt: "Get TradePilot on Google Play",
         appStoreAlt: "Get TradePilot on the App Store",
         logoAlt: "TradePilot logo",
-        supportTitle:
-          "TradePilot is a third-party service in partnership with PT Solid Gold Berjangka.",
-        supportDescription:
-          "PT Solid Gold Berjangka partners with TradePilot.id to provide this feature. TradePilot is a decision-support tool, not financial advice or a trading service. Decisions and risks remain yours. Past performance does not guarantee future results.",
+        supportTitle: "Disclaimer",
+        supportParagraphs: [
+          "TradePilot is a technology partner service developed and operated by TradePilot.id.",
+          "Analysis and simulation results are generated automatically by the TradePilot AI system and are not official statements or recommendations of PT Solid Gold Berjangka.",
+          "TradePilot does not execute transactions or manage clients' trading funds.",
+          "Use of TradePilot is optional and is not a requirement for opening an account or making transactions.",
+          "Credit purchases are made through TradePilot.id and are managed separately from the balances, accounts, and trading margin of PT Solid Gold Berjangka clients.",
+          "Analysis results may contain inaccuracies and do not guarantee trading results. Transaction decisions remain with the user.",
+          "Each service provider is responsible according to the scope of its services and its obligations under applicable law.",
+        ],
         disclaimerLabel: "Disclaimer:",
         disclaimerDescription:
           "All information, data, charts, and features displayed in the Client Area are view-only and cannot be used to execute transactions.",
@@ -672,7 +686,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         usedMarginLabel: "Margin used",
         marginAndStopLossLabel: "Day margin + loss at SL",
         additionalPositionTitle: "Position {position} · Additional layer",
-        layerTriggerDescription: "Only filled if price reaches {price} before Stop Loss is hit",
+        layerTriggerDescription:
+          "Only filled if price reaches {price} before Stop Loss is hit",
         cumulativeFundsAtStopLabel: "Total funds needed at SL (cumulative)",
         initialPositionTitle: "Position 1 · Initial entry",
         entryFromPlanDescription: "Entry from the {account} Plan",
@@ -704,8 +719,7 @@ export const enClientArea: AppMessages["clientArea"] = {
         additionalLossLimitLabel: "Additional loss limit required",
         manualOrderWarning:
           "Manual only: price moving against the position is not a trigger by itself.",
-        planLoadingLabel:
-          "Calculating recommendation...",
+        planLoadingLabel: "Calculating recommendation...",
         planErrorMessage:
           "The recommendation could not be calculated. Please try again.",
         planLossLimitExceedsCapitalMessage:
@@ -714,10 +728,8 @@ export const enClientArea: AppMessages["clientArea"] = {
           "This analysis has resolved or expired. Run a new analysis to get a position recommendation.",
         planRulesSourceLabel:
           "Calculated from broker trading rules version {version}. Price levels come from the AI analysis; lot, margin and risk use fixed formulas.",
-        planPostureLabel:
-          "Recommendation status",
-        planReasonsLabel:
-          "Considerations",
+        planPostureLabel: "Recommendation status",
+        planReasonsLabel: "Considerations",
         sideBlockedTitle:
           "Funds or loss limit are not enough for the minimum lot",
         sideBlockedDescription:
@@ -730,8 +742,7 @@ export const enClientArea: AppMessages["clientArea"] = {
           "This scenario is for the initial entry only; no additional layers are recommended.",
         additionalLayersNote:
           "Additional layers are only filled if price reaches the layer level before Stop Loss is hit.",
-        layerLabel:
-          "Layer {level} · {price}",
+        layerLabel: "Layer {level} · {price}",
         planPostureLabels: {
           scaling_allowed: "Staged additions allowed",
           entry_only: "Initial entry only",
@@ -764,7 +775,8 @@ export const enClientArea: AppMessages["clientArea"] = {
           fundamental_clear: "No major fundamental events",
           fundamental_unavailable: "Fundamental data unavailable",
           directional_conflict: "Analysis direction and indicators conflict",
-          staged_add_condition: "Extra layers only if price reaches their level",
+          staged_add_condition:
+            "Extra layers only if price reaches their level",
         },
         chooseScenarioUsageTitle: "Choose one scenario",
         chooseScenarioUsageDescription:
@@ -803,7 +815,8 @@ export const enClientArea: AppMessages["clientArea"] = {
         takeProfitTwoLabel: "TP2",
         resolvedAtLabel: "Outcome reached",
         validUntilLabel: "Valid until",
-        neutralNoLevelsLabel: "Neutral analysis (wait): no entry levels suggested.",
+        neutralNoLevelsLabel:
+          "Neutral analysis (wait): no entry levels suggested.",
         entryHitLabel: "{side} entry triggered",
         directionLabels: {
           bullish: "Bullish",

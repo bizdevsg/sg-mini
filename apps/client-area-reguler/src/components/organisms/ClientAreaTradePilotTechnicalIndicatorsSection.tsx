@@ -119,6 +119,19 @@ export function ClientAreaTradePilotTechnicalIndicatorsSection({ analysis, copy 
                 <p className={`mt-4 text-center text-sm font-bold ${statusTone(groupStatus)}`}>
                   {statusLabel(groupStatus)}
                 </p>
+                <p className="mt-2 text-center text-xs font-semibold">
+                  <span className="text-red-400">
+                    {count("sell", group)} {copy.sellLabel}
+                  </span>
+                  <span className="text-zinc-600"> · </span>
+                  <span className="text-zinc-400">
+                    {count("neutral", group)} {copy.neutralLabel}
+                  </span>
+                  <span className="text-zinc-600"> · </span>
+                  <span className="text-emerald-400">
+                    {count("buy", group)} {copy.buyLabel}
+                  </span>
+                </p>
               </div>
             );
           })}

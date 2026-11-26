@@ -434,7 +434,9 @@ export type AppMessages = {
       };
       analysis: {
         title: string;
+        partnerLabel: string;
         description: string;
+        poweredByLabel: string;
         quotaLabel: string;
         quotaUnlimitedLabel: string;
         quotaResetLabel: string;
@@ -642,7 +644,7 @@ export type AppMessages = {
           appStoreAlt: string;
           logoAlt: string;
           supportTitle: string;
-          supportDescription: string;
+          supportParagraphs: string[];
           disclaimerLabel: string;
           disclaimerDescription: string;
           legalNavigationLabel: string;
