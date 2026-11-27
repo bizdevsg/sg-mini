@@ -4,9 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ResilientImage } from "@/components/atoms/ResilientImage";
 import { SectionContainer } from "@/components/atoms/SectionContainer";
-import {
-  AppDownloadModalTriggerButton,
-} from "@/components/molecules/AppDownloadModalTriggerButton";
+import { AppDownloadModalTriggerButton } from "@/components/molecules/AppDownloadModalTriggerButton";
 import { ScrollReveal } from "@/components/molecules/ScrollReveal";
 import { SectionIntro } from "@/components/molecules/SectionIntro";
 import { PageHeroBanner } from "@/components/organisms/PageHeroBanner";
@@ -101,6 +99,7 @@ export default async function ProdukPrimePage({
               label={page.hero.primaryCta}
               size="lg"
               visualVariant="qr"
+              className="w-full"
             />
           </ScrollReveal>
 
@@ -278,7 +277,9 @@ export default async function ProdukPrimePage({
             <table className="min-w-full text-left text-sm">
               <thead className="bg-white/5 text-zinc-200">
                 <tr>
-                  <th className="px-4 py-3">{page.tradingTable.headers.specification}</th>
+                  <th className="px-4 py-3">
+                    {page.tradingTable.headers.specification}
+                  </th>
                   <th className="px-4 py-3 font-mono text-yellow-400">
                     {page.tradingTable.headers.xul10}
                   </th>
